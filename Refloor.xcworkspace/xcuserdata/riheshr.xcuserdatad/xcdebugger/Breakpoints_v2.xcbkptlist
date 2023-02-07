@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "B6069C21-D757-420C-A7EC-14C847CE76DB"
+   type = "0"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A16BD26D-7EB9-4AB1-A31F-65C69976C261"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/ToolViewControllers/ToolsSupportedViews/L_Shape_CustomView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "259"
+            endingLineNumber = "259"
+            landmarkName = "getposition1path()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "030C2B14-74F7-4839-8114-D6B5BA6EF8A3"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/ToolViewControllers/ToolsSupportedViews/L_Shape_CustomView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
+            landmarkName = "getposition1path()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "18FE1BA6-9A65-4B27-9BD2-F107A7B40087"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/ToolViewControllers/ToolsSupportedViews/CustomNineZeroDegreeShape/CustomeShapeViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "646"
+            endingLineNumber = "646"
+            landmarkName = "customeLabelDelegateResult(label:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E8C4B28A-DEBD-48A8-9194-78AC24DEB68A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/ToolViewControllers/ToolsSupportedViews/CustomNineZeroDegreeShape/NineZeroDrowingView.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "482"
+            endingLineNumber = "482"
+            landmarkName = "getarea()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A462D101-C570-432B-B56C-6109D32595B1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/DownPaymentViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
+            landmarkName = "externalCollectionViewDidSelectbutton(index:tag:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

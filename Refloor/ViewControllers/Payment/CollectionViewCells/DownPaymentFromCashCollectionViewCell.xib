@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="DownPaymentFromCashCollectionViewCell" id="gTV-IL-0wX" customClass="DownPaymentFromCashCollectionViewCell" customModule="Refloor" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="394" height="800"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="394" height="800"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OIY-Zw-jQi">
+                        <rect key="frame" x="0.0" y="0.0" width="394" height="800"/>
+                        <subviews>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Price: $1434.00 (including tax)" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NhQ-Ie-Ky8">
+                                <rect key="frame" x="20" y="10" width="302.5" height="25"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="18"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="ikG-k6-H5o">
+                                <rect key="frame" x="20" y="45" width="354" height="80"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="At2-mj-rod"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="YJs-Is-8co">
+                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                            </collectionView>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Down Payment: $286.80" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aoi-jp-bWT">
+                                <rect key="frame" x="20" y="65" width="354" height="26"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="19"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hw3-yd-57T">
+                                <rect key="frame" x="20" y="141" width="354" height="56"/>
+                                <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="56" id="mV1-7u-jBj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="22"/>
+                                <state key="normal" title="Pay $286.80">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.65536212920000003" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="ikG-k6-H5o" secondAttribute="trailing" constant="20" id="5oK-yx-RXg"/>
+                            <constraint firstAttribute="trailing" secondItem="aoi-jp-bWT" secondAttribute="trailing" constant="20" id="EOV-l7-iaW"/>
+                            <constraint firstAttribute="trailing" secondItem="hw3-yd-57T" secondAttribute="trailing" constant="20" id="MhK-ld-fjh"/>
+                            <constraint firstItem="aoi-jp-bWT" firstAttribute="leading" secondItem="OIY-Zw-jQi" secondAttribute="leading" constant="20" id="NV4-G2-xPb"/>
+                            <constraint firstItem="hw3-yd-57T" firstAttribute="leading" secondItem="OIY-Zw-jQi" secondAttribute="leading" constant="20" id="PnI-tE-08e"/>
+                            <constraint firstItem="NhQ-Ie-Ky8" firstAttribute="leading" secondItem="OIY-Zw-jQi" secondAttribute="leading" constant="20" id="UIb-UT-baz"/>
+                            <constraint firstItem="aoi-jp-bWT" firstAttribute="top" secondItem="ikG-k6-H5o" secondAttribute="bottom" constant="-60" id="Ymm-Mw-hGn"/>
+                            <constraint firstItem="hw3-yd-57T" firstAttribute="top" secondItem="aoi-jp-bWT" secondAttribute="bottom" constant="50" id="bxJ-Aw-BOO"/>
+                            <constraint firstItem="ikG-k6-H5o" firstAttribute="top" secondItem="NhQ-Ie-Ky8" secondAttribute="bottom" constant="10" id="gbY-Gq-SX1"/>
+                            <constraint firstItem="NhQ-Ie-Ky8" firstAttribute="top" secondItem="OIY-Zw-jQi" secondAttribute="top" constant="10" id="i0n-L9-XVr"/>
+                            <constraint firstItem="ikG-k6-H5o" firstAttribute="leading" secondItem="OIY-Zw-jQi" secondAttribute="leading" constant="20" id="lRZ-d4-jvU"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="OIY-Zw-jQi" secondAttribute="bottom" id="bkb-Ch-NZ4"/>
+                <constraint firstAttribute="trailing" secondItem="OIY-Zw-jQi" secondAttribute="trailing" id="exB-wC-lDx"/>
+                <constraint firstItem="OIY-Zw-jQi" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="hHX-F1-4pE"/>
+                <constraint firstItem="OIY-Zw-jQi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="kvi-45-hEb"/>
+            </constraints>
+            <connections>
+                <outlet property="collectionView" destination="ikG-k6-H5o" id="NHy-Ms-U9I"/>
+                <outlet property="downPaymentLabel" destination="aoi-jp-bWT" id="mIZ-Am-VEe"/>
+                <outlet property="payButton" destination="hw3-yd-57T" id="Jey-ck-YeM"/>
+                <outlet property="totalLabel" destination="NhQ-Ie-Ky8" id="Zel-xc-MYe"/>
+            </connections>
+            <point key="canvasLocation" x="132" y="106"/>
+        </collectionViewCell>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

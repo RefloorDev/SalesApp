@@ -1,0 +1,6 @@
+framework module JWTCodable {
+  umbrella header "JWTCodable-umbrella.h"
+
+  export *
+  module * { export * }
+}

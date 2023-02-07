@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9bH-Ic-mWf">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="refloorLogo" translatesAutoresizingMaskIntoConstraints="NO" id="ZgM-Yh-gG6">
+                                        <rect key="frame" x="386.5" y="337" width="251" height="94"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="251" id="4jd-GF-DLc"/>
+                                            <constraint firstAttribute="height" constant="94" id="i0f-NX-4AK"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686274509802" green="0.22592604159999999" blue="0.27170065049999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="ZgM-Yh-gG6" firstAttribute="centerY" secondItem="9bH-Ic-mWf" secondAttribute="centerY" id="15a-h7-Ny8"/>
+                                    <constraint firstItem="ZgM-Yh-gG6" firstAttribute="centerX" secondItem="9bH-Ic-mWf" secondAttribute="centerX" id="9FB-fh-wC0"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" red="0.1913043857" green="0.22592604159999999" blue="0.27170065049999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="9bH-Ic-mWf" secondAttribute="bottom" id="4QT-DY-1Fg"/>
+                            <constraint firstAttribute="trailing" secondItem="9bH-Ic-mWf" secondAttribute="trailing" id="Svz-2M-MSl"/>
+                            <constraint firstItem="9bH-Ic-mWf" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="dJP-qT-v3f"/>
+                            <constraint firstItem="9bH-Ic-mWf" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="mXf-7n-OCG"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="refloorLogo" width="211" height="80"/>
+    </resources>
+</document>
