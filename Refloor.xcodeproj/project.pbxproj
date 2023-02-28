@@ -100,6 +100,7 @@
 		653EA610241FB3BC00EA684E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653EA60F241FB3BC00EA684E /* LoginViewController.swift */; };
 		653FA1DB248768CA0064C5CB /* CustomShapeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FA1DA248768CA0064C5CB /* CustomShapeLineViewController.swift */; };
 		653FA1E02487771B0064C5CB /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FA1DF2487771A0064C5CB /* LineView.swift */; };
+		6544081C29ADE213007B2D35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6544081B29ADE212007B2D35 /* GoogleService-Info.plist */; };
 		654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654F229724E41EC900CCA1E4 /* PaymentDetailsViewController.swift */; };
 		65519FEE2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65519FED2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift */; };
 		655C43A22456B4FB00D5CA2C /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655C43A12456B4FB00D5CA2C /* TransactionViewController.swift */; };
@@ -174,7 +175,6 @@
 		65FFF93724471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */; };
 		B0238B2B297525B900242BDC /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0238B2A297525B900242BDC /* GoogleService-Info1.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
-		B0CCBAF52981066D00CF8A43 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0CCBAF42981066D00CF8A43 /* GoogleService-Info.plist */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -289,6 +289,7 @@
 		653EA60F241FB3BC00EA684E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		653FA1DA248768CA0064C5CB /* CustomShapeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShapeLineViewController.swift; sourceTree = "<group>"; };
 		653FA1DF2487771A0064C5CB /* LineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
+		6544081B29ADE212007B2D35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		654F229724E41EC900CCA1E4 /* PaymentDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailsViewController.swift; sourceTree = "<group>"; };
 		65519FED2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummeryDetailsTilesTableViewCell.swift; sourceTree = "<group>"; };
 		655C43A12456B4FB00D5CA2C /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
@@ -364,7 +365,6 @@
 		B0238B2A297525B900242BDC /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellationPolicyViewController.swift; sourceTree = "<group>"; };
-		B0CCBAF42981066D00CF8A43 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -604,7 +604,7 @@
 		653EA56C241F7AFC00EA684E /* Refloor */ = {
 			isa = PBXGroup;
 			children = (
-				B0CCBAF42981066D00CF8A43 /* GoogleService-Info.plist */,
+				6544081B29ADE212007B2D35 /* GoogleService-Info.plist */,
 				B0238B2A297525B900242BDC /* GoogleService-Info1.plist */,
 				B04B016728E2F19B00B59E33 /* Refloor.entitlements */,
 				65FFF9292446CF8800E3534D /* AppModelClassAndApi */,
@@ -1037,7 +1037,7 @@
 				65209442243CA31100B010CA /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				6520944F243CA31100B010CA /* SF-Pro-Text-Bold.otf in Resources */,
 				6520945E243CA31100B010CA /* SF-Pro-Text-Medium.otf in Resources */,
-				B0CCBAF52981066D00CF8A43 /* GoogleService-Info.plist in Resources */,
+				6544081C29ADE213007B2D35 /* GoogleService-Info.plist in Resources */,
 				B0238B2B297525B900242BDC /* GoogleService-Info1.plist in Resources */,
 				6520942C243CA31100B010CA /* loading.gif in Resources */,
 				657C72C524500BFF00F392F3 /* SubSqureToolView.xib in Resources */,
