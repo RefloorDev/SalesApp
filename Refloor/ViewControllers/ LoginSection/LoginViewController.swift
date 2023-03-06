@@ -43,8 +43,8 @@ class LoginViewController: UIViewController {
 //     self.passwordTF.text = "salesApp"
 
         //just remove this.
-//        self.emailTF.text = "vrenaud@refloor.com" //vrenaud@refloor.com"
-//        self.passwordTF.text = "TESTAPP" //testAPP"
+        self.emailTF.text = "vrenaud@refloor.com" //vrenaud@refloor.com"
+        self.passwordTF.text = "TESTAPP" //testAPP"
         
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         

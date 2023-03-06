@@ -1522,6 +1522,22 @@ class CashData: Mappable
         
     }
 }
+
+class dataBaseData: Mappable
+{
+    var result:String?
+    var message:String?
+    var override_json_result:Int?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        override_json_result <- map["override_json_result"]
+    }
+    
+}
 class CashDataResponse: Mappable
 {
     var result: String?
@@ -1813,11 +1829,13 @@ class TransitionData:NSObject
     var name :String?
     var color: String?
     var transsquarefeet :Float?
+    //var transHeight :Int?
     init( name: String, color: String, transsquarefeet: Float)
     {
         self.name = name
         self.color = color
         self.transsquarefeet = transsquarefeet
+       // self.transHeight = transHeight
         
     }
 }
@@ -1948,28 +1966,28 @@ class PaymentOption: NSObject{
 
 struct CustomerEncodingDecodingDetails:Codable
 {
-    var operation_mode:String?
-    var appVersion:String?
-    var paymentDetails:PaymentDetailAppointment?
-    var answer:[AnswerDetails]?
-    var applicationInfo:ApplicantInfoDetails?
-    var appointmentId:Int?
-    var paymentMethods:paymentMethodDetails?
-    var rooms:[RoomsDetails]?
-    var customer:CustomerDetails?
-    var dataCompleted:Int?
+//    var operation_mode:String?
+//    var appVersion:String?
+//    var paymentDetails:PaymentDetailAppointment?
+//    var answer:[AnswerDetails]?
+    var applicationInfo:ApplicantInfoDetailsSecret?
+   // var appointmentId:Int?
+    var paymentMethods:paymentMethodDetailsSecret?
+//    var rooms:[RoomsDetails]?
+//    var customer:CustomerDetails?
+//    var dataCompleted:Int?
     enum CodingKeys: String, CodingKey
     {
-        case operation_mode = "operation_mode"
-        case appVersion = "app_version"
-        case paymentDetails = "paymentdetails"
-        case answer = "answer"
+//        case operation_mode = "operation_mode"
+//        case appVersion = "app_version"
+//        case paymentDetails = "paymentdetails"
+//        case answer = "answer"
         case applicationInfo = "applicationInfo"
-        case appointmentId = "appointment_id"
+       // case appointmentId = "appointment_id"
         case paymentMethods = "paymentmethod"
-        case rooms = "rooms"
-        case customer = "customer"
-        case dataCompleted = "data_completed"
+//        case rooms = "rooms"
+//        case customer = "customer"
+//        case dataCompleted = "data_completed"
     }
 }
 struct PaymentDetailAppointment:Codable
@@ -2051,7 +2069,7 @@ struct AnswerDetails:Codable
         case answerId = "question_id"
     }
 }
-struct ApplicantInfoDetails:Codable
+struct ApplicantInfoDetailsSecret:Codable
 {
     var coApplicantPresentEmployersState:String?
     var addressRelationshipCity:String?
@@ -2402,7 +2420,7 @@ struct ApplicantInfoDetails:Codable
         case coApplicantPresentEmployer = "co_applicant_present_employer"
     }
 }
-struct paymentMethodDetails:Codable
+struct paymentMethodDetailsSecret:Codable
 {
     var cardNumber:String?
     var checkingRoutingNumber:String?
@@ -2458,7 +2476,7 @@ struct RoomsDetails:Codable
 struct transitionDetails:Codable
 {
     var name:String?
-    var width:Int?
+    var width:Double?
     
     enum CodingKeys: String, CodingKey
     {
@@ -2500,9 +2518,6 @@ struct CustomerDetails:Codable
     var completedDate:String?
     var applicantLastName:String?
     var coApplicantFirstName:String?
-    var mobile:String?
-    var phone:String?
-    var email:String?
     
     enum CodingKeys: String, CodingKey
     {
@@ -2538,8 +2553,5 @@ struct CustomerDetails:Codable
         case completedDate = "completed_date"
         case applicantLastName = "applicant_last_name"
         case coApplicantFirstName = "co_applicant_first_name"
-        case phone = "phone"
-        case mobile = "mobile"
-        case email = "email"
     }
 }
