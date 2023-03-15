@@ -57,6 +57,8 @@ class MasterData : Object, Mappable {
     var appointments = List<rf_master_appointment>()
     var appointmentResults = List<rf_master_appointment_results>()
     var specialPrice = List<rf_specialPrice_results>()
+    var promotionCodes = List<rf_promotionCodes_results>()
+    var transitionHeights = List<rf_transitionHeights_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -79,6 +81,8 @@ class MasterData : Object, Mappable {
         appointments <- (map["appointments"], ListTransform<rf_master_appointment>())
         appointmentResults <- (map["appointment_results"], ListTransform<rf_master_appointment_results>())
         specialPrice <- (map["special_prices"], ListTransform<rf_specialPrice_results>())
+        promotionCodes <- (map["promotion_codes"], ListTransform<rf_promotionCodes_results>())
+        transitionHeights <- (map["transition_heights"], ListTransform<rf_transitionHeights_results>())
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
@@ -222,8 +226,11 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var sequence = 0
     @objc dynamic var default_answer : String?
     @objc dynamic var exclude_from_discount : Bool = false
+    @objc dynamic  var setDefaultAnswer : Bool = false
+    @objc dynamic var applicableCurrentSurface : String?
     var quote_label = List<rf_master_question_detail>()
     var rf_AnswerOFQustion = List<rf_AnswerForQuestion>()
+    var applicableRooms = List<rf_AnswerapplicableRooms>()
     
     @objc dynamic var last_updated_date : String?
     @objc dynamic var applicableTo: String?
@@ -264,6 +271,9 @@ class rf_master_question :Object, Mappable {
         quote_label <- (map["quote_label"], ListTransform<rf_master_question_detail>())
         last_updated_date <- map["last_updated_date"]
         applicableTo <- map["applicable_to"]
+        setDefaultAnswer <- map["set_default_answer"]
+        applicableCurrentSurface <- map["applicable_current_surface"]
+        applicableRooms <- (map["applicable_rooms"], ListTransform<rf_AnswerapplicableRooms>())
         //not from api
         rf_AnswerOFQustion <- map["rf_AnswerOFQustion"]
         //
@@ -325,6 +335,22 @@ class rf_master_question :Object, Mappable {
 //
 //    }
 //}
+
+class rf_AnswerapplicableRooms :Object, Mappable
+{
+    @objc dynamic var room_id : Int = 0
+    @objc dynamic var room_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        room_id <- map["room_id"]
+        room_name <- map["room_name"]
+    }
+}
 
 class rf_master_question_detail : Object,Mappable {
     @objc dynamic var question_id : Int = 0
@@ -596,6 +622,57 @@ class rf_specialPrice_results : Object ,Mappable
         listPrice <- map["list_price"]
         msrp <- map["msrp"]
         maxDiscount <- map["max_discount"]
+    }
+}
+
+
+
+class rf_promotionCodes_results : Object ,Mappable
+{
+    @objc dynamic var promotionCodeId = 0
+    @objc dynamic var name :String?
+    @objc dynamic var discount = 0.0
+    @objc dynamic var startDate : String?
+    @objc dynamic var endDate : String?
+   
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    override init(){
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        promotionCodeId <- map["promotion_code_id"]
+        name <- map["name"]
+        discount <- map["discount"]
+        startDate <- map["start_date"]
+        endDate <- map["end_date"]
+    }
+}
+class rf_transitionHeights_results :Object , Mappable
+{
+    @objc dynamic var transitionHeightId = 0
+    @objc dynamic var name :String?
+    @objc dynamic var sequence = 0
+   
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    override init(){
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        transitionHeightId <- map["transition_height_id"]
+        name <- map["name"]
+        sequence <- map["sequence"]
     }
 }
 
@@ -1058,6 +1135,8 @@ class rf_transitionData:Object
     @objc dynamic var name :String?
     @objc dynamic var color: String?
     @objc dynamic var transsquarefeet :Float = 0.0
+    @objc dynamic var transHeight : String?
+    @objc dynamic var transitionHeightId: Int = 0
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -1067,11 +1146,13 @@ class rf_transitionData:Object
         
     }
     
-    init( name: String, color: String, transsquarefeet: Float)
+    init( name: String, color: String, transsquarefeet: Float, transHeight: String,transitionHeightId:Int)
     {
         self.name = name
         self.color = color
         self.transsquarefeet = transsquarefeet
+        self.transHeight = transHeight
+        self.transitionHeightId = transitionHeightId
         
     }
     
@@ -1079,6 +1160,8 @@ class rf_transitionData:Object
         self.name = transData.name
         self.color = transData.color
         self.transsquarefeet = transData.transsquarefeet ?? 0.0
+        self.transHeight = transData.transHeight
+        self.transitionHeightId = transData.transitionHeightId 
     }
     
     

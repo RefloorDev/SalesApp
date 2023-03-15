@@ -13,6 +13,8 @@ import CryptoKit
 import CommonCrypto
 
 class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,ContractCommentProtocol {
+    
+    
     var document = ""
     var paymentType = ""
     var orderID = 0
@@ -23,6 +25,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
     var isloadCompleted = false
     var comments = ""
     var sendPhysicalDocument: Bool = false
+    var FlexInstall : Bool = false
     var isCardVerified:Bool = Bool()
     let header = JWTHeader(typ: "JWT", alg: .hs256)
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"//"password"
@@ -192,16 +195,27 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             self.mobileOwner1Label.text = mainApplicant.phone ?? ""
             self.alternatePhoneOwner1Label.text = mainApplicant.mobile ?? ""
             self.emailOwner1Label.text = mainApplicant.email ?? ""
+            let coApplicantFirstName = mainApplicant.co_applicant_first_name ?? ""
+            let coApplicantMiddleName = mainApplicant.co_applicant_middle_name ?? ""
+            let coApplicantLastName = mainApplicant.co_applicant_last_name ?? ""
+//            if coApplicantMiddleName == ""
+//            {
+//                self.nameOwner2Label.text = coApplicantFirstName ?? "" + " " + (coApplicantLastName ?? "")
+//            }
+//            else
+//            {
+//                self.nameOwner2Label.text = coApplicantFirstName ?? "" + " " + coApplicantMiddleName ?? "" + " " + coApplicantLastName ?? ""
+//            }
+            self.nameOwner2Label.text = (coApplicantMiddleName == "") ? (coApplicantFirstName + " " + coApplicantLastName) : (coApplicantFirstName + " " + coApplicantMiddleName + " " + coApplicantLastName)
+            self.mobileOwner2Label.text = mainApplicant.co_applicant_phone ?? ""
+            self.alternatePhoneOwner2Label.text = mainApplicant.co_applicant_secondary_phone ?? ""
+            self.emailOwner2Label.text = mainApplicant.co_applicant_email ?? ""
         }
         
-        let coApplicantFirstName = applicant["co_applicant_first_name"] as? String ?? ""
-        let coApplicantMiddleName = applicant["co_applicant_middle_name"] as? String ?? ""
-        let coApplicantLastName = applicant["co_applicant_last_name"] as? String ?? ""
         
-        self.nameOwner2Label.text = (coApplicantMiddleName == "") ? (coApplicantFirstName + " " + coApplicantLastName) : (coApplicantFirstName + " " + coApplicantMiddleName + " " + coApplicantLastName)
-        self.mobileOwner2Label.text = applicant["co_applicant_phone"] as? String ?? ""
-        self.alternatePhoneOwner2Label.text = applicant["co_applicant_secondary_phone"] as? String ?? ""
-        self.emailOwner2Label.text = applicant["co_applicant_email"] as? String ?? ""
+        
+      
+        
         
         let totalAmount = (self.total.rounded())
         let depositAmount = (self.downPayment.rounded())
@@ -917,10 +931,11 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         }
     }
     
-    func sendAddedComments(comment: String, sendHardCopy: Bool){
+    func sendAddedComments(comment: String, sendHardCopy: Bool,sendFlexInstall:Bool){
         print("COMMENT : \(comment)")
         self.comments = comment
         self.sendPhysicalDocument = sendHardCopy
+        self.FlexInstall = sendFlexInstall
         validationOkayProceedWithContract()
     }
     
@@ -937,18 +952,21 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         let contactApiData = self.createContractParameters()
         if let applicantDataDict = contactApiData as? [String:Any]
         {
-            if  let applicant = applicantDataDict["application_info_secret"] as? String{
-                if applicant == ""
-                {
-                    
-                }
-                else
-                {
-                    var applicantData:[String:Any] = [:]
-                    let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-                    applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-                    self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-                }
+//            if  let applicant = applicantDataDict["application_info_secret"] as? String{
+//                if applicant == ""
+//                {
+//
+//                }
+//                else
+//                {
+//                    var applicantData:[String:Any] = [:]
+//                    let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+//                    applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+//                    self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+//                }
+//            }
+            if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+                self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
             }
         }
         //1.
@@ -1001,7 +1019,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             contract_plumbing_option_2 = 1
         }
         let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-        let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments]
+        let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
         createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "")
         
         let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
@@ -1062,20 +1080,20 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         print(paymentType)
-        let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-        var applicantInfoSecret:String = String()
-        if applicantDta.count > 0
-        {
-             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
-        }
+//        var applicantInfoSecret:String = String()
+//        if applicantDta.count > 0
+//        {
+//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+//        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["payment_method_secret"] = paymentTypeSecret
-        contractDict["application_info_secret"] = applicantInfoSecret
+        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
+        contractDict["applicationInfo"] = applicantDta["data"]//applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0

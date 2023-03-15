@@ -633,7 +633,7 @@ extension LineView{
     
     
     
-    func add_Sub_Square_View(xAsis:CGFloat,yAxis:CGFloat,width:CGFloat,hight:CGFloat,delegate:CustomViewDelegate,isVertical:Bool,objc:OpeningCustomObject)
+    func add_Sub_Square_View(xAsis:CGFloat,yAxis:CGFloat,width:CGFloat,hight:CGFloat,delegate:CustomViewDelegate,isVertical:Bool,objc:OpeningCustomObject,addViewHeight: String,transitionheightId:Int)
           {
         let subView = SubSqureView(frame: CGRect(x: xAsis, y: yAxis, width: width * (40), height: hight * (40)),isVertical:isVertical, color: objc.color)
                   
@@ -644,7 +644,8 @@ extension LineView{
               subView.customDelegate = delegate
               subView.tag = self.subSquareView.count
               subView.isUserInteractionEnabled = true
-             
+              subView.addViewHeight = addViewHeight
+              subView.transitionHeightId = transitionheightId
               self.subSquareView.append(subView)
               self.addSubview(subView)
               UIView.animate(withDuration: 0.3) {

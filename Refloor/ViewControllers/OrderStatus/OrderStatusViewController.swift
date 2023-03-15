@@ -252,19 +252,22 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                     let contactApiData = self.createContractParameters()
                     if let applicantDataDict = contactApiData as? [String:Any]
                     {
-                        if  let applicant = applicantDataDict["application_info_secret"] as? String {
-                            if applicant == ""
-                            {
-                                
-                            }
-                            else
-                            {
-                                var applicantData:[String:Any] = [:]
-                                let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-                                applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-                                self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-                            }
-                           // self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+//                        if  let applicant = applicantDataDict["application_info_secret"] as? String {
+//                            if applicant == ""
+//                            {
+//
+//                            }
+//                            else
+//                            {
+//                                var applicantData:[String:Any] = [:]
+//                                let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+//                                applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+//                                self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+//                            }
+//                           // self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+//                        }
+                        if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
                         }
                     }
                     print(contactApiData)
@@ -612,17 +615,17 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         print(paymentType)
-        let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-        let applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+        //let applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["payment_method_secret"] = paymentTypeSecret
-        contractDict["application_info_secret"] = applicantInfoSecret
+        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
+        contractDict["applicationInfo"] = applicantDta["data"]//applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
         //contractDict["data_completed"] = 0
         //contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0

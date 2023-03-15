@@ -2102,6 +2102,8 @@ class HttpClientManager: NSObject {
                                 let payment = realm.objects(rf_master_payment_option.self)
                                 let appointmentResults = realm.objects(rf_master_appointment_results.self)
                                 let specialPriceResults = realm.objects(rf_specialPrice_results.self)
+                                let promotionCodesResult = realm.objects(rf_promotionCodes_results.self)
+                                let transitionHeightResults = realm.objects(rf_transitionHeights_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2117,6 +2119,8 @@ class HttpClientManager: NSObject {
                                     realm.delete(payment)
                                     realm.delete(appointmentResults)
                                     realm.delete(specialPriceResults)
+                                    realm.delete(promotionCodesResult)
+                                    realm.delete(transitionHeightResults)
                                    
                                 }
                             }catch{

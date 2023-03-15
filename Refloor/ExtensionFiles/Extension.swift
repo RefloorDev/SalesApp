@@ -237,6 +237,24 @@ extension UIView{
         }
         return nil
     }
+    func addDashedBorder(size:CGSize) {
+        let color = UIColor().colorFromHexString("#A7B0BA").cgColor//UIColor.black.cgColor
+            //#A7B0BA
+            let shapeLayer:CAShapeLayer = CAShapeLayer()
+            let frameSize = size
+            let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
+            
+            shapeLayer.bounds = shapeRect
+            shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
+            shapeLayer.fillColor = UIColor.clear.cgColor
+            shapeLayer.strokeColor = color
+            shapeLayer.lineWidth = 1
+            shapeLayer.lineJoin = CAShapeLayerLineJoin.round
+            shapeLayer.lineDashPattern = [5,5]
+            shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 4).cgPath
+            
+            self.layer.addSublayer(shapeLayer)
+        }
     
     func setDeSelected(_ color:UIColor)
     {
@@ -3590,19 +3608,21 @@ extension UIViewController:OrderStatusViewDelegate
                 let selectedColor = room.selected_room_color ?? ""
                 let roomColorId = masterData?.flooring_colors.filter("color_name == %@",selectedColor).first?.material_id ?? 0
                 var transitionArray: [[String:Any]] = []
-                var transition1_name = ""
-                var transition1_width = ""
-                var transition2_name = ""
-                var transition2_width = ""
-                var transition3_name = ""
-                var transition3_width = ""
-                var transition4_name = ""
-                var transition4_width = ""
+//                var transition1_name = ""
+//                var transition1_width = ""
+//                var transition2_name = ""
+//                var transition2_width = ""
+//                var transition3_name = ""
+//                var transition3_width = ""
+//                var transition4_name = ""
+//                var transition4_width = ""
                 let isRoomExcluded = room.room_strike_status ? 1 : 0
                 for i in 0..<room.transArray.count{
                     let name = room.transArray[i].name ?? ""
                     let width = room.transArray[i].transsquarefeet
-                    let transitionDict:[String:Any] = ["name":name, "width": width]
+                    let height = room.transArray[i].transHeight ?? "0"
+                    let transitionHeightId = room.transArray[i].transitionHeightId
+                    let transitionDict:[String:Any] = ["name":name, "width": width, "height": height , "transition_height_id":transitionHeightId]
                     transitionArray.append(transitionDict)
 //                    switch i {
 //
@@ -3989,6 +4009,32 @@ extension UIViewController:OrderStatusViewDelegate
             let realm = try Realm()
             let masterData = realm.objects(MasterData.self)
             if let discountCoupons = masterData.first?.discount_coupons{
+                discountCouponsArray = discountCoupons
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return discountCouponsArray
+    }
+    func getPromoDropDownValue() -> RealmSwift.List<rf_promotionCodes_results> {
+        var discountCouponsArray = RealmSwift.List<rf_promotionCodes_results>()
+        do{
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let discountCoupons = masterData.first?.promotionCodes{
+                discountCouponsArray = discountCoupons
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return discountCouponsArray
+    }
+    func getTransitionheightDropDownValue() -> RealmSwift.List<rf_transitionHeights_results> {
+        var discountCouponsArray = RealmSwift.List<rf_transitionHeights_results>()
+        do{
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let discountCoupons = masterData.first?.transitionHeights{
                 discountCouponsArray = discountCoupons
             }
         }catch{

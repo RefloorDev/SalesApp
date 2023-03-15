@@ -227,6 +227,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 cell.cardPinTF.setPlaceHolderWithColor(placeholder: "000", colour: .placeHolderColor)
             }
             cell.cardExperyDateTF.addTarget(self, action: #selector(datepickerSalection(_:)), for: .editingDidBegin)
+           
             if(paymentType == .DebitCard)
             {
                 cell.cardScanButton.setTitle("DEBIT CARD SCAN", for: .normal)
@@ -764,22 +765,22 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         
         print(paymentType)
-        let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-        var applicantInfoSecret:String = String()
-        if applicantDta.count > 0
-        {
-             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
-            
-        }
+//        var applicantInfoSecret:String = String()
+//        if applicantDta.count > 0
+//        {
+//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+//
+//        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["payment_method_secret"] = paymentTypeSecret
-        contractDict["application_info_secret"] = applicantInfoSecret
+        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
+        contractDict["applicationInfo"] = applicantDta["data"] //applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0
@@ -803,18 +804,21 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 let appointmentId = AppointmentData().appointment_id ?? 0
                 if let applicantDataDict = parameter as? [String:Any]
                 {
-                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
-                        if applicant == ""
-                        {
-                           
-                        }
-                        else
-                        {
-                            var applicantData:[String:Any] = [:]
-                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-                        }
+//                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
+//                        if applicant == ""
+//                        {
+//
+//                        }
+//                        else
+//                        {
+//                            var applicantData:[String:Any] = [:]
+//                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+//                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+//                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+//                        }
+//                    }
+                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
                     }
                 }//createFinalParameterForCustomerApiCall()
                 var parameterToPass:[String:Any] = [:]
@@ -1055,6 +1059,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 {
                     let string = String(format: "%02d/%d", month, year)
                     cell.cardExperyDateTF.text = string
+                    
                     NSLog(string)
                 }// should show something like 05/2015
             }

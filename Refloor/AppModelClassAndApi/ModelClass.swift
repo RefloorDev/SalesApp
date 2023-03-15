@@ -588,6 +588,9 @@ class QuestionsMeasurementData: Mappable
     var calculation_type :String?
     var default_answer: String?
     var amount: Double?
+    var setDefaultAnswer : Bool?
+    var applicableCurrentSurface : String?
+    var aaplicableRoom : [ApplicableRoom]?
     var quote_label :[QuoteLabelData]?
     var answerOFQustion:AnswerOFQustion?
     required init?(map: ObjectMapper.Map){
@@ -614,6 +617,15 @@ class QuestionsMeasurementData: Mappable
         self.calculation_type = masterQuestions.calculation_type
         self.default_answer = masterQuestions.default_answer
         self.amount = masterQuestions.amount
+        self.setDefaultAnswer = masterQuestions.setDefaultAnswer
+        self.applicableCurrentSurface = masterQuestions.applicableCurrentSurface
+        
+        var applicableRoomdetails :[ApplicableRoom] = []
+        for rooms in masterQuestions.applicableRooms
+        {
+            applicableRoomdetails.append(ApplicableRoom(applicableRoomsDetails: rooms))
+        }
+        self.aaplicableRoom = applicableRoomdetails
         var questionDetails:[QuoteLabelData] = []
         for question in masterQuestions.quote_label{
             questionDetails.append(QuoteLabelData(questionDetails: question) )
@@ -642,6 +654,10 @@ class QuestionsMeasurementData: Mappable
         default_answer <- map["default_answer"]
         amount <- map["amount"]
         quote_label <- map["quote_label"]
+        aaplicableRoom <- map["applicable_rooms"]
+        setDefaultAnswer <- map["set_default_answer"]
+        applicableCurrentSurface <- map["applicable_current_surface"]
+        
         
         
     }
@@ -680,6 +696,29 @@ class AnswerOFQustion:NSObject
         self.multySelection = rf_AnsOFQustion.multySelection
     }
 }
+
+class ApplicableRoom: Mappable
+{
+    var room_id:Int?
+    var room_name:String?
+    init(room_id:Int,room_name:String) {
+        self.room_id = room_id
+        self.room_name = room_name
+    }
+    init(applicableRoomsDetails:rf_AnswerapplicableRooms){
+        self.room_id = applicableRoomsDetails.room_id
+        self.room_name = applicableRoomsDetails.room_name
+    }
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        room_id <- map["room_id"]
+        room_name <- map["room_name"]
+    }
+}
+
 
 class QuoteLabelData: Mappable
 {
@@ -1829,13 +1868,15 @@ class TransitionData:NSObject
     var name :String?
     var color: String?
     var transsquarefeet :Float?
-    //var transHeight :Int?
-    init( name: String, color: String, transsquarefeet: Float)
+    var transHeight :String?
+    var transitionHeightId:Int
+    init( name: String, color: String, transsquarefeet: Float, transHeight:String,transitionHeightId:Int)
     {
         self.name = name
         self.color = color
         self.transsquarefeet = transsquarefeet
-       // self.transHeight = transHeight
+        self.transHeight = transHeight
+        self.transitionHeightId = transitionHeightId
         
     }
 }

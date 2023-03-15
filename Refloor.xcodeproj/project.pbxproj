@@ -87,6 +87,9 @@
 		65209464243CA31100B010CA /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65209429243CA31000B010CA /* Extension.swift */; };
 		65209466243CA47A00B010CA /* AppOtherConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65209465243CA47A00B010CA /* AppOtherConstants.swift */; };
 		6520946A243CA49000B010CA /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65209469243CA49000B010CA /* Protocols.swift */; };
+		65274C7229C19CE700ACFDE3 /* PromoDropDownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65274C7129C19CE600ACFDE3 /* PromoDropDownViewController.swift */; };
+		65274C7729C1A47400ACFDE3 /* PromoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65274C7529C1A47400ACFDE3 /* PromoCollectionViewCell.swift */; };
+		65274C7829C1A47400ACFDE3 /* PromoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65274C7629C1A47400ACFDE3 /* PromoCollectionViewCell.xib */; };
 		653875FA24E5771A009C3D25 /* DrowingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653875F924E5771A009C3D25 /* DrowingView.swift */; };
 		653EA56E241F7AFC00EA684E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653EA56D241F7AFC00EA684E /* AppDelegate.swift */; };
 		653EA570241F7AFC00EA684E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653EA56F241F7AFC00EA684E /* SceneDelegate.swift */; };
@@ -274,6 +277,9 @@
 		65209429243CA31000B010CA /* Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		65209465243CA47A00B010CA /* AppOtherConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppOtherConstants.swift; sourceTree = "<group>"; };
 		65209469243CA49000B010CA /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		65274C7129C19CE600ACFDE3 /* PromoDropDownViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromoDropDownViewController.swift; sourceTree = "<group>"; };
+		65274C7529C1A47400ACFDE3 /* PromoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PromoCollectionViewCell.swift; path = CollectionViewCell/PromoCollectionViewCell.swift; sourceTree = "<group>"; };
+		65274C7629C1A47400ACFDE3 /* PromoCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PromoCollectionViewCell.xib; path = CollectionViewCell/PromoCollectionViewCell.xib; sourceTree = "<group>"; };
 		653875F924E5771A009C3D25 /* DrowingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrowingView.swift; sourceTree = "<group>"; };
 		653EA56A241F7AFC00EA684E /* Refloor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Refloor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		653EA56D241F7AFC00EA684E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -444,6 +450,7 @@
 		650B1CDF254C2511005ED521 /* PopUp */ = {
 			isa = PBXGroup;
 			children = (
+				65274C7129C19CE600ACFDE3 /* PromoDropDownViewController.swift */,
 				DD06FAFD2849DC49008AF42F /* PromoPopUpTableviewCells */,
 				DDA10632284487AB008B1FE6 /* ContactCommentPopUpViewController.swift */,
 				650B1CE0254C253C005ED521 /* PromoPopUpViewController.swift */,
@@ -919,6 +926,8 @@
 		DD06FAFD2849DC49008AF42F /* PromoPopUpTableviewCells */ = {
 			isa = PBXGroup;
 			children = (
+				65274C7529C1A47400ACFDE3 /* PromoCollectionViewCell.swift */,
+				65274C7629C1A47400ACFDE3 /* PromoCollectionViewCell.xib */,
 				DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */,
 				DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */,
 				DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */,
@@ -998,6 +1007,7 @@
 				65209456243CA31100B010CA /* SF-Pro-Display-Black.otf in Resources */,
 				65209450243CA31100B010CA /* SF-Pro-Display-MediumItalic.otf in Resources */,
 				65209452243CA31100B010CA /* SF-Pro-Display-Ultralight.otf in Resources */,
+				65274C7829C1A47400ACFDE3 /* PromoCollectionViewCell.xib in Resources */,
 				6520945B243CA31100B010CA /* SFUIText-Semibold.otf in Resources */,
 				65209453243CA31100B010CA /* SF-Pro-Display-UltralightItalic.otf in Resources */,
 				6520945D243CA31100B010CA /* SF-Pro-Text-LightItalic.otf in Resources */,
@@ -1145,6 +1155,7 @@
 				DDF18F46277B253100321FFE /* BackgroundTaskService.swift in Sources */,
 				6500187024FFC5BE00B183E6 /* SuggetionsTableViewCell.swift in Sources */,
 				653EA578241F7AFC00EA684E /* Refloor.xcdatamodeld in Sources */,
+				65274C7229C19CE700ACFDE3 /* PromoDropDownViewController.swift in Sources */,
 				65CE7AD224EFEC77002F5D12 /* OtherIncomeViewController.swift in Sources */,
 				650B1CE1254C253C005ED521 /* PromoPopUpViewController.swift in Sources */,
 				65853E5F243DF39B002C6016 /* SelectARoomViewController.swift in Sources */,
@@ -1202,6 +1213,7 @@
 				DD30685D274B698E0007AA3B /* RealmDatabaseManager.swift in Sources */,
 				65853E5D243DF37C002C6016 /* RoomDetailsCollectionViewCell.swift in Sources */,
 				65C4C3A5243EFADF003ABF04 /* SelectAShapeViewController.swift in Sources */,
+				65274C7729C1A47400ACFDE3 /* PromoCollectionViewCell.swift in Sources */,
 				650512BB25403C040026B8FC /* CustomerDetailsOneViewController.swift in Sources */,
 				65CB188424DBF24D00A0BD39 /* AboutRoomDetailsTableViewCell.swift in Sources */,
 				65F3483A244492F300C61100 /* L_Shape_ViewController.swift in Sources */,
