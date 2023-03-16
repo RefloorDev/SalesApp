@@ -2102,6 +2102,8 @@ class HttpClientManager: NSObject {
                                 let payment = realm.objects(rf_master_payment_option.self)
                                 let appointmentResults = realm.objects(rf_master_appointment_results.self)
                                 let specialPriceResults = realm.objects(rf_specialPrice_results.self)
+                                let promotionCodesResult = realm.objects(rf_promotionCodes_results.self)
+                                let transitionHeightResults = realm.objects(rf_transitionHeights_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2117,6 +2119,8 @@ class HttpClientManager: NSObject {
                                     realm.delete(payment)
                                     realm.delete(appointmentResults)
                                     realm.delete(specialPriceResults)
+                                    realm.delete(promotionCodesResult)
+                                    realm.delete(transitionHeightResults)
                                    
                                 }
                             }catch{
@@ -2173,6 +2177,7 @@ class HttpClientManager: NSObject {
                 }
                 else{
                     completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage)
+                    self.showhideHUD(viewtype: .HIDE, title: "")
                 }
             }
         }
@@ -2212,6 +2217,39 @@ class HttpClientManager: NSObject {
 //            
 //        }
 //    }
+    
+    func fetchDataBaseInfoAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().fetchDataBaseRawValue
+            self.showhideHUD(viewtype: .SHOW, title: "Uploading Data. Please wait…")
+            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject {
+                (response:DataResponse<dataBaseData>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        completion(response?.result,response?.message)
+                        self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false", AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false", AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
     
     // MARK: - Sync Images Upload
     func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){

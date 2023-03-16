@@ -13,6 +13,8 @@ import CryptoKit
 import CommonCrypto
 
 class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,ContractCommentProtocol {
+    
+    
     var document = ""
     var paymentType = ""
     var orderID = 0
@@ -23,6 +25,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
     var isloadCompleted = false
     var comments = ""
     var sendPhysicalDocument: Bool = false
+    var FlexInstall : Bool = false
     var isCardVerified:Bool = Bool()
     let header = JWTHeader(typ: "JWT", alg: .hs256)
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"//"password"
@@ -139,17 +142,6 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         logoImageView.backgroundColor = .clear
     }
     
-    @objc override func doregenerateBack()
-    {
-        if isCardVerified == true
-                {
-                    self.alert("You can’t navigate back and change the payment option. ", nil)
-                }
-        else
-        {
-        self.navigationController?.popViewController(animated: true)
-        }
-    }
     
     func getApplicantsData() -> [String: Any]{
         return self.getApplicantAndIncomeDataFromAppointmentDetail()
@@ -203,16 +195,27 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             self.mobileOwner1Label.text = mainApplicant.phone ?? ""
             self.alternatePhoneOwner1Label.text = mainApplicant.mobile ?? ""
             self.emailOwner1Label.text = mainApplicant.email ?? ""
+            let coApplicantFirstName = mainApplicant.co_applicant_first_name ?? ""
+            let coApplicantMiddleName = mainApplicant.co_applicant_middle_name ?? ""
+            let coApplicantLastName = mainApplicant.co_applicant_last_name ?? ""
+//            if coApplicantMiddleName == ""
+//            {
+//                self.nameOwner2Label.text = coApplicantFirstName ?? "" + " " + (coApplicantLastName ?? "")
+//            }
+//            else
+//            {
+//                self.nameOwner2Label.text = coApplicantFirstName ?? "" + " " + coApplicantMiddleName ?? "" + " " + coApplicantLastName ?? ""
+//            }
+            self.nameOwner2Label.text = (coApplicantMiddleName == "") ? (coApplicantFirstName + " " + coApplicantLastName) : (coApplicantFirstName + " " + coApplicantMiddleName + " " + coApplicantLastName)
+            self.mobileOwner2Label.text = mainApplicant.co_applicant_phone ?? ""
+            self.alternatePhoneOwner2Label.text = mainApplicant.co_applicant_secondary_phone ?? ""
+            self.emailOwner2Label.text = mainApplicant.co_applicant_email ?? ""
         }
         
-        let coApplicantFirstName = applicant["co_applicant_first_name"] as? String ?? ""
-        let coApplicantMiddleName = applicant["co_applicant_middle_name"] as? String ?? ""
-        let coApplicantLastName = applicant["co_applicant_last_name"] as? String ?? ""
         
-        self.nameOwner2Label.text = (coApplicantMiddleName == "") ? (coApplicantFirstName + " " + coApplicantLastName) : (coApplicantFirstName + " " + coApplicantMiddleName + " " + coApplicantLastName)
-        self.mobileOwner2Label.text = applicant["co_applicant_phone"] as? String ?? ""
-        self.alternatePhoneOwner2Label.text = applicant["co_applicant_secondary_phone"] as? String ?? ""
-        self.emailOwner2Label.text = applicant["co_applicant_email"] as? String ?? ""
+        
+      
+        
         
         let totalAmount = (self.total.rounded())
         let depositAmount = (self.downPayment.rounded())
@@ -668,7 +671,10 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             sender.isSelected = true
         }
     }
-    
+    @objc override func doregenerateBack()
+    {
+        self.navigationController?.popViewController(animated: true)
+    }
     @IBAction func floorProtectionBtnStatus(_ sender: UIButton) {
         if sender.isSelected{
             sender.isSelected = false
@@ -925,10 +931,11 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         }
     }
     
-    func sendAddedComments(comment: String, sendHardCopy: Bool){
+    func sendAddedComments(comment: String, sendHardCopy: Bool,sendFlexInstall:Bool){
         print("COMMENT : \(comment)")
         self.comments = comment
         self.sendPhysicalDocument = sendHardCopy
+        self.FlexInstall = sendFlexInstall
         validationOkayProceedWithContract()
     }
     
@@ -945,6 +952,19 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         let contactApiData = self.createContractParameters()
         if let applicantDataDict = contactApiData as? [String:Any]
         {
+//            if  let applicant = applicantDataDict["application_info_secret"] as? String{
+//                if applicant == ""
+//                {
+//
+//                }
+//                else
+//                {
+//                    var applicantData:[String:Any] = [:]
+//                    let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+//                    applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+//                    self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+//                }
+//            }
             if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
                 self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
             }
@@ -956,24 +976,24 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         for (key,value) in contactApiData{
             customerAndRoomData[key] = value
         }
-            let json = (customerAndRoomData as NSDictionary).JsonString()
-            let data = json.data(using: .utf8)
+//            let json = (customerAndRoomData as NSDictionary).JsonString()
+//            let data = json.data(using: .utf8)
+////            let decoder = JSONDecoder()
+////            let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data!)
+//            var jwtToken:String = String()
+//
 //            let decoder = JSONDecoder()
-//            let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data!)
-            var jwtToken:String = String()
-                    
-            let decoder = JSONDecoder()
-                    
-            if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-                print(model)
-                let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-                jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-                print(jwtToken)
-            }
+//
+//            if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
+//                print(model)
+//                let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
+//                jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//                print(jwtToken)
+//            }
         //customerAndRoomData = ["data":customerAndRoomData]
             
         print(customerAndRoomData)
-            createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "",isDecodeEncode: true,jwtToken: jwtToken)
+            createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
         }
         //2.
         
@@ -987,7 +1007,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         //            imagesArray[imagesArray.count-1] = lastImageDict
         //            print(imagesArray)
         for imageDict in imagesArray{
-            createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String,isDecodeEncode: false,jwtToken: "")
+            createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
         }
         //4.
         let appoint_id = String(AppointmentData().appointment_id ?? 0)
@@ -999,12 +1019,12 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             contract_plumbing_option_2 = 1
         }
         let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-        let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison]
-        createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "",isDecodeEncode: false,jwtToken: "")
+        let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
+        createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "")
         
         let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
         let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-        createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "",isDecodeEncode: false,jwtToken: "")
+        createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
         
         //log entry
         let appointment = self.getAppointmentData(appointmentId: appointmentId)
@@ -1016,23 +1036,13 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         //arb
         
         //
-        let details = CustomerListViewController.initialization()!
-        details.comments = comments
-        details.sendPhysical = sendPhysicalDocument
-        self.navigationController?.pushViewController(details, animated: true)
-        //self.navigationController?.popToRootViewController(animated: true)
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     
-    func createAppointmentsRequestDataToDatabase(title:RequestTitle,url:String,requestType:RequestType,requestParams:NSDictionary,imageName:String,isDecodeEncode:Bool,jwtToken:String){
-        if isDecodeEncode == false
-        {
-            self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName,isDecodeEncode: isDecodeEncode,jwtToken: jwtToken)
-        }
-        else
-        {
-            self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: [:], imageName: imageName,isDecodeEncode: isDecodeEncode,jwtToken: jwtToken)
-        }
+    func createAppointmentsRequestDataToDatabase(title:RequestTitle,url:String,requestType:RequestType,requestParams:NSDictionary,imageName:String){
+        
+            self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName)
     }
     // MARK: - ROOM PARAMETERS
     //rooms
@@ -1053,8 +1063,8 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         customerDict["appointment_id"] = AppointmentData().appointment_id ?? 0
         customerDict["data_completed"] = 0
         var customerData = createCustomerParameter()
-        customerData["additional_comments"] = self.comments
-        customerData["send_physical_document"] = self.sendPhysicalDocument ? 1 : 0
+//        customerData["additional_comments"] = self.comments
+//        customerData["send_physical_document"] = self.sendPhysicalDocument ? 1 : 0
         customerDict["customer"] = customerData
         customerDict["rooms"] = createRoomParameters()
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
@@ -1070,14 +1080,20 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         print(paymentType)
+        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
+//        var applicantInfoSecret:String = String()
+//        if applicantDta.count > 0
+//        {
+//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+//        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType
-        contractDict["applicationInfo"] = applicantDta["data"]
+        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
+        contractDict["applicationInfo"] = applicantDta["data"]//applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0

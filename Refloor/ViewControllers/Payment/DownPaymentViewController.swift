@@ -227,6 +227,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 cell.cardPinTF.setPlaceHolderWithColor(placeholder: "000", colour: .placeHolderColor)
             }
             cell.cardExperyDateTF.addTarget(self, action: #selector(datepickerSalection(_:)), for: .editingDidBegin)
+           
             if(paymentType == .DebitCard)
             {
                 cell.cardScanButton.setTitle("DEBIT CARD SCAN", for: .normal)
@@ -748,8 +749,8 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         customerDict["appointment_id"] = AppointmentData().appointment_id ?? 0
         customerDict["data_completed"] = 0
         var customerData = createCustomerParameter()
-        customerData["additional_comments"] = ""
-        customerData["send_physical_document"] = 0
+//        customerData["additional_comments"] = ""
+//        customerData["send_physical_document"] = 0
         customerDict["customer"] = customerData
         customerDict["rooms"] = createRoomParameters()
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
@@ -762,15 +763,24 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         let paymentDetails = self.getPaymentDetailsDataFromAppointmentDetail()
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
+        
         print(paymentType)
+        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
+//        var applicantInfoSecret:String = String()
+//        if applicantDta.count > 0
+//        {
+//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+//
+//        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType
-        contractDict["applicationInfo"] = applicantDta["data"]
+        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
+        contractDict["applicationInfo"] = applicantDta["data"] //applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0
@@ -778,6 +788,8 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
 //        print(contractDataDict)
         return contractDict //contractDataDict
     }
+    
+
     
     @objc func goNextPageForPAyButtonAction()
     {
@@ -788,35 +800,56 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             if HttpClientManager.SharedHM.connectedToNetwork()
             {
                 self.getCardDetails()
-                var parameter = createFinalParameterForCustomerApiCall()
+                var parameter = self.createContractParameters()
+                let appointmentId = AppointmentData().appointment_id ?? 0
+                if let applicantDataDict = parameter as? [String:Any]
+                {
+//                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
+//                        if applicant == ""
+//                        {
+//
+//                        }
+//                        else
+//                        {
+//                            var applicantData:[String:Any] = [:]
+//                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+//                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+//                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+//                        }
+//                    }
+                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+                    }
+                }//createFinalParameterForCustomerApiCall()
                 var parameterToPass:[String:Any] = [:]
-                var jwtToken:String = String()
-                let contactApiData = self.createContractParameters()
+                //var jwtToken:String = String()
+                let contactApiData = createFinalParameterForCustomerApiCall()//self.createContractParameters()
                 for (key,value) in contactApiData{
                     parameter[key] = value
                 }
                 print(parameter)
                 
-                let json = (parameter as NSDictionary).JsonString()
-                let data = json.data(using: .utf8)
-                        
-                let decoder = JSONDecoder()
-                        
-                if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-                    print(model)
-                    let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-                    jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-                    print(jwtToken)
-                    let decodeOption:[String:Bool] = ["verify_signature":false]
+//                let json = (parameter as NSDictionary).JsonString()
+//                let data = json.data(using: .utf8)
+//
+//                let decoder = JSONDecoder()
+//
+//                if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
+//                    print(model)
+//                    let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
+//                    jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//                    print(jwtToken)
+
+                let decodeOption:[String:Bool] = ["verify_signature":false]
                     
                     
-                    parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":jwtToken,"native_data":json]
-                }
+                  parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter]
+               // }
                 // let paymentOptionUserDetails = paymentOptionUser(payment_Method: "cash", paymentDetails: userPaymentDetails)
              
      
                 
-                //let dbParameter = parameter
+                let dbParameter = parameter
                 //
                
                 //parameter["token"] = UserData.init().token ?? ""
@@ -824,9 +857,16 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message  in
                     if(success ?? "") == "Success"{
                         print("success")
+                        let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
+                        let firstName = appointment?.applicant_first_name ?? ""
+                        let lastName = appointment?.applicant_last_name ?? ""
+                        let name = lastName == ""  ? firstName : firstName + " " + lastName
+                        let date = appointment?.appointment_datetime ?? ""
+                        let appointmentId = AppointmentData().appointment_id ?? 0
                        // self.saveLogDetailsForAppointment(appointmentId: appoint, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-                        
-                        self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: jwtToken, imageName: "")
+                        self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                        self.deleteAnyAppointmentLogsTable(appointmentId: appointmentId)
+                        self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: dbParameter as NSDictionary, imageName: "")
                         //self.alert(message ?? "", nil)
                         self.isCardVerifiedSuccessfully = true
                         let yes = UIAlertAction(title: "OK", style:.default) { (_) in
@@ -834,7 +874,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                             self.cardDetailsAPiSuccess()
                         }
                         
-                        self.alert(message ?? "", [yes])
+                        self.alert(payment_message ?? "", [yes])
                         
                        
                     }
@@ -1019,6 +1059,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 {
                     let string = String(format: "%02d/%d", month, year)
                     cell.cardExperyDateTF.text = string
+                    
                     NSLog(string)
                 }// should show something like 05/2015
             }

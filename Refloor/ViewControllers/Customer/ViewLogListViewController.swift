@@ -13,6 +13,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     static func initialization() -> ViewLogListViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ViewLogListViewController") as? ViewLogListViewController
     }
+    @IBOutlet weak var fetchDataBtn: UIButton!
     @IBOutlet weak var viewLogTableView: UITableView!
     @IBOutlet weak var syncAllButton: UIButton!
     @IBOutlet weak var deleteAllButton: UIButton!
@@ -25,6 +26,8 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     var appointmentId:String = String()
     var intAppointment:Int = Int()
     var message:String = String()
+    var isFetchData:Bool = Bool()
+    var appStatus:String = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         //viewLogTableView.estimatedRowHeight = 70
@@ -75,13 +78,18 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         cell.transactionMsgLbl.isHidden = true
         //cell.transactionMsgLblHeightConstraint.constant = 0
         cell.selectionStyle = .none
-        var appStatus = "Sync Completed"
+        appStatus = "Sync Completed"
+    
         if  self.fetchAppointmentRequest(for: appointmentLogsArray[indexPath.row].appointment_id).count > 0
         {
             appStatus = "Sync Pending"
         }
         if appStatus == "Sync Pending"
         {
+            if isFetchData == true
+            {
+                fetchDataBtn.isHidden = false
+            }
             cell.syncBtn.setBackgroundImage(UIImage(named: "syncPending"), for: .normal)
             cell.appointmentStatusLabel.textColor = UIColor.lightGray
             cell.appointmentStatusLabel.text = appStatus
@@ -98,6 +106,10 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         }
         else
         {
+            if isFetchData == true
+            {
+                fetchDataBtn.isHidden = true
+            }
             cell.appointmentStatusLabel.text = appStatus
            if appointmentLogsArray[indexPath.row].paymentStatus == "Success" || appointmentLogsArray[indexPath.row].paymentStatus == "Not Done"
             {
@@ -204,6 +216,11 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         self.alert("Are you sure you want to delete all logs?", [yes,no])
     }
     
+    @IBAction func fetchDataBtnClicked(_ sender: UIButton)
+    {
+        retrieveData()
+    }
+    
     @objc func reloadAndRefresh(){
         DispatchQueue.main.async
         {
@@ -267,7 +284,10 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     
     // MARK: - UPLOAD LOG
     @IBAction func uploadLogAction(_ sender: UIButton) {
+        isFetchData = true
+        self.fetchDataBtn.isHidden = false
         let yes = UIAlertAction(title: "Upload", style:.default) { (_) in
+            
             self.uploadLog()
         }
         let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -300,6 +320,16 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
                         self.viewLogTableView.isHidden = true
                         self.swipeDeleteTextButton.isHidden = true
                         self.syncAllButton.isHidden = true
+                        if self.appStatus == "Sync Completed" && self.viewLogTableView.isHidden == true
+                        {
+                            self.fetchDataBtn.isHidden = true
+                        }
+                        else
+                        {
+                            self.fetchDataBtn.isHidden = false
+                        }
+                        //self.viewLogTableView.reloadData()
+                        
                     }
                 }
                 self.alert(message ?? AppAlertMsg.serverNotReached, [ok])
@@ -763,6 +793,402 @@ extension ViewLogListViewController{
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.signatureSyncFailed.rawValue, time: Date().getSyncDateAsString(), errorMessage: errorMessage,name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.initialsSyncFailed.rawValue, time: Date().getSyncDateAsString(), errorMessage: errorMessage,name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.snapshotDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(), errorMessage: errorMessage,name:name ,appointmentDate:date)
+    }
+    
+    func retrieveData()
+    {
+        let completedAppointments = getCompletedAppointmentData()
+        //var completedAppointmentsArray:[[String:Any]] = [[:]]
+        if completedAppointments!.count > 0
+        {
+            for appointments in completedAppointments!
+            {
+                var completedAppointmentDictionary:[String:Any] = [:]
+                completedAppointmentDictionary["appointment_id"] = appointments.appointment_id
+                completedAppointmentDictionary["appointment_date"] = appointments.appointment_date
+                completedAppointmentDictionary["appointment_datetime"] = appointments.appointment_datetime
+                completedAppointmentDictionary["customer_id"] = appointments.customer_id
+                completedAppointmentDictionary["applicant_first_name"] = appointments.applicant_first_name
+                completedAppointmentDictionary["applicant_middle_name"] = appointments.applicant_middle_name
+                completedAppointmentDictionary["applicant_last_name"] = appointments.applicant_last_name
+                completedAppointmentDictionary["applicant_street"] = appointments.applicant_street
+                completedAppointmentDictionary["applicant_street2"] = appointments.applicant_street2
+                completedAppointmentDictionary["applicant_city"] = appointments.applicant_city
+                completedAppointmentDictionary["applicant_state_code"] = appointments.applicant_state_code
+                completedAppointmentDictionary["applicant_zip"] = appointments.applicant_zip
+                completedAppointmentDictionary["applicant_phone"] = appointments.applicant_phone
+                completedAppointmentDictionary["applicant_country_code"] = appointments.applicant_country_code
+                completedAppointmentDictionary["applicant_country"] = appointments.applicant_country
+                completedAppointmentDictionary["applicant_email"] = appointments.applicant_email
+                completedAppointmentDictionary["sales_person"] = appointments.sales_person
+                completedAppointmentDictionary["salesperson_id"] = appointments.salesperson_id
+                completedAppointmentDictionary["partner_latitude"] = appointments.partner_latitude
+                completedAppointmentDictionary["partner_longitude"] = appointments.partner_longitude
+                completedAppointmentDictionary["applicant_country_id"] = appointments.applicant_country_id
+                completedAppointmentDictionary["co_applicant_first_name"] = appointments.co_applicant_first_name
+                completedAppointmentDictionary["co_applicant_middle_name"] = appointments.co_applicant_middle_name
+                completedAppointmentDictionary["co_applicant_last_name"] = appointments.co_applicant_last_name
+                completedAppointmentDictionary["co_applicant_address"] = appointments.co_applicant_address
+                completedAppointmentDictionary["co_applicant_city"] = appointments.co_applicant_city
+                completedAppointmentDictionary["co_applicant_state"] = appointments.co_applicant_state
+                completedAppointmentDictionary["co_applicant_zip"] = appointments.co_applicant_zip
+                completedAppointmentDictionary["co_applicant_secondary_phone"] = appointments.co_applicant_secondary_phone
+                completedAppointmentDictionary["co_applicant_phone"] = appointments.co_applicant_phone
+                completedAppointmentDictionary["co_applicant_email"] = appointments.co_applicant_email
+                completedAppointmentDictionary["applicantAndIncomeData"] = appointments.applicantAndIncomeData
+                completedAppointmentDictionary["paymentDetails"] = appointments.paymentDetails
+                completedAppointmentDictionary["applicantSignatureImage"] = appointments.applicantSignatureImage
+                completedAppointmentDictionary["applicantInitialsImage"] = appointments.applicantInitialsImage
+                completedAppointmentDictionary["coApplicantSignatureImage"] = appointments.coApplicantSignatureImage
+                completedAppointmentDictionary["coApplicantInitialsImage"] = appointments.coApplicantInitialsImage
+                completedAppointmentDictionary["paymentType"] = appointments.paymentType
+                completedAppointmentDictionary["contractData"] = appointments.contractData
+                completedAppointmentDictionary["recisionDate"] = appointments.recisionDate
+                var roomData = roomDetails(roomdata: appointments.rooms)
+                completedAppointmentDictionary["rooms"] = roomData
+                //completedAppointmentDictionary["questionnaires"] = appointments.questionnaires
+                if appointments.applicantData != nil
+                {
+                    var applicantData = applicantData(applicantdata:appointments.applicantData)
+                    completedAppointmentDictionary["applicantData"] = applicantData
+                }
+                if appointments.coApplicantData != nil
+                {
+                    var coApplicantData = coApplicantData(coApplicantdata:appointments.coApplicantData!)
+                    completedAppointmentDictionary["coApplicantData"] = coApplicantData
+                }
+                if appointments.otherIncomeData != nil
+                {
+                    var otherIncomeData = otherIncome(otherIncomedata:appointments.otherIncomeData)
+                    completedAppointmentDictionary["otherIncomeData"] = otherIncomeData
+                }
+                let json = (completedAppointmentDictionary as NSDictionary).JsonString()
+                //let json = "{'result': 'Success', 'message': 'Data stored successfully', 'override_json_result': 1}"
+                let token = UserData.init().token ?? ""
+                let appointmentId:Int = (completedAppointmentDictionary["appointment_id"] ?? 0 ) as! Int
+                
+                var parameter : [String:Any] = [:]
+                parameter = ["token":token,"appointment_id":appointmentId,"data":json]
+            
+                HttpClientManager.SharedHM.fetchDataBaseInfoAPi(parameter: parameter) { success, message in
+                    if(success ?? "") == "Success"{
+                        let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
+                            completedAppointmentDictionary.removeAll()
+                            print(message ?? "No msg")
+                            
+                        }
+                        self.alert("Debug data collected and sent to support team successfully." ?? AppAlertMsg.serverNotReached, [ok])
+                    }
+                    else
+                    {
+                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                            completedAppointmentDictionary.removeAll()
+                            self.retrieveData()
+                            
+                        }
+                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        
+                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                    }
+                }
+                
+                
+            }
+            
+        }
+        
+        
+    }
+    func otherIncome(otherIncomedata:rf_OtherIncomeData) -> [String:Any]
+    {
+        var otherIncomeData:[String:Any] = [:]
+        otherIncomeData["appointment_id"] = otherIncomedata.appointment_id
+        otherIncomeData["sourceOfOtherIncome"] = otherIncomedata.sourceOfOtherIncome
+        otherIncomeData["amountMonthly"] = otherIncomedata.amountMonthly
+        otherIncomeData["nearestRelative"] = otherIncomedata.nearestRelative
+        otherIncomeData["relationship"] = otherIncomedata.relationship
+        otherIncomeData["addressRelationship"] = otherIncomedata.addressRelationship
+        otherIncomeData["addressRelationshipStreet"] = otherIncomedata.addressRelationshipStreet
+        otherIncomeData["addressRelationshipStreet2"] = otherIncomedata.addressRelationshipStreet2
+        otherIncomeData["addressRelationshipCity"] = otherIncomedata.addressRelationshipCity
+        otherIncomeData["addressRelationshipState"] = otherIncomedata.addressRelationshipState
+        otherIncomeData["addressRelationshipZip"] = otherIncomedata.addressRelationshipZip
+        otherIncomeData["phoneNumberRelationhip"] = otherIncomedata.phoneNumberRelationhip
+        otherIncomeData["propertyDetails"] = otherIncomedata.propertyDetails
+        otherIncomeData["lenderName"] = otherIncomedata.lenderName
+        otherIncomeData["lenderAddress"] = otherIncomedata.lenderAddress
+        otherIncomeData["lenderAddressStreet"] = otherIncomedata.lenderAddressStreet
+        otherIncomeData["lenderAddressStreet2"] = otherIncomedata.lenderAddressStreet2
+        otherIncomeData["lenderAddressCity"] = otherIncomedata.lenderAddressCity
+        otherIncomeData["lenderAddressState"] = otherIncomedata.lenderAddressState
+        otherIncomeData["lenderAddressZip"] = otherIncomedata.lenderAddressZip
+        otherIncomeData["lenderPhone"] = otherIncomedata.lenderPhone
+        otherIncomeData["originalPurchasePrice"] = otherIncomedata.originalPurchasePrice
+        otherIncomeData["originalMortageAmount"] = otherIncomedata.originalMortageAmount
+        otherIncomeData["monthlyMortagePayment"] = otherIncomedata.monthlyMortagePayment
+        otherIncomeData["dateAquired"] = otherIncomedata.dateAquired
+        otherIncomeData["presentBalance"] = otherIncomedata.presentBalance
+        otherIncomeData["presentValueOfHome"] = otherIncomedata.presentValueOfHome
+        otherIncomeData["secondMortage"] = otherIncomedata.secondMortage
+        otherIncomeData["lenderNameOrPhone"] = otherIncomedata.lenderNameOrPhone
+        otherIncomeData["originalAmount"] = otherIncomedata.originalAmount
+        otherIncomeData["presentBalanceSecondMortage"] = otherIncomedata.presentBalanceSecondMortage
+        otherIncomeData["monthlyPayment"] = otherIncomedata.monthlyPayment
+        otherIncomeData["otherObligations"] = otherIncomedata.otherObligations
+        otherIncomeData["totalMonthlyPayments"] = otherIncomedata.totalMonthlyPayments
+        otherIncomeData["checkingAccountNo"] = otherIncomedata.checkingAccountNo
+        otherIncomeData["nameOfBank"] = otherIncomedata.nameOfBank
+        otherIncomeData["bankPhoneNumber"] = otherIncomedata.bankPhoneNumber
+        otherIncomeData["insuranceCompany"] = otherIncomedata.insuranceCompany
+        otherIncomeData["agent"] = otherIncomedata.agent
+        otherIncomeData["insurancePhoneNo"] = otherIncomedata.insurancePhoneNo
+        
+        otherIncomeData["coverage"] = otherIncomedata.coverage
+        otherIncomeData["typeOfCreditRequested"] = otherIncomedata.typeOfCreditRequested
+        otherIncomeData["additional_income"] = otherIncomedata.additional_income
+        otherIncomeData["second_mortage"] = otherIncomedata.second_mortage
+        otherIncomeData["lender_name_or_phone"] = otherIncomedata.lender_name_or_phone
+        otherIncomeData["checking_account_no"] = otherIncomedata.checking_account_no
+        otherIncomeData["checking_routing_no"] = otherIncomedata.checking_routing_no
+        otherIncomeData["name_of_bank"] = otherIncomedata.name_of_bank
+        otherIncomeData["applicant_signature_date"] = otherIncomedata.applicant_signature_date
+        otherIncomeData["co_applicant_signature_date"] = otherIncomedata.co_applicant_signature_date
+        otherIncomeData["hunterMessageStatus"] = otherIncomedata.hunterMessageStatus
+        otherIncomeData["present_balance"] = otherIncomedata.present_balance
+        otherIncomeData["present_value_of_home"] = otherIncomedata.present_value_of_home
+        otherIncomeData["original_amount"] = otherIncomedata.original_amount
+        otherIncomeData["present_balance_second_mortage"] = otherIncomedata.present_balance_second_mortage
+        otherIncomeData["monthly_payment"] = otherIncomedata.monthly_payment
+       return otherIncomeData
+    }
+    func coApplicantData(coApplicantdata:rf_CoApplicationData) -> [String:Any]
+    {
+        var coApplicantData:[String:Any] = [:]
+        coApplicantData["appointment_id"] = coApplicantdata.ethnicity
+        coApplicantData["ethnicity"] = coApplicantdata.race
+        coApplicantData["race"] = coApplicantdata.sex
+        coApplicantData["sex"] = coApplicantdata.sex
+        coApplicantData["CoapplicantEmail"] = coApplicantdata.CoapplicantEmail
+        coApplicantData["maritalStatus"] = coApplicantdata.maritalStatus
+        coApplicantData["applicantFirstName"] = coApplicantdata.applicantFirstName
+        coApplicantData["applicantMiddleName"] = coApplicantdata.applicantMiddleName
+        coApplicantData["applicantLastName"] = coApplicantdata.applicantLastName
+        coApplicantData["driversLicense"] = coApplicantdata.driversLicense
+        coApplicantData["driversLicenseExpDate"] = coApplicantdata.driversLicenseExpDate
+        coApplicantData["driversLicenseIssueDate"] = coApplicantdata.driversLicenseIssueDate
+        coApplicantData["dateOfBirth"] = coApplicantdata.dateOfBirth
+        coApplicantData["socialSecurityNumber"] = coApplicantdata.socialSecurityNumber
+        coApplicantData["addressOfApplicant"] = coApplicantdata.addressOfApplicant
+        coApplicantData["addressOfApplicantStreet"] = coApplicantdata.addressOfApplicantStreet
+        coApplicantData["addressOfApplicantStreet2"] = coApplicantdata.addressOfApplicantStreet2
+        coApplicantData["addressOfApplicantCity"] = coApplicantdata.addressOfApplicantCity
+        coApplicantData["addressOfApplicantState"] = coApplicantdata.addressOfApplicantState
+        coApplicantData["addressOfApplicantZip"] = coApplicantdata.addressOfApplicantZip
+        coApplicantData["previousAddressOfApplicant"] = coApplicantdata.previousAddressOfApplicant
+        coApplicantData["previousAddressOfApplicantStreet"] = coApplicantdata.previousEmployersAddressStreet
+        coApplicantData["previousAddressOfApplicantStreet2"] = coApplicantdata.previousEmployersAddressStreet2
+        coApplicantData["previousAddressOfApplicantCity"] = coApplicantdata.previousAddressOfApplicantCity
+        coApplicantData["previousAddressOfApplicantState"] = coApplicantdata.previousAddressOfApplicantState
+        coApplicantData["previousAddressOfApplicantZip"] = coApplicantdata.previousAddressOfApplicantZip
+        coApplicantData["cellPhone"] = coApplicantdata.cellPhone
+        coApplicantData["homePhone"] = coApplicantdata.homePhone
+        coApplicantData["howLong"] = coApplicantdata.howLong
+        coApplicantData["previousAddressHowLong"] = coApplicantdata.previousAddressHowLong
+        coApplicantData["presentEmployer"] = coApplicantdata.presentEmployer
+        coApplicantData["yearsOnJob"] = coApplicantdata.yearsOnJob
+        coApplicantData["occupation"] = coApplicantdata.occupation
+        coApplicantData["presentEmployersAddress"] = coApplicantdata.presentEmployersAddress
+        coApplicantData["presentEmployersAddressStreet"] = coApplicantdata.presentEmployersAddressStreet
+        coApplicantData["presentEmployersAddressStreet2"] = coApplicantdata.presentEmployersAddressStreet2
+        coApplicantData["presentEmployersAddressCity"] = coApplicantdata.previousEmployersAddressCity
+        coApplicantData["presentEmployersAddressState"] = coApplicantdata.presentEmployersAddressState
+        coApplicantData["presentEmployersAddressZip"] = coApplicantdata.presentEmployersAddressZip
+        coApplicantData["earningsFromEmployment"] = coApplicantdata.earningsFromEmployment
+        coApplicantData["supervisorOrDepartment"] = coApplicantdata.supervisorOrDepartment
+        coApplicantData["employersPhoneNumber"] = coApplicantdata.employersPhoneNumber
+        coApplicantData["previousEmployersAddress"] = coApplicantdata.previousEmployersAddress
+        coApplicantData["previousEmployersAddressStreet"] = coApplicantdata.previousEmployersAddressStreet
+        coApplicantData["previousEmployersAddressStreet2"] = coApplicantdata.previousEmployersAddressStreet2
+        coApplicantData["previousEmployersAddressCity"] = coApplicantdata.previousEmployersAddressCity
+        coApplicantData["previousEmployersAddressState"] = coApplicantdata.previousEmployersAddressState
+        coApplicantData["previousEmployersAddressZip"] = coApplicantdata.previousEmployersAddressZip
+        coApplicantData["earningsPerMonth"] = coApplicantdata.earningsPerMonth
+        coApplicantData["yearsOnJobPreviousEmployer"] = coApplicantdata.yearsOnJobPreviousEmployer
+        coApplicantData["occupationPreviousEmployer"] = coApplicantdata.occupationPreviousEmployer
+        coApplicantData["previousEmployersPhoneNumber"] = coApplicantdata.previousEmployersPhoneNumber
+        coApplicantData["otherRace"] = coApplicantdata.otherRace
+        return coApplicantData
+    }
+    func applicantData(applicantdata:rf_ApplicantData) -> [String:Any]
+    {
+        var applicantData:[String:Any] = [:]
+        applicantData["ethnicity"] = applicantdata.ethnicity
+        applicantData["race"] = applicantdata.race
+        applicantData["sex"] = applicantdata.sex
+        applicantData["applicantEmail"] = applicantdata.applicantEmail
+        applicantData["applicantEmail"] = applicantdata.applicantEmail
+        applicantData["maritalStatus"] = applicantdata.maritalStatus
+        applicantData["applicantFirstName"] = applicantdata.applicantFirstName
+        
+        applicantData["applicantMiddleName"] = applicantdata.applicantMiddleName
+        applicantData["applicantLastName"] = applicantdata.applicantLastName
+        applicantData["driversLicense"] = applicantdata.driversLicense
+        applicantData["driversLicenseExpDate"] = applicantdata.driversLicenseExpDate
+        applicantData["driversLicenseIssueDate"] = applicantdata.driversLicenseIssueDate
+        applicantData["dateOfBirth"] = applicantdata.dateOfBirth
+        applicantData["socialSecurityNumber"] = applicantdata.socialSecurityNumber
+        applicantData["addressOfApplicant"] = applicantdata.addressOfApplicant
+        applicantData["addressOfApplicantStreet"] = applicantdata.addressOfApplicantStreet
+        applicantData["addressOfApplicantStreet2"] = applicantdata.addressOfApplicantStreet2
+        applicantData["addressOfApplicantCity"] = applicantdata.addressOfApplicantCity
+        applicantData["addressOfApplicantState"] = applicantdata.addressOfApplicantState
+        
+        applicantData["addressOfApplicantZip"] = applicantdata.addressOfApplicantZip
+        applicantData["previousAddressOfApplicant"] = applicantdata.previousAddressOfApplicant
+        applicantData["previousAddressOfApplicantStreet"] = applicantdata.previousEmployersAddressStreet
+        applicantData["previousAddressOfApplicantStreet2"] = applicantdata.previousEmployersAddressStreet2
+        applicantData["previousAddressOfApplicantCity"] = applicantdata.previousAddressOfApplicantCity
+        applicantData["previousAddressOfApplicantState"] = applicantdata.previousAddressOfApplicantState
+        applicantData["previousAddressOfApplicantZip"] = applicantdata.previousAddressOfApplicantZip
+        applicantData["cellPhone"] = applicantdata.cellPhone
+        applicantData["homePhone"] = applicantdata.homePhone
+        applicantData["howLong"] = applicantdata.howLong
+        applicantData["previousAddressHowLong"] = applicantdata.previousAddressHowLong
+        applicantData["presentEmployer"] = applicantdata.presentEmployer
+        applicantData["yearsOnJob"] = applicantdata.yearsOnJob
+        applicantData["occupation"] = applicantdata.occupation
+        applicantData["presentEmployersAddress"] = applicantdata.presentEmployersAddress
+        applicantData["presentEmployersAddressStreet"] = applicantdata.presentEmployersAddressStreet
+        applicantData["presentEmployersAddressStreet2"] = applicantdata.presentEmployersAddressStreet2
+        applicantData["presentEmployersAddressCity"] = applicantdata.presentEmployersAddressCity
+        applicantData["presentEmployersAddressState"] = applicantdata.presentEmployersAddressState
+        applicantData["presentEmployersAddressZip"] = applicantdata.presentEmployersAddressZip
+        applicantData["earningsFromEmployment"] = applicantdata.earningsFromEmployment
+        applicantData["type_of_credit_requested"] = applicantdata.type_of_credit_requested
+        applicantData["supervisorOrDepartment"] = applicantdata.supervisorOrDepartment
+        applicantData["employersPhoneNumber"] = applicantdata.employersPhoneNumber
+        
+        applicantData["previousEmployersAddress"] = applicantdata.previousEmployersAddress
+        applicantData["previousEmployersAddressStreet"] = applicantdata.presentEmployersAddressStreet
+        applicantData["previousEmployersAddressStreet2"] = applicantdata.previousEmployersAddressStreet2
+        applicantData["previousEmployersAddressCity"] = applicantdata.previousEmployersAddressCity
+        applicantData["previousEmployersAddressState"] = applicantdata.previousEmployersAddressState
+        applicantData["previousEmployersAddressZip"] = applicantdata.previousEmployersAddressZip
+        applicantData["earningsPerMonth"] = applicantdata.earningsPerMonth
+        applicantData["yearsOnJobPreviousEmployer"] = applicantdata.yearsOnJobPreviousEmployer
+        applicantData["occupationPreviousEmployer"] = applicantdata.occupationPreviousEmployer
+        applicantData["previousEmployersPhoneNumber"] = applicantdata.previousEmployersPhoneNumber
+        applicantData["otherRace"] = applicantdata.otherRace
+        return applicantData
+    }
+    
+    func roomDetails(roomdata:List<rf_completed_room>) -> [[String:Any]]
+    {
+        var roomData:[String:Any] = [:]
+        var roomDataArray:[[String:Any]] = [[:]]
+        for rooms in roomdata
+        {
+            
+            roomData["room_id"] = rooms.room_id
+            roomData["measurement_exist"] = rooms.measurement_exist
+            roomData["customer_id"] = rooms.customer_id
+            roomData["appointment_id"] = rooms.appointment_id
+            roomData["room_name"] = rooms.room_name
+            roomData["room_type"] = rooms.room_type
+            roomData["drawing_id"] = rooms.drawing_id
+            roomData["draw_image_name"] = rooms.draw_image_name
+            roomData["room_summary_comment"] = rooms.room_summary_comment
+            roomData["selected_room_color"] = rooms.selected_room_color
+            roomData["selected_room_Upcharge"] = rooms.selected_room_Upcharge
+            roomData["selected_room_UpchargePrice"] = rooms.selected_room_UpchargePrice
+            roomData["selected_room_molding"] = rooms.selected_room_molding
+            roomData["room_strike_status"] = rooms.room_strike_status
+            roomData["extraPrice"] = rooms.extraPrice
+            roomData["extraPriceToExclude"] = rooms.extraPriceToExclude
+            roomData["room_area"] = rooms.room_area
+            roomData["stairCount"] = rooms.stairCount
+            roomData["stairWidth"] = rooms.stairWidth
+            roomData["draw_area_adjusted"] = rooms.draw_area_adjusted
+            roomData["room_perimeter"] = rooms.room_perimeter
+            roomData["material_image_url"] = rooms.material_image_url
+            roomData["floor_id"] = rooms.floor_id
+            
+            var roomAttachments:[String] = []
+            if rooms.room_attachments.count > 0
+            {
+                for roomImages in rooms.room_attachments
+                {
+                    roomAttachments.append(roomImages)
+                }
+                roomData["room_attachments"] = roomAttachments
+            }
+            if (rooms.transArray.count) > 0
+            {
+                var transition = transitionDetails(transitiondata: rooms.transArray)
+                roomData["transArray"] = transition
+            }
+            
+            var questions = questionDetails(questiondata: rooms.questionnaires)
+            roomData["questionnaires"] = questions
+            roomDataArray.append(roomData)
+        }
+        return roomDataArray
+        
+    }
+    
+    func questionDetails(questiondata:List<rf_master_question>) -> [[String:Any]]
+    {
+        var questionData:[String:Any] = [:]
+        var questionDataArray:[[String:Any]] = [[:]]
+        for questions in questiondata
+        {
+            questionData["id"] = questions.id
+            questionData["room_id"] = questions.room_id
+            questionData["appointment_id"] = questions.appointment_id
+            questionData["question_name"] = questions.question_name
+            questionData["amount"] = questions.amount
+            questionData["amount_included"] = questions.amount_included
+            if (questions.rf_AnswerOFQustion.count) > 0
+            {
+                var answer = answerDetails(answerDetailsdata:questions.rf_AnswerOFQustion)
+                questionData["rf_AnswerOFQustion"] = answer
+            }
+            questionDataArray.append(questionData)
+        }
+        return questionDataArray
+    }
+    func answerDetails(answerDetailsdata:List<rf_AnswerForQuestion>) -> [[String:Any]]
+    {
+        var answerData:[String:Any] = [:]
+        var answerDataArray:[[String:Any]] = [[:]]
+        for answer in answerDetailsdata
+        {
+            var answerValue:[String] = []
+            answerData["question_id"] = answer.question_id
+            answerData["appointment_id"] = answer.appointment_id
+            for answerDetails in answer.answer
+            {
+                answerValue.append(answerDetails)
+            }
+            answerData["answer"] = answerValue
+            answerDataArray.append(answerData)
+        }
+        return answerDataArray
+    }
+    
+    func transitionDetails(transitiondata:List<rf_transitionData>) -> [[String:Any]]
+    {
+        var transitionData:[String:Any] = [:]
+        var transitionArray:[[String:Any]] = [[:]]
+        for transition in transitiondata
+        {
+            transitionData["name"] = transition.name
+            transitionData["color"] = transition.color
+            transitionData["transsquarefeet"] = transition.transsquarefeet
+            transitionArray.append(transitionData)
+        }
+        return transitionArray
+        
     }
 }
 class ViewLogTableViewCell:UITableViewCell{
