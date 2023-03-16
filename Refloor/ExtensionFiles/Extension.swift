@@ -237,6 +237,24 @@ extension UIView{
         }
         return nil
     }
+    func addDashedBorder(size:CGSize) {
+        let color = UIColor().colorFromHexString("#A7B0BA").cgColor//UIColor.black.cgColor
+            //#A7B0BA
+            let shapeLayer:CAShapeLayer = CAShapeLayer()
+            let frameSize = size
+            let shapeRect = CGRect(x: 0, y: 0, width: frameSize.width, height: frameSize.height)
+            
+            shapeLayer.bounds = shapeRect
+            shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
+            shapeLayer.fillColor = UIColor.clear.cgColor
+            shapeLayer.strokeColor = color
+            shapeLayer.lineWidth = 1
+            shapeLayer.lineJoin = CAShapeLayerLineJoin.round
+            shapeLayer.lineDashPattern = [5,5]
+            shapeLayer.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 4).cgPath
+            
+            self.layer.addSublayer(shapeLayer)
+        }
     
     func setDeSelected(_ color:UIColor)
     {
@@ -1944,6 +1962,25 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
     }
+    func deleteAnyAppointmentLogsTable(appointmentId:Int) {
+        do{
+            let realm = try Realm()
+            let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d",appointmentId)
+                try realm.write{
+//                    for appointment in appointments
+//                    {
+                        realm.delete(appointments)
+                   // }
+//                    if let appointment = appointments.first{
+                       
+                    //}
+                }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
+    
+    
     //delete single or all appointment logs
     func deleteAppointmentLog(appointmentId:Int, deleteAll:Bool) {
         do{
@@ -2171,7 +2208,45 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return savedRooms
     }
-    
+    func createJWTToken(parameter:[String : Any]) -> String
+     {
+         let header = JWTHeader(typ: "JWT", alg: .hs256)
+         let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+         var jwtToken:String = String()
+         let json = (parameter as NSDictionary).JsonString()
+         let data = json.data(using: .utf8)
+                 
+         let decoder = JSONDecoder()
+                 
+         if let data = data, let model = try? decoder.decode(paymentMethodDetailsSecret.self, from: data) {
+             print(model)
+             let jwt = JWT<paymentMethodDetailsSecret>(header: header, payload: model, signature: signature)
+             jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+             print(jwtToken)
+         
+         }
+         return jwtToken
+     }
+     
+     func createJWTTokenApplicantInfo(parameter:[String : Any]) -> String
+      {
+          let header = JWTHeader(typ: "JWT", alg: .hs256)
+          let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          var jwtToken:String = String()
+          let json = (parameter as NSDictionary).JsonString()
+          let data = json.data(using: .utf8)
+                  
+          let decoder = JSONDecoder()
+                  
+          if let data = data, let model = try? decoder.decode(ApplicantInfoDetailsSecret.self, from: data) {
+              print(model)
+              let jwt = JWT<ApplicantInfoDetailsSecret>(header: header, payload: model, signature: signature)
+              jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+              print(jwtToken)
+          
+          }
+          return jwtToken
+      }
     
     func deleteRoomImage(savedImageUrlString: String,appointmentId: Int, roomId:Int) -> Bool{
         let savedRooms = rf_completed_room()
@@ -2697,6 +2772,7 @@ extension UIViewController:OrderStatusViewDelegate
     func saveLogDetailsForAppointment(appointmentId: Int, logMessage: String ,time:String, errorMessage: String = "",name:String,appointmentDate:String,payment_status:String = "",payment_message:String = ""){
         do{
             let realm = try Realm()
+            var dict:[String:Any] = [:]
             try realm.write{
                 let appointmentLogs = realm.objects(rf_Appointment_Logs.self).filter("appointment_id == %@",appointmentId)
                 if appointmentLogs.count == 0{
@@ -2708,7 +2784,17 @@ extension UIViewController:OrderStatusViewDelegate
                     if let appointmentLogsAlreadyExist = appointmentLogs.first{
                         let logArrayList = appointmentLogsAlreadyExist.sync_message
                         logArrayList.append(rf_Appointment_Log_Data(message: logMessage, time: time, appointmentId: appointmentId,customerName:name,appointmentDateTime: appointmentDate))
-                        let dict:[String:Any] = ["appointment_id":appointmentId,"sync_message":logArrayList,"appBaseUrl":BASE_URL,"paymentStatus":payment_status,"paymentMessage":payment_message]
+                        if payment_status == ""
+                        {
+                            let pay_message = appointmentLogsAlreadyExist.paymentMessage
+                          
+                           let pay_status = appointmentLogsAlreadyExist.paymentStatus
+                            dict = ["appointment_id":appointmentId,"sync_message":logArrayList,"appBaseUrl":BASE_URL,"paymentStatus":pay_status ?? "","paymentMessage":pay_message ?? ""]
+                        }
+                        else
+                        {
+                            dict = ["appointment_id":appointmentId,"sync_message":logArrayList,"appBaseUrl":BASE_URL,"paymentStatus":payment_status ,"paymentMessage":payment_message ]
+                        }
                         realm.create(rf_Appointment_Logs.self, value: dict, update: .all)
                     }
                 }
@@ -2887,9 +2973,17 @@ extension UIViewController:OrderStatusViewDelegate
             
             if appointmentRequest.count == 0 { //ie this is an appointment yet to start
                 return AppointmentStatus.start
-            }else if appointmentRequest.filter("sync_status == %@" , false).count > 0{ // atleast one enty yet to sync
+            }else if appointmentRequest.filter("sync_status == %@",false).count > 0{ // atleast one enty yet to sync
                 return AppointmentStatus.sync
-            }else{
+            }
+            else if appointmentRequest.filter("sync_status == %@",true).count > 1
+            {
+                return AppointmentStatus.complete
+            }
+            else if appointmentRequest.filter("sync_status == %@ AND reqest_title == %@",true,"Sales_Update").count == 1{
+                return AppointmentStatus.start
+            }
+            else{
                 // all synced, hide appointment
                 return AppointmentStatus.complete
             }
@@ -2899,9 +2993,21 @@ extension UIViewController:OrderStatusViewDelegate
         
         return AppointmentStatus.start
     }
+    func getCompletedAppointmentData() -> Results<rf_completed_appointment>!{
+        var appointmentData : Results<rf_completed_appointment>!
+        do{
+            let realm = try Realm()
+             let appointment = realm.objects(rf_completed_appointment.self)
+                appointmentData = appointment
+            return appointmentData
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return appointmentData
+    }
     
     
-    func createDBAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: String,imageName:String){
+    func createDBAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String){
         let appointmentId = AppointmentData().appointment_id ?? 0
         do{
             let realm = try Realm()
@@ -2909,7 +3015,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let dict:[String:Any] = [ "appointment_id": appointmentId,
                                           "reqest_title": requestTitle.rawValue,
                                           "request_url": requestUrl,
-                                          "request_parameter" : requestParameter,
+                                          "request_parameter" : requestParameter.JsonString(),
                                           "request_type" : requestType.rawValue,
                                           "sync_status" : true,
                                           "image_name": imageName]
@@ -2920,32 +3026,20 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
-    func createAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String,isDecodeEncode:Bool,jwtToken:String?){
+    func createAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String){
         let appointmentId = AppointmentData().appointment_id ?? 0
         do{
             let realm = try Realm()
-            var dict:[String:Any] = [:]
             try realm.write{
-                if isDecodeEncode == false
-                {
-                dict = [ "appointment_id": appointmentId,
+                
+             let dict:[String:Any] = [ "appointment_id": appointmentId,
                                       "reqest_title": requestTitle.rawValue,
                                       "request_url": requestUrl,
                                       "request_parameter" : requestParameter.JsonString(),
                                       "request_type" : requestType.rawValue,
                                       "sync_status" : false,
                                       "image_name": imageName]
-                }
-                else
-                {
-                dict = [ "appointment_id": appointmentId,
-                                      "reqest_title": requestTitle.rawValue,
-                                      "request_url": requestUrl,
-                         "request_parameter" : jwtToken ?? "",
-                                      "request_type" : requestType.rawValue,
-                                      "sync_status" : false,
-                                      "image_name": imageName]
-                }
+                
                 realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
             }
         }catch{
@@ -3169,10 +3263,10 @@ extension UIViewController:OrderStatusViewDelegate
             if let appointment = realm.objects(rf_master_appointment.self).filter("id == %d",appointmentId).first{
                 appointmentData = appointment
             }else if let  appointmentReq = realm.objects(rf_Completed_Appointment_Request.self).filter("reqest_title == %d AND appointment_id == %d", RequestTitle.CustomerAndRoom.rawValue,appointmentId).first{
-               // let customerFullDict = appointmentReq.request_parameter?.dictionaryValue() ?? [:]
-                let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: appointmentReq.request_parameter ?? "")
-                let customerDictData = customerFullDict["payload"] as? [String:Any]
-                let customerDict = customerDictData?["customer"] as? [String:Any] ?? [:]
+                let customerFullDict = appointmentReq.request_parameter?.dictionaryValue() ?? [:]
+                //let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: appointmentReq.request_parameter ?? "")
+                //let customerDictData = customerFullDict["data"] as? [String:Any]
+                let customerDict = customerFullDict["customer"] as? [String:Any] ?? [:]
                 appointmentData = rf_master_appointment(appointmentObj: customerDict)
             }
         }catch{
@@ -3514,19 +3608,21 @@ extension UIViewController:OrderStatusViewDelegate
                 let selectedColor = room.selected_room_color ?? ""
                 let roomColorId = masterData?.flooring_colors.filter("color_name == %@",selectedColor).first?.material_id ?? 0
                 var transitionArray: [[String:Any]] = []
-                var transition1_name = ""
-                var transition1_width = ""
-                var transition2_name = ""
-                var transition2_width = ""
-                var transition3_name = ""
-                var transition3_width = ""
-                var transition4_name = ""
-                var transition4_width = ""
+//                var transition1_name = ""
+//                var transition1_width = ""
+//                var transition2_name = ""
+//                var transition2_width = ""
+//                var transition3_name = ""
+//                var transition3_width = ""
+//                var transition4_name = ""
+//                var transition4_width = ""
                 let isRoomExcluded = room.room_strike_status ? 1 : 0
                 for i in 0..<room.transArray.count{
                     let name = room.transArray[i].name ?? ""
                     let width = room.transArray[i].transsquarefeet
-                    let transitionDict:[String:Any] = ["name":name, "width": width]
+                    let height = room.transArray[i].transHeight ?? "0"
+                    let transitionHeightId = room.transArray[i].transitionHeightId
+                    let transitionDict:[String:Any] = ["name":name, "width": width, "height": height , "transition_height_id":transitionHeightId]
                     transitionArray.append(transitionDict)
 //                    switch i {
 //
@@ -3913,6 +4009,32 @@ extension UIViewController:OrderStatusViewDelegate
             let realm = try Realm()
             let masterData = realm.objects(MasterData.self)
             if let discountCoupons = masterData.first?.discount_coupons{
+                discountCouponsArray = discountCoupons
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return discountCouponsArray
+    }
+    func getPromoDropDownValue() -> RealmSwift.List<rf_promotionCodes_results> {
+        var discountCouponsArray = RealmSwift.List<rf_promotionCodes_results>()
+        do{
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let discountCoupons = masterData.first?.promotionCodes{
+                discountCouponsArray = discountCoupons
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return discountCouponsArray
+    }
+    func getTransitionheightDropDownValue() -> RealmSwift.List<rf_transitionHeights_results> {
+        var discountCouponsArray = RealmSwift.List<rf_transitionHeights_results>()
+        do{
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let discountCoupons = masterData.first?.transitionHeights{
                 discountCouponsArray = discountCoupons
             }
         }catch{

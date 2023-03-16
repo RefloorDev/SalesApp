@@ -50,6 +50,7 @@ class PaymentDetailsViewController: UIViewController{
     var savings:Double = 0
     var specialPriceId:Int = Int()
     var stairSpecialPriceId:Int = Int()
+    var promotionCodeId:Int = Int()
     override func viewWillAppear(_ animated: Bool ){
         
         self.setNavigationBarbackAndlogo(with: "Payment Summary".uppercased())
@@ -228,7 +229,7 @@ class PaymentDetailsViewController: UIViewController{
         {
             coapplicantSkiip = customer.co_applicant_skipped ?? 0
         }
-        let data = ["selected_package_id":paymentPlanValue?.id ?? 0,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"discount":self.paymentPlanValue?.discount ?? 0,"payment_method":paymentmethord,"finance_option_id":paymentOptionDataValue?.id ?? 0,"additional_cost":self.paymentPlanValue?.additional_cost ?? 0,"msrp":mrp,"installation_date":self.installationDate,"photo_permission":adminStatusValue,"adjustment":adjustmentValue,"price":totalAmount,"down_payment_amount":downPaymentValue,"final_payment":finalpayment,"finance_amount":financePayment,"coapplicant_skip":coapplicantSkiip,"savings": savings,"special_price_id":specialPriceId,"stair_special_price_id":stairSpecialPriceId] as [String : Any]
+        let data = ["selected_package_id":paymentPlanValue?.id ?? 0,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"discount":self.paymentPlanValue?.discount ?? 0,"payment_method":paymentmethord,"finance_option_id":paymentOptionDataValue?.id ?? 0,"additional_cost":self.paymentPlanValue?.additional_cost ?? 0,"msrp":mrp,"installation_date":self.installationDate,"photo_permission":adminStatusValue,"adjustment":adjustmentValue,"price":totalAmount,"down_payment_amount":downPaymentValue,"final_payment":finalpayment,"finance_amount":financePayment,"coapplicant_skip":coapplicantSkiip,"savings": savings,"special_price_id":specialPriceId,"stair_special_price_id":stairSpecialPriceId,"calc_based_on":"msrp","promotion_code_id":promotionCodeId] as [String : Any]
         //arb
         self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
         //

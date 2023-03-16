@@ -13,6 +13,8 @@ class SubSqureView: UIView {
     var lastLocation = CGPoint(x: 0, y: 0)
     var custom_width: CGFloat = 0
     var custom_hight: CGFloat  = 0
+    var addViewHeight : String = "0"
+    var transitionHeightId : Int = 0
     var object:OpeningCustomObject?
     var getSize:CGFloat{
         return self.isVertical ?  custom_hight : custom_width

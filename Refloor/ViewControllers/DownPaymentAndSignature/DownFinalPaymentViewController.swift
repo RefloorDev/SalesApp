@@ -49,6 +49,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var specialPriceId:Int = Int()
     var stairsSpecialPriceId:Int = Int()
     var imagePicker: CaptureImage!
+    var promotionCodeId:Int = Int()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -182,8 +183,18 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
                 {
                     downPayment = totalAmount
                 }
+                
                 finalpayment = 0
                 downOrFinal = downPayment
+            }
+            else
+            {
+                if downPayment > totalAmount
+                {
+                    downPayment = totalAmount
+                    finalpayment = 0
+                }
+                self.finalPaymentTF.text = "\(finalpayment.noDecimal)"
             }
             
         }
@@ -356,7 +367,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
             
             if(financePayment > 1)
             {
-                self.alert("You have entered down and final amount lower than sale price So adjusted correct amount and please tap next button", nil)
+                self.alert("Down and final payment amount lower than sales price. Please update the price and tap on Next button.", nil)
                 return
             }
             
@@ -365,6 +376,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         UIUpdateForValueChange(isUpdateDownPayment:true)
         summery.specialPriceId = specialPriceId
         summery.stairSpecialPriceId = stairsSpecialPriceId
+        summery.promotionCodeId = promotionCodeId
         summery.downOrFinal = self.downOrFinal
         summery.totalAmount = self.totalAmount
         summery.paymentPlan = self.paymentPlan

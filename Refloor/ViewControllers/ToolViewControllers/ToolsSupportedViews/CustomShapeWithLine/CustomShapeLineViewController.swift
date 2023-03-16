@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineViewDelegate,DropDownDelegate {
+class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineViewDelegate,DropDownDelegate,UITextFieldDelegate {
     
     
     
@@ -35,13 +35,16 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     @IBOutlet weak var horisontalButton: UIButton!
     @IBOutlet weak var verticalButton: UIButton!
     @IBOutlet weak var addView_WidthTF: UITextField!
+    @IBOutlet weak var addView_HeightTF: UITextField!
     @IBOutlet weak var add_Button: UIButton!
     @IBOutlet weak var add_View_hight_Constrain: NSLayoutConstraint!
+    @IBOutlet weak var bottomLineViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var selected_squareView_Name_label: UILabel!
     @IBOutlet weak var selected_horizotal_Button: UIButton!
     @IBOutlet weak var selected_vertical_Button: UIButton!
     @IBOutlet weak var seletced_SqureView_TF: UITextField!
     @IBOutlet weak var selected_View_Constrain: NSLayoutConstraint!
+    @IBOutlet weak var selected_SquareView_Height_TF: UITextField!
     @IBOutlet weak var selected_View: UIView!
     var isResponder = false
     var drowingView:LineView!
@@ -63,6 +66,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     var roomData:RoomDataValue!
     var messurementID = -1
     var imagePicker: CaptureImage!
+    var transitionHeightDropDownArray:List<rf_transitionHeights_results>!
     
  //   var openingsList:[OpeningCustomObject] = [OpeningCustomObject(name: "No Transition", color: .white),OpeningCustomObject(name: "Reducer", color: .yellow),OpeningCustomObject(name: "Square Edge", color: .blue),OpeningCustomObject(name: "Stair Nose", color: .green),OpeningCustomObject(name: "Carpet", color: .red)]
     
@@ -74,13 +78,35 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     var path: UIBezierPath!
     var graph_minimunValue = minimumValue
     var summaryData:SummeryDetailsData!
+    var transitionHeightvalue:[String] = []
+    var transitionHeightId:Int = Int()
     override func viewDidLoad() {
         super.viewDidLoad()
         //
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         minimumValue = 40
+        addView_WidthTF.delegate = self
+        addView_HeightTF.delegate = self
+        bottomLineViewTopConstraint.constant = 35
+        addView_HeightTF.setLeftPaddingPoints(10)
+        selected_SquareView_Height_TF.setLeftPaddingPoints(10)
         //
         //seletced_SqureView_TF.delegate = self
+        
+        transitionHeightDropDownArray = self.getTransitionheightDropDownValue()
+        if transitionHeightDropDownArray.count > 0
+        {
+            transitionHeightvalue = transitionHeightDropDownArray!.compactMap({$0.name})
+            //        var transitionHeightValueCopy = transitionHeightvalue
+            //        transitionHeightvalue.removeAll()
+            //        for index in 0...transitionHeightValueCopy.count - 1
+            //        {
+            //            var value = transitionHeightValueCopy[index]
+            //            value = value.replacingOccurrences(of: "\"", with: "")
+            //            transitionHeightvalue.append(value)
+            //        }
+            transitionHeightId = transitionHeightDropDownArray[0].transitionHeightId
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             self.drowingView = LineView(frame: CGRect(x: 0, y: 0, width: self.masterView.bounds.width - 300, height: self.masterView.bounds.height ))
             self.drowingView.delegate = self
@@ -159,7 +185,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     @IBAction func areaTFDidEndAction(_ sender: UITextField) {
         if let value2 =  Float(sender.text ?? "")
         {
-            let a = Double(areaValue)
+            let a = Double(value2)
             
             self.areaValue = roundTheValue(CGFloat(value2))
             self.areaTF.text = "\(a.rounded().clean)"
@@ -188,6 +214,27 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         
         
         self.areaTF.text = "\(a.rounded().clean)"
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+    {
+        if textField == addView_WidthTF
+        {
+            let searchString = (addView_WidthTF.text as NSString?)?.replacingCharacters(in: range, with: string)
+            if (searchString?.count)! > 1 {
+                
+                let inverseSet = CharacterSet(charactersIn: ".0123456789").inverted
+                
+                return ((string as NSString).rangeOfCharacter(from: inverseSet).location == NSNotFound)
+                
+            } else {
+                
+                let inverseSet = CharacterSet(charactersIn: ".123456789").inverted
+                
+                return ((string as NSString).rangeOfCharacter(from: inverseSet).location == NSNotFound)
+            }
+        }
+        return true
     }
     
     override func nextAction() {
@@ -463,22 +510,12 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     
     
     
-    @IBAction func rectanglebuttonAction(_ sender: UIButton) {
+    @IBAction func rectanglebuttonAction(_ sender: UIButton)
+    {
         let masterData = self.getMasterDataFromDB()
         let maximumOpenings = masterData.max_no_transitions 
         if let openings = self.drowingView?.subSquareView,(openings.count >= maximumOpenings)
         {
-//            if(openings.count < 5)
-//            {
-//                let strings = openingsList.map { (opening) -> String in
-//                    opening.name
-//                }
-//                self.DropDownDefaultfunction(sender, 200, strings, currentOpening, delegate: self, tag: 2)
-//            }
-//            else
-//            {
-//                self.alert("You have added maximum number of transitions", nil)
-//            }
             self.alert("You have added maximum number of transitions", nil)
         }
         else
@@ -487,7 +524,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 opening.name
             }
             self.DropDownDefaultfunction(sender, 200, strings, currentOpening, delegate: self, tag: 2)
-            
+            bottomLineViewTopConstraint.constant = 25
         }
         
        
@@ -516,19 +553,22 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             }
             else
             {
-                self.add_View_hight_Constrain.constant = 160
+                self.add_View_hight_Constrain.constant = 330
                 self.isVertical = true
                 self.verticalButton.borderWidth = 1
                 self.verticalButton.borderColor = self.openingsList[self.currentOpening].color
                 self.horisontalButton.borderColor = .clear
                 self.horisontalButton.borderWidth = 0
                 self.addView_WidthTF.text = "1"
+                self.addView_HeightTF.text = "0"
                 self.addView.isHidden = false
             }
             self.addView.layoutIfNeeded()
         }
         
     }
+    
+    
     
     @IBAction func add_opens_orientation(_ sender: UIButton) {
         if(verticalButton == sender)
@@ -554,20 +594,26 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         
         if let value2 =  Float(self.addView_WidthTF.text ?? ""),currentOpening != -1
         {
+            var addViewHeight = addView_HeightTF.text ?? "0"
+           //addViewHeight = addViewHeight.replacingOccurrences(of: "\", with: "")
             if value2 == 0
             {
                 self.alert("Please enter a valid value in width field.", nil)
 
             }
+            if addView_HeightTF.text == ""
+            {
+                self.alert("Please enter a valid value in height field.", nil)
+            }
             else
             {
-                
-                let hight = (!self.isVertical) ? 1 : CGFloat(value2)
-                let width = (!self.isVertical) ? CGFloat(value2) : 1
+                let hight = (!self.isVertical) ? 1 : CGFloat(value2 * 100) / 100
+                let width = (!self.isVertical) ? CGFloat(value2 * 100) / 100 : 1
                 
                 addViewHideORVisible(true)
-                drowingView.add_Sub_Square_View(xAsis: self.drowingView.buzierpath.bounds.maxX/2, yAxis: self.drowingView.buzierpath.bounds.maxY/2, width: width, hight: hight, delegate: self, isVertical: self.isVertical, objc: openingsList[currentOpening])
+                drowingView.add_Sub_Square_View(xAsis: self.drowingView.buzierpath.bounds.maxX/2, yAxis: self.drowingView.buzierpath.bounds.maxY/2, width: width, hight: hight, delegate: self, isVertical: self.isVertical, objc: openingsList[currentOpening], addViewHeight: addViewHeight,transitionheightId: self.transitionHeightId)
                 currentOpening = -1
+                bottomLineViewTopConstraint.constant = 35
             }
         }
         else
@@ -593,7 +639,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         else
         {
             self.selected_View.isHidden = false
-            self.selected_View_Constrain.constant = 275
+            self.selected_View_Constrain.constant = 350
             self.selectedOpening = subView
             // self.selected_squareView_Name_label.text = "Selected \(subView.object?.name ?? "")(\(subView.tag + 1))"
             self.selected_squareView_Name_label.text = "Selected \(subView.object?.name ?? "")"
@@ -605,7 +651,8 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 self.selected_vertical_Button.borderColor = UIColor.white
                 self.selected_horizotal_Button.borderColor = .clear
                 self.selected_horizotal_Button.borderWidth = 0
-                self.seletced_SqureView_TF.text = "\(subView.custom_width)"
+                self.seletced_SqureView_TF.text = String(format: "%.1f", subView.custom_width)//"\(subView.custom_width)"
+                self.selected_SquareView_Height_TF.text = "\(subView.addViewHeight)" //addView_HeightTF.text
             }
             else
             {
@@ -614,7 +661,8 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 self.selected_vertical_Button.borderColor = UIColor.clear
                 self.selected_horizotal_Button.borderColor = .white
                 self.selected_horizotal_Button.borderWidth = 1
-                self.seletced_SqureView_TF.text = "\(subView.custom_hight)"
+                self.seletced_SqureView_TF.text = String(format: "%.1f", subView.custom_hight)//"\(subView.custom_hight)"
+                self.selected_SquareView_Height_TF.text = "\(subView.addViewHeight)" //addView_HeightTF.text
             }
         }
     }
@@ -657,6 +705,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         self.selected_View_Constrain.constant = 0
         self.selected_squareView_Name_label.text  = "No Selected Openings"
         self.seletced_SqureView_TF.text = ""
+        self.selected_SquareView_Height_TF.text = ""
         self.selected_vertical_Button.borderWidth = 0
         self.selected_vertical_Button.borderColor = UIColor.clear
         self.selected_horizotal_Button.borderColor = .clear
@@ -681,6 +730,26 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 view.changeOriantation(false)
                 setSelectedSubSqureView(view)
             }
+        }
+    }
+    @IBAction func HeightdropDownBtnClicked(_ sender: UIButton)
+    {
+        if transitionHeightvalue.count > 0
+        {
+            if sender.tag == 0
+            {
+                print("transition heights",transitionHeightvalue)
+                self.DropDownDefaultfunction(sender, sender.bounds.width, transitionHeightvalue, 1, delegate: self, tag: 1)
+            }
+            else
+            {
+                print("transition heights",transitionHeightvalue)
+                self.DropDownDefaultfunction(sender, sender.bounds.width, transitionHeightvalue, 1, delegate: self, tag: 3)
+            }
+        }
+        else
+        {
+            self.alert("Not Available", nil)
         }
     }
     
@@ -736,6 +805,8 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         }
         
     }
+ 
+    
     
     func customViewDelegateResult(_ tag: Int) {
         
@@ -811,7 +882,22 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     
     
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
-        if tag != 2
+        if tag == 1
+       {
+           addView_HeightTF.text = item
+           //selected_SquareView_Height_TF.text = item
+            let selectedValue = transitionHeightDropDownArray.filter({$0.name == item})
+            transitionHeightId = selectedValue.first?.transitionHeightId ?? 0
+       }
+        else if tag == 3
+        {
+            selected_SquareView_Height_TF.text = item
+            let selectedValue = transitionHeightDropDownArray.filter({$0.name == item})
+            transitionHeightId = selectedValue.first?.transitionHeightId ?? 0
+            let view =  self.selectedOpening
+            view?.addViewHeight = item
+        }
+       else if tag != 2
         {
         switch index {
         case 0:
@@ -845,6 +931,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         self.drowingView.drowShape(self.drowingView.isClosed)
         }
         }
+         
         else
         {
             self.currentOpening = index
@@ -856,6 +943,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             //self.horisontalButton.borderColor = .clear
             self.horisontalButton.borderWidth = 0
             self.addViewHideORVisible(false)
+            self.view.bringSubviewToFront(addView)
         }
        }
     
@@ -871,7 +959,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             {
                 if #available(iOS 14.0, *) {
                     print("item:\(opng.object?.name ?? "") color:\(opng.object?.color.accessibilityName ?? "") size: \(opng.getSize)")
-                    let transData = TransitionData.init(name: opng.object?.name ?? "", color: opng.object?.color.accessibilityName ?? "", transsquarefeet: Float(opng.getSize))
+                    let transData = TransitionData.init(name: opng.object?.name ?? "", color: opng.object?.color.accessibilityName ?? "", transsquarefeet: Float(opng.getSize),transHeight: opng.addViewHeight,transitionHeightId: opng.transitionHeightId)
                     transArray.append(transData)
                 } else {
                     // Fallback on earlier versions

@@ -252,6 +252,20 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                     let contactApiData = self.createContractParameters()
                     if let applicantDataDict = contactApiData as? [String:Any]
                     {
+//                        if  let applicant = applicantDataDict["application_info_secret"] as? String {
+//                            if applicant == ""
+//                            {
+//
+//                            }
+//                            else
+//                            {
+//                                var applicantData:[String:Any] = [:]
+//                                let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+//                                applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+//                                self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+//                            }
+//                           // self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+//                        }
                         if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
                             self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
                         }
@@ -261,65 +275,65 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                     for (key,value) in contactApiData{
                         customerAndRoomData[key] = value
                     }
-                    let json = (customerAndRoomData as NSDictionary).JsonString()
-                    let data = json.data(using: .utf8)
-                    var jwtToken:String = String()
-                            
-                    let decoder = JSONDecoder()
-                            
-                    if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-                        print(model)
-                        let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-                        jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-                        print(jwtToken)
-                    }
+//                    let json = (customerAndRoomData as NSDictionary).JsonString()
+//                    let data = json.data(using: .utf8)
+//                    var jwtToken:String = String()
+//
+//                    let decoder = JSONDecoder()
+//
+//                    if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
+//                        print(model)
+//                        let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
+//                        jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//                        print(jwtToken)
+//                    }
                     //customerAndRoomData = ["data":customerAndRoomData]
                     print(customerAndRoomData)
-                    createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: [:], imageName: "",isDecodeEncode: true,jwtToken: jwtToken)
+                    createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams:customerAndRoomData as NSDictionary, imageName: "")
                     //self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ContactDetails, url: AppURL().syncContactInfo, requestType: RequestType.post, requestParams: contactApiData as NSDictionary, imageName: "")
                     imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
                     var lastImageDict = imagesArray[imagesArray.count-1]
                     lastImageDict["data_completed"] = 1
                     imagesArray[imagesArray.count-1] = lastImageDict
                     for imageDict in imagesArray{
-                        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String,isDecodeEncode: false,jwtToken: "")
+                        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
                     }
                     
                     let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
                     let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "",isDecodeEncode: false,jwtToken: "")
+                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
                         self.dismiss(animated: true) {
                             self.addStartLog()
                             self.delegate?.OrderStatusViewDelegateResult()
                         }
                 }else{ // no room image exist only customer details
                     var customerAndRoomData = self.createFinalParameterForCustomerApiCall(data_completed: 0)
-                    let json = (customerAndRoomData as NSDictionary).JsonString()
-                    let data = json.data(using: .utf8)
-                    var jwtToken:String = String()
-                            
-                    let decoder = JSONDecoder()
-                            
-                    if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-                        print(model)
-                        let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-                        jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-                        print(jwtToken)
-                    }
+//                    let json = (customerAndRoomData as NSDictionary).JsonString()
+//                    let data = json.data(using: .utf8)
+//                    var jwtToken:String = String()
+//
+//                    let decoder = JSONDecoder()
+//
+//                    if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
+//                        print(model)
+//                        let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
+//                        jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//                        print(jwtToken)
+//                    }
                     //customerAndRoomData = ["data":customerAndRoomData]
                     print(customerAndRoomData)
-                    createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: [:], imageName: "",isDecodeEncode: true,jwtToken: jwtToken)
+                    createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
                     imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
                     var lastImageDict = imagesArray[imagesArray.count-1]
                     lastImageDict["data_completed"] = 1
                     imagesArray[imagesArray.count-1] = lastImageDict
                     for imageDict in imagesArray{
-                        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String,isDecodeEncode: false,jwtToken: "")
+                        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
                     }
                     
                     let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
                     let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "",isDecodeEncode: false,jwtToken: "")
+                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
 
                         self.dismiss(animated: true)
                     {
@@ -333,24 +347,24 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             else{
                 //ie appointment started but no room added
                 var customerAndRoomData = self.createFinalParameterForCustomerApiCall(data_completed: 1)
-                let json = (customerAndRoomData as NSDictionary).JsonString()
-                let data = json.data(using: .utf8)
-                var jwtToken:String = String()
-                        
-                let decoder = JSONDecoder()
-                        
-                if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-                    print(model)
-                    let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-                    jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-                    print(jwtToken)
-                }
+//                let json = (customerAndRoomData as NSDictionary).JsonString()
+//                let data = json.data(using: .utf8)
+//                var jwtToken:String = String()
+//
+//                let decoder = JSONDecoder()
+//
+//                if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
+//                    print(model)
+//                    let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
+//                    jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//                    print(jwtToken)
+//                }
                 //customerAndRoomData = ["data":customerAndRoomData]
                 print(customerAndRoomData)
-                createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: [:], imageName: "",isDecodeEncode: true,jwtToken: jwtToken)
+                createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
                 let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
                 let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "",isDecodeEncode: false,jwtToken: "")
+                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
                 /*   if HttpClientManager.SharedHM.connectedToNetwork()
                  {
                  var requestParams = customerAndRoomData
@@ -601,14 +615,17 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         print(paymentType)
+        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
+        //let applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType
-        contractDict["applicationInfo"] = applicantDta["data"]
+        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
+        contractDict["applicationInfo"] = applicantDta["data"]//applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
         //contractDict["data_completed"] = 0
         //contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0
@@ -617,15 +634,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         return contractDict //contractDataDict
     }
     
-    func createAppointmentsRequestDataToDatabase(title:RequestTitle,url:String,requestType:RequestType,requestParams:NSDictionary,imageName:String,isDecodeEncode:Bool,jwtToken:String){
-       if isDecodeEncode == false
-        {
-            self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName,isDecodeEncode: false,jwtToken: "")
-        }
-        else
-        {
-            self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName,isDecodeEncode: true,jwtToken: jwtToken)
-        }
+    func createAppointmentsRequestDataToDatabase(title:RequestTitle,url:String,requestType:RequestType,requestParams:NSDictionary,imageName:String){
+       
+            self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName)
     }
     
     func createRoomParameters() -> [[String:Any]]{

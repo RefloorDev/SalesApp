@@ -188,6 +188,7 @@ struct AppURL {
      let syncInitiate_i360 = BASE_URL + "initiate_sync_to_i360_json"
      let uploadAppointmentLogs = BASE_URL + "update_sync_log"
      let logoutApi = BASE_URL + "logout_from_device"
+    let fetchDataBaseRawValue = BASE_URL + "fetch_database_raw_data"
     
 }
 

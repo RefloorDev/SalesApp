@@ -22,6 +22,8 @@ class PamentOptionsTopCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var adjustmentHeadingLabel: UILabel!
     @IBOutlet weak var priceTopConstrain: NSLayoutConstraint!
     @IBOutlet weak var makeVisibleButton: UIButton!
+    @IBOutlet weak var savingsValueHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var savingsLblHeightConstraint: NSLayoutConstraint!
     var viewC:PaymentOptionsNewViewController?
     @IBAction func makeVisibleButtonAction(_ sender: UIButton) {
         if viewC != nil

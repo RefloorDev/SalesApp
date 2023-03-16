@@ -277,6 +277,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             furnitureQustions.roomID = self.summaryData.room_id ?? 0
             furnitureQustions.floorID = self.summaryData.floor_id ?? 0
             furnitureQustions.appoinmentID = self.summaryData.appointment_id ?? 0
+            furnitureQustions.area = summaryData.adjusted_area ?? 0.0
             furnitureQustions.delegate = self
             furnitureQustions.summaryQustions = self.summaryData.questionaire ?? []
             self.deleteDiscountArrayFromDb() 
@@ -477,6 +478,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
     func cellforQustionsTableViewCell(_ tableView:UITableView,indexPath:IndexPath,tableValue:SummeryTableDataValues) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SummeryDetailsQustionsTableViewCell") as! SummeryDetailsQustionsTableViewCell
+        //qustionAnswer
         
         cell.qustionLabel.text = (tableValue.heading ?? "") + (tableValue.qustionAnswer?.question ?? "")
         var answer = ""
@@ -519,6 +521,25 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 
                 summaryData.adjusted_area  = value
                 cell.messurementTF.text = (summaryData.adjusted_area ?? 0).toRoundeString
+                if isStair != 1
+                {
+                    if qustionAnswer[0].answerOFQustion?.singleSelection?.value == qustionAnswer[17].applicableCurrentSurface
+                    {
+                        var vapourBarrierValue : Int = Int()
+                        let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
+                        if vapourValue.1 == 0.0
+                        {
+                            vapourBarrierValue = Int(vapourValue.0)
+                        }
+                        else
+                        {
+                            vapourBarrierValue = Int(vapourValue.0) + 1
+                        }
+                        summaryData.questionaire![17].answers![0].answer = String(vapourBarrierValue)
+                        qustionAnswer[17].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                        tableReaload()
+                    }
+                }
 //                self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))
                 
             }
@@ -542,7 +563,25 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                     self.deleteDiscountArrayFromDb()
                     summaryData.adjusted_area  = value - 1
                     cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
-                    
+                    if isStair != 1
+                    {
+                        if qustionAnswer[0].answerOFQustion?.singleSelection?.value == qustionAnswer[17].applicableCurrentSurface
+                        {
+                            var vapourBarrierValue : Int = Int()
+                            let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
+                            if vapourValue.1 == 0.0
+                            {
+                                vapourBarrierValue = Int(vapourValue.0)
+                            }
+                            else
+                            {
+                                vapourBarrierValue = Int(vapourValue.0) + 1
+                            }
+                            qustionAnswer[17].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                            summaryData.questionaire![17].answers![0].answer = String(vapourBarrierValue)
+                            tableReaload()
+                        }
+                    }
                 }
             }
         }
@@ -556,6 +595,25 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 self.deleteDiscountArrayFromDb()
                 summaryData.adjusted_area  = value + 1
                 cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
+                if isStair != 1
+                {
+                    if qustionAnswer[0].answerOFQustion?.singleSelection?.value == qustionAnswer[17].applicableCurrentSurface
+                    {
+                        var vapourBarrierValue : Int = Int()
+                        let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
+                        if vapourValue.1 == 0.0
+                        {
+                            vapourBarrierValue = Int(vapourValue.0)
+                        }
+                        else
+                        {
+                            vapourBarrierValue = Int(vapourValue.0) + 1
+                        }
+                        qustionAnswer[17].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                        summaryData.questionaire![17].answers![0].answer = String(vapourBarrierValue)
+                        tableReaload()
+                    }
+                }
                 //self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))
             }
         }

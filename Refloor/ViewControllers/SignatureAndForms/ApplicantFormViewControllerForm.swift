@@ -384,9 +384,13 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         var licenseExpdate = self.lisenceExpDate.text ?? ""
         //dateOfBirth = dateOfBirth.replacingOccurrences(of: "/", with: "-")
         dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
-        if licenseIssueDate != "" || licenseExpdate != ""
+        if licenseIssueDate != ""
         {
             licenseIssueDate = licenseIssueDate.dateconverterEncoding(licenseIssueDate)
+           
+        }
+        if  licenseExpdate != ""
+        {
             licenseExpdate = licenseExpdate.dateconverterEncoding(licenseExpdate)
         }
         
@@ -405,7 +409,17 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             let rf_CoApplicantInfo = rf_CoApplicationData(coApplicantData: coData)
             self.saveCoApplicantDataToAppointmentDetail(coApplicantInfo: rf_CoApplicantInfo)
             //
-            
+           
+            let appointment = AppDelegate.appoinmentslData
+            appointment?.co_applicant_first_name =  ""
+            appointment?.co_applicant_last_name =  ""
+            appointment?.co_applicant_middle_name =  ""
+            appointment?.co_applicant_zip =  ""
+            appointment?.co_applicant_email =  ""
+            appointment?.co_applicant_city =  ""
+            appointment?.co_applicant_state = ""
+            appointment?.co_applicant_address = ""
+            appointment?.co_applicant_skipped = 1
             let applicant = OtherIncomeViewControllerForm.initialization()!
             applicant.downOrFinal = self.downOrFinal
             applicant.totalAmount = self.totalAmount

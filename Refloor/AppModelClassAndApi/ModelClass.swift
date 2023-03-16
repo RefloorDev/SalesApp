@@ -588,6 +588,9 @@ class QuestionsMeasurementData: Mappable
     var calculation_type :String?
     var default_answer: String?
     var amount: Double?
+    var setDefaultAnswer : Bool?
+    var applicableCurrentSurface : String?
+    var aaplicableRoom : [ApplicableRoom]?
     var quote_label :[QuoteLabelData]?
     var answerOFQustion:AnswerOFQustion?
     required init?(map: ObjectMapper.Map){
@@ -614,6 +617,15 @@ class QuestionsMeasurementData: Mappable
         self.calculation_type = masterQuestions.calculation_type
         self.default_answer = masterQuestions.default_answer
         self.amount = masterQuestions.amount
+        self.setDefaultAnswer = masterQuestions.setDefaultAnswer
+        self.applicableCurrentSurface = masterQuestions.applicableCurrentSurface
+        
+        var applicableRoomdetails :[ApplicableRoom] = []
+        for rooms in masterQuestions.applicableRooms
+        {
+            applicableRoomdetails.append(ApplicableRoom(applicableRoomsDetails: rooms))
+        }
+        self.aaplicableRoom = applicableRoomdetails
         var questionDetails:[QuoteLabelData] = []
         for question in masterQuestions.quote_label{
             questionDetails.append(QuoteLabelData(questionDetails: question) )
@@ -642,6 +654,10 @@ class QuestionsMeasurementData: Mappable
         default_answer <- map["default_answer"]
         amount <- map["amount"]
         quote_label <- map["quote_label"]
+        aaplicableRoom <- map["applicable_rooms"]
+        setDefaultAnswer <- map["set_default_answer"]
+        applicableCurrentSurface <- map["applicable_current_surface"]
+        
         
         
     }
@@ -680,6 +696,29 @@ class AnswerOFQustion:NSObject
         self.multySelection = rf_AnsOFQustion.multySelection
     }
 }
+
+class ApplicableRoom: Mappable
+{
+    var room_id:Int?
+    var room_name:String?
+    init(room_id:Int,room_name:String) {
+        self.room_id = room_id
+        self.room_name = room_name
+    }
+    init(applicableRoomsDetails:rf_AnswerapplicableRooms){
+        self.room_id = applicableRoomsDetails.room_id
+        self.room_name = applicableRoomsDetails.room_name
+    }
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        room_id <- map["room_id"]
+        room_name <- map["room_name"]
+    }
+}
+
 
 class QuoteLabelData: Mappable
 {
@@ -1522,6 +1561,22 @@ class CashData: Mappable
         
     }
 }
+
+class dataBaseData: Mappable
+{
+    var result:String?
+    var message:String?
+    var override_json_result:Int?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        override_json_result <- map["override_json_result"]
+    }
+    
+}
 class CashDataResponse: Mappable
 {
     var result: String?
@@ -1813,11 +1868,15 @@ class TransitionData:NSObject
     var name :String?
     var color: String?
     var transsquarefeet :Float?
-    init( name: String, color: String, transsquarefeet: Float)
+    var transHeight :String?
+    var transitionHeightId:Int
+    init( name: String, color: String, transsquarefeet: Float, transHeight:String,transitionHeightId:Int)
     {
         self.name = name
         self.color = color
         self.transsquarefeet = transsquarefeet
+        self.transHeight = transHeight
+        self.transitionHeightId = transitionHeightId
         
     }
 }
@@ -1948,28 +2007,28 @@ class PaymentOption: NSObject{
 
 struct CustomerEncodingDecodingDetails:Codable
 {
-    var operation_mode:String?
-    var appVersion:String?
-    var paymentDetails:PaymentDetailAppointment?
-    var answer:[AnswerDetails]?
-    var applicationInfo:ApplicantInfoDetails?
-    var appointmentId:Int?
-    var paymentMethods:paymentMethodDetails?
-    var rooms:[RoomsDetails]?
-    var customer:CustomerDetails?
-    var dataCompleted:Int?
+//    var operation_mode:String?
+//    var appVersion:String?
+//    var paymentDetails:PaymentDetailAppointment?
+//    var answer:[AnswerDetails]?
+    var applicationInfo:ApplicantInfoDetailsSecret?
+   // var appointmentId:Int?
+    var paymentMethods:paymentMethodDetailsSecret?
+//    var rooms:[RoomsDetails]?
+//    var customer:CustomerDetails?
+//    var dataCompleted:Int?
     enum CodingKeys: String, CodingKey
     {
-        case operation_mode = "operation_mode"
-        case appVersion = "app_version"
-        case paymentDetails = "paymentdetails"
-        case answer = "answer"
+//        case operation_mode = "operation_mode"
+//        case appVersion = "app_version"
+//        case paymentDetails = "paymentdetails"
+//        case answer = "answer"
         case applicationInfo = "applicationInfo"
-        case appointmentId = "appointment_id"
+       // case appointmentId = "appointment_id"
         case paymentMethods = "paymentmethod"
-        case rooms = "rooms"
-        case customer = "customer"
-        case dataCompleted = "data_completed"
+//        case rooms = "rooms"
+//        case customer = "customer"
+//        case dataCompleted = "data_completed"
     }
 }
 struct PaymentDetailAppointment:Codable
@@ -2051,7 +2110,7 @@ struct AnswerDetails:Codable
         case answerId = "question_id"
     }
 }
-struct ApplicantInfoDetails:Codable
+struct ApplicantInfoDetailsSecret:Codable
 {
     var coApplicantPresentEmployersState:String?
     var addressRelationshipCity:String?
@@ -2402,7 +2461,7 @@ struct ApplicantInfoDetails:Codable
         case coApplicantPresentEmployer = "co_applicant_present_employer"
     }
 }
-struct paymentMethodDetails:Codable
+struct paymentMethodDetailsSecret:Codable
 {
     var cardNumber:String?
     var checkingRoutingNumber:String?
@@ -2458,7 +2517,7 @@ struct RoomsDetails:Codable
 struct transitionDetails:Codable
 {
     var name:String?
-    var width:Int?
+    var width:Double?
     
     enum CodingKeys: String, CodingKey
     {
@@ -2500,9 +2559,6 @@ struct CustomerDetails:Codable
     var completedDate:String?
     var applicantLastName:String?
     var coApplicantFirstName:String?
-    var mobile:String?
-    var phone:String?
-    var email:String?
     
     enum CodingKeys: String, CodingKey
     {
@@ -2538,8 +2594,5 @@ struct CustomerDetails:Codable
         case completedDate = "completed_date"
         case applicantLastName = "applicant_last_name"
         case coApplicantFirstName = "co_applicant_first_name"
-        case phone = "phone"
-        case mobile = "mobile"
-        case email = "email"
     }
 }

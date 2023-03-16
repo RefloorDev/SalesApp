@@ -8,7 +8,7 @@
 
 import UIKit
 protocol ContractCommentProtocol{
-    func sendAddedComments(comment: String, sendHardCopy: Bool)
+    func sendAddedComments(comment: String, sendHardCopy: Bool, sendFlexInstall : Bool)
 }
 
 class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
@@ -20,7 +20,9 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
     let placeholderText = "Enter Here"
     @IBOutlet weak var commentsTextView: UITextView!
     @IBOutlet weak var sendPhysicalDocumentCheckboxButton: UIButton!
+    @IBOutlet weak var flexibleInstallCheckBoxBtn: UIButton!
     var isSendHardCopy = false
+    var isFlexibleInstall = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,9 +47,20 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
         }
     }
     
+    @IBAction func FlexibleInstallContractAction(_ sender: UIButton) {
+        if sender.isSelected{
+            sender.isSelected = false
+            flexibleInstallCheckBoxBtn.isSelected = false
+            isFlexibleInstall = false
+        }else{
+            sender.isSelected = true
+            flexibleInstallCheckBoxBtn.isSelected = true
+            isFlexibleInstall = true
+        }
+    }
     
     @IBAction func cancelAction(_ sender: UIButton) {
-        delegate?.sendAddedComments(comment: "", sendHardCopy: isSendHardCopy)
+        delegate?.sendAddedComments(comment: "", sendHardCopy: isSendHardCopy, sendFlexInstall: isFlexibleInstall)
         self.dismiss(animated: true)
     }
     
@@ -55,12 +68,12 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
         if let comment = commentsTextView.text{
             if comment.trimmingCharacters(in: .whitespaces).count > 0 && comment != placeholderText{
                 self.dismiss(animated: true) {
-                    self.delegate?.sendAddedComments(comment: comment, sendHardCopy: self.isSendHardCopy)
+                    self.delegate?.sendAddedComments(comment: comment, sendHardCopy: self.isSendHardCopy, sendFlexInstall: self.isFlexibleInstall)
                 }
                 
             } else{
                 self.dismiss(animated: true){
-                    self.delegate?.sendAddedComments(comment: "",sendHardCopy: self.isSendHardCopy)
+                    self.delegate?.sendAddedComments(comment: "",sendHardCopy: self.isSendHardCopy, sendFlexInstall: self.isFlexibleInstall)
                 }
 //                let okBtn = UIAlertAction(title: "OK", style: .cancel)
 //                self.alert("Please enter comment", [okBtn])

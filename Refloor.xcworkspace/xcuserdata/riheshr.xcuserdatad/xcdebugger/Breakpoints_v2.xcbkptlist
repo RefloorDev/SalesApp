@@ -80,7 +80,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "428"
             endingLineNumber = "428"
-            landmarkName = "externalCollectionViewDidSelectbutton(index:tag:)"
+            landmarkName = "validateForCard()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

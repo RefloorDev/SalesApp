@@ -23,6 +23,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var appoinmentID = 0
     var isStair = 0
     var drowingImageID = 0
+    var area:CGFloat = 0
     var placeHolder = "Type Here"
     var summaryQustions:[SummeryQustionsDetails] = []
     var delegate:SummeryEditDelegate?
@@ -117,6 +118,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["quote_label"] = question.quote_label
                         dict["last_updated_date"] = question.last_updated_date
                         dict["applicableTo"] = question.applicableTo
+                        dict["applicableCurrentSurface"] = question.applicableCurrentSurface
+                        dict["setDefaultAnswer"] = question.setDefaultAnswer
+                        dict["applicableRooms"] = List<rf_AnswerapplicableRooms>()
                         dict["rf_AnswerOFQustion"] = List<rf_AnswerOFQustion>()
                         realm.create(rf_master_question.self, value: dict, update: .all)
                     }
@@ -334,6 +338,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             qustionAnswer[index].answerOFQustion = AnswerOFQustion(0)
             
         }
+        print("Indexpath : \(index) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
         cell.numerical_Answer_Label.tag = index
         cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)"
         cell.numerical_Answer_Label.isUserInteractionEnabled = true
@@ -482,6 +487,42 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             qustionAnswer[tag].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
             qustionAnswer[tag].answerOFQustion?.answerID = value?.answerID ?? 0
         }
+        
+            //var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex(of: qustionAnswer.filter({$0.setde == UnitNumberId}).first ?? Unit_list()) ?? 0
+        let roomNameSubStr = roomName.contains("STAIRS")
+            if roomNameSubStr != true
+        {
+                if tag == 0
+                {
+                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                    if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface//"Concrete / Cement"
+                    {
+                        var vapourBarrierValue : Int = Int()
+                        let vapourValue = modf(area / 100)
+                        if vapourValue.1 == 0.0
+                        {
+                            vapourBarrierValue = Int(vapourValue.0)
+                        }
+                        else
+                        {
+                            vapourBarrierValue = Int(vapourValue.0) + 1
+                        }
+                        qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                        //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
+                        self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
+                    }
+                    else
+                    {
+                        qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(0)
+                        //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
+                        self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
+                    }
+                }
+            }
+            
+        
+        
         self.tableView.reloadRows(at: [[0,(tag + 1)]], with: .automatic)
     }
     
