@@ -12,7 +12,7 @@ import CryptoKit
 import CommonCrypto
 import PayCardsRecognizer
 var packageName = ""
-class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate {
+class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate, UITextFieldDelegate {
     
     
     
@@ -215,8 +215,11 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.accountHolderNameTF.setPlaceHolderWithColor(placeholder: "Name", colour: .placeHolderColor)
             cell.cardNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
             cell.cardNumberTF.keyboardType = .numberPad
+            cell.cardNumberTF.delegate = self
             cell.cardPinTF.keyboardType = .numberPad
+            cell.cardPinTF.delegate = self
             cell.cardExperyDateTF.setPlaceHolderWithColor(placeholder: "01/30", colour: .placeHolderColor)
+            cell.cardExperyDateTF.delegate = self
             cell.cardPinTF.isSecureTextEntry = true
             
             cell.cardPinTF.setPlaceHolderWithColor(placeholder: "0000", colour: .placeHolderColor)
@@ -254,9 +257,12 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             //cell.totalLabel.text = "Down Payment: $\(self.downPaymentValue.toDoubleString)"
             cell.selectedItem = self.selectedPersecntage
             cell.checkNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.checkNumberTF.delegate = self
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.accountNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.accountNumberTF.delegate = self
             cell.routingNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.routingNumberTF.delegate = self
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
@@ -269,6 +275,20 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             return cell
         }
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil {
+            return false
+        }
+        
+        return true
+    }
+    
     @objc func cardScanner()
     {
         let rec = RecognizerViewController.initialization()!

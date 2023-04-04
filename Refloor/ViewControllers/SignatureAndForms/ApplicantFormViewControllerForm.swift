@@ -217,6 +217,14 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.emailAddress {
+            return false
+        }
+        
         if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
         {
             if(textField == self.homePhone || textField == self.cellPhone || textField == self.employementPhone )
@@ -247,9 +255,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             if (isBackSpace == -92) {
                 return true
             }
-            
-            return false
         }
+        return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
