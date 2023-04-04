@@ -490,7 +490,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         
             //var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex(of: qustionAnswer.filter({$0.setde == UnitNumberId}).first ?? Unit_list()) ?? 0
         let roomNameSubStr = roomName.contains("STAIRS")
-            if roomNameSubStr != true
+            if roomNameSubStr
         {
                 if tag == 0
                 {

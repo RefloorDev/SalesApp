@@ -207,6 +207,14 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.emailAddress {
+            return false
+        }
+        
         if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
         {
             if(textField == self.homePhone || textField == self.cellPhone || textField == self.employementPhone)
@@ -233,9 +241,8 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
             if (isBackSpace == -92) {
                 return true
             }
-            
-            return false
         }
+        return true
     }
     
     @IBAction func exEmployeraddressDidBigen(_ sender: UITextField) {
@@ -279,57 +286,55 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     
     func validation() -> String
     {
-        /*   if(firstName.text!.removeUnvantedcharactoes() == "")
-         {
-         firstName.becomeFirstResponder()
-         return "Please enter First Name"
-         }
-         //          else if(middlename.text!.removeUnvantedcharactoes() == "")
-         //          {
-         //              return "Please enter middle name"
-         //          }
-         if(lastName.text!.removeUnvantedcharactoes() == "")
-         {
-         lastName.becomeFirstResponder()
-         return "Please enter Last Name"
-         }
-         if(dateofbirth.text!.removeUnvantedcharactoes() == "")
-         {
-         dateofbirth.becomeFirstResponder()
-         return "Please select Date of Birth"
-         }
-         */
-        /*  if !(emailAddress.text!.validateEmail())
-         {
-         emailAddress.becomeFirstResponder()
-         return "Please enter a valid Email Address"
-         }*/
-        /* if(drivingLisenceID.text!.removeUnvantedcharactoes() == "")
-         {
-         drivingLisenceID.becomeFirstResponder()
-         return "Please enter your Drivers License Number"
-         }
-         if(lisenceExpDate.text!.removeUnvantedcharactoes() == "")
-         {
-         lisenceExpDate.becomeFirstResponder()
-         return "Please enter your Drivers License Expiration Date"
-         }
-         if(socialSecurityNo.text!.removeUnvantedcharactoes() == "")
-         {
-         socialSecurityNo.becomeFirstResponder()
-         return "Please enter the Applicant SSN"
-         }
-         */
-        
-        //        if(!isValidSsn(ssn:socialSecurityNo.text ?? ""))
-        //        {
-        //           // socialSecurityNo.becomeFirstResponder()
-        //            return "Please enter valid SSN"
-        //        }
-//        if(presentEmployer.text!.removeUnvantedcharactoes() == "")
-//        {
-//            return "Please enter Employer/Source of Income"
-//        }
+        // Adding Validations to Co-Applicant for Mandatory Fields
+        if(firstName.text!.removeUnvantedcharactoes() == "") {
+            firstName.becomeFirstResponder()
+            return "Please enter First Name"
+        }
+        if(lastName.text!.removeUnvantedcharactoes() == "") {
+            lastName.becomeFirstResponder()
+            return "Please enter Last Name"
+        }
+        if(dateofbirth.text!.removeUnvantedcharactoes() == "") {
+            dateofbirth.becomeFirstResponder()
+            return "Please select Date of Birth"
+        }
+        if(address.text!.removeUnvantedcharactoes() == "") {
+            address.becomeFirstResponder()
+            return "Please enter Applicant Address"
+        }
+        if(socialSecurityNo.text!.removeUnvantedcharactoesUnerScore() == "") {
+            socialSecurityNo.becomeFirstResponder()
+            return "Please enter the Applicant SSN"
+        }
+        if(!isValidSsn(ssn:socialSecurityNo.text ?? "")) {
+            socialSecurityNo.becomeFirstResponder()
+            return "Please enter valid SSN"
+        }
+        if(city.text!.removeUnvantedcharactoes() == "") {
+            city.becomeFirstResponder()
+            return "Please enter your City"
+        }
+        if(stateZipCode.text!.removeUnvantedcharactoes() == "") {
+            stateZipCode.becomeFirstResponder()
+            return "Please enter Present State"
+        }
+        if(zipcode.text!.removeUnvantedcharactoes() == "") {
+            zipcode.becomeFirstResponder()
+            return "Please enter your ZIP Code"
+        }
+        if !(homePhone.text!.validatePhone()) {
+            homePhone.becomeFirstResponder()
+            return "Please enter a valid home Phone Number"
+        }
+        if(presentEmployer.text!.removeUnvantedcharactoes() == "") {
+            presentEmployer.becomeFirstResponder()
+            return "Please enter Employer/Source Of Income"
+        }
+        if(earnings.text!.removeUnvantedcharactoes() == "") {
+            earnings.becomeFirstResponder()
+            return "Please enter monthly earnings"
+        }
         if((firstName.text!.removeUnvantedcharactoes() != "") || (lastName.text!.removeUnvantedcharactoes() != ""))
         {
             if (self.wishShareStatus == .Share)
@@ -457,10 +462,11 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         var dateOfBirth = self.dateofbirth.text ?? ""
         var licenseIssueDate = self.lisenceissueDate.text ?? ""
         var licenseExpdate = self.lisenceExpDate.text ?? ""
-        
-        if licenseIssueDate != "" || licenseExpdate != "" || dateOfBirth != ""
+        // Adding Date Of Birth format to Server format
+        dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
+        if licenseIssueDate != "" || licenseExpdate != ""
         {
-            dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
+            //dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
             licenseIssueDate = licenseIssueDate.dateconverterEncoding(licenseIssueDate)
             licenseExpdate = licenseExpdate.dateconverterEncoding(licenseExpdate)
         }
