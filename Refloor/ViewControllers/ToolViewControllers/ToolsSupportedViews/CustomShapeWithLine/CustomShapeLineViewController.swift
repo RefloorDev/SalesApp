@@ -123,6 +123,10 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     override func resetButtonAction() {
         let yes = UIAlertAction(title: "Yes", style: .default) { (_) in

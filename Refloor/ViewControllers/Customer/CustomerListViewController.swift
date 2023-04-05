@@ -101,6 +101,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         }
         isLoadedFirstTime = false
         //  checkBuildStatus()
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -161,6 +162,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         }
         
         //BackendApiSyncCall()
+       
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: true)
     }
     
     @objc  func updateAppointmentOffline()

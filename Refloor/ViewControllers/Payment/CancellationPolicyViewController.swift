@@ -61,6 +61,10 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         noticeOfCancellationLbl.text = noticeOfCancellationLbl.text! + " " + today
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     override func screenShotBarButtonAction(sender:UIButton)
         {
             self.imagePicker = CaptureImage(presentationController: self, delegate: self)

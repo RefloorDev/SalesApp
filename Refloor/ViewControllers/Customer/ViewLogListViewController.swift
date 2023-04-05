@@ -61,6 +61,8 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         UIApplication.shared.applicationIconBadgeNumber = 0
         intAppointment = Int(appointmentId) ?? 0
         viewLogTableView.reloadData()
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        
     }
     
     override func performSegueToReturnBack()

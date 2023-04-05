@@ -57,6 +57,8 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         }
         self.tableView.reloadRows(at:[IndexPath(row: 1, section: 0)], with: .automatic)
         self.tableView.reloadRows(at:[IndexPath(row: 2, section: 0)], with: .automatic)
+        
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         //
     }
     

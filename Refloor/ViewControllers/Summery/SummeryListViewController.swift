@@ -59,7 +59,10 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
         // Do any additional setup after loading the view.
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     override func performSegueToReturnBack() {
         if (isFromStatus)
         {

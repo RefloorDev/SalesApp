@@ -68,7 +68,10 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
       
     }
 
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     @IBAction func cancelBtnAction(_ sender: UIButton)
     {
         self.dismiss(animated: true)

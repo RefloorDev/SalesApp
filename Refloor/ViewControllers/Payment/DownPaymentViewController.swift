@@ -111,6 +111,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
@@ -765,22 +766,22 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         
         print(paymentType)
-        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        let paymentTypeSecret = createJWTToken(parameter: paymentType)
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-//        var applicantInfoSecret:String = String()
-//        if applicantDta.count > 0
-//        {
-//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
-//
-//        }
-        //let contactInfo = self.getContractDataOfAppointment()
+        var applicantInfoSecret:String = String()
+        if applicantDta.count > 0
+        {
+             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+
+        }
+        let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
-        contractDict["applicationInfo"] = applicantDta["data"] //applicantInfoSecret
+        contractDict["payment_method_secret"] = paymentTypeSecret
+        contractDict["application_info_secret"] = applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0

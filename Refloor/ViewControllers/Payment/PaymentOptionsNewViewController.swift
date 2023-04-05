@@ -26,6 +26,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         {
             self.isPromoApplied = false
         }
+        self.selectedOption = -1
         planCollectionView.reloadData()
         
     }
@@ -94,9 +95,15 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var savingsArray:[String] = []
     var savingsArrayDouble:[Double] = []
     var salePriceDouble:[Double] = []
+    var stairPrice:Double = Double()
+    override func viewWillAppear(_ animated: Bool)
+    {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         self.setNavigationPackageBarbackAndlogo(with: "Select package".uppercased())
         //arb
         let masterData = self.getMasterDataFromDB()
@@ -654,11 +661,28 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             downpatmet.isPaymentByCash = true
         }
         downpatmet.totalAmount = self.amountTotel
+        if area == 0.0
+        {
+            if stairPrice < self.minimumFee
+            {
+                downpatmet.stairPrice = minimumFee
+            }
+        }
+        else
+        {
+            downpatmet.stairPrice = stairPrice
+        }
         downpatmet.paymentPlan = self.paymentPlanValueDetails[self.selectedPlan]
         //arb
         packageName = self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? ""
         //
         downpatmet.roomName = ""
+        var savingsAmount = savingsArray[0]
+        if let index = savingsAmount.firstIndex(of: "$")
+        {
+            savingsAmount.remove(at: index)
+        }
+        savings = savingsAmount
         downpatmet.savings = Double(savings) ?? 0
         if(amountTotel < downOrFinal)
         {
@@ -791,6 +815,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         {
             savingsArray.removeAll()
             savingsArrayDouble.removeAll()
+            salePriceDouble.removeAll()
             if(!self.paymentPlanValueDetails[indexPath.row].isNotAvailable)
             {
                 
@@ -1000,6 +1025,10 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             saleprice = saleprice + additionalCost +  stairPrice
 
             mrp = mrp + stairPrice
+            if selectedPlan == indexPath.row
+            {
+                self.stairPrice = stairPrice
+            }
             mrp = (mrp + additionalCost).rounded()
             saleprice = saleprice.rounded()
             cell.mrpLabel.text = "$\(mrp.clean)"
@@ -1140,7 +1169,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 {
                     amountTotel = prize.rounded()
                 }
-                if monthly == 0 && selectedOption == -1
+                if monthly == 0 && selectedOption == -1 || monthly == 0 && selectedOption == 1
                 {
                     amountTotel = prize
                 }
@@ -1205,11 +1234,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             let Balance_DueDt = Double(self.paymentOptionDataValueDetail[indexPath.row].Balance_Due__c ?? "0") ?? 0
             let modifiedDate = Calendar.current.date(byAdding: .day, value: Int(Balance_DueDt), to: today)!
             emiAmount = amountTotel
-//            if(downOrFinal > 0 )
-//            {
-//                self.emiAmount = self.emiAmount - downOrFinal
-//            }
-            //cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+
             let tempValue = self.emiAmount - downOrFinal
             cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
             cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
@@ -1334,6 +1359,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")
                 print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
                 print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
+            }
+            else
+            {
+                if(downOrFinal > 0 )
+                {
+                    self.emiAmount = self.emiAmount - downOrFinal
+                }
+                cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
             }
             if(selectedOption == indexPath.row)
             {

@@ -2112,7 +2112,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(discount)
                                     realm.delete(molding)
                                     realm.delete(product)
-                                    realm.delete(question)
+                                    //realm.delete(question)
                                     realm.delete(questionDetail)
                                     realm.delete(imagesArr)
                                     realm.delete(appointments)
@@ -2247,6 +2247,39 @@ class HttpClientManager: NSObject {
         }
         else{
             completion("false", AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    func autoLogoutAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ autologoutTime:String? , _ enableAutoLogout:Int?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().autoLogout
+            //self.showhideHUD(viewtype: .SHOW, title: "Logging out. Please wait.")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<autoLogoutData>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        completion(response?.result,(response?.autoLogoutTime)!,response?.enableAutoLogout)
+                        self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false","",0)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false","",0)
             
         }
     }

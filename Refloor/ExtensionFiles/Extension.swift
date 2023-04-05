@@ -449,15 +449,25 @@ extension String{
     func logDate() -> Date{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        //formatter.timeZone = TimeZone(identifier: "UTC")
         if let date = formatter.date(from: self){
             return date
         }
         return Date()
     }
+    func autoLogoutDate() -> Date{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter.timeZone = TimeZone(identifier: "UTC")
+        if let date = formatter.date(from: self){
+            return date
+        }
+        return Date()
+    }
+    
     func recisionDate() -> Date{
         let formatter = DateFormatter()
-        //formatter.locale = Locale(identifier: "en_US_POSIX")
-        //formatter.timeZone = TimeZone(abbreviation: "GMT+0:00")
         formatter.dateFormat = "YYYY-MM-dd"
         if let date = formatter.date(from: self){
             return date
@@ -568,6 +578,199 @@ extension UIColor
 
 extension UIViewController:OrderStatusViewDelegate
 {
+    
+    // AutoLogout
+    func checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed:Bool)
+    {
+        let group = DispatchGroup()
+        let token = UserData.init().token ?? ""
+        var parameter : [String:Any] = [:]
+        parameter = ["token":token]
+        var autoLogoutTimeResult:String = String()
+        var enableAutoLogoutResult:Int = Int()
+        group.enter()
+        //AutoLogout Api call
+        HttpClientManager.SharedHM.autoLogoutAPi(parameter: parameter) { success, autoLogoutTime, enableAutoLogout in
+            if(success ?? "") == "Success"
+            {
+                autoLogoutTimeResult = autoLogoutTime ?? ""
+                enableAutoLogoutResult = enableAutoLogout ?? 0
+                group.leave()
+            }
+        }
+        group.notify(queue: DispatchQueue.main)
+        {
+            
+            if enableAutoLogoutResult == 0
+            {
+                return
+            }
+            else
+            {
+                let currentDateAndTime = Date().dateToString().autoLogoutDate()
+                let masterDataAutoLogoutDate = autoLogoutTimeResult
+                if masterDataAutoLogoutDate != ""
+                {
+                    let currentTime = self.getDate()
+                    let isTimetoLogout = Date().compareTimeToAutoLogout(firstTime: currentTime, secondTime: masterDataAutoLogoutDate)
+                    if isTimetoLogout
+                    {
+                        
+                        let userLoggedInTime = UserDefaults.standard.value(forKey: "LoggedInTime") as! Date
+                        var LogoutDateString = Date().autoLogoutdateToString()
+                        LogoutDateString = LogoutDateString + " " + masterDataAutoLogoutDate
+                        let LogoutDateStringDate = LogoutDateString.autoLogoutDate()
+                        var masterLogoutDateString = LogoutDateString.autoLogoutDate()
+                        if masterDataAutoLogoutDate == "00:00:00"
+                        {
+                            if LogoutDateStringDate < userLoggedInTime
+                            {
+                                
+                                masterLogoutDateString = Calendar.current.date(byAdding: .day, value: 1, to: masterLogoutDateString)!
+                            }
+                            else
+                            {
+                                masterLogoutDateString = Calendar.current.date(byAdding: .day, value: -1, to: masterLogoutDateString)!
+                            }
+                        }
+                        if userLoggedInTime < masterLogoutDateString
+                        {
+
+                            let masterdataAutoLogoutTime = masterLogoutDateString
+                            var onedayMinus = Calendar.current.date(byAdding: .day, value: -1, to: masterdataAutoLogoutTime)
+                            onedayMinus = Calendar.current.date(byAdding: .minute, value: -1, to: onedayMinus!)
+                            onedayMinus = Calendar.current.date(byAdding: .second, value: -1, to: onedayMinus!)
+                            onedayMinus = Calendar.current.date(byAdding: .minute, value: 1, to: onedayMinus!)
+                            let isTimeToAutoLogoutCall = currentDateAndTime.isBetween(date: onedayMinus!, andDate: masterdataAutoLogoutTime)
+                            print(isTimeToAutoLogoutCall)
+                            if isTimeToAutoLogoutCall
+                            {
+                                return
+                            }
+                            else
+                            {
+                                _ = self.isTimeToAutoLogout(isRefreshBtnPressed:isRefreshBtnPressed)
+                                return
+                            }
+                        }
+                        else
+                        {
+                            _ = self.isTimeToAutoLogout(isRefreshBtnPressed:isRefreshBtnPressed)
+                            return
+                        }
+                    }
+                    else
+                    {
+                        var userLoggedInTime = UserDefaults.standard.value(forKey: "LoggedInTime") as! Date
+                        var LogoutDateString = Date().autoLogoutdateToString()
+                        LogoutDateString = LogoutDateString + " " + masterDataAutoLogoutDate
+                        var masterLogoutDateString = LogoutDateString.autoLogoutDate()
+                        if userLoggedInTime > masterLogoutDateString
+                        {
+                            return
+                        }
+                        else
+                        {
+                            _ = self.isTimeToAutoLogout(isRefreshBtnPressed:isRefreshBtnPressed)
+                            return
+                        }
+//
+//
+                    }
+                
+                }
+                else
+                {
+                    return
+                }
+            }
+        }
+    }
+
+
+    func isTimeToAutoLogout(isRefreshBtnPressed:Bool) -> Bool
+    {
+                if determineIfAnyPendingAppointmentsToSink()
+                {
+                    if isRefreshBtnPressed
+                    {
+                        self.alert("Please sync all pending appointments in order to get today's appointment list", nil)
+                    }
+                    else
+                    {
+                        self.alert("There are pending appointments for syncing. Please sync all appointments, logout and relogin.", nil)
+                    }
+                    return false
+                }
+                else
+        {
+                    let params:[String:Any] = ["token":UserData.init().token ?? ""]
+                    HttpClientManager.SharedHM.logoutApi(parameter: params) { result, message in
+                        DispatchQueue.main.async{
+                            if (result ?? "") == "Success"
+                            {
+                                UserData.setLogedInVal(false)
+                                //UserDefaults.standard.set(false, forKey: "isAutoLogout")
+                                BASE_URL = ""
+                                UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+                                //self.deleteAllAppointments()
+                                self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
+                                
+                                
+                            }
+                        }
+                        
+                    }
+                }
+        return true
+    }
+    
+    func getDate()->String{
+        let time = Date()
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm:ss"
+        let stringDate = timeFormatter.string(from: time)
+        return stringDate
+       }
+    
+    func autoLogout() -> (autoLogoutTime:String,enableAutoLogout:Int)
+    {
+        let token = UserData.init().token ?? ""
+        var parameter : [String:Any] = [:]
+        parameter = ["token":token]
+        var autoLogoutTimeResult:String = String()
+        var enableAutoLogoutResult:Int = Int()
+        HttpClientManager.SharedHM.autoLogoutAPi(parameter: parameter) { success, autoLogoutTime, enableAutoLogout in
+            if(success ?? "") == "Success"{
+                enableAutoLogoutResult = enableAutoLogout ?? 0
+                autoLogoutTimeResult = autoLogoutTime ?? ""
+
+                    
+                    //print(message ?? "No msg")
+                   //
+                   
+                    
+              
+                //self.alert("Auto Logging out successfully." , [ok])
+                
+            }
+            else
+            {
+                enableAutoLogoutResult = enableAutoLogout ?? 0
+                autoLogoutTimeResult = autoLogoutTime ?? ""
+                //return(false,autoLogoutTime)
+                //let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    
+                    //self.autoLogout()
+                    
+                //}
+               // let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                //self.alert(AppAlertMsg.serverNotReached, [yes,no])
+            }
+        }
+        return (autoLogoutTimeResult,enableAutoLogoutResult)
+    }
     
     
     //    func dictionaryToJson(){
@@ -1403,8 +1606,10 @@ extension UIViewController:OrderStatusViewDelegate
                             if (result ?? "") == "Success"
                             {
                                 UserData.setLogedInVal(false)
+                                //UserDefaults.standard.set(false, forKey: "isAutoLogout")
                                 BASE_URL = ""
                                 UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+                                //self.deleteAllAppointments()
                                 self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
                                 
                             }else{
@@ -1966,6 +2171,23 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d",appointmentId)
+                try realm.write{
+//                    for appointment in appointments
+//                    {
+                        realm.delete(appointments)
+                   // }
+//                    if let appointment = appointments.first{
+                       
+                    //}
+                }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
+    func deleteAllAppointments() {
+        do{
+            let realm = try Realm()
+            let appointments = realm.objects(rf_completed_appointment.self)
                 try realm.write{
 //                    for appointment in appointments
 //                    {
@@ -4466,6 +4688,25 @@ extension Date {
         return formatter2.string(from: self) ?? ""
        
     }
+    func currentTimeMillis() -> Int64 {
+            return Int64(self.timeIntervalSince1970 * 1000)
+        }
+    func dateToString() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        
+        return dateFormatter.string(from: self)
+    }
+    func autoLogoutdateToString() -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        var datestr =  dateFormatter.string(from: self)
+        datestr = dateFormatter.string(from: self.DateOnly(datestr: datestr))
+        return datestr
+    }
+    
 }
 extension String
 {
@@ -4951,6 +5192,47 @@ extension Date{
         }
         return passtring
     }
+    func compareTimeToAutoLogout(firstTime:String,secondTime:String) -> Bool
+     {
+         let formatter = DateFormatter()
+           formatter.dateFormat = "HH:mm:ss"
+         var firstDate = Calendar.current.dateComponents([.hour,.minute,.second], from: formatter.date(from: firstTime)!)//formatter.date(from: firstTime)
+           var secondDate = Calendar.current.dateComponents([.hour,.minute,.second], from: formatter.date(from: secondTime)!)
+         if secondDate.hour == 00
+         {
+             secondDate.hour = 24
+         }
+         if firstDate.hour == 00
+         {
+             firstDate.hour = 24
+         }
+         if firstDate.hour! < secondDate.hour!
+         {
+             return true
+         }
+         else if firstDate.hour == secondDate.hour
+         {
+             if firstDate.minute! < secondDate.minute!
+             {
+                 return true
+             }
+             else if firstDate.minute == secondDate.minute
+             {
+                 
+                 return true
+                 
+             }
+             else
+             {
+                 return false
+             }
+         }
+         else
+         {
+             return false
+         }
+     }
+
     func DateOnly(datestr:String) -> Date {
         let formatter2 = DateFormatter()
         formatter2.dateFormat = "YYYY-MM-dd"

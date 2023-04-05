@@ -80,7 +80,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         //
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     func addQuestions(){
         do{
             let realm = try Realm()
@@ -510,13 +513,13 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                         qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
                         //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
-                        self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
+                        ///self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                     }
                     else
                     {
                         qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(0)
                         //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
-                        self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
+                       // self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                     }
                 }
             }

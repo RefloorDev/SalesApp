@@ -173,7 +173,10 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
         discountPercentageTextField.setLeftPaddingPoints(10)
         dropDownTextfield.setLeftPaddingPoints(10)
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     func reloadTableAndAnimateHeight(){
         discountTableView.reloadData()

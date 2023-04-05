@@ -70,6 +70,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         for appointmentResult in appointmentResults{
             self.tempstatusList.append(OrderStatusData(appointmentResult: appointmentResult))
         }
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         //OrderStatustLisApiCall()
     }
     
@@ -615,17 +616,17 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         print(paymentType)
-        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        let paymentTypeSecret = createJWTToken(parameter: paymentType)
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-        //let applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+        let applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
-        contractDict["applicationInfo"] = applicantDta["data"]//applicantInfoSecret
+        contractDict["payment_method_secret"] = paymentTypeSecret
+        contractDict["application_info_secret"] = applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
         //contractDict["data_completed"] = 0
         //contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0

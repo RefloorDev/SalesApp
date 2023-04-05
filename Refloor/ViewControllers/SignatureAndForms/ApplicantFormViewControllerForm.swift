@@ -205,6 +205,11 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
     
     func setPhoneNumberDelegate()
     {

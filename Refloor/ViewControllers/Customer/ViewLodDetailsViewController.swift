@@ -35,6 +35,10 @@ class ViewLodDetailsViewController: UIViewController,UITableViewDataSource,UITab
             appointmentStatusLabel.textColor = UIColor().colorFromHexString("#72C36F")
         }
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return appointmentLogsArray.count == 0 ? 0 :  appointmentLogsArray.count
