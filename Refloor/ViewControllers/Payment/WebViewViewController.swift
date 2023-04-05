@@ -13,8 +13,6 @@ import CryptoKit
 import CommonCrypto
 
 class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,ContractCommentProtocol {
-    
-    
     var document = ""
     var paymentType = ""
     var orderID = 0
@@ -132,6 +130,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
 //    }
     
     override func viewWillAppear(_ animated: Bool) {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         //self.navigationController?.setNavigationBarHidden(false, animated: false)
         logoImageView.contentMode = .scaleAspectFit
         if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
@@ -1080,20 +1079,20 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         print(paymentDetails)
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         print(paymentType)
-        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        let paymentTypeSecret = createJWTToken(parameter: paymentType)
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-//        var applicantInfoSecret:String = String()
-//        if applicantDta.count > 0
-//        {
-//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
-//        }
+        var applicantInfoSecret:String = String()
+        if applicantDta.count > 0
+        {
+             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
-        contractDict["applicationInfo"] = applicantDta["data"]//applicantInfoSecret
+        contractDict["payment_method_secret"] = paymentTypeSecret
+        contractDict["application_info_secret"] = applicantInfoSecret
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0

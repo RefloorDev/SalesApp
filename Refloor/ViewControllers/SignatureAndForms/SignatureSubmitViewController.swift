@@ -78,6 +78,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
     
     override func viewWillAppear(_ animated: Bool) {
         self.deleteCoApplicantSignatureAndInitialsFromAppointmentDetail()
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {

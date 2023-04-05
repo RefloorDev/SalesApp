@@ -169,11 +169,8 @@ struct AppURL {
     //api for attching images
      let uploadScreeshot = BASE_URL + "add_screenshots"
     
-    
     //api for getting appointment resuls list
      let get_appointment_result = BASE_URL + "get_appointment_result"
-    
-    
     
      let check_app_build_status = "https://www.oneteam.us/testflight/refloor/phpinfo.php"
     
@@ -188,8 +185,8 @@ struct AppURL {
      let syncInitiate_i360 = BASE_URL + "initiate_sync_to_i360_json"
      let uploadAppointmentLogs = BASE_URL + "update_sync_log"
      let logoutApi = BASE_URL + "logout_from_device"
-    let fetchDataBaseRawValue = BASE_URL + "fetch_database_raw_data"
-    
+     let fetchDataBaseRawValue = BASE_URL + "fetch_database_raw_data"
+     let autoLogout = BASE_URL + "check_auto_logout"
 }
 
 

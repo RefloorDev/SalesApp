@@ -190,7 +190,10 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
 //    {
 //        <#code#>
 //    }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     @IBAction func passwordVisbleBatton(_ sender: UIButton) {
         isPasswordVisble = !isPasswordVisble

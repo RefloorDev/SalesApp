@@ -249,6 +249,11 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
         setPhoneNumberDelegate()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
     @objc func termsandconditionsAction()
     {
         if !istearmAndCondition
