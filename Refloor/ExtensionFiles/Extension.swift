@@ -582,7 +582,7 @@ extension UIViewController:OrderStatusViewDelegate
     // AutoLogout
     func checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed:Bool)
     {
-        let group = DispatchGroup()
+       /* let group = DispatchGroup()
         let token = UserData.init().token ?? ""
         var parameter : [String:Any] = [:]
         parameter = ["token":token]
@@ -684,7 +684,7 @@ extension UIViewController:OrderStatusViewDelegate
                     return
                 }
             }
-        }
+       }*/ 
     }
 
 
