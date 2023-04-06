@@ -117,7 +117,9 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
             let index = salePriceArray.count - 1
             if salePriceArray[index] == self.minimumFee
             {
-                self.alert("New sale price cannot be less than $\(self.minimumFee)", nil)
+                //self.alert("New sale price cannot be less than $\(self.minimumFee)", nil)
+                //Updated Changes
+                self.alert(AppAlertMsg.maxDiscountAmountMessage, nil)
                 return
             }
             applyBtn.isUserInteractionEnabled = false

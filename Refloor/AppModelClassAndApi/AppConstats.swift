@@ -194,7 +194,10 @@ struct AppAlertMsg {
     
     
     static let NetWorkAlertMessage = "No internet connection currently available. Please move to an area with a better internet connection and click Retry to proceed."
-    static let serverNotReached = "We are having issue with communicating our server (API timed out). Please tap on Retry button to try again. If issue continues, please reach out to the support."
+    //static let serverNotReached = "We are having issue with communicating our server (API timed out). Please tap on Retry button to try again. If issue continues, please reach out to the support."
+    // Updated Message
+    static let serverNotReached = "We are having issues communicating with our server. Please tap the Retry button to try again. If the issue continues, please reach out to support"
+    static let maxDiscountAmountMessage = "The maximum discount amount has been applied"
     //App Alert Msg
     //    static let NetWorkAlertMessage = "No internet connection. Please move to an area with a better internet connection and click Retry to proceed."
     //     static let serverNotReached = "The server could not be reached because of a connection problem. Please click Retry to proceed."
@@ -237,6 +240,10 @@ struct AppAlertMsg {
     static let APPOINTMENT_SYNC_MESSAGE   = "We are getting new appointments. Please wait."
     static let ORDER_SAVE_SYNC_MESSAGE   = "The appointment results has been saved."
     static let APPOINTMENT_SYNC_TO_I360_MESSAGE   = "Please wait till the sync process completes."
+}
+
+struct Validation {
+    static let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
 }
 
 enum RequestTitle: String{
