@@ -367,6 +367,14 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil {
+            return false
+        }
+        
         if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
         {
             
@@ -388,9 +396,8 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
             if (isBackSpace == -92) {
                 return true
             }
-            
-            return false
         }
+        return true
     }
     @IBAction func typeOfLoanChange(_ sender: UIButton) {
         //        let array = ["NO LOAN APPLIED","LOW PAYMENT","NO INTEREST"]

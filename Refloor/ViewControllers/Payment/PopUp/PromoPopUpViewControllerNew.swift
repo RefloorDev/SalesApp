@@ -510,7 +510,9 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
                     //
                     //                }
                     if discountData.newPrice < self.minimumFee{
-                        self.alert("New sale price cannot be less than $\(self.minimumFee)", nil)
+                        //self.alert("New sale price cannot be less than $\(self.minimumFee)", nil)
+                        //Updated Changes
+                        self.alert(AppAlertMsg.maxDiscountAmountMessage, nil)
                         break
                     }else{
                         discountArray.append(discountData)
@@ -567,7 +569,9 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
                     //
                     //                }
                     if discountData.newPrice < self.minimumFee{
-                        self.alert("New sale price cannot be less than $\(Int(self.minimumFee))", nil)
+                        //self.alert("New sale price cannot be less than $\(Int(self.minimumFee))", nil)
+                        //Updated Changes
+                        self.alert(AppAlertMsg.maxDiscountAmountMessage, nil)
                     }else{
                         discountArray.append(discountData)
                         self.newPrice = discountData.newPrice
@@ -593,7 +597,9 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
                     //                }
                     let discountData = createDiscountDataToAddToArray(discountEntered:String(discountAmount) , discountType: discountType, discountPercentage:discountPercentage)
                     if discountData.newPrice < self.minimumFee{
-                        self.alert("New sale price cannot be less than $\(Int(self.minimumFee))", nil)
+                        //self.alert("New sale price cannot be less than $\(Int(self.minimumFee))", nil)
+                        //Updated Changes
+                        self.alert(AppAlertMsg.maxDiscountAmountMessage, nil)
                     }else{
                         discountArray.append(discountData)
                         self.newPrice = discountData.newPrice
