@@ -187,6 +187,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             next.roomName = self.roomName
             next.roomID = self.roomID
             next.drowingImageID = self.drowingImageID
+            next.area = self.area
             if(self.isStair == 1)
             {
                 next.isStair = self.isStair
