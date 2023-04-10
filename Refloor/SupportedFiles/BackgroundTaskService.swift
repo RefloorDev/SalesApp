@@ -580,18 +580,18 @@ extension BackgroundTaskService {
         var jwtToken:String = String()
         let appointment_id = completedAppointmentRequest.appointment_id
         let apiUrl = completedAppointmentRequest.request_url ?? ""
-        //var paramsDict:[String:Any] = completedAppointmentRequest.request_parameter?.dictionaryValue() ?? [:]
-        jwtToken = completedAppointmentRequest.request_parameter ?? ""
+        var paramsDict:[String:Any] = completedAppointmentRequest.request_parameter?.dictionaryValue() ?? [:]
+        //jwtToken = completedAppointmentRequest.request_parameter ?? ""
        // paramsDict.removeValue(forKey: "data")
-        let contactApiData = self.createContractParameters()
-        var customerAndRoomData = self.createFinalParameterForCustomerApiCall()
-        for (key,value) in contactApiData{
-            customerAndRoomData[key] = value
-        }
-       let json = (customerAndRoomData as NSDictionary).JsonString()
+//        let contactApiData = self.createContractParameters()
+//        var customerAndRoomData = self.createFinalParameterForCustomerApiCall()
+//        for (key,value) in contactApiData{
+//            customerAndRoomData[key] = value
+//        }
+//       let json = (customerAndRoomData as NSDictionary).JsonString()
         
         let decodeOption:[String:Bool] = ["verify_signature":false]
-      parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":jwtToken,"native_data":json]
+      parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":paramsDict]
        // paramsDict["token"] = UserData.init().token ?? ""
         return (appointmentId: appointment_id, requestParams:parameterToPass, requestUrl: apiUrl)
     }
