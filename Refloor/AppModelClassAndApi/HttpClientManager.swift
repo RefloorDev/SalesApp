@@ -2112,7 +2112,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(discount)
                                     realm.delete(molding)
                                     realm.delete(product)
-                                    //realm.delete(question)
+                                    realm.delete(question)
                                     realm.delete(questionDetail)
                                     realm.delete(imagesArr)
                                     realm.delete(appointments)

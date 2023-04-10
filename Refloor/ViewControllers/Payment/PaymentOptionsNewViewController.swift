@@ -1169,7 +1169,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 {
                     amountTotel = prize.rounded()
                 }
-                if monthly == 0 && selectedOption == -1 || monthly == 0 && selectedOption == 1
+                if monthly == 0 && selectedOption == -1 || monthly == 0 && selectedOption != -1
                 {
                     amountTotel = prize
                 }
