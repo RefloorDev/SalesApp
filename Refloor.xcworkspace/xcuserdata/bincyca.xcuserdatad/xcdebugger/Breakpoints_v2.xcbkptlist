@@ -78,8 +78,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "210"
-            endingLineNumber = "210"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
             landmarkName = "changeAreaButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,8 +94,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "435"
-            endingLineNumber = "435"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
             landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -110,8 +110,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "352"
-            endingLineNumber = "352"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
             landmarkName = "discountApplied(discountAmount:discountArray:isDiscountApplied:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -126,8 +126,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "228"
-            endingLineNumber = "228"
+            startingLineNumber = "229"
+            endingLineNumber = "229"
             landmarkName = "changeAreaButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -636,8 +636,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "469"
-            endingLineNumber = "469"
+            startingLineNumber = "470"
+            endingLineNumber = "470"
             landmarkName = "didApplyDiscountAtCash(cash:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -668,8 +668,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "476"
-            endingLineNumber = "476"
+            startingLineNumber = "477"
+            endingLineNumber = "477"
             landmarkName = "didApplyDiscountAtCash(cash:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1564,8 +1564,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "87"
-            endingLineNumber = "87"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
             landmarkName = "PaymentOptionsNewViewController"
             landmarkType = "3">
             <Locations>
@@ -1816,8 +1816,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "313"
-            endingLineNumber = "313"
+            startingLineNumber = "314"
+            endingLineNumber = "314"
             landmarkName = "discountApplied(discountAmount:discountArray:isDiscountApplied:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1832,8 +1832,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "714"
-            endingLineNumber = "714"
+            startingLineNumber = "715"
+            endingLineNumber = "715"
             landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1896,8 +1896,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "561"
-            endingLineNumber = "561"
+            startingLineNumber = "562"
+            endingLineNumber = "562"
             landmarkName = "DownorfinalPaymentButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2120,8 +2120,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "816"
-            endingLineNumber = "816"
+            startingLineNumber = "817"
+            endingLineNumber = "817"
             landmarkName = "collectionView(_:didSelectItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2136,8 +2136,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1224"
-            endingLineNumber = "1224"
+            startingLineNumber = "1225"
+            endingLineNumber = "1225"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2152,8 +2152,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "980"
-            endingLineNumber = "980"
+            startingLineNumber = "981"
+            endingLineNumber = "981"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2168,8 +2168,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1118"
-            endingLineNumber = "1118"
+            startingLineNumber = "1119"
+            endingLineNumber = "1119"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2184,8 +2184,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1126"
-            endingLineNumber = "1126"
+            startingLineNumber = "1127"
+            endingLineNumber = "1127"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2200,8 +2200,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1172"
-            endingLineNumber = "1172"
+            startingLineNumber = "1173"
+            endingLineNumber = "1173"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
