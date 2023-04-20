@@ -18,7 +18,7 @@
 
 #import <Realm/RLMApp.h>
 
-NS_ASSUME_NONNULL_BEGIN
+RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
 
 /// Observer block for app notifications.
 typedef void(^RLMAppNotificationBlock)(RLMApp *);
@@ -27,20 +27,24 @@ typedef void(^RLMAppNotificationBlock)(RLMApp *);
 /// avoid dangling observers, therefore this must be retained to hold
 /// onto a subscription.
 @interface RLMAppSubscriptionToken : NSObject
-
-/// The underlying value of the subscription token.
-@property (nonatomic, readonly) NSUInteger value;
-
+- (void)unsubscribe;
 @end
 
 @interface RLMApp ()
-/// Returns all Apps which have been initialized in the current run of the application.
-+ (NSArray *)appIds;
+/// Returns all currently cached Apps
++ (NSArray<RLMApp *> *)allApps;
 /// Subscribe to notifications for this RLMApp.
 - (RLMAppSubscriptionToken *)subscribe:(RLMAppNotificationBlock)block;
-/// Unsubscribe to notifications for this RLMApp.
-- (void)unsubscribe:(RLMAppSubscriptionToken *)token;
 
++ (instancetype)appWithId:(NSString *)appId
+            configuration:(nullable RLMAppConfiguration *)configuration
+            rootDirectory:(nullable NSURL *)rootDirectory;
+
++ (instancetype)uncachedAppWithId:(NSString *)appId
+                    configuration:(RLMAppConfiguration *)configuration
+                    rootDirectory:(nullable NSURL *)rootDirectory;
+
++ (void)resetAppCache;
 @end
 
-NS_ASSUME_NONNULL_END
+RLM_HEADER_AUDIT_END(nullability, sendability)
