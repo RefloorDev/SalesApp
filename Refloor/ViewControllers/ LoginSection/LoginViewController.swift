@@ -42,8 +42,8 @@ class LoginViewController: UIViewController {
 //        
 //     self.emailTF.text = "ajay.jayaram@oneteamus.com" //vrenaud@refloor.com"
 //     self.passwordTF.text = "salesApp"
-        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
-        self.passwordTF.text = "SALESapp"
+//        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
+//        self.passwordTF.text = "SALESapp"
 
         //just remove this.
 //        self.emailTF.text = "vrenaud@refloor.com" //vrenaud@refloor.com"
