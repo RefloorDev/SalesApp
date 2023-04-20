@@ -26,6 +26,9 @@ class List;
 class Object;
 class Realm;
 class Results;
+namespace object_store {
+class Dictionary;
+}
 
 // Opaque type-ereased wrapper for a Realm object which can be imported into another Realm
 class ThreadSafeReference {
@@ -43,6 +46,10 @@ public:
     // Import the object into the destination Realm
     template <typename T>
     T resolve(std::shared_ptr<Realm> const&);
+
+    // Is the payload of a certain type
+    template <typename T>
+    bool is() const;
 
     explicit operator bool() const noexcept
     {

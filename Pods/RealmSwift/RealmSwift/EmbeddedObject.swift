@@ -56,7 +56,7 @@ import Realm.Private
  ```
  */
 public typealias EmbeddedObject = RealmSwiftEmbeddedObject
-extension EmbeddedObject: RealmCollectionValue {
+extension EmbeddedObject: _RealmCollectionValueInsideOptional {
     /// :nodoc:
     public class override final func isEmbedded() -> Bool {
         return true
@@ -114,7 +114,7 @@ extension EmbeddedObject: RealmCollectionValue {
      It is not considered part of the public API.
      :nodoc:
      */
-    public override final class func _getProperties() -> [RLMProperty] {
+    @MainActor public override final class func _getProperties() -> [RLMProperty] {
         return ObjectUtil.getSwiftProperties(self)
     }
 
@@ -130,6 +130,37 @@ extension EmbeddedObject: RealmCollectionValue {
      - returns: An array of property names to ignore.
      */
     @objc open class func ignoredProperties() -> [String] { return [] }
+
+    /**
+     Override this method to specify a map of public-private property names.
+     This will set a different persisted property name on the Realm, and allows using the public name
+     for any operation with the property. (Ex: Queries, Sorting, ...).
+     This very helpful if you need to map property names from your `Device Sync` JSON schema
+     to local property names.
+
+     ```swift
+     class Person: EmbeddedObject {
+         @Persisted var firstName: String
+         @Persisted var birthDate: Date
+         @Persisted var age: Int
+
+         override class public func propertiesMapping() -> [String : String] {
+             ["firstName": "first_name",
+              "birthDate": "birth_date"]
+         }
+     }
+     ```
+
+     - note: Only property that have a different column name have to be added to the properties mapping
+     dictionary.
+
+     - returns: A dictionary of public-private property names.
+     */
+    @objc open override class func propertiesMapping() -> [String: String] { return [:] }
+
+    /// :nodoc:
+    @available(*, unavailable, renamed: "propertiesMapping", message: "`_realmColumnNames` private API is unavailable in our Swift SDK, please use the override `.propertiesMapping()` instead.")
+    @objc open override class func _realmColumnNames() -> [String: String] { return [:] }
 
     // MARK: Key-Value Coding & Subscripting
 
@@ -203,7 +234,7 @@ extension EmbeddedObject: RealmCollectionValue {
      */
     public func dynamicList(_ propertyName: String) -> List<DynamicObject> {
         let list = RLMDynamicGetByName(self, propertyName) as! RLMSwiftCollectionBase
-        return List<DynamicObject>(objc: list._rlmCollection as! RLMArray<AnyObject>)
+        return List<DynamicObject>(collection: list._rlmCollection as! RLMArray<AnyObject>)
     }
 
     // MARK: Comparison
@@ -260,23 +291,5 @@ extension EmbeddedObject: ThreadConfined {
      */
     public func thaw() -> Self? {
         return realm?.thaw(self)
-    }
-}
-
-
-// MARK: AssistedObjectiveCBridgeable
-
-// FIXME: Remove when `as! Self` can be written
-private func forceCastToInferred<T, V>(_ x: T) -> V {
-    return x as! V
-}
-
-extension EmbeddedObject: AssistedObjectiveCBridgeable {
-    static func bridging(from objectiveCValue: Any, with metadata: Any?) -> Self {
-        return forceCastToInferred(objectiveCValue)
-    }
-
-    var bridged: (objectiveCValue: Any, metadata: Any?) {
-        return (objectiveCValue: unsafeBitCast(self, to: RLMObject.self), metadata: nil)
     }
 }

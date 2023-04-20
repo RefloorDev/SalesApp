@@ -43,6 +43,7 @@ typedef SSIZE_T ssize_t;
 
 #include <realm/util/features.h>
 #include <realm/util/assert.hpp>
+#include <realm/util/functional.hpp>
 #include <realm/util/safe_int_ops.hpp>
 
 // GCC defines __i386__ and __x86_64__
@@ -74,7 +75,7 @@ typedef SSIZE_T ssize_t;
 
 namespace realm {
 
-using StringCompareCallback = std::function<bool(const char* string1, const char* string2)>;
+using StringCompareCallback = util::UniqueFunction<bool(const char* string1, const char* string2)>;
 
 extern signed char sse_support;
 extern signed char avx_support;
@@ -192,7 +193,7 @@ inline int ctz(size_t x)
 #ifdef REALM_PTR_64
     return __builtin_ctzll(x); // returns int
 #else
-    return __builtin_ctz(x);      // returns int
+    return __builtin_ctz(x); // returns int
 #endif
 #elif defined(_WIN32)
     unsigned long index = 0;
@@ -386,11 +387,13 @@ struct PlacementDelete {
 };
 
 #ifdef _WIN32
-typedef void* FileDesc;
+typedef HANDLE FileDesc;
 #else
 typedef int FileDesc;
 #endif
 
+
+enum class IteratorControl { AdvanceToNext, Stop };
 
 } // namespace realm
 

@@ -22,31 +22,18 @@
 
 #import <memory>
 
-NS_ASSUME_NONNULL_BEGIN
+RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
 
 @interface RLMAppConfiguration ()
-
 - (realm::app::App::Config&)config;
-
-- (void)setAppId:(NSString *)appId;
-
 - (instancetype)initWithConfig:(const realm::app::App::Config&)config;
-
 @end
 
 @interface RLMApp ()
-
 - (std::shared_ptr<realm::app::App>)_realmApp;
-
-+ (instancetype)appWithId:(NSString *)appId
-            configuration:(nullable RLMAppConfiguration *)configuration
-            rootDirectory:(nullable NSURL *)rootDirectory;
-
 - (instancetype)initWithApp:(std::shared_ptr<realm::app::App>)app;
-
-+ (void)resetAppCache;
 @end
 
-NSError * RLMAppErrorToNSError(realm::app::AppError const& appError);
+NSError * makeError(realm::app::AppError const& appError);
 
-NS_ASSUME_NONNULL_END
+RLM_HEADER_AUDIT_END(nullability, sendability)
