@@ -80,10 +80,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         //
     }
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-    }
+    
     func addQuestions(){
         do{
             let realm = try Realm()
@@ -498,28 +495,31 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 if tag == 0
                 {
                     var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
-                    let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
-                    if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface//"Concrete / Cement"
+                    if setDefaultAnswerTrueIndex != nil
                     {
-                        var vapourBarrierValue : Int = Int()
-                        let vapourValue = modf(area / 100)
-                        if vapourValue.1 == 0.0
+                        let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                        if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface//"Concrete / Cement"
                         {
-                            vapourBarrierValue = Int(vapourValue.0)
+                            var vapourBarrierValue : Int = Int()
+                            let vapourValue = modf(area / 100)
+                            if vapourValue.1 == 0.0
+                            {
+                                vapourBarrierValue = Int(vapourValue.0)
+                            }
+                            else
+                            {
+                                vapourBarrierValue = Int(vapourValue.0) + 1
+                            }
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                            //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
+                            //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                         }
                         else
                         {
-                            vapourBarrierValue = Int(vapourValue.0) + 1
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(0)
+                            //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
+                            //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                         }
-                        qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
-                        //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
-                        ///self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
-                    }
-                    else
-                    {
-                        qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(0)
-                        //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
-                       // self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                     }
                 }
             }
