@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+import RealmSwift
 class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITextFieldDelegate
 {
     static public func initialization() -> CoApplicantFormViewControllerForm? {
@@ -466,12 +467,19 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         var licenseIssueDate = self.lisenceissueDate.text ?? ""
         var licenseExpdate = self.lisenceExpDate.text ?? ""
         // Adding Date Of Birth format to Server format
-        dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
-        if licenseIssueDate != "" || licenseExpdate != ""
+        if licenseIssueDate != ""
         {
-            //dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
+            
             licenseIssueDate = licenseIssueDate.dateconverterEncoding(licenseIssueDate)
+           
+        }
+        if licenseExpdate != ""
+        {
             licenseExpdate = licenseExpdate.dateconverterEncoding(licenseExpdate)
+        }
+        if dateOfBirth != ""
+        {
+            dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
         }
         //dateOfBirth = dateOfBirth.replacingOccurrences(of: "/", with: "-")
         let data = CoApplicationData.init(applicantFirstName: self.firstName.text ?? "", applicantMiddleName: self.middlename.text ?? "", applicantLastName: self.lastName.text ?? "", driversLicense: self.drivingLisenceID.text ?? "", driversLicenseExpDate: licenseExpdate,driversLicenseIssueDate: licenseIssueDate, dateOfBirth: dateOfBirth, socialSecurityNumber: self.socialSecurityNo.text ?? "", addressOfApplicant: self.address.text ?? "", addressOfApplicantStreet: "", addressOfApplicantStreet2: "", addressOfApplicantCity: self.city.text ?? "", addressOfApplicantState: self.stateZipCode.text ?? "", addressOfApplicantZip: self.zipcode.text ?? "", previousAddressOfApplicant:"", previousAddressOfApplicantStreet: "", previousAddressOfApplicantStreet2: "", previousAddressOfApplicantCity: "", previousAddressOfApplicantState: "", previousAddressOfApplicantZip: "", cellPhone: "", homePhone: self.homePhone.text ?? "", howLong: self.howLong.text ?? "", previousAddressHowLong: "", presentEmployer: self.presentEmployer.text ?? "", yearsOnJob: self.yearonJob.text ?? "", occupation: self.occupation.text ?? "", presentEmployersAddress: "", presentEmployersAddressStreet: "", presentEmployersAddressStreet2: "", presentEmployersAddressCity: "", presentEmployersAddressState: "", presentEmployersAddressZip: "", earningsFromEmployment: self.earnings.text ?? "", supervisorOrDepartment: "", employersPhoneNumber: "", previousEmployersAddress:"", previousEmployersAddressStreet: "", previousEmployersAddressStreet2: "", previousEmployersAddressCity: "", previousEmployersAddressState: "", previousEmployersAddressZip: "", earningsPerMonth: "", yearsOnJobPreviousEmployer: "", occupationPreviousEmployer:"", previousEmployersPhoneNumber:  "", ethnicity: ethencity, race: (wishShareStatus == .Share) ? (self.race.text ?? "") : ethencity, sex: sex, maritalStatus: self.martialStatus.text ?? "",CoapplicantEmail: self.emailAddress.text ?? "",otherRace: self.raceOther.text ?? "")
@@ -507,10 +515,34 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         }
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
+        let appointment = AppDelegate.appoinmentslData
+        appointment?.co_applicant_first_name = self.firstName.text ?? ""
+        appointment?.co_applicant_last_name = self.lastName.text ?? ""
+        appointment?.co_applicant_middle_name = self.middlename.text ?? ""
+        appointment?.co_applicant_zip = self.zipcode.text ?? ""
+        appointment?.co_applicant_email = self.emailAddress.text ?? ""
+        appointment?.co_applicant_city = self.city.text ?? ""
+        appointment?.co_applicant_state = self.stateZipCode.text ?? ""
+        appointment?.co_applicant_address = self.address.text ?? ""
+        appointment?.co_applicant_skipped = 0
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "CoApplicantInformation"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //
+        do
+        {
+            let realm = try Realm()
+            try realm.write
+            {
+                var dict = ["appointment_id":appointmentId ?? 0,"co_applicant_first_name":appointment?.co_applicant_first_name,"co_applicant_middle_name":appointment?.co_applicant_middle_name,"co_applicant_last_name":appointment?.co_applicant_last_name,"co_applicant_address":appointment?.co_applicant_address,"co_applicant_city":appointment?.co_applicant_city ,"co_applicant_state":appointment?.co_applicant_state,"co_applicant_zip":appointment?.co_applicant_zip,"co_applicant_email":appointment?.co_applicant_email]
+                                        realm.create(rf_completed_appointment.self, value: dict, update: .all)
+            }
+            
+        }
+        catch
+        {
+            print(RealmError.initialisationFailed)
+        }
         self.navigationController?.pushViewController(applicant, animated: true)
         
     }

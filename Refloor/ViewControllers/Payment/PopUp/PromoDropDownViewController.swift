@@ -235,8 +235,10 @@ extension PromoDropDownViewController: UICollectionViewDelegate,UICollectionView
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
         let label = UILabel(frame: CGRect.zero)
+        label.font = UIFont(name: "Avenir-Medium", size: 22)
         label.text = selectedPromoCodeArrayValue[indexPath.item]
         label.sizeToFit()
+        
         return CGSize(width: label.frame.width + 30 + 46 + 20 + 35, height: 56)
         
     }
