@@ -13997,7 +13997,7 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ce2-ox-aSb">
-                                        <rect key="frame" x="213" y="434" width="63" height="36"/>
+                                        <rect key="frame" x="210" y="434" width="65" height="36"/>
                                         <fontDescription key="fontDescription" name="SFUIDisplay-Bold" family="SF UI Display" pointSize="20"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" systemColor="linkColor"/>
@@ -14007,7 +14007,7 @@ Cgo
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="E0x-er-86W">
-                                        <rect key="frame" x="524" y="434" width="72" height="36"/>
+                                        <rect key="frame" x="525" y="434" width="75" height="36"/>
                                         <fontDescription key="fontDescription" name="SFUIDisplay-Bold" family="SF UI Display" pointSize="20"/>
                                         <state key="normal" title="Confirm">
                                             <color key="titleColor" systemColor="linkColor"/>
@@ -14017,13 +14017,13 @@ Cgo
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIGNATURE FOR: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d74-6K-A86">
-                                        <rect key="frame" x="20" y="20" width="252" height="35"/>
+                                        <rect key="frame" x="20" y="20" width="238.5" height="36"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Semibold" family="SF Pro Display" pointSize="30"/>
                                         <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SIGNATURE FOR: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ToC-bU-dbv">
-                                        <rect key="frame" x="272.5" y="29" width="520" height="24"/>
+                                        <rect key="frame" x="259" y="29.5" width="520" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="520" id="c82-mC-2I3"/>
                                         </constraints>
@@ -14032,7 +14032,7 @@ Cgo
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hKs-zp-a0u">
-                                        <rect key="frame" x="376" y="434" width="48" height="36"/>
+                                        <rect key="frame" x="375" y="434" width="50" height="36"/>
                                         <fontDescription key="fontDescription" name="SFUIDisplay-Bold" family="SF UI Display" pointSize="20"/>
                                         <state key="normal" title="Clear">
                                             <color key="titleColor" systemColor="linkColor"/>
@@ -20243,7 +20243,7 @@ Cgo
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Read Before Signing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dQF-8m-bt4">
-                                        <rect key="frame" x="182" y="21.5" width="258" height="33"/>
+                                        <rect key="frame" x="182" y="21.5" width="244.5" height="33"/>
                                         <fontDescription key="fontDescription" name="SFProDisplay-Medium" family="SF Pro Display" pointSize="28"/>
                                         <color key="textColor" red="0.34509803921568627" green="0.39215686274509803" blue="0.44313725490196076" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>

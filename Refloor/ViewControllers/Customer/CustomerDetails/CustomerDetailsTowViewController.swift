@@ -456,30 +456,36 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
-        {
-            if(textField == self.customerPhone || textField == self.customerContactNumberTF)
-            {
-                guard let text = textField.text else { return false }
-                let newString = (text as NSString).replacingCharacters(in: range, with: string)
-                textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
-                return false
-            }
-            
-            return true
-        }
-        else
-        {
-            
-            let  char = string.cString(using: String.Encoding.utf8)!
-            let isBackSpace = strcmp(char, "\\b")
-            
-            if (isBackSpace == -92) {
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+                    return false
+                }
+                //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+                if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.customerEmail {
+                    return false
+                }
+                if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
+                {
+                    if(textField == self.customerPhone || textField == self.customerContactNumberTF)
+                    {
+                        guard let text = textField.text else { return false }
+                        let newString = (text as NSString).replacingCharacters(in: range, with: string)
+                        textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
+                        return false
+                    }
+                    
+                    return true
+                }
+                else
+                {
+                    
+                    let  char = string.cString(using: String.Encoding.utf8)!
+                    let isBackSpace = strcmp(char, "\\b")
+                    
+                    if (isBackSpace == -92) {
+                        return true
+                    }
+                }
                 return true
-            }
-            
-            return false
-        }
     }
     
     
