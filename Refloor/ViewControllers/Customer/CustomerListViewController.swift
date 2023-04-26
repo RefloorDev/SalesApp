@@ -114,7 +114,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { _ in
                     
                     print("TIMER WAKEUP Appointment")
-                    BackgroundTaskService.shared.startSyncProcess(comments: self.comments, sendPhysical: self.sendPhysical)
+                    BackgroundTaskService.shared.startSyncProcess()
                 })
             }
             

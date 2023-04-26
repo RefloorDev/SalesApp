@@ -1400,7 +1400,7 @@
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution: Refloor LLC. (F8JN2G36QM)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1428,7 +1428,7 @@
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Distribution: Refloor LLC. (F8JN2G36QM)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 2.0;
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;

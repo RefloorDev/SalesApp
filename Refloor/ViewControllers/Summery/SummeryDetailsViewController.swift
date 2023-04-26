@@ -51,7 +51,6 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         setQuestion()
         self.setNavigationBarbackAndlogo(with: "Room Summary".uppercased())
         self.tableReaload()
-       checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         
     }
     
@@ -524,21 +523,26 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 cell.messurementTF.text = (summaryData.adjusted_area ?? 0).toRoundeString
                 if isStair != 1
                 {
-                    if qustionAnswer[0].answerOFQustion?.singleSelection?.value == qustionAnswer[17].applicableCurrentSurface
+                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    if setDefaultAnswerTrueIndex != nil
                     {
-                        var vapourBarrierValue : Int = Int()
-                        let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
-                        if vapourValue.1 == 0.0
+                        let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                        if qustionAnswer[sender.tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface
                         {
-                            vapourBarrierValue = Int(vapourValue.0)
+                            var vapourBarrierValue : Int = Int()
+                            let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
+                            if vapourValue.1 == 0.0
+                            {
+                                vapourBarrierValue = Int(vapourValue.0)
+                            }
+                            else
+                            {
+                                vapourBarrierValue = Int(vapourValue.0) + 1
+                            }
+                            summaryData.questionaire![setDefaultAnswerTrueIndexInt].answers![sender.tag].answer = String(vapourBarrierValue)
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                            tableReaload()
                         }
-                        else
-                        {
-                            vapourBarrierValue = Int(vapourValue.0) + 1
-                        }
-                        summaryData.questionaire![17].answers![0].answer = String(vapourBarrierValue)
-                        qustionAnswer[17].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
-                        tableReaload()
                     }
                 }
 //                self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))
@@ -566,21 +570,26 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                     cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
                     if isStair != 1
                     {
-                        if qustionAnswer[0].answerOFQustion?.singleSelection?.value == qustionAnswer[17].applicableCurrentSurface
+                        var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                        if setDefaultAnswerTrueIndex != nil
                         {
-                            var vapourBarrierValue : Int = Int()
-                            let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
-                            if vapourValue.1 == 0.0
+                            let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                            if qustionAnswer[sender.tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface
                             {
-                                vapourBarrierValue = Int(vapourValue.0)
+                                var vapourBarrierValue : Int = Int()
+                                let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
+                                if vapourValue.1 == 0.0
+                                {
+                                    vapourBarrierValue = Int(vapourValue.0)
+                                }
+                                else
+                                {
+                                    vapourBarrierValue = Int(vapourValue.0) + 1
+                                }
+                                qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                                summaryData.questionaire![setDefaultAnswerTrueIndexInt].answers![sender.tag].answer = String(vapourBarrierValue)
+                                tableReaload()
                             }
-                            else
-                            {
-                                vapourBarrierValue = Int(vapourValue.0) + 1
-                            }
-                            qustionAnswer[17].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
-                            summaryData.questionaire![17].answers![0].answer = String(vapourBarrierValue)
-                            tableReaload()
                         }
                     }
                 }
@@ -598,21 +607,26 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
                 if isStair != 1
                 {
-                    if qustionAnswer[0].answerOFQustion?.singleSelection?.value == qustionAnswer[17].applicableCurrentSurface
+                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    if setDefaultAnswerTrueIndex != nil
                     {
-                        var vapourBarrierValue : Int = Int()
-                        let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
-                        if vapourValue.1 == 0.0
+                        let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                        if qustionAnswer[sender.tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface
                         {
-                            vapourBarrierValue = Int(vapourValue.0)
+                            var vapourBarrierValue : Int = Int()
+                            let vapourValue = modf((summaryData.adjusted_area ?? 0) / 100)
+                            if vapourValue.1 == 0.0
+                            {
+                                vapourBarrierValue = Int(vapourValue.0)
+                            }
+                            else
+                            {
+                                vapourBarrierValue = Int(vapourValue.0) + 1
+                            }
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                            summaryData.questionaire![setDefaultAnswerTrueIndexInt].answers![sender.tag].answer = String(vapourBarrierValue)
+                            tableReaload()
                         }
-                        else
-                        {
-                            vapourBarrierValue = Int(vapourValue.0) + 1
-                        }
-                        qustionAnswer[17].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
-                        summaryData.questionaire![17].answers![0].answer = String(vapourBarrierValue)
-                        tableReaload()
                     }
                 }
                 //self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))

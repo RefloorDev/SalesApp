@@ -27,8 +27,6 @@ class BackgroundTaskService {
     var testResult = "TEST"
     var i = 1
     var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-    var comments:String = String()
-    var sendPhysical:Bool = Bool()
     
     func enterBackground() {
         print("Enter Background !!")
@@ -166,7 +164,7 @@ extension BackgroundTaskService {
             print("START ALL PENDING SYNC OPERATIONS")
             
             
-            self.startSyncProcess(comments: self.comments, sendPhysical: self.sendPhysical)
+            self.startSyncProcess()
             //   })
             
             
@@ -249,19 +247,34 @@ extension BackgroundTaskService {
     
     //func to mark the status of api once its successfully completed -> "sync_status" = true
     // MARK: - UPDATE STATUS OF COMPLETED APPOINTMENT IN DB
-    func updateAppointmentRequestSyncStatusAsComplete(appointmentId: Int, requestTitle: RequestTitle, imageName:String = ""){
+    func updateAppointmentRequestSyncStatusAsComplete(appointmentId: Int, requestTitle: RequestTitle, imageName:String = "",paymentStatus:String,paymentMessage:String){
+        let appointment = self.getAppointmentData(appointmentId: appointmentId)
+        let firstName = appointment?.applicant_first_name ?? ""
+        let lastName = appointment?.applicant_last_name ?? ""
+        let name = lastName == ""  ? firstName : firstName + " " + lastName
+        let date = appointment?.appointment_datetime ?? ""
         do{
             let realm = try Realm()
             try realm.write{
                 if requestTitle != RequestTitle.ImageUpload{
                     let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND reqest_title == %@", appointmentId, requestTitle.rawValue)
                     var dict:[String:Any] = [:]
-                    if appointmentRequest.count == 1{
-                        if let appointmentRequestObj = appointmentRequest.first{
-                            dict = ["id": appointmentRequestObj.id,
+                    if appointmentRequest.count > 0{
+//                        if let appointmentRequestObj = appointmentRequest.first{
+//                            dict = ["id": appointmentRequestObj.id,
+//                                    "sync_status" : true]
+//                            realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+//                        }
+                    for obj in appointmentRequest
+                    {
+
+//                            if let appointmentRequestObj = obj{
+                        dict = ["id": obj.id,
                                     "sync_status" : true]
+
                             realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
-                        }
+                     //   }
+                    }
                     }
                 }
                 else{
@@ -346,9 +359,7 @@ extension BackgroundTaskService {
     }
     
     // MARK: - START SYNC ACTION
-    func startSyncProcess(comments:String,sendPhysical:Bool){
-        self.comments = comments
-        self.sendPhysical = sendPhysical
+    func startSyncProcess(){
         var syncDelayValue:Int = 0
         print("Timer called")
         var ifAnyApiFailed = false
@@ -455,7 +466,7 @@ extension BackgroundTaskService {
             if ifAnyApiFailed
             {
                 
-                self.startSyncProcess(comments: self.comments, sendPhysical: self.sendPhysical)
+                self.startSyncProcess()
                 
             }
             
@@ -565,7 +576,7 @@ extension BackgroundTaskService {
             if ifAnyApiFailed
             {
                 
-                self.startSyncProcess(comments: self.comments, sendPhysical: self.sendPhysical)
+                self.startSyncProcess()
                 
             }
             
@@ -575,358 +586,20 @@ extension BackgroundTaskService {
     
     // MARK: - CREATE PARAMETERS
     func createCustomerAndRoomParametersForApiCall(completedAppointmentRequest:rf_Completed_Appointment_Request) -> (appointmentId: Int, requestParams: [String:Any], requestUrl: String){
-        //UserData.init().token ?? ""
         var parameterToPass:[String:Any] = [:]
-        var jwtToken:String = String()
         let appointment_id = completedAppointmentRequest.appointment_id
         let apiUrl = completedAppointmentRequest.request_url ?? ""
         var paramsDict:[String:Any] = completedAppointmentRequest.request_parameter?.dictionaryValue() ?? [:]
         //jwtToken = completedAppointmentRequest.request_parameter ?? ""
        // paramsDict.removeValue(forKey: "data")
-//        let contactApiData = self.createContractParameters()
-//        var customerAndRoomData = self.createFinalParameterForCustomerApiCall()
-//        for (key,value) in contactApiData{
-//            customerAndRoomData[key] = value
-//        }
-//       let json = (customerAndRoomData as NSDictionary).JsonString()
+        
         
         let decodeOption:[String:Bool] = ["verify_signature":false]
       parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":paramsDict]
        // paramsDict["token"] = UserData.init().token ?? ""
         return (appointmentId: appointment_id, requestParams:parameterToPass, requestUrl: apiUrl)
     }
-    func createFinalParameterForCustomerApiCall() -> [String:Any]{
-        var customerDict: [String:Any] = [:]
-        customerDict["appointment_id"] = AppointmentData().appointment_id ?? 0
-        customerDict["data_completed"] = 0
-        var customerData = createCustomerParameter()
-        customerData["additional_comments"] = self.comments
-        customerData["send_physical_document"] = self.sendPhysical ? 1 : 0
-        customerDict["customer"] = customerData
-        customerDict["rooms"] = createRoomParameters()
-        customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
-        customerDict["operation_mode"] = "offline"
-        return customerDict
-    }
-    func getQuestionAnswerArrayForApiCall() -> [[String:Any]]{
-        var questionAnswerArray:[[String:Any]] = []
-        do{
-            _ = try Realm()
-            let appointmentId = AppointmentData().appointment_id ?? 0
-            let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
-            appointment.first?.rooms.forEach({ room in
-                var questionAnswerDictForSingleRoom:[String:Any] = [:]
-                let questionAnswers = room.questionnaires
-                questionAnswers.forEach { question in
-                    let room_id = question.room_id
-                    let question_id = question.id
-                    let answerObj = question.rf_AnswerOFQustion.first
-                    var answerArray:[String] = []
-                    answerObj?.answer.forEach({ answer in
-                        answerArray.append(answer)
-                    })
-                    questionAnswerDictForSingleRoom["room_id"] = room_id
-                    questionAnswerDictForSingleRoom["question_id"] = question_id
-                    questionAnswerDictForSingleRoom["answer"] = answerArray
-                    questionAnswerArray.append(questionAnswerDictForSingleRoom)
-                }
-            })
-            
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        
-        return questionAnswerArray
-    }
-    func createQuestionAnswerForAllRoomsParameter() -> [[String:Any]]{
-        return self.getQuestionAnswerArrayForApiCall()
-    }
-    func getRoomArrayForApiCall() -> [[String:Any]]{
-        var roomArray: [[String:Any]] = []
-        do{
-            let realm = try Realm()
-            let appointmentId = AppointmentData().appointment_id ?? 0
-            let masterData = realm.objects(MasterData.self).first
-            let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
-            appointment.first?.rooms.forEach({ room in
-                var roomDict:[String:Any] = [:]
-                let room_id = room.room_id
-                let room_name = room.room_name
-                let room_area = room.room_area
-                let room_area_image = room.draw_image_name
-                let room_adjusted_area = room.draw_area_adjusted
-                let room_perimeter = room.room_perimeter
-                let moldingName = room.selected_room_molding
-                let selectedColor = room.selected_room_color ?? ""
-                let roomColorId = masterData?.flooring_colors.filter("color_name == %@",selectedColor).first?.material_id ?? 0
-                var transitionArray: [[String:Any]] = []
-                var transition1_name = ""
-                var transition1_width = ""
-                var transition2_name = ""
-                var transition2_width = ""
-                var transition3_name = ""
-                var transition3_width = ""
-                var transition4_name = ""
-                var transition4_width = ""
-                let isRoomExcluded = room.room_strike_status ? 1 : 0
-                for i in 0..<room.transArray.count{
-                    let name = room.transArray[i].name ?? ""
-                    let width = room.transArray[i].transsquarefeet
-                    let transitionDict:[String:Any] = ["name":name, "width": width]
-                    transitionArray.append(transitionDict)
-//                    switch i {
-//
-//                    case 0:
-//                        transition1_name = room.transArray[i].name ?? ""
-//                        transition1_width = "\(room.transArray[i].transsquarefeet)"
-//                    case 1:
-//                        transition2_name = room.transArray[i].name ?? ""
-//                        transition2_width = "\(room.transArray[i].transsquarefeet)"
-//                    case 2:
-//                        transition3_name = room.transArray[i].name ?? ""
-//                        transition3_width = "\(room.transArray[i].transsquarefeet)"
-//                    case 3:
-//                        transition4_name = room.transArray[i].name ?? ""
-//                        transition4_width = "\(room.transArray[i].transsquarefeet)"
-//                    default:
-//                        break
-//                    }
-                }
-                let room_comments = room.room_summary_comment ?? ""
-                var room_image_names:[String] = []
-                for i in 0..<room.room_attachments.count{
-                    room_image_names.append(room.room_attachments[i])
-                }
-                roomDict["room_id"] = room_id
-                roomDict["room_name"] = room_name
-                roomDict["room_area"] = room_area
-                roomDict["room_area_image"] = room_area_image
-                roomDict["room_adjusted_area"] = room_adjusted_area
-                roomDict["room_perimeter"] = room_perimeter
-//                roomDict["transition1_name"] = transition1_name
-//                roomDict["transition1_width"] = transition1_width
-//                roomDict["transition2_name"] = transition2_name
-//                roomDict["transition2_width"] = transition2_width
-//                roomDict["transition3_name"] = transition3_name
-//                roomDict["transition3_width"] = transition3_width
-//                roomDict["transition4_name"] = transition4_name
-//                roomDict["transition4_width"] = transition4_width
-                roomDict["transitions"] = transitionArray
-                roomDict["room_comments"] = room_comments
-                roomDict["room_image_names"] = room_image_names
-                roomDict["moulding_type"] = moldingName
-                roomDict["material_id"] = roomColorId
-                roomDict["exclude_from_calculation"] = isRoomExcluded
-                roomArray.append(roomDict)
-            })
-            
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return roomArray
-    }
-    func createRoomParameters() -> [[String:Any]]{
-        return self.getRoomArrayForApiCall()
-    }
-    func getCompletedAppointmentsFromDB(appointmentId:Int) -> Results<rf_completed_appointment>{
-        var completedAppointment:Results<rf_completed_appointment>!
-        do{
-            let realm = try Realm()
-            completedAppointment = realm.objects(rf_completed_appointment.self).filter("appointment_id == %d" , appointmentId)
-            
-            
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return completedAppointment
-    }
-    func getCustomerDetailsForApiCall() -> [String:Any]{
-        var customerDetailsDict:[String:Any] = [:]
-        do{
-            _ = try Realm()
-            let appointmentId = AppointmentData().appointment_id ?? 0
-            let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId).first
-            let mobile = appointment?.applicant_phone
-            let street2 = appointment?.applicant_street2
-            let street = appointment?.applicant_street
-            let state_code = appointment?.applicant_state_code
-            let city = appointment?.applicant_city
-            let zip = appointment?.applicant_zip
-            let appointment_id = appointment?.appointment_id
-            let customer_id = ""
-            let appointment_date = appointment?.appointment_date
-            let state = ""
-            let country_id = appointment?.applicant_country_id
-            let country = appointment?.applicant_country
-            let country_code = appointment?.applicant_country_code
-            let phone = appointment?.applicant_phone
-            let email = appointment?.applicant_email
-            let sales_person = appointment?.sales_person
-            let salesperson_id = appointment?.salesperson_id
-            let partner_latitude = appointment?.partner_latitude
-            let partner_longitude = appointment?.partner_longitude
-            let applicant_first_name = appointment?.applicant_first_name
-            let applicant_middle_name = appointment?.applicant_middle_name
-            let applicant_last_name = appointment?.applicant_last_name
-            let co_applicant_first_name = appointment?.co_applicant_first_name
-            let co_applicant_middle_name = appointment?.co_applicant_middle_name
-            let co_applicant_last_name = appointment?.co_applicant_last_name
-            let co_applicant_email = appointment?.co_applicant_email
-            let co_applicant_secondary_phone = appointment?.co_applicant_secondary_phone
-            let co_applicant_address = appointment?.co_applicant_address
-            let co_applicant_city = appointment?.co_applicant_city
-            let co_applicant_state = appointment?.co_applicant_state
-            let co_applicant_zip = appointment?.co_applicant_zip
-            let co_applicant_phone = appointment?.co_applicant_phone
-            customerDetailsDict["mobile"] = mobile
-            customerDetailsDict["street2"] = street2
-            customerDetailsDict["street"] = street
-            customerDetailsDict["state_code"] = state_code
-            customerDetailsDict["city"] = city
-            customerDetailsDict["zip"] = zip
-            customerDetailsDict["appointment_id"] = appointment_id
-            customerDetailsDict["customer_id"] = customer_id
-            customerDetailsDict["appointment_date"] = appointment_date
-            customerDetailsDict["state"] = state
-            customerDetailsDict["country_id"] = country_id
-            customerDetailsDict["country"] = country
-            customerDetailsDict["country_code"] = country_code
-            customerDetailsDict["phone"] = phone
-            customerDetailsDict["email"] = email
-            customerDetailsDict["sales_person"] = sales_person
-            customerDetailsDict["salesperson_id"] = salesperson_id
-            customerDetailsDict["partner_latitude"] = partner_latitude
-            customerDetailsDict["partner_longitude"] = partner_longitude
-            customerDetailsDict["applicant_first_name"] = applicant_first_name
-            customerDetailsDict["applicant_middle_name"] = applicant_middle_name
-            customerDetailsDict["applicant_last_name"] = applicant_last_name
-            customerDetailsDict["co_applicant_first_name"] = co_applicant_first_name
-            customerDetailsDict["co_applicant_middle_name"] = co_applicant_middle_name
-            customerDetailsDict["co_applicant_last_name"] = co_applicant_last_name
-            customerDetailsDict["co_applicant_email"] = co_applicant_email
-            customerDetailsDict["co_applicant_secondary_phone"] = co_applicant_secondary_phone
-            customerDetailsDict["co_applicant_address"] = co_applicant_address
-            customerDetailsDict["co_applicant_city"] = co_applicant_city
-            customerDetailsDict["co_applicant_state"] = co_applicant_state
-            customerDetailsDict["co_applicant_zip"] = co_applicant_zip
-            customerDetailsDict["co_applicant_phone"] = co_applicant_phone
-            customerDetailsDict["appointment_result"] = "Sold"
-            
-            let (date,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            customerDetailsDict["completed_date"] = date
-            customerDetailsDict["timezone"] = timeZone
-            
-            //arb
-            let appoint = self.getAppointmentData(appointmentId: appointmentId)
-            if applicant_first_name == nil{
-                customerDetailsDict["applicant_first_name"] = appoint?.applicant_first_name
-            }
-            if applicant_last_name  == nil{
-                customerDetailsDict["applicant_last_name"] = appoint?.applicant_last_name
-            }
-            if appointment_date == nil{
-                customerDetailsDict["appointment_date"] = appoint?.appointment_datetime
-                customerDetailsDict["appointment_datetime"] = appoint?.appointment_datetime
-            }
-            
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return customerDetailsDict
-    }
-    func createCustomerParameter() -> [String:Any]{
-        return self.getCustomerDetailsForApiCall()
-    }
     
-    func createContractParameters() -> [String:Any] {
-        let paymentDetails = self.getPaymentDetailsDataFromAppointmentDetail()
-        print(paymentDetails)
-        let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
-        print(paymentType)
-        let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
-        print(applicantDta)
-        //let contactInfo = self.getContractDataOfAppointment()
-        //print(contactInfo)
-        var contractDict: [String:Any] = [:]
-        contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType
-        contractDict["applicationInfo"] = applicantDta["data"]
-        //contractDict["contractInfo"] = contactInfo
-//        contractDict["data_completed"] = 0
-//        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0
-//        let contractDataDict: [String:Any] = ["data":contractDict]
-//        print(contractDataDict)
-        return contractDict //contractDataDict
-    }
-    func getDiscountArrayToSend() -> [DiscountObject]{
-        var discountsArray : [DiscountObject] = []
-        let appointmentId = AppointmentData().appointment_id ?? 0
-        do{
-            let realm = try Realm()
-            let discountData = realm.objects(DiscountObject.self).filter("appointment_id == %d", appointmentId)
-            let discounts = discountData.toArray(ofType: DiscountObject.self)
-            if discounts.count > 0{
-                discountsArray = discounts
-            }
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return discountsArray
-    }
-    
-    func getPaymentDetailsDataFromAppointmentDetail() -> [String: Any]{
-        let appointmentId = AppointmentData().appointment_id ?? 0
-        var dictionary: [String: Any] = [:]
-        do{
-            let realm = try Realm()
-            if let appointment = realm.object(ofType: rf_completed_appointment.self, forPrimaryKey: appointmentId){
-                let paymentDetailsDictString = appointment.paymentDetails
-                dictionary =  paymentDetailsDictString?.dictionaryValue() ?? [:]
-                //add progressive discount data
-                let array = self.getDiscountArrayToSend()
-                var disArray: [[String:Any]] = []
-                for discount in array{
-                    let disDict = discount.toDictionary()
-                    disArray.append(disDict)
-                }
-                dictionary["discount_history_line"] = disArray
-                return dictionary
-            }
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return dictionary
-    }
-    func getApplicantAndIncomeDataFromAppointmentDetail() -> [String: Any]{
-        let appointmentId = AppointmentData().appointment_id ?? 0
-        var dictionary: [String: Any] = [:]
-        do{
-            let realm = try Realm()
-            if let appointment = realm.object(ofType: rf_completed_appointment.self, forPrimaryKey: appointmentId){
-                let coApplicantDictString = appointment.applicantAndIncomeData
-                dictionary =  coApplicantDictString?.dictionaryValue() ?? [:]
-                return dictionary
-            }
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return dictionary
-    }
-    func getPaymentMethodTypeFromAppointmentDetail() -> [String: Any]{
-        let appointmentId = AppointmentData().appointment_id ?? 0
-        var dictionary: [String: Any] = [:]
-        do{
-            let realm = try Realm()
-            if let appointment = realm.object(ofType: rf_completed_appointment.self, forPrimaryKey: appointmentId){
-                let paymentTypeDictString = appointment.paymentType
-                dictionary =  paymentTypeDictString?.dictionaryValue() ?? [:]
-                return dictionary
-            }
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
-        }
-        return dictionary
-    }
     func createContractDetailsParametersForApiCall(completedAppointmentRequest:rf_Completed_Appointment_Request) -> (appointmentId: Int, requestParams: [String:Any], requestUrl: String){
         let appointment_id = completedAppointmentRequest.appointment_id
         let apiUrl = completedAppointmentRequest.request_url ?? ""
@@ -1001,7 +674,7 @@ extension BackgroundTaskService {
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.CustomerAndRoom)
+                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.CustomerAndRoom,paymentStatus: payment_status ?? "",paymentMessage: payment_message ?? "")
                 completion(true)
             }else{
                 //Writing Logs
@@ -1069,7 +742,7 @@ extension BackgroundTaskService {
                 print(message ?? "No msg")
                 if let imageNam = imageName{
                     self.addImageCompleteLogs(appointmentId: appoint_id)
-                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle:  RequestTitle.ImageUpload, imageName: imageNam)
+                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle:  RequestTitle.ImageUpload, imageName: imageNam,paymentStatus: "",paymentMessage: "")
                     completion(true)
                 }
                 completion(false)
@@ -1094,7 +767,7 @@ extension BackgroundTaskService {
             if(success ?? "") == "Success"{
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
                 print(message ?? "No msg")
-                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.GenerateContract)
+                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.GenerateContract,paymentStatus: "",paymentMessage: "")
                 self.deleteSyncCompletedAppointmentFromAppointmentDB(appointmentId: appointmentId)
                 completion(true)
             }else{
@@ -1114,7 +787,7 @@ extension BackgroundTaskService {
         HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
-                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
+                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync,paymentStatus: "",paymentMessage: "")
                 if (UIApplication.getTopViewController() as? ViewLogListViewController) != nil {
                     NotificationCenter.default.post(name: Notification.Name("UpdateLogView"), object: nil)
                 }
