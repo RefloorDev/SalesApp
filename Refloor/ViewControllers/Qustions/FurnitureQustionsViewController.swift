@@ -80,6 +80,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         //
     }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     func addQuestions(){
         do{

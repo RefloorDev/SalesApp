@@ -22,9 +22,9 @@ struct AppURL {
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-     //let LIVE_BASE_URL = "http://server.oneteamus.com:2446/api/"
+     let LIVE_BASE_URL = "http://server.oneteamus.com:2445/api/"
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
-    let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
+    //let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
 //http://server.oneteamus.com:2446
     //LIVE
     // let BASE_URL = "http://35.245.254.221:7007/api/"
@@ -33,8 +33,8 @@ struct AppURL {
     // let BASE_URL = "http://35.245.254.221:6006/api/"
     
     //Training New Server
-     //let TRAINING_BASE_URL = "http://35.199.10.7:6006/api/"
-    let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
+     let TRAINING_BASE_URL = "http://35.199.10.7:6006/api/"
+    //let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
     //authenticate login api
      var authenticate = BASE_URL + "authenticate"
     
@@ -180,7 +180,7 @@ struct AppURL {
      //let syncCustomerAndRoomInfo = BASE_URL + "update_customer_and_room_information"
      //let syncCustomerAndRoomInfo = BASE_URL + "create_order_and_update_measurements_encoded_v2"//"create_order_and_update_measurements_encoded"
      //let syncContactInfo = BASE_URL + "update_contract_information"
-    let syncCustomerAndRoomInfo = BASE_URL + "create_order_and_update_measurements"//"create_order_and_update_measurements_encoded"
+    let syncCustomerAndRoomInfo = BASE_URL + "create_order_and_update_measurements_encoded"//"create_order_and_update_measurements"//
      let syncImageInfo = BASE_URL + "upload_images"
      let syncGenerateContractDocumentInServer = BASE_URL + "generate_contract_document"
      let syncInitiate_i360 = BASE_URL + "initiate_sync_to_i360_json"
