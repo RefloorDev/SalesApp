@@ -43,6 +43,10 @@ class ImageViewAndRemoveViewController: UIViewController {
         loadImage()
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     func loadImage()
     {   //arb

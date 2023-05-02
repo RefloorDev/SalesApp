@@ -107,7 +107,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         {
             let cell = tableView.dequeueReusableCell(withIdentifier: "AboutRoomDetailsTableViewCell") as! AboutRoomDetailsTableViewCell
             //arb
-            cell.uploadStaticTextLabel.text = indexPath.row == 1 ? "Upload Room Images" : "Upload Protrusion Images (Optional)"
+            cell.uploadStaticTextLabel.text = indexPath.row == 1 ? "Upload Room Images" : "Upload Anomaly Images (Optional)"
             cell.cameraButton.tag = indexPath.row
             cell.galleryUploadButton.tag = indexPath.row
             cell.cameraButton.addTarget(self, action: #selector(cameraUploadButtonAction(sender:)), for: .touchUpInside)
@@ -243,7 +243,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             }
             else
             {
-                self.alert("No more than 8 protrusion images are allowed per room", nil)
+                self.alert("No more than 8 anomaly images are allowed per room", nil)
             }
         }
         
@@ -267,7 +267,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             }
             else
             {
-                self.alert("No more than 8 protrusion images are allowed per room", nil)
+                self.alert("No more than 8 anomaly images are allowed per room", nil)
             }
         }
     }
@@ -291,7 +291,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             }
             else
             {
-                self.alert("No more than 8 protrusion images are allowed per room", nil)
+                self.alert("No more than 8 anomaly images are allowed per room", nil)
             }
         }
     }
@@ -315,7 +315,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             }
             else
             {
-                self.alert("No more than 8 protrusion images are allowed per room", nil)
+                self.alert("No more than 8 anomaly images are allowed per room", nil)
             }
         }
     }
@@ -564,7 +564,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         else
         {
             dismiss(animated: true, completion: nil)
-            self.alert("Something Went Wrong, Image Uploading Faild", nil)
+            self.alert("Something Went Wrong, Image Uploading Failed", nil)
         }
     }
     

@@ -1230,6 +1230,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             let DownDouble = Double(self.paymentOptionDataValueDetail[indexPath.row].Down_Payment__c ?? "0") ?? 0
             let FinalDouble = Double(self.paymentOptionDataValueDetail[indexPath.row].Final_Payment__c ?? "0") ?? 0
             let Payment_Factor = Double(self.paymentOptionDataValueDetail[indexPath.row].Payment_Factor__c ?? "0") ?? 0
+            let secondaryFactor = Double(self.paymentOptionDataValueDetail[indexPath.row].Secondary_Payment_Factor__c ?? "0") ?? 0
             let today = Date()
             let Balance_DueDt = Double(self.paymentOptionDataValueDetail[indexPath.row].Balance_Due__c ?? "0") ?? 0
             let modifiedDate = Calendar.current.date(byAdding: .day, value: Int(Balance_DueDt), to: today)!
@@ -1326,8 +1327,15 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     // cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On:"
                     cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On: ", amount: modifiedDate.DateFromStringMonthDate())
                 }
-                
-                cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                if secondaryFactor == 0 ||  self.emiAmount == 0
+                {
+                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                }
+                else
+                {
+                    //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
+                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                }
                 cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
@@ -1350,8 +1358,17 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment: $\((self.emiAmount * Payment_Factor).toRoundeString)"
                 
                 //   cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment:", amount: " $\((self.emiAmount * Payment_Factor).toDoubleString)")
+                if secondaryFactor == 0 ||  self.emiAmount == 0
+                {
+                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                }
+                else
+                {
+                    //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
+                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                }
                 
-                cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+               
                 cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
@@ -1366,7 +1383,16 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 {
                     self.emiAmount = self.emiAmount - downOrFinal
                 }
-                cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                if secondaryFactor == 0 ||  self.emiAmount == 0
+                {
+                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                }
+                else
+                {
+                    //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
+                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                }
+                
             }
             if(selectedOption == indexPath.row)
             {

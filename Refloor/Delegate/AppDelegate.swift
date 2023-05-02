@@ -13,6 +13,7 @@ import GooglePlaces
 import IQKeyboardManagerSwift
 import FirebaseCore
 import FirebaseMessaging
+import RealmSwift
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,MessagingDelegate {
@@ -24,11 +25,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     public static var appoinmentslData:AppoinmentDataValue!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        let config = Realm.Configuration(
+            // Set the new schema version. This must be greater than the previously used
+            // version (if you've never set a schema version before, the version is 0).
+            schemaVersion: 1,
+
+            // Set the block which will be called automatically when opening a Realm with
+            // a schema version lower than the one set above
+            migrationBlock: { migration, oldSchemaVersion in
+                // We haven’t migrated anything yet, so oldSchemaVersion == 0
+        })
+        Realm.Configuration.defaultConfiguration = config
         IQKeyboardManager.shared.enable = true
-        if UserDefaults.standard.string(forKey: "BASE_URL") ?? "" == ""{
+        if UserDefaults.standard.string(forKey: "BASE_URL") ?? "" == ""
+        {
             BASE_URL = AppURL().LIVE_BASE_URL //Live url
             UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
-        }else{
+        }
+        else
+        {
             BASE_URL = UserDefaults.standard.string(forKey: "BASE_URL") ?? ""
         }
         //IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow

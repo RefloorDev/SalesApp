@@ -112,6 +112,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
     @IBAction func sidetabButtonActions(_ sender: UIButton) {
@@ -785,22 +786,22 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         
         print(paymentType)
-        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        let paymentTypeSecret = createJWTToken(parameter: paymentType)
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-//        var applicantInfoSecret:String = String()
-//        if applicantDta.count > 0
-//        {
-//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
-//
-//        }
+        var applicantInfoSecret:String = String()
+        if applicantDta.count > 0
+        {
+             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+
+        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
-        contractDict["applicationInfo"] = applicantDta["data"] //applicantInfoSecret
+        contractDict["payment_method_secret"] = paymentTypeSecret//paymentType//
+        contractDict["application_info_secret"] = applicantInfoSecret//applicantDta["data"] //
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0
@@ -824,22 +825,22 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 let appointmentId = AppointmentData().appointment_id ?? 0
                 if let applicantDataDict = parameter as? [String:Any]
                 {
-//                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
-//                        if applicant == ""
-//                        {
-//
-//                        }
-//                        else
-//                        {
-//                            var applicantData:[String:Any] = [:]
-//                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-//                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-//                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-//                        }
-//                    }
-                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
-                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
+                        if applicant == ""
+                        {
+
+                        }
+                        else
+                        {
+                            var applicantData:[String:Any] = [:]
+                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+                        }
                     }
+//                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+//                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+                   // }
                 }//createFinalParameterForCustomerApiCall()
                 var parameterToPass:[String:Any] = [:]
                 //var jwtToken:String = String()

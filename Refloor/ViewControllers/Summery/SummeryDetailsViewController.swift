@@ -51,6 +51,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         setQuestion()
         self.setNavigationBarbackAndlogo(with: "Room Summary".uppercased())
         self.tableReaload()
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         
     }
     

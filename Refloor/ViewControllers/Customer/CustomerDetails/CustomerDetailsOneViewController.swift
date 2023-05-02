@@ -141,6 +141,10 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
 //     @objc override func OrderstatusBarButtonAction()
 //    {
