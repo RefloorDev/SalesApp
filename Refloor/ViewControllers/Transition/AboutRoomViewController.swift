@@ -138,7 +138,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                 }
                 cell.images = imagenames//imagenames
             }else{
-                let uploadedProtrusionImage = uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})
+                let uploadedProtrusionImage = uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
                 if uploadedProtrusionImage.count == 0
                 {
                     cell.noImageBtn.isHidden = false
@@ -237,7 +237,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                 self.alert("No more than 8 images are allowed per room", nil)
             }
         }else{
-            if((uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})).count < 8)
+            if((uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})).count < 8)
             {
                 self.openCameraToPickImage()
             }
@@ -261,7 +261,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                 self.alert("No more than 8 images are allowed per room", nil)
             }
         }else{
-            if((uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})).count < 8)
+            if((uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})).count < 8)
             {
                 self.openPhotoLibraryToPickImage()
             }
@@ -285,7 +285,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                 self.alert("No more than 8 images are allowed per room", nil)
             }
         }else{
-            if((uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})).count < 8)
+            if((uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})).count < 8)
             {
                 self.openCameraToPickImage()
             }
@@ -309,7 +309,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                 self.alert("No more than 8 images are allowed per room", nil)
             }
         }else{
-            if((uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})).count < 8)
+            if((uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})).count < 8)
             {
                 self.openPhotoLibraryToPickImage()
             }
@@ -339,7 +339,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             uploadImageArray = uploadedImage.filter({$0.url?.contains("Attachment") ?? false})
         }else{
             isRoomCollectionViewTapped = false
-            uploadImageArray = uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})
+            uploadImageArray = uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
         }
         if uploadImageArray.count == index
         {
@@ -379,7 +379,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         if isRoomCollectionViewTapped{
             uploadedImageArray = self.uploadedImage.filter({$0.url?.contains("Attachment") ?? false})
         }else{
-            uploadedImageArray = self.uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})
+            uploadedImageArray = self.uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
         }
         if ImageSaveToDirectory.SharedImage.deleteImageFromDocumentDirectory(rfImage: uploadedImageArray[position].url ?? ""){
             let appointmentId = AppointmentData().appointment_id ?? 0
@@ -472,7 +472,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             if isRoomImage {
             name = "Attachment" + randomString(length: 10) + ".JPG"
             }else{
-                name = "Protrusion" + randomString(length: 10) + ".JPG"
+                name = "Anomaly" + randomString(length: 10) + ".JPG"
             }
             
             if let imageURL = info[UIImagePickerController.InfoKey.referenceURL] as? URL {
@@ -500,7 +500,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                     self.imageNames = uploadedImage.map({$0.url ?? ""})
                     self.tableView.reloadRows(at: [[0,1]], with: .automatic)
                 }else{
-                    let uploadedImage = self.uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})
+                    let uploadedImage = self.uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
                     self.protrusionImageNames = uploadedImage.map({$0.url ?? ""})
                     self.tableView.reloadRows(at: [[0,2]], with: .automatic)
                 }
@@ -532,7 +532,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                     self.imageNames = uploadedImage.map({$0.url ?? ""})
                     self.tableView.reloadRows(at: [[0,1]], with: .automatic)
                 }else{
-                    let uploadedImage = self.uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})
+                    let uploadedImage = self.uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
                     self.protrusionImageNames = uploadedImage.map({$0.url ?? ""})
                     self.tableView.reloadRows(at: [[0,2]], with: .automatic)
                 }
@@ -553,7 +553,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                     self.imageNames = uploadedImage.map({$0.url ?? ""})
                     self.tableView.reloadRows(at: [[0,1]], with: .automatic)
                 }else{
-                    let uploadedImage = self.uploadedImage.filter({$0.url?.contains("Protrusion") ?? false})
+                    let uploadedImage = self.uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
                     self.protrusionImageNames = uploadedImage.map({$0.url ?? ""})
                     self.tableView.reloadRows(at: [[0,2]], with: .automatic)
                 }

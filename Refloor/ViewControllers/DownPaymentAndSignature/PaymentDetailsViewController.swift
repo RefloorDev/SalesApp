@@ -140,7 +140,15 @@ class PaymentDetailsViewController: UIViewController{
             }
             else
             {
-                self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).toDoubleString)"
+                //self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).toDoubleString)"
+                if self.paymentOptionDataValue?.Secondary_Payment_Factor__c != "0"
+                {
+                    self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).rounded().clean) - $\((self.financePayment * (Double(self.paymentOptionDataValue?.Secondary_Payment_Factor__c ?? "0") ?? 0)).rounded().clean)"
+                }
+                else
+                {
+                    self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).rounded().clean)"
+                }
             }
             
             
