@@ -1585,6 +1585,7 @@ class dataBaseData: Mappable
 class autoLogoutData: Mappable
 {
     var result:String?
+    var message:String?
     var enableAutoLogout:Int?
     var autoLogoutTime:String?
     var override_json_result:Int?
@@ -1593,6 +1594,7 @@ class autoLogoutData: Mappable
     
     func mapping(map: ObjectMapper.Map) {
         result <- map["result"]
+        message <- map["message"]
         enableAutoLogout <- map["enable_auto_logout"]
         autoLogoutTime <- map["auto_logout_time"]
         override_json_result <- map["override_json_result"]

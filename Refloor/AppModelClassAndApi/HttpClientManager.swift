@@ -2251,7 +2251,7 @@ class HttpClientManager: NSObject {
         }
     }
     
-    func autoLogoutAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ autologoutTime:String? , _ enableAutoLogout:Int?) -> ()){
+    func autoLogoutAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?, _ autologoutTime:String? , _ enableAutoLogout:Int?) -> ()){
         
         if self.connectedToNetwork() {
             
@@ -2268,18 +2268,26 @@ class HttpClientManager: NSObject {
                 if response != nil{
                     if(response?.result != nil)
                     {
-                        completion(response?.result,(response?.autoLogoutTime)!,response?.enableAutoLogout)
-                        self.showhideHUD(viewtype: .HIDE, title: "")
+                        if response?.result == "AuthFailed" || response?.result == "authfailed"
+                        {
+                            completion(response?.result,response?.message,"",0)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                        }
+                        else
+                        {
+                            completion(response?.result,response?.message,(response?.autoLogoutTime)!,response?.enableAutoLogout)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                        }
                     }
                 }
                 else{
-                    completion("false","",0)
+                    completion("false","","",0)
                 }
             }
            // completion("false", AppAlertMsg.serverNotReached)
         }
         else{
-            completion("false","",0)
+            completion("false","","",0)
             
         }
     }
