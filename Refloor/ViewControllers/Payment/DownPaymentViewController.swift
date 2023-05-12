@@ -899,9 +899,28 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                         
                        
                     }
+                    else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+                    {
+                        
+                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                            
+                            self.fourceLogOutbuttonAction()
+                        }
+                        
+                        self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                        
+                    }
                     else
                     {
-                        self.alert(message ?? "", nil)
+                        //self.alert(message ?? "", nil)
+                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                            
+                            self.goNextPageForPAyButtonAction()
+                            
+                        }
+                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        
+                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                     }
                 }
             }
