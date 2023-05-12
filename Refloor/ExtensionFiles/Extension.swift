@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SDWebImage
+//import SDWebImage
 import CoreLocation
 import DropDown
 import RealmSwift
@@ -590,18 +591,29 @@ extension UIViewController:OrderStatusViewDelegate
         var enableAutoLogoutResult:Int = Int()
         group.enter()
         //AutoLogout Api call
-        HttpClientManager.SharedHM.autoLogoutAPi(parameter: parameter) { success, autoLogoutTime, enableAutoLogout in
+        HttpClientManager.SharedHM.autoLogoutAPi(parameter: parameter) { success, message, autoLogoutTime, enableAutoLogout in
             if(success ?? "") == "Success"
             {
                 autoLogoutTimeResult = autoLogoutTime ?? ""
                 enableAutoLogoutResult = enableAutoLogout ?? 0
                 group.leave()
             }
+            else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+            {
+                
+                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    
+                    self.fourceLogOutbuttonAction()
+                }
+                
+                self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                
+            }
         }
         group.notify(queue: DispatchQueue.main)
         {
             
-            if enableAutoLogoutResult == 0
+       /*     if enableAutoLogoutResult == 0
             {
                 return
             }
@@ -635,6 +647,7 @@ extension UIViewController:OrderStatusViewDelegate
                         }
                         if userLoggedInTime < masterLogoutDateString
                         {
+                            
 
                             let masterdataAutoLogoutTime = masterLogoutDateString
                             var onedayMinus = Calendar.current.date(byAdding: .day, value: -1, to: masterdataAutoLogoutTime)
@@ -655,6 +668,12 @@ extension UIViewController:OrderStatusViewDelegate
                         }
                         else
                         {
+                            let userLoggedInDate = userLoggedInTime.autoLogoutdateToString()
+                            let masterLogoutDate = masterLogoutDateString.autoLogoutdateToString()
+                            if userLoggedInDate == masterLogoutDate
+                            {
+                                return
+                            }
                             _ = self.isTimeToAutoLogout(isRefreshBtnPressed:isRefreshBtnPressed)
                             return
                         }
@@ -683,7 +702,7 @@ extension UIViewController:OrderStatusViewDelegate
                 {
                     return
                 }
-            }
+            } */
        }
     }
 
@@ -733,44 +752,44 @@ extension UIViewController:OrderStatusViewDelegate
         return stringDate
        }
     
-    func autoLogout() -> (autoLogoutTime:String,enableAutoLogout:Int)
-    {
-        let token = UserData.init().token ?? ""
-        var parameter : [String:Any] = [:]
-        parameter = ["token":token]
-        var autoLogoutTimeResult:String = String()
-        var enableAutoLogoutResult:Int = Int()
-        HttpClientManager.SharedHM.autoLogoutAPi(parameter: parameter) { success, autoLogoutTime, enableAutoLogout in
-            if(success ?? "") == "Success"{
-                enableAutoLogoutResult = enableAutoLogout ?? 0
-                autoLogoutTimeResult = autoLogoutTime ?? ""
-
-                    
-                    //print(message ?? "No msg")
-                   //
-                   
-                    
-              
-                //self.alert("Auto Logging out successfully." , [ok])
-                
-            }
-            else
-            {
-                enableAutoLogoutResult = enableAutoLogout ?? 0
-                autoLogoutTimeResult = autoLogoutTime ?? ""
-                //return(false,autoLogoutTime)
-                //let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                    
-                    //self.autoLogout()
-                    
-                //}
-               // let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                
-                //self.alert(AppAlertMsg.serverNotReached, [yes,no])
-            }
-        }
-        return (autoLogoutTimeResult,enableAutoLogoutResult)
-    }
+//    func autoLogout() -> (autoLogoutTime:String,enableAutoLogout:Int)
+//    {
+//        let token = UserData.init().token ?? ""
+//        var parameter : [String:Any] = [:]
+//        parameter = ["token":token]
+//        var autoLogoutTimeResult:String = String()
+//        var enableAutoLogoutResult:Int = Int()
+//        HttpClientManager.SharedHM.autoLogoutAPi(parameter: parameter) { success, autoLogoutTime, enableAutoLogout in
+//            if(success ?? "") == "Success"{
+//                enableAutoLogoutResult = enableAutoLogout ?? 0
+//                autoLogoutTimeResult = autoLogoutTime ?? ""
+//
+//
+//                    //print(message ?? "No msg")
+//                   //
+//
+//
+//
+//                //self.alert("Auto Logging out successfully." , [ok])
+//
+//            }
+//            else
+//            {
+//                enableAutoLogoutResult = enableAutoLogout ?? 0
+//                autoLogoutTimeResult = autoLogoutTime ?? ""
+//                //return(false,autoLogoutTime)
+//                //let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+//
+//                    //self.autoLogout()
+//
+//                //}
+//               // let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//
+//                //self.alert(AppAlertMsg.serverNotReached, [yes,no])
+//            }
+//        }
+//        return (autoLogoutTimeResult,enableAutoLogoutResult)
+//    }
     
     
     //    func dictionaryToJson(){
@@ -1612,7 +1631,19 @@ extension UIViewController:OrderStatusViewDelegate
                                 //self.deleteAllAppointments()
                                 self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
                                 
-                            }else{
+                            }
+                            else if ((result ?? "") == "AuthFailed" || ((result ?? "") == "authfailed"))
+                            {
+                                
+                                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                                    
+                                    self.fourceLogOutbuttonAction()
+                                }
+                                
+                                self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                                
+                            }
+                            else{
                                 let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
                                     self.logOutbuttonAction(sender: sender)
                                 }
