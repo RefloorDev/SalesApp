@@ -68,7 +68,10 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
       
     }
 
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     @IBAction func cancelBtnAction(_ sender: UIButton)
     {
         self.dismiss(animated: true)
@@ -114,7 +117,9 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
             let index = salePriceArray.count - 1
             if salePriceArray[index] == self.minimumFee
             {
-                self.alert("New sale price cannot be less than $\(self.minimumFee)", nil)
+                //self.alert("New sale price cannot be less than $\(self.minimumFee)", nil)
+                //Updated Changes
+                self.alert(AppAlertMsg.maxDiscountAmountMessage, nil)
                 return
             }
             applyBtn.isUserInteractionEnabled = false
@@ -230,8 +235,10 @@ extension PromoDropDownViewController: UICollectionViewDelegate,UICollectionView
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
     {
         let label = UILabel(frame: CGRect.zero)
+        label.font = UIFont(name: "Avenir-Medium", size: 22)
         label.text = selectedPromoCodeArrayValue[indexPath.item]
         label.sizeToFit()
+        
         return CGSize(width: label.frame.width + 30 + 46 + 20 + 35, height: 56)
         
     }

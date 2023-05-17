@@ -25,7 +25,7 @@ import Realm
  This type is similar to Swift's built-in Decimal type, but allocates bits differently, resulting in a different representable range. (NS)Decimal stores a significand of up to 38 digits long and an exponent from -128 to 127, while this type stores up to 34 digits of significand and an exponent from -6143 to 6144.
  */
 @objc(RealmSwiftDecimal128)
-public final class Decimal128: RLMDecimal128, Decodable {
+public final class Decimal128: RLMDecimal128, Decodable, @unchecked Sendable {
     /// Creates a new zero-initialized Decimal128.
     public override required init() {
         super.init()
@@ -181,7 +181,7 @@ extension Decimal128: Comparable {
     }
 }
 
-extension Decimal128 {
+extension Decimal128: Numeric {
     /// Creates a new instance from the given integer, if it can be represented
     /// exactly.
     ///
@@ -229,6 +229,16 @@ extension Decimal128 {
     ///   - rhs: The second value to multiply.
     public static func * (lhs: Decimal128, rhs: Decimal128) -> Decimal128 {
         unsafeDowncast(lhs.decimalNumberByMultiplying(by: rhs), to: Decimal128.self)
+    }
+
+    /// Multiplies two values and stores the result in the left-hand-side
+    /// variable.
+    ///
+    /// - Parameters:
+    ///   - lhs: The first value to multiply.
+    ///   - rhs: The second value to multiply.
+    public static func *= (lhs: inout Decimal128, rhs: Decimal128) {
+        lhs = lhs * rhs
     }
 
     /// Returns the quotient of dividing the first Decimal128 value by the second.

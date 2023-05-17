@@ -148,6 +148,7 @@ class rf_master_payment_option : Object, Mappable {
     @objc dynamic var down_payment__c : String?
     @objc dynamic var final_payment__c : String?
     @objc dynamic var payment_factor__c : String?
+    @objc dynamic var Secondary_Payment_Factor__c:String?
     @objc dynamic var balance_Due__c : String?
     @objc dynamic var payment_info__c : String?
     @objc dynamic var sequence : Int = 0
@@ -163,6 +164,7 @@ class rf_master_payment_option : Object, Mappable {
         down_payment__c <- map["Down_Payment__c"]
         final_payment__c <- map["Final_Payment__c"]
         payment_factor__c <- map["Payment_Factor__c"]
+        Secondary_Payment_Factor__c <- map["Secondary_Payment_Factor__c"]
         balance_Due__c <- map["Balance_Due__c"]
         payment_info__c <- map["Payment_Info__c"]
         sequence <- map["sequence"]

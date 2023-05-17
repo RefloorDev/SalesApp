@@ -12,7 +12,7 @@ import CryptoKit
 import CommonCrypto
 import PayCardsRecognizer
 var packageName = ""
-class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate {
+class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate, UITextFieldDelegate {
     
     
     
@@ -112,6 +112,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
     @IBAction func sidetabButtonActions(_ sender: UIButton) {
@@ -215,8 +216,11 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.accountHolderNameTF.setPlaceHolderWithColor(placeholder: "Name", colour: .placeHolderColor)
             cell.cardNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
             cell.cardNumberTF.keyboardType = .numberPad
+            cell.cardNumberTF.delegate = self
             cell.cardPinTF.keyboardType = .numberPad
+            cell.cardPinTF.delegate = self
             cell.cardExperyDateTF.setPlaceHolderWithColor(placeholder: "01/30", colour: .placeHolderColor)
+            cell.cardExperyDateTF.delegate = self
             cell.cardPinTF.isSecureTextEntry = true
             
             cell.cardPinTF.setPlaceHolderWithColor(placeholder: "0000", colour: .placeHolderColor)
@@ -254,9 +258,12 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             //cell.totalLabel.text = "Down Payment: $\(self.downPaymentValue.toDoubleString)"
             cell.selectedItem = self.selectedPersecntage
             cell.checkNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.checkNumberTF.delegate = self
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.accountNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.accountNumberTF.delegate = self
             cell.routingNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.routingNumberTF.delegate = self
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
@@ -269,6 +276,20 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             return cell
         }
     }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil {
+            return false
+        }
+        
+        return true
+    }
+    
     @objc func cardScanner()
     {
         let rec = RecognizerViewController.initialization()!
@@ -765,22 +786,22 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         let paymentType = self.getPaymentMethodTypeFromAppointmentDetail()
         
         print(paymentType)
-        //let paymentTypeSecret = createJWTToken(parameter: paymentType)
+        let paymentTypeSecret = createJWTToken(parameter: paymentType)
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-//        var applicantInfoSecret:String = String()
-//        if applicantDta.count > 0
-//        {
-//             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
-//
-//        }
+        var applicantInfoSecret:String = String()
+        if applicantDta.count > 0
+        {
+             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+
+        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
-        contractDict["paymentmethod"] = paymentType//paymentTypeSecret
-        contractDict["applicationInfo"] = applicantDta["data"] //applicantInfoSecret
+        contractDict["payment_method_secret"] = paymentTypeSecret//paymentType//
+        contractDict["application_info_secret"] = applicantInfoSecret//applicantDta["data"] //
         //contractDict["contractInfo"] = contactInfo
 //        contractDict["data_completed"] = 0
 //        contractDict["appointment_id"] = AppointmentData().appointment_id ?? 0
@@ -804,22 +825,22 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 let appointmentId = AppointmentData().appointment_id ?? 0
                 if let applicantDataDict = parameter as? [String:Any]
                 {
-//                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
-//                        if applicant == ""
-//                        {
-//
-//                        }
-//                        else
-//                        {
-//                            var applicantData:[String:Any] = [:]
-//                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-//                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-//                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-//                        }
-//                    }
-                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
-                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
+                        if applicant == ""
+                        {
+
+                        }
+                        else
+                        {
+                            var applicantData:[String:Any] = [:]
+                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+                        }
                     }
+//                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+//                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+                   // }
                 }//createFinalParameterForCustomerApiCall()
                 var parameterToPass:[String:Any] = [:]
                 //var jwtToken:String = String()
@@ -878,9 +899,28 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                         
                        
                     }
+                    else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+                    {
+                        
+                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                            
+                            self.fourceLogOutbuttonAction()
+                        }
+                        
+                        self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                        
+                    }
                     else
                     {
-                        self.alert(message ?? "", nil)
+                        //self.alert(message ?? "", nil)
+                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                            
+                            self.goNextPageForPAyButtonAction()
+                            
+                        }
+                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        
+                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                     }
                 }
             }

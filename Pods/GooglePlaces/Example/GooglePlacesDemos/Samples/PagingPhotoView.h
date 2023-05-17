@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Google Inc. All rights reserved.
+ * Copyright 2016 Google LLC. All rights reserved.
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -27,14 +27,12 @@
 
 @end
 
-/*
+/**
  * A horizontally-paging scroll view that displays a list of photo images and their attributions.
  */
 @interface PagingPhotoView : UIScrollView
 
-/**
- * An array of |AttributedPhoto| objects representing the photos to display.
- */
+/** An array of |AttributedPhoto| objects representing the photos to display. */
 @property(nonatomic, copy) NSArray *photoList;
 
 @end

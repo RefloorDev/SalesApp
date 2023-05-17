@@ -1366,6 +1366,7 @@ class PaymentOptionDataValue: Mappable
     var Down_Payment__c:String?
     var Final_Payment__c:String?
     var Payment_Factor__c:String?
+    var Secondary_Payment_Factor__c:String?
     var Balance_Due__c:String?
     var Payment_Info__c:String?
     
@@ -1381,6 +1382,7 @@ class PaymentOptionDataValue: Mappable
         self.Down_Payment__c = paymentOption.down_payment__c
         self.Final_Payment__c = paymentOption.final_payment__c
         self.Payment_Factor__c = paymentOption.payment_factor__c
+        self.Secondary_Payment_Factor__c = paymentOption.Secondary_Payment_Factor__c
         self.Balance_Due__c = paymentOption.balance_Due__c
         self.Payment_Info__c = paymentOption.payment_info__c
     }
@@ -1396,6 +1398,7 @@ class PaymentOptionDataValue: Mappable
         Down_Payment__c <- map["Down_Payment__c"]
         Final_Payment__c <- map["Final_Payment__c"]
         Payment_Factor__c <- map["Payment_Factor__c"]
+        Secondary_Payment_Factor__c <- map["Secondary_Payment_Factor__c"]
         Balance_Due__c <- map["Balance_Due__c"]
         Payment_Info__c <- map["Payment_Info__c"]
         
@@ -1573,6 +1576,27 @@ class dataBaseData: Mappable
     func mapping(map: ObjectMapper.Map) {
         result <- map["result"]
         message <- map["message"]
+        override_json_result <- map["override_json_result"]
+    }
+    
+}
+
+
+class autoLogoutData: Mappable
+{
+    var result:String?
+    var message:String?
+    var enableAutoLogout:Int?
+    var autoLogoutTime:String?
+    var override_json_result:Int?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        enableAutoLogout <- map["enable_auto_logout"]
+        autoLogoutTime <- map["auto_logout_time"]
         override_json_result <- map["override_json_result"]
     }
     

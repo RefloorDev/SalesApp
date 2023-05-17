@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Google Inc. All rights reserved.
+ * Copyright 2016 Google LLC. All rights reserved.
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -15,6 +15,10 @@
 
 #import <GooglePlaces/GooglePlaces.h>
 #import "GooglePlacesDemos/Support/BaseDemoViewController.h"
+
+static CGFloat const kButtonHeight = 44.f;
+static CGFloat const kButtonWidth = 200.f;
+static CGFloat const kButtonTopMargin = 100.f;
 
 /**
  * All other autocomplete demo classes inherit from this class. This class optionally adds a button
@@ -43,9 +47,13 @@
 - (UIButton *)createShowAutocompleteButton:(SEL)selector;
 
 - (void)autocompleteDidSelectPlace:(GMSPlace *)place;
+
 - (void)autocompleteDidFail:(NSError *)error;
+
 - (void)autocompleteDidCancel;
+
 - (void)showCustomMessageInResultPane:(NSString *)message;
+
 - (void)resetViews;
 
 @end

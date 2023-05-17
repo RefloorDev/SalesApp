@@ -125,6 +125,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         
          isSkippbuttonCalled = 0
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
     @IBAction func submitAndTransforButtonAction(sender: UIButton)
@@ -149,6 +150,17 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
         else
         {
             self.appoinmentslData.co_applicant_skipped = 1
+            self.customerFirstName.text = ""
+            self.customerMiddleName.text = ""
+            self.customerLastName.text = ""
+            self.customerEmail.text = ""
+            self.customerContactNumberTF.text = ""
+            self.Street_Address_TF.text = ""
+            self.city_TF.text = ""
+            self.state_TF.text = ""
+            self.zipTF.text = ""
+            self.customerPhone.text = ""
+            
         }
         let string1 = self.appoinmentslData.applicant_first_name ?? ""
         let string2 = self.appoinmentslData.applicant_last_name ?? ""
@@ -171,7 +183,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
         self.updateAppointmentData(appointmentChangesDict: data)
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
-        if !(checkIfAtleastOneRoomAddedUnderAppointment(appointmentId: appointmentId)){
+       // if !(checkIfAtleastOneRoomAddedUnderAppointment(appointmentId: appointmentId)){
             let appointmentInProcess = rf_completed_appointment(appointmentObj: rf_master_appointment(appointmentData: self.appoinmentslData))
             do{
                 let realm = try Realm()
@@ -180,23 +192,32 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
                     let appointment =  realm.object(ofType: rf_completed_appointment.self, forPrimaryKey: appointmentId)
                     //let masterData = realm.objects(MasterData.self)
                     appointment?.co_applicant_first_name = data["co_applicant_first_name"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_middle_name"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_last_name"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_address"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_email"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_phone"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_zip"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_state"] as? String ?? ""
-                    appointment?.co_applicant_first_name = data["co_applicant_city"] as? String ?? ""
+                    appointment?.co_applicant_middle_name = data["co_applicant_middle_name"] as? String ?? ""
+                    appointment?.co_applicant_last_name = data["co_applicant_last_name"] as? String ?? ""
+                    appointment?.co_applicant_address = data["co_applicant_address"] as? String ?? ""
+                    appointment?.co_applicant_email = data["co_applicant_email"] as? String ?? ""
+                    appointment?.co_applicant_phone = data["co_applicant_phone"] as? String ?? ""
+                    appointment?.co_applicant_zip = data["co_applicant_zip"] as? String ?? ""
+                    appointment?.co_applicant_state = data["co_applicant_state"] as? String ?? ""
+                    appointment?.co_applicant_city = data["co_applicant_city"] as? String ?? ""
+                    var dict:[String:Any] = [:]
                     if let rooms = appointment?.rooms{
                         appointmentInProcess.rooms = rooms
+                        dict = ["appointment_id":appointmentId ?? 0,"rooms": rooms, "appointment_date":appointmentInProcess.appointment_date ?? "","appointment_datetime":appointmentInProcess.appointment_datetime ?? ""  ,"customer_id":appointmentInProcess.customer_id,"applicant_first_name":appointmentInProcess.applicant_first_name ?? "" ,"applicant_middle_name":appointmentInProcess.applicant_middle_name ?? "","applicant_last_name":appointmentInProcess.applicant_last_name ?? "" ,"applicant_street":appointmentInProcess.applicant_street ?? "","applicant_city":appointmentInProcess.applicant_city ?? "","applicant_state_code":appointmentInProcess.applicant_state_code ?? "","applicant_zip":appointmentInProcess.applicant_zip ?? "","applicant_phone":appointmentInProcess.applicant_phone ?? "","applicant_email":appointmentInProcess.applicant_email ?? "","sales_person":appointmentInProcess.sales_person ?? "","salesperson_id":appointmentInProcess.salesperson_id,"partner_latitude":appointmentInProcess.partner_latitude,"partner_longitude":appointmentInProcess.partner_longitude,"co_applicant_first_name":data["co_applicant_first_name"] as? String ?? "","co_applicant_middle_name":data["co_applicant_middle_name"] as? String ?? "","co_applicant_last_name":data["co_applicant_last_name"] as? String ?? "","co_applicant_address":data["co_applicant_address"] as? String ?? "","co_applicant_city":data["co_applicant_city"] as? String ?? "" ,"co_applicant_state":data["co_applicant_state"] as? String ?? "","co_applicant_zip":data["co_applicant_zip"] as? String ?? "","co_applicant_email":data["co_applicant_email"] as? String ?? "","recisionDate":appointmentInProcess.recisionDate ?? "","sync_status":appointmentInProcess.sync_status,"officeLocationId":appointmentInProcess.officeLocationId]
+                        realm.create(rf_completed_appointment.self, value: dict, update: .all)
                     }
-                    realm.add(appointmentInProcess, update: .all)
+                    else
+                    {
+                        dict = ["appointment_id":appointmentId ?? 0, "appointment_date":appointmentInProcess.appointment_date ?? "","appointment_datetime":appointmentInProcess.appointment_datetime ?? ""  ,"customer_id":appointmentInProcess.customer_id,"applicant_first_name":appointmentInProcess.applicant_first_name ?? "","applicant_middle_name":appointmentInProcess.applicant_middle_name ?? "","applicant_last_name":appointmentInProcess.applicant_last_name ?? "" ,"applicant_street":appointmentInProcess.applicant_street ?? "","applicant_city":appointmentInProcess.applicant_city ?? "","applicant_state_code":appointmentInProcess.applicant_state_code ?? "","applicant_zip":appointmentInProcess.applicant_zip ?? "","applicant_phone":appointmentInProcess.applicant_phone ?? "","applicant_email":appointmentInProcess.applicant_email ?? "","sales_person":appointmentInProcess.sales_person ?? "","salesperson_id":appointmentInProcess.salesperson_id,"partner_latitude":appointmentInProcess.partner_latitude,"partner_longitude":appointmentInProcess.partner_longitude,"co_applicant_first_name":data["co_applicant_first_name"] as? String ?? "","co_applicant_middle_name":data["co_applicant_middle_name"] as? String ?? "","co_applicant_last_name":data["co_applicant_last_name"] as? String ?? "","co_applicant_address":data["co_applicant_address"] as? String ?? "","co_applicant_city":data["co_applicant_city"] as? String ?? "" ,"co_applicant_state":data["co_applicant_state"] as? String ?? "","co_applicant_zip":data["co_applicant_zip"] as? String ?? "","co_applicant_email":data["co_applicant_email"] as? String ?? "","recisionDate":appointmentInProcess.recisionDate ?? "","sync_status":appointmentInProcess.sync_status,"officeLocationId":appointmentInProcess.officeLocationId]
+                        realm.create(rf_completed_appointment.self, value: dict, update: .all)
+                    }
+                    //realm.add(appointmentInProcess, update: .all)
+                    
                 }
             }catch{
                 print(RealmError.initialisationFailed)
             }
-        }
+      //  }
         //
         
         /*  if(isEditedtextField)
@@ -231,8 +252,6 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
         self.appoinmentslData.co_applicant_email = self.customerEmail.text ?? ""
         self.appoinmentslData.co_applicant_phone = self.customerPhone.text ?? ""
         self.appoinmentslData.co_applicant_secondary_phone = self.customerContactNumberTF.text ?? ""
-        
-        
         
         AppDelegate.floorLevelData = self.floorLevelData ?? []
         AppDelegate.roomData = self.roomData ?? []
@@ -437,30 +456,36 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
-        if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
-        {
-            if(textField == self.customerPhone || textField == self.customerContactNumberTF)
-            {
-                guard let text = textField.text else { return false }
-                let newString = (text as NSString).replacingCharacters(in: range, with: string)
-                textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
-                return false
-            }
-            
-            return true
-        }
-        else
-        {
-            
-            let  char = string.cString(using: String.Encoding.utf8)!
-            let isBackSpace = strcmp(char, "\\b")
-            
-            if (isBackSpace == -92) {
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+                    return false
+                }
+                //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+                if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.customerEmail {
+                    return false
+                }
+                if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
+                {
+                    if(textField == self.customerPhone || textField == self.customerContactNumberTF)
+                    {
+                        guard let text = textField.text else { return false }
+                        let newString = (text as NSString).replacingCharacters(in: range, with: string)
+                        textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
+                        return false
+                    }
+                    
+                    return true
+                }
+                else
+                {
+                    
+                    let  char = string.cString(using: String.Encoding.utf8)!
+                    let isBackSpace = strcmp(char, "\\b")
+                    
+                    if (isBackSpace == -92) {
+                        return true
+                    }
+                }
                 return true
-            }
-            
-            return false
-        }
     }
     
     

@@ -15,15 +15,11 @@
 
 #import "GoogleMapsDemos/DemoAppDelegate.h"
 
-#import "GoogleMapsDemos/MasterViewController.h"
-#import "GoogleMapsDemos/SDKDemoAPIKey.h"
 #import <GoogleMaps/GoogleMaps.h>
+#import "GoogleMapsDemos/DemoSceneDelegate.h"
+#import "GoogleMapsDemos/SDKDemoAPIKey.h"
 
-@implementation DemoAppDelegate {
-  id _services;
-}
-
-@synthesize window = _window;
+@implementation DemoAppDelegate
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -39,75 +35,26 @@
                                  userInfo:nil];
   }
   [GMSServices provideAPIKey:kAPIKey];
-  _services = [GMSServices sharedServices];
 
-  // Log the required open source licenses! Yes, just NSLog-ing them is not enough but is good for
-  // a demo.
+  // Metal is the preferred renderer.
+  [GMSServices setMetalRendererEnabled:YES];
+  self.servicesHandle = [GMSServices sharedServices];
+
+  // Log the required open source licenses! Yes, just NSLog-ing them is not enough but is good for a
+  // demo.
   NSLog(@"Open source licenses:\n%@", [GMSServices openSourceLicenseInfo]);
 
-  self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-  MasterViewController *master = [[MasterViewController alloc] init];
-  master.appDelegate = self;
-
-  if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
-    // This is an iPhone; configure the top-level navigation controller as the
-    // rootViewController, which contains the 'master' list of samples.
-    self.navigationController =
-        [[UINavigationController alloc] initWithRootViewController:master];
-
-    // Force non-translucent navigation bar for consistency of demo between
-    // iOS 6 and iOS 7.
-    self.navigationController.navigationBar.translucent = NO;
-
-    self.window.rootViewController = self.navigationController;
-  } else {
-    // This is an iPad; configure a split-view controller that contains the
-    // the 'master' list of samples on the left side, and the current displayed
-    // sample on the right (begins empty).
-    UINavigationController *masterNavigationController =
-        [[UINavigationController alloc] initWithRootViewController:master];
-
-    UIViewController *empty = [[UIViewController alloc] init];
-    UINavigationController *detailNavigationController =
-        [[UINavigationController alloc] initWithRootViewController:empty];
-
-    // Force non-translucent navigation bar for consistency of demo between
-    // iOS 6 and iOS 7.
-    detailNavigationController.navigationBar.translucent = NO;
-
-    self.splitViewController = [[UISplitViewController alloc] init];
-    self.splitViewController.delegate = master;
-    self.splitViewController.viewControllers =
-        @[masterNavigationController, detailNavigationController];
-    self.splitViewController.presentsWithGesture = NO;
-
-    self.window.rootViewController = self.splitViewController;
-  }
-
-  [self.window makeKeyAndVisible];
   return YES;
 }
 
-- (void)setSample:(UIViewController *)sample {
-  NSAssert([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad,
-           @"Expected device to be iPad inside setSample:");
-
-  // Finds the UINavigationController in the right side of the sample, and
-  // replace its displayed controller with the new sample.
-  UINavigationController *nav =
-      [self.splitViewController.viewControllers objectAtIndex:1];
-  [nav setViewControllers:[NSArray arrayWithObject:sample] animated:NO];
-}
-
-- (UIViewController *)sample {
-  NSAssert([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad,
-           @"Expected device to be iPad inside sample");
-
-  // The current sample is the top-most VC in the right-hand pane of the
-  // splitViewController.
-  UINavigationController *nav =
-      [self.splitViewController.viewControllers objectAtIndex:1];
-  return [[nav viewControllers] objectAtIndex:0];
+- (UISceneConfiguration *)application:(UIApplication *)application
+    configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession
+                                   options:(UISceneConnectionOptions *)options {
+  UISceneConfiguration *configuration =
+      [UISceneConfiguration configurationWithName:@"Default Configuration"
+                                      sessionRole:connectingSceneSession.role];
+  configuration.delegateClass = [DemoSceneDelegate class];
+  return configuration;
 }
 
 @end

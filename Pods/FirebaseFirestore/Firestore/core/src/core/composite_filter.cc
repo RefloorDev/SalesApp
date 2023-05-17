@@ -72,29 +72,40 @@ bool CompositeFilter::Rep::IsDisjunction() const {
   return op_ == Operator::Or;
 }
 
+bool CompositeFilter::Rep::IsFlat() const {
+  return std::all_of(
+      filters_.cbegin(), filters_.cend(),
+      [](const Filter& filter) { return filter.IsAFieldFilter(); });
+}
+
 bool CompositeFilter::Rep::Matches(const model::Document& doc) const {
   if (IsConjunction()) {
     // For conjunctions, all filters must match, so return false if any filter
     // doesn't match.
-    for (const auto& filter : filters_) {
-      if (!filter.Matches(doc)) {
-        return false;
-      }
-    }
-    return true;
+    return std::all_of(
+        filters_.cbegin(), filters_.cend(),
+        [&doc](const Filter& filter) { return filter.Matches(doc); });
   } else {
     // For disjunctions, at least one filter should match.
-    for (const auto& filter : filters_) {
-      if (filter.Matches(doc)) {
-        return true;
-      }
-    }
-    return false;
+    return std::any_of(
+        filters_.cbegin(), filters_.cend(),
+        [&doc](const Filter& filter) { return filter.Matches(doc); });
   }
 }
 
 std::string CompositeFilter::Rep::CanonicalId() const {
-  // TODO(orquery): Add special case for flat AND filters.
+  // Older SDK versions use an implicit AND operation between their filters. In
+  // the new SDK versions, the developer may use an explicit AND filter. To stay
+  // consistent with the old usages, we add a special case to ensure the
+  // canonical ID for these two are the same. For example: `col.whereEquals("a",
+  // 1).whereEquals("b", 2)` should have the same canonical ID as
+  // `col.where(and(equals("a",1), equals("b",2)))`.
+  if (IsFlatConjunction()) {
+    return absl::StrJoin(filters_, "", [](std::string* out, const Filter& f) {
+      return absl::StrAppend(out, f.CanonicalId());
+    });
+  }
+
   return util::StringFormat(
       "%s(%s)", CanonicalName(op_),
       absl::StrJoin(filters_, ",", [](std::string* out, const Filter& f) {
@@ -108,9 +119,16 @@ bool CompositeFilter::Rep::Equals(const Filter::Rep& other) const {
   // Note: This comparison requires order of filters in the list to be the same,
   // and it does not remove duplicate subfilters from each composite filter.
   // It is therefore way less expensive.
-  // TODO(orquery): Consider removing duplicates and ignoring order of filters
   // in the list.
   return op_ == other_rep.op_ && filters_ == other_rep.filters_;
+}
+
+CompositeFilter CompositeFilter::WithAddedFilters(
+    const std::vector<core::Filter>& other_filters) {
+  std::vector<Filter> merged_filters(filters());
+  merged_filters.insert(merged_filters.end(), other_filters.begin(),
+                        other_filters.end());
+  return CompositeFilter::Create(std::move(merged_filters), op());
 }
 
 const FieldFilter* CompositeFilter::Rep::FindFirstMatchingFilter(

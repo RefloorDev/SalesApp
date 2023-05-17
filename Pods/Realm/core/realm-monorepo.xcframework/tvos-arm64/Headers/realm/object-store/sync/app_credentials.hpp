@@ -21,7 +21,7 @@
 
 #include <realm/object-store/util/tagged_string.hpp>
 
-#include <functional>
+#include <memory>
 #include <string>
 
 namespace realm {
@@ -72,6 +72,7 @@ extern IdentityProvider const IdentityProviderServerAPIKey;
 
 enum class AuthProvider {
     ANONYMOUS,
+    ANONYMOUS_NO_REUSE,
     FACEBOOK,
     GOOGLE,
     APPLE,
@@ -84,13 +85,15 @@ enum class AuthProvider {
 
 IdentityProvider provider_type_from_enum(AuthProvider provider);
 
+AuthProvider enum_from_provider_type(const IdentityProvider& provider);
+
 // Opaque credentials representing a specific Realm Object Server user.
 struct AppCredentials {
     // Construct and return credentials from a Facebook account token.
     static AppCredentials facebook(const AppCredentialsToken access_token);
 
     // Construct and return anonymous credentials
-    static AppCredentials anonymous();
+    static AppCredentials anonymous(bool reuse_anonymous_credentials = true);
 
     // Construct and return credentials from an Apple account token.
     static AppCredentials apple(const AppCredentialsToken id_token);
@@ -127,19 +130,21 @@ struct AppCredentials {
     std::string provider_as_string() const;
 
     // The serialized payload
+    bson::BsonDocument serialize_as_bson() const;
     std::string serialize_as_json() const;
 
     AppCredentials() = default;
-    AppCredentials(const AppCredentials&) = default;
+    AppCredentials(const AppCredentials&);
     AppCredentials(AppCredentials&&) = default;
-    AppCredentials& operator=(AppCredentials const&) = default;
+    AppCredentials& operator=(AppCredentials const&);
     AppCredentials& operator=(AppCredentials&&) = default;
 
 private:
-    AppCredentials(AuthProvider provider, std::function<std::string()> factory);
+    AppCredentials(AuthProvider provider, std::unique_ptr<bson::BsonDocument> payload);
+    AppCredentials(AuthProvider provider, std::initializer_list<std::pair<const char*, bson::Bson>>);
     // The name of the identity provider which generated the credentials token.
     AuthProvider m_provider;
-    std::function<std::string()> m_payload_factory;
+    std::unique_ptr<bson::BsonDocument> m_payload;
 };
 
 } // namespace app

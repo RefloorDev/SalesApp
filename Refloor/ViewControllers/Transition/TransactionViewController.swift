@@ -381,7 +381,7 @@ class TransactionViewController: UIViewController,UITableViewDelegate,UITableVie
         else
         {
             dismiss(animated: true, completion: nil)
-            self.alert("Something Went Wrong, Image Uploading Faild", nil)
+            self.alert("Something Went Wrong, Image Uploading Failed", nil)
         }
         
     }

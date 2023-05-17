@@ -141,6 +141,10 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
 //     @objc override func OrderstatusBarButtonAction()
 //    {
@@ -253,6 +257,13 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.customerEmail {
+            return false
+        }
         if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
         {
             if(textField == self.customerPhone || textField == self.customerContactNumberTF)
@@ -274,9 +285,8 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
             if (isBackSpace == -92) {
                 return true
             }
-            
-            return false
         }
+        return true
     }
     
     

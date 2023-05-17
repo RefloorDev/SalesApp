@@ -18,9 +18,9 @@
 
 #import <Realm/RLMObjectBase_Dynamic.h>
 
-NS_ASSUME_NONNULL_BEGIN
+RLM_HEADER_AUDIT_BEGIN(nullability, sendability)
 
-@class RLMProperty, RLMArray;
+@class RLMProperty, RLMArray, RLMSchema;
 typedef NS_ENUM(int32_t, RLMPropertyType);
 
 FOUNDATION_EXTERN void RLMInitializeWithValue(RLMObjectBase *, id, RLMSchema *);
@@ -37,6 +37,9 @@ FOUNDATION_EXTERN void RLMInitializeWithValue(RLMObjectBase *, id, RLMSchema *);
 
 + (nullable NSArray<RLMProperty *> *)_getProperties;
 + (bool)_realmIgnoreClass;
+
+// This enables to override the propertiesMapping in Swift, it is not to be used in Objective-C API.
++ (NSDictionary<NSString *, NSString *> *)propertiesMapping;
 
 @end
 
@@ -57,13 +60,13 @@ typedef void (^RLMObjectNotificationCallback)(RLMObjectBase *_Nullable object,
                                               NSError *_Nullable error);
 
 FOUNDATION_EXTERN RLMNotificationToken *RLMObjectBaseAddNotificationBlock(RLMObjectBase *obj,
-                                                                          NSArray<NSString *> *_Nullable key_paths,
+                                                                          NSArray<NSString *> *_Nullable keyPaths,
                                                                           dispatch_queue_t _Nullable queue,
                                                                           RLMObjectNotificationCallback block);
 
 RLMNotificationToken *RLMObjectAddNotificationBlock(RLMObjectBase *obj,
                                                     RLMObjectChangeBlock block,
-                                                    NSArray<NSString *> *_Nullable key_paths,
+                                                    NSArray<NSString *> *_Nullable keyPaths,
                                                     dispatch_queue_t _Nullable queue);
 
 // Returns whether the class is a descendent of RLMObjectBase
@@ -96,4 +99,4 @@ FOUNDATION_EXTERN uint64_t RLMObjectBaseGetCombineId(RLMObjectBase *);
 + (void)set:(RLMProperty *)property on:(RLMObjectBase *)parent to:(id)value;
 @end
 
-NS_ASSUME_NONNULL_END
+RLM_HEADER_AUDIT_END(nullability, sendability)
