@@ -2251,6 +2251,47 @@ class HttpClientManager: NSObject {
         }
     }
     
+    func autoLogoutAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?, _ autologoutTime:String? , _ enableAutoLogout:Int?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().autoLogout
+            //self.showhideHUD(viewtype: .SHOW, title: "Logging out. Please wait.")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<autoLogoutData>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        if response?.result == "AuthFailed" || response?.result == "authfailed"
+                        {
+                            completion(response?.result,response?.message,"",0)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                        }
+                        else
+                        {
+                            completion(response?.result,response?.message,(response?.autoLogoutTime)!,response?.enableAutoLogout)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                        }
+                    }
+                }
+                else{
+                    completion("false","","",0)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false","","",0)
+            
+        }
+    }
+    
     // MARK: - Sync Images Upload
     func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
         

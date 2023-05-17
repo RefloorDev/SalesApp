@@ -22,7 +22,7 @@ struct AppURL {
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-     //let LIVE_BASE_URL = "http://server.oneteamus.com:2445/api/"
+     //let LIVE_BASE_URL = "http://server.oneteamus.com:2446/api/"
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
     let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
 //http://server.oneteamus.com:2446
@@ -169,11 +169,8 @@ struct AppURL {
     //api for attching images
      let uploadScreeshot = BASE_URL + "add_screenshots"
     
-    
     //api for getting appointment resuls list
      let get_appointment_result = BASE_URL + "get_appointment_result"
-    
-    
     
      let check_app_build_status = "https://www.oneteam.us/testflight/refloor/phpinfo.php"
     
@@ -181,15 +178,16 @@ struct AppURL {
      let get_master_data = BASE_URL + "get_master_data"
     
      //let syncCustomerAndRoomInfo = BASE_URL + "update_customer_and_room_information"
-     let syncCustomerAndRoomInfo = BASE_URL + "create_order_and_update_measurements_encoded_v2"//"create_order_and_update_measurements_encoded"
+     //let syncCustomerAndRoomInfo = BASE_URL + "create_order_and_update_measurements_encoded_v2"//"create_order_and_update_measurements_encoded"
      //let syncContactInfo = BASE_URL + "update_contract_information"
+    let syncCustomerAndRoomInfo = BASE_URL + "create_order_and_update_measurements_encoded"//"create_order_and_update_measurements"//
      let syncImageInfo = BASE_URL + "upload_images"
      let syncGenerateContractDocumentInServer = BASE_URL + "generate_contract_document"
      let syncInitiate_i360 = BASE_URL + "initiate_sync_to_i360_json"
      let uploadAppointmentLogs = BASE_URL + "update_sync_log"
      let logoutApi = BASE_URL + "logout_from_device"
-    let fetchDataBaseRawValue = BASE_URL + "fetch_database_raw_data"
-    
+     let fetchDataBaseRawValue = BASE_URL + "fetch_database_raw_data"
+     let autoLogout = BASE_URL + "check_auto_logout"
 }
 
 
@@ -197,7 +195,10 @@ struct AppAlertMsg {
     
     
     static let NetWorkAlertMessage = "No internet connection currently available. Please move to an area with a better internet connection and click Retry to proceed."
-    static let serverNotReached = "We are having issue with communicating our server (API timed out). Please tap on Retry button to try again. If issue continues, please reach out to the support."
+    //static let serverNotReached = "We are having issue with communicating our server (API timed out). Please tap on Retry button to try again. If issue continues, please reach out to the support."
+    // Updated Message
+    static let serverNotReached = "We are having issues communicating with our server. Please tap the Retry button to try again. If the issue continues, please reach out to support"
+    static let maxDiscountAmountMessage = "The maximum discount amount has been applied"
     //App Alert Msg
     //    static let NetWorkAlertMessage = "No internet connection. Please move to an area with a better internet connection and click Retry to proceed."
     //     static let serverNotReached = "The server could not be reached because of a connection problem. Please click Retry to proceed."
@@ -240,6 +241,10 @@ struct AppAlertMsg {
     static let APPOINTMENT_SYNC_MESSAGE   = "We are getting new appointments. Please wait."
     static let ORDER_SAVE_SYNC_MESSAGE   = "The appointment results has been saved."
     static let APPOINTMENT_SYNC_TO_I360_MESSAGE   = "Please wait till the sync process completes."
+}
+
+struct Validation {
+    static let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
 }
 
 enum RequestTitle: String{

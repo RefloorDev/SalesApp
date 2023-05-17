@@ -50,6 +50,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var stairsSpecialPriceId:Int = Int()
     var imagePicker: CaptureImage!
     var promotionCodeId:Int = Int()
+    var stairPrice:Double = Double()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -100,6 +101,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         self.validationDownpayment()
         print(self.summery.downPaymentValue)
         print(self.summery.finalpayment)
@@ -385,6 +387,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         summery.drowingImageID = self.drowingImageID
         summery.savings = self.savings
         summery.area = self.area
+        summery.stairPrice = self.stairPrice
         // summery.adminFeeStatus = self.isAdmiFee
         //summery.installationDate=self.installationDate.text ?? ""
         summery.downPaymentValue = self.downPayment

@@ -53,7 +53,8 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
     }
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
-    }
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return roomData.count
     }

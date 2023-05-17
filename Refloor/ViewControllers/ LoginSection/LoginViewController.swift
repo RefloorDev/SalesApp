@@ -26,6 +26,7 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         BASE_URL = AppURL().LIVE_BASE_URL
         self.setClearNavigationBar()
+       
         //this will be triggered when all images from the master data is successfully downloaded and saved to DB
         NotificationCenter.default.addObserver(self, selector: #selector(self.masterDataInsertedSuccessfullyToDatabase(notification:)), name: Notification.Name("MasterDataComplete"), object: nil)
         self.navigationController?.viewControllers = [self]
@@ -38,17 +39,19 @@ class LoginViewController: UIViewController {
         //  self.passwordTF.text = "api"
         //  self.emailTF.text = "mhigley@refloor.com"
         //  self.passwordTF.text = "SALESapp"
-        
+//        
 //     self.emailTF.text = "ajay.jayaram@oneteamus.com" //vrenaud@refloor.com"
 //     self.passwordTF.text = "salesApp"
+//        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
+//        self.passwordTF.text = "SALESapp"
 
         //just remove this.
-        self.emailTF.text = "vrenaud@refloor.com" //vrenaud@refloor.com"
-        self.passwordTF.text = "TESTAPP" //testAPP"
+//        self.emailTF.text = "vrenaud@refloor.com" //vrenaud@refloor.com"
+//        self.passwordTF.text = "TESTAPP" //testAPP"
         
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
-            if BASE_URL == "http://server.oneteamus.com:2445/api/"{
+            if BASE_URL == "http://server.oneteamus.com:2446/api/"{
                 versionNumber.setTitle("Version: \(text) - DEV", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
@@ -126,6 +129,14 @@ class LoginViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         self.setClearNavigationBar()
+//        if UserDefaults.standard.value(forKey: "username") != nil
+//        {
+//            emailTF.text = UserDefaults.standard.value(forKey: "username") as? String
+//        }
+//        if UserDefaults.standard.value(forKey: "password") != nil
+//        {
+//            passwordTF.text = UserDefaults.standard.value(forKey: "password") as? String
+//        }
     }
     @IBAction func forgotPasswordButtonAction(_ sender: Any) {
         
@@ -186,6 +197,8 @@ class LoginViewController: UIViewController {
                 }
                 
                 if  ((self.determineIfAnyPendingAppointmentsToSink() == false) || (UserData.isLogedIn() != true)){
+                    self.emailTF.text = self.emailTF.text
+                    self.passwordTF.text = self.passwordTF.text
                     self.getMasterData()
                 }
                 //self.navigationController?.pushViewController(ApplicantFormViewControllerForm.initialization()!, animated: true)
@@ -251,11 +264,18 @@ class LoginViewController: UIViewController {
                                 flooringColorImageArray.append(img)
                             }
                         }
+                        UserDefaults.standard.set(self.emailTF.text, forKey: "username")
+                        UserDefaults.standard.set(self.passwordTF.text, forKey: "password")
+                        let loggedIndateAndTime =  Date().dateToString().autoLogoutDate()
+                        
+
+                        UserDefaults.standard.set(loggedIndateAndTime, forKey: "LoggedInTime")
                         
                         DispatchQueue.global(qos: .background).async{
                             DispatchQueue.main.async
                             {
                                 self.showhideHUD(viewtype: .SHOW, title:"Master Data Fetching Completed.")
+                    
                             }
                             self.downloadPhoto(imageUrlArray: flooringColorImageArray, type: .floorColor)
                         }

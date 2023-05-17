@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Google Inc. All rights reserved.
+ * Copyright 2016 Google LLC. All rights reserved.
  *
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -15,9 +15,7 @@
 
 #import "GooglePlacesDemos/Samples/Autocomplete/AutocompleteBaseViewController.h"
 
-/*
- * SDK Demo showing how to customise colors in the full-screen Autocomplete Widget.
- */
+/** SDK Demo showing how to customise colors in the full-screen Autocomplete Widget. */
 @interface AutocompleteWithCustomColors : AutocompleteBaseViewController
 
 @end

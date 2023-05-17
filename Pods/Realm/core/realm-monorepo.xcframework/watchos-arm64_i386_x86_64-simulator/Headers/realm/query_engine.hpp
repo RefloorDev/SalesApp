@@ -94,6 +94,7 @@ AggregateState      State of the aggregate - contains a state variable that stor
 #include <realm/array_key.hpp>
 #include <realm/array_string.hpp>
 #include <realm/array_binary.hpp>
+#include <realm/array_integer_tpl.hpp>
 #include <realm/array_timestamp.hpp>
 #include <realm/array_decimal128.hpp>
 #include <realm/array_fixed_bytes.hpp>
@@ -109,8 +110,6 @@ AggregateState      State of the aggregate - contains a state variable that stor
 #include <realm/unicode.hpp>
 #include <realm/util/miscellaneous.hpp>
 #include <realm/util/serializer.hpp>
-#include <realm/util/shared_ptr.hpp>
-#include <realm/util/string_buffer.hpp>
 #include <realm/utilities.hpp>
 #include <realm/index_string.hpp>
 
@@ -122,6 +121,8 @@ AggregateState      State of the aggregate - contains a state variable that stor
 #endif
 
 namespace realm {
+
+class IndexEvaluator;
 
 // Number of matches to find in best condition loop before breaking out to probe other conditions. Too low value gives
 // too many constant time overheads everywhere in the query engine. Too high value makes it adapt less rapidly to
@@ -152,7 +153,10 @@ public:
     {
         return false;
     }
-    virtual void index_based_aggregate(size_t, Evaluator) {}
+    virtual const IndexEvaluator* index_based_keys()
+    {
+        return nullptr;
+    }
 
     void gather_children(std::vector<ParentNode*>& v)
     {
@@ -222,15 +226,9 @@ public:
     virtual size_t aggregate_local(QueryStateBase* st, size_t start, size_t end, size_t local_limit,
                                    ArrayPayload* source_column);
 
-
     virtual std::string validate()
     {
-        if (error_code != "")
-            return error_code;
-        if (m_child == nullptr)
-            return "";
-        else
-            return m_child->validate();
+        return m_child ? m_child->validate() : "";
     }
 
     ParentNode(const ParentNode& from);
@@ -244,18 +242,6 @@ public:
     }
 
     virtual std::unique_ptr<ParentNode> clone() const = 0;
-
-    ColKey get_column_key(StringData column_name) const
-    {
-        ColKey column_key;
-        if (column_name.size() > 0) {
-            column_key = m_table.unchecked_ptr()->get_column_key(column_name);
-            if (column_key == ColKey()) {
-                throw LogicError(LogicError::column_does_not_exist);
-            }
-        }
-        return column_key;
-    }
 
     virtual std::string describe(util::serializer::SerialisationState&) const
     {
@@ -318,7 +304,6 @@ protected:
     ConstTableRef m_table = ConstTableRef();
     const Cluster* m_cluster = nullptr;
     QueryStateBase* m_state = nullptr;
-    std::string error_code;
 
     ColumnType get_real_column_type(ColKey key)
     {
@@ -352,6 +337,54 @@ protected:
     {
     }
 
+};
+
+class IndexEvaluator {
+public:
+    IndexEvaluator() {}
+    virtual ~IndexEvaluator() = default;
+
+    void init(StringIndex* index, Mixed value);
+    void init(std::vector<ObjKey>* storage);
+
+    size_t do_search_index(const Cluster* cluster, size_t start, size_t end);
+
+    size_t size() const
+    {
+        if (m_matching_keys) {
+            return m_matching_keys->size();
+        }
+        return m_results_end - m_results_start;
+    }
+    ObjKey get(size_t ndx) const
+    {
+        return get_internal(ndx + m_results_start);
+    }
+
+private:
+    inline ObjKey get_internal(size_t ndx) const
+    {
+        if (m_matching_keys) {
+            return m_matching_keys->at(ndx);
+        }
+        if (m_index_matches) {
+            return ObjKey(m_index_matches->get(ndx));
+        }
+        else if (m_results_end == 1) {
+            REALM_ASSERT_EX(ndx == 0, ndx);
+            return m_actual_key;
+        }
+        return ObjKey();
+    }
+
+    std::shared_ptr<IntegerColumn> m_index_matches;
+    ObjKey m_actual_key;
+    ObjKey m_last_start_key;
+    size_t m_results_start = 0;
+    size_t m_results_ndx = 0;
+    size_t m_results_end = 0;
+
+    std::vector<ObjKey>* m_matching_keys = nullptr;
 };
 
 template <class LeafType>
@@ -406,14 +439,14 @@ protected:
     size_t find_all_local(size_t start, size_t end)
     {
         if (run_single()) {
-            m_leaf_ptr->template find<TConditionFunction>(m_value, start, end, 0, m_state, nullptr);
+            m_leaf_ptr->template find<TConditionFunction>(m_value, start, end, m_state, nullptr);
         }
         else {
             auto callback = [this](size_t index) {
                 auto val = m_source_column->get_any(index);
                 return m_state->match(index, val);
             };
-            m_leaf_ptr->template find<TConditionFunction>(m_value, start, end, 0, m_state, callback);
+            m_leaf_ptr->template find<TConditionFunction>(m_value, start, end, m_state, callback);
         }
 
         return end;
@@ -509,22 +542,16 @@ public:
         : BaseType(value, column_key)
     {
     }
-    ~IntegerNode()
-    {
-    }
 
     void init(bool will_query_ranges) override
     {
         BaseType::init(will_query_ranges);
         m_nb_needles = m_needles.size();
 
-        if (has_search_index()) {
-            // _search_index_init();
-            m_result.clear();
-            auto index = ParentNode::m_table->get_search_index(ParentNode::m_condition_column_key);
-            index->find_all(m_result, BaseType::m_value);
-            m_result_get = 0;
-            m_last_start_key = ObjKey();
+        if (has_search_index() && m_nb_needles == 0) {
+            StringIndex* index = ParentNode::m_table->get_search_index(ParentNode::m_condition_column_key);
+            m_index_evaluator = IndexEvaluator();
+            m_index_evaluator->init(index, BaseType::m_value);
             IntegerNodeBase<LeafType>::m_dT = 0;
         }
     }
@@ -543,17 +570,13 @@ public:
 
     bool has_search_index() const override
     {
-        return this->m_table->has_search_index(IntegerNodeBase<LeafType>::m_condition_column_key);
+        return this->m_table->search_index_type(IntegerNodeBase<LeafType>::m_condition_column_key) ==
+               IndexType::General;
     }
 
-    void index_based_aggregate(size_t limit, Evaluator evaluator) override
+    const IndexEvaluator* index_based_keys() override
     {
-        for (size_t t = 0; t < m_result.size() && limit > 0; ++t) {
-            auto obj = this->m_table->get_object(m_result[t]);
-            if (evaluator(obj)) {
-                --limit;
-            }
-        }
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
     }
 
     size_t find_first_local(size_t start, size_t end) override
@@ -565,8 +588,8 @@ public:
             if (m_nb_needles) {
                 s = find_first_haystack<22>(*this->m_leaf_ptr, m_needles, start, end);
             }
-            else if (has_search_index()) {
-                return do_search_index(m_last_start_key, m_result_get, m_result, BaseType::m_cluster, start, end);
+            else if (m_index_evaluator) {
+                return m_index_evaluator->do_search_index(BaseType::m_cluster, start, end);
             }
             else if (end - start == 1) {
                 if (this->m_leaf_ptr->get(start) == this->m_value) {
@@ -596,17 +619,14 @@ public:
                    util::serializer::print_value(IntegerNodeBase<LeafType>::m_value);
         }
 
-        // FIXME: once the parser supports it, print something like "column IN {n1, n2, n3}"
-        std::string desc = "(";
+        std::string list_contents;
         bool is_first = true;
         for (auto it : m_needles) {
-            if (!is_first)
-                desc += " or ";
-            desc +=
-                col_descr + " " + Equal::description() + " " + util::serializer::print_value(it); // "it" may be null
+            list_contents +=
+                util::format("%1%2", is_first ? "" : ", ", util::serializer::print_value(it)); // "it" may be null
             is_first = false;
         }
-        desc += ")";
+        std::string desc = util::format("%1 IN {%2}", col_descr, list_contents);
         return desc;
     }
 
@@ -617,10 +637,8 @@ public:
 
 private:
     std::unordered_set<TConditionValue> m_needles;
-    std::vector<ObjKey> m_result;
     size_t m_nb_needles = 0;
-    size_t m_result_get = 0;
-    ObjKey m_last_start_key;
+    std::optional<IndexEvaluator> m_index_evaluator;
 
     IntegerNode(const IntegerNode<LeafType, Equal>& from)
         : BaseType(from)
@@ -931,7 +949,39 @@ public:
     BoolNode(const BoolNode& from)
         : ParentNode(from)
         , m_value(from.m_value)
+        , m_index_evaluator(from.m_index_evaluator)
     {
+    }
+
+    void init(bool will_query_ranges) override
+    {
+        ParentNode::init(will_query_ranges);
+
+        if constexpr (std::is_same_v<TConditionFunction, Equal>) {
+            if (m_index_evaluator) {
+                StringIndex* index = m_table->get_search_index(m_condition_column_key);
+                m_index_evaluator->init(index, m_value);
+                this->m_dT = 0;
+            }
+        }
+    }
+
+    void table_changed() override
+    {
+        if constexpr (std::is_same_v<TConditionFunction, Equal>) {
+            const bool has_index = m_table->search_index_type(m_condition_column_key) == IndexType::General;
+            m_index_evaluator = has_index ? std::make_optional(IndexEvaluator{}) : std::nullopt;
+        }
+    }
+
+    const IndexEvaluator* index_based_keys() override
+    {
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
+    }
+
+    bool has_search_index() const override
+    {
+        return bool(m_index_evaluator);
     }
 
     void cluster_changed() override
@@ -944,6 +994,12 @@ public:
 
     size_t find_first_local(size_t start, size_t end) override
     {
+        if constexpr (std::is_same_v<TConditionFunction, Equal>) {
+            if (m_index_evaluator) {
+                return m_index_evaluator->do_search_index(m_cluster, start, end);
+            }
+        }
+
         TConditionFunction condition;
         bool m_value_is_null = !m_value;
         for (size_t s = start; s < end; ++s) {
@@ -972,6 +1028,7 @@ private:
     LeafCacheStorage m_leaf_cache_storage;
     LeafPtr m_array_ptr;
     const ArrayBoolNull* m_leaf_ptr = nullptr;
+    std::optional<IndexEvaluator> m_index_evaluator;
 };
 
 class TimestampNodeBase : public ParentNode {
@@ -1019,8 +1076,46 @@ class TimestampNode : public TimestampNodeBase {
 public:
     using TimestampNodeBase::TimestampNodeBase;
 
+    void init(bool will_query_ranges) override
+    {
+        TimestampNodeBase::init(will_query_ranges);
+
+        if constexpr (std::is_same_v<TConditionFunction, Equal>) {
+            if (m_index_evaluator) {
+                StringIndex* index =
+                    TimestampNodeBase::m_table->get_search_index(TimestampNodeBase::m_condition_column_key);
+                m_index_evaluator->init(index, TimestampNodeBase::m_value);
+                this->m_dT = 0;
+            }
+        }
+    }
+
+    void table_changed() override
+    {
+        if constexpr (std::is_same_v<TConditionFunction, Equal>) {
+            const bool has_index =
+                this->m_table->search_index_type(TimestampNodeBase::m_condition_column_key) == IndexType::General;
+            m_index_evaluator = has_index ? std::make_optional(IndexEvaluator{}) : std::nullopt;
+        }
+    }
+
+    const IndexEvaluator* index_based_keys() override
+    {
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
+    }
+
+    bool has_search_index() const override
+    {
+        return bool(m_index_evaluator);
+    }
+
     size_t find_first_local(size_t start, size_t end) override
     {
+        if constexpr (std::is_same_v<TConditionFunction, Equal>) {
+            if (m_index_evaluator) {
+                return m_index_evaluator->do_search_index(this->m_cluster, start, end);
+            }
+        }
         return m_leaf_ptr->find_first<TConditionFunction>(m_value, start, end);
     }
 
@@ -1041,6 +1136,7 @@ protected:
         : TimestampNodeBase(from, tr)
     {
     }
+    std::optional<IndexEvaluator> m_index_evaluator;
 };
 
 class DecimalNodeBase : public ParentNode {
@@ -1124,9 +1220,6 @@ protected:
     {
     }
 };
-
-size_t do_search_index(ObjKey& last_start_key, size_t& result_get, std::vector<ObjKey>& results,
-                       const Cluster* cluster, size_t start, size_t end);
 
 template <class ObjectType, class ArrayType>
 class FixedBytesNodeBase : public ParentNode {
@@ -1235,30 +1328,28 @@ public:
             m_optional_value = this->m_value;
         }
 
-        if (has_search_index()) {
-            // _search_index_init();
-            m_result.clear();
-            auto index = BaseType::m_table->get_search_index(BaseType::m_condition_column_key);
-            index->find_all(m_result, m_optional_value);
-            m_result_get = 0;
-            m_last_start_key = ObjKey();
+        if (m_index_evaluator) {
+            StringIndex* index = BaseType::m_table->get_search_index(BaseType::m_condition_column_key);
+            m_index_evaluator->init(index, m_optional_value);
             this->m_dT = 0;
         }
     }
 
-    void index_based_aggregate(size_t limit, Evaluator evaluator) override
+    void table_changed() override
     {
-        for (size_t t = 0; t < m_result.size() && limit > 0; ++t) {
-            auto obj = this->m_table->get_object(m_result[t]);
-            if (evaluator(obj)) {
-                --limit;
-            }
-        }
+        const bool has_index =
+            this->m_table->search_index_type(BaseType::m_condition_column_key) == IndexType::General;
+        m_index_evaluator = has_index ? std::make_optional(IndexEvaluator{}) : std::nullopt;
+    }
+
+    const IndexEvaluator* index_based_keys() override
+    {
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
     }
 
     bool has_search_index() const override
     {
-        return this->m_table->has_search_index(BaseType::m_condition_column_key);
+        return bool(m_index_evaluator);
     }
 
     size_t find_first_local(size_t start, size_t end) override
@@ -1267,8 +1358,8 @@ public:
         size_t s = realm::npos;
 
         if (start < end) {
-            if (has_search_index()) {
-                return do_search_index(m_last_start_key, m_result_get, m_result, this->m_cluster, start, end);
+            if (m_index_evaluator) {
+                return m_index_evaluator->do_search_index(this->m_cluster, start, end);
             }
 
             if (end - start == 1) {
@@ -1303,10 +1394,8 @@ protected:
         : FixedBytesNode(from, tr)
     {
     }
-    util::Optional<ObjectType> m_optional_value;
-    std::vector<ObjKey> m_result;
-    size_t m_result_get = 0;
-    ObjKey m_last_start_key;
+    std::optional<ObjectType> m_optional_value;
+    std::optional<IndexEvaluator> m_index_evaluator;
 };
 
 
@@ -1353,10 +1442,15 @@ public:
     std::string describe(util::serializer::SerialisationState& state) const override
     {
         REALM_ASSERT(m_condition_column_key);
+        std::string value;
+        if (m_value.is_type(type_TypedLink)) {
+            value = util::serializer::print_value(m_value.get<ObjLink>(), state.group);
+        }
+        else {
+            value = util::serializer::print_value(m_value);
+        }
         return state.describe_column(ParentNode::m_table, m_condition_column_key) + " " + this->describe_condition() +
-               " " +
-               (m_value_is_null ? util::serializer::print_value(realm::null())
-                                : util::serializer::print_value(m_value));
+               " " + value;
     }
 
 protected:
@@ -1437,13 +1531,13 @@ protected:
 template <>
 class MixedNode<Equal> : public MixedNodeBase {
 public:
-    MixedNode<Equal>(Mixed v, ColKey column)
+    MixedNode(Mixed v, ColKey column)
         : MixedNodeBase(v, column)
     {
     }
-    MixedNode<Equal>(const MixedNode<Equal>& other)
+    MixedNode(const MixedNode<Equal>& other)
         : MixedNodeBase(other)
-        , m_has_search_index(other.m_has_search_index)
+        , m_index_evaluator(other.m_index_evaluator)
     {
     }
     void init(bool will_query_ranges) override;
@@ -1451,19 +1545,21 @@ public:
     void cluster_changed() override
     {
         // If we use searchindex, we do not need further access to clusters
-        if (!m_has_search_index) {
+        if (!has_search_index()) {
             MixedNodeBase::cluster_changed();
         }
     }
 
     void table_changed() override
     {
-        m_has_search_index = m_table.unchecked_ptr()->has_search_index(m_condition_column_key);
+        const bool has_index =
+            m_table.unchecked_ptr()->search_index_type(m_condition_column_key) == IndexType::General;
+        m_index_evaluator = has_index ? std::make_optional(IndexEvaluator{}) : std::nullopt;
     }
 
     bool has_search_index() const override
     {
-        return m_has_search_index;
+        return bool(m_index_evaluator);
     }
 
     size_t find_first_local(size_t start, size_t end) override;
@@ -1479,16 +1575,70 @@ public:
     }
 
 protected:
+    std::optional<IndexEvaluator> m_index_evaluator;
+
+    const IndexEvaluator* index_based_keys() override
+    {
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
+    }
+};
+
+template <>
+class MixedNode<EqualIns> : public MixedNodeBase {
+public:
+    MixedNode(Mixed v, ColKey column)
+        : MixedNodeBase(v, column)
+    {
+    }
+    MixedNode(const MixedNode<EqualIns>& other)
+        : MixedNodeBase(other)
+        , m_index_evaluator(other.m_index_evaluator)
+    {
+    }
+    void init(bool will_query_ranges) override;
+
+    size_t find_first_local(size_t start, size_t end) override;
+
+    void cluster_changed() override
+    {
+        // If we use searchindex, we do not need further access to clusters
+        if (!has_search_index()) {
+            MixedNodeBase::cluster_changed();
+        }
+    }
+
+    void table_changed() override
+    {
+        const bool has_index =
+            m_table.unchecked_ptr()->search_index_type(m_condition_column_key) == IndexType::General;
+        m_index_evaluator = has_index ? std::make_optional(IndexEvaluator{}) : std::nullopt;
+    }
+
+    bool has_search_index() const override
+    {
+        return bool(m_index_evaluator);
+    }
+
+    virtual std::string describe_condition() const override
+    {
+        return EqualIns::description();
+    }
+
+    std::unique_ptr<ParentNode> clone() const override
+    {
+        return std::unique_ptr<ParentNode>(new MixedNode<EqualIns>(*this));
+    }
+
+protected:
+    std::string m_ucase;
+    std::string m_lcase;
+    std::optional<IndexEvaluator> m_index_evaluator;
     std::vector<ObjKey> m_index_matches;
 
-    ObjKey m_actual_key;
-    ObjKey m_last_start_key;
-    size_t m_results_start;
-    size_t m_results_ndx;
-    size_t m_results_end;
-    bool m_has_search_index = false;
-
-    void index_based_aggregate(size_t limit, Evaluator evaluator) override;
+    const IndexEvaluator* index_based_keys() override
+    {
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
+    }
 };
 
 class StringNodeBase : public ParentNode {
@@ -1549,7 +1699,7 @@ public:
         REALM_ASSERT(m_condition_column_key);
         StringData sd;
         if (bool(StringNodeBase::m_value)) {
-            sd = StringData(StringNodeBase::m_value.value());
+            sd = StringData(*StringNodeBase::m_value);
         }
         return state.describe_column(ParentNode::m_table, m_condition_column_key) + " " + describe_condition() + " " +
                util::serializer::print_value(sd);
@@ -1586,7 +1736,7 @@ public:
         auto upper = case_map(v, true);
         auto lower = case_map(v, false);
         if (!upper || !lower) {
-            error_code = "Malformed UTF-8: " + std::string(v);
+            throw InvalidArgument(util::format("Malformed UTF-8: %1", v));
         }
         else {
             m_ucase = std::move(*upper);
@@ -1711,7 +1861,7 @@ public:
         auto upper = case_map(v, true);
         auto lower = case_map(v, false);
         if (!upper || !lower) {
-            error_code = "Malformed UTF-8: " + std::string(v);
+            throw query_parser::InvalidQueryError(util::format("Malformed UTF-8: %1", v));
         }
         else {
             m_ucase = std::move(*upper);
@@ -1792,21 +1942,29 @@ public:
     }
     StringNodeEqualBase(const StringNodeEqualBase& from)
         : StringNodeBase(from)
-        , m_has_search_index(from.m_has_search_index)
+        , m_index_evaluator(from.m_index_evaluator)
     {
     }
 
     void init(bool) override;
 
+    void table_changed() override
+    {
+        StringNodeBase::table_changed();
+        const bool has_index =
+            m_table.unchecked_ptr()->search_index_type(m_condition_column_key) == IndexType::General;
+        m_index_evaluator = has_index ? std::make_optional(IndexEvaluator{}) : std::nullopt;
+    }
+
     bool has_search_index() const override
     {
-        return m_has_search_index;
+        return bool(m_index_evaluator);
     }
 
     void cluster_changed() override
     {
         // If we use searchindex, we do not need further access to clusters
-        if (!m_has_search_index) {
+        if (!m_index_evaluator) {
             StringNodeBase::cluster_changed();
         }
     }
@@ -1818,20 +1976,19 @@ public:
         return Equal::description();
     }
 
+    const IndexEvaluator* index_based_keys() override
+    {
+        return m_index_evaluator ? &(*m_index_evaluator) : nullptr;
+    }
+
 protected:
-    ObjKey m_actual_key;
-    ObjKey m_last_start_key;
-    size_t m_results_start;
-    size_t m_results_ndx;
-    size_t m_results_end;
-    bool m_has_search_index = false;
+    std::optional<IndexEvaluator> m_index_evaluator;
 
     inline BinaryData str_to_bin(const StringData& s) noexcept
     {
         return BinaryData(s.data(), s.size());
     }
 
-    virtual ObjKey get_key(size_t ndx) = 0;
     virtual void _search_index_init() = 0;
     virtual size_t _find_first_local(size_t start, size_t end) = 0;
 };
@@ -1843,13 +2000,9 @@ protected:
 template <>
 class StringNode<Equal> : public StringNodeEqualBase {
 public:
-    using StringNodeEqualBase::StringNodeEqualBase;
-
-    void table_changed() override
+    StringNode(StringData v, ColKey column)
+        : StringNodeEqualBase(v, column)
     {
-        StringNodeBase::table_changed();
-        m_has_search_index = m_table.unchecked_ptr()->has_search_index(m_condition_column_key) ||
-                             m_table.unchecked_ptr()->get_primary_key_column() == m_condition_column_key;
     }
 
     void _search_index_init() override;
@@ -1863,7 +2016,7 @@ public:
 
     std::string describe(util::serializer::SerialisationState& state) const override;
 
-    StringNode<Equal>(const StringNode& from)
+    StringNode(const StringNode& from)
         : StringNodeEqualBase(from)
     {
         for (auto& needle : from.m_needles) {
@@ -1877,40 +2030,8 @@ public:
             }
         }
     }
-    void index_based_aggregate(size_t limit, Evaluator evaluator) override
-    {
-        if (limit == 0)
-            return;
-        if (m_index_matches == nullptr) {
-            if (m_results_end) { // 1 result
-                auto obj = m_table->get_object(m_actual_key);
-                evaluator(obj);
-            }
-        }
-        else { // multiple results
-            for (size_t t = m_results_start; t < m_results_end && limit > 0; ++t) {
-                auto obj = m_table->get_object(ObjKey(m_index_matches->get(t)));
-                if (evaluator(obj)) {
-                    --limit;
-                }
-            }
-        }
-    }
 
 private:
-    std::unique_ptr<IntegerColumn> m_index_matches;
-
-    ObjKey get_key(size_t ndx) override
-    {
-        if (IntegerColumn* vec = m_index_matches.get()) {
-            return ObjKey(vec->get(ndx));
-        }
-        else if (m_results_end == 1) {
-            return m_actual_key;
-        }
-        return ObjKey();
-    }
-
     size_t _find_first_local(size_t start, size_t end) override;
     std::unordered_set<StringData> m_needles;
     std::vector<std::unique_ptr<char[]>> m_needle_storage;
@@ -1928,7 +2049,7 @@ public:
         auto upper = case_map(v, true);
         auto lower = case_map(v, false);
         if (!upper || !lower) {
-            error_code = "Malformed UTF-8: " + std::string(v);
+            throw query_parser::InvalidQueryError(util::format("Malformed UTF-8: %1", v));
         }
         else {
             m_ucase = std::move(*upper);
@@ -1936,17 +2057,6 @@ public:
         }
     }
 
-    void clear_leaf_state() override
-    {
-        StringNodeEqualBase::clear_leaf_state();
-        m_index_matches.clear();
-    }
-
-    void table_changed() override
-    {
-        StringNodeBase::table_changed();
-        m_has_search_index = m_table.unchecked_ptr()->has_search_index(m_condition_column_key);
-    }
     void _search_index_init() override;
 
     virtual std::string describe_condition() const override
@@ -1966,28 +2076,48 @@ public:
     {
     }
 
-    void index_based_aggregate(size_t limit, Evaluator evaluator) override
-    {
-        for (size_t t = 0; t < m_index_matches.size() && limit > 0; ++t) {
-            auto obj = m_table->get_object(m_index_matches[t]);
-            if (evaluator(obj)) {
-                --limit;
-            }
-        }
-    }
-
 private:
-    // Used for index lookup
     std::vector<ObjKey> m_index_matches;
     std::string m_ucase;
     std::string m_lcase;
+    std::vector<ObjKey> storage;
+    size_t _find_first_local(size_t start, size_t end) override;
+};
 
-    ObjKey get_key(size_t ndx) override
+
+class LinkMap;
+class StringNodeFulltext : public StringNodeEqualBase {
+public:
+    StringNodeFulltext(StringData v, ColKey column, std::unique_ptr<LinkMap> lm = {});
+
+    void table_changed() override;
+
+    void _search_index_init() override;
+
+    bool has_search_index() const override
     {
-        return m_index_matches[ndx];
+        return true; // it's a required precondition for fulltext queries
     }
 
-    size_t _find_first_local(size_t start, size_t end) override;
+    std::unique_ptr<ParentNode> clone() const override
+    {
+        return std::unique_ptr<ParentNode>(new StringNodeFulltext(*this));
+    }
+
+    virtual std::string describe_condition() const override
+    {
+        return "FULLTEXT";
+    }
+
+private:
+    std::vector<ObjKey> m_index_matches;
+    std::unique_ptr<LinkMap> m_link_map;
+    StringNodeFulltext(const StringNodeFulltext&);
+
+    size_t _find_first_local(size_t, size_t) override
+    {
+        REALM_UNREACHABLE();
+    }
 };
 
 // OR node contains at least two node pointers: Two or more conditions to OR
@@ -2120,12 +2250,10 @@ public:
 
     std::string validate() override
     {
-        if (error_code != "")
-            return error_code;
         if (m_conditions.size() == 0)
-            return "Missing left-hand side of OR";
+            return "Missing both arguments of OR";
         if (m_conditions.size() == 1)
-            return "Missing right-hand side of OR";
+            return "Missing argument of OR";
         std::string s;
         if (m_child != 0)
             s = m_child->validate();
@@ -2178,6 +2306,9 @@ public:
         : m_condition(std::move(condition))
     {
         m_dT = 50.0;
+        if (!m_condition) {
+            throw query_parser::InvalidQueryError("Missing argument to Not");
+        }
     }
 
     void table_changed() override
@@ -2205,23 +2336,6 @@ public:
     }
 
     size_t find_first_local(size_t start, size_t end) override;
-
-    std::string validate() override
-    {
-        if (error_code != "")
-            return error_code;
-        if (m_condition == 0)
-            return "Missing argument to Not";
-        std::string s;
-        if (m_child != 0)
-            s = m_child->validate();
-        if (s != "")
-            return s;
-        s = m_condition->validate();
-        if (s != "")
-            return s;
-        return "";
-    }
 
     std::string describe(util::serializer::SerialisationState& state) const override
     {
@@ -2279,18 +2393,19 @@ public:
         m_dT = 100.0;
         m_condition_column_key1 = column1;
         m_condition_column_key2 = column2;
+        if (m_condition_column_key1.is_collection() || m_condition_column_key2.is_collection()) {
+            throw Exception(ErrorCodes::InvalidQuery,
+                            util::format("queries comparing two properties are not yet supported for "
+                                         "collections (list/set/dictionary) (%1 and %2)",
+                                         ParentNode::m_table->get_column_name(m_condition_column_key1),
+                                         ParentNode::m_table->get_column_name(m_condition_column_key2)));
+        }
     }
 
     ~TwoColumnsNodeBase() noexcept override {}
     void table_changed() override
     {
         if (this->m_table) {
-            if (m_condition_column_key1.is_collection() || m_condition_column_key2.is_collection()) {
-                throw std::runtime_error(util::format("queries comparing two properties are not yet supported for "
-                                                      "collections (list/set/dictionary) (%1 and %2)",
-                                                      ParentNode::m_table->get_column_name(m_condition_column_key1),
-                                                      ParentNode::m_table->get_column_name(m_condition_column_key2)));
-            }
             ParentNode::m_table->check_column(m_condition_column_key1);
             ParentNode::m_table->check_column(m_condition_column_key2);
         }
@@ -2428,9 +2543,10 @@ public:
     {
         REALM_ASSERT(m_condition_column_key);
         if (m_target_keys.size() > 1)
-            throw SerialisationError("Serializing a query which links to multiple objects is currently unsupported.");
+            throw SerializationError("Serializing a query which links to multiple objects is currently unsupported.");
+        ObjLink link(m_table->get_opposite_table(m_condition_column_key)->get_key(), m_target_keys[0]);
         return state.describe_column(ParentNode::m_table, m_condition_column_key) + " " + describe_condition() + " " +
-               util::serializer::print_value(m_target_keys[0]);
+               util::serializer::print_value(link, m_table->get_parent_group());
     }
 
 protected:
@@ -2458,7 +2574,7 @@ class LinksToNode : public LinksToNodeBase {
 public:
     using LinksToNodeBase::LinksToNodeBase;
 
-    virtual std::string describe_condition() const override
+    std::string describe_condition() const override
     {
         return TConditionFunction::description();
     }

@@ -61,6 +61,21 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         noticeOfCancellationLbl.text = noticeOfCancellationLbl.text! + " " + today
         // Do any additional setup after loading the view.
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    override func performSegueToReturnBack()
+    {
+        if isCardVerified == true
+        {
+            self.alert("You can’t navigate back and change the payment option. ", nil)
+        }
+        else
+        {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     override func screenShotBarButtonAction(sender:UIButton)
         {
             self.imagePicker = CaptureImage(presentationController: self, delegate: self)

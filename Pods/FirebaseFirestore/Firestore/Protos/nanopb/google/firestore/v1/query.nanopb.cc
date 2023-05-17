@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2023 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -169,6 +169,8 @@ const char* EnumToString(
         return "OPERATOR_UNSPECIFIED";
     case google_firestore_v1_StructuredQuery_CompositeFilter_Operator_AND:
         return "AND";
+    case google_firestore_v1_StructuredQuery_CompositeFilter_Operator_OR:
+        return "OR";
     }
     return "<unknown enum value>";
 }

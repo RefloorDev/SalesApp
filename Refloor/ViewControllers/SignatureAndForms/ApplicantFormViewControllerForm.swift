@@ -205,6 +205,11 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         // Do any additional setup after loading the view.
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
     
     func setPhoneNumberDelegate()
     {
@@ -216,6 +221,14 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         // self.exEmployeementPhone.delegate = self
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.emailAddress {
+            return false
+        }
         
         if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
         {
@@ -247,9 +260,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             if (isBackSpace == -92) {
                 return true
             }
-            
-            return false
         }
+        return true
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {

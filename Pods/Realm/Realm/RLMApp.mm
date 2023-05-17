@@ -40,26 +40,28 @@ namespace {
     /// Internal transport struct to bridge RLMNetworkingTransporting to the GenericNetworkTransport.
     class CocoaNetworkTransport : public realm::app::GenericNetworkTransport {
     public:
-        CocoaNetworkTransport(id<RLMNetworkTransport> transport) : m_transport(transport) {};
+        CocoaNetworkTransport(id<RLMNetworkTransport> transport) : m_transport(transport) {}
 
-        void send_request_to_server(const app::Request request,
-                                    std::function<void(const app::Response)> completion) override {
+        void send_request_to_server(const app::Request& request,
+                                    util::UniqueFunction<void(const app::Response&)>&& completion) override {
             // Convert the app::Request to an RLMRequest
             auto rlmRequest = [RLMRequest new];
             rlmRequest.url = @(request.url.data());
             rlmRequest.body = @(request.body.data());
             NSMutableDictionary *headers = [NSMutableDictionary new];
-            for (auto header : request.headers) {
+            for (auto&& header : request.headers) {
                 headers[@(header.first.data())] = @(header.second.data());
             }
             rlmRequest.headers = headers;
             rlmRequest.method = static_cast<RLMHTTPMethod>(request.method);
-            rlmRequest.timeout = request.timeout_ms / 1000;
+            rlmRequest.timeout = request.timeout_ms / 1000.0;
 
             // Send the request through to the Cocoa level transport
+            auto completion_ptr = completion.release();
             [m_transport sendRequestToServer:rlmRequest completion:^(RLMResponse *response) {
-                __block std::map<std::string, std::string> bridgingHeaders;
-                [response.headers enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL *) {
+                util::UniqueFunction<void(const app::Response&)> completion(completion_ptr);
+                std::map<std::string, std::string> bridgingHeaders;
+                [response.headers enumerateKeysAndObjectsUsingBlock:[&](NSString *key, NSString *value, BOOL *) {
                     bridgingHeaders[key.UTF8String] = value.UTF8String;
                 }];
 
@@ -96,6 +98,13 @@ namespace {
     return nil;
 }
 
+- (instancetype)init {
+    return [self initWithBaseURL:nil
+                       transport:nil
+                    localAppName:nil
+                 localAppVersion:nil];
+}
+
 - (instancetype)initWithBaseURL:(nullable NSString *)baseURL
                       transport:(nullable id<RLMNetworkTransport>)transport
                    localAppName:(nullable NSString *)localAppName
@@ -104,12 +113,12 @@ namespace {
                        transport:transport
                     localAppName:localAppName
                  localAppVersion:localAppVersion
-         defaultRequestTimeoutMS:6000];
+         defaultRequestTimeoutMS:60000];
 }
 
 - (instancetype)initWithBaseURL:(nullable NSString *)baseURL
                       transport:(nullable id<RLMNetworkTransport>)transport
-                   localAppName:(NSString *)localAppName
+                   localAppName:(nullable NSString *)localAppName
                 localAppVersion:(nullable NSString *)localAppVersion
         defaultRequestTimeoutMS:(NSUInteger)defaultRequestTimeoutMS {
     if (self = [super init]) {
@@ -119,10 +128,19 @@ namespace {
         self.localAppVersion = localAppVersion;
         self.defaultRequestTimeoutMS = defaultRequestTimeoutMS;
 
-        _config.platform = "Realm Cocoa";
+        _config.device_info.sdk = "Realm Swift";
 
-        RLMNSStringToStdString(_config.platform_version, [[NSProcessInfo processInfo] operatingSystemVersionString]);
-        RLMNSStringToStdString(_config.sdk_version, REALM_COCOA_VERSION);
+        // Platform info isn't available when running via `swift test`.
+        // Non-Xcode SPM builds can't build for anything but macOS, so this is
+        // probably unimportant for now and we can just report "unknown"
+        auto processInfo = [NSProcessInfo processInfo];
+        auto platform = [processInfo.environment[@"RUN_DESTINATION_DEVICE_PLATFORM_IDENTIFIER"]
+                         componentsSeparatedByString:@"."].lastObject;
+        RLMNSStringToStdString(_config.device_info.platform,
+                               platform ?: @"unknown");
+        RLMNSStringToStdString(_config.device_info.platform_version,
+                               [processInfo operatingSystemVersionString] ?: @"unknown");
+        RLMNSStringToStdString(_config.device_info.sdk_version, REALM_COCOA_VERSION);
         return self;
     }
     return nil;
@@ -144,27 +162,25 @@ namespace {
     return nil;
 }
 
+static void setOptionalString(std::optional<std::string>& dst, NSString *src) {
+    std::string tmp;
+    RLMNSStringToStdString(tmp, src);
+    dst = tmp.empty() ? util::none : std::optional(std::move(tmp));
+}
+
 - (void)setBaseURL:(nullable NSString *)baseURL {
-    std::string base_url;
-    RLMNSStringToStdString(base_url, baseURL);
-    _config.base_url = base_url.empty() ? util::none : util::Optional(base_url);
-    return;
+    setOptionalString(_config.base_url, baseURL);
 }
 
 - (id<RLMNetworkTransport>)transport {
-    return static_cast<CocoaNetworkTransport*>(_config.transport_generator().get())->transport();
+    return static_cast<CocoaNetworkTransport&>(*_config.transport).transport();
 }
 
 - (void)setTransport:(id<RLMNetworkTransport>)transport {
-    if (transport) {
-        _config.transport_generator = [transport]{
-            return std::make_unique<CocoaNetworkTransport>(transport);
-        };
-    } else {
-        _config.transport_generator = []{
-            return std::make_unique<CocoaNetworkTransport>([RLMNetworkTransport new]);
-        };
+    if (!transport) {
+        transport = [RLMNetworkTransport new];
     }
+    _config.transport = std::make_shared<CocoaNetworkTransport>(transport);
 }
 
 - (NSString *)localAppName {
@@ -176,10 +192,7 @@ namespace {
 }
 
 - (void)setLocalAppName:(nullable NSString *)localAppName {
-    std::string local_app_name;
-    RLMNSStringToStdString(local_app_name, localAppName);
-    _config.local_app_name = local_app_name.empty() ? util::none : util::Optional(local_app_name);
-    return;
+    setOptionalString(_config.local_app_name, localAppName);
 }
 
 - (NSString *)localAppVersion {
@@ -191,14 +204,11 @@ namespace {
 }
 
 - (void)setLocalAppVersion:(nullable NSString *)localAppVersion {
-    std::string local_app_version;
-    RLMNSStringToStdString(local_app_version, localAppVersion);
-    _config.local_app_version = local_app_version.empty() ? util::none : util::Optional(local_app_version);
-    return;
+    setOptionalString(_config.local_app_version, localAppVersion);
 }
 
 - (NSUInteger)defaultRequestTimeoutMS {
-    return _config.default_request_timeout_ms.value_or(6000U);
+    return _config.default_request_timeout_ms.value_or(60000U);
 }
 
 - (void)setDefaultRequestTimeoutMS:(NSUInteger)defaultRequestTimeoutMS {
@@ -207,32 +217,24 @@ namespace {
 
 @end
 
-NSError *RLMAppErrorToNSError(realm::app::AppError const& appError) {
-    return [[NSError alloc] initWithDomain:@(appError.error_code.category().name())
-                                      code:appError.error_code.value()
-                                  userInfo:@{
-                                      @(appError.error_code.category().name()) : @(appError.error_code.message().data()),
-                                      NSLocalizedDescriptionKey : @(appError.message.c_str())
-                                  }];
-}
-
 #pragma mark RLMAppSubscriptionToken
+
 @implementation RLMAppSubscriptionToken {
-@public
-    std::unique_ptr<realm::Subscribable<app::App>::Token> _token;
+    std::shared_ptr<app::App> _app;
+    std::optional<app::App::Token> _token;
 }
 
-- (instancetype)initWithToken:(realm::Subscribable<app::App>::Token&&)token {
+- (instancetype)initWithApp:(std::shared_ptr<app::App>)app token:(app::App::Token&&)token {
     if (self = [super init]) {
-        _token = std::make_unique<realm::Subscribable<app::App>::Token>(std::move(token));
-        return self;
+        _app = std::move(app);
+        _token = std::move(token);
     }
-
-    return nil;
+    return self;
 }
 
-- (NSUInteger)value {
-    return _token->value();
+- (void)unsubscribe {
+    _token.reset();
+    _app.reset();
 }
 @end
 
@@ -245,6 +247,10 @@ NSError *RLMAppErrorToNSError(realm::app::AppError const& appError) {
 @end
 
 @implementation RLMApp : NSObject
+
++ (void)initialize {
+    [RLMRealm class];
+}
 
 - (instancetype)initWithApp:(std::shared_ptr<realm::app::App>)app {
     if (self = [super init]) {
@@ -288,9 +294,9 @@ NSError *RLMAppErrorToNSError(realm::app::AppError const& appError) {
 static NSMutableDictionary *s_apps = [NSMutableDictionary new];
 static std::mutex& s_appMutex = *new std::mutex();
 
-+ (NSArray *)appIds {
++ (NSArray *)allApps {
     std::lock_guard<std::mutex> lock(s_appMutex);
-    return s_apps.allKeys;
+    return s_apps.allValues;
 }
 
 + (void)resetAppCache {
@@ -312,12 +318,29 @@ static std::mutex& s_appMutex = *new std::mutex();
     return app;
 }
 
++ (instancetype)uncachedAppWithId:(NSString *)appId
+                    configuration:(RLMAppConfiguration *)configuration
+                    rootDirectory:(NSURL *)rootDirectory {
+    REALM_ASSERT(appId.length);
+
+    [configuration setAppId:appId];
+    auto app = RLMTranslateError([&] {
+        return app::App::get_uncached_app(configuration.config,
+                                          [RLMSyncManager configurationWithRootDirectory:rootDirectory appId:appId]);
+    });
+    return [[RLMApp alloc] initWithApp:app];
+}
+
 + (instancetype)appWithId:(NSString *)appId configuration:(RLMAppConfiguration *)configuration {
     return [self appWithId:appId configuration:configuration rootDirectory:nil];
 }
 
 + (instancetype)appWithId:(NSString *)appId {
     return [self appWithId:appId configuration:nil];
+}
+
+- (NSString *)appId {
+    return @(_app->config().app_id.c_str());
 }
 
 - (std::shared_ptr<realm::app::App>)_realmApp {
@@ -346,9 +369,9 @@ static std::mutex& s_appMutex = *new std::mutex();
 
 - (void)loginWithCredential:(RLMCredentials *)credentials
                  completion:(RLMUserCompletionBlock)completionHandler {
-    auto completion = ^(std::shared_ptr<SyncUser> user, util::Optional<app::AppError> error) {
-        if (error && error->error_code) {
-            return completionHandler(nil, RLMAppErrorToNSError(*error));
+    auto completion = ^(std::shared_ptr<SyncUser> user, std::optional<app::AppError> error) {
+        if (error) {
+            return completionHandler(nil, makeError(*error));
         }
 
         completionHandler([[RLMUser alloc] initWithUser:user app:self], nil);
@@ -393,26 +416,20 @@ static std::mutex& s_appMutex = *new std::mutex();
            if (user) {
                [self.authorizationDelegate authenticationDidCompleteWithUser:user];
            } else {
-               [self.authorizationDelegate authenticationDidCompleteWithError:error];
+               [self.authorizationDelegate authenticationDidFailWithError:error];
            }
        }];
 }
 
 - (void)authorizationController:(__unused ASAuthorizationController *)controller
            didCompleteWithError:(NSError *)error API_AVAILABLE(ios(13.0), macos(10.15), tvos(13.0), watchos(6.0)) {
-    [self.authorizationDelegate authenticationDidCompleteWithError:error];
+    [self.authorizationDelegate authenticationDidFailWithError:error];
 }
 
 - (RLMAppSubscriptionToken *)subscribe:(RLMAppNotificationBlock)block {
-    return [[RLMAppSubscriptionToken alloc] initWithToken:_app->subscribe([block, self] (auto&) {
+    return [[RLMAppSubscriptionToken alloc] initWithApp:_app token:_app->subscribe([block, self] (auto&) {
         block(self);
     })];
 }
 
-- (void)unsubscribe:(RLMAppSubscriptionToken *)token {
-    return _app->unsubscribe(*token->_token);
-}
-
 @end
-
-

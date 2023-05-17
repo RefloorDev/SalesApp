@@ -122,7 +122,7 @@ static NSString *RLMHashData(const void *bytes, size_t length) {
 
     char formatted[CC_SHA256_DIGEST_LENGTH * 2 + 1];
     for (int i = 0; i < CC_SHA256_DIGEST_LENGTH; ++i) {
-        sprintf(formatted + i * 2, "%02x", buffer[i]);
+        snprintf(formatted + i * 2, sizeof(formatted) - i * 2, "%02x", buffer[i]);
     }
 
     return [[NSString alloc] initWithBytes:formatted
@@ -130,26 +130,49 @@ static NSString *RLMHashData(const void *bytes, size_t length) {
                                   encoding:NSUTF8StringEncoding];
 }
 
-// Returns the hash of the MAC address of the first network adaptor since the
-// vendorIdentifier isn't constant between iOS simulators.
-static NSString *RLMMACAddress() {
-    int en0 = static_cast<int>(if_nametoindex("en0"));
-    if (!en0) {
-        return nil;
+static std::optional<std::array<unsigned char, 6>> getMacAddress(int id) {
+    char buff[] = "en0";
+    snprintf(buff + 2, 2, "%d", id);
+    int index = static_cast<int>(if_nametoindex(buff));
+    if (!index) {
+        return std::nullopt;
     }
 
-    std::array<int, 6> mib = {{CTL_NET, PF_ROUTE, 0, AF_LINK, NET_RT_IFLIST, en0}};
+    std::array<int, 6> mib = {{CTL_NET, PF_ROUTE, 0, AF_LINK, NET_RT_IFLIST, index}};
     size_t bufferSize;
     auto buffer = RLMSysCtl(&mib[0], mib.size(), &bufferSize);
     if (!buffer) {
-        return nil;
+        return std::nullopt;
     }
 
     // sockaddr_dl struct is immediately after the if_msghdr struct in the buffer
     auto sockaddr = reinterpret_cast<sockaddr_dl *>(static_cast<if_msghdr *>(buffer.get()) + 1);
-    auto mac = reinterpret_cast<const unsigned char *>(sockaddr->sdl_data + sockaddr->sdl_nlen);
+    std::array<unsigned char, 6> mac;
+    std::memcpy(&mac[0], sockaddr->sdl_data + sockaddr->sdl_nlen, 6);
 
-    return RLMHashData(mac, 6);
+    // Touch bar internal network interface, which is identical on all touch bar macs
+    if (mac == std::array<unsigned char, 6>{0xAC, 0xDE, 0x48, 0x00, 0x11, 0x22}) {
+        return std::nullopt;
+    }
+
+    // The mac address reported on iOS. It's unclear how we're seeing this as
+    // this code doesn't run on iOS, but it somehow sometimes happens.
+    if (mac == std::array<unsigned char, 6>{2, 0, 0, 0, 0, 0}) {
+        return std::nullopt;
+    }
+
+    return mac;
+}
+
+// Returns the hash of the MAC address of the first network adaptor since the
+// vendorIdentifier isn't constant between iOS simulators.
+static NSString *RLMMACAddress() {
+    for (int i = 0; i < 9; ++i) {
+        if (auto mac = getMacAddress(i)) {
+            return RLMHashData(&(*mac)[0], 6);
+        }
+    }
+    return @"unknown";
 }
 
 static NSDictionary *RLMAnalyticsPayload() {
@@ -179,7 +202,7 @@ static NSDictionary *RLMAnalyticsPayload() {
     BOOL isSwift = swiftDecimal128 != nil;
 
     static NSString *kUnknownString = @"unknown";
-    NSString *hashedMACAddress = RLMMACAddress() ?: kUnknownString;
+    NSString *hashedMACAddress = RLMMACAddress();
     NSDictionary *info = appBundle.infoDictionary;
 
     return @{
@@ -236,8 +259,7 @@ void RLMSendAnalytics() {
     if (getenv("REALM_DISABLE_ANALYTICS") || !RLMIsDebuggerAttached() || RLMIsRunningInPlayground()) {
         return;
     }
-    NSArray *urlStrings = @[@"https://webhooks.mongodb-realm.com/api/client/v2.0/app/realmsdkmetrics-zmhtm/service/metric_webhook/incoming_webhook/metric?data=%@",
-                            @"https://api.mixpanel.com/track/?data=%@&ip=1"];
+    NSArray *urlStrings = @[@"https://data.mongodb-api.com/app/realmsdkmetrics-zmhtm/endpoint/metric_webhook/metric?data=%@"];
     NSData *payload = [NSJSONSerialization dataWithJSONObject:RLMAnalyticsPayload() options:0 error:nil];
 
     for (NSString *urlString in urlStrings) {

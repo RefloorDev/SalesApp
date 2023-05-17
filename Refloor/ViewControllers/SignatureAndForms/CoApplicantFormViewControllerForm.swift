@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+import RealmSwift
 class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITextFieldDelegate
 {
     static public func initialization() -> CoApplicantFormViewControllerForm? {
@@ -190,7 +191,10 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
 //    {
 //        <#code#>
 //    }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
     
     @IBAction func passwordVisbleBatton(_ sender: UIButton) {
         isPasswordVisble = !isPasswordVisble
@@ -206,6 +210,14 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         //self.exEmployeementPhone.delegate = self
     }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        if (textField.textInputMode?.primaryLanguage == "emoji") {
+            return false
+        }
+        //let specialCharString = CharacterSet(charactersIn: "!@#$%^&*()_+{}[]|\"<>,.~`/:;?-=\\¥'£•¢")
+        if string.rangeOfCharacter(from: Validation.specialCharString) != nil && textField != self.emailAddress {
+            return false
+        }
         
         if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
         {
@@ -233,9 +245,8 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
             if (isBackSpace == -92) {
                 return true
             }
-            
-            return false
         }
+        return true
     }
     
     @IBAction func exEmployeraddressDidBigen(_ sender: UITextField) {
@@ -279,57 +290,55 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     
     func validation() -> String
     {
-        /*   if(firstName.text!.removeUnvantedcharactoes() == "")
-         {
-         firstName.becomeFirstResponder()
-         return "Please enter First Name"
-         }
-         //          else if(middlename.text!.removeUnvantedcharactoes() == "")
-         //          {
-         //              return "Please enter middle name"
-         //          }
-         if(lastName.text!.removeUnvantedcharactoes() == "")
-         {
-         lastName.becomeFirstResponder()
-         return "Please enter Last Name"
-         }
-         if(dateofbirth.text!.removeUnvantedcharactoes() == "")
-         {
-         dateofbirth.becomeFirstResponder()
-         return "Please select Date of Birth"
-         }
-         */
-        /*  if !(emailAddress.text!.validateEmail())
-         {
-         emailAddress.becomeFirstResponder()
-         return "Please enter a valid Email Address"
-         }*/
-        /* if(drivingLisenceID.text!.removeUnvantedcharactoes() == "")
-         {
-         drivingLisenceID.becomeFirstResponder()
-         return "Please enter your Drivers License Number"
-         }
-         if(lisenceExpDate.text!.removeUnvantedcharactoes() == "")
-         {
-         lisenceExpDate.becomeFirstResponder()
-         return "Please enter your Drivers License Expiration Date"
-         }
-         if(socialSecurityNo.text!.removeUnvantedcharactoes() == "")
-         {
-         socialSecurityNo.becomeFirstResponder()
-         return "Please enter the Applicant SSN"
-         }
-         */
-        
-        //        if(!isValidSsn(ssn:socialSecurityNo.text ?? ""))
-        //        {
-        //           // socialSecurityNo.becomeFirstResponder()
-        //            return "Please enter valid SSN"
-        //        }
-//        if(presentEmployer.text!.removeUnvantedcharactoes() == "")
-//        {
-//            return "Please enter Employer/Source of Income"
-//        }
+        // Adding Validations to Co-Applicant for Mandatory Fields
+        if(firstName.text!.removeUnvantedcharactoes() == "") {
+            firstName.becomeFirstResponder()
+            return "Please enter First Name"
+        }
+        if(lastName.text!.removeUnvantedcharactoes() == "") {
+            lastName.becomeFirstResponder()
+            return "Please enter Last Name"
+        }
+        if(dateofbirth.text!.removeUnvantedcharactoes() == "") {
+            dateofbirth.becomeFirstResponder()
+            return "Please select Date of Birth"
+        }
+        if(address.text!.removeUnvantedcharactoes() == "") {
+            address.becomeFirstResponder()
+            return "Please enter Applicant Address"
+        }
+        if(socialSecurityNo.text!.removeUnvantedcharactoesUnerScore() == "") {
+            socialSecurityNo.becomeFirstResponder()
+            return "Please enter the Applicant SSN"
+        }
+        if(!isValidSsn(ssn:socialSecurityNo.text ?? "")) {
+            socialSecurityNo.becomeFirstResponder()
+            return "Please enter valid SSN"
+        }
+        if(city.text!.removeUnvantedcharactoes() == "") {
+            city.becomeFirstResponder()
+            return "Please enter your City"
+        }
+        if(stateZipCode.text!.removeUnvantedcharactoes() == "") {
+            stateZipCode.becomeFirstResponder()
+            return "Please enter Present State"
+        }
+        if(zipcode.text!.removeUnvantedcharactoes() == "") {
+            zipcode.becomeFirstResponder()
+            return "Please enter your ZIP Code"
+        }
+        if !(homePhone.text!.validatePhone()) {
+            homePhone.becomeFirstResponder()
+            return "Please enter a valid home Phone Number"
+        }
+        if(presentEmployer.text!.removeUnvantedcharactoes() == "") {
+            presentEmployer.becomeFirstResponder()
+            return "Please enter Employer/Source Of Income"
+        }
+        if(earnings.text!.removeUnvantedcharactoes() == "") {
+            earnings.becomeFirstResponder()
+            return "Please enter monthly earnings"
+        }
         if((firstName.text!.removeUnvantedcharactoes() != "") || (lastName.text!.removeUnvantedcharactoes() != ""))
         {
             if (self.wishShareStatus == .Share)
@@ -457,12 +466,20 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         var dateOfBirth = self.dateofbirth.text ?? ""
         var licenseIssueDate = self.lisenceissueDate.text ?? ""
         var licenseExpdate = self.lisenceExpDate.text ?? ""
-        
-        if licenseIssueDate != "" || licenseExpdate != "" || dateOfBirth != ""
+        // Adding Date Of Birth format to Server format
+        if licenseIssueDate != ""
+        {
+            
+            licenseIssueDate = licenseIssueDate.dateconverterEncoding(licenseIssueDate)
+           
+        }
+        if licenseExpdate != ""
+        {
+            licenseExpdate = licenseExpdate.dateconverterEncoding(licenseExpdate)
+        }
+        if dateOfBirth != ""
         {
             dateOfBirth = dateOfBirth.dateconverterEncoding(dateOfBirth)
-            licenseIssueDate = licenseIssueDate.dateconverterEncoding(licenseIssueDate)
-            licenseExpdate = licenseExpdate.dateconverterEncoding(licenseExpdate)
         }
         //dateOfBirth = dateOfBirth.replacingOccurrences(of: "/", with: "-")
         let data = CoApplicationData.init(applicantFirstName: self.firstName.text ?? "", applicantMiddleName: self.middlename.text ?? "", applicantLastName: self.lastName.text ?? "", driversLicense: self.drivingLisenceID.text ?? "", driversLicenseExpDate: licenseExpdate,driversLicenseIssueDate: licenseIssueDate, dateOfBirth: dateOfBirth, socialSecurityNumber: self.socialSecurityNo.text ?? "", addressOfApplicant: self.address.text ?? "", addressOfApplicantStreet: "", addressOfApplicantStreet2: "", addressOfApplicantCity: self.city.text ?? "", addressOfApplicantState: self.stateZipCode.text ?? "", addressOfApplicantZip: self.zipcode.text ?? "", previousAddressOfApplicant:"", previousAddressOfApplicantStreet: "", previousAddressOfApplicantStreet2: "", previousAddressOfApplicantCity: "", previousAddressOfApplicantState: "", previousAddressOfApplicantZip: "", cellPhone: "", homePhone: self.homePhone.text ?? "", howLong: self.howLong.text ?? "", previousAddressHowLong: "", presentEmployer: self.presentEmployer.text ?? "", yearsOnJob: self.yearonJob.text ?? "", occupation: self.occupation.text ?? "", presentEmployersAddress: "", presentEmployersAddressStreet: "", presentEmployersAddressStreet2: "", presentEmployersAddressCity: "", presentEmployersAddressState: "", presentEmployersAddressZip: "", earningsFromEmployment: self.earnings.text ?? "", supervisorOrDepartment: "", employersPhoneNumber: "", previousEmployersAddress:"", previousEmployersAddressStreet: "", previousEmployersAddressStreet2: "", previousEmployersAddressCity: "", previousEmployersAddressState: "", previousEmployersAddressZip: "", earningsPerMonth: "", yearsOnJobPreviousEmployer: "", occupationPreviousEmployer:"", previousEmployersPhoneNumber:  "", ethnicity: ethencity, race: (wishShareStatus == .Share) ? (self.race.text ?? "") : ethencity, sex: sex, maritalStatus: self.martialStatus.text ?? "",CoapplicantEmail: self.emailAddress.text ?? "",otherRace: self.raceOther.text ?? "")
@@ -498,10 +515,34 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         }
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
+        let appointment = AppDelegate.appoinmentslData
+        appointment?.co_applicant_first_name = self.firstName.text ?? ""
+        appointment?.co_applicant_last_name = self.lastName.text ?? ""
+        appointment?.co_applicant_middle_name = self.middlename.text ?? ""
+        appointment?.co_applicant_zip = self.zipcode.text ?? ""
+        appointment?.co_applicant_email = self.emailAddress.text ?? ""
+        appointment?.co_applicant_city = self.city.text ?? ""
+        appointment?.co_applicant_state = self.stateZipCode.text ?? ""
+        appointment?.co_applicant_address = self.address.text ?? ""
+        appointment?.co_applicant_skipped = 0
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "CoApplicantInformation"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //
+        do
+        {
+            let realm = try Realm()
+            try realm.write
+            {
+                var dict = ["appointment_id":appointmentId ?? 0,"co_applicant_first_name":appointment?.co_applicant_first_name,"co_applicant_middle_name":appointment?.co_applicant_middle_name,"co_applicant_last_name":appointment?.co_applicant_last_name,"co_applicant_address":appointment?.co_applicant_address,"co_applicant_city":appointment?.co_applicant_city ,"co_applicant_state":appointment?.co_applicant_state,"co_applicant_zip":appointment?.co_applicant_zip,"co_applicant_email":appointment?.co_applicant_email]
+                                        realm.create(rf_completed_appointment.self, value: dict, update: .all)
+            }
+            
+        }
+        catch
+        {
+            print(RealmError.initialisationFailed)
+        }
         self.navigationController?.pushViewController(applicant, animated: true)
         
     }
