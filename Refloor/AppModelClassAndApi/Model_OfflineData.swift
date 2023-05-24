@@ -636,6 +636,7 @@ class rf_promotionCodes_results : Object ,Mappable
     @objc dynamic var discount = 0.0
     @objc dynamic var startDate : String?
     @objc dynamic var endDate : String?
+    @objc dynamic var calculationType :String?
    
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -653,6 +654,7 @@ class rf_promotionCodes_results : Object ,Mappable
         discount <- map["discount"]
         startDate <- map["start_date"]
         endDate <- map["end_date"]
+        calculationType <- map["calculation_type"]
     }
 }
 class rf_transitionHeights_results :Object , Mappable

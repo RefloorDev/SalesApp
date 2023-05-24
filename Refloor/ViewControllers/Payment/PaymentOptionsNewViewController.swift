@@ -10,13 +10,14 @@ import UIKit
 import RealmSwift
 
 class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,PromoPopUpViewDelegate,DiscountProtocol, PromoDiscoundProtocol {
-    func promocodeApplied(promocodeArray: [String], promoCodeDropDownSelectedId: Int, promocodeDropDownSelectedDiscount: Double)
+    func promocodeApplied(promocodeArray: [String], promoCodeDropDownSelectedId: Int, promocodeDropDownSelectedDiscount: Double,calculationType: String)
     {
         savingsArray.removeAll()
         savingsArrayDouble.removeAll()
         salePriceDouble.removeAll()
         promoValue = promocodeDropDownSelectedDiscount
         self.promoCodeDropDownSelectedId = promoCodeDropDownSelectedId
+        self.calculationType = calculationType
         promoDiscountArray = promocodeArray
         if promocodeArray.count > 0
         {
@@ -92,6 +93,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var promoCodeDropDownSelectedId:Int = Int()
     var promoValue: Double = Double()
     var promoDiscountArray:[String] = []
+    var calculationType:String = String()
     var savingsArray:[String] = []
     var savingsArrayDouble:[Double] = []
     var salePriceDouble:[Double] = []
@@ -205,6 +207,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 var costpersqft:Double = Double()
                 var msrppersqft:Double = Double()
                 var stairperprice:Double = Double()
+                var saleprice:Double = Double()
                 if isroomSpclPriceApplied == true && (paymentPlanValueDetails[self.selectedPlan].id == specialPriceTable().first?.productTmplId)
                 {
                   
@@ -229,9 +232,19 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 let stairPrice = Double(self.stairCount) * stairperprice
                 var mrp = msrppersqft * area
-                var saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
-                saleprice = saleprice + stairPrice
-                saleprice = saleprice + additionalCost
+                if calculationType == "sqft"
+                {
+                    saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
+                    saleprice = saleprice + stairPrice
+                    saleprice = saleprice + additionalCost
+                }
+                else
+                {
+                    saleprice =  (self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
+               
+                   saleprice = saleprice + additionalCost +  stairPrice
+                    saleprice = saleprice - (saleprice * promoValue / 100)
+                }
                 mrp = mrp + stairPrice
                 mrp = (mrp + additionalCost).rounded()
                 saleprice = saleprice.rounded()
@@ -996,6 +1009,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             var costpersqft:Double = Double()
             var msrppersqft:Double = Double()
             var stairperprice:Double = Double()
+            var saleprice:Double = Double()
             if isroomSpclPriceApplied == true && (paymentPlanValueDetails[indexPath.row].id == specialPriceTable[0].productTmplId)
             {
               
@@ -1021,8 +1035,19 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             additionalCost = totalUpchargeCost + totalExtraCost
             let stairPrice = Double(self.stairCount) * stairperprice
             var mrp = msrppersqft * area
-            var saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
-            saleprice = saleprice + additionalCost +  stairPrice
+            if calculationType == "sqft"
+            {
+                 saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
+            
+                saleprice = saleprice + additionalCost +  stairPrice
+            }
+            else
+            {
+                saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
+           
+               saleprice = saleprice + additionalCost +  stairPrice
+                saleprice = saleprice - (saleprice * promoValue / 100)
+            }
 
             mrp = mrp + stairPrice
             if selectedPlan == indexPath.row
