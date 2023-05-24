@@ -22,9 +22,9 @@ struct AppURL {
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-     //let LIVE_BASE_URL = "http://server.oneteamus.com:2446/api/"
+     let LIVE_BASE_URL = "http://server.oneteamus.com:2445/api/"
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
-    let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
+   // let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
 //http://server.oneteamus.com:2446
     //LIVE
     // let BASE_URL = "http://35.245.254.221:7007/api/"
@@ -33,8 +33,8 @@ struct AppURL {
     // let BASE_URL = "http://35.245.254.221:6006/api/"
     
     //Training New Server
-     //let TRAINING_BASE_URL = "http://35.199.10.7:6006/api/"
-    let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
+     let TRAINING_BASE_URL = "http://35.199.10.7:6006/api/"
+    //let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
     //authenticate login api
      var authenticate = BASE_URL + "authenticate"
     
