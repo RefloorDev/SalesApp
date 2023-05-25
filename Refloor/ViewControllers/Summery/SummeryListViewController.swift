@@ -39,7 +39,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var globalMoldingName = ""
     
     var moldingNamesArray:[String] = []
-    var colorNamesArray:Results<rf_master_color_list>!
+    var floorColorNamesArray:Results<rf_floorColour_results>!
+    var stairColourNamesArray:Results<rf_stairColour_results>!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -361,9 +362,21 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     {
         var value:[String] = []
         //arb
-        let  Colorvalue = getColorList()
-        self.colorNamesArray = Colorvalue
-        value = Colorvalue.compactMap({$0.color_name})
+        if tableValues[sender.tag].room_name!.contains("STAIRS")//roomName.contains("STAIRS")
+        {
+            let  Colorvalue = getStairColorList()
+            self.stairColourNamesArray = Colorvalue
+            value = Colorvalue.compactMap({$0.color})
+        }
+        else
+        {
+            
+            let  Colorvalue = getFloorColorList()
+            self.floorColorNamesArray = Colorvalue
+            value = Colorvalue.compactMap({$0.color})
+        }
+    
+        
          
         //
 //        for val in tableValues[sender.tag].material_colors ?? []
@@ -605,13 +618,26 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         {
             //updateTitleColorApi(measurement_id: self.tableValues[cell].contract_measurement_id ?? 0, material_id: self.tableValues[cell].material_colors?[index].material_id ?? 0)
             //arb
-            let selectedColor = self.colorNamesArray[index].color_name ?? ""
-            let selectedColorUpCharge = self.colorNamesArray[index].color_upcharge
-            let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
-            //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
-            let roomId = self.tableValues[cell].room_id ?? 0
-            self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge)
-            self.loadRefreshData()
+            if tableValues[cell].room_name!.contains("STAIRS")
+            {
+                let selectedColor = self.stairColourNamesArray[index].color ?? ""
+                let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
+                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+                let roomId = self.tableValues[cell].room_id ?? 0
+                self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge)
+                self.loadRefreshData()
+            }
+            else
+            {
+                let selectedColor = self.floorColorNamesArray[index].color ?? ""
+                let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
+                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+                let roomId = self.tableValues[cell].room_id ?? 0
+                self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge)
+                self.loadRefreshData()
+            }
             //
         }
         

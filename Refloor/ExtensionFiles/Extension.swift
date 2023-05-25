@@ -3859,7 +3859,16 @@ extension UIViewController:OrderStatusViewDelegate
                 let room_perimeter = room.room_perimeter
                 let moldingName = room.selected_room_molding
                 let selectedColor = room.selected_room_color ?? ""
-                let roomColorId = masterData?.flooring_colors.filter("color_name == %@",selectedColor).first?.material_id ?? 0
+                var roomColorId:Int = Int()
+                if room_name!.contains("STAIRS")
+                {
+                    roomColorId = masterData?.stairColourList.filter("color == %@",selectedColor).first?.material_id ?? 0
+                }
+                else
+                {
+                     roomColorId = masterData?.floorColourList.filter("color == %@",selectedColor).first?.material_id ?? 0
+                    
+                }
                 var transitionArray: [[String:Any]] = []
 //                var transition1_name = ""
 //                var transition1_width = ""
@@ -4249,6 +4258,28 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             let colors = realm.objects(rf_master_color_list.self)
+            colorNamesArray = colors
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return colorNamesArray
+    }
+    func getFloorColorList() -> Results<rf_floorColour_results> {
+        var colorNamesArray : Results<rf_floorColour_results>!
+        do{
+            let realm = try Realm()
+            let colors = realm.objects(rf_floorColour_results.self)
+            colorNamesArray = colors
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return colorNamesArray
+    }
+    func getStairColorList() -> Results<rf_stairColour_results> {
+        var colorNamesArray : Results<rf_stairColour_results>!
+        do{
+            let realm = try Realm()
+            let colors = realm.objects(rf_stairColour_results.self)
             colorNamesArray = colors
         }catch{
             print(RealmError.initialisationFailed.rawValue)

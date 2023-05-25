@@ -59,6 +59,8 @@ class MasterData : Object, Mappable {
     var specialPrice = List<rf_specialPrice_results>()
     var promotionCodes = List<rf_promotionCodes_results>()
     var transitionHeights = List<rf_transitionHeights_results>()
+    var floorColourList = List<rf_floorColour_results>()
+    var stairColourList = List<rf_stairColour_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -83,6 +85,8 @@ class MasterData : Object, Mappable {
         specialPrice <- (map["special_prices"], ListTransform<rf_specialPrice_results>())
         promotionCodes <- (map["promotion_codes"], ListTransform<rf_promotionCodes_results>())
         transitionHeights <- (map["transition_heights"], ListTransform<rf_transitionHeights_results>())
+        floorColourList <- (map["floor_colors_list"], ListTransform<rf_floorColour_results>())
+        stairColourList <- (map["stair_colors_list"], ListTransform<rf_stairColour_results>())
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
@@ -381,6 +385,52 @@ class rf_master_question_detail : Object,Mappable {
     
 }
 
+
+class rf_floorColour_results : Object,Mappable {
+    @objc dynamic var material_id : Int = 0
+    @objc dynamic var color_name : String?
+    @objc dynamic var color : String?
+    @objc dynamic var material_image_url : String?
+    @objc dynamic var color_upcharge: Double = 0.0
+    @objc dynamic var last_updated_date : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        material_id <- map["material_id"]
+        color_name <- map["name"]
+        color <- map["color"]
+        material_image_url <- map["material_image_url"]
+        color_upcharge <- map["color_up_charge_price"]
+    }
+    
+}
+
+class rf_stairColour_results : Object,Mappable {
+    @objc dynamic var material_id : Int = 0
+    @objc dynamic var color_name : String?
+    @objc dynamic var color : String?
+    @objc dynamic var material_image_url : String?
+    @objc dynamic var color_upcharge: Double = 0.0
+    @objc dynamic var last_updated_date : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        material_id <- map["material_id"]
+        color_name <- map["name"]
+        color <- map["color"]
+        material_image_url <- map["material_image_url"]
+        color_upcharge <- map["color_up_charge_price"]
+    }
+    
+}
 
 class rf_master_color_list : Object,Mappable {
     @objc dynamic var material_id : Int = 0
