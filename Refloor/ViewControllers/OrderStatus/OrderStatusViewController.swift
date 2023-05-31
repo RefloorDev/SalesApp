@@ -619,7 +619,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         
         let applicantDta = self.getApplicantAndIncomeDataFromAppointmentDetail()
         print(applicantDta)
-        let applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+        var applicantInfoSecret :String = String()
+        if applicantDta.count != 0
+        {
+             applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
+        }
         //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]

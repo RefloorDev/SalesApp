@@ -1091,7 +1091,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         {
              applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
         }
-        let contactInfo = self.getContractDataOfAppointment()
+        //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails
