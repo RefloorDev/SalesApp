@@ -524,7 +524,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 cell.messurementTF.text = (summaryData.adjusted_area ?? 0).toRoundeString
                 if isStair != 1
                 {
-                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
@@ -571,7 +571,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                     cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
                     if isStair != 1
                     {
-                        var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                        let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                         if setDefaultAnswerTrueIndex != nil
                         {
                             let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
@@ -608,7 +608,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
                 if isStair != 1
                 {
-                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)

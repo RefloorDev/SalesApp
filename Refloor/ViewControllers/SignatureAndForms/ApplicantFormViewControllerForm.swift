@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import GoogleMaps
 import GooglePlaces
+import RealmSwift
 class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,AddressSelectPlaceEntryDelegate,UITextFieldDelegate,GMSMapViewDelegate{
     
     static public func initialization() -> ApplicantFormViewControllerForm? {
@@ -411,7 +412,26 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         //arb
         let rf_ApplicantInfo = rf_ApplicantData(applicantOneData:data)
         self.saveApplicantOneDataToAppointmentDetail(applicantInfo: rf_ApplicantInfo)
-        //
+        //update appdlegate value
+        
+        let appointmetslData = AppDelegate.appoinmentslData
+        appointmetslData?.mobile = self.homePhone.text
+        
+        
+        // update applicant database
+        
+//        let appointmentId = AppointmentData().appointment_id ?? 0
+//        do{
+//            let realm = try Realm()
+//            try realm.write{
+//                var dict:[String:Any] = [:]
+//                dict = ["appointment_id":appointmentId,"applicant_phone":homePhone.text ?? "","applicant_email":emailAddress.text ?? ""]
+//                realm.create(rf_completed_appointment.self, value: dict, update: .all)
+//            }
+//        }
+//        catch{
+//            print(RealmError.initialisationFailed)
+//        }
         
         if(AppDelegate.appoinmentslData.co_applicant_skipped == 1)
         {
@@ -477,6 +497,12 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             applicant.downpayment = downpayment
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
+            let appointment = AppDelegate.appoinmentslData
+            appointment?.zip = self.zipCode.text ?? ""
+            appointment?.email = self.emailAddress.text ?? ""
+            appointment?.phone = self.homePhone.text ?? ""
+            appointment?.city = self.city.text ?? ""
+            appointment?.state = self.stateZipCode.text ?? ""
             let currentClassName = String(describing: type(of: self))
             let classDisplayName = "ApplicantInformation"
             self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())

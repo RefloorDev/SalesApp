@@ -1910,7 +1910,7 @@ class ContractData:NSObject
     
     //contract_scheduling_Btn, contract_motion_btn, contract_floor_protection_Btn, contract_plumbing_Btn, contract_plumbing_option_Btn,contract_plumbing_option_Btn2, contract_additional_other_cost_Btn, contract_additional_other_subfloor_Btn, contract_additional_other_leveling_Btn, contract_additional_other_screwdown_Btn, contract_additional_other_hardwood_removal_Btn, contract_additional_other_door_removal_Btn, contract_additional_other_bifold_removal_Btn,contract_floor_protection, contract_right_to_cure_Btn, contract_owner_responsibility_Btn,electronicsAuthorizationBtn,electronicsAuthorizationBtn2
     
-    var contract_owner_reviewed_status, contract_transition, contract_molding_status,contract_molding_none_status,contract_molding_waterproof_status, contract_molding_unfinished_status, contract_risk_free_status, contract_lifetime_guarantee_status, contract_lead_safe_status,contract_deposit_status, contract_final_payment_status, contract_time_of_performance_status,contract_notices_to_owners_status,contract_notices_of_cancellation,contract_scheduling_status, contract_motion_status, contract_floor_protection_status, contract_plumbing_status, contract_plumbing_option_status, contract_additional_other_cost_status, contract_additional_other_subfloor_status, contract_additional_other_leveling_status, contract_additional_other_screwdown_status, contract_additional_other_hardwood_removal_status, contract_additional_other_door_removal_status,contract_additional_other_bifold_removal_status,contract_floor_protection, contract_right_to_cure_status, contract_owner_responsibility_status,electronicsAuthorization1Status,electronicsAuthorization2Status: Int
+    var contract_owner_reviewed_status, contract_transition, contract_molding_status,contract_molding_none_status,contract_molding_waterproof_status, contract_molding_unfinished_status,contract_molding_CovedBaseboard_status, contract_risk_free_status, contract_lifetime_guarantee_status, contract_lead_safe_status,contract_deposit_status, contract_final_payment_status, contract_time_of_performance_status,contract_notices_to_owners_status,contract_notices_of_cancellation,contract_scheduling_status, contract_motion_status, contract_floor_protection_status, contract_plumbing_status, contract_plumbing_option_status, contract_additional_other_cost_status, contract_additional_other_subfloor_status, contract_additional_other_leveling_status, contract_additional_other_screwdown_status, contract_additional_other_hardwood_removal_status, contract_additional_other_door_removal_status,contract_additional_other_bifold_removal_status,contract_floor_protection, contract_right_to_cure_status, contract_owner_responsibility_status,electronicsAuthorization1Status,electronicsAuthorization2Status,electronicsAuthorization3Status: Int
     
     var dictionary: [String: Any] {
         return ["contract_owner_reviewed_status": contract_owner_reviewed_status,
@@ -1919,6 +1919,7 @@ class ContractData:NSObject
                 "contract_molding_none_status":contract_molding_none_status,
                 "contract_molding_waterproof_status":contract_molding_waterproof_status,
                 "contract_molding_unfinished_status":contract_molding_unfinished_status,
+                "contract_molding_CovedBaseboard_status":contract_molding_CovedBaseboard_status,
                 "contract_risk_free_status":contract_risk_free_status,
                 "contract_lifetime_guarantee_status":contract_lifetime_guarantee_status,
                 "contract_lead_safe_status":contract_lead_safe_status,
@@ -1944,7 +1945,8 @@ class ContractData:NSObject
                 "contract_right_to_cure_status":contract_right_to_cure_status,
                 "contract_owner_responsibility_status":contract_owner_responsibility_status,
                 "electronicsAuthorization1Status":electronicsAuthorization1Status,
-                "electronicsAuthorization2Status":electronicsAuthorization2Status
+                "electronicsAuthorization2Status":electronicsAuthorization2Status,
+                "electronicsAuthorization3Status":electronicsAuthorization3Status
         ]
     }
     
@@ -1954,7 +1956,7 @@ class ContractData:NSObject
     
     //contract_owner_reviewed_status, contract_transition, contract_molding_status,contract_molding_none_status,contract_molding_waterproof_status, contract_molding_unfinished_status, contract_risk_free_status, contract_lifetime_guarantee_status, contract_lead_safe_status,contract_deposit_status, contract_final_payment_status, contract_time_of_performance_status,contract_notices_to_owners_status,contract_notices_of_cancellation,contract_scheduling_status, contract_motion_status, contract_floor_protection_status, contract_plumbing_status, contract_plumbing_option_status, contract_additional_other_cost_status, contract_additional_other_subfloor_status, contract_additional_other_leveling_status, contract_additional_other_screwdown_status, contract_additional_other_hardwood_removal_status, contract_additional_other_door_removal_status,contract_additional_other_bifold_removal_status,contract_floor_protection, contract_right_to_cure_status, contract_owner_responsibility_status,electronicsAuthorization1Status,electronicsAuthorization2Status
     
-    init(contract_owner_reviewed_status: Int, contract_transition: Int, contract_molding_status: Int,contract_molding_none_status: Int, contract_molding_waterproof_status: Int, contract_molding_unfinished_status: Int, contract_risk_free_status: Int, contract_lifetime_guarantee_status: Int, contract_lead_safe_status:Int,contract_deposit_status: Int, contract_final_payment_status: Int,contract_time_of_performance_status:Int, contract_notices_to_owners_status:Int,contract_notices_of_cancellation:Int, contract_scheduling_status: Int,contract_motion_status:Int,  contract_floor_protection_status: Int, contract_plumbing_status: Int, contract_plumbing_option_status: Int, contract_additional_other_cost_status: Int, contract_additional_other_subfloor_status: Int, contract_additional_other_leveling_status: Int, contract_additional_other_screwdown_status: Int,  contract_additional_other_hardwood_removal_status: Int, contract_additional_other_door_removal_status: Int, contract_additional_other_bifold_removal_status: Int,contract_floor_protection:Int, contract_right_to_cure_status: Int, contract_owner_responsibility_status:Int,electronicsAuthorization1Status:Int,electronicsAuthorization2Status: Int)
+    init(contract_owner_reviewed_status: Int, contract_transition: Int, contract_molding_status: Int,contract_molding_none_status: Int, contract_molding_waterproof_status: Int, contract_molding_unfinished_status: Int, contract_molding_CovedBaseboard_status:Int,contract_risk_free_status: Int, contract_lifetime_guarantee_status: Int, contract_lead_safe_status:Int,contract_deposit_status: Int, contract_final_payment_status: Int,contract_time_of_performance_status:Int, contract_notices_to_owners_status:Int,contract_notices_of_cancellation:Int, contract_scheduling_status: Int,contract_motion_status:Int,  contract_floor_protection_status: Int, contract_plumbing_status: Int, contract_plumbing_option_status: Int, contract_additional_other_cost_status: Int, contract_additional_other_subfloor_status: Int, contract_additional_other_leveling_status: Int, contract_additional_other_screwdown_status: Int,  contract_additional_other_hardwood_removal_status: Int, contract_additional_other_door_removal_status: Int, contract_additional_other_bifold_removal_status: Int,contract_floor_protection:Int, contract_right_to_cure_status: Int, contract_owner_responsibility_status:Int,electronicsAuthorization1Status:Int,electronicsAuthorization2Status: Int,electronicsAuthorization3Status:Int)
     
     {
         self.contract_owner_reviewed_status = contract_owner_reviewed_status
@@ -1963,6 +1965,7 @@ class ContractData:NSObject
         self.contract_molding_none_status = contract_molding_none_status
         self.contract_molding_waterproof_status = contract_molding_waterproof_status
         self.contract_molding_unfinished_status = contract_molding_unfinished_status
+        self.contract_molding_CovedBaseboard_status = contract_molding_CovedBaseboard_status
         self.contract_risk_free_status = contract_risk_free_status
         self.contract_lifetime_guarantee_status = contract_lifetime_guarantee_status
         self.contract_deposit_status = contract_deposit_status
@@ -1988,6 +1991,7 @@ class ContractData:NSObject
         self.contract_owner_responsibility_status = contract_owner_responsibility_status
         self.electronicsAuthorization1Status = electronicsAuthorization1Status
         self.electronicsAuthorization2Status = electronicsAuthorization2Status
+        self.electronicsAuthorization3Status = electronicsAuthorization3Status
         
     }
     

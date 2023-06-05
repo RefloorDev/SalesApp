@@ -3081,7 +3081,7 @@ extension UIViewController:OrderStatusViewDelegate
                 try realm.write{
                     var dict:[String:Any?] = [:]
                     if customerDetailsDict["applicant_first_name"] as? String != "" && customerDetailsDict["applicant_first_name"] != nil{
-                        let applicant_phone = customerDetailsDict["mobile"]
+                        let applicant_phone = customerDetailsDict["home_phone"]
                         let applicant_street = customerDetailsDict["street2"]
                         let applicant_street2 = customerDetailsDict["street"]
                         let applicant_state_code = customerDetailsDict["state_code"]
@@ -3975,7 +3975,7 @@ extension UIViewController:OrderStatusViewDelegate
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId).first
-            let mobile = appointment?.applicant_phone
+           // let mobile = appointment?.applicant_phone
             let street2 = appointment?.applicant_street2
             let street = appointment?.applicant_street
             let state_code = appointment?.applicant_state_code
@@ -4007,7 +4007,7 @@ extension UIViewController:OrderStatusViewDelegate
             let co_applicant_state = appointment?.co_applicant_state
             let co_applicant_zip = appointment?.co_applicant_zip
             let co_applicant_phone = appointment?.co_applicant_phone
-            customerDetailsDict["mobile"] = mobile
+            //customerDetailsDict["mobile"] = mobile
             customerDetailsDict["street2"] = street2
             customerDetailsDict["street"] = street
             customerDetailsDict["state_code"] = state_code
