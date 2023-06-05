@@ -770,8 +770,6 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         customerDict["appointment_id"] = AppointmentData().appointment_id ?? 0
         customerDict["data_completed"] = 0
         var customerData = createCustomerParameter()
-//        customerData["additional_comments"] = ""
-//        customerData["send_physical_document"] = 0
         customerDict["customer"] = customerData
         customerDict["rooms"] = createRoomParameters()
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()

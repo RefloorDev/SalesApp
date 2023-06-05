@@ -400,6 +400,19 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     {
         for qustion in qustionAnswer
         {
+            if let levellingSolutionIndex =  qustionAnswer.firstIndex(where: { $0.code == "PrimerType"})
+             {
+//                let value = QuoteLabelData(question_id: summaryQustions[levellingSolutionIndex].answers![0].id ?? 0, value: summaryQustions[levellingSolutionIndex].answers![0].answer ?? "")
+//                let val =  AnswerOFQustion(value)
+//                val.qustionLineID = summaryQustions[levellingSolutionIndex].contract_question_line_id ?? 0
+//                val.answerID = summaryQustions[levellingSolutionIndex].answers![0].id ?? 0
+//                qustion.answerOFQustion = val
+                let levellingSolutionIndexInt = Int(levellingSolutionIndex)
+                let value1 = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
+                qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![0])
+                qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value1?.qustionLineID ?? 0
+                qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value1?.answerID ?? 0
+            }
             for answer in summaryQustions
             {
                 if qustion.id == answer.question_id
@@ -491,6 +504,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             qustionAnswer[tag].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
             qustionAnswer[tag].answerOFQustion?.answerID = value?.answerID ?? 0
         }
+        // qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
         
             //var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex(of: qustionAnswer.filter({$0.setde == UnitNumberId}).first ?? Unit_list()) ?? 0
         let roomNameSubStr = roomName.contains("STAIRS")
@@ -498,7 +512,27 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         {
                 if tag == 0
                 {
-                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    //if let levellingSolutionIndex =  qustionAnswer.firstIndex(where: { $0.code == "LevellingSolution"})
+//                    {
+//                        let levellingSolutionIndexInt = Int(levellingSolutionIndex)
+//                        if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[levellingSolutionIndexInt].applicableCurrentSurface//"Concrete / Cement"
+//                        {
+//                            let value = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
+//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![0])
+//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
+//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value?.answerID ?? 0
+//
+//                        }
+//                        else
+//                        {
+//                            let value = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
+//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![1])
+//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
+//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value?.answerID ?? 0
+//                        }
+//
+//                    }
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)

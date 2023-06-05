@@ -521,6 +521,7 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         appointment?.co_applicant_middle_name = self.middlename.text ?? ""
         appointment?.co_applicant_zip = self.zipcode.text ?? ""
         appointment?.co_applicant_email = self.emailAddress.text ?? ""
+        appointment?.co_applicant_phone = self.homePhone.text ?? ""
         appointment?.co_applicant_city = self.city.text ?? ""
         appointment?.co_applicant_state = self.stateZipCode.text ?? ""
         appointment?.co_applicant_address = self.address.text ?? ""

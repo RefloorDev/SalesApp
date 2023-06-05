@@ -1046,7 +1046,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
            
                saleprice = saleprice + additionalCost +  stairPrice
-                saleprice = saleprice - (saleprice * promoValue / 100)
+                if calculationType == "fixed"
+                {
+                    saleprice = saleprice - promoValue
+                }
+                else
+                {
+                    saleprice = saleprice - (saleprice * promoValue / 100)
+                }
             }
 
             mrp = mrp + stairPrice
