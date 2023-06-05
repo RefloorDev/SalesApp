@@ -415,7 +415,7 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         //update appdlegate value
         
         let appointmetslData = AppDelegate.appoinmentslData
-        appointmetslData?.mobile = self.homePhone.text
+        appointmetslData?.phone = self.homePhone.text
         
         
         // update applicant database
