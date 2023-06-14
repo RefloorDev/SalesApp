@@ -457,6 +457,24 @@ extension String{
         }
         return Date()
     }
+    
+    func promoSpecialDate(_ dateString:String ) -> Date{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.date(from: dateString)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let resultString = dateFormatter.string(from: date!)
+//        let resultdate = resultString.recisionDate()
+//        return resultdate
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "yyyy-MM-dd"
+        dateFormatter1.dateStyle = .short
+        if let resultDate = dateFormatter1.date(from: resultString)
+        {
+            return resultDate
+        }
+        return Date()
+    }
     func autoLogoutDate() -> Date{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -4733,8 +4751,8 @@ extension Date {
     {
             //return date1.compare(self).rawValue * self.compare(date2).rawValue >= 0
         //return (min(date1, date2) ... max(date1, date2)).contains(self)
-        return date1.timeIntervalSince1970 < self.timeIntervalSince1970 && date2.timeIntervalSince1970 > self.timeIntervalSince1970
-
+        //return date1.timeIntervalSince1970 < self.timeIntervalSince1970 && date2.timeIntervalSince1970 > self.timeIntervalSince1970
+                return (min(date1, date2) ... max(date1, date2)) ~= self
         }
     
     func toString() -> String
