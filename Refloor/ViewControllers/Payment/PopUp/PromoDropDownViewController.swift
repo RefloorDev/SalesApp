@@ -37,6 +37,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
     var savingsArray:[Double] = []
     var salePriceArray:[Double] = []
     var minimumFee = 0.0
+    var area = 0.0
     static func initialization() -> PromoDropDownViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "PromoDropDownViewController") as? PromoDropDownViewController
     }
@@ -153,21 +154,30 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
         //arb
         if promoCodeDropDownArray.count > 0
         {
-            let appointmentDate = AppDelegate.appoinmentslData.appointment_date?.logDate()
+            //let sampleDate = "2023-05-23 00:00:00"
+            let appointmentDate = AppDelegate.appoinmentslData.appointment_date?.logDate() //AppDelegate.appoinmentslData.appointment_date?.promoSpecialDate(AppDelegate.appoinmentslData.appointment_date!)
+            //Calendar.current.startOfDay(for: appointmentDate)
+//            let calendar = Calendar.current
+//            let components = calendar.dateComponents([.month, .day, .year], from: appointmentDate!)
             let  promoValue = promoCodeDropDownArray
             startDate = promoValue!.compactMap({$0.startDate})
             endDate = promoValue!.compactMap({$0.endDate})
             value = promoValue!.compactMap({$0.name})
+            let calculationType = promoValue!.compactMap({$0.calculationType})
             for index in 0...startDate.count - 1
             {
                 let startDateValue = startDate[index].logDate()
                 let endDateValue = endDate[index].logDate()
                 let promoResult = value[index]
-            
+                let calculationTypeString = calculationType[index]
                 let isPromotionTodayQualified = appointmentDate!.isBetween(date: startDateValue, andDate: endDateValue) ? true : false
                 if isPromotionTodayQualified == true
                 {
                     self.promoCodeArrayValue.append(promoResult)
+                    if self.area ==  0.0 && calculationTypeString == "sqft"
+                    {
+                        promoCodeArrayValue.removeLast()
+                    }
                     //self.promoCodeArrayValue = value
                 }
             }

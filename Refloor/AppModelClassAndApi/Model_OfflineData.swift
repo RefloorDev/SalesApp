@@ -512,6 +512,7 @@ class rf_master_product_package :Object, Mappable {
     @objc dynamic var unit_of_measure : String?
     @objc dynamic var grade : String?
     @objc dynamic var stair_cost : Double = 0.0
+    @objc dynamic var stair_Msrp :Double = 0.0
     @objc dynamic var last_updated_date : String?
     @objc dynamic var stairProductId: Int = 0
     
@@ -536,6 +537,7 @@ class rf_master_product_package :Object, Mappable {
         unit_of_measure <- map["unit_of_measure"]
         grade <- map["grade"]
         stair_cost <- map["stair_cost"]
+        stair_Msrp <- map["stair_msrp"]
         last_updated_date <- map["last_updated_date"]
         stairProductId <- map["stair_product_id"]
     }

@@ -1279,6 +1279,7 @@ class PaymentPlanValue: Mappable
     var eligible_for_discounts: String?
     var unit_of_measure: String?
     var stair_cost: Double?
+    var stair_msrp: Double?
     var stairProductId: Int?
     required init?(map: ObjectMapper.Map){
     }
@@ -1304,6 +1305,7 @@ class PaymentPlanValue: Mappable
         self.eligible_for_discounts = paymentPlan.eligible_for_discounts
         self.unit_of_measure = paymentPlan.unit_of_measure
         self.stair_cost = paymentPlan.stair_cost
+        self.stair_msrp = paymentPlan.stair_Msrp
         self.stairProductId = paymentPlan.stairProductId
     }
     
@@ -1330,6 +1332,7 @@ class PaymentPlanValue: Mappable
         eligible_for_discounts <- map["eligible_for_discounts"]
         unit_of_measure <- map["unit_of_measure"]
         stair_cost <- map["stair_cost"]
+        stair_msrp <- map["stair_Msrp"]
         stairProductId <- map["stair_product_id"]
     }
     

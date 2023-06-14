@@ -671,17 +671,17 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
         switch discountType {
         case .promo:
             let discountAmountDouble = Double(discountEntered) ?? 0.0
-            let newPrice = self.newPrice == 0 ? (salePrc - discountAmountDouble) : (self.newPrice - discountAmountDouble)
+            let newPrice = self.newPrice == 0 ? (salePrc - discountAmountDouble.rounded()) : (self.newPrice - discountAmountDouble)
             let discountData = DiscountDetailStruct(salePrice:salePrc , newPrice: newPrice, discountValue: discountAmountDouble, discountPromoCode: promoCode, discountPromoCodeDisplayName: promoCodeDisplayName, discountPercentage: 0.0, discountType: .promo, cellType: .discountValuCell)
             return discountData
         case .amount:
             let discountAmountDouble = Double(discountEntered) ?? 0.0
-            let newPrice = self.newPrice == 0 ? (salePrc - discountAmountDouble) : (self.newPrice - discountAmountDouble)
+            let newPrice = self.newPrice == 0 ? (salePrc - discountAmountDouble.rounded()) : (self.newPrice - discountAmountDouble)
             let discountData = DiscountDetailStruct(salePrice:salePrc , newPrice: newPrice, discountValue: discountAmountDouble, discountPromoCode: "", discountPercentage: 0.0, discountType: .amount, cellType: .discountValuCell)
             return discountData
         case .percentage:
             let discountAmountDouble = Double(discountEntered) ?? 0.0
-            let newPrice = self.newPrice == 0 ? (salePrc - discountAmountDouble) : (self.newPrice - discountAmountDouble)
+            let newPrice = self.newPrice == 0 ? (salePrc - discountAmountDouble.rounded()) : (self.newPrice - discountAmountDouble)
             let discountData = DiscountDetailStruct(salePrice:salePrc , newPrice: newPrice, discountValue: discountAmountDouble, discountPromoCode: "", discountPercentage: discountPercentage, discountType: .percentage, cellType: .discountValuCell)
             return discountData
         case .none:

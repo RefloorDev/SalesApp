@@ -292,7 +292,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aM3-wl-Njn">
-                                <rect key="frame" x="398" y="614" width="570" height="48"/>
+                                <rect key="frame" x="20" y="614" width="1326" height="48"/>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="26"/>
                                 <state key="normal" title="Forgot Password?">
                                     <color key="titleColor" red="0.65490196078431373" green="0.69019607843137254" blue="0.72941176470588232" alpha="1" colorSpace="calibratedRGB"/>
@@ -302,7 +302,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gNn-Vn-MND">
-                                <rect key="frame" x="398" y="956" width="570" height="48"/>
+                                <rect key="frame" x="20" y="956" width="1326" height="48"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="ELG-2Y-eDE"/>
                                 </constraints>
@@ -358,7 +358,7 @@
                             <constraint firstItem="lrQ-Ww-3GI" firstAttribute="trailing" secondItem="GhK-A3-0Tw" secondAttribute="trailing" id="1Hz-yN-X4Y"/>
                             <constraint firstAttribute="bottom" secondItem="2iC-Mg-z1m" secondAttribute="bottom" id="1eE-hC-MF9"/>
                             <constraint firstAttribute="trailing" secondItem="2iC-Mg-z1m" secondAttribute="trailing" id="386-Yc-EzP"/>
-                            <constraint firstItem="gNn-Vn-MND" firstAttribute="leading" secondItem="BaY-yK-Xdz" secondAttribute="leading" constant="398" id="5cz-KG-cxG"/>
+                            <constraint firstItem="gNn-Vn-MND" firstAttribute="leading" secondItem="BaY-yK-Xdz" secondAttribute="leading" constant="20" id="5cz-KG-cxG"/>
                             <constraint firstItem="PI3-ad-hDp" firstAttribute="top" secondItem="GhK-A3-0Tw" secondAttribute="bottom" constant="30" id="AiX-iG-8hJ"/>
                             <constraint firstItem="aM3-wl-Njn" firstAttribute="top" secondItem="PI3-ad-hDp" secondAttribute="bottom" constant="40" id="FRq-aN-Huw"/>
                             <constraint firstItem="A40-u6-GHo" firstAttribute="top" secondItem="Tcv-xt-3FC" secondAttribute="bottom" constant="60" id="Gqw-9A-Qve"/>
@@ -373,7 +373,7 @@
                             <constraint firstItem="A40-u6-GHo" firstAttribute="centerX" secondItem="Rlg-sm-mqp" secondAttribute="centerX" id="ctT-Bb-MQs"/>
                             <constraint firstItem="Tcv-xt-3FC" firstAttribute="centerX" secondItem="Rlg-sm-mqp" secondAttribute="centerX" id="edy-gs-Emf"/>
                             <constraint firstItem="GhK-A3-0Tw" firstAttribute="top" secondItem="KRR-1n-Mvq" secondAttribute="bottom" constant="30" id="fwG-nq-Qrf"/>
-                            <constraint firstItem="BaY-yK-Xdz" firstAttribute="trailing" secondItem="gNn-Vn-MND" secondAttribute="trailing" constant="398" id="h1F-mY-WGV"/>
+                            <constraint firstItem="BaY-yK-Xdz" firstAttribute="trailing" secondItem="gNn-Vn-MND" secondAttribute="trailing" constant="20" id="h1F-mY-WGV"/>
                             <constraint firstItem="2iC-Mg-z1m" firstAttribute="leading" secondItem="Rlg-sm-mqp" secondAttribute="leading" id="hJc-bQ-VNS"/>
                             <constraint firstItem="lrQ-Ww-3GI" firstAttribute="bottom" secondItem="GhK-A3-0Tw" secondAttribute="bottom" id="i16-GB-hN2"/>
                             <constraint firstItem="KRR-1n-Mvq" firstAttribute="centerX" secondItem="Rlg-sm-mqp" secondAttribute="centerX" id="j3a-Y4-o84"/>
@@ -24233,7 +24233,7 @@ Cgo
                                 <rect key="frame" x="0.0" y="120" width="1024" height="2680"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="smp-dq-vLX">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2231"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1692"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JLo-aj-vlm">
                                                 <rect key="frame" x="35" y="130" width="954" height="100"/>
@@ -25392,7 +25392,7 @@ Cgo
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NhI-Wj-AXV">
-                                                <rect key="frame" x="35" y="1961" width="954" height="100"/>
+                                                <rect key="frame" x="35" y="1422" width="954" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sex" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dB-Rf-Z7G">
                                                         <rect key="frame" x="10" y="0.0" width="39.5" height="35"/>
@@ -25505,7 +25505,7 @@ Cgo
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lJT-5a-Lab">
-                                                <rect key="frame" x="50" y="2111" width="924" height="70"/>
+                                                <rect key="frame" x="50" y="1572" width="924" height="70"/>
                                                 <color key="backgroundColor" red="0.1616491377" green="0.14324414730000001" blue="0.3782793283" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="JY7-sR-UPK"/>
@@ -25565,7 +25565,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hfc-tR-S5F">
-                                                <rect key="frame" x="30" y="1391" width="964" height="540"/>
+                                                <rect key="frame" x="30" y="1391" width="964" height="1"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="L2j-gy-uEy"/>
@@ -30793,7 +30793,7 @@ Cgo
                                 <rect key="frame" x="0.0" y="100" width="1024" height="10450"/>
                                 <subviews>
                                     <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N15-6q-pLh" userLabel="Content">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="14966.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="15051.5"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contractRefloorIcon" translatesAutoresizingMaskIntoConstraints="NO" id="oqV-qH-fPO">
                                                 <rect key="frame" x="30" y="45" width="247" height="100"/>
@@ -33974,7 +33974,7 @@ Cg
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REFLOOR GUARANTEES" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cmc-lV-M10">
-                                                <rect key="frame" x="393" y="8650" width="238" height="28"/>
+                                                <rect key="frame" x="393" y="8735" width="238" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="m8V-hu-2ZH"/>
                                                 </constraints>
@@ -33983,7 +33983,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rxx-so-PQ4">
-                                                <rect key="frame" x="439.5" y="8691" width="145" height="1"/>
+                                                <rect key="frame" x="439.5" y="8776" width="145" height="1"/>
                                                 <color key="backgroundColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="3Tz-AH-8VS"/>
@@ -33998,7 +33998,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REFLOOR 110% RISK FREE GUARANTEE" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SoF-Iq-KT0">
-                                                <rect key="frame" x="20" y="8717" width="984" height="28"/>
+                                                <rect key="frame" x="20" y="8802" width="984" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="vT4-Ui-FgR"/>
                                                 </constraints>
@@ -34007,7 +34007,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mca-5w-NTn">
-                                                <rect key="frame" x="26" y="8770" width="974" height="516"/>
+                                                <rect key="frame" x="26" y="8855" width="974" height="516"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="639.5" id="Zt2-2N-0yQ"/>
                                                 </constraints>
@@ -34194,14 +34194,14 @@ Cg
                                                 <string key="userLabel">Refloor is a family-owned and operated business, and we stand behind our products and installations. If, within the first three days of a completed installation, you are not satisfied with our product or quality of work, we will fix or replace items within the contractual obligations, Work Order, and Refloor standards. If we do not address the issues, you will be entitled to a refund of up to 110%. Here is how it works: Upon arrival on the installation day, you will approve your plank color and your Work Order. At this time, you will remit full payment and we will begin your installation, at which time your 110% Risk-Free Guarantee will be in place. You will inspect all work as it is being completed and address any issues with your Installer or your Project Coordinator immediately to solve any problems during the initial installation. When the installation is complete, you will inspect the job with our Installer. If you find the project is not 100% complete based on the quality of work, materials, and/or Work Order, you will create a punch list with the Installer and Project Coordinator (A punch list is a list of items that must be addressed before the project is considered complete). If the punch list cannot be corrected immediately, we will schedule a service call while you are on the phone with our Project Coordinator. All issues will be corrected within 33 days from installation. If the punch list items persist for more than 33 days, you will be entitled to a 10% refund; after 60 days, a 25% refund; after 90 days, a 75% refund; and after 120 days, a 110% refund.   We want to provide you the best project outcome possible given the condition of your underlying subfloor. This guarantee does not cover leveling beyond what is required in our Work Order or change orders, any abuse, and terminates on the fourth (4th) day following the installation date. The Owner agrees to provide reasonable access to the property within the 30-day repair window at scheduled time(s), from 8:00 am to 7:00 pm Monday thru Saturday, for punch list item completion.   Refloor guarantees your project will be completed as described, or you will receive up to 110% of your money back. This 110% Guarantee cannot be changed by any conversations between Owner and Refloor. Any changes must be in writing and signed by Owner and Refloor. This 110% Guarantee is for the sole purpose of protecting the Owner.</string>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QWP-ME-0rI">
-                                                <rect key="frame" x="26" y="9311" width="974" height="1"/>
+                                                <rect key="frame" x="26" y="9396" width="974" height="1"/>
                                                 <color key="backgroundColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="7Vw-CT-FrV"/>
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iWp-M0-fG2">
-                                                <rect key="frame" x="444.5" y="9378" width="135" height="1"/>
+                                                <rect key="frame" x="444.5" y="9463" width="135" height="1"/>
                                                 <color key="backgroundColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="135" id="U2L-kp-p7B"/>
@@ -34209,7 +34209,7 @@ Cg
                                                 </constraints>
                                             </view>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="REFLOOR 4-PART LIFETIME GUARANTEE" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wnu-cg-B0w">
-                                                <rect key="frame" x="314" y="9337" width="396" height="28"/>
+                                                <rect key="frame" x="314" y="9422" width="396" height="28"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="28" id="jLY-3F-ssI"/>
                                                 </constraints>
@@ -34218,13 +34218,13 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iIo-fm-7zj">
-                                                <rect key="frame" x="26" y="9384" width="974" height="369"/>
+                                                <rect key="frame" x="26" y="9469" width="974" height="369"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="375" id="ASD-ET-7fd"/>
                                                 </constraints>
                                                 <attributedString key="attributedText">
                                                     <fragment>
-                                                        <mutableString key="content">Refloor provides the following 4-Part Limited Lifetime Guarantee to the residential purchasing Owner of Refloor's Smart Choice Products. (Rental and commercial properties are covered under the Manufacturer’s Warranty only.) This guarantee becomes effective upon payment in full of the purchase price and the date the installation is complete. As long as the flooring remains where it was originally installed and is not modified in any way, this guarantee will last the length of time the original purchaser remains in the home. To request an inspection for guarantee servicing, please contact Refloor at Refloor Customer Service at 844- REFLOOR or by submitting a service request at </mutableString>
+                                                        <string key="content">Refloor provides the following 4-Part Limited Lifetime Guarantee to the residential purchasing Owner of Refloor's Smart Choice Products. (Rental and commercial properties are covered under the Manufacturer’s Warranty only.) This guarantee becomes effective upon payment in full of the purchase price and the date the installation is complete. As long as the flooring remains where it was originally installed and is not modified in any way, this guarantee will last the length of time the original purchaser remains in the home. To request an inspection for guarantee servicing, please contact Refloor at Refloor Customer Service at 844- REFLOOR or by submitting a service request at </string>
                                                         <attributes>
                                                             <color key="NSColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <font key="NSFont" size="18" name="Avenir-Medium"/>
@@ -34240,7 +34240,7 @@ Cg
                                                         </attributes>
                                                     </fragment>
                                                     <fragment>
-                                                        <mutableString key="content">. Refloor reserves the right to inspect any products you believe fail to meet the requirements of this guarantee and you must allow Refloor or its representatives all access reasonably necessary for inspection. If the exact original product or part is no longer available, Refloor reserves the right to substitute a similar part or product of equal or greater quality. These limited guarantees give you specific rights and you may also have other rights which vary from state to state. These guarantees are transferable for a one- time fee of 10% of the original purchase price of your Refloor floor. Refloor must be notified in writing, and payment must be received within thirty (30) days of the property transfer. With payment, Owner must include a copy of the title transfer agreement for the home. If both payment and title transfer are not received by Refloor within 30 days of the property transfer, all guarantees on the flooring will be void as to the new owner of the property.</mutableString>
+                                                        <string key="content">. Refloor reserves the right to inspect any products you believe fail to meet the requirements of this guarantee and you must allow Refloor or its representatives all access reasonably necessary for inspection. If the exact original product or part is no longer available, Refloor reserves the right to substitute a similar part or product of equal or greater quality. These limited guarantees give you specific rights and you may also have other rights which vary from state to state. These guarantees are transferable for a one- time fee of 10% of the original purchase price of your Refloor floor. Refloor must be notified in writing, and payment must be received within thirty (30) days of the property transfer. With payment, Owner must include a copy of the title transfer agreement for the home. If both payment and title transfer are not received by Refloor within 30 days of the property transfer, all guarantees on the flooring will be void as to the new owner of the property.</string>
                                                         <attributes>
                                                             <color key="NSColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <font key="NSFont" size="18" name="Avenir-Medium"/>
@@ -34251,7 +34251,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kdb-Ce-fPf">
-                                                <rect key="frame" x="52" y="9768" width="948" height="74"/>
+                                                <rect key="frame" x="52" y="9853" width="948" height="74"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="75" id="2F0-3H-msJ"/>
                                                 </constraints>
@@ -34321,7 +34321,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aPv-Ug-aoN">
-                                                <rect key="frame" x="26" y="9768" width="21" height="25"/>
+                                                <rect key="frame" x="26" y="9853" width="21" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="25" id="jUF-VW-jPJ"/>
                                                     <constraint firstAttribute="width" constant="21" id="zz9-Ap-dWb"/>
@@ -34331,7 +34331,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QlC-2h-oSb">
-                                                <rect key="frame" x="52" y="9857" width="948" height="74"/>
+                                                <rect key="frame" x="52" y="9942" width="948" height="74"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="74" id="8V0-SB-Lvj"/>
                                                 </constraints>
@@ -34403,7 +34403,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JWC-jU-YQY">
-                                                <rect key="frame" x="26" y="9857" width="21" height="25"/>
+                                                <rect key="frame" x="26" y="9942" width="21" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="21" id="PmS-f3-Fav"/>
                                                     <constraint firstAttribute="height" constant="25" id="yfs-A4-t7h"/>
@@ -34413,7 +34413,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Edz-OV-kLc">
-                                                <rect key="frame" x="52" y="9946" width="948" height="270.5"/>
+                                                <rect key="frame" x="52" y="10031" width="948" height="270.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="295.5" id="nG5-Qi-uYd"/>
                                                 </constraints>
@@ -34522,7 +34522,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4L-Yh-PUE">
-                                                <rect key="frame" x="26" y="9946" width="21" height="25"/>
+                                                <rect key="frame" x="26" y="10031" width="21" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="21" id="DKV-Pr-q7H"/>
                                                     <constraint firstAttribute="height" constant="25" id="UJl-yp-mQd"/>
@@ -34532,7 +34532,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dTQ-xq-moQ">
-                                                <rect key="frame" x="52" y="10231.5" width="948" height="221.5"/>
+                                                <rect key="frame" x="52" y="10316.5" width="948" height="221.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="246" id="r7C-sD-lNG"/>
                                                 </constraints>
@@ -34568,7 +34568,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="4." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4rb-Ib-WXG">
-                                                <rect key="frame" x="26" y="10231.5" width="21" height="25"/>
+                                                <rect key="frame" x="26" y="10316.5" width="21" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="25" id="26u-5l-fNZ"/>
                                                     <constraint firstAttribute="width" constant="21" id="2NK-dh-fLM"/>
@@ -34578,7 +34578,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BUI-tk-nUM">
-                                                <rect key="frame" x="26" y="10468" width="974" height="443"/>
+                                                <rect key="frame" x="26" y="10553" width="974" height="443"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="615" id="cQt-1f-zMK"/>
                                                 </constraints>
@@ -35197,7 +35197,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bk0-3F-wEY">
-                                                <rect key="frame" x="26" y="8436" width="32" height="32"/>
+                                                <rect key="frame" x="26" y="8446" width="32" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="32" id="dxq-JP-oba"/>
                                                     <constraint firstAttribute="height" constant="32" id="oqq-Cj-R8Y"/>
@@ -35209,7 +35209,7 @@ Cg
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Rk8-Y4-hqF">
-                                                <rect key="frame" x="26" y="8543" width="32" height="32"/>
+                                                <rect key="frame" x="26" y="8553" width="32" height="32"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="32" id="Ffl-TU-eZC"/>
                                                     <constraint firstAttribute="width" constant="32" id="pDz-Ic-18I"/>
@@ -35221,7 +35221,7 @@ Cg
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pYQ-cU-7B0">
-                                                <rect key="frame" x="68" y="8421" width="932" height="100"/>
+                                                <rect key="frame" x="68" y="8431" width="932" height="100"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="100" id="xMo-hM-KZ4"/>
                                                 </constraints>
@@ -35231,7 +35231,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State Disclosures" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAn-8f-QAO">
-                                                <rect key="frame" x="26" y="10936" width="974" height="25"/>
+                                                <rect key="frame" x="26" y="11021" width="974" height="25"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="25" id="T3I-es-ayK"/>
                                                 </constraints>
@@ -35240,7 +35240,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bGg-EN-CxG">
-                                                <rect key="frame" x="26" y="10961" width="974" height="541"/>
+                                                <rect key="frame" x="26" y="11046" width="974" height="541"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="545" id="w08-79-Xe5"/>
                                                 </constraints>
@@ -35269,7 +35269,7 @@ Cg
                                                         </attributes>
                                                     </fragment>
                                                     <fragment>
-                                                        <string key="content">Florida Homeowners’ Construction Recovery Fund: Payment, up to a limited amount, may be available from the Florida Homeowners' Construction Recovery Fund if you lose money on a project performed under contract, where the loss results from specified violations of Florida law by a licensed contractor. For information about the recovery fund and filing a claim, contact the Florida construction industry licensing board at the following telephone number and address: 1940 North Monroe Street, Tallahassee, FL 32399-1039/Phone: 850.487.1395. Any claims for construction defects are subject to the notice and cure provisions of Chapter 558, Florida Statutes. Buyer’s Right to Cancel: This is a home solicitation sale, and if you do not want the goods or services, you may cancel this agreement by providing written notice to the seller in person, by telegram, or by mail. This notice must indicate that you do not want the goods or services and must be delivered or postmarked before midnight of the third business day after you sign this agreement. If you cancel this agreement, the seller may not keep all or part of any cash down payment. </string>
+                                                        <string key="content">Florida Homeowners ’ Construction Recovery Fund: Payment, up to a limited amount, may be available from the Florida Homeowners' Construction Recovery Fund if you lose money on a project performed under contract, where the loss results from specified violations of Florida law by a licensed contractor. For information about the recovery fund and filing a claim, contact the Florida construction industry licensing board at the following telephone number and address: 1940 North Monroe Street, Tallahassee, FL 32399-1039/Phone: 850.487.1395. Any claims for construction defects are subject to the notice and cure provisions of Chapter 558, Florida Statutes. Buyer’s Right to Cancel: This is a home solicitation sale, and if you do not want the goods or services, you may cancel this agreement by providing written notice to the seller in person, by telegram, or by mail. This notice must indicate that you do not want the goods or services and must be delivered or postmarked before midnight of the third business day after you sign this agreement. If you cancel this agreement, the seller may not keep all or part of any cash down payment. </string>
                                                         <attributes>
                                                             <color key="NSColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <font key="NSFont" size="18" name="Avenir-Medium"/>
@@ -35441,7 +35441,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DrI-Vq-IKP">
-                                                <rect key="frame" x="26" y="11502" width="974" height="393.5"/>
+                                                <rect key="frame" x="26" y="11587" width="974" height="393.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="395" id="6Nd-IK-qwI"/>
                                                 </constraints>
@@ -35554,7 +35554,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3nr-sq-dCf">
-                                                <rect key="frame" x="26" y="11895.5" width="974" height="467.5"/>
+                                                <rect key="frame" x="26" y="11980.5" width="974" height="467.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="470" id="bAq-PC-cf2"/>
                                                 </constraints>
@@ -35621,7 +35621,7 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nJq-8X-DZj">
-                                                <rect key="frame" x="26" y="12363" width="974" height="1353.5"/>
+                                                <rect key="frame" x="26" y="12448" width="974" height="1353.5"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" priority="250" constant="1354" id="Qh5-e1-Oyd"/>
                                                 </constraints>
@@ -35795,7 +35795,7 @@ Cg
                                                 <string key="userLabel">Ohio Sales Only: Ohio law contains important requirements you must follow before you may file a lawsuit or commence arbitration proceedings for defective construction against the residential contractor who constructed your home. At least sixty days before you file a lawsuit or commence arbitration proceedings, you must provide the contractor with a written notice of the conditions you allege are defective. Under Chapter 1312 of the Ohio Revised Code, the contractor has an opportunity to offer to repair or pay for the defects. You are not obligated to accept any offer the contractor makes. There are strict deadlines and procedures under state law, and failure to follow them may affect your ability to file a lawsuit or commence arbitration proceedings. Cincinnati Sales Only: Do not sign this Agreement if any blank spaces remain on the Agreement. All manufacturers’ warranties shall be supplied upon request. Contractor warrants its workmanship under separate written warranty. Please review that document for terms of coverage. Any down payment shall be limited to ten percent (10%) of the Purchase Price plus the cost of special-order materials, when applicable, and any interim payments shall be limited to the percentage of work completed at the time of the interim payment. Contractor shall obtain all applicable permits. All subcontractors, laborers, and materialmen will be paid in full prior to the final payment. Tennessee Sales Only: Home improvement contractors and subcontractors must be licensed by the Tennessee Home Improvement Commission. Anyone may inquire about a contractor or subcontractor by contacting the Tennessee Board for Licensing Contractors at 500 James Robertson Pkwy, Ste 110, Nashville, TN 37245 or (615) 741-5630. Notice under Tenn. Code Ann. § 47-18-104(b)(48): In Tennessee, it is a criminal offense for the home improvement services provider to do any of the following prohibited acts set out in § 39-14-154(b): (1) Fail to refund amounts paid under a contract for home improvement services within ten (10) days of either the acceptance of a written request for a refund either hand delivered or mailed certified mail return receipt attached or the refusal to accept the certified mail sent to the last known address of the home improvement services provider by the residential owner if all of the following apply: (A) No substantial portion of the contracted work has been performed at the time of the request; (B) More than ninety (90) days have elapsed since the starting date of the contract for home improvement services; and (C) A copy of the written request for a refund was sent by the residential ow ner to the consumer protection division of the office of the attorney general; (2) Deviate from or disregard plans or specifications in any material respect that are contained in a contract for home improvement services. Such deviation includes, but is not limited to: (A) The amount billed for the home improvement services is substantially greater than the amount quoted in the contract; (B) The materials used in the project are of a substandard quality but the residential owner was charged for higher quality materials; or (C) (i) The residential owner did not provide written consent for the home improvement services provider to deviate from or disregard plans or specifications in the contract; and (ii) Such deviation or disregard caused substantial damage to the residential owner’s property. Any violation of above is punishable as theft pursuant to § 39-14-105. If a person is convicted of a violation of the above, the court may order the person to make restitution to any residential owner that has suffered injury resulting from the crime. Vehicles used to commit this offense are subject to seizure and forfeiture under the same procedures used for forfeitures. All fines collected as a result of a violation shall be allocated as follows: (A) First to remaining unpaid court costs assessed in the case; (B) Then to restitution ordered by the court; and (C) Any remaining money shall be transmitted to the state board of licensing contractors for purposes of carrying out the provisions of § 62-6-139. In addition, a violation shall be construed to constitute an unfair or deceptive act or practice affecting the conduct of trade or commerce under the Tennessee Consumer Protection Act of 1977, compiled in title 47, chapter 18, and as such, the private right of action remedy under that act shall be available to any person who suffers an ascertainable loss of money or property, real, personal, or mixed, or any other article, commodity, or thing of value wherever situated as a result of such violation. Upon a conviction for a violation, the court shall notify the state board of licensing contractors of the home improvement services provider’s conviction. If the home improvement services provider is licensed by the board, the board shall revoke the home improvement services provider's license pursuant to § 62-6-118. Prosecution shall not bar prosecution under any other applicable criminal statute, nor shall it bar the commencement of any applicable civil cause of actions, including but not limited to, violations of the Tennessee Consumer Protection Act of 1977, compiled in title 47, chapter 18, part 1 or title 62, chapter 6. The district attorney in conjunction with any law enforcement agency shall have the authority to investigate and to institute criminal proceedings for any violation regardless of any actions taken or not taken by the board of licensing contractors. The above-captioned contractor hereby gives notice to the owner of the property to be improved, that the contractor is about to begin improving the property according to the terms and conditions of the contract and that under the provisions of the state law (§§ 66-11-101 — 66-11-141) there shall be a lien upon the real property and building for the improvements made in favor of the above-mentioned contractor who does the work or furnishes the materials for such improvements for a duration of one (1) year after the work is finished or materials furnished.</string>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Iqw-Dm-JpT">
-                                                <rect key="frame" x="26" y="13731.5" width="974" height="1000"/>
+                                                <rect key="frame" x="26" y="13816.5" width="974" height="1000"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ijx-S7-BPL">
                                                         <rect key="frame" x="20" y="15" width="934" height="45"/>
@@ -36041,8 +36041,14 @@ Cg
                                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                         </attributes>
                                                     </fragment>
-                                                    <fragment>
-                                                        <string key="content">This option comes color coordinated with you flooring choice. This option is only used when necessary, such as cases of tile baseboard removal and basement cement walls.</string>
+                                                    <fragment content="In cases of tile baseboard removal or basement cement walls, this option must be used. ">
+                                                        <attributes>
+                                                            <color key="NSColor" red="0.17646999999999999" green="0.20391999999999999" blue="0.23921999999999999" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                                            <font key="NSFont" size="18" name="Avenir-Medium"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                    <fragment content="This option comes color coordinated (not matching) with your flooring choice. ">
                                                         <attributes>
                                                             <color key="NSColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
                                                             <font key="NSFont" size="18" name="Avenir-Medium"/>
@@ -36053,11 +36059,11 @@ Cg
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ls6-V1-h7B">
-                                                <rect key="frame" x="68" y="8525" width="932" height="100"/>
+                                                <rect key="frame" x="68" y="8535" width="932" height="175"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="100" id="qeO-ar-b9I"/>
+                                                    <constraint firstAttribute="height" constant="175" id="qeO-ar-b9I"/>
                                                 </constraints>
-                                                <string key="text">Owner hereby grants permission and consent to Refloor for the use of photography and/or online review for presentation under any legal condition, including but not limited to: publicity, marketing, training, and web content with the understanding there is no payment for this release and the authorization may not be revoked.</string>
+                                                <string key="text">Owner gives Refloor permission to (i) photograph and record (visually or otherwise); (ii) copyright and use, re-use, reproduce, publish, and republish any or all photographic portraits, pictures, or recordings of the work performed by Refloor, including the before-and-after of the surrounding area, intact or in part, in composite or distorted in character or form, without restriction as to changes or transformations for any purpose whatsoever in connection with advertising and marketing material for Refloor. I also giveb Refloor permission to use all or any part of any written rating or review. I provide to them, without restriction for their advertising and marketing purposes and in any media forum, so long as my full name  and address are not identifiable in the advertising and marketing.</string>
                                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="18"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -36273,7 +36279,7 @@ Cg
                                             <constraint firstItem="QlC-2h-oSb" firstAttribute="leading" secondItem="JWC-jU-YQY" secondAttribute="trailing" constant="5" id="QPF-ON-faw"/>
                                             <constraint firstItem="50L-4M-dzx" firstAttribute="top" secondItem="vBr-jq-lRp" secondAttribute="bottom" constant="25" id="QQR-1t-aqt"/>
                                             <constraint firstItem="YdP-rh-4HZ" firstAttribute="centerY" secondItem="XGl-Ij-QzU" secondAttribute="centerY" id="QWB-Y1-bId"/>
-                                            <constraint firstItem="Bk0-3F-wEY" firstAttribute="top" secondItem="bcI-qk-jla" secondAttribute="bottom" constant="10" id="Qab-OW-7tf"/>
+                                            <constraint firstItem="Bk0-3F-wEY" firstAttribute="top" secondItem="bcI-qk-jla" secondAttribute="bottom" constant="20" id="Qab-OW-7tf"/>
                                             <constraint firstItem="wXP-S2-ghi" firstAttribute="leading" secondItem="zPR-p4-2dK" secondAttribute="trailing" constant="9" id="Qjf-Um-aTm"/>
                                             <constraint firstItem="QlC-2h-oSb" firstAttribute="trailing" secondItem="Kdb-Ce-fPf" secondAttribute="trailing" id="Qqf-8W-rYw"/>
                                             <constraint firstItem="SoF-Iq-KT0" firstAttribute="top" secondItem="rxx-so-PQ4" secondAttribute="bottom" constant="25" id="Qrk-9Z-2bE"/>
