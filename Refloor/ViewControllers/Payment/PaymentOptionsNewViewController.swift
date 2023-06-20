@@ -77,7 +77,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var savings : String = ""
     var totalUpchargeCost: Double = 0.0
     var totalExtraCost: Double = 0.0
+    var totalMoldingPrice: Double = 0.07
     var totalExtraCostToReduce: Double = 0.0
+    var totalExtraPromoCostToReduced: Double = 0.0
     var  additionalCost :Double = 0
     var discountArray:[DiscountDetailStruct] = []
     var isProgressiveDiscountApplied = false
@@ -202,6 +204,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 //promo.delegate = self
                 promo.discountValue = applyedDiscountValue
+                promo.exludedCost = self.totalExtraCostToReduce
                 promo.discountPromoCode = applyedPromoCode
                 promo.discountPercentage = applyediscountPercentage
                 var costpersqft:Double = Double()
@@ -241,6 +244,18 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 else
                 {
                     saleprice =  (self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
+//                    if self.isDiscountApplied
+//                    {
+//                        saleprice = msrppersqft - totalExtraCostToReduce * area
+//                    }
+//                    if self.isPromoApplied
+//                    {
+//                        saleprice = msrppersqft - totalExtraPromoCostToReduced * area
+//                    }
+//                    if self.isDiscountApplied == false && self.isPromoApplied == false
+//                    {
+//                        saleprice = msrppersqft * area
+//                    }
                
                    saleprice = saleprice + additionalCost +  stairPrice
                     if calculationType == "fixed"
@@ -249,7 +264,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                     else
                     {
-                        saleprice = saleprice - (saleprice * promoValue / 100)
+                        saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100)
                     }
                 }
                 mrp = mrp + stairPrice
@@ -350,7 +365,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 let actualPrice = discountObj.salePrice
                 let salePrice = discountObj.newPrice
                 let appointment_id = AppointmentData().appointment_id ?? 0
-                let discount = DiscountObject(appointment_id: appointment_id, promoType: promoType, type: type, value: value, discountAmount: discountAmount, actualPrice: actualPrice, salePrice: salePrice)
+                let discount = DiscountObject(appointment_id: appointment_id, promoType: promoType, type: type, value: value, discountAmount: discountAmount, actualPrice: actualPrice, salePrice: salePrice, excluded_amount_discount: self.totalExtraCostToReduce)
                 discounts.append(discount)
             }
             self.saveRealmArray(discounts)
@@ -756,6 +771,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
+        downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
         downpatmet.adminFee = 0
@@ -1036,7 +1052,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             }
         
             //let additionalCost = (paymentPlanValueDetails[indexPath.row].additional_cost ?? 0)
-            additionalCost = totalUpchargeCost + totalExtraCost
+            additionalCost = totalUpchargeCost + totalExtraCost + totalMoldingPrice
             let stairPrice = Double(self.stairCount) * stairperprice
             var mrp = msrppersqft * area
             if calculationType == "sqft"
@@ -1048,6 +1064,18 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             else
             {
                 saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
+//                if self.isDiscountApplied
+//                {
+//                    saleprice = msrppersqft * area
+//                }
+//                if self.isPromoApplied
+//                {
+//                    saleprice = msrppersqft * area
+//                }
+//                if self.isDiscountApplied == false && self.isPromoApplied == false
+//                {
+//                    saleprice = msrppersqft * area
+//                }
            
                saleprice = saleprice + additionalCost +  stairPrice
                 if calculationType == "fixed"
@@ -1056,7 +1084,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 else
                 {
-                    saleprice = saleprice - (saleprice * promoValue / 100)
+                    saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100)
                 }
             }
 
