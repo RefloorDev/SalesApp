@@ -2809,6 +2809,7 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.name = room.room_name
                     summaryList.color = room.selected_room_color ?? "Select Color"
                     summaryList.moulding = room.selected_room_molding ?? ""
+                    summaryList.mouldingPrice = room.selected_room_MoldingPrice
                     summaryList.room_image_url = room.room_attachments.first ?? ""
                     summaryList.room_area = Double(room.draw_area_adjusted ?? "0.0")
                     summaryList.material_image_url = room.material_image_url
@@ -2816,6 +2817,7 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.stair_count = Int(room.stairCount ?? "0")
                     summaryList.colorUpCharge = room.selected_room_Upcharge
                     summaryList.colorUpChargePrice = room.selected_room_UpchargePrice
+                    summaryList.room_perimeter = room.room_perimeter
                     summaryListArray.append(summaryList)
                 }
             }
@@ -2866,7 +2868,7 @@ extension UIViewController:OrderStatusViewDelegate
     
     
     
-    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0){
+    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0, moldPrice: Double = 0.0){
         let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         if let room = appointment.first?.rooms.filter("room_id == %d", roomID){
@@ -2877,10 +2879,10 @@ extension UIViewController:OrderStatusViewDelegate
                     if let id = room.first?.id{
                         if !isColor{
                             
-                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName]
+                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName, "selected_room_MoldingPrice": moldPrice]
                             
                         }else{
-                            dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge]
+                            dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge ,"selected_room_MoldingPrice": moldPrice]
                         }
                     }
                     realm.create(rf_completed_room.self, value: dict, update: .all)
@@ -3626,6 +3628,7 @@ extension UIViewController:OrderStatusViewDelegate
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         let room = appointment.first?.rooms.filter("room_id == %d", roomID)
         if room?.count == 1{
+            //room?.first?.room_perimeter
             summaryData.name = roomName
             summaryData.room_name = roomName
             summaryData.room_id = roomID
@@ -3748,14 +3751,14 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
-    func saveExtraCostExcludeToCompletedAppointment(roomId:Int, extraCostExclude: Double){
+    func saveExtraCostExcludeToCompletedAppointment(roomId:Int, extraCostExclude: Double, extraPromoPriceToExclude: Double){
         do{
             let realm = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
-                let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPriceToExclude":extraCostExclude]
+                let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPriceToExclude":extraCostExclude , "extraPromoPriceToExclude":extraPromoPriceToExclude]
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -3765,8 +3768,9 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
-    func getExtraCostExcludeFromCompletedAppointment(roomId:Int) -> Double{
+    func getExtraCostExcludeFromCompletedAppointment(roomId:Int) -> (extrapriceToExclude:Double,extraPromoPriceToExclude:Double){
         var extraCostToExclude: Double = 0.0
+        var extraPromoPriceToExclude: Double = 0.0
         do{
             let realm = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
@@ -3774,11 +3778,12 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let roomSel = room?.first{
                 extraCostToExclude = roomSel.extraPriceToExclude
+                extraPromoPriceToExclude = roomSel.extraPromoPriceToExclude
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
         }
-        return extraCostToExclude
+        return (extraCostToExclude,extraPromoPriceToExclude)
     }
     
     func saveUpchargeCostPerRoomToCompletedAppointment(roomId:Int, upChargeCost: Double){

@@ -1114,6 +1114,7 @@ class SummeryListData: Mappable
     var name :String?
     var total_area:Double?
     var moulding:String?
+    var mouldingPrice: Double?
     var total_adjusted_area:Double?
     var material_id: Int?
     var color:String?
@@ -1128,6 +1129,7 @@ class SummeryListData: Mappable
     var room_name :String?
     var appointment_id: Int?
     var room_area :Double?
+    var room_perimeter : Float?
     var adjusted_area:Double?
     var comments: String?
     var striked :String?
@@ -1153,6 +1155,7 @@ class SummeryListData: Mappable
         room_name <- map["room_name"]
         appointment_id <- map["appointment_id"]
         room_area <- map["room_area"]
+        room_perimeter <- map["room_perimeter"]
         comments <- map["comments"]
         striked <- map["striked"]
         material_comments <- map["material_comments"]
@@ -1163,6 +1166,7 @@ class SummeryListData: Mappable
         total_adjusted_area <- map["total_adjusted_area"]
         room_image_url <- map["room_image_url"]
         moulding <- map["moulding"]
+        mouldingPrice <- map ["mouldingPrice"]
         material_colors <- map["material_colors"]
         molding_Type <- map["molding_type"]
         stair_count <- map["stair_count"]
@@ -1199,6 +1203,7 @@ class MoldingType: Mappable
 {
     var molding_id: Int?
     var name: String?
+    var unit_price: Double?
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1206,6 +1211,7 @@ class MoldingType: Mappable
     func mapping(map: ObjectMapper.Map) {
         molding_id <- map["molding_id"]
         name <- map["name"]
+        unit_price <- map["unit_price"]
         
         
     }
