@@ -38,7 +38,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var globalColor_id:Int = 0
     var globalMoldingName = ""
     
-    var moldingNamesArray:[String] = []
+    var moldingNamesArray:List<rf_master_molding>!
     var colorNamesArray:Results<rf_master_color_list>!
     
     override func viewDidLoad() {
@@ -93,12 +93,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
     }
     
-    func calculateFloorColorUpchargeAndExtraCost(rooms:[SummeryListData]) -> (totalUpcharge: Double, extraCost: Double, extraCostExclude: Double, totalStairCountOfAllRooms: Int){
+    func calculateFloorColorUpchargeAndExtraCost(rooms:[SummeryListData]) -> (totalUpcharge: Double, extraCost: Double, extraCostExclude: Double, totalStairCountOfAllRooms: Int, totalMoldingCost: Double){
             var upCharge: Double = 0.0
             var totalExtraCost: Double = 0.0
             var totalExtraCostToReduce: Double = 0.0
             var totalStairCount = 0
+        var totalMoldingCost: Double = 0.0
             for roomData in rooms{
+                dump(roomData)
                 if ((roomData.color ?? "") != "" && (roomData.striked ?? "").lowercased() == "false"){
                     let currentRoomUpcharge = ((roomData.adjusted_area ?? 0.0) * (roomData.colorUpCharge ?? 0.0))
                     let roomId = roomData.room_id ?? 0
@@ -109,9 +111,13 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     if (roomData.room_name ?? "").localizedCaseInsensitiveContains("stair") {
                         totalStairCount = totalStairCount + (roomData.stair_count ?? 0)
                     }
+                    let moldingPrice = roomData.moldingPrice
+                    let roomPerimter = roomData.roomPerimeter
+                    let moldingPriceForRoomPerimiter = moldingPrice * Double(roomPerimter)
+                    totalMoldingCost = totalMoldingCost + moldingPriceForRoomPerimiter
                 }
             }
-            return (upCharge, totalExtraCost,totalExtraCostToReduce,totalStairCount)
+            return (upCharge, totalExtraCost,totalExtraCostToReduce,totalStairCount, totalMoldingCost)
         }
     
     
@@ -163,7 +169,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 paymentOptions.area = self.area
                
                 //arb
-                let (totalUpchargeForAllRooms,extraCostConsideringQuestions, extraCostToExclude,totalStairCount) = self.calculateFloorColorUpchargeAndExtraCost(rooms: self.tableValues)
+                let (totalUpchargeForAllRooms,extraCostConsideringQuestions, extraCostToExclude,totalStairCount, totalMoldingCost) = self.calculateFloorColorUpchargeAndExtraCost(rooms: self.tableValues)
                 print(totalUpchargeForAllRooms)
                 print(extraCostConsideringQuestions)
                 paymentOptions.stairCount = totalStairCount
@@ -171,6 +177,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 paymentOptions.totalExtraCost = extraCostConsideringQuestions
                 //paymentOptions.totalExtraCostToReduce = extraCostToExclude
                 paymentOptions.discount_exclude_amount = extraCostToExclude
+                paymentOptions.totalMoldingCost = totalMoldingCost
                 //
                 self.navigationController?.pushViewController(paymentOptions, animated: true)
             }
@@ -387,14 +394,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         //arb
         let  moldValue = self.getMoldList()
         value = moldValue.compactMap({$0.name})
-        self.moldingNamesArray = value
+        self.moldingNamesArray = moldValue
         //
 //        for val in tableValues[sender.tag].molding_Type ?? []
 //        {
 //            value.append(val.name ?? "Unknown")
 //        }
         
-        if(value.count != 0)
+        if(self.moldingNamesArray.count != 0)
         {
             self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 2, cell: sender.tag)
         }
@@ -589,7 +596,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             //arb
             let selectedMold = self.moldingNamesArray[index]
             let roomId = self.tableValues[cell].room_id ?? 0
-            self.updateRoomMoldOrColor(roomID: roomId, moldName: selectedMold)
+            self.updateRoomMoldOrColor(roomID: roomId, moldName: selectedMold.name ?? "Select Molding", moldPrice: selectedMold.molding_price )
             self.loadRefreshData()
             //
             

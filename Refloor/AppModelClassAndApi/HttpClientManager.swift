@@ -2084,9 +2084,7 @@ class HttpClientManager: NSObject {
                     if response.result.value != nil {
                         
                         let jsonString = String(data: response.data!, encoding: .utf8)!
-                        print(jsonString)
                         if let responseData = MasterData(JSONString: jsonString){
-                            print(responseData)
                             do{
                                 let realm = try Realm()
                                 let results =  realm.objects(MasterData.self)

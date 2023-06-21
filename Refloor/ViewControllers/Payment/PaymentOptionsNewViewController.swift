@@ -59,6 +59,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var selectedPlan = -1
     var IsEligibleForDiscounts = 0
     var discount_exclude_amount:Double = 0
+    var totalMoldingCost:Double = 0
     var selectedOption = -1
     var area:Double = 0
     var adjestmentValue:Double = 0
@@ -221,14 +222,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     stairperprice = (paymentPlanValueDetails[self.selectedPlan].stair_cost ?? 0)
                 }
                 let stairPrice = Double(self.stairCount) * stairperprice
-                var mrp = msrppersqft * area
-                var saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
+                var mrp = (msrppersqft * area) + totalMoldingCost
+                var saleprice = (self.isPromoApplied) ? (((msrppersqft - promoValue) * area) + totalMoldingCost) : ((msrppersqft * area) + totalMoldingCost)
                 saleprice = saleprice + stairPrice
                 saleprice = saleprice + additionalCost
                 mrp = mrp + stairPrice
-                mrp = (mrp + additionalCost).rounded()
+                mrp = ((mrp + additionalCost) - self.discount_exclude_amount).rounded()
                 saleprice = saleprice.rounded()
-                let prize = saleprice.rounded(.towardZero)
+                let prize = (saleprice - self.discount_exclude_amount).rounded(.towardZero)
                 if(prize < self.minimumFee)
                 {
                     promo.totalAmount = self.minimumFee
@@ -967,7 +968,21 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             cell.borderColor = UIColor().colorFromHexString("#586471")
             cell.HeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_title
             cell.subHeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_subtitle
-            cell.descriptionLabel.text = paymentPlanValueDetails[indexPath.row].description
+            var updatedDescriptionText = ""
+            if (indexPath.row == 0) {
+                updatedDescriptionText = "\n" + "\n1-Year limited warranty"
+            } else if (indexPath.row == 1) {
+                updatedDescriptionText = "\n" + "\n4-Year limited warranty"
+            } else if (indexPath.row == 2) {
+                if isDiscountApplied == true || isPromoApplied == true {
+                    updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+                } else {
+                    updatedDescriptionText = "\n4-Part Lifetime Guarantee"
+                }
+            } else if (indexPath.row == 3) {
+                updatedDescriptionText = "\n" + "\n10-Year limited warranty"
+            }
+            cell.descriptionLabel.text = (paymentPlanValueDetails[indexPath.row].description ?? "") + updatedDescriptionText
             var costpersqft:Double = Double()
             var msrppersqft:Double = Double()
             var stairperprice:Double = Double()
@@ -995,8 +1010,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             //let additionalCost = (paymentPlanValueDetails[indexPath.row].additional_cost ?? 0)
             additionalCost = totalUpchargeCost + totalExtraCost
             let stairPrice = Double(self.stairCount) * stairperprice
-            var mrp = msrppersqft * area
-            var saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
+            var mrp = (msrppersqft * area) + totalMoldingCost
+            var saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (((msrppersqft - promoValue) * area) + totalMoldingCost) : ((msrppersqft * area) + totalMoldingCost)
             saleprice = saleprice + additionalCost +  stairPrice
 
             mrp = mrp + stairPrice
@@ -1270,7 +1285,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //   cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
                 let tempValue = self.emiAmount - downOrFinal
                 cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 
                 
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
@@ -1303,7 +1318,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 
                 cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
@@ -1327,7 +1342,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //   cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment:", amount: " $\((self.emiAmount * Payment_Factor).toDoubleString)")
                 
                 cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")

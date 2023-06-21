@@ -1137,6 +1137,8 @@ class SummeryListData: Mappable
     var total_stair_count :Int?
     var colorUpCharge : Double?
     var colorUpChargePrice : Double?
+    var roomPerimeter:Float = 0.0
+    var moldingPrice:Double = 0.0
     
     
     required init?(map: ObjectMapper.Map){
@@ -1168,6 +1170,8 @@ class SummeryListData: Mappable
         stair_count <- map["stair_count"]
         total_stair_count <- map["total_stair_count"]
         color <- map["color"]
+        roomPerimeter <- map["roomPerimeter"]
+        moldingPrice <- map["moldingPrice"]
     }
     
     init(){

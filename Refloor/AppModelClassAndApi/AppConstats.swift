@@ -34,7 +34,11 @@ struct AppURL {
     
     //Training New Server
      //let TRAINING_BASE_URL = "http://35.199.10.7:6006/api/"
-    let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
+    //let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
+    // STAGE URL
+    // kavya.krishna05@outlook.com
+    // SALESapp
+    let TRAINING_BASE_URL = "http://server.oneteamus.com:2446/api/"
     //authenticate login api
      var authenticate = BASE_URL + "authenticate"
     

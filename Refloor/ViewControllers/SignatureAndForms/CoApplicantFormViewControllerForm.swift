@@ -184,6 +184,8 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         setPhoneNumberDelegate()
         sexSegment.setTitleTextAttributes([NSAttributedString.Key.font: font,NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         
+        self.zipcode.keyboardType = .asciiCapableNumberPad
+        self.zipcode.delegate = self
         // Do any additional setup after loading the view.
     }
 //    override func performSegueToReturnBack()
@@ -215,13 +217,18 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
                 let newString = (text as NSString).replacingCharacters(in: range, with: string)
                 textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
                 return false
-            }
-            if(textField == self.socialSecurityNo)
+            } else if(textField == self.socialSecurityNo)
             {
                 guard let text = textField.text else { return false }
                 let newString = (text as NSString).replacingCharacters(in: range, with: string)
                 textField.text = self.format(with: "XXX-XX-XXXX", phone: newString)
                 return false
+            } else if(textField == self.zipcode) {
+                guard var text = textField.text else { return false }
+                text = text + string
+                if text.count > 5 {
+                    return false
+                }
             }
             return true
         }
@@ -794,11 +801,19 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
                         else if(co.lowercased() == "administrative_area_level_1")
                         {
                             self.stateZipCode.text = component.shortName
+                        } else if(co.lowercased() == "street_number")
+                        {
+                            self.address.text = ""
+                            self.address.text = component.name
+                        }
+                        else if(co.lowercased() == "route")
+                        {
+                            self.address.text = (self.address.text ?? "") + " " + component.name
                         }
                     }
                 }
                 
-                self.address.text = title
+                //self.address.text = title
                 
             }
         }

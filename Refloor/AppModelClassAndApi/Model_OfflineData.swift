@@ -226,6 +226,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var sequence = 0
     @objc dynamic var default_answer : String?
     @objc dynamic var exclude_from_discount : Bool = false
+    @objc dynamic var exclude_from_promotion : Bool = false
     @objc dynamic  var setDefaultAnswer : Bool = false
     @objc dynamic var applicableCurrentSurface : String?
     var quote_label = List<rf_master_question_detail>()
@@ -268,6 +269,7 @@ class rf_master_question :Object, Mappable {
         sequence <- map["sequence"]
         default_answer <- map["default_answer"]
         exclude_from_discount <- map["exclude_from_discount"]
+        exclude_from_promotion <- map["exclude_from_promotion"]
         quote_label <- (map["quote_label"], ListTransform<rf_master_question_detail>())
         last_updated_date <- map["last_updated_date"]
         applicableTo <- map["applicable_to"]
@@ -407,6 +409,7 @@ class rf_master_molding : Object,Mappable {
     @objc dynamic var molding_id : Int = 0
     @objc dynamic var name : String?
     @objc dynamic var last_updated_date : String?
+    @objc dynamic var molding_price : Double = 0.0
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -417,6 +420,7 @@ class rf_master_molding : Object,Mappable {
         molding_id <- map["molding_id"]
         name <- map["name"]
         last_updated_date <- map["last_updated_date"]
+        molding_price <- map["unit_price"]
     }
     
 }
@@ -1056,6 +1060,7 @@ class rf_completed_room: Object{
     @objc dynamic var selected_room_Upcharge: Double = 0.0
     @objc dynamic var selected_room_UpchargePrice: Double = 0.0
     @objc dynamic var selected_room_molding: String?
+    @objc dynamic var selected_room_molding_price: Double = 0.0
     @objc dynamic var room_strike_status: Bool = false
     @objc dynamic var extraPrice: Double = 0.0
     @objc dynamic var extraPriceToExclude: Double = 0.0

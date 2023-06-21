@@ -2545,6 +2545,8 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.stair_count = Int(room.stairCount ?? "0")
                     summaryList.colorUpCharge = room.selected_room_Upcharge
                     summaryList.colorUpChargePrice = room.selected_room_UpchargePrice
+                    summaryList.roomPerimeter = room.room_perimeter
+                    summaryList.moldingPrice = room.selected_room_molding_price
                     summaryListArray.append(summaryList)
                 }
             }
@@ -2595,7 +2597,7 @@ extension UIViewController:OrderStatusViewDelegate
     
     
     
-    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0){
+    func updateRoomMoldOrColor(roomID:Int, moldName: String, moldPrice: Double = 0.0, isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0){
         let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         if let room = appointment.first?.rooms.filter("room_id == %d", roomID){
@@ -2606,7 +2608,7 @@ extension UIViewController:OrderStatusViewDelegate
                     if let id = room.first?.id{
                         if !isColor{
                             
-                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName]
+                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName, "selected_room_molding_price": moldPrice]
                             
                         }else{
                             dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge]

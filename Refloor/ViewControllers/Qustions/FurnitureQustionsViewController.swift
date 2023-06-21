@@ -922,7 +922,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             
                             let additionalCost = self.calculateExtraPrice(question: question, answerOfQuestion: questionsArray)
-                            if question.exclude_from_discount{
+                            if question.exclude_from_discount || question.exclude_from_promotion {
                                 extraCostExclude = extraCostExclude + additionalCost
                             }
                             extraCost = extraCost + additionalCost
