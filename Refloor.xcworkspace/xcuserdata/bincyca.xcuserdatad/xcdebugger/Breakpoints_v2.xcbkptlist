@@ -1232,6 +1232,21 @@
                   endingLineNumber = "1191"
                   offsetFromSymbolStart = "21604">
                </Location>
+               <Location
+                  uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A - a3a39f8475511dc9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1191"
+                  endingLineNumber = "1191"
+                  offsetFromSymbolStart = "21436">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -1707,22 +1722,6 @@
             startingLineNumber = "1067"
             endingLineNumber = "1067"
             landmarkName = "collectionView(_:cellForItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F6DF0CD3-E7AD-40A5-9955-0C49EA082BF7"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
-            landmarkName = "calculateFloorColorUpchargeAndExtraCost(rooms:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
