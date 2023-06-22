@@ -131,7 +131,8 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         self.customerContactNumberTF.text =  self.appoinmentslData.phone ?? ""
         
         self.checkTextFieldEdited()
-        
+        self.zipTF.keyboardType = .asciiCapableNumberPad
+        self.zipTF.delegate = self
         
         setPhoneNumberDelegate()
         //         self.customerAddressTF.isUserInteractionEnabled = false
@@ -273,6 +274,13 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
                 textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
                 return false
             }
+            else if(textField == self.zipTF) {
+                            guard var text = textField.text else { return false }
+                            text = text + string
+                            if text.count > 5 {
+                                return false
+                            }
+                        }
             
             return true
         }
@@ -443,10 +451,19 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
                         {
                             self.state_TF.text = component.shortName
                         }
-                        else if(co.lowercased() == "route")
-                        {
-                            self.Street_Address_TF.text = component.name
-                        }
+//                        else if(co.lowercased() == "route")
+//                        {
+//                            self.Street_Address_TF.text = component.name
+//                        }
+                        else if(co.lowercased() == "street_number")
+                                                {
+                                                    self.Street_Address_TF.text = ""
+                                                    self.Street_Address_TF.text = component.name
+                                                }
+                                                else if(co.lowercased() == "route")
+                                                {
+                                                    self.Street_Address_TF.text = (self.Street_Address_TF.text ?? "") + " " + component.name
+                                                }
                     }
                 }
                 
