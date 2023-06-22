@@ -709,7 +709,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         packageName = self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? ""
         //
         downpatmet.roomName = ""
-        var savingsAmount = savingsArray[0]
+        var savingsAmount = savingsArray[selectedPlan]
         if let index = savingsAmount.firstIndex(of: "$")
         {
             savingsAmount.remove(at: index)
@@ -1035,6 +1035,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
               
                 costpersqft = specialPriceTable[0].listPrice
                 msrppersqft = specialPriceTable[0].msrp
+                paymentPlanValueDetails[indexPath.row].cost_per_sqft = msrppersqft
+                //_ = PaymentPlanValue(costPerSqft: msrppersqft)
                 
             }
             else
@@ -1045,6 +1047,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             if isStairsSpclPriceApplied == true && (paymentPlanValueDetails[indexPath.row].stairProductId == specialPriceTable[1].productTmplId)
             {
                 stairperprice = specialPriceTable[1].msrp
+                paymentPlanValueDetails[indexPath.row].stair_msrp = stairperprice
             }
             else
             {
@@ -1084,7 +1087,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 else
                 {
-                    saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100)
+                    saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100).rounded()
                 }
             }
 
