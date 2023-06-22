@@ -198,6 +198,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         setPhoneNumberDelegate()
         let font = UIFont(name: "Avenir-Medium", size: 22)!
         sexSegment.setTitleTextAttributes([NSAttributedString.Key.font: font,NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        self.zipCode.keyboardType = .asciiCapableNumberPad
+        self.zipCode.delegate = self
         
         
         
@@ -240,7 +242,7 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
                 textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
                 return false
             }
-            if(textField == self.socialSecurityNo)
+            else if(textField == self.socialSecurityNo)
             {
                 
                 guard let text = textField.text else { return false }
@@ -248,6 +250,13 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
                 textField.text = self.format(with: "XXX-XX-XXXX", phone: newString)
                 //  self.socialSecurityNo.isSecureTextEntry = true
                 return false
+            }
+            else if(textField == self.zipCode) {
+                guard var text = textField.text else { return false }
+                text = text + string
+                if text.count > 5 {
+                    return false
+                }
             }
             
             return true
@@ -416,6 +425,10 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         
         let appointmetslData = AppDelegate.appoinmentslData
         appointmetslData?.phone = self.homePhone.text
+        appointmetslData?.street = self.address.text
+        appointmetslData?.zip = self.zipCode.text
+        appointmetslData?.city = self.city.text
+        appointmetslData?.state = self.stateZipCode.text
         
         
         // update applicant database
@@ -993,6 +1006,15 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
                         else if(co.lowercased() == "administrative_area_level_1")
                         {
                             self.stateZipCode.text = component.shortName
+                        }
+                        else if(co.lowercased() == "street_number")
+                        {
+                            self.address.text = ""
+                            self.address.text = component.name
+                        }
+                        else if(co.lowercased() == "route")
+                        {
+                            self.address.text = (self.address.text ?? "") + " " + component.name
                         }
                     }
                 }

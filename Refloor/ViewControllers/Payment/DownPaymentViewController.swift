@@ -216,11 +216,11 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.accountHolderNameTF.setPlaceHolderWithColor(placeholder: "Name", colour: .placeHolderColor)
             cell.cardNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
             cell.cardNumberTF.keyboardType = .numberPad
-            cell.cardNumberTF.delegate = self
+            //cell.cardNumberTF.delegate = self
             cell.cardPinTF.keyboardType = .numberPad
-            cell.cardPinTF.delegate = self
+            //cell.cardPinTF.delegate = self
             cell.cardExperyDateTF.setPlaceHolderWithColor(placeholder: "01/30", colour: .placeHolderColor)
-            cell.cardExperyDateTF.delegate = self
+            //cell.cardExperyDateTF.delegate = self
             cell.cardPinTF.isSecureTextEntry = true
             
             cell.cardPinTF.setPlaceHolderWithColor(placeholder: "0000", colour: .placeHolderColor)

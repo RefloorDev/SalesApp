@@ -119,6 +119,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["sequence"] = question.sequence
                         dict["default_answer"] = question.default_answer
                         dict["exclude_from_discount"] = question.exclude_from_discount
+                        dict["exclude_from_promotion"] = question.exclude_from_promotion
                         dict["quote_label"] = question.quote_label
                         dict["last_updated_date"] = question.last_updated_date
                         dict["applicableTo"] = question.applicableTo
@@ -943,6 +944,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         let questionsForAppointment = getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var extraCost:Double = 0.0
         var extraCostExclude:Double = 0.0
+        var extraPromoCostExcluded: Double = 0.0
         for i in 0..<questionsForAppointment.count{
             let questionsArray = List<rf_AnswerForQuestion>()
             let question = questionsForAppointment[i]
@@ -966,6 +968,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             if question.exclude_from_discount{
                                 extraCostExclude = extraCostExclude + additionalCost
                             }
+                            if question.exclude_from_promotion
+                            {
+                                extraPromoCostExcluded = extraPromoCostExcluded + additionalCost
+                            }
                             extraCost = extraCost + additionalCost
                         }
                     }catch{
@@ -981,7 +987,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         //save extra cost of selected room to appointment
         self.saveExtraCostToCompletedAppointment(roomId: self.roomID, extraCost: extraCost)
         //save extra cost to exclude
-        self.saveExtraCostExcludeToCompletedAppointment(roomId: self.roomID, extraCostExclude: extraCostExclude)
+        self.saveExtraCostExcludeToCompletedAppointment(roomId: self.roomID, extraCostExclude: extraCostExclude, extraPromoPriceToExclude: extraPromoCostExcluded)
         //to save stair count and width to appointment room details
         if roomName.localizedCaseInsensitiveContains("stair"){
             self.saveStairDetailsToCompletedAppointment(roomId: self.roomID)
