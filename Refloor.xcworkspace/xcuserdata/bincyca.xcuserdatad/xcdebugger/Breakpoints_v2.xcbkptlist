@@ -14,8 +14,8 @@
             filePath = "Refloor/ViewControllers/Customer/CustomerDetails/CustomerDetailsTowViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "459"
-            endingLineNumber = "459"
+            startingLineNumber = "461"
+            endingLineNumber = "461"
             landmarkName = "textField(_:shouldChangeCharactersIn:replacementString:)"
             landmarkType = "7">
             <Locations>
@@ -94,6 +94,21 @@
                   endingLineNumber = "459"
                   offsetFromSymbolStart = "380">
                </Location>
+               <Location
+                  uuid = "209BFB22-F37D-4EA9-B00A-FC53E9BB4F98 - d418eff237db4a56"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.CustomerDetailsTowViewController.textField(_: __C.UITextField, shouldChangeCharactersIn: __C._NSRange, replacementString: Swift.String) -&gt; Swift.Bool"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Customer/CustomerDetails/CustomerDetailsTowViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "461"
+                  endingLineNumber = "461"
+                  offsetFromSymbolStart = "388">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -123,8 +138,8 @@
             filePath = "Refloor/ViewControllers/DownPaymentAndSignature/PaymentDetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "143"
-            endingLineNumber = "143"
+            startingLineNumber = "144"
+            endingLineNumber = "144"
             landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
             <Locations>
@@ -186,6 +201,21 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "144"
                   endingLineNumber = "144"
+                  offsetFromSymbolStart = "13488">
+               </Location>
+               <Location
+                  uuid = "0740B705-582E-45B5-9971-044CFC67F060 - a4c9766cc505bc8c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentDetailsViewController.viewWillAppear(Swift.Bool) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/DownPaymentAndSignature/PaymentDetailsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "145"
+                  endingLineNumber = "145"
                   offsetFromSymbolStart = "13488">
                </Location>
             </Locations>
@@ -392,13 +422,13 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "443"
+            endingLineNumber = "443"
             landmarkName = "foreditingFunctions()"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "206642C0-91A2-415E-ABC3-E37E1701D8BC - 94d08f631c8de37c"
+                  uuid = "206642C0-91A2-415E-ABC3-E37E1701D8BC - 94d08f631c8de2c2"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -408,12 +438,12 @@
                   urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "442"
-                  endingLineNumber = "442"
-                  offsetFromSymbolStart = "4768">
+                  startingLineNumber = "444"
+                  endingLineNumber = "444"
+                  offsetFromSymbolStart = "5580">
                </Location>
                <Location
-                  uuid = "206642C0-91A2-415E-ABC3-E37E1701D8BC - 94d08f631c8de37c"
+                  uuid = "206642C0-91A2-415E-ABC3-E37E1701D8BC - 94d08f631c8de31d"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -423,38 +453,8 @@
                   urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "442"
-                  endingLineNumber = "442"
-                  offsetFromSymbolStart = "6628">
-               </Location>
-               <Location
-                  uuid = "206642C0-91A2-415E-ABC3-E37E1701D8BC - 94d08f631c8de37c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.foreditingFunctions() -&gt; ()"
-                  moduleName = "Refloor"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "442"
-                  endingLineNumber = "442"
-                  offsetFromSymbolStart = "3560">
-               </Location>
-               <Location
-                  uuid = "206642C0-91A2-415E-ABC3-E37E1701D8BC - 94d08f631c8de37c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.foreditingFunctions() -&gt; ()"
-                  moduleName = "Refloor"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "442"
-                  endingLineNumber = "442"
+                  startingLineNumber = "443"
+                  endingLineNumber = "443"
                   offsetFromSymbolStart = "5180">
                </Location>
             </Locations>
@@ -598,42 +598,10 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3102"
-            endingLineNumber = "3102"
+            startingLineNumber = "3104"
+            endingLineNumber = "3104"
             landmarkName = "saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId:customerDetailsDict:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "C3DADB31-DF16-48A4-B7E0-9D1D4697CD02 - 7530072588b00b1e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in __C.UIViewController.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: Swift.Int, customerDetailsDict: Swift.Dictionary&lt;Swift.String, Any&gt;) -&gt; ()"
-                  moduleName = "Refloor"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ExtensionFiles/Extension.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3102"
-                  endingLineNumber = "3102"
-                  offsetFromSymbolStart = "1140">
-               </Location>
-               <Location
-                  uuid = "C3DADB31-DF16-48A4-B7E0-9D1D4697CD02 - 7530072588b00b1e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in __C.UIViewController.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: Swift.Int, customerDetailsDict: Swift.Dictionary&lt;Swift.String, Any&gt;) -&gt; ()"
-                  moduleName = "Refloor"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ExtensionFiles/Extension.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3102"
-                  endingLineNumber = "3102"
-                  offsetFromSymbolStart = "1048">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -868,42 +836,10 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "3994"
-            endingLineNumber = "3994"
+            startingLineNumber = "3999"
+            endingLineNumber = "3999"
             landmarkName = "getCustomerDetailsForApiCall()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3DE475B7-5169-47A2-B2CA-0291A87BC5D2 - 9d0a9e047b18b06c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__C.UIViewController.getCustomerDetailsForApiCall() -&gt; Swift.Dictionary&lt;Swift.String, Any&gt;"
-                  moduleName = "Refloor"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ExtensionFiles/Extension.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3994"
-                  endingLineNumber = "3994"
-                  offsetFromSymbolStart = "716">
-               </Location>
-               <Location
-                  uuid = "3DE475B7-5169-47A2-B2CA-0291A87BC5D2 - 9d0a9e047b18b06c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__C.UIViewController.getCustomerDetailsForApiCall() -&gt; Swift.Dictionary&lt;Swift.String, Any&gt;"
-                  moduleName = "Refloor"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ExtensionFiles/Extension.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "3994"
-                  endingLineNumber = "3994"
-                  offsetFromSymbolStart = "576">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1239,22 +1175,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B2568AED-B836-46F4-9D21-DE8FA4112A81"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "997"
-            endingLineNumber = "997"
-            landmarkName = "collectionView(_:cellForItemAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -1262,10 +1182,87 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1163"
-            endingLineNumber = "1163"
+            startingLineNumber = "1194"
+            endingLineNumber = "1194"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A - a3a39f8475511d2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1194"
+                  endingLineNumber = "1194"
+                  offsetFromSymbolStart = "23164">
+               </Location>
+               <Location
+                  uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A - a3a39f8475511d2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1194"
+                  endingLineNumber = "1194"
+                  offsetFromSymbolStart = "22196">
+               </Location>
+               <Location
+                  uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A - a3a39f8475511d2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1194"
+                  endingLineNumber = "1194"
+                  offsetFromSymbolStart = "22316">
+               </Location>
+               <Location
+                  uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A - a3a39f8475511d2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1194"
+                  endingLineNumber = "1194"
+                  offsetFromSymbolStart = "22336">
+               </Location>
+               <Location
+                  uuid = "6CCE6527-5901-4EC8-A79F-452E7699CD8A - a3a39f8475511d2a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1194"
+                  endingLineNumber = "1194"
+                  offsetFromSymbolStart = "22356">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1278,8 +1275,8 @@
             filePath = "Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "584"
-            endingLineNumber = "584"
+            startingLineNumber = "585"
+            endingLineNumber = "585"
             landmarkName = "applyAction(_:)"
             landmarkType = "7">
             <Locations>
@@ -1313,6 +1310,66 @@
                   endingLineNumber = "584"
                   offsetFromSymbolStart = "12044">
                </Location>
+               <Location
+                  uuid = "26D95DE3-E5AC-4426-925C-085561AC71A7 - 933d7e4b5da9995d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PromoPopUpViewControllerNew.applyAction(__C.UIButton) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "585"
+                  endingLineNumber = "585"
+                  offsetFromSymbolStart = "11988">
+               </Location>
+               <Location
+                  uuid = "26D95DE3-E5AC-4426-925C-085561AC71A7 - 933d7e4b5da9995d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PromoPopUpViewControllerNew.applyAction(__C.UIButton) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "585"
+                  endingLineNumber = "585"
+                  offsetFromSymbolStart = "12044">
+               </Location>
+               <Location
+                  uuid = "26D95DE3-E5AC-4426-925C-085561AC71A7 - 933d7e4b5da9995d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PromoPopUpViewControllerNew.applyAction(__C.UIButton) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "585"
+                  endingLineNumber = "585"
+                  offsetFromSymbolStart = "12080">
+               </Location>
+               <Location
+                  uuid = "26D95DE3-E5AC-4426-925C-085561AC71A7 - 933d7e4b5da9995d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PromoPopUpViewControllerNew.applyAction(__C.UIButton) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "585"
+                  endingLineNumber = "585"
+                  offsetFromSymbolStart = "12136">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -1326,8 +1383,8 @@
             filePath = "Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "684"
-            endingLineNumber = "684"
+            startingLineNumber = "685"
+            endingLineNumber = "685"
             landmarkName = "createDiscountDataToAddToArray(discountEntered:discountType:promoCode:discountPercentage:promoCodeDisplayName:)"
             landmarkType = "7">
             <Locations>
@@ -1361,7 +1418,750 @@
                   endingLineNumber = "684"
                   offsetFromSymbolStart = "3148">
                </Location>
+               <Location
+                  uuid = "C7D57678-4610-4205-AE88-C94D2BEB35E1 - 5022922719228718"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PromoPopUpViewControllerNew.createDiscountDataToAddToArray(discountEntered: Swift.String, discountType: Refloor.DiscountEnum, promoCode: Swift.String, discountPercentage: Swift.Double, promoCodeDisplayName: Swift.String) -&gt; Refloor.DiscountDetailStruct"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PopUp/PromoPopUpViewControllerNew.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "685"
+                  endingLineNumber = "685"
+                  offsetFromSymbolStart = "3148">
+               </Location>
             </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9E17FE42-4D7B-4E7D-86A4-5A662D308D8E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "971"
+            endingLineNumber = "971"
+            landmarkName = "submitApiCall()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "9E17FE42-4D7B-4E7D-86A4-5A662D308D8E - 1a51cc707afd8b2f"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in Refloor.FurnitureQustionsViewController.submitApiCall() -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "972"
+                  endingLineNumber = "972"
+                  offsetFromSymbolStart = "1112">
+               </Location>
+               <Location
+                  uuid = "9E17FE42-4D7B-4E7D-86A4-5A662D308D8E - 1a51cc707afd8ad0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in Refloor.FurnitureQustionsViewController.submitApiCall() -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "971"
+                  endingLineNumber = "971"
+                  offsetFromSymbolStart = "1088">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A6D12B59-02CA-4B64-A3B1-B9A192CA0FDB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1058"
+            endingLineNumber = "1058"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A6D12B59-02CA-4B64-A3B1-B9A192CA0FDB - a3a39f8475510ea2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1058"
+                  endingLineNumber = "1058"
+                  offsetFromSymbolStart = "11372">
+               </Location>
+               <Location
+                  uuid = "A6D12B59-02CA-4B64-A3B1-B9A192CA0FDB - a3a39f8475510ea2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1058"
+                  endingLineNumber = "1058"
+                  offsetFromSymbolStart = "11284">
+               </Location>
+               <Location
+                  uuid = "A6D12B59-02CA-4B64-A3B1-B9A192CA0FDB - a3a39f8475510ea2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1058"
+                  endingLineNumber = "1058"
+                  offsetFromSymbolStart = "11404">
+               </Location>
+               <Location
+                  uuid = "A6D12B59-02CA-4B64-A3B1-B9A192CA0FDB - a3a39f8475510ea2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1058"
+                  endingLineNumber = "1058"
+                  offsetFromSymbolStart = "11424">
+               </Location>
+               <Location
+                  uuid = "A6D12B59-02CA-4B64-A3B1-B9A192CA0FDB - a3a39f8475510ea2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1058"
+                  endingLineNumber = "1058"
+                  offsetFromSymbolStart = "11444">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5C465AAE-844C-404A-8980-735D2737C266"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2162"
+            endingLineNumber = "2162"
+            landmarkName = "updateCustomerAndRoomInfoAPi(parameter:isOnlineCollectBtnPressed:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E477239C-C17F-402E-B79F-70C44DA9A696"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2175"
+            endingLineNumber = "2175"
+            landmarkName = "updateCustomerAndRoomInfoAPi(parameter:isOnlineCollectBtnPressed:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5340AB33-C448-4496-B0EC-8F8D5D370476"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "2170"
+            endingLineNumber = "2170"
+            landmarkName = "updateCustomerAndRoomInfoAPi(parameter:isOnlineCollectBtnPressed:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "5340AB33-C448-4496-B0EC-8F8D5D370476 - c574519b2291dd8b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.HttpClientManager.updateCustomerAndRoomInfoAPi(parameter: Swift.Dictionary&lt;Swift.String, Any&gt;, isOnlineCollectBtnPressed: Swift.Bool, completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/AppModelClassAndApi/HttpClientManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2170"
+                  endingLineNumber = "2170"
+                  offsetFromSymbolStart = "308">
+               </Location>
+               <Location
+                  uuid = "5340AB33-C448-4496-B0EC-8F8D5D370476 - 56ba60ae7657b183"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Refloor.CashDataResponse&gt;) -&gt; () in Refloor.HttpClientManager.updateCustomerAndRoomInfoAPi(parameter: Swift.Dictionary&lt;Swift.String, Any&gt;, isOnlineCollectBtnPressed: Swift.Bool, completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/AppModelClassAndApi/HttpClientManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2173"
+                  endingLineNumber = "2173"
+                  offsetFromSymbolStart = "76">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0679995B-49A0-40CE-A3B6-70369C6BD74F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "250"
+            endingLineNumber = "250"
+            landmarkName = "nextButtonAction(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "0679995B-49A0-40CE-A3B6-70369C6BD74F - 2bcc462ed5cedd18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.FurnitureQustionsViewController.nextButtonAction(Any) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "251"
+                  endingLineNumber = "251"
+                  offsetFromSymbolStart = "172">
+               </Location>
+               <Location
+                  uuid = "0679995B-49A0-40CE-A3B6-70369C6BD74F - 2bcc462ed5cedaf9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.FurnitureQustionsViewController.nextButtonAction(Any) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "250"
+                  endingLineNumber = "250"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "281EE274-0CA9-4EA5-9468-7ECCAB9D9FCC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1070"
+            endingLineNumber = "1070"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "281EE274-0CA9-4EA5-9468-7ECCAB9D9FCC - a3a39f8475510b98"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1080"
+                  endingLineNumber = "1080"
+                  offsetFromSymbolStart = "12108">
+               </Location>
+               <Location
+                  uuid = "281EE274-0CA9-4EA5-9468-7ECCAB9D9FCC - a3a39f8475510be5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1083"
+                  endingLineNumber = "1083"
+                  offsetFromSymbolStart = "12268">
+               </Location>
+               <Location
+                  uuid = "281EE274-0CA9-4EA5-9468-7ECCAB9D9FCC - a3a39f8475510be5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1083"
+                  endingLineNumber = "1083"
+                  offsetFromSymbolStart = "12388">
+               </Location>
+               <Location
+                  uuid = "281EE274-0CA9-4EA5-9468-7ECCAB9D9FCC - a3a39f8475510be5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1083"
+                  endingLineNumber = "1083"
+                  offsetFromSymbolStart = "12408">
+               </Location>
+               <Location
+                  uuid = "281EE274-0CA9-4EA5-9468-7ECCAB9D9FCC - a3a39f8475510be5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1083"
+                  endingLineNumber = "1083"
+                  offsetFromSymbolStart = "12428">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "EC673999-F698-4193-870F-21B70EC0EC2B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "943"
+            endingLineNumber = "943"
+            landmarkName = "submitApiCall()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7D852077-A703-4795-8080-A61E433C2018"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "958"
+            endingLineNumber = "958"
+            landmarkName = "submitApiCall()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C92BDFFE-E77D-4CF8-B28A-D927B46D6CD8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "968"
+            endingLineNumber = "968"
+            landmarkName = "submitApiCall()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "280E9299-BAA6-46B9-803A-25BEB9F738CB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "addQuestions()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C37D1537-E2FB-4FF2-8C0C-04600222C349"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "672"
+            endingLineNumber = "672"
+            landmarkName = "nextButtonAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0CCB6EAA-C9B3-4236-A762-862D91E83B81"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "711"
+            endingLineNumber = "711"
+            landmarkName = "nextButtonAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "39CF4CD9-8C30-4CD9-8738-9F2EE9440C6D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1038"
+            endingLineNumber = "1038"
+            landmarkName = "collectionView(_:cellForItemAt:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "39CF4CD9-8C30-4CD9-8738-9F2EE9440C6D - a3a39f8475513151"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1039"
+                  endingLineNumber = "1039"
+                  offsetFromSymbolStart = "9320">
+               </Location>
+               <Location
+                  uuid = "39CF4CD9-8C30-4CD9-8738-9F2EE9440C6D - a3a39f8475513151"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1039"
+                  endingLineNumber = "1039"
+                  offsetFromSymbolStart = "9336">
+               </Location>
+               <Location
+                  uuid = "39CF4CD9-8C30-4CD9-8738-9F2EE9440C6D - a3a39f8475513136"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1038"
+                  endingLineNumber = "1038"
+                  offsetFromSymbolStart = "9336">
+               </Location>
+               <Location
+                  uuid = "39CF4CD9-8C30-4CD9-8738-9F2EE9440C6D - a3a39f8475513136"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.PaymentOptionsNewViewController.collectionView(_: __C.UICollectionView, cellForItemAt: Foundation.IndexPath) -&gt; __C.UICollectionViewCell"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1038"
+                  endingLineNumber = "1038"
+                  offsetFromSymbolStart = "9344">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "03FC354C-16AC-4FA0-9EE0-7E506E2C4525"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/DownPaymentAndSignature/PaymentDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
+            landmarkName = "createSalesQuotation()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "6C9B47D3-D542-48C2-B9FE-2F1465445797"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/CollectionViewCells/DownPaymentFromCardCollectionViewCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "108"
+            endingLineNumber = "108"
+            landmarkName = "textField(_:shouldChangeCharactersIn:replacementString:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "6C9B47D3-D542-48C2-B9FE-2F1465445797 - a0b189ffdcecf105"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.DownPaymentFromCardCollectionViewCell.textField(_: __C.UITextField, shouldChangeCharactersIn: __C._NSRange, replacementString: Swift.String) -&gt; Swift.Bool"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/CollectionViewCells/DownPaymentFromCardCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "112"
+                  endingLineNumber = "112"
+                  offsetFromSymbolStart = "752">
+               </Location>
+               <Location
+                  uuid = "6C9B47D3-D542-48C2-B9FE-2F1465445797 - a0b189ffdcecf181"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.DownPaymentFromCardCollectionViewCell.textField(_: __C.UITextField, shouldChangeCharactersIn: __C._NSRange, replacementString: Swift.String) -&gt; Swift.Bool"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/Payment/CollectionViewCells/DownPaymentFromCardCollectionViewCell.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "108"
+                  endingLineNumber = "108"
+                  offsetFromSymbolStart = "196">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "22C5D90C-ADE8-4168-B86C-6A470820327A"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/CollectionViewCells/DownPaymentFromCardCollectionViewCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "textFieldDidBeginEditing(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "90398409-740A-4B92-BA21-00C0100B3672"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/SignatureAndForms/ApplicantFormViewControllerForm.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "418"
+            endingLineNumber = "418"
+            landmarkName = "nextButtonAction(_:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "90398409-740A-4B92-BA21-00C0100B3672 - db5a68e08eb96f5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.ApplicantFormViewControllerForm.nextButtonAction(Any) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/SignatureAndForms/ApplicantFormViewControllerForm.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "419"
+                  endingLineNumber = "419"
+                  offsetFromSymbolStart = "3824">
+               </Location>
+               <Location
+                  uuid = "90398409-740A-4B92-BA21-00C0100B3672 - db5a68e08eb96f5c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.ApplicantFormViewControllerForm.nextButtonAction(Any) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20Version%202.1.0/SalesApp/Refloor/ViewControllers/SignatureAndForms/ApplicantFormViewControllerForm.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "419"
+                  endingLineNumber = "419"
+                  offsetFromSymbolStart = "13308">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2C80DCD1-1395-42FD-A2D9-04BB32E589C1"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/SignatureAndForms/ApplicantFormViewControllerForm.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "426"
+            endingLineNumber = "426"
+            landmarkName = "nextButtonAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CD02DFB5-B363-4655-9ED7-1C7F967DCDA4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/CancellationPolicyViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
+            landmarkName = "nextBtnAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D850D903-AEF0-4E14-94CF-37660ECC4170"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Customer/CustomerDetails/CustomerDetailsOneViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "submitAndTransforButtonAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "8E89ED29-37A6-4F16-A727-C236C547114E"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Payment/WebViewViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1097"
+            endingLineNumber = "1097"
+            landmarkName = "createCustomerParameter()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

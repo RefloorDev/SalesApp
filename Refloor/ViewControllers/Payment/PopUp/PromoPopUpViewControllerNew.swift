@@ -72,6 +72,7 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
     var selectedPromoCodeArrayValue:[String] = []
     var selectedDropDownIndex = -1
     var msrpPrice:Double = Double()
+    var exludedCost:Double = 0.0
     var promoCodeDropDownSelectedId:Int = Int()
     var promocodeDropDownSelectedDiscount:Double = Double()
     var area:Double = Double()
@@ -494,7 +495,7 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
                     }else if (promoCodeObj.value(forKey: "type") as! NSArray)[0] as! String  == "Percent"{
                         let discountPercentageStr = (promoCodeObj.value(forKey: "amount") as! NSArray)[0] as! String
                         let discountPercentage = Double(discountPercentageStr) ?? 0.0
-                        discountAmtDouble =  newPrice == 0 ? (totalAmount * (discountPercentage/100)) : (newPrice * (discountPercentage/100))
+                        discountAmtDouble =  newPrice == 0 ? ((totalAmount - exludedCost) * (discountPercentage/100)) : ((newPrice - exludedCost) * (discountPercentage/100))
                         SavingPrice = SavingPrice + discountAmtDouble
                         discountAmt = String(discountAmtDouble)
                     }
@@ -582,7 +583,7 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
                 break
             case .percentage:
                 let discountPercentage = Double(valueEnteredDiscountTextField.text!) ?? 0.0
-                let discountAmount = newPrice == 0 ? (totalAmount * (discountPercentage/100)) : (newPrice * (discountPercentage/100))
+                let discountAmount = newPrice == 0 ? ((totalAmount - exludedCost) * (discountPercentage/100)) : ((newPrice - exludedCost) * (discountPercentage/100))
                 if (discountAmount > 0){
                     SavingPrice  = SavingPrice + discountAmount
                     //                if SavingPrice != 0 && oneYearPrice != 0
