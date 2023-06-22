@@ -22,7 +22,7 @@ struct AppURL {
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-     let LIVE_BASE_URL = "http://server.oneteamus.com:2445/api/"
+     let LIVE_BASE_URL = "http://server.oneteamus.com:2446/api/"
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
    // let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
 //http://server.oneteamus.com:2446

@@ -1289,6 +1289,10 @@ class PaymentPlanValue: Mappable
     var stairProductId: Int?
     required init?(map: ObjectMapper.Map){
     }
+//    init(costPerSqft:Double)
+//    {
+//        self.cost_per_sqft = costPerSqft
+//    }
     
     init(paymentPlan:rf_master_product_package){
         self.id = paymentPlan.id
