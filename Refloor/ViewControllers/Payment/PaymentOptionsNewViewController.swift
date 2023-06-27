@@ -1025,7 +1025,22 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             cell.borderColor = UIColor().colorFromHexString("#586471")
             cell.HeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_title
             cell.subHeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_subtitle
-            cell.descriptionLabel.text = paymentPlanValueDetails[indexPath.row].description
+            //cell.descriptionLabel.text = paymentPlanValueDetails[indexPath.row].description
+            var updatedDescriptionText = ""
+                        if (indexPath.row == 0) {
+                            updatedDescriptionText = "\n\n" + "\n1-Year limited warranty"
+                        } else if (indexPath.row == 1) {
+                            updatedDescriptionText = "\n" + "\n4-Year limited warranty"
+                        } else if (indexPath.row == 2) {
+                            if isDiscountApplied == true || isPromoApplied == true {
+                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+                            } else {
+                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+                            }
+                        } else if (indexPath.row == 3) {
+                            updatedDescriptionText = "\n" + "\n10-Year limited warranty"
+                        }
+                        cell.descriptionLabel.text = (paymentPlanValueDetails[indexPath.row].description ?? "") + updatedDescriptionText
             var costpersqft:Double = Double()
             var msrppersqft:Double = Double()
             var stairperprice:Double = Double()
@@ -1305,7 +1320,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 
             let tempValue = self.emiAmount - downOrFinal
             cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-            cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+            cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
             cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
             if(indexPath.row==0)
             {
@@ -1363,7 +1378,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //   cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
                 let tempValue = self.emiAmount - downOrFinal
                 cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 
                 
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
@@ -1403,7 +1418,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
                     cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
                 }
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
@@ -1436,7 +1451,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 
                
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
