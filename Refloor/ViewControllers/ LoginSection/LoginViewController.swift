@@ -52,7 +52,7 @@ class LoginViewController: UIViewController {
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
             if BASE_URL == "http://server.oneteamus.com:2446/api/"{
-                versionNumber.setTitle("Version: \(text) (4.0) - DEV", for: .normal)
+                versionNumber.setTitle("Version: \(text) (5.0) - DEV", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
             }
