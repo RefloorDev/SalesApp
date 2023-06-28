@@ -95,6 +95,11 @@
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
+		<key>FirebaseCoreDiagnostics.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>47</integer>
+		</dict>
 		<key>FirebaseCoreInternal.xcscheme</key>
 		<dict>
 			<key>isShown</key>

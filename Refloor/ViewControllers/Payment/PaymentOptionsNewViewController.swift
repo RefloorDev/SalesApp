@@ -10,13 +10,14 @@ import UIKit
 import RealmSwift
 
 class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,PromoPopUpViewDelegate,DiscountProtocol, PromoDiscoundProtocol {
-    func promocodeApplied(promocodeArray: [String], promoCodeDropDownSelectedId: Int, promocodeDropDownSelectedDiscount: Double)
+    func promocodeApplied(promocodeArray: [String], promoCodeDropDownSelectedId: Int, promocodeDropDownSelectedDiscount: Double,calculationType: String)
     {
         savingsArray.removeAll()
         savingsArrayDouble.removeAll()
         salePriceDouble.removeAll()
         promoValue = promocodeDropDownSelectedDiscount
         self.promoCodeDropDownSelectedId = promoCodeDropDownSelectedId
+        self.calculationType = calculationType
         promoDiscountArray = promocodeArray
         if promocodeArray.count > 0
         {
@@ -76,7 +77,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var savings : String = ""
     var totalUpchargeCost: Double = 0.0
     var totalExtraCost: Double = 0.0
+    var totalMoldingPrice: Double = 0.07
     var totalExtraCostToReduce: Double = 0.0
+    var totalExtraPromoCostToReduced: Double = 0.0
     var  additionalCost :Double = 0
     var discountArray:[DiscountDetailStruct] = []
     var isProgressiveDiscountApplied = false
@@ -92,6 +95,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var promoCodeDropDownSelectedId:Int = Int()
     var promoValue: Double = Double()
     var promoDiscountArray:[String] = []
+    var calculationType:String = String()
     var savingsArray:[String] = []
     var savingsArrayDouble:[Double] = []
     var salePriceDouble:[Double] = []
@@ -200,11 +204,13 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 //promo.delegate = self
                 promo.discountValue = applyedDiscountValue
+                promo.exludedCost = self.totalExtraCostToReduce
                 promo.discountPromoCode = applyedPromoCode
                 promo.discountPercentage = applyediscountPercentage
                 var costpersqft:Double = Double()
                 var msrppersqft:Double = Double()
                 var stairperprice:Double = Double()
+                var saleprice:Double = Double()
                 if isroomSpclPriceApplied == true && (paymentPlanValueDetails[self.selectedPlan].id == specialPriceTable().first?.productTmplId)
                 {
                   
@@ -220,18 +226,47 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 
                 if isStairsSpclPriceApplied == true && (paymentPlanValueDetails[self.selectedPlan].stairProductId == specialPriceTable[1].productTmplId)
                 {
-                    stairperprice = specialPriceTable[1].listPrice
+                    stairperprice = specialPriceTable[1].msrp
                 }
                 else
                 {
                     
-                    stairperprice = (paymentPlanValueDetails[self.selectedPlan].stair_cost ?? 0)
+                    stairperprice = (paymentPlanValueDetails[self.selectedPlan].stair_msrp ?? 0)
                 }
                 let stairPrice = Double(self.stairCount) * stairperprice
                 var mrp = msrppersqft * area
-                var saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
-                saleprice = saleprice + stairPrice
-                saleprice = saleprice + additionalCost
+                if calculationType == "sqft"
+                {
+                    saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
+                    saleprice = saleprice + stairPrice
+                    saleprice = saleprice + additionalCost
+                }
+                else
+                {
+                    saleprice =  (self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
+//                    if self.isDiscountApplied
+//                    {
+//                        saleprice = msrppersqft - totalExtraCostToReduce * area
+//                    }
+//                    if self.isPromoApplied
+//                    {
+//                        saleprice = msrppersqft - totalExtraPromoCostToReduced * area
+//                    }
+//                    if self.isDiscountApplied == false && self.isPromoApplied == false
+//                    {
+//                        saleprice = msrppersqft * area
+//                    }
+               
+                   saleprice = saleprice + additionalCost +  stairPrice
+                    if calculationType == "fixed"
+                    {
+                        saleprice = saleprice - promoValue
+                    }
+                    else
+                    {
+                        saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100)
+                    }
+                }
                 mrp = mrp + stairPrice
                 mrp = (mrp + additionalCost).rounded()
                 saleprice = saleprice.rounded()
@@ -330,7 +365,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 let actualPrice = discountObj.salePrice
                 let salePrice = discountObj.newPrice
                 let appointment_id = AppointmentData().appointment_id ?? 0
-                let discount = DiscountObject(appointment_id: appointment_id, promoType: promoType, type: type, value: value, discountAmount: discountAmount, actualPrice: actualPrice, salePrice: salePrice)
+                let discount = DiscountObject(appointment_id: appointment_id, promoType: promoType, type: type, value: value, discountAmount: discountAmount, actualPrice: actualPrice, salePrice: salePrice, excluded_amount_discount: self.totalExtraCostToReduce)
                 discounts.append(discount)
             }
             self.saveRealmArray(discounts)
@@ -354,12 +389,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     
     @IBAction func adjustmentButtonAction(_ sender: Any)
     {
-        if area == 0
-        {
-            self.alert("Promotion does not apply for stairs", nil)
-        }
-        else
-        {
+
             if isDiscountApplied == true
             {
                 self.alert("Discount must be removed, before promotion can be changed", nil)
@@ -373,12 +403,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 promo.selectedPromoCodeArrayValue = promoDiscountArray
                 promo.promocodeDropDownSelectedDiscount = promoValue
                 promo.promoCodeDropDownSelectedId = self.promoCodeDropDownSelectedId
+                promo.calculationType = self.calculationType
                 promo.savingsArray = savingsArrayDouble
                 promo.salePriceArray = salePriceDouble
                 promo.minimumFee = self.minimumFee
+                promo.area = self.area
                 self.present(promo, animated: true, completion: nil)
             }
-        }
+        
         
     }
     
@@ -677,7 +709,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         packageName = self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? ""
         //
         downpatmet.roomName = ""
-        var savingsAmount = savingsArray[0]
+        var savingsAmount = savingsArray[selectedPlan]
         if let index = savingsAmount.firstIndex(of: "$")
         {
             savingsAmount.remove(at: index)
@@ -739,6 +771,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
+        downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
         downpatmet.adminFee = 0
@@ -992,15 +1025,33 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             cell.borderColor = UIColor().colorFromHexString("#586471")
             cell.HeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_title
             cell.subHeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_subtitle
-            cell.descriptionLabel.text = paymentPlanValueDetails[indexPath.row].description
+            //cell.descriptionLabel.text = paymentPlanValueDetails[indexPath.row].description
+            var updatedDescriptionText = ""
+                        if (indexPath.row == 0) {
+                            updatedDescriptionText = "\n\n" + "\n1-Year limited warranty"
+                        } else if (indexPath.row == 1) {
+                            updatedDescriptionText = "\n" + "\n4-Year limited warranty"
+                        } else if (indexPath.row == 2) {
+                            if isDiscountApplied == true || isPromoApplied == true {
+                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+                            } else {
+                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+                            }
+                        } else if (indexPath.row == 3) {
+                            updatedDescriptionText = "\n" + "\n10-Year limited warranty"
+                        }
+                        cell.descriptionLabel.text = (paymentPlanValueDetails[indexPath.row].description ?? "") + updatedDescriptionText
             var costpersqft:Double = Double()
             var msrppersqft:Double = Double()
             var stairperprice:Double = Double()
+            var saleprice:Double = Double()
             if isroomSpclPriceApplied == true && (paymentPlanValueDetails[indexPath.row].id == specialPriceTable[0].productTmplId)
             {
               
                 costpersqft = specialPriceTable[0].listPrice
                 msrppersqft = specialPriceTable[0].msrp
+                paymentPlanValueDetails[indexPath.row].cost_per_sqft = msrppersqft
+                //_ = PaymentPlanValue(costPerSqft: msrppersqft)
                 
             }
             else
@@ -1010,19 +1061,50 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             }
             if isStairsSpclPriceApplied == true && (paymentPlanValueDetails[indexPath.row].stairProductId == specialPriceTable[1].productTmplId)
             {
-                stairperprice = specialPriceTable[1].listPrice
+                stairperprice = specialPriceTable[1].msrp
+                paymentPlanValueDetails[indexPath.row].stair_msrp = stairperprice
             }
             else
             {
-                 stairperprice = (paymentPlanValueDetails[indexPath.row].stair_cost ?? 0)
+                stairperprice = (paymentPlanValueDetails[indexPath.row].stair_msrp ?? 0)//(paymentPlanValueDetails[indexPath.row].stair_cost ?? 0)
             }
         
             //let additionalCost = (paymentPlanValueDetails[indexPath.row].additional_cost ?? 0)
-            additionalCost = totalUpchargeCost + totalExtraCost
+            additionalCost = totalUpchargeCost + totalExtraCost + totalMoldingPrice
             let stairPrice = Double(self.stairCount) * stairperprice
             var mrp = msrppersqft * area
-            var saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
-            saleprice = saleprice + additionalCost +  stairPrice
+            if calculationType == "sqft"
+            {
+                 saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
+            
+                saleprice = saleprice + additionalCost +  stairPrice
+            }
+            else
+            {
+                saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft) * area : (msrppersqft) * area
+//                if self.isDiscountApplied
+//                {
+//                    saleprice = msrppersqft * area
+//                }
+//                if self.isPromoApplied
+//                {
+//                    saleprice = msrppersqft * area
+//                }
+//                if self.isDiscountApplied == false && self.isPromoApplied == false
+//                {
+//                    saleprice = msrppersqft * area
+//                }
+           
+               saleprice = saleprice + additionalCost +  stairPrice
+                if calculationType == "fixed"
+                {
+                    saleprice = saleprice - promoValue
+                }
+                else
+                {
+                    saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100).rounded()
+                }
+            }
 
             mrp = mrp + stairPrice
             if selectedPlan == indexPath.row
@@ -1055,7 +1137,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             if prize == self.minimumFee
             {
                 prize = self.minimumFee
-                monthly = 0.0
+                //monthly = monthly
             }
             if(prize < self.minimumFee)
             {
@@ -1125,12 +1207,12 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 {
                     //discount_exclude_amount = (paymentPlanValueDetails[indexPath.row].discount_exclude_amount ?? 0)
                     IsEligibleForDiscounts=1
-                    cell.adjustmentValue.text = "$\((adjestmentValue + monthly).clean)"
+                    cell.adjustmentValue.text = "$\((adjestmentValue.rounded() + monthly).clean)"
                     savingsArrayDouble.remove(at: indexPath.row)
                     savingsArrayDouble.insert((adjestmentValue + monthly), at: indexPath.row)
                     savingsArray.remove(at: indexPath.row)
                     savingsArray.insert(cell.adjustmentValue.text ?? "", at: indexPath.row)
-                    prize = mrp - (adjestmentValue + monthly)
+                    prize = mrp - (adjestmentValue.rounded() + monthly)
                     actualSalePrice = mrp - monthly
                     if(prize < self.minimumFee)
                     {
@@ -1238,7 +1320,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 
             let tempValue = self.emiAmount - downOrFinal
             cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-            cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+            cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
             cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
             if(indexPath.row==0)
             {
@@ -1296,7 +1378,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //   cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
                 let tempValue = self.emiAmount - downOrFinal
                 cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 
                 
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
@@ -1336,7 +1418,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
                     cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
                 }
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
@@ -1369,7 +1451,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 
                
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")

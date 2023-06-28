@@ -59,6 +59,8 @@ class MasterData : Object, Mappable {
     var specialPrice = List<rf_specialPrice_results>()
     var promotionCodes = List<rf_promotionCodes_results>()
     var transitionHeights = List<rf_transitionHeights_results>()
+    var floorColourList = List<rf_floorColour_results>()
+    var stairColourList = List<rf_stairColour_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -83,6 +85,8 @@ class MasterData : Object, Mappable {
         specialPrice <- (map["special_prices"], ListTransform<rf_specialPrice_results>())
         promotionCodes <- (map["promotion_codes"], ListTransform<rf_promotionCodes_results>())
         transitionHeights <- (map["transition_heights"], ListTransform<rf_transitionHeights_results>())
+        floorColourList <- (map["floor_colors_list"], ListTransform<rf_floorColour_results>())
+        stairColourList <- (map["stair_colors_list"], ListTransform<rf_stairColour_results>())
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
@@ -228,6 +232,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var sequence = 0
     @objc dynamic var default_answer : String?
     @objc dynamic var exclude_from_discount : Bool = false
+    @objc dynamic var exclude_from_promotion : Bool = false
     @objc dynamic  var setDefaultAnswer : Bool = false
     @objc dynamic var applicableCurrentSurface : String?
     var quote_label = List<rf_master_question_detail>()
@@ -270,6 +275,7 @@ class rf_master_question :Object, Mappable {
         sequence <- map["sequence"]
         default_answer <- map["default_answer"]
         exclude_from_discount <- map["exclude_from_discount"]
+        exclude_from_promotion <- map["exclude_from_promotion"]
         quote_label <- (map["quote_label"], ListTransform<rf_master_question_detail>())
         last_updated_date <- map["last_updated_date"]
         applicableTo <- map["applicable_to"]
@@ -382,6 +388,52 @@ class rf_master_question_detail : Object,Mappable {
 }
 
 
+class rf_floorColour_results : Object,Mappable {
+    @objc dynamic var material_id : Int = 0
+    @objc dynamic var color_name : String?
+    @objc dynamic var color : String?
+    @objc dynamic var material_image_url : String?
+    @objc dynamic var color_upcharge: Double = 0.0
+    @objc dynamic var last_updated_date : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        material_id <- map["material_id"]
+        color_name <- map["name"]
+        color <- map["color"]
+        material_image_url <- map["material_image_url"]
+        color_upcharge <- map["color_up_charge_price"]
+    }
+    
+}
+
+class rf_stairColour_results : Object,Mappable {
+    @objc dynamic var material_id : Int = 0
+    @objc dynamic var color_name : String?
+    @objc dynamic var color : String?
+    @objc dynamic var material_image_url : String?
+    @objc dynamic var color_upcharge: Double = 0.0
+    @objc dynamic var last_updated_date : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        material_id <- map["material_id"]
+        color_name <- map["name"]
+        color <- map["color"]
+        material_image_url <- map["material_image_url"]
+        color_upcharge <- map["color_up_charge_price"]
+    }
+    
+}
+
 class rf_master_color_list : Object,Mappable {
     @objc dynamic var material_id : Int = 0
     @objc dynamic var color_name : String?
@@ -409,6 +461,7 @@ class rf_master_molding : Object,Mappable {
     @objc dynamic var molding_id : Int = 0
     @objc dynamic var name : String?
     @objc dynamic var last_updated_date : String?
+    @objc dynamic var unit_price : Double = 0.0
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -419,6 +472,7 @@ class rf_master_molding : Object,Mappable {
         molding_id <- map["molding_id"]
         name <- map["name"]
         last_updated_date <- map["last_updated_date"]
+        unit_price <- map["unit_price"]
     }
     
 }
@@ -462,6 +516,7 @@ class rf_master_product_package :Object, Mappable {
     @objc dynamic var unit_of_measure : String?
     @objc dynamic var grade : String?
     @objc dynamic var stair_cost : Double = 0.0
+    @objc dynamic var stair_Msrp :Double = 0.0
     @objc dynamic var last_updated_date : String?
     @objc dynamic var stairProductId: Int = 0
     
@@ -486,6 +541,7 @@ class rf_master_product_package :Object, Mappable {
         unit_of_measure <- map["unit_of_measure"]
         grade <- map["grade"]
         stair_cost <- map["stair_cost"]
+        stair_Msrp <- map["stair_msrp"]
         last_updated_date <- map["last_updated_date"]
         stairProductId <- map["stair_product_id"]
     }
@@ -636,6 +692,7 @@ class rf_promotionCodes_results : Object ,Mappable
     @objc dynamic var discount = 0.0
     @objc dynamic var startDate : String?
     @objc dynamic var endDate : String?
+    @objc dynamic var calculationType :String?
    
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -653,6 +710,7 @@ class rf_promotionCodes_results : Object ,Mappable
         discount <- map["discount"]
         startDate <- map["start_date"]
         endDate <- map["end_date"]
+        calculationType <- map["calculation_type"]
     }
 }
 class rf_transitionHeights_results :Object , Mappable
@@ -1058,9 +1116,11 @@ class rf_completed_room: Object{
     @objc dynamic var selected_room_Upcharge: Double = 0.0
     @objc dynamic var selected_room_UpchargePrice: Double = 0.0
     @objc dynamic var selected_room_molding: String?
+    @objc dynamic var selected_room_MoldingPrice: Double = 0.0
     @objc dynamic var room_strike_status: Bool = false
     @objc dynamic var extraPrice: Double = 0.0
     @objc dynamic var extraPriceToExclude: Double = 0.0
+    @objc dynamic var extraPromoPriceToExclude: Double = 0.0
     @objc dynamic var sync_status: Bool = false
     //arb
     @objc dynamic var room_area: String?
@@ -1573,11 +1633,12 @@ class DiscountObject: Object {
     @objc dynamic var discountAmount = 0.0
     @objc dynamic var actualPrice = 0.0
     @objc dynamic var salePrice = 0.0
+    @objc dynamic var excluded_amount_discount = 0.0
     override init(){
         
     }
     
-    convenience init(appointment_id: Int,promoType:Int,type:String,value:String,discountAmount:Double,actualPrice:Double,salePrice:Double){
+    convenience init(appointment_id: Int,promoType:Int,type:String,value:String,discountAmount:Double,actualPrice:Double,salePrice:Double, excluded_amount_discount:Double){
         self.init()
         self.appointment_id = appointment_id
         self.promoType = promoType
@@ -1586,10 +1647,11 @@ class DiscountObject: Object {
         self.discountAmount = discountAmount
         self.actualPrice = actualPrice
         self.salePrice = salePrice
+        self.excluded_amount_discount = excluded_amount_discount
     }
     
     func toDictionary() -> [String:Any]{
-        return ["promo_type" : promoType, "type" : type, "value" : value , "discount_amount" : discountAmount, "actual_price" : actualPrice, "sale_price" : salePrice]
+        return ["promo_type" : promoType, "type" : type, "value" : value , "discount_amount" : discountAmount, "actual_price" : actualPrice, "sale_price" : salePrice, "excluded_amount_discount": excluded_amount_discount]
     }
 }
 

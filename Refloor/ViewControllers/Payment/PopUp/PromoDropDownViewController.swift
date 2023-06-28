@@ -12,7 +12,7 @@ import DropDown
 
 protocol PromoDiscoundProtocol
 {
-    func promocodeApplied(promocodeArray:[String],promoCodeDropDownSelectedId:Int,promocodeDropDownSelectedDiscount:Double)
+    func promocodeApplied(promocodeArray:[String],promoCodeDropDownSelectedId:Int,promocodeDropDownSelectedDiscount:Double,calculationType:String)
 }
 
 
@@ -29,6 +29,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
     var promoCodeDropDownArray:List<rf_promotionCodes_results>!
     var promoCodeArrayValue:[String] = []
     var promoCodeDropDownSelectedId:Int = Int()
+    var calculationType:String = String()
     var promocodeDropDownSelectedDiscount:Double = Double()
     var isPromoBtnClicked = false
     var promocodeDict:[String:Any] = [:]
@@ -36,6 +37,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
     var savingsArray:[Double] = []
     var salePriceArray:[Double] = []
     var minimumFee = 0.0
+    var area = 0.0
     static func initialization() -> PromoDropDownViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "PromoDropDownViewController") as? PromoDropDownViewController
     }
@@ -84,7 +86,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
     
     @IBAction func doneBtnAction(_ sender: UIButton)
     {
-        promoCodeApplied?.promocodeApplied(promocodeArray: selectedPromoCodeArrayValue, promoCodeDropDownSelectedId: promoCodeDropDownSelectedId, promocodeDropDownSelectedDiscount: promocodeDropDownSelectedDiscount)
+        promoCodeApplied?.promocodeApplied(promocodeArray: selectedPromoCodeArrayValue, promoCodeDropDownSelectedId: promoCodeDropDownSelectedId, promocodeDropDownSelectedDiscount: promocodeDropDownSelectedDiscount, calculationType: calculationType)
         self.dismiss(animated: true)
     }
     @IBAction func resetBtnAction(_ sender: UIButton)
@@ -104,6 +106,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
         )
         promoCodeDropDownSelectedId = 0
         promocodeDropDownSelectedDiscount = 0
+        calculationType = ""
         self.view.layoutSubviews()
     }
     @IBAction func applyBtnAction(_ sender: UIButton)
@@ -129,6 +132,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
             selectedPromoCodeArrayValue.append(promocodeDict["name"] as! String)
             promocodeDropDownSelectedDiscount = promocodeDict["discount"] as! Double
             promoCodeDropDownSelectedId = promocodeDict["id"] as! Int
+            calculationType = promocodeDict["calculationType"] as! String
             self.view.layoutIfNeeded()
             setUIofApplyButton(isEnable: false)
             self.promoCodeDropDownView.backgroundColor = UIColor().colorFromHexString("#667483")
@@ -150,21 +154,30 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
         //arb
         if promoCodeDropDownArray.count > 0
         {
-            let appointmentDate = AppDelegate.appoinmentslData.appointment_date?.logDate()
+            //let sampleDate = "2023-05-23 00:00:00"
+            let appointmentDate = AppDelegate.appoinmentslData.appointment_date?.logDate() //AppDelegate.appoinmentslData.appointment_date?.promoSpecialDate(AppDelegate.appoinmentslData.appointment_date!)
+            //Calendar.current.startOfDay(for: appointmentDate)
+//            let calendar = Calendar.current
+//            let components = calendar.dateComponents([.month, .day, .year], from: appointmentDate!)
             let  promoValue = promoCodeDropDownArray
             startDate = promoValue!.compactMap({$0.startDate})
             endDate = promoValue!.compactMap({$0.endDate})
             value = promoValue!.compactMap({$0.name})
+            let calculationType = promoValue!.compactMap({$0.calculationType})
             for index in 0...startDate.count - 1
             {
                 let startDateValue = startDate[index].logDate()
                 let endDateValue = endDate[index].logDate()
                 let promoResult = value[index]
-            
+                let calculationTypeString = calculationType[index]
                 let isPromotionTodayQualified = appointmentDate!.isBetween(date: startDateValue, andDate: endDateValue) ? true : false
                 if isPromotionTodayQualified == true
                 {
                     self.promoCodeArrayValue.append(promoResult)
+                    if self.area ==  0.0 && calculationTypeString == "sqft"
+                    {
+                        promoCodeArrayValue.removeLast()
+                    }
                     //self.promoCodeArrayValue = value
                 }
             }
@@ -197,6 +210,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
         promocodeDict["name"] = selectedPromoCodeArray.first?.name ?? ""
         promocodeDict["id"] = selectedPromoCodeArray.first?.promotionCodeId ?? 0
         promocodeDict["discount"] = selectedPromoCodeArray.first?.discount ?? 0.0
+        promocodeDict["calculationType"] = selectedPromoCodeArray.first?.calculationType ?? ""
 //        self.promoCodeDropDownSelectedId = selectedPromoCodeArray.first?.promotionCodeId ?? 0
 //        self.promocodeDropDownSelectedDiscount = selectedPromoCodeArray.first?.discount ?? 0.0
         
@@ -259,6 +273,7 @@ extension PromoDropDownViewController: UICollectionViewDelegate,UICollectionView
         )
         promoCodeDropDownSelectedId = 0
         promocodeDropDownSelectedDiscount = 0
+        calculationType = ""
         self.view.layoutSubviews()
         
         

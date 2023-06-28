@@ -50,6 +50,7 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
         self.collectionView.dataSource = self
         self.collectionView.backgroundColor = .clear
         self.cardNumberTF.delegate = self
+        self.cardPinTF.delegate = self
         self.collectionView.reloadData()
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -106,6 +107,16 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         previousTextFieldContent = textField.text;
         previousSelection = textField.selectedTextRange;
+        if string.rangeOfCharacter(from: NSCharacterSet.decimalDigits) != nil
+         {
+             if(textField == self.cardPinTF) {
+                 guard var text = textField.text else { return false }
+                 text = text + string
+                 if text.count > 4 {
+                     return false
+                 }
+             }
+         }
         return true
     }
     

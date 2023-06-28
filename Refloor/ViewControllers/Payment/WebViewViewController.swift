@@ -88,8 +88,9 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
     @IBOutlet weak var moldingNone: UIButton!
     @IBOutlet weak var moldingVinyl: UIButton!
     @IBOutlet weak var moldingUnfinish: UIButton!
+    @IBOutlet weak var moldingCovedBaseBoard: UIButton!
     
-    @IBOutlet weak var contract_owner_reviewed_Btn, contract_transition_Btn, contract_molding_Btn,contract_molding_none_Btn, contract_molding_waterproof_Btn, contract_molding_unfinished_Btn,  contract_risk_free_Btn, contract_lifetime_guarantee_Btn, contract_lead_safe_btn,contract_deposit_Btn, contract_final_payment_Btn, contract_time_of_performance_btn,contract_notices_to_owners_btn,notices_to_cancellation_btn,contract_scheduling_Btn, contract_motion_btn, contract_floor_protection_Btn, contract_plumbing_Btn, contract_plumbing_option_Btn,contract_plumbing_option_Btn2, contract_additional_other_cost_Btn, contract_additional_other_subfloor_Btn, contract_additional_other_leveling_Btn, contract_additional_other_screwdown_Btn, contract_additional_other_hardwood_removal_Btn, contract_additional_other_door_removal_Btn, contract_additional_other_bifold_removal_Btn,contract_floor_protection, contract_right_to_cure_Btn, contract_owner_responsibility_Btn,electronicsAuthorizationBtn,electronicsAuthorizationBtn2: UIButton!
+    @IBOutlet weak var contract_owner_reviewed_Btn, contract_transition_Btn, contract_molding_Btn,contract_molding_none_Btn, contract_molding_waterproof_Btn, contract_molding_unfinished_Btn,  contract_risk_free_Btn, contract_lifetime_guarantee_Btn, contract_lead_safe_btn,contract_deposit_Btn, contract_final_payment_Btn, contract_time_of_performance_btn,contract_notices_to_owners_btn,notices_to_cancellation_btn,contract_scheduling_Btn, contract_motion_btn, contract_floor_protection_Btn, contract_plumbing_Btn, contract_plumbing_option_Btn,contract_plumbing_option_Btn2, contract_additional_other_cost_Btn, contract_additional_other_subfloor_Btn, contract_additional_other_leveling_Btn, contract_additional_other_screwdown_Btn, contract_additional_other_hardwood_removal_Btn, contract_additional_other_door_removal_Btn, contract_additional_other_bifold_removal_Btn,contract_floor_protection, contract_right_to_cure_Btn, contract_owner_responsibility_Btn,electronicsAuthorizationBtn,electronicsAuthorizationBtn2,electronicsAuthorizationBtn3: UIButton!
     
     @IBOutlet weak var cancellationLabelTopPart: UILabel!
     func getSignatureAndInitials(){
@@ -124,7 +125,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         self.getSignatureAndInitials()
         setInitialData()
         //contract_owner_reviewed_Btn, contract_transition_Btn, contract_molding_Btn,contract_molding_none_Btn, contract_molding_waterproof_Btn, contract_molding_unfinished_Btn,  contract_risk_free_Btn, contract_lifetime_guarantee_Btn, contract_lead_safe_btn,contract_deposit_Btn, contract_final_payment_Btn, contract_time_of_performance_btn,contract_notices_to_owners_btn,notices_to_cancellation_btn,
-        self.contractDataStatus = ContractData.init(contract_owner_reviewed_status: 0, contract_transition: 0, contract_molding_status: 0, contract_molding_none_status: 0, contract_molding_waterproof_status: 0, contract_molding_unfinished_status: 0, contract_risk_free_status: 0, contract_lifetime_guarantee_status: 0, contract_lead_safe_status: 0, contract_deposit_status: 0, contract_final_payment_status: 0, contract_time_of_performance_status: 0, contract_notices_to_owners_status: 0, contract_notices_of_cancellation: 0, contract_scheduling_status: 0, contract_motion_status: 0, contract_floor_protection_status: 0, contract_plumbing_status: 0, contract_plumbing_option_status: -1, contract_additional_other_cost_status: 0, contract_additional_other_subfloor_status: 0, contract_additional_other_leveling_status: 0, contract_additional_other_screwdown_status: 0, contract_additional_other_hardwood_removal_status: 0, contract_additional_other_door_removal_status: 0, contract_additional_other_bifold_removal_status: 0, contract_floor_protection: 0, contract_right_to_cure_status: 0, contract_owner_responsibility_status: 0, electronicsAuthorization1Status: 0, electronicsAuthorization2Status: 0) //ContractData.init(contract_owner_reviewed_status: 0, contract_transition: 0, contract_molding_status: 0,contract_molding_none_status: 0, contract_molding_waterproof_status: 0, contract_molding_unfinished_status: 0, contract_financing_status: 0, contract_risk_free_status: 0, contract_lifetime_guarantee_status: 0, contract_deposit_status: 0, contract_final_payment_status: 0, contract_additional_cost_status: 0, contract_lead_safe_status: 0, contract_scheduling_status: 0, contract_time_of_performance_status: 0, contract_floor_protection_status: 0, contract_door_frame_and_other_status: 0, contract_plumbing_status: 0, contract_plumbing_option_status: -1, contract_additional_other_cost_status: 0, contract_additional_other_subfloor_status: 0, contract_additional_other_leveling_status: 0, contract_additional_other_screwdown_status: 0, contract_additional_other_tile_removal_status: 0, contract_additional_other_hardwood_removal_status: 0, contract_additional_other_door_removal_status: 0, contract_additional_other_bifold_removal_status: 0, contract_right_to_cure_status: 0, contract_owner_responsibility_status: 0,electronicsAuthorization1Status:0,electronicsAuthorization2Status: 0)
+        self.contractDataStatus = ContractData.init(contract_owner_reviewed_status: 0, contract_transition: 0, contract_molding_status: 0, contract_molding_none_status: 0, contract_molding_waterproof_status: 0, contract_molding_unfinished_status: 0, contract_molding_CovedBaseboard_status: 0,contract_risk_free_status: 0, contract_lifetime_guarantee_status: 0, contract_lead_safe_status: 0, contract_deposit_status: 0, contract_final_payment_status: 0, contract_time_of_performance_status: 0, contract_notices_to_owners_status: 0, contract_notices_of_cancellation: 0, contract_scheduling_status: 0, contract_motion_status: 0, contract_floor_protection_status: 0, contract_plumbing_status: 0, contract_plumbing_option_status: -1, contract_additional_other_cost_status: 0, contract_additional_other_subfloor_status: 0, contract_additional_other_leveling_status: 0, contract_additional_other_screwdown_status: 0, contract_additional_other_hardwood_removal_status: 0, contract_additional_other_door_removal_status: 0, contract_additional_other_bifold_removal_status: 0, contract_floor_protection: 0, contract_right_to_cure_status: 0, contract_owner_responsibility_status: 0, electronicsAuthorization1Status: 0, electronicsAuthorization2Status: 0,electronicsAuthorization3Status: 0) //ContractData.init(contract_owner_reviewed_status: 0, contract_transition: 0, contract_molding_status: 0,contract_molding_none_status: 0, contract_molding_waterproof_status: 0, contract_molding_unfinished_status: 0, contract_financing_status: 0, contract_risk_free_status: 0, contract_lifetime_guarantee_status: 0, contract_deposit_status: 0, contract_final_payment_status: 0, contract_additional_cost_status: 0, contract_lead_safe_status: 0, contract_scheduling_status: 0, contract_time_of_performance_status: 0, contract_floor_protection_status: 0, contract_door_frame_and_other_status: 0, contract_plumbing_status: 0, contract_plumbing_option_status: -1, contract_additional_other_cost_status: 0, contract_additional_other_subfloor_status: 0, contract_additional_other_leveling_status: 0, contract_additional_other_screwdown_status: 0, contract_additional_other_tile_removal_status: 0, contract_additional_other_hardwood_removal_status: 0, contract_additional_other_door_removal_status: 0, contract_additional_other_bifold_removal_status: 0, contract_right_to_cure_status: 0, contract_owner_responsibility_status: 0,electronicsAuthorization1Status:0,electronicsAuthorization2Status: 0)
         
     }
 //    override func performSegueToReturnBack() {
@@ -170,6 +171,9 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         }
         if moldingTypesSelected.contains(where: {$0.localizedStandardContains("Unfinished")}) {
             self.moldingUnfinish.setBackgroundImage(UIImage(named: "contactTick"), for: .normal)
+        }
+        if moldingTypesSelected.contains(where: {$0.localizedStandardContains("Coved Baseboard")}) {
+            self.moldingCovedBaseBoard.setBackgroundImage(UIImage(named: "contactTick"), for: .normal)
         }
         contract_plumbing_option_Btn.setBackgroundImage(applicantInitialsImage ?? UIImage(), for: .selected)
         contract_plumbing_option_Btn2.setBackgroundImage(applicantInitialsImage ?? UIImage(), for: .selected)
@@ -351,6 +355,18 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         }
     }
     
+    @IBAction func contract_molding_CovedBaseBoardStatus(_ sender: UIButton)
+    {
+        if sender.isSelected{
+            sender.isSelected = false
+            contractDataStatus!.contract_molding_CovedBaseboard_status = 0
+        }else{
+            
+            contractDataStatus!.contract_molding_CovedBaseboard_status = 1
+            sender.setBackgroundImage(applicantInitialsImage ?? UIImage(), for: .selected)
+            sender.isSelected = true
+        }
+    }
     
     
     
@@ -673,6 +689,19 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             sender.isSelected = true
         }
     }
+    
+    @IBAction func electronicsAuthorization3Action(_ sender: UIButton)
+    {
+        if sender.isSelected{
+            sender.isSelected = false
+            contractDataStatus!.electronicsAuthorization3Status = 0
+        }else{
+            
+            contractDataStatus!.electronicsAuthorization3Status = 1
+            sender.setBackgroundImage(applicantInitialsImage ?? UIImage(), for: .selected)
+            sender.isSelected = true
+        }
+    }
     @objc override func doregenerateBack()
     {
         self.navigationController?.popViewController(animated: true)
@@ -893,6 +922,13 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             let postion = CGPoint(x: 0, y: self.electronicsAuthorizationBtn2.frame.origin.y)
             return (alertMessage,postion)
         }
+        guard contractDataStatus!.electronicsAuthorization3Status == 1 else
+        {
+            alertMessage = "alertMessage"
+            self.electronicsAuthorizationBtn3.setBackgroundImage(UIImage(named: "contactUncheckRed"), for: .normal)
+            let postion = CGPoint(x: 0, y: self.electronicsAuthorizationBtn3.frame.origin.y)
+            return (alertMessage,postion)
+        }
         return (alertMessage,CGPoint.zero)
     }
 
@@ -1091,7 +1127,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         {
              applicantInfoSecret = createJWTTokenApplicantInfo(parameter: applicantDta["data"] as! [String : Any])
         }
-        let contactInfo = self.getContractDataOfAppointment()
+        //let contactInfo = self.getContractDataOfAppointment()
         //print(contactInfo)
         var contractDict: [String:Any] = [:]
         contractDict["paymentdetails"] = paymentDetails

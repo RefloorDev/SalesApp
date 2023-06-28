@@ -524,7 +524,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 cell.messurementTF.text = (summaryData.adjusted_area ?? 0).toRoundeString
                 if isStair != 1
                 {
-                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
@@ -571,7 +571,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                     cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
                     if isStair != 1
                     {
-                        var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                        let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                         if setDefaultAnswerTrueIndex != nil
                         {
                             let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
@@ -608,7 +608,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 cell.messurementTF.text = "\(summaryData.adjusted_area ?? 0)"
                 if isStair != 1
                 {
-                    var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex { $0.setDefaultAnswer == true}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
@@ -851,6 +851,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         let questionsForAppointment = getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var extraCost:Double = 0.0
         var extraCostExclude:Double = 0.0
+        var extrapromoToexclude:Double = 0.0
         for i in 0..<questionsForAppointment.count{
             let questionsArray = List<rf_AnswerForQuestion>()
             let question = questionsForAppointment[i]
@@ -874,6 +875,10 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                             if question.exclude_from_discount{
                                 extraCostExclude = extraCostExclude + additionalCost
                             }
+                            if question.exclude_from_promotion
+                            {
+                                extrapromoToexclude = extrapromoToexclude + additionalCost
+                            }
                             extraCost = extraCost + additionalCost
                         }
                     }catch{
@@ -889,7 +894,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         //save extra cost of selected room to appointment
         self.saveExtraCostToCompletedAppointment(roomId: self.roomID, extraCost: extraCost)
         //save extra cost to exclude
-        self.saveExtraCostExcludeToCompletedAppointment(roomId: self.roomID, extraCostExclude: extraCostExclude)
+        self.saveExtraCostExcludeToCompletedAppointment(roomId: self.roomID, extraCostExclude: extraCostExclude,extraPromoPriceToExclude: extrapromoToexclude)
         //to save stair count and width to appointment room details
         if roomName.localizedCaseInsensitiveContains("stair"){
             self.saveStairDetailsToCompletedAppointment(roomId: self.roomID)

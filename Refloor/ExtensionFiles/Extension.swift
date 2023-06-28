@@ -457,6 +457,24 @@ extension String{
         }
         return Date()
     }
+    
+    func promoSpecialDate(_ dateString:String ) -> Date{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = dateFormatter.date(from: dateString)
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let resultString = dateFormatter.string(from: date!)
+//        let resultdate = resultString.recisionDate()
+//        return resultdate
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = "yyyy-MM-dd"
+        dateFormatter1.dateStyle = .short
+        if let resultDate = dateFormatter1.date(from: resultString)
+        {
+            return resultDate
+        }
+        return Date()
+    }
     func autoLogoutDate() -> Date{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -2791,6 +2809,7 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.name = room.room_name
                     summaryList.color = room.selected_room_color ?? "Select Color"
                     summaryList.moulding = room.selected_room_molding ?? ""
+                    summaryList.mouldingPrice = room.selected_room_MoldingPrice
                     summaryList.room_image_url = room.room_attachments.first ?? ""
                     summaryList.room_area = Double(room.draw_area_adjusted ?? "0.0")
                     summaryList.material_image_url = room.material_image_url
@@ -2798,6 +2817,7 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.stair_count = Int(room.stairCount ?? "0")
                     summaryList.colorUpCharge = room.selected_room_Upcharge
                     summaryList.colorUpChargePrice = room.selected_room_UpchargePrice
+                    summaryList.room_perimeter = room.room_perimeter
                     summaryListArray.append(summaryList)
                 }
             }
@@ -2848,7 +2868,7 @@ extension UIViewController:OrderStatusViewDelegate
     
     
     
-    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0){
+    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0, moldPrice: Double = 0.0){
         let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         if let room = appointment.first?.rooms.filter("room_id == %d", roomID){
@@ -2859,10 +2879,10 @@ extension UIViewController:OrderStatusViewDelegate
                     if let id = room.first?.id{
                         if !isColor{
                             
-                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName]
+                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName, "selected_room_MoldingPrice": moldPrice]
                             
                         }else{
-                            dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge]
+                            dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge ,"selected_room_MoldingPrice": moldPrice]
                         }
                     }
                     realm.create(rf_completed_room.self, value: dict, update: .all)
@@ -3081,7 +3101,7 @@ extension UIViewController:OrderStatusViewDelegate
                 try realm.write{
                     var dict:[String:Any?] = [:]
                     if customerDetailsDict["applicant_first_name"] as? String != "" && customerDetailsDict["applicant_first_name"] != nil{
-                        let applicant_phone = customerDetailsDict["mobile"]
+                        let applicant_phone = customerDetailsDict["home_phone"]
                         let applicant_street = customerDetailsDict["street2"]
                         let applicant_street2 = customerDetailsDict["street"]
                         let applicant_state_code = customerDetailsDict["state_code"]
@@ -3608,6 +3628,7 @@ extension UIViewController:OrderStatusViewDelegate
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         let room = appointment.first?.rooms.filter("room_id == %d", roomID)
         if room?.count == 1{
+            //room?.first?.room_perimeter
             summaryData.name = roomName
             summaryData.room_name = roomName
             summaryData.room_id = roomID
@@ -3730,14 +3751,14 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
-    func saveExtraCostExcludeToCompletedAppointment(roomId:Int, extraCostExclude: Double){
+    func saveExtraCostExcludeToCompletedAppointment(roomId:Int, extraCostExclude: Double, extraPromoPriceToExclude: Double){
         do{
             let realm = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
-                let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPriceToExclude":extraCostExclude]
+                let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPriceToExclude":extraCostExclude , "extraPromoPriceToExclude":extraPromoPriceToExclude]
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -3747,8 +3768,9 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
-    func getExtraCostExcludeFromCompletedAppointment(roomId:Int) -> Double{
+    func getExtraCostExcludeFromCompletedAppointment(roomId:Int) -> (extrapriceToExclude:Double,extraPromoPriceToExclude:Double){
         var extraCostToExclude: Double = 0.0
+        var extraPromoPriceToExclude: Double = 0.0
         do{
             let realm = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
@@ -3756,11 +3778,12 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let roomSel = room?.first{
                 extraCostToExclude = roomSel.extraPriceToExclude
+                extraPromoPriceToExclude = roomSel.extraPromoPriceToExclude
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
         }
-        return extraCostToExclude
+        return (extraCostToExclude,extraPromoPriceToExclude)
     }
     
     func saveUpchargeCostPerRoomToCompletedAppointment(roomId:Int, upChargeCost: Double){
@@ -3859,7 +3882,16 @@ extension UIViewController:OrderStatusViewDelegate
                 let room_perimeter = room.room_perimeter
                 let moldingName = room.selected_room_molding
                 let selectedColor = room.selected_room_color ?? ""
-                let roomColorId = masterData?.flooring_colors.filter("color_name == %@",selectedColor).first?.material_id ?? 0
+                var roomColorId:Int = Int()
+                if room_name!.contains("STAIRS")
+                {
+                    roomColorId = masterData?.stairColourList.filter("color == %@",selectedColor).first?.material_id ?? 0
+                }
+                else
+                {
+                     roomColorId = masterData?.floorColourList.filter("color == %@",selectedColor).first?.material_id ?? 0
+                    
+                }
                 var transitionArray: [[String:Any]] = []
 //                var transition1_name = ""
 //                var transition1_width = ""
@@ -3966,7 +3998,7 @@ extension UIViewController:OrderStatusViewDelegate
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId).first
-            let mobile = appointment?.applicant_phone
+           // let mobile = appointment?.applicant_phone
             let street2 = appointment?.applicant_street2
             let street = appointment?.applicant_street
             let state_code = appointment?.applicant_state_code
@@ -3998,7 +4030,7 @@ extension UIViewController:OrderStatusViewDelegate
             let co_applicant_state = appointment?.co_applicant_state
             let co_applicant_zip = appointment?.co_applicant_zip
             let co_applicant_phone = appointment?.co_applicant_phone
-            customerDetailsDict["mobile"] = mobile
+            //customerDetailsDict["mobile"] = mobile
             customerDetailsDict["street2"] = street2
             customerDetailsDict["street"] = street
             customerDetailsDict["state_code"] = state_code
@@ -4249,6 +4281,28 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             let colors = realm.objects(rf_master_color_list.self)
+            colorNamesArray = colors
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return colorNamesArray
+    }
+    func getFloorColorList() -> Results<rf_floorColour_results> {
+        var colorNamesArray : Results<rf_floorColour_results>!
+        do{
+            let realm = try Realm()
+            let colors = realm.objects(rf_floorColour_results.self)
+            colorNamesArray = colors
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return colorNamesArray
+    }
+    func getStairColorList() -> Results<rf_stairColour_results> {
+        var colorNamesArray : Results<rf_stairColour_results>!
+        do{
+            let realm = try Realm()
+            let colors = realm.objects(rf_stairColour_results.self)
             colorNamesArray = colors
         }catch{
             print(RealmError.initialisationFailed.rawValue)
@@ -4702,8 +4756,8 @@ extension Date {
     {
             //return date1.compare(self).rawValue * self.compare(date2).rawValue >= 0
         //return (min(date1, date2) ... max(date1, date2)).contains(self)
-        return date1.timeIntervalSince1970 < self.timeIntervalSince1970 && date2.timeIntervalSince1970 > self.timeIntervalSince1970
-
+        //return date1.timeIntervalSince1970 < self.timeIntervalSince1970 && date2.timeIntervalSince1970 > self.timeIntervalSince1970
+                return (min(date1, date2) ... max(date1, date2)) ~= self
         }
     
     func toString() -> String
