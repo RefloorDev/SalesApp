@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import GoogleMaps
 import GooglePlaces
+import RealmSwift
 class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,AddressSelectPlaceEntryDelegate,UITextFieldDelegate,GMSMapViewDelegate{
     
     static public func initialization() -> ApplicantFormViewControllerForm? {
@@ -197,6 +198,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         setPhoneNumberDelegate()
         let font = UIFont(name: "Avenir-Medium", size: 22)!
         sexSegment.setTitleTextAttributes([NSAttributedString.Key.font: font,NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        self.zipCode.keyboardType = .asciiCapableNumberPad
+        self.zipCode.delegate = self
         
         
         
@@ -239,7 +242,7 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
                 textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
                 return false
             }
-            if(textField == self.socialSecurityNo)
+            else if(textField == self.socialSecurityNo)
             {
                 
                 guard let text = textField.text else { return false }
@@ -247,6 +250,13 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
                 textField.text = self.format(with: "XXX-XX-XXXX", phone: newString)
                 //  self.socialSecurityNo.isSecureTextEntry = true
                 return false
+            }
+            else if(textField == self.zipCode) {
+                guard var text = textField.text else { return false }
+                text = text + string
+                if text.count > 5 {
+                    return false
+                }
             }
             
             return true
@@ -411,7 +421,30 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         //arb
         let rf_ApplicantInfo = rf_ApplicantData(applicantOneData:data)
         self.saveApplicantOneDataToAppointmentDetail(applicantInfo: rf_ApplicantInfo)
-        //
+        //update appdlegate value
+        
+        let appointmetslData = AppDelegate.appoinmentslData
+        appointmetslData?.phone = self.homePhone.text
+        appointmetslData?.street = self.address.text
+        appointmetslData?.zip = self.zipCode.text
+        appointmetslData?.city = self.city.text
+        appointmetslData?.state = self.stateZipCode.text
+        
+        
+        // update applicant database
+        
+//        let appointmentId = AppointmentData().appointment_id ?? 0
+//        do{
+//            let realm = try Realm()
+//            try realm.write{
+//                var dict:[String:Any] = [:]
+//                dict = ["appointment_id":appointmentId,"applicant_phone":homePhone.text ?? "","applicant_email":emailAddress.text ?? ""]
+//                realm.create(rf_completed_appointment.self, value: dict, update: .all)
+//            }
+//        }
+//        catch{
+//            print(RealmError.initialisationFailed)
+//        }
         
         if(AppDelegate.appoinmentslData.co_applicant_skipped == 1)
         {
@@ -477,6 +510,12 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             applicant.downpayment = downpayment
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
+            let appointment = AppDelegate.appoinmentslData
+            appointment?.zip = self.zipCode.text ?? ""
+            appointment?.email = self.emailAddress.text ?? ""
+            appointment?.phone = self.homePhone.text ?? ""
+            appointment?.city = self.city.text ?? ""
+            appointment?.state = self.stateZipCode.text ?? ""
             let currentClassName = String(describing: type(of: self))
             let classDisplayName = "ApplicantInformation"
             self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
@@ -967,6 +1006,15 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
                         else if(co.lowercased() == "administrative_area_level_1")
                         {
                             self.stateZipCode.text = component.shortName
+                        }
+                        else if(co.lowercased() == "street_number")
+                        {
+                            self.address.text = ""
+                            self.address.text = component.name
+                        }
+                        else if(co.lowercased() == "route")
+                        {
+                            self.address.text = (self.address.text ?? "") + " " + component.name
                         }
                     }
                 }

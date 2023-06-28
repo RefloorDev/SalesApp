@@ -2104,6 +2104,8 @@ class HttpClientManager: NSObject {
                                 let specialPriceResults = realm.objects(rf_specialPrice_results.self)
                                 let promotionCodesResult = realm.objects(rf_promotionCodes_results.self)
                                 let transitionHeightResults = realm.objects(rf_transitionHeights_results.self)
+                                let floorColourList = realm.objects(rf_floorColour_results.self)
+                                let stairColourList = realm.objects(rf_stairColour_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2121,6 +2123,8 @@ class HttpClientManager: NSObject {
                                     realm.delete(specialPriceResults)
                                     realm.delete(promotionCodesResult)
                                     realm.delete(transitionHeightResults)
+                                    realm.delete(floorColourList)
+                                    realm.delete(stairColourList)
                                    
                                 }
                             }catch{

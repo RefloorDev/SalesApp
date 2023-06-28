@@ -184,6 +184,8 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         }
         setPhoneNumberDelegate()
         sexSegment.setTitleTextAttributes([NSAttributedString.Key.font: font,NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
+        self.zipcode.keyboardType = .asciiCapableNumberPad
+         self.zipcode.delegate = self
         
         // Do any additional setup after loading the view.
     }
@@ -228,12 +230,19 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
                 textField.text = self.format(with: "(XXX) XXX-XXXX", phone: newString)
                 return false
             }
-            if(textField == self.socialSecurityNo)
+            else if(textField == self.socialSecurityNo)
             {
                 guard let text = textField.text else { return false }
                 let newString = (text as NSString).replacingCharacters(in: range, with: string)
                 textField.text = self.format(with: "XXX-XX-XXXX", phone: newString)
                 return false
+            }
+            else if(textField == self.zipcode) {
+                guard var text = textField.text else { return false }
+                text = text + string
+                if text.count > 5 {
+                    return false
+                }
             }
             return true
         }
@@ -521,6 +530,7 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         appointment?.co_applicant_middle_name = self.middlename.text ?? ""
         appointment?.co_applicant_zip = self.zipcode.text ?? ""
         appointment?.co_applicant_email = self.emailAddress.text ?? ""
+        appointment?.co_applicant_phone = self.homePhone.text ?? ""
         appointment?.co_applicant_city = self.city.text ?? ""
         appointment?.co_applicant_state = self.stateZipCode.text ?? ""
         appointment?.co_applicant_address = self.address.text ?? ""
@@ -835,6 +845,15 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
                         else if(co.lowercased() == "administrative_area_level_1")
                         {
                             self.stateZipCode.text = component.shortName
+                        }
+                        else if(co.lowercased() == "street_number")
+                        {
+                            self.address.text = ""
+                            self.address.text = component.name
+                        }
+                        else if(co.lowercased() == "route")
+                        {
+                            self.address.text = (self.address.text ?? "") + " " + component.name
                         }
                     }
                 }

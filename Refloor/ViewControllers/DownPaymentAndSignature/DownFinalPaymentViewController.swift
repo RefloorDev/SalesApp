@@ -51,6 +51,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var imagePicker: CaptureImage!
     var promotionCodeId:Int = Int()
     var stairPrice:Double = Double()
+    var excluded_amount_promotion:Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -377,6 +378,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         
         UIUpdateForValueChange(isUpdateDownPayment:true)
         summery.specialPriceId = specialPriceId
+        summery.excluded_amount_promotion = self.excluded_amount_promotion
         summery.stairSpecialPriceId = stairsSpecialPriceId
         summery.promotionCodeId = promotionCodeId
         summery.downOrFinal = self.downOrFinal
