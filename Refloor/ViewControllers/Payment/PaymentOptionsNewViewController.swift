@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 
+
 class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,PromoPopUpViewDelegate,DiscountProtocol, PromoDiscoundProtocol {
     func promocodeApplied(promocodeArray: [String], promoCodeDropDownSelectedId: Int, promocodeDropDownSelectedDiscount: Double,calculationType: String)
     {

@@ -2157,9 +2157,10 @@ class HttpClientManager: NSObject {
     }
     
     //MARK: - Update Customer & Room Information
-    func updateCustomerAndRoomInfoAPi(parameter:Parameters,isOnlineCollectBtnPressed:Bool,completion:@escaping (_ success: String?, _ object: String? , _ paymentStatus: String? , _ paymentMessage: String? ) -> ()){
+    func updateCustomerAndRoomInfoAPi(parameter:Parameters,isOnlineCollectBtnPressed:Bool,completion:@escaping (_ success: String?, _ object: String? , _ paymentStatus: String? , _ paymentMessage: String?, _ transactionId: String?,  _ cardType: String?) -> ()){
         
         if self.connectedToNetwork() {
+
             if isOnlineCollectBtnPressed == true
             {
             self.showhideHUD(viewtype: .SHOW, title: "Processing Payment")
@@ -2175,18 +2176,18 @@ class HttpClientManager: NSObject {
                 if response != nil{
                     if(response?.result != nil)
                     {
-                        completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage)
+                        completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
                         self.showhideHUD(viewtype: .HIDE, title: "")
                     }
                 }
                 else{
-                    completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage)
+                    completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
                     self.showhideHUD(viewtype: .HIDE, title: "")
                 }
             }
         }
         else{
-            completion("false", AppAlertMsg.NetWorkAlertMessage,"","")
+            completion("false", AppAlertMsg.NetWorkAlertMessage,"","","","")
             
         }
     }
