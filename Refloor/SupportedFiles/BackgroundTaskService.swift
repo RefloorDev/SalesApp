@@ -377,6 +377,7 @@ extension BackgroundTaskService {
                 self.cancelAllTaskRequests()
                 
             }
+            //SceneDelegate.timer.invalidate()
             
             for appointmentRequest in appointmentRequestArray
             {
@@ -663,10 +664,17 @@ extension BackgroundTaskService {
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameter, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message  in
-            if(success ?? "") == "Success"{
+        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameter, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
+            if(success ?? "") == "Success" {
+                //print(parameter.ke)
+               
+                if success == "Success"
+                {
+                    
+                }
                 print(message ?? "No msg")
                 //Writing Logs
+                
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.roomDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 //
@@ -676,7 +684,14 @@ extension BackgroundTaskService {
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.CustomerAndRoom,paymentStatus: payment_status ?? "",paymentMessage: payment_message ?? "")
                 completion(true)
-            }else{
+            }
+            else if success == "Failed"
+            {
+                let paymentFailureParam = self.transactionInfoAppendingOnData(parameter: parameter, transactionId: transactionId ?? "", cardType: cardType ?? "")
+                completion(false)
+            }
+                
+            else{
                 //Writing Logs
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.roomDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
@@ -687,6 +702,47 @@ extension BackgroundTaskService {
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
                 completion(false)
             }
+        }
+
+    }
+
+    
+    func transactionInfoAppendingOnData(parameter:[String:Any],transactionId: String,cardType:String) -> [String:Any]
+    {
+        var dictParam = parameter
+        if var param = parameter["data"] as? [String:Any]
+        {
+            //var appointmentId = param["paymentdetails"]["appointment_id"]
+            if !param.keys.contains("payment_transaction_info")
+            {
+                let payment_TrasnsactionDict = ["authorize_transaction_id":transactionId ,"card_type":cardType ]
+                param["payment_transaction_info"] = payment_TrasnsactionDict
+            }
+            dictParam["data"] = param
+            
+            
+        }
+        createAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: dictParam as NSDictionary, imageName: "")
+        return dictParam
+    }
+    func createAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String){
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        do{
+            let realm = try Realm()
+            try realm.write{
+                
+             let dict:[String:Any] = [ "appointment_id": appointmentId,
+                                      "reqest_title": requestTitle.rawValue,
+                                      "request_url": requestUrl,
+                                      "request_parameter" : requestParameter.JsonString(),
+                                      "request_type" : requestType.rawValue,
+                                      "sync_status" : false,
+                                      "image_name": imageName]
+                
+                realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
         }
     }
     

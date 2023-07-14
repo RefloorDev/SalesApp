@@ -44,6 +44,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
     var document = ""
     var recisionDate:String = String()
     var imagePicker: CaptureImage!
+    var payment_TrasnsactionDict:[String:String] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +68,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
     }
     override func performSegueToReturnBack()
     {
-        if isCardVerified == true
+        if isCardVerified == true || payment_TrasnsactionDict != [:]
         {
             self.alert("You can’t navigate back and change the payment option. ", nil)
         }
@@ -125,6 +126,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "cash"
             web.isCardVerified = false
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
         }
         else if self.paymentType == "check"
@@ -137,6 +139,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "check"
             web.isCardVerified = false
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
             
         }
@@ -150,6 +153,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "card"
             web.isCardVerified = isCardVerified
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
         }
         else 
@@ -161,7 +165,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.total = total
             web.balance = balance
             web.paymentType = "finance"
-            
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
         }
         

@@ -30,6 +30,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
     let header = JWTHeader(typ: "JWT", alg: .hs256)
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"//"password"
     var recisionDate:String = String()
+    var payment_TrasnsactionDict:[String:String] = [:]
     // var activity= PaymentOptionsViewController
     let activity = HttpClientManager.init()
     static func initialization() -> WebViewViewController? {
@@ -1015,6 +1016,10 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         for (key,value) in contactApiData{
             customerAndRoomData[key] = value
         }
+            if payment_TrasnsactionDict != [:]
+            {
+                customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
+            }
 //            let json = (customerAndRoomData as NSDictionary).JsonString()
 //            let data = json.data(using: .utf8)
 ////            let decoder = JSONDecoder()

@@ -1621,6 +1621,9 @@ class CashDataResponse: Mappable
     var document:String?
     var paymentStatus:String?
     var paymentMessage:String?
+    var authorize_transaction_id:String?
+    var card_type:String?
+    
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1631,6 +1634,8 @@ class CashDataResponse: Mappable
         document <- map["document"]
         paymentStatus <- map["payment_status"]
         paymentMessage <- map["payment_message"]
+        authorize_transaction_id <- map["authorize_transaction_id"]
+        card_type <- map["card_type"]
         
     }
 }

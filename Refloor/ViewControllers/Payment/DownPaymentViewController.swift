@@ -70,6 +70,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     var roomData:RoomDataValue!
     //let header = JWTHeader(alg: .hs256)
     let header = JWTHeader(typ: "JWT", alg: .hs256)
+    var payment_TrasnsactionDict:[String:String] = [:]
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"//"password"//UserData.init().token ?? ""//
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -873,8 +874,8 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                
                 //parameter["token"] = UserData.init().token ?? ""
                 
-                HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message  in
-                    if(success ?? "") == "Success"{
+                HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message,transactionId,cardType  in
+                    if(success ?? "") == "Success" || success == "Failed"{
                         print("success")
                         let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
                         let firstName = appointment?.applicant_first_name ?? ""
@@ -887,13 +888,28 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                         self.deleteAnyAppointmentLogsTable(appointmentId: appointmentId)
                         self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: dbParameter as NSDictionary, imageName: "")
                         //self.alert(message ?? "", nil)
-                        self.isCardVerifiedSuccessfully = true
+                        if success == "Success"
+                        {
+                            self.isCardVerifiedSuccessfully = true
+                        }
+                        else
+                        {
+                            self.payment_TrasnsactionDict = ["authorize_transaction_id":transactionId ?? "","card_type":cardType ?? ""]
+                            self.isCardVerifiedSuccessfully = false
+                        }
                         let yes = UIAlertAction(title: "OK", style:.default) { (_) in
                             
                             self.cardDetailsAPiSuccess()
                         }
-                        
-                        self.alert(payment_message ?? "", [yes])
+                        if success == "Success"
+                        {
+                            
+                            self.alert(payment_message ?? "", [yes])
+                        }
+                        else
+                        {
+                            self.alert(message ?? "", [yes])
+                        }
                         
                        
                     }
@@ -950,6 +966,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cancel.balance = self.totalAmount - self.downPaymentValue
             cancel.paymentType = "cash"
             cancel.isCardVerified = false
+            cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(cancel, animated: true)
         }
         else if self.paymentType == .Check
@@ -962,6 +979,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cancel.balance = self.totalAmount - self.downPaymentValue
             cancel.paymentType = "check"
             cancel.isCardVerified = false
+            cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(cancel, animated: true)
             
         }
@@ -975,6 +993,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cancel.balance = self.totalAmount - self.downPaymentValue
             cancel.paymentType = "card"
             cancel.isCardVerified = self.isCardVerifiedSuccessfully
+            cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(cancel, animated: true)
         }
     }
