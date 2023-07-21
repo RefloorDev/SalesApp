@@ -117,8 +117,8 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
             promocodeCollectionViewHeightConstraint.constant = 0
         }
         //
-        let masterData = self.getMasterDataFromDB()
-        self.minimumFee = masterData.min_sale_price
+//        let masterData = self.getMasterDataFromDB()
+//        self.minimumFee = masterData.min_sale_price
         //set sale price
         if isPromoBtnClicked == false
         {

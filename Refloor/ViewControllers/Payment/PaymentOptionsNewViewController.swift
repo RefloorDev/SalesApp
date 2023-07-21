@@ -139,7 +139,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         let isSatirsTodaysDateQualified = appointmentDate!.isBetween(date: stairStartDate, andDate: stairEndDate)
         
-        self.minimumFee = masterData.min_sale_price
+        //self.minimumFee = masterData.min_sale_price
         
         if (appointmentOfficeLocationId == spclPriceOfficeLOcationId) && isRoomTodaysDateQualified == true
         {
@@ -208,6 +208,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 promo.exludedCost = self.totalExtraCostToReduce
                 promo.discountPromoCode = applyedPromoCode
                 promo.discountPercentage = applyediscountPercentage
+                promo.minimumFee = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00
                 var costpersqft:Double = Double()
                 var msrppersqft:Double = Double()
                 var stairperprice:Double = Double()
@@ -272,9 +273,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 mrp = (mrp + additionalCost).rounded()
                 saleprice = saleprice.rounded()
                 let prize = saleprice.rounded(.towardZero)
-                if(prize < self.minimumFee)
+                if(prize < self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00)
                 {
-                    promo.totalAmount = self.minimumFee
+                    promo.totalAmount = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00
                     
                 }else{
                     promo.totalAmount = prize
@@ -773,6 +774,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
         downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
+        downpatmet.minSalePrice = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
         downpatmet.adminFee = 0
@@ -868,6 +870,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 
                 self.savings = cell.adjustmentValue.text!
                 self.savings.removeFirst()
+                self.minimumFee = paymentPlanValueDetails[indexPath.row].minimum_Sale_price ?? 1500.00
                 //self.adjestmentValue = 0
                 self.monthlyValue = self.paymentPlanValueDetails[indexPath.row].monthly_promo ?? 0
                 let youSavedValue = (adjestmentValue + monthlyValue)
@@ -1028,19 +1031,27 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             cell.subHeadingLabel.text = paymentPlanValueDetails[indexPath.row].plan_subtitle
             //cell.descriptionLabel.text = paymentPlanValueDetails[indexPath.row].description
             var updatedDescriptionText = ""
-                        if (indexPath.row == 0) {
-                            updatedDescriptionText = "\n\n" + "\n1-Year limited warranty"
-                        } else if (indexPath.row == 1) {
-                            updatedDescriptionText = "\n" + "\n4-Year limited warranty"
-                        } else if (indexPath.row == 2) {
-                            if isDiscountApplied == true || isPromoApplied == true {
-                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
-                            } else {
-                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
-                            }
-                        } else if (indexPath.row == 3) {
-                            updatedDescriptionText = "\n" + "\n10-Year limited warranty"
-                        }
+//                        if (indexPath.row == 0) {
+//                            updatedDescriptionText = "\n\n" + "\n1-Year limited warranty"
+//                        } else if (indexPath.row == 1) {
+//                            updatedDescriptionText = "\n" + "\n4-Year limited warranty"
+//                        } else if (indexPath.row == 2) {
+//                            if isDiscountApplied == true || isPromoApplied == true {
+//                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+//                            } else {
+//                                updatedDescriptionText = "\n" + "\n4-Part Lifetime Guarantee"
+//                            }
+//                        } else if (indexPath.row == 3) {
+//                            updatedDescriptionText = "\n" + "\n10-Year limited warranty"
+//                        }
+//            if indexPath.row == 0
+//            {
+//                updatedDescriptionText = "\n\n" + (paymentPlanValueDetails[indexPath.row].warranty ?? "")
+//            }
+//            else
+//            {
+                updatedDescriptionText = "\n\n" + (paymentPlanValueDetails[indexPath.row].warranty ?? "")
+            //}
                         cell.descriptionLabel.text = (paymentPlanValueDetails[indexPath.row].description ?? "") + updatedDescriptionText
             var costpersqft:Double = Double()
             var msrppersqft:Double = Double()
@@ -1074,6 +1085,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             additionalCost = totalUpchargeCost + totalExtraCost + totalMoldingPrice
             let stairPrice = Double(self.stairCount) * stairperprice
             var mrp = msrppersqft * area
+            self.minimumFee = paymentPlanValueDetails[indexPath.row].minimum_Sale_price ?? 1500.00
             if calculationType == "sqft"
             {
                  saleprice =  (self.isDiscountApplied || self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
@@ -1321,7 +1333,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 
             let tempValue = self.emiAmount - downOrFinal
             cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-            cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
+            
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+           
             cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
             if(indexPath.row==0)
             {
@@ -1379,7 +1393,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //   cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
                 let tempValue = self.emiAmount - downOrFinal
                 cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
+                
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+                
                 
                 
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
@@ -1419,7 +1435,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
                     cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
                 }
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
+                
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing:paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+                
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
@@ -1450,9 +1468,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
                     cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
                 }
-                
-               
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n $200 Down"
+                   cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+            
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
                 print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")

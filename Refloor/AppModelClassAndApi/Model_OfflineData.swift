@@ -157,6 +157,7 @@ class rf_master_payment_option : Object, Mappable {
     @objc dynamic var payment_info__c : String?
     @objc dynamic var sequence : Int = 0
     @objc dynamic var last_updated_date : String?
+    @objc dynamic var down_payment_message:String?
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
     }
@@ -173,6 +174,7 @@ class rf_master_payment_option : Object, Mappable {
         payment_info__c <- map["Payment_Info__c"]
         sequence <- map["sequence"]
         last_updated_date <- map["last_updated_date"]
+        down_payment_message <- map["down_payment_message"]
     }
 }
 
@@ -512,6 +514,7 @@ class rf_master_product_package :Object, Mappable {
     @objc dynamic var cost_per_sqft : Double = 0.0
     @objc dynamic var monthly_promo : Int = 0
     @objc dynamic var warranty_info : String?
+    @objc dynamic var min_Sale_Price : Double = 0.0
     @objc dynamic var eligible_for_discounts : String?
     @objc dynamic var unit_of_measure : String?
     @objc dynamic var grade : String?
@@ -537,6 +540,7 @@ class rf_master_product_package :Object, Mappable {
         cost_per_sqft <- map["cost_per_sqft"]
         monthly_promo <- map["monthly_promo"]
         warranty_info <- map["warranty_info"]
+        min_Sale_Price <- map["min_sale_price"]
         eligible_for_discounts <- map["eligible_for_discounts"]
         unit_of_measure <- map["unit_of_measure"]
         grade <- map["grade"]
