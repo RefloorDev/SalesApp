@@ -52,6 +52,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var promotionCodeId:Int = Int()
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
+    var minSalePrice:Double = 0.0
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -390,6 +391,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         summery.savings = self.savings
         summery.area = self.area
         summery.stairPrice = self.stairPrice
+        summery.minSalePrice = self.minSalePrice
         // summery.adminFeeStatus = self.isAdmiFee
         //summery.installationDate=self.installationDate.text ?? ""
         summery.downPaymentValue = self.downPayment

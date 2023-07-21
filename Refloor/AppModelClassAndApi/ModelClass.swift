@@ -1273,6 +1273,7 @@ class PaymentPlanValue: Mappable
     var cost_per_sqft: Double?
     var floor_standard :String?
     var warranty :String?
+    var minimum_Sale_price: Double?
     var sequence :String?
     var monthly_promo:Double?
     var discount: Int?
@@ -1302,7 +1303,8 @@ class PaymentPlanValue: Mappable
         self.description = paymentPlan.description1
         self.cost_per_sqft = paymentPlan.cost_per_sqft
         self.floor_standard = ""
-        self.warranty = paymentPlan.warranty
+        self.warranty = paymentPlan.warranty_info
+        self.minimum_Sale_price = paymentPlan.min_Sale_Price
         self.sequence = String(paymentPlan.sequence)
         self.monthly_promo = Double(paymentPlan.monthly_promo)
         //self.discount = discount.discount
@@ -1326,6 +1328,7 @@ class PaymentPlanValue: Mappable
         company_id <- map["company_id"]
         description <- map["description"]
         warranty <- map["warranty_info"]
+        minimum_Sale_price <- map["min_sale_price"]
         floor_standard <- map["floor_standard"]
         sequence <- map["sequence"]
         company_id <- map["company_id"]
@@ -1382,6 +1385,7 @@ class PaymentOptionDataValue: Mappable
     var Secondary_Payment_Factor__c:String?
     var Balance_Due__c:String?
     var Payment_Info__c:String?
+    var down_payment_message:String?
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1398,6 +1402,7 @@ class PaymentOptionDataValue: Mappable
         self.Secondary_Payment_Factor__c = paymentOption.Secondary_Payment_Factor__c
         self.Balance_Due__c = paymentOption.balance_Due__c
         self.Payment_Info__c = paymentOption.payment_info__c
+        self.down_payment_message = paymentOption.down_payment_message
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -1414,8 +1419,7 @@ class PaymentOptionDataValue: Mappable
         Secondary_Payment_Factor__c <- map["Secondary_Payment_Factor__c"]
         Balance_Due__c <- map["Balance_Due__c"]
         Payment_Info__c <- map["Payment_Info__c"]
-        
-        
+        down_payment_message <- map["down_payment_message"]
     }
 }
 
