@@ -1334,7 +1334,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             let tempValue = self.emiAmount - downOrFinal
             cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
             
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
            
             cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
             if(indexPath.row==0)
@@ -1394,7 +1394,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 let tempValue = self.emiAmount - downOrFinal
                 cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
                 
-                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
                 
                 
                 
@@ -1436,7 +1436,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
                 }
                 
-                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing:paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing:paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
                 
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
@@ -1468,7 +1468,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
                     cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
                 }
-                   cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message!))"
+                   cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
             
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
                 
