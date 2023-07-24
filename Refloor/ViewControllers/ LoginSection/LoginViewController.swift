@@ -52,7 +52,7 @@ class LoginViewController: UIViewController {
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
             if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"{
-                versionNumber.setTitle("Version: \(text) (6.0) - DEV", for: .normal)
+                versionNumber.setTitle("Version: \(text) (1.0) - DEV", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
             }
