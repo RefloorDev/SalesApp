@@ -875,7 +875,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 //parameter["token"] = UserData.init().token ?? ""
                 
                 HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message,transactionId,cardType  in
-                    if(success ?? "") == "Success" || (success == "Failed" && transactionId != ""){
+                    if(success ?? "") == "Success" || (success == "Failed" && transactionId != "Invalid"){
                         print("success")
                         let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
                         let firstName = appointment?.applicant_first_name ?? ""
