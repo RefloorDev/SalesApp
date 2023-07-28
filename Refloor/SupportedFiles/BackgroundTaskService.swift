@@ -685,7 +685,7 @@ extension BackgroundTaskService {
                 self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.CustomerAndRoom,paymentStatus: payment_status ?? "",paymentMessage: payment_message ?? "")
                 completion(true)
             }
-            else if success == "Failed"
+            else if success == "Failed" && transactionId != "Invalid"
             {
                 let paymentFailureParam = self.transactionInfoAppendingOnData(parameter: parameter, transactionId: transactionId ?? "", cardType: cardType ?? "")
                 completion(false)
@@ -717,10 +717,8 @@ extension BackgroundTaskService {
             {
                 let payment_TrasnsactionDict = ["authorize_transaction_id":transactionId ,"card_type":cardType ]
                 param["payment_transaction_info"] = payment_TrasnsactionDict
+                dictParam["data"] = param
             }
-            dictParam["data"] = param
-            
-            
         }
         createAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: dictParam as NSDictionary, imageName: "")
         return dictParam
