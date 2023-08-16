@@ -173,7 +173,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         if moldingTypesSelected.contains(where: {$0.localizedStandardContains("Unfinished")}) {
             self.moldingUnfinish.setBackgroundImage(UIImage(named: "contactTick"), for: .normal)
         }
-        if moldingTypesSelected.contains(where: {$0.localizedStandardContains("Coved Baseboard")}) {
+        if moldingTypesSelected.contains(where: {$0.localizedStandardContains("Cove Baseboard")}) {
             self.moldingCovedBaseBoard.setBackgroundImage(UIImage(named: "contactTick"), for: .normal)
         }
         contract_plumbing_option_Btn.setBackgroundImage(applicantInitialsImage ?? UIImage(), for: .selected)
