@@ -143,6 +143,19 @@ class rf_master_roomname : Object, Mappable {
         room_category <- map["room_category"]
     }
     
+    init(customRoomName: rf_customRoomName)
+    {
+        self.room_id = Int(customRoomName.roomId)!
+        self.room_name = customRoomName.name
+        if customRoomName.isConfirm == true
+        {
+            self.company_id = 1
+        }
+        
+    }
+    override init() {
+    }
+    
 }
 
 class rf_master_payment_option : Object, Mappable {
@@ -999,6 +1012,25 @@ class Appointment_results : Mappable {
         
         id <- map["id"]
         result <- map["result"]
+    }
+}
+
+class rf_customRoomName:Object
+{
+    @objc dynamic var roomId = ""
+    @objc dynamic var appointment_id = 0
+    @objc dynamic var name: String?
+    @objc dynamic var isConfirm: Bool = false
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    override init(){
+        
+    }
+    override static func primaryKey() -> String? {
+        return "roomId"
     }
 }
 

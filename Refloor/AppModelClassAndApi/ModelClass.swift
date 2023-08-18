@@ -334,7 +334,8 @@ class RoomDataValue: Mappable,Encodable
     required init?(map: ObjectMapper.Map){
     }
     
-    init(roomData:rf_master_roomname) {
+    init(roomData:rf_master_roomname)
+    {
         self.id = roomData.room_id
         self.name = roomData.room_name
         self.note = roomData.note
@@ -344,6 +345,7 @@ class RoomDataValue: Mappable,Encodable
         //self.is_custom_room = roomData.isc
         //self.custom_room_measurement_id = roomData.cus
     }
+
    
     
     func mapping(map: ObjectMapper.Map) {
