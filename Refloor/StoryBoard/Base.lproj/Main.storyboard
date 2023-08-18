@@ -1739,14 +1739,36 @@
                                                                                 <constraint firstAttribute="width" constant="15" id="GmA-mr-B9d"/>
                                                                             </constraints>
                                                                         </imageView>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0vL-54-hkm">
+                                                                            <rect key="frame" x="236.5" y="131" width="26" height="26"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="height" constant="26" id="TdP-C6-M5R"/>
+                                                                                <constraint firstAttribute="width" constant="26" id="gTJ-G7-DpU"/>
+                                                                            </constraints>
+                                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                            <state key="normal" image="edit"/>
+                                                                        </button>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Bk-lU-ZQl">
+                                                                            <rect key="frame" x="206.5" y="131" width="26" height="26"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="26" id="4mh-rt-vyv"/>
+                                                                                <constraint firstAttribute="height" constant="26" id="XMO-f3-teX"/>
+                                                                            </constraints>
+                                                                            <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                                            <state key="normal" image="delete"/>
+                                                                        </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" red="0.1764705882" green="0.20392156859999999" blue="0.23921568630000001" alpha="1" colorSpace="calibratedRGB"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="trailing" secondItem="HI7-8n-2DU" secondAttribute="trailing" constant="10" id="09E-D5-FRm"/>
+                                                                        <constraint firstItem="0vL-54-hkm" firstAttribute="leading" secondItem="6Bk-lU-ZQl" secondAttribute="trailing" constant="4" id="0TV-5j-fyX"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="0vL-54-hkm" secondAttribute="bottom" constant="6" id="2U0-7k-2FS"/>
                                                                         <constraint firstItem="32f-R3-fL9" firstAttribute="centerX" secondItem="yuW-Jw-YSE" secondAttribute="centerX" id="Hlj-sP-f95"/>
                                                                         <constraint firstItem="W5M-D2-kBQ" firstAttribute="top" secondItem="yuW-Jw-YSE" secondAttribute="top" constant="10" id="IGc-5D-BoU"/>
+                                                                        <constraint firstAttribute="bottom" secondItem="6Bk-lU-ZQl" secondAttribute="bottom" constant="6" id="PAT-fb-w2n"/>
                                                                         <constraint firstAttribute="trailing" secondItem="W5M-D2-kBQ" secondAttribute="trailing" constant="10" id="QJh-tM-ZL9"/>
                                                                         <constraint firstItem="HI7-8n-2DU" firstAttribute="centerY" secondItem="yuW-Jw-YSE" secondAttribute="centerY" id="W8b-xh-V1F"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="0vL-54-hkm" secondAttribute="trailing" constant="5.5" id="bed-No-suM"/>
                                                                         <constraint firstItem="32f-R3-fL9" firstAttribute="top" secondItem="yuW-Jw-YSE" secondAttribute="top" constant="20" id="emG-vh-qBg"/>
                                                                         <constraint firstItem="HI7-8n-2DU" firstAttribute="leading" secondItem="yuW-Jw-YSE" secondAttribute="leading" constant="10" id="rEh-vW-glN"/>
                                                                     </constraints>
@@ -1774,6 +1796,8 @@
                                                 <connections>
                                                     <outlet property="bGView" destination="yuW-Jw-YSE" id="5PO-Rb-y0U"/>
                                                     <outlet property="closeImage" destination="W5M-D2-kBQ" id="0ax-Y7-oK3"/>
+                                                    <outlet property="deleteBtn" destination="6Bk-lU-ZQl" id="0aq-wE-4MA"/>
+                                                    <outlet property="editBtn" destination="0vL-54-hkm" id="GIC-UJ-K53"/>
                                                     <outlet property="iconImageView" destination="32f-R3-fL9" id="hYK-K6-w1k"/>
                                                     <outlet property="nameLabel" destination="HI7-8n-2DU" id="mwI-Mb-nGq"/>
                                                     <outlet property="roomView" destination="GmV-lM-UZi" id="f1z-ts-7Av"/>
@@ -1808,6 +1832,26 @@
                                             <action selector="nextButtonAction:" destination="Foc-bL-OmX" eventType="touchUpInside" id="ReL-y5-RQw"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tBe-QD-Ro8">
+                                        <rect key="frame" x="791" y="40" width="270" height="70"/>
+                                        <color key="backgroundColor" red="0.34484910959999998" green="0.39283764360000001" blue="0.44376060369999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="270" id="nfT-dy-KqM"/>
+                                            <constraint firstAttribute="height" constant="70" id="vnV-Cu-ZxU"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="26"/>
+                                        <state key="normal" title="Add Custom Room">
+                                            <color key="titleColor" red="0.89411764705882346" green="0.9137254901960784" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                <real key="value" value="0.0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="addCustomRoomBtnAction:" destination="Foc-bL-OmX" eventType="touchUpInside" id="t6h-Nl-qvj"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.1356758773" green="0.161044091" blue="0.1986880302" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1815,8 +1859,10 @@
                                     <constraint firstItem="QI9-o6-ekG" firstAttribute="top" secondItem="IAk-Js-Fbb" secondAttribute="bottom" constant="20" id="HNM-Y3-SqP"/>
                                     <constraint firstItem="RLU-YI-0Dm" firstAttribute="centerY" secondItem="IAk-Js-Fbb" secondAttribute="centerY" id="J8q-uy-AzT"/>
                                     <constraint firstAttribute="bottom" secondItem="QI9-o6-ekG" secondAttribute="bottom" constant="30" id="R05-z7-lVs"/>
+                                    <constraint firstItem="IAk-Js-Fbb" firstAttribute="leading" secondItem="tBe-QD-Ro8" secondAttribute="trailing" constant="10" id="TsX-iC-z23"/>
                                     <constraint firstItem="QI9-o6-ekG" firstAttribute="leading" secondItem="fSM-m6-ARg" secondAttribute="leading" constant="60" id="faK-cE-VmZ"/>
                                     <constraint firstAttribute="trailing" secondItem="QI9-o6-ekG" secondAttribute="trailing" constant="60" id="gk1-7b-KFY"/>
+                                    <constraint firstItem="tBe-QD-Ro8" firstAttribute="centerY" secondItem="IAk-Js-Fbb" secondAttribute="centerY" id="idx-M5-fsq"/>
                                     <constraint firstAttribute="trailing" secondItem="IAk-Js-Fbb" secondAttribute="trailing" constant="65" id="jR1-eg-Y3f"/>
                                     <constraint firstItem="RLU-YI-0Dm" firstAttribute="leading" secondItem="fSM-m6-ARg" secondAttribute="leading" constant="70" id="mZt-Gp-h5u"/>
                                 </constraints>
@@ -29701,10 +29747,10 @@ Cgo
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WSp-dp-lpW">
-                                <rect key="frame" x="100" y="121" width="823" height="802"/>
+                                <rect key="frame" x="100" y="121" width="1166" height="802"/>
                                 <subviews>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RKh-9I-eaY" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="50" y="106.5" width="723" height="595.5"/>
+                                        <rect key="frame" x="50" y="106.5" width="1066" height="595.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -29716,19 +29762,19 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Applicant Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jUC-kd-ml0">
-                                        <rect key="frame" x="295.5" y="20" width="232.5" height="36"/>
+                                        <rect key="frame" x="467" y="20" width="232.5" height="36"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="26"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Please make your signature as large as possible)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EW3-9B-agM">
-                                        <rect key="frame" x="171.5" y="56" width="480" height="30.5"/>
+                                        <rect key="frame" x="343" y="56" width="480" height="30.5"/>
                                         <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZj-bt-IKt" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="61" y="117.5" width="701" height="573.5"/>
+                                        <rect key="frame" x="61" y="117.5" width="1044" height="573.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -29740,10 +29786,10 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="kZ4-LT-Jf7">
-                                        <rect key="frame" x="50" y="722" width="723" height="60"/>
+                                        <rect key="frame" x="50" y="722" width="1066" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1e-NG-hA0">
-                                                <rect key="frame" x="0.0" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="339.5" height="60"/>
                                                 <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="2BF-iG-Kkd"/>
@@ -29758,7 +29804,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3oc-Iw-qJS">
-                                                <rect key="frame" x="249" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="363.5" y="0.0" width="339" height="60"/>
                                                 <color key="backgroundColor" red="0.65536212920000003" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="6au-5z-6tY"/>
@@ -29773,7 +29819,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nw1-YA-hAi">
-                                                <rect key="frame" x="498" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="726.5" y="0.0" width="339.5" height="60"/>
                                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="jRN-8v-EjI"/>
@@ -30078,6 +30124,234 @@ Cgo
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jKf-by-AYs" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="19573" y="1822"/>
+        </scene>
+        <!--Select Room Comment Pop Up View Controller-->
+        <scene sceneID="hRx-NT-oZo">
+            <objects>
+                <viewController storyboardIdentifier="SelectRoomCommentPopUpViewController" modalTransitionStyle="crossDissolve" modalPresentationStyle="overFullScreen" id="S1d-GU-090" customClass="SelectRoomCommentPopUpViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JLK-kY-zzt" customClass="UIControl">
+                        <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gOf-Qk-O1r">
+                                <rect key="frame" x="489.5" y="385" width="387" height="254"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Custom Room" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eB9-86-I6Z">
+                                        <rect key="frame" x="20" y="29" width="347" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="iso-Sx-alP"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter your room name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7IE-jp-Ot8">
+                                        <rect key="frame" x="20" y="66" width="347" height="25"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="VtT-aW-LaQ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KtX-wO-cSe">
+                                        <rect key="frame" x="46" y="111" width="295" height="56"/>
+                                        <color key="backgroundColor" red="0.17254901960784313" green="0.20000000000000001" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="56" id="7ch-88-OHY"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.65166860820000005" green="0.68582618240000004" blue="0.72741973400000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="Qpv-08-qQT">
+                                        <rect key="frame" x="0.0" y="188" width="387" height="66"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WtL-vE-wEA">
+                                                <rect key="frame" x="0.0" y="0.0" width="193.5" height="66"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Cancel">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.65536206959999999" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="addRoomCancelBtn:" destination="S1d-GU-090" eventType="touchUpInside" id="HtH-Ec-ZxI"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NT8-Xx-fLH">
+                                                <rect key="frame" x="193.5" y="0.0" width="193.5" height="66"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Add">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.65536206959999999" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="addRoomConfirmBtnAction:" destination="S1d-GU-090" eventType="touchUpInside" id="pOE-h5-glD"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="66" id="XQe-bi-vcu"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="66" id="m2r-x5-jst"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.31793498990000002" green="0.36007645729999999" blue="0.4071214199" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="KtX-wO-cSe" secondAttribute="trailing" constant="46" id="3Ns-f5-xlB"/>
+                                    <constraint firstItem="7IE-jp-Ot8" firstAttribute="top" secondItem="eB9-86-I6Z" secondAttribute="bottom" constant="3" id="62e-yq-tWI"/>
+                                    <constraint firstAttribute="width" constant="387" id="9mW-kh-VSy"/>
+                                    <constraint firstItem="eB9-86-I6Z" firstAttribute="top" secondItem="gOf-Qk-O1r" secondAttribute="top" constant="29" id="Drc-Gf-yJg"/>
+                                    <constraint firstItem="KtX-wO-cSe" firstAttribute="leading" secondItem="gOf-Qk-O1r" secondAttribute="leading" constant="46" id="GBb-wy-CtX"/>
+                                    <constraint firstAttribute="trailing" secondItem="Qpv-08-qQT" secondAttribute="trailing" id="JP9-yF-aS4"/>
+                                    <constraint firstItem="eB9-86-I6Z" firstAttribute="leading" secondItem="gOf-Qk-O1r" secondAttribute="leading" constant="20" id="RpR-qV-qz6"/>
+                                    <constraint firstAttribute="trailing" secondItem="7IE-jp-Ot8" secondAttribute="trailing" constant="20" id="TC8-19-Td6"/>
+                                    <constraint firstAttribute="height" constant="254" id="bio-a3-3JF"/>
+                                    <constraint firstItem="KtX-wO-cSe" firstAttribute="top" secondItem="7IE-jp-Ot8" secondAttribute="bottom" constant="20" id="fCn-FF-rLA"/>
+                                    <constraint firstAttribute="trailing" secondItem="eB9-86-I6Z" secondAttribute="trailing" constant="20" id="mdE-gS-hIE"/>
+                                    <constraint firstAttribute="bottom" secondItem="Qpv-08-qQT" secondAttribute="bottom" id="pm7-xR-Vmb"/>
+                                    <constraint firstItem="7IE-jp-Ot8" firstAttribute="leading" secondItem="gOf-Qk-O1r" secondAttribute="leading" constant="20" id="u84-SU-6bE"/>
+                                    <constraint firstItem="Qpv-08-qQT" firstAttribute="leading" secondItem="gOf-Qk-O1r" secondAttribute="leading" id="vTF-JH-cyR"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.39957857130000002" green="0.39957857130000002" blue="0.39957857130000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zbl-Aa-0he" userLabel="View1">
+                                <rect key="frame" x="489.5" y="410.5" width="387" height="203"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delete Room" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zV8-h3-6zo">
+                                        <rect key="frame" x="20" y="29" width="347" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="fq9-Cp-58F"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you sure you want to delete this Room?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wT7-Dv-M8t">
+                                        <rect key="frame" x="64" y="66" width="259" height="51"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="mLv-sk-gNf">
+                                        <rect key="frame" x="0.0" y="137" width="387" height="66"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dPN-Kn-va1">
+                                                <rect key="frame" x="0.0" y="0.0" width="193.5" height="66"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Cancel">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.65536206959999999" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="addRoomCancelBtn:" destination="S1d-GU-090" eventType="touchUpInside" id="xCz-FL-jvD"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qF2-5n-uCh">
+                                                <rect key="frame" x="193.5" y="0.0" width="193.5" height="66"/>
+                                                <fontDescription key="fontDescription" name="Avenir-Black" family="Avenir" pointSize="25"/>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="Delete">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                                        <real key="value" value="1"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                                        <color key="value" red="0.65536206959999999" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="addRoomConfirmBtnAction:" destination="S1d-GU-090" eventType="touchUpInside" id="ZZv-Ui-ojd"/>
+                                                    <action selector="deleteBtnAction:" destination="S1d-GU-090" eventType="touchUpInside" id="2nJ-he-lyM"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="66" id="fB5-gB-6Dj"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.31793498990000002" green="0.36007645729999999" blue="0.4071214199" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="zV8-h3-6zo" secondAttribute="trailing" constant="20" id="0Re-fV-16z"/>
+                                    <constraint firstItem="zV8-h3-6zo" firstAttribute="top" secondItem="Zbl-Aa-0he" secondAttribute="top" constant="29" id="3Se-No-5pZ"/>
+                                    <constraint firstAttribute="trailing" secondItem="mLv-sk-gNf" secondAttribute="trailing" id="Cpc-WE-nl1"/>
+                                    <constraint firstItem="mLv-sk-gNf" firstAttribute="leading" secondItem="Zbl-Aa-0he" secondAttribute="leading" id="EV9-W2-wKf"/>
+                                    <constraint firstItem="wT7-Dv-M8t" firstAttribute="leading" secondItem="Zbl-Aa-0he" secondAttribute="leading" constant="64" id="LEe-Xc-hpl"/>
+                                    <constraint firstItem="zV8-h3-6zo" firstAttribute="leading" secondItem="Zbl-Aa-0he" secondAttribute="leading" constant="20" id="asa-48-il8"/>
+                                    <constraint firstAttribute="height" constant="203" id="csd-be-aFe"/>
+                                    <constraint firstAttribute="trailing" secondItem="wT7-Dv-M8t" secondAttribute="trailing" constant="64" id="dm1-Wk-Tro"/>
+                                    <constraint firstItem="wT7-Dv-M8t" firstAttribute="top" secondItem="zV8-h3-6zo" secondAttribute="bottom" constant="3" id="iU4-kv-Mo1"/>
+                                    <constraint firstAttribute="bottom" secondItem="mLv-sk-gNf" secondAttribute="bottom" id="k6E-3F-Msr"/>
+                                    <constraint firstItem="mLv-sk-gNf" firstAttribute="top" secondItem="wT7-Dv-M8t" secondAttribute="bottom" constant="20" id="pi1-80-vsQ"/>
+                                    <constraint firstAttribute="width" constant="387" id="zgY-nM-i1e"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" red="0.39957857130000002" green="0.39957857130000002" blue="0.39957857130000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="cNZ-4i-Xqi"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.62414965986394555" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Zbl-Aa-0he" firstAttribute="centerX" secondItem="JLK-kY-zzt" secondAttribute="centerX" id="4sy-TQ-DgE"/>
+                            <constraint firstItem="gOf-Qk-O1r" firstAttribute="centerY" secondItem="JLK-kY-zzt" secondAttribute="centerY" id="cOY-7F-dXP"/>
+                            <constraint firstItem="gOf-Qk-O1r" firstAttribute="centerX" secondItem="JLK-kY-zzt" secondAttribute="centerX" id="eB0-tY-ahN"/>
+                            <constraint firstItem="Zbl-Aa-0he" firstAttribute="centerY" secondItem="JLK-kY-zzt" secondAttribute="centerY" id="rT2-ue-Ql2"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="TitleLbl" destination="eB9-86-I6Z" id="nW0-kc-OdK"/>
+                        <outlet property="addBtn" destination="NT8-Xx-fLH" id="7PV-eL-WoI"/>
+                        <outlet property="addEditView" destination="gOf-Qk-O1r" id="rPl-WC-9Pe"/>
+                        <outlet property="deleteView" destination="Zbl-Aa-0he" id="bDQ-WF-php"/>
+                        <outlet property="roomNameTxtFld" destination="KtX-wO-cSe" id="Cc4-oN-GxN"/>
+                        <outlet property="subTitleLbl" destination="7IE-jp-Ot8" id="hfq-L0-vza"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ol5-UZ-t34" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="18920" y="1822"/>
         </scene>
         <!--Promo Pop Up View Controller New-->
         <scene sceneID="30C-sO-j78">
@@ -36925,9 +37199,10 @@ Cg
         <image name="contractRefloorIcon" width="293" height="76"/>
         <image name="customer" width="25" height="33"/>
         <image name="daining" width="25" height="19"/>
-        <image name="delete" width="64" height="64"/>
+        <image name="delete" width="26" height="26"/>
         <image name="deselectedRound" width="20" height="20"/>
         <image name="dropDown" width="21" height="21"/>
+        <image name="edit" width="26" height="26"/>
         <image name="email" width="35" height="27"/>
         <image name="eraser" width="64" height="64"/>
         <image name="flipHorisontal" width="33" height="33"/>

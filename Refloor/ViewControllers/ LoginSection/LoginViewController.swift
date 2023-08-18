@@ -42,8 +42,8 @@ class LoginViewController: UIViewController {
 //        
 //     self.emailTF.text = "ajay.jayaram@oneteamus.com" //vrenaud@refloor.com"
 //     self.passwordTF.text = "salesApp"
-//        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
-//        self.passwordTF.text = "SALESapp"
+        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
+        self.passwordTF.text = "SALESapp"
 
         //just remove this.
 //        self.emailTF.text = "vrenaud@refloor.com" //vrenaud@refloor.com"
@@ -51,7 +51,7 @@ class LoginViewController: UIViewController {
         
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
-            if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"{
+            if BASE_URL == "https://refloor-dev.odooapps.oneteam.us/api/"{
                 versionNumber.setTitle("Version: \(text) (1.0) - DEV", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)

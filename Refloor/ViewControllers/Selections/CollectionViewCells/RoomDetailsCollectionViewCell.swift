@@ -14,6 +14,7 @@ class RoomDetailsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var bGView: UIView!
     @IBOutlet weak var roomView: UIView!
     @IBOutlet weak var closeImage: UIImageView!
-    
+    @IBOutlet weak var deleteBtn: UIButton!
+    @IBOutlet weak var editBtn: UIButton!
     
 }

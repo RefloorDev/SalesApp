@@ -2233,6 +2233,24 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
     }
+    func deleteCustomRoomName(appointmentId:Int,roomId:String)
+    {
+        do{
+            let realm = try Realm()
+            let appointments = realm.objects(rf_customRoomName.self).filter("appointment_id == %d AND roomId == %d",appointmentId , roomId)
+                try realm.write{
+//                    for appointment in appointments
+//                    {
+                        realm.delete(appointments)
+                   // }
+//                    if let appointment = appointments.first{
+                       
+                    //}
+                }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
     func deleteAllAppointments() {
         do{
             let realm = try Realm()
@@ -2310,6 +2328,31 @@ extension UIViewController:OrderStatusViewDelegate
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
+        }
+        return roomList
+    }
+    
+    func getcustomRoomNameByApt(appointmentId:Int) -> [RoomDataValue]
+    {
+        var roomList:[RoomDataValue] = []
+        do{
+            let realm = try Realm()
+            
+            let rooms = realm.objects(rf_customRoomName.self).filter("appointment_id == %d",appointmentId )
+            if rooms.count > 0
+            {
+//                if let results = rooms.sorted(byKeyPath: "roomId",ascending: false)
+//                {
+                    for room in rooms{
+                        roomList.append(RoomDataValue(roomData: rf_master_roomname(customRoomName: room)))
+                    }
+                //}
+            }
+            return roomList
+            
+        }
+        catch{
+            print(RealmError.initialisationFailed)
         }
         return roomList
     }
@@ -2572,6 +2615,32 @@ extension UIViewController:OrderStatusViewDelegate
                     appointment.rooms.append(objectsIn: room)
                     realm.create(rf_completed_appointment.self, value: ["appointment_id": appointmentId, "rooms":appointment.rooms], update: .all)
                     
+                }
+            }
+            
+        }catch{
+            print(RealmError.initialisationFailed)
+        }
+    }
+    
+    func saveCustomRoomName(roomId:String,appointmentId: Int, roomName:String, isConfirm:Bool,isNextBtn:Bool)
+    {
+        do
+        {
+            let realm = try Realm()
+             let appointment = realm.objects(rf_customRoomName.self).filter("roomId == %d",roomId)
+            for room in appointment
+            {
+                try realm.write
+                {
+                    room.name = roomName
+                    if isNextBtn
+                    {
+                        room.isConfirm = true
+                    }
+                    //let customRoom = realm.objects(rf_customRoomName.self).filter("roomId == %d",roomId)
+                    //realm.delete(appointment)
+                    realm.create(rf_customRoomName.self, value: ["roomId": roomId,"appointment_id": appointmentId, "roomName":roomName, "isConfirm": isConfirm], update: .all)
                 }
             }
             
