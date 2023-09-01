@@ -2106,6 +2106,7 @@ class HttpClientManager: NSObject {
                                 let transitionHeightResults = realm.objects(rf_transitionHeights_results.self)
                                 let floorColourList = realm.objects(rf_floorColour_results.self)
                                 let stairColourList = realm.objects(rf_stairColour_results.self)
+                                let ruleList = realm.objects(rf_ruleList_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2125,6 +2126,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(transitionHeightResults)
                                     realm.delete(floorColourList)
                                     realm.delete(stairColourList)
+                                    realm.delete(ruleList)
                                    
                                 }
                             }catch{
@@ -2298,7 +2300,7 @@ class HttpClientManager: NSObject {
     }
     
     // MARK: - Sync Images Upload
-    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
+    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
         
         
         if self.connectedToNetwork() {
@@ -2307,9 +2309,9 @@ class HttpClientManager: NSObject {
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName]
             }else{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName]
             }
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)

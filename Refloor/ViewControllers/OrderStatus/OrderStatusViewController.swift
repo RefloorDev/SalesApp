@@ -506,9 +506,10 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             //
             let file = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: image_name) ?? UIImage()
             let room_id = (room["room_id"] as? Int ?? 0)
+            let room_name = room["room_name"] as? String ?? ""
             let room_id_str = String(room_id)
             group.enter()
-            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted)) { success, message, imageName in
+            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name) { success, message, imageName in
                 if(success ?? "") == "Success"{
                     group.leave()
                     print(message ?? "No msg")

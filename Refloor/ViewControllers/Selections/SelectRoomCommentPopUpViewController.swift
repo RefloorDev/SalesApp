@@ -20,7 +20,7 @@ protocol deleteCustomRoomProtocol
     func deleteRoomName(roomId:Int)
 }
 
-class SelectRoomCommentPopUpViewController: UIViewController {
+class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate {
     
     static func initialization() -> SelectRoomCommentPopUpViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SelectRoomCommentPopUpViewController") as? SelectRoomCommentPopUpViewController
@@ -42,6 +42,8 @@ class SelectRoomCommentPopUpViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.roomNameTxtFld.autocapitalizationType = UITextAutocapitalizationType.allCharacters;
+        roomNameTxtFld.delegate = self
         roomNameTxtFld.setLeftPaddingPoints(15)
         roomNameTxtFld.setRightPaddingPoints(15)
         if isdelete
@@ -71,17 +73,53 @@ class SelectRoomCommentPopUpViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+//    func textFieldDidEndEditing(_ textField: UITextField)
+//    {
+//
+//
+//    }
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+    {
+        do
+        {
+            let allowedCharacter = CharacterSet.letters
+            let allowedCharacter1 = CharacterSet.whitespaces
+            let allowedCharacter3 = CharacterSet.decimalDigits
+            let characterSet = CharacterSet(charactersIn: string)
+            if allowedCharacter.isSuperset(of: characterSet) || allowedCharacter1.isSuperset(of: characterSet) || allowedCharacter3.isSuperset(of: characterSet)
+            {
+                guard range.location == 0 else {
+                        return true
+                    }
+
+                    let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string) as NSString
+                    return (newString.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines).location != 0) && (allowedCharacter.isSuperset(of: characterSet) || allowedCharacter1.isSuperset(of: characterSet) || allowedCharacter3.isSuperset(of: characterSet))
+            }
+        }
+        return true
+                 
+    }
+    
     @IBAction func addRoomConfirmBtnAction(_ sender: UIButton)
     {
-        self.dismiss(animated: true)
+        
+        if roomNameTxtFld.text == ""
         {
-            if self.isEdit == false
+            self.alert("Please enter a custom room name", nil)
+        }
+        else
+        {
+            self.dismiss(animated: true)
             {
-                self.delegate?.sendRoomName(roomName: self.roomNameTxtFld.text!)
-            }
-            else
-            {
-                self.editDelegate?.editRoomName(roomName: self.roomNameTxtFld.text!, roomId: self.roomId)
+                if self.isEdit == false
+                {
+                    self.delegate?.sendRoomName(roomName: self.roomNameTxtFld.text!)
+                }
+                else
+                {
+                    self.editDelegate?.editRoomName(roomName: self.roomNameTxtFld.text!, roomId: self.roomId)
+                }
             }
         }
     }

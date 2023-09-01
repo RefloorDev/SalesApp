@@ -388,16 +388,26 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         //updating master appointments results database with value false for not demoed
         
      
-        createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
-
+//        createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
+//
         if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
+            //print(getTodayWeekDay())
             let details = CustomerDetailsOneViewController.initialization()!
             details.appoinmentslData = self.appoinmentsList![sender.tag]
             _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
 
             UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
+           // let details = InstallerShedulerViewController.initialization()!
             self.navigationController?.pushViewController(details, animated: true)
-        }
+       }
+        
+        func getTodayWeekDay()-> String{
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "EEEE"
+                let weekDay = dateFormatter.string(from: Date())
+                return weekDay
+          }
+
     }
     
    
