@@ -61,6 +61,7 @@ class MasterData : Object, Mappable {
     var transitionHeights = List<rf_transitionHeights_results>()
     var floorColourList = List<rf_floorColour_results>()
     var stairColourList = List<rf_stairColour_results>()
+    var ruleList = List<rf_ruleList_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -227,6 +228,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var questionIdUnique = UUID().uuidString
     @objc dynamic var id = 0
     @objc dynamic var room_id = 0
+    @objc dynamic var room_name: String? = ""
     let ofAppointment = LinkingObjects(fromType: rf_completed_appointment.self, property: "questionnaires")
     @objc dynamic var appointment_id = AppointmentData().appointment_id ?? 0
     @objc dynamic var question_name : String?
@@ -424,6 +426,122 @@ class rf_floorColour_results : Object,Mappable {
         color_upcharge <- map["color_up_charge_price"]
     }
     
+}
+//rf_ruleList_results
+class rf_ruleList_results : Object,Mappable
+{
+    @objc dynamic var name : String?
+    @objc dynamic var start_date : String?
+    @objc dynamic var end_date : String?
+    @objc dynamic var conditions : String?
+    @objc dynamic var amount: Int = 0
+    @objc dynamic var margin_amount : Int = 0
+    var category = List<rf_categoryData>()
+    var company = List<rf_comapnyData>()
+    var allowed_days = List<rf_allowedData>()
+    var office_location = List<rf_OfficeLocationData>()
+    var payment_options = List<rf_paymentOptionData>()
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        name <- map["name"]
+        start_date <- map["start_date"]
+        end_date <- map["end_date"]
+        conditions <- map["conditions"]
+        amount <- map["amount"]
+        margin_amount <- map["margin_amount"]
+        category <- map["category"]
+        company <- map["company"]
+        allowed_days <- map["allowed_days"]
+        office_location <- map["office_locations"]
+        payment_options <- map["payment_options"]
+    }
+}
+class rf_categoryData : Object, Mappable
+{
+    @objc dynamic var category_id : Int = 0
+    @objc dynamic var category_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        category_id <- map["id"]
+        category_name <- map["name"]
+        
+    }
+}
+class rf_allowedData : Object, Mappable
+{
+    @objc dynamic var allowed_id : Int = 0
+    @objc dynamic var allowed_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        allowed_id <- map["id"]
+        allowed_name <- map["name"]
+        
+    }
+}
+class rf_comapnyData : Object, Mappable
+{
+    @objc dynamic var company_id : Int = 0
+    @objc dynamic var company_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        company_id <- map["id"]
+        company_name <- map["name"]
+        
+    }
+}
+class rf_OfficeLocationData : Object, Mappable
+{
+    @objc dynamic var office_location_id : Int = 0
+    @objc dynamic var office_location_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        office_location_id <- map["id"]
+        office_location_name <- map["name"]
+        
+    }
+}
+//rf_paymentOptionData
+
+class rf_paymentOptionData : Object, Mappable
+{
+    @objc dynamic var paymentOption_id : Int = 0
+    @objc dynamic var paymentOption_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        paymentOption_id <- map["id"]
+        paymentOption_name <- map["name"]
+        
+    }
 }
 
 class rf_stairColour_results : Object,Mappable {
@@ -1138,6 +1256,7 @@ class rf_completed_appointment:Object{
 class rf_completed_room: Object{
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var room_id: Int = 0
+    @objc dynamic var is_custom_room: Int = 0
     var questionnaires = List<rf_master_question>()
     let ofAppointment = LinkingObjects(fromType: rf_completed_appointment.self, property: "rooms")
     @objc dynamic var measurement_exist: String? = "false"

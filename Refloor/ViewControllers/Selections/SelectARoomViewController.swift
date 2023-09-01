@@ -68,7 +68,7 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         }
         else
         {
-            self.alert("This room name  already exists", nil)
+            self.alert("This room name already exists", nil)
         }
         
     }
@@ -95,8 +95,12 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         
         self.setNavigationBarbaclogoAndStatus(with: "Room Selection")
         
-        //get all master room data
-        //roomData = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
+
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        roomData.removeAll()
         
         roomData = getMasterRoomFromDB()
         let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
@@ -105,11 +109,6 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
             let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
             roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
         }
-        if roomData[0].company_id == 0
-        {
-            selectedno = 0
-        }
-        //roomData[0] = RoomDataValue(roomName: self.customRoomName)
         let appointmentId = AppointmentData().appointment_id ?? 0
         let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
         let allExistingRoomIds = roomExists.map{$0.room_id}
@@ -117,28 +116,6 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
             if allExistingRoomIds.contains(room.id ?? 0){
                 room.measurement_exist = "true"
             }
-        }
-        
-        print(allExistingRoomIds)
-//        let roomsInMasterThatAlreadyExist = roomData.filter { room in
-//            return allExistingRoomIds.interfaces.contains(<#T##Self.Output#>)
-//        }
-//        let appExits = getCompletedAppointmentsFromDB(appointmentId: appoinmentsData.id ?? 0)
-        
-        //getroomDataDetails(nil)
-        // nextButton.isHidden = true
-        // Do any additional setup after loading the view.
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        roomData.removeAll()
-        roomData = getMasterRoomFromDB()
-        let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
-        if customdbRommValues.count > 0
-        {
-            let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
-            roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
         }
         collectionView.reloadData()
         }
@@ -468,6 +445,7 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
                 next.roomName = self.roomData[self.selectedno].name ?? ""
                 next.isStair = 1
                 next.area = self.areaValue
+                //let roomId = self.roomData[self.selectedno].id ?? 0
                 
                 self.summaryData = self.createSummaryData(roomID: self.roomData[self.selectedno].id ?? 0, roomName: self.roomData[self.selectedno].name ?? "")
                 let roomSelected = self.roomData[self.selectedno]

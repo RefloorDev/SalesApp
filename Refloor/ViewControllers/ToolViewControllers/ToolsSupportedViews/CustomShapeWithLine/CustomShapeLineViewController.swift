@@ -1002,6 +1002,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
 //            completedRoom.room_type = roomType
 //            completedRoom.draw_image_name = drawingImageSavedToFile
             let (isRoomAlreadyExist,room) = self.checkIfRoomExist(appointmentId:appointmentId, roomId: self.roomData.id ?? 0)
+            let isCustomRoomExists = self.checkIfCustomRoomExists(appointmentId: appointmentId, roomId: String(self.roomData.id ?? 0))
             var roomUniqueId = ""
             if isRoomAlreadyExist{
                 roomUniqueId = room?.first?.id ?? ""
@@ -1009,6 +1010,11 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             var partiallyCompletedRoomToUpdate:[String:Any] = ["room_id":self.roomData.id ?? 0,"measurement_exist":"true","customer_id":customerId,"appointment_id":appointmentId,"transArray":transDataArray,"room_area":self.areaValue.toString,"room_perimeter":Float(tempPerimeter) ?? 0,"room_name":roomName ,"room_type":roomType,"draw_image_name":drawingImageSavedToFile,"draw_area_adjusted":self.areaValue.toString]
             if roomUniqueId != ""{
                 partiallyCompletedRoomToUpdate["id"] = roomUniqueId
+            }
+            if isCustomRoomExists
+            {
+                partiallyCompletedRoomToUpdate["is_custom_room"] = 1
+                //partiallyCompletedRoomToUpdate["room_id"] = 0
             }
             //self.deleteRoomFromAppointment(appointmentId: appointmentId,roomId:self.roomData.id ?? 0)
             let next = AboutRoomViewController.initialization()!
