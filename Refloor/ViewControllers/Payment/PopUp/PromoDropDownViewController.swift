@@ -38,6 +38,7 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
     var salePriceArray:[Double] = []
     var minimumFee = 0.0
     var area = 0.0
+    var restrictedPromo:[[Int:String]] = [[:]]
     static func initialization() -> PromoDropDownViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "PromoDropDownViewController") as? PromoDropDownViewController
     }
@@ -173,11 +174,31 @@ class PromoDropDownViewController: UIViewController,DropDownDelegate {
                 let isPromotionTodayQualified = appointmentDate!.isBetween(date: startDateValue, andDate: endDateValue) ? true : false
                 if isPromotionTodayQualified == true
                 {
+                    
                     self.promoCodeArrayValue.append(promoResult)
                     if self.area ==  0.0 && calculationTypeString == "sqft"
                     {
                         promoCodeArrayValue.removeLast()
                     }
+                    
+                    if restrictedPromo.count > 0
+                    {
+                        for promotions in restrictedPromo
+                        {
+                            for valueKeys in promotions.values
+                            {
+                                if valueKeys == promoResult
+                                {
+                                    let index = promoCodeArrayValue.firstIndex(of: promoResult)!
+                                    promoCodeArrayValue.remove(at: index)
+                                }
+                            }
+                        }
+                    }
+                    
+                       
+                    
+                    
                     //self.promoCodeArrayValue = value
                 }
             }

@@ -1287,6 +1287,7 @@ class PaymentPlanValue: Mappable
     var discount_exclude_amount: Double?
     var eligible_for_discounts: String?
     var unit_of_measure: String?
+    var grade: String?
     var stair_cost: Double?
     var stair_msrp: Double?
     var stairProductId: Int?
@@ -1318,6 +1319,7 @@ class PaymentPlanValue: Mappable
         //self.discount_exclude_amount = discount.discount_exclude_amount
         self.eligible_for_discounts = paymentPlan.eligible_for_discounts
         self.unit_of_measure = paymentPlan.unit_of_measure
+        self.grade = paymentPlan.grade
         self.stair_cost = paymentPlan.stair_cost
         self.stair_msrp = paymentPlan.stair_Msrp
         self.stairProductId = paymentPlan.stairProductId
@@ -1388,6 +1390,7 @@ class PaymentOptionDataValue: Mappable
     var Balance_Due__c:String?
     var Payment_Info__c:String?
     var down_payment_message:String?
+    var isHidden: Bool = false
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1405,6 +1408,7 @@ class PaymentOptionDataValue: Mappable
         self.Balance_Due__c = paymentOption.balance_Due__c
         self.Payment_Info__c = paymentOption.payment_info__c
         self.down_payment_message = paymentOption.down_payment_message
+        //self.isHidden = self.isHidden
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -1424,6 +1428,7 @@ class PaymentOptionDataValue: Mappable
         down_payment_message <- map["down_payment_message"]
     }
 }
+
 
 class MonthlyPromoDataValue: Mappable
 {
@@ -1620,6 +1625,74 @@ class autoLogoutData: Mappable
     }
     
 }
+
+class InstallerDatesSubmit: Mappable
+{
+    var result:String?
+    var message:String?
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+    }
+}
+
+class InstallerDates: Mappable
+{
+    var result:String?
+    var message:String?
+    var data:DatesValues?
+    var override_json_result:Int?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        data <- map["data"]
+        override_json_result <- map["override_json_result"]
+    }
+}
+class DatesValues: Mappable
+{
+    var availableDates:[AvailableDatesValues]?
+    var saleOrderId: Int?
+    required init?(map: ObjectMapper.Map)
+    {
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        availableDates <- map["available_dates"]
+        saleOrderId <- map["sale_order_id"]
+       
+    }
+}
+
+class AvailableDatesValues: Mappable
+{
+    var installationId:Int?
+    var startDate:String?
+    var endDate:String?
+    var crewId:Int?
+    var crewName:String?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        installationId <- map["installation_id"]
+        startDate <- map["start_date"]
+        endDate <- map["end_date"]
+        crewId <- map["crew_id"]
+        crewName <- map["crew_name"]
+        
+       
+    }
+}
+
 class CashDataResponse: Mappable
 {
     var result: String?

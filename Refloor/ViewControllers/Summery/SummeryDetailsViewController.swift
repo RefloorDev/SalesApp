@@ -303,7 +303,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             next.roomID = self.summaryData.room_id ?? 0
             next.roomName = self.summaryData.room_name ?? ""
             next.drowingImageID = self.summaryData.contract_measurement_id ?? 0
-            next.area = CGFloat(self.summaryData.room_area ?? 0)
+            next.area = CGFloat(self.summaryData.adjusted_area ?? 0)
             next.delegate = self
             next.value = self.summaryData.attachment_comments ?? ""
             next.uploadedImage = self.summaryData.attachments ?? []

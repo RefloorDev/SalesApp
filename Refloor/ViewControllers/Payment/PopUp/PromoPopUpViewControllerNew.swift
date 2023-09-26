@@ -46,6 +46,7 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
     @IBOutlet weak var dropDownTextfield: UITextField!
     @IBOutlet weak var promoSuccessViewDoneButton: UIButton!
     @IBOutlet weak var promoCodeDropDownView: UIView!
+    var restrictedDiscount:[[Int:String]] = [[:]]
     let placeholderColor = UIColor().colorFromHexString("#A7B0BA")
     var newPrice: Double = 0.0
     var discountArray:[DiscountDetailStruct] = []
@@ -143,6 +144,8 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
         }
         //
         promoCodeArray = self.getDiscountList()
+ 
+        
         promoCodeDropDownArray = self.getPromoDropDownValue()
         promoCodeTextField.attributedPlaceholder = NSAttributedString(
             string: "Enter here",
@@ -485,6 +488,20 @@ class PromoPopUpViewControllerNew: UIViewController,DropDownDelegate {
                 //check from db the type of discount alloted for this promo code
                 let enteredPromoCode = valueEnteredDiscountTextField.text!
                 if self.promoCodeArray.contains(where: {($0.code ?? "") == enteredPromoCode}){
+                    if restrictedDiscount.count > 0
+                    {
+                        for discounts in restrictedDiscount
+                        {
+                            for keyValues in discounts.values
+                            {
+                                if keyValues == enteredPromoCode
+                                {
+                                    self.alert("Please enter a valid promo code", nil)
+                                    return
+                                }
+                            }
+                        }
+                    }
                     var discountAmt = "0"
                     self.view.endEditing(true)
                     //1.accordlingly calculate the discount

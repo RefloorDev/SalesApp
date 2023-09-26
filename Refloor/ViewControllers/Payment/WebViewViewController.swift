@@ -1020,24 +1020,53 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
             {
                 customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
             }
-//            let json = (customerAndRoomData as NSDictionary).JsonString()
-//            let data = json.data(using: .utf8)
-////            let decoder = JSONDecoder()
-////            let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data!)
-//            var jwtToken:String = String()
-//
-//            let decoder = JSONDecoder()
-//
-//            if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-//                print(model)
-//                let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-//                jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-//                print(jwtToken)
-//            }
-        //customerAndRoomData = ["data":customerAndRoomData]
             
         print(customerAndRoomData)
-            createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+            let group = DispatchGroup()
+            if HttpClientManager.SharedHM.connectedToNetwork()
+            {
+                group.enter()
+                HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW , title: "Creating Sale Order")
+                let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
+                let firstName = appointment?.applicant_first_name ?? ""
+                let lastName = appointment?.applicant_last_name ?? ""
+                let name = lastName == ""  ? firstName : firstName + " " + lastName
+                let date = appointment?.appointment_datetime ?? ""
+                var parameterToPass:[String:Any] = [:]
+                let decodeOption:[String:Bool] = ["verify_signature":false]
+                
+                    
+                  parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData]
+                HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
+                    if(success ?? "") == "Success" || (success == "Failed" && transactionId != "Invalid"){
+                        self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                        self.deleteAnyAppointmentLogsTable(appointmentId: appointmentId)
+                        
+                        self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: customerAndRoomData as NSDictionary, imageName: "")
+                        group.leave()
+                        
+                        
+                    }
+                    else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+                    {
+                        
+                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                            
+                            self.fourceLogOutbuttonAction()
+                        }
+                        
+                        self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                        
+                    }
+                    
+                }
+                
+
+            }
+            else
+            {
+                createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+            }
         }
         //2.
         
@@ -1080,7 +1109,17 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         //arb
         
         //
-        self.navigationController?.popToRootViewController(animated: true)
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
+            let installer = InstallerShedulerViewController.initialization()!
+            self.navigationController?.pushViewController(installer, animated: true)
+        }
+        else
+        {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+     
     }
     
     

@@ -2107,6 +2107,9 @@ class HttpClientManager: NSObject {
                                 let floorColourList = realm.objects(rf_floorColour_results.self)
                                 let stairColourList = realm.objects(rf_stairColour_results.self)
                                 let ruleList = realm.objects(rf_ruleList_results.self)
+                                let contract_document = realm.objects(rf_contract_document_templates_results.self)
+                                                               // var tempcontract_document:rf_contract_document_templates_results!
+                                let fields = realm.objects(rf_fields.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2127,6 +2130,8 @@ class HttpClientManager: NSObject {
                                     realm.delete(floorColourList)
                                     realm.delete(stairColourList)
                                     realm.delete(ruleList)
+                                    realm.delete(contract_document)
+                                    realm.delete(fields)
                                    
                                 }
                             }catch{
@@ -2295,6 +2300,77 @@ class HttpClientManager: NSObject {
         }
         else{
             completion("false","","",0)
+            
+        }
+    }
+    
+    
+    func installerDatesAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?, _ installationDates:[AvailableDatesValues]?, _ saleOrderId: Int? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().installationDates
+            self.showhideHUD(viewtype: .SHOW, title: "Fetching available installer schedule dates. Please wait…")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<InstallerDates>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message,response?.data?.availableDates,response?.data?.saleOrderId)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                        AppAlertMsg.serverNotReached, [] , 0)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage, [], 0)
+            
+        }
+    }
+    
+    func installerDatesSubmitAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().installationDatesSubmit
+            self.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<InstallerDatesSubmit>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                               AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
             
         }
     }

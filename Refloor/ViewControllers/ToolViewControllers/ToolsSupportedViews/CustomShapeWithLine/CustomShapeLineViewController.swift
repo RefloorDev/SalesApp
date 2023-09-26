@@ -973,7 +973,8 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         if let area  = Float(self.areaTF.text?.replacingOccurrences(of: ",", with: "") ?? "")
         {
             self.areaValue = CGFloat(area)
-            let tempPerimeter = Double(self.perimeter).clean
+            var tempPerimeter = Double(self.perimeter).clean
+            tempPerimeter = tempPerimeter.replacingOccurrences(of: ",", with: "")
             //arb
             //let appointment = getCompletedAppointmentsFromDB(appointmentId: appoinmentslData.id ?? 0)
             let customerId = appoinmentslData.customer_id ?? 0

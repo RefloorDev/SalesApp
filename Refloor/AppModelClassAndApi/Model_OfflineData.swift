@@ -12,6 +12,8 @@ import RealmSwift
 import ObjectMapper_Realm
 import UIKit
 
+var contractIndex=0
+
 public struct ListTransform<T: RealmSwift.Object>: TransformType where T: BaseMappable {
     
     public typealias Serialize = (List<T>) -> ()
@@ -62,6 +64,7 @@ class MasterData : Object, Mappable {
     var floorColourList = List<rf_floorColour_results>()
     var stairColourList = List<rf_stairColour_results>()
     var ruleList = List<rf_ruleList_results>()
+    var contract_document_templates = List<rf_contract_document_templates_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -91,6 +94,8 @@ class MasterData : Object, Mappable {
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
+        ruleList <- (map["payment_restriction_rules"], ListTransform<rf_ruleList_results>())
+        contract_document_templates <- (map["contract_document_templates"], ListTransform<rf_contract_document_templates_results>())
     }
     
 }
@@ -427,6 +432,95 @@ class rf_floorColour_results : Object,Mappable {
     }
     
 }
+
+//Dynamic contract
+class rf_contract_document_templates_results :Object,Mappable
+{
+    @objc dynamic var template_id: Int = 0
+    @objc dynamic var document_url:String?
+    @objc dynamic var name:String?
+    @objc dynamic var type:String?
+    @objc dynamic var data:Data?
+   
+    var fields = List<rf_fields>()
+    
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+//        if let contractData = try? Data(contentsOf: URL(string: document_url!)!)
+//        {
+//            data = contractData
+//        }
+        //data = Data(contentsOf: URL(string: document_url!)!)
+      
+    }
+    
+    override init(){
+        
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        template_id <- map["template_id"]
+        document_url <- map["document_url"]
+        name <- map["name"]
+        type <- map["type"]
+        fields <- (map["fields"], ListTransform<rf_fields>())
+        
+    }
+}
+
+
+class rf_fields:Object,Mappable
+{
+    @objc dynamic var type: String?
+    @objc dynamic var related_field:String?
+    @objc dynamic var responsible_id:String?
+    @objc dynamic var page:Int=0
+    @objc dynamic var posX:Float=0.0
+    @objc dynamic var posY:Float=0.0
+    @objc dynamic var width:Float=0.0
+    @objc dynamic var height:Float=0.0
+    @objc dynamic var field_type:String?
+    @objc dynamic var isSelected=0
+    @objc dynamic var id=contractIndex
+    @objc dynamic var option:String?
+    
+    
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+        contractIndex+=1
+    }
+    override static func primaryKey() -> String? {
+        return "id"
+    }
+    
+    //    init(isSelected:Int) {
+    //        self.isSelected = isSelected
+    //
+    //    }
+    
+    
+    override init(){
+        
+    }
+
+    func mapping(map: ObjectMapper.Map) {
+        
+        type <- map["type"]
+        related_field <- map["related_field"]
+        page <- map["page"]
+        responsible_id <- map["responsible_id"]
+        posX <- map["posX"]
+        posY <- map["posY"]
+        width <- map["width"]
+        height <- map["height"]
+        field_type <- map["field_type"]
+        option <- map["option"]
+    }
+}
+
 //rf_ruleList_results
 class rf_ruleList_results : Object,Mappable
 {
@@ -436,7 +530,10 @@ class rf_ruleList_results : Object,Mappable
     @objc dynamic var conditions : String?
     @objc dynamic var amount: Int = 0
     @objc dynamic var margin_amount : Int = 0
-    var category = List<rf_categoryData>()
+    @objc dynamic var grade : String?
+    //var category = List<rf_categoryData>()
+    var restricted_promotions = List<rf_restrictedPromotionData>()
+    var restricted_discount = List<rf_restrictedDiscountData>()
     var company = List<rf_comapnyData>()
     var allowed_days = List<rf_allowedData>()
     var office_location = List<rf_OfficeLocationData>()
@@ -454,13 +551,17 @@ class rf_ruleList_results : Object,Mappable
         conditions <- map["conditions"]
         amount <- map["amount"]
         margin_amount <- map["margin_amount"]
-        category <- map["category"]
-        company <- map["company"]
-        allowed_days <- map["allowed_days"]
-        office_location <- map["office_locations"]
-        payment_options <- map["payment_options"]
+        grade <- map["grade"]
+        //category <- (map["category"], ListTransform<rf_categoryData>())
+        restricted_promotions <- (map["restricted_promotions"], ListTransform<rf_restrictedPromotionData>())
+        restricted_discount <- (map["restricted_discounts"], ListTransform<rf_restrictedDiscountData>())
+        company <- (map["company"], ListTransform<rf_comapnyData>())
+        allowed_days <- (map["allowed_days"], ListTransform<rf_allowedData>())
+        office_location <- (map["office_locations"], ListTransform<rf_OfficeLocationData>())
+        payment_options <- (map["payment_options"], ListTransform<rf_paymentOptionData>())
     }
 }
+
 class rf_categoryData : Object, Mappable
 {
     @objc dynamic var category_id : Int = 0
@@ -474,6 +575,40 @@ class rf_categoryData : Object, Mappable
         
         category_id <- map["id"]
         category_name <- map["name"]
+        
+    }
+}
+
+class rf_restrictedPromotionData : Object, Mappable
+{
+    @objc dynamic var promotion_id : Int = 0
+    @objc dynamic var promotion_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        promotion_id <- map["id"]
+        promotion_name <- map["name"]
+        
+    }
+}
+
+class rf_restrictedDiscountData : Object, Mappable
+{
+    @objc dynamic var discount_id : Int = 0
+    @objc dynamic var discount_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        discount_id <- map["id"]
+        discount_name <- map["code"]
         
     }
 }
