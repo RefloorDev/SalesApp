@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import IQKeyboardManagerSwift
 
 protocol AddCustomRoomProtocol{
     func sendRoomName(roomName:String)
@@ -42,6 +43,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        IQKeyboardManager.shared.keyboardDistanceFromTextField = 100
         self.roomNameTxtFld.autocapitalizationType = UITextAutocapitalizationType.allCharacters;
         roomNameTxtFld.delegate = self
         roomNameTxtFld.setLeftPaddingPoints(15)
@@ -67,7 +69,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         else
         {
             TitleLbl.text = "Add Custom Room"
-            subTitleLbl.text = "Edit your room name"
+            subTitleLbl.text = "Enter your room name"
             addBtn.setTitle("Add", for: .normal)
         }
 
@@ -81,23 +83,35 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
 //    }
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
-        do
+//        do
+//        {
+//
+//            let allowedCharacter1 = CharacterSet.whitespaces
+//            let allowedCharacter3 = CharacterSet.decimalDigits
+//            let allowedCharacter = CharacterSet.letters
+//            let characterSet = CharacterSet(charactersIn: string)
+//            if allowedCharacter.isSuperset(of: characterSet) || allowedCharacter1.isSuperset(of: characterSet) || allowedCharacter3.isSuperset(of: characterSet)
+//            {
+//                guard range.location == 0 else {
+//                        return true
+//                    }
+//
+//                    let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string) as NSString
+//                    return (newString.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines).location != 0) && (allowedCharacter.isSuperset(of: characterSet) || allowedCharacter1.isSuperset(of: characterSet) || allowedCharacter3.isSuperset(of: characterSet))
+//            }
+//        }
+//        return true
+        
+        
+        let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
+        if range.location == 0 && string == " "
         {
-            let allowedCharacter = CharacterSet.letters
-            let allowedCharacter1 = CharacterSet.whitespaces
-            let allowedCharacter3 = CharacterSet.decimalDigits
-            let characterSet = CharacterSet(charactersIn: string)
-            if allowedCharacter.isSuperset(of: characterSet) || allowedCharacter1.isSuperset(of: characterSet) || allowedCharacter3.isSuperset(of: characterSet)
-            {
-                guard range.location == 0 else {
-                        return true
-                    }
-
-                    let newString = (textField.text! as NSString).replacingCharacters(in: range, with: string) as NSString
-                    return (newString.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines).location != 0) && (allowedCharacter.isSuperset(of: characterSet) || allowedCharacter1.isSuperset(of: characterSet) || allowedCharacter3.isSuperset(of: characterSet))
-            }
+            return false
         }
-        return true
+            let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
+            let filtered = string.components(separatedBy: cs).joined(separator: "")
+
+            return (string == filtered)
                  
     }
     
@@ -112,13 +126,15 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         {
             self.dismiss(animated: true)
             {
+                let roomName = self.roomNameTxtFld.text!.trimmingCharacters(in: .whitespaces)
+            
                 if self.isEdit == false
                 {
-                    self.delegate?.sendRoomName(roomName: self.roomNameTxtFld.text!)
+                    self.delegate?.sendRoomName(roomName: roomName)
                 }
                 else
                 {
-                    self.editDelegate?.editRoomName(roomName: self.roomNameTxtFld.text!, roomId: self.roomId)
+                    self.editDelegate?.editRoomName(roomName: roomName, roomId: self.roomId)
                 }
             }
         }

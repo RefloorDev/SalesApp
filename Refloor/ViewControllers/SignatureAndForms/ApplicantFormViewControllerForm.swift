@@ -424,27 +424,18 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         //update appdlegate value
         
         let appointmetslData = AppDelegate.appoinmentslData
+        appointmetslData?.applicant_first_name = self.firstName.text
+        appointmetslData?.applicant_middle_name = self.middlename.text
+        appointmetslData?.applicant_last_name = self.lastName.text
         appointmetslData?.phone = self.homePhone.text
         appointmetslData?.street = self.address.text
         appointmetslData?.zip = self.zipCode.text
         appointmetslData?.city = self.city.text
         appointmetslData?.state = self.stateZipCode.text
+        appointmetslData?.email = self.emailAddress.text
+
         
-        
-        // update applicant database
-        
-//        let appointmentId = AppointmentData().appointment_id ?? 0
-//        do{
-//            let realm = try Realm()
-//            try realm.write{
-//                var dict:[String:Any] = [:]
-//                dict = ["appointment_id":appointmentId,"applicant_phone":homePhone.text ?? "","applicant_email":emailAddress.text ?? ""]
-//                realm.create(rf_completed_appointment.self, value: dict, update: .all)
-//            }
-//        }
-//        catch{
-//            print(RealmError.initialisationFailed)
-//        }
+   
         
         if(AppDelegate.appoinmentslData.co_applicant_skipped == 1)
         {

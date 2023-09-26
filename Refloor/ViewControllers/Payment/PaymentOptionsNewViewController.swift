@@ -53,6 +53,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var paymentPlanValueDetails:[PaymentPlanValue] = []
     //var availablepaymentPlanValueDetails:[PaymentPlanValue]? = nil
     var paymentOptionDataValueDetail:[PaymentOptionDataValue] = []
+    var paymentRestrictionDataValueDetail:[PaymentOptionDataValue] = []
     var paymentMeterialDataValueDetails:[PaymentMeterialDataValue] = []
     var paymentMonthlyPromo:[MonthlyPromoDataValue] = []
     var imagePicker: CaptureImage!
@@ -76,6 +77,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var applyedDiscountValue  :Double = 0
     var applyediscountPercentage  :Double = 0
     var savings : String = ""
+    var oneYrPrice : String = ""
     var totalUpchargeCost: Double = 0.0
     var totalExtraCost: Double = 0.0
     var totalMoldingPrice: Double = 0.07
@@ -91,6 +93,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var stairsspecialPriceId:Int = Int()
     //var promoCodeArray:List<rf_master_discount>!
     var specialPriceTable:Results<rf_specialPrice_results>!
+    var ruleList:Results<rf_ruleList_results>!
     var isDiscountApplied = false
     var isPromoApplied = false
     var promoCodeDropDownSelectedId:Int = Int()
@@ -101,6 +104,12 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var savingsArrayDouble:[Double] = []
     var salePriceDouble:[Double] = []
     var stairPrice:Double = Double()
+    var appointmentOfficeLocationId:Int = Int()
+    var appointmentDate :Date = Date()
+    var productPaymentMethod = List<rf_master_payment_option>()
+    var OneYearPrice:Double = Double()
+    var restrictedPromo:[[Int:String]] = [[:]]
+    var restrictedDiscount:[[Int:String]] = [[:]]
     override func viewWillAppear(_ animated: Bool)
     {
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
@@ -113,12 +122,19 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         //arb
         let masterData = self.getMasterDataFromDB()
         specialPriceTable = specialPriceTable()
+        ruleList = ruleListTable()
         var roomStartDate:Date = Date()
         var roomEndDate:Date = Date()
         var stairStartDate:Date = Date()
         var stairEndDate:Date = Date()
         var spclPriceOfficeLOcationId:Int = Int()
         var stairSpclPriceOfficeLOcationId:Int = Int()
+        var successRuleListpaymentOptId = Set<Int>()
+        
+        
+       appointmentOfficeLocationId = self.getMasterAppointmentOfficeLocationId()
+        appointmentDate = (AppDelegate.appoinmentslData.appointment_date?.logDate())!
+
         if specialPriceTable.count > 0
         {
             
@@ -131,13 +147,11 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             stairEndDate = (masterData.specialPrice[1].endDate?.logDate())!
             
         }
-            let appointmentOfficeLocationId = self.getMasterAppointmentOfficeLocationId()
-        let appointmentDate = AppDelegate.appoinmentslData.appointment_date?.logDate()
-        let isRoomTodaysDateQualified = appointmentDate!.isBetween(date: roomStartDate, andDate: roomEndDate)
+        let isRoomTodaysDateQualified = appointmentDate.isBetween(date: roomStartDate, andDate: roomEndDate)
         // stairs
         
         
-        let isSatirsTodaysDateQualified = appointmentDate!.isBetween(date: stairStartDate, andDate: stairEndDate)
+        let isSatirsTodaysDateQualified = appointmentDate.isBetween(date: stairStartDate, andDate: stairEndDate)
         
         //self.minimumFee = masterData.min_sale_price
         
@@ -161,14 +175,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             isStairsSpclPriceApplied = false
             stairsspecialPriceId = 0
         }
-        let productPaymentMethod = masterData.payment_options
+        productPaymentMethod = masterData.payment_options
         let paymentPlans = masterData.product_plans
         let discountCoupons = masterData.discount_coupons
         for paymentPlan in paymentPlans{
             self.paymentPlanValueDetails.append( PaymentPlanValue(paymentPlan: paymentPlan))
         }
         for paymentMethod in productPaymentMethod{
-            self.paymentOptionDataValueDetail.append(PaymentOptionDataValue(paymentOption: paymentMethod))
+            self.paymentRestrictionDataValueDetail.append(PaymentOptionDataValue(paymentOption: paymentMethod))
         }
         for discount in discountCoupons{
             self.paymentMonthlyPromo.append(MonthlyPromoDataValue(discountPromo: discount))
@@ -189,6 +203,129 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         self.adjustmentLabel.startBlink()
     }
     
+    func isApplicableRoom()
+    {
+        var isPaymentRestrict = false
+        if ruleList.count > 0
+        {
+            for rules in ruleList
+            {
+                if appointmentDate.isBetween(date: (rules.start_date?.logDate())!, andDate: (rules.end_date?.logDate())!)
+                {
+                    for locationDetails in rules.office_location
+                    {
+                        if locationDetails.office_location_id == appointmentOfficeLocationId
+                        {
+                            let weekday = getTodayWeekDay()
+                            for weekdays in rules.allowed_days
+                            {
+                                if weekdays.allowed_name == weekday
+                                {
+                                    switch rules.conditions
+                                    {
+                                    case "amount":
+                                        if Int(OneYearPrice) <= rules.amount
+                                        {
+                                            isPaymentRestrict = true
+                                            if rules.restricted_promotions.count > 0
+                                            {
+                                                for promotions in rules.restricted_promotions
+                                                {
+                                                    restrictedPromo.append([promotions.promotion_id : promotions.promotion_name!])
+                                                }
+                                            }
+                                            
+                                            if rules.restricted_discount.count > 0
+                                            {
+                                                for discounts in rules.restricted_discount
+                                                {
+                                                    restrictedDiscount.append([discounts.discount_id : discounts.discount_name!])
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            isPaymentRestrict = false
+                                        }
+                                    case "grade":
+                                        if rules.grade == self.paymentPlanValueDetails[self.selectedPlan].grade
+                                        {
+                                            isPaymentRestrict = true
+                                            if rules.restricted_promotions.count > 0
+                                            {
+                                                for promotions in rules.restricted_promotions
+                                                {
+                                                    restrictedPromo.append([promotions.promotion_id : promotions.promotion_name!])
+                                                }
+                                            }
+                                            
+                                            if rules.restricted_discount.count > 0
+                                            {
+                                                for discounts in rules.restricted_discount
+                                                {
+                                                    restrictedDiscount.append([discounts.discount_id : discounts.discount_name!])
+                                                }
+                                            }
+                                         }
+                                         else
+                                         {
+                                             isPaymentRestrict = false
+                                         
+                                         }
+                                        
+//                                    case "margin":
+//                                        if OneYearPrice <= self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500
+//
+//                                        {
+//                                           isPaymentRestrict = true
+//                                            if rules.restricted_promotions.count > 0
+//                                            {
+//                                                for promotions in rules.restricted_promotions
+//                                                {
+//                                                    restrictedPromo.append([promotions.promotion_id : promotions.promotion_name!])
+//                                                }
+//                                            }
+//
+//                                            if rules.restricted_discount.count > 0
+//                                            {
+//                                                for discounts in rules.restricted_discount
+//                                                {
+//                                                    restrictedDiscount.append([discounts.discount_id : discounts.discount_name!])
+//                                                }
+//                                            }
+//                                        }
+//                                        else
+//                                        {
+//                                            isPaymentRestrict = false
+//
+//                                        }
+                                    
+                                    default:
+                                        break
+                                    }
+                                    if isPaymentRestrict
+                                    {
+                                        if rules.payment_options.count > 0
+                                        {
+                                            for paymentOptions in rules.payment_options
+                                            {
+                                                let Index = paymentOptionDataValueDetail.firstIndex(where: {$0.id == paymentOptions.paymentOption_id})
+                                                //paymentOptionDataValueDetail.filter({$0.id == paymentOptions.paymentOption_id})
+                                                paymentOptionDataValueDetail[Index!].isHidden = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
+        paymentCollectionView.reloadData()
+    }
+    
     
     @IBAction func changeAreaButtonAction(_ sender: Any) {
        // self.performSegueToReturnBack()
@@ -205,6 +342,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 //promo.delegate = self
                 promo.discountValue = applyedDiscountValue
+                promo.restrictedDiscount = self.restrictedDiscount
                 promo.exludedCost = self.totalExtraCostToReduce
                 promo.discountPromoCode = applyedPromoCode
                 promo.discountPercentage = applyediscountPercentage
@@ -391,7 +529,13 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     
     @IBAction func adjustmentButtonAction(_ sender: Any)
     {
-
+        if selectedPlan == -1
+        {
+            self.alert("Select a package to continue", nil)
+        }
+        else
+        {
+            
             if isDiscountApplied == true
             {
                 self.alert("Discount must be removed, before promotion can be changed", nil)
@@ -410,8 +554,10 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 promo.salePriceArray = salePriceDouble
                 promo.minimumFee = self.minimumFee
                 promo.area = self.area
+                promo.restrictedPromo = self.restrictedPromo
                 self.present(promo, animated: true, completion: nil)
             }
+        }
         
         
     }
@@ -855,6 +1001,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             if(!self.paymentPlanValueDetails[indexPath.row].isNotAvailable)
             {
                 
+                
                 if(self.selectedPlan !=  indexPath.item)
                 {
                     applyediscountPercentage = 0
@@ -867,9 +1014,22 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 self.selectedPlan = indexPath.item
                 
                 let cell = collectionView.cellForItem(at: indexPath) as! PamentOptionsTopCollectionViewCell
-
+                
+                paymentOptionDataValueDetail = paymentRestrictionDataValueDetail
+                for index in paymentOptionDataValueDetail
+                {
+                    index.isHidden = false
+                }
+                self.oneYrPrice = cell.mrpLabel.text!
+                //self.oneYrPrice.removeFirst()
+                oneYrPrice = oneYrPrice.replacingOccurrences(of: "$", with: "")
+                oneYrPrice = oneYrPrice.replacingOccurrences(of: ",", with: "")
+                self.OneYearPrice = Double(oneYrPrice)!
                 self.savings = cell.adjustmentValue.text!
                 self.savings.removeFirst()
+                restrictedPromo.removeAll()
+                restrictedDiscount.removeAll()
+                isApplicableRoom()
                 self.minimumFee = paymentPlanValueDetails[indexPath.row].minimum_Sale_price ?? 1500.00
                 //self.adjestmentValue = 0
                 self.monthlyValue = self.paymentPlanValueDetails[indexPath.row].monthly_promo ?? 0
@@ -895,8 +1055,10 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
         else if self.downOrFinal != self.amountTotel
         {
+           
             if(indexPath.item == 0 )
             {
+                
                 if self.downOrFinal == 0
                 {
                     self.selectedOption = indexPath.item
@@ -935,6 +1097,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if(collectionView == planCollectionView)
         {
@@ -942,6 +1105,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
         else
         {
+            paymentOptionDataValueDetail = paymentRestrictionDataValueDetail.filter({$0.isHidden == false})
+//            paymentOptionDataValueDetail.removeLast()
+           // paymentOptionDataValueDetail.removeLast()
             return paymentOptionDataValueDetail.count
         }
     }
@@ -950,20 +1116,22 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         if(collectionView == planCollectionView)
         {
             let count = CGFloat(paymentPlanValueDetails.count)
-            
+           
             let totalWidth = 320 * count
             let defferent = (collectionView.bounds.width - totalWidth)
             //return 12
             return (defferent > 70) ? (defferent/count) : 20
         }
+        
         else
         {
-            let count = CGFloat(paymentOptionDataValueDetail.count)
-            
-            let totalWidth = 320 * count
-            let defferent = (collectionView.bounds.width - totalWidth)
-            return (defferent > 70) ? (defferent/count) : 20
-            
+//            let count = CGFloat(paymentOptionDataValueDetail.count)
+//
+//            let totalWidth = 320 * count
+//            let defferent = (collectionView.bounds.width - totalWidth)
+//            return (defferent > 70) ? (defferent/count) : 20
+            return 20
+
         }
     }
     
@@ -984,6 +1152,27 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets
+    {
+        if paymentOptionDataValueDetail.count < 4
+        {
+            if collectionView == paymentCollectionView
+            {
+                let CellWidth = 290
+                let CellCount = paymentOptionDataValueDetail.count
+                let totalCellWidth = CellWidth * CellCount
+                    let totalSpacingWidth = 20 * (CellCount - 1)
+
+                let leftInset = max(0, (collectionView.bounds.width - CGFloat(totalCellWidth + totalSpacingWidth)) / 2.0)
+                    let rightInset = leftInset
+
+                    return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
+            }
+        }
+
+        return UIEdgeInsets()
+    }
+    
     /* func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
      return 5
      }*/
@@ -998,13 +1187,16 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
            // return 12
             return (defferent > 70) ? (defferent/count) : 20
         }
+    
+       
         else
         {
-            let count = CGFloat(paymentOptionDataValueDetail.count)
-            
-            let totalWidth = 320 * count
-            let defferent = (collectionView.bounds.width - totalWidth)
-            return (defferent > 70) ? (defferent/count) : 20
+            return 20
+//            let count = CGFloat(paymentOptionDataValueDetail.count)
+//
+//            let totalWidth = 320 * count
+//            let defferent = (collectionView.bounds.width - totalWidth)
+//            return (defferent > 70) ? (defferent/count) : 20
         }
     }
     
@@ -1317,6 +1509,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         else
         {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentOptionsBottomCollectionViewCell", for: indexPath) as! PaymentOptionsBottomCollectionViewCell
+            //let paymentRestrictionArray = paymentOptionDataValueDetail.filter({$0.isHidden == false})
+
             cell.borderWidth = 1
             cell.borderColor = UIColor().colorFromHexString("#586471")
             let htmlString = paymentOptionDataValueDetail[indexPath.row].Name
@@ -1337,7 +1531,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
            
             cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
-            if(indexPath.row==0)
+            if(paymentOptionDataValueDetail[indexPath.row].Name == "Cash" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
             {
                 
                 // if(downOrFinal > 0)
@@ -1382,7 +1576,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //                print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
                 //                print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
             }
-            else if(indexPath.row==1)
+            else if(paymentOptionDataValueDetail[indexPath.row].Name == "1 Year<br />No Payments<br />No Interest" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
             
             {
                 
@@ -1408,7 +1602,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 
                 //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nPayment: $\((self.emiAmount * Payment_Factor).toRoundeString)"
             }
-            else if(indexPath.row==2)
+            else if(paymentOptionDataValueDetail[indexPath.row].Name == "Zero Interest Program" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
             
             {
                 if(downOrFinal > 0 )
@@ -1447,7 +1641,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 
                 
             }
-            else if(indexPath.row==3)
+            else if(paymentOptionDataValueDetail[indexPath.row].Name == "Low Monthly Payment" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
             
             {
                 // let Payment_Factor = Double(self.paymentOptionDataValueDetail[indexPath.row].Payment_Factor__c ?? "0") ?? 0

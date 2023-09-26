@@ -17,7 +17,23 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
         roomData.removeAll()
         roomData = getMasterRoomFromDB()
-        roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+        let appointmentId = self.appoinmentsData.id ?? 0
+        if customdbRommValues.count > 0
+        {
+            let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+            roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+        }
+        
+        
+        let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
+        let allExistingRoomIds = roomExists.map{$0.room_id}
+        roomData.forEach{ room in
+            if allExistingRoomIds.contains(room.id ?? 0){
+                room.measurement_exist = "true"
+            }
+        }
+        selectedno = -1
+        //roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
         collectionView.reloadData()
     }
     
@@ -28,10 +44,25 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         {
             saveCustomRoomName(roomId:String(roomId),appointmentId: AppDelegate.appoinmentslData.id ?? 0, roomName: roomName.uppercased(), isConfirm: false,isNextBtn: false)
             let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
-            let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
             roomData.removeAll()
             roomData = getMasterRoomFromDB()
-            roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+            let appointmentId = self.appoinmentsData.id ?? 0
+            if customdbRommValues.count > 0
+            {
+                let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+                roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+            }
+            
+            
+            let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
+            let allExistingRoomIds = roomExists.map{$0.room_id}
+            roomData.forEach{ room in
+                if allExistingRoomIds.contains(room.id ?? 0){
+                    room.measurement_exist = "true"
+                }
+            }
+            //roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+            selectedno = 0
             collectionView.reloadData()
         }
     }
@@ -54,10 +85,23 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
                     let customRoom:[String:Any] = ["roomId":String(Date().currentTimeMillis()),"appointment_id":appointmentId, "name":self.customRoomName.uppercased() ,"isConfirm":false]
                         realm.create(rf_customRoomName.self, value: customRoom, update: .all)
                     let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
-                 let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
                     roomData.removeAll()
                     roomData = getMasterRoomFromDB()
-                    roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+                    if customdbRommValues.count > 0
+                    {
+                        let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+                        roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+                    }
+                    
+                    
+                    let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
+                    let allExistingRoomIds = roomExists.map{$0.room_id}
+                    roomData.forEach{ room in
+                        if allExistingRoomIds.contains(room.id ?? 0){
+                            room.measurement_exist = "true"
+                        }
+                    }
+                    //roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
                     selectedno = 0
                     collectionView.reloadData()
                     

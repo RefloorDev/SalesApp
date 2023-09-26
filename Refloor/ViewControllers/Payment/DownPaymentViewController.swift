@@ -1225,7 +1225,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             if(success ?? "") == "Success"
             {
                 
-                let web = WebViewViewController.initialization()! 
+                let web = DynamicContractViewController.initialization()! 
                 web.document=value ?? ""
                 web.orderID=self.orderID
                 web.downPayment = self.DownPaymentcalucaltion().downPayment
@@ -1272,7 +1272,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         HttpClientManager.SharedHM.PaymentRequestCardAPi(parameter: parameter) { (success, message, value) in
             if(success ?? "") == "Success"
             {
-                let web = WebViewViewController.initialization()!
+                let web = DynamicContractViewController.initialization()!
                 web.document=value ?? ""
                 web.orderID=self.orderID;
                 web.downPayment = self.DownPaymentcalucaltion().downPayment
@@ -1319,7 +1319,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         HttpClientManager.SharedHM.PaymentRequestCardAPi(parameter: parameter) { (success, message, value) in
             if(success ?? "") == "Success"
             {
-                let web = WebViewViewController.initialization()!
+                let web = DynamicContractViewController.initialization()!
                 web.document=value ?? ""
                 web.orderID=self.orderID;
                 web.downPayment = self.DownPaymentcalucaltion().downPayment
@@ -1366,7 +1366,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         HttpClientManager.SharedHM.PaymentRequestCheckAPi(parameter: parameter){ (success, message, value) in
             if(success ?? "") == "Success"
             {
-                let web = WebViewViewController.initialization()!
+                let web = DynamicContractViewController.initialization()!
                 web.document=value ?? ""
                 web.orderID = self.orderID;
                 web.downPayment = self.DownPaymentcalucaltion().downPayment

@@ -118,7 +118,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         if paymentType == "cash"
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -131,7 +131,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         }
         else if self.paymentType == "check"
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -145,7 +145,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         }
         else if paymentType == "card"
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -158,7 +158,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         }
         else 
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             web.document=document
             web.orderID=orderID
             web.downPayment = downPayment

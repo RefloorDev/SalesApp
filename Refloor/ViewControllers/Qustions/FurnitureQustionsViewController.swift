@@ -401,19 +401,21 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     {
         for qustion in qustionAnswer
         {
-            if let levellingSolutionIndex =  qustionAnswer.firstIndex(where: { $0.code == "PrimerType"})
-             {
-//                let value = QuoteLabelData(question_id: summaryQustions[levellingSolutionIndex].answers![0].id ?? 0, value: summaryQustions[levellingSolutionIndex].answers![0].answer ?? "")
-//                let val =  AnswerOFQustion(value)
-//                val.qustionLineID = summaryQustions[levellingSolutionIndex].contract_question_line_id ?? 0
-//                val.answerID = summaryQustions[levellingSolutionIndex].answers![0].id ?? 0
-//                qustion.answerOFQustion = val
-                let levellingSolutionIndexInt = Int(levellingSolutionIndex)
-                let value1 = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
-                qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![0])
-                qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value1?.qustionLineID ?? 0
-                qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value1?.answerID ?? 0
-            }
+//            if let levellingSolutionIndex =  qustionAnswer.firstIndex(where: { $0.code == "PrimerType"})
+//             {
+////                let value = QuoteLabelData(question_id: summaryQustions[levellingSolutionIndex].answers![0].id ?? 0, value: summaryQustions[levellingSolutionIndex].answers![0].answer ?? "")
+////                let val =  AnswerOFQustion(value)
+////                val.qustionLineID = summaryQustions[levellingSolutionIndex].contract_question_line_id ?? 0
+////                val.answerID = summaryQustions[levellingSolutionIndex].answers![0].id ?? 0
+////                qustion.answerOFQustion = val
+//
+////
+////                let levellingSolutionIndexInt = Int(levellingSolutionIndex)
+////                let value1 = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
+////                qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![0])
+////                qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value1?.qustionLineID ?? 0
+////                qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value1?.answerID ?? 0
+//            }
             for answer in summaryQustions
             {
                 if qustion.id == answer.question_id
