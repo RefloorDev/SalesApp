@@ -26,7 +26,7 @@ struct AppURL {
     //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
    // let LIVE_BASE_URL = " https://refloor-stage.odooapps.oneteam.us/" //Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
-    let LIVE_BASE_URL = "http://odoo.myx.ac:7007/api/"
+    let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446
     //LIVE
     // let BASE_URL = "http://35.245.254.221:7007/api/"
@@ -36,7 +36,7 @@ struct AppURL {
     
     //Training New Server
      //let TRAINING_BASE_URL = "http://35.199.10.7:6006/api/"
-    let TRAINING_BASE_URL = "http://odootraining.myx.ac:6006/api/"
+    let TRAINING_BASE_URL = "https://odootraining.myx.ac/api/"
     //authenticate login api
      var authenticate = BASE_URL + "authenticate"
     
