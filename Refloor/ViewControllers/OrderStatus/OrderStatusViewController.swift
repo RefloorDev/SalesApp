@@ -34,6 +34,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
     @IBOutlet weak var orderstatusLabel: UILabel!
     
+    @IBOutlet weak var aptResultScrollView: UIScrollView!
     @IBOutlet weak var whtnextButton: UIButton!
     @IBOutlet weak var whthpndButton: UIButton!
     
@@ -45,6 +46,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     var appointmentResults = List<rf_master_appointments_results_demoedNotDemoed>()
     override func viewDidLoad() {
         super.viewDidLoad()
+        aptResultScrollView.isDirectionalLockEnabled = true
+
         //  self.setNavigationBarbackAndlogo(with: "Customer 1 Details")
         whatsnewTextView.text = "Enter here"
         whatsnewTextView.textColor = placeholderColor
@@ -71,6 +74,12 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             self.tempstatusList.append(OrderStatusData(appointmentResult: appointmentResult))
         }
         //OrderStatustLisApiCall()
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x>0 {
+            scrollView.contentOffset.x = 0
+        }
     }
     
     func imageUploadScreenShotOrderStatus(_ image:UIImage,_ name:String )
