@@ -4679,6 +4679,19 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return discountCouponsArray
     }
+    func getAptResultReason() -> RealmSwift.List<rf_appointment_result_reasons_results> {
+        var AppointmentResultReasonArray = RealmSwift.List<rf_appointment_result_reasons_results>()
+        do{
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let AppointmentResultReason = masterData.first?.appointment_result_reasons{
+                AppointmentResultReasonArray = AppointmentResultReason
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return AppointmentResultReasonArray
+    }
     func getTransitionheightDropDownValue() -> RealmSwift.List<rf_transitionHeights_results> {
         var discountCouponsArray = RealmSwift.List<rf_transitionHeights_results>()
         do{

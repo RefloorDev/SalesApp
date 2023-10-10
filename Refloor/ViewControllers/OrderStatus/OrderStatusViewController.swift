@@ -26,6 +26,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     var StatusArray = [String]()
     var theApiValue:OrderStatusDataMap?
     var tempstatusList:[OrderStatusData] = []
+    var aptResultList:[AppointmentResultData] = []
     var appoinmentslData:AppoinmentDataValue!
     var delegate:OrderStatusViewDelegate?
     var isAPIcalled = true
@@ -34,6 +35,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
     @IBOutlet weak var orderstatusLabel: UILabel!
     
+    @IBOutlet weak var aptResultDetailsLbl: UILabel!
     @IBOutlet weak var aptResultScrollView: UIScrollView!
     @IBOutlet weak var whtnextButton: UIButton!
     @IBOutlet weak var whthpndButton: UIButton!
@@ -43,7 +45,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     @IBOutlet weak var whatsnewTextView: UITextView!
     @IBOutlet weak var whthpndTextView: UITextView!
     var imagesArray: [[String:Any]] = []
+    var selectedAptResultReasonId:Int = Int()
     var appointmentResults = List<rf_master_appointments_results_demoedNotDemoed>()
+    var appointDetailsResults:List<rf_appointment_result_reasons_results>!
     override func viewDidLoad() {
         super.viewDidLoad()
         aptResultScrollView.isDirectionalLockEnabled = true
@@ -57,7 +61,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     override func viewWillAppear(_ animated: Bool) {
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        if orderstatusLabel.text=="Select Result"{
+        if orderstatusLabel.text=="Select Result" || aptResultDetailsLbl.text == "Select Result Details"{
             whthpndTextView.isUserInteractionEnabled=false
             whatsnewTextView.isUserInteractionEnabled=false
         }else{
@@ -72,6 +76,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
 //        appointmentResults = masterData.appointmentResults
         for appointmentResult in appointmentResults{
             self.tempstatusList.append(OrderStatusData(appointmentResult: appointmentResult))
+        }
+        appointDetailsResults = self.getAptResultReason()
+        for aptResultReason in appointDetailsResults
+        {
+            self.aptResultList.append(AppointmentResultData(appointmentResultData: aptResultReason))
         }
         //OrderStatustLisApiCall()
     }
@@ -191,24 +200,47 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     }
     @IBAction func dropDownButtonAction(_ sender: UIButton) {
         
-        
-        var value:[String] = []
-        for val in tempstatusList
+        if sender.tag == 0
         {
-            value.append(val.statusresult ?? "Unknown")
-        }
-        
-        if(value.count != 0)
-        {
-            // self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag)
-            self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
-            //  self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
+            var value:[String] = []
+            for val in tempstatusList
+            {
+                value.append(val.statusresult ?? "Unknown")
+            }
             
-            
+            if(value.count != 0)
+            {
+                // self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag)
+                self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
+                //  self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
+                
+                
+            }
+            else
+            {
+                self.alert("Appointment Results not available", nil)
+            }
         }
         else
         {
-            self.alert("Appointment Results not available", nil)
+            var value:[String] = []
+            for val in aptResultList
+            {
+                value.append(val.reason ?? "Unknown")
+            }
+            
+            if(value.count != 0)
+            {
+                // self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag)
+                self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 1)
+                //  self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
+                
+                
+            }
+            else
+            {
+                self.alert("Appointment Result Details not available", nil)
+            }
         }
         
         
@@ -226,6 +258,10 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         {
             self.alert("Please select appointment result", nil)
             
+        }
+        else if aptResultDetailsLbl.text == "Select Result Details"
+        {
+            self.alert("Please select appointment result details", nil)
         }
         else if whthpndTextView.text=="Enter here" && whatsnewTextView.text=="Enter here"{
             whathpnderrorLabel.isHidden=false
@@ -669,6 +705,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         customerDict["timezone"] = timeZone
         customerDict["what_happened_notes"] = self.whthpndTextView.text ?? ""
         customerDict["whats_next_notes"] = self.whatsnewTextView.text ?? ""
+        customerDict["resulting_reason_id"] = self.selectedAptResultReasonId
         return customerDict
     }
     
@@ -736,8 +773,18 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
-        self.orderstatusLabel.text = item
-        self.orderstatusLabel.textColor = .white
+        if tag == 0
+        {
+            self.orderstatusLabel.text = item
+            self.orderstatusLabel.textColor = .white
+        }
+        else
+        {
+            let selectedAptResultReasonArray = appointDetailsResults.filter({$0.reason == item})
+            selectedAptResultReasonId = selectedAptResultReasonArray.first?.reasonId ?? 0
+            self.aptResultDetailsLbl.text = item
+            self.aptResultDetailsLbl.textColor = .white
+        }
     }
     
     func addImageStatLogs(appointmentId: Int, imageType:String){

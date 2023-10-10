@@ -65,6 +65,7 @@ class MasterData : Object, Mappable {
     var stairColourList = List<rf_stairColour_results>()
     var ruleList = List<rf_ruleList_results>()
     var contract_document_templates = List<rf_contract_document_templates_results>()
+    var appointment_result_reasons = List<rf_appointment_result_reasons_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -96,6 +97,7 @@ class MasterData : Object, Mappable {
         resitionDate <- map ["recision_date"]
         ruleList <- (map["payment_restriction_rules"], ListTransform<rf_ruleList_results>())
         contract_document_templates <- (map["contract_document_templates"], ListTransform<rf_contract_document_templates_results>())
+        appointment_result_reasons <- (map["appointment_result_reasons"], ListTransform<rf_appointment_result_reasons_results>())
     }
     
 }
@@ -153,6 +155,7 @@ class rf_master_roomname : Object, Mappable {
     {
         self.room_id = Int(customRoomName.roomId)!
         self.room_name = customRoomName.name
+        self.room_category = customRoomName.roomcategory
         if customRoomName.isConfirm == true
         {
             self.company_id = 1
@@ -431,6 +434,25 @@ class rf_floorColour_results : Object,Mappable {
         color_upcharge <- map["color_up_charge_price"]
     }
     
+}
+
+// appointment results details
+
+class rf_appointment_result_reasons_results: Object,Mappable
+{
+    @objc dynamic var reasonId : Int = 0
+    @objc dynamic var reason : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        reasonId <- map["reason_id"]
+        reason <- map["reason"]
+        
+    }
 }
 
 //Dynamic contract
@@ -1274,6 +1296,7 @@ class rf_customRoomName:Object
     @objc dynamic var appointment_id = 0
     @objc dynamic var name: String?
     @objc dynamic var isConfirm: Bool = false
+    @objc dynamic var roomcategory = "Vinyl Flooring"
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()

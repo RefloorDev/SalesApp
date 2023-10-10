@@ -55,7 +55,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var qustionAnswer: [QuestionsMeasurementData] = []
         questionsList.forEach{ question in
-            if !roomName.localizedCaseInsensitiveContains("stair") {
+            //if !roomName.localizedCaseInsensitiveContains("stair") && area != 0
+            if area != 0
+            {
                 if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
                 qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
                 }
@@ -511,30 +513,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         
             //var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex(of: qustionAnswer.filter({$0.setde == UnitNumberId}).first ?? Unit_list()) ?? 0
         let roomNameSubStr = roomName.contains("STAIRS")
-            if roomNameSubStr != true
+        if roomNameSubStr != true && area != 0.0
         {
                 if tag == 0
                 {
-                    //if let levellingSolutionIndex =  qustionAnswer.firstIndex(where: { $0.code == "LevellingSolution"})
-//                    {
-//                        let levellingSolutionIndexInt = Int(levellingSolutionIndex)
-//                        if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[levellingSolutionIndexInt].applicableCurrentSurface//"Concrete / Cement"
-//                        {
-//                            let value = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
-//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![0])
-//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
-//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value?.answerID ?? 0
-//
-//                        }
-//                        else
-//                        {
-//                            let value = qustionAnswer[levellingSolutionIndexInt].answerOFQustion
-//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion = AnswerOFQustion( qustionAnswer[levellingSolutionIndexInt].quote_label![1])
-//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
-//                            qustionAnswer[levellingSolutionIndexInt].answerOFQustion?.answerID = value?.answerID ?? 0
-//                        }
-//
-//                    }
+ 
                     let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
                     if setDefaultAnswerTrueIndex != nil
                     {

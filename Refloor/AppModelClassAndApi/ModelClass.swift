@@ -330,6 +330,7 @@ class RoomDataValue: Mappable,Encodable
     var measurement_exist:String?
     var is_custom_room:String?
     var custom_room_measurement_id:Int?
+    var roomCategory:String?
     
     required init?(map: ObjectMapper.Map){
     }
@@ -341,6 +342,7 @@ class RoomDataValue: Mappable,Encodable
         self.note = roomData.note
         self.company_id = roomData.company_id
         self.image = roomData.image
+        self.roomCategory = roomData.room_category
         //self.measurement_exist = roomData.mea
         //self.is_custom_room = roomData.isc
         //self.custom_room_measurement_id = roomData.cus
@@ -357,6 +359,7 @@ class RoomDataValue: Mappable,Encodable
         measurement_exist <- map["measurement_exist"]
         is_custom_room <- map["is_custom_room"]
         custom_room_measurement_id <- map["custom_room_measurement_id"]
+        roomCategory <- map["room_category"]
         
     }
 }
@@ -885,6 +888,29 @@ class OrderStatusData: Mappable
     init(appointmentResult:rf_master_appointments_results_demoedNotDemoed){
         self.id = appointmentResult.id
         self.statusresult = appointmentResult.result
+    }
+    
+}
+
+class AppointmentResultData: Mappable
+{
+    var id: Int?
+    var reason:String?
+    
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        id <- map["reason_id"]
+        reason <- map["reason"]
+        
+        
+    }
+    init(appointmentResultData:rf_appointment_result_reasons_results){
+        self.id = appointmentResultData.reasonId
+        self.reason = appointmentResultData.reason
     }
     
 }

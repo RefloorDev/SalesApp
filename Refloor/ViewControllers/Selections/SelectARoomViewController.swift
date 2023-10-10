@@ -480,7 +480,7 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
             //
             
             let string = self.roomData[self.selectedno].name!
-            if((string.contains("STAIR")) || (string.contains("stair")) || (string.contains("Stair")))
+            if((string.contains("STAIR")) || (string.contains("stair")) || (string.contains("Stair"))) && self.roomData[self.selectedno].roomCategory != "Vinyl Flooring"
             {
                 // stairDataUpload()
                 let next = AboutRoomViewController.initialization()!
