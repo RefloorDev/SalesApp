@@ -282,7 +282,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             // cell.molding.borderWidth = 1
             cell.molding.textColor = UIColor.redColor
         }
-        if((tableValues[indexPath.row].stair_count ?? 0 ) > 0 || (tableValues[indexPath.row].room_name ?? "").localizedCaseInsensitiveContains("stair"))
+        if((tableValues[indexPath.row].stair_count ?? 0 ) > 0 || ((tableValues[indexPath.row].room_name ?? "").localizedCaseInsensitiveContains("stair")) && tableValues[indexPath.row].room_area == 0.0)
         {
             //MoldingTitleLbl.isHidden = true
             // MoldingView.isHidden = true

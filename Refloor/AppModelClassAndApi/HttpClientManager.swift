@@ -2110,6 +2110,7 @@ class HttpClientManager: NSObject {
                                 let contract_document = realm.objects(rf_contract_document_templates_results.self)
                                                                // var tempcontract_document:rf_contract_document_templates_results!
                                 let fields = realm.objects(rf_fields.self)
+                                let appointmentResultsReasons = realm.objects(rf_appointment_result_reasons_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2132,7 +2133,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(ruleList)
                                     realm.delete(contract_document)
                                     realm.delete(fields)
-                                   
+                                    realm.delete(appointmentResultsReasons)
                                 }
                             }catch{
                                 print(RealmError.writeFailed.rawValue)
@@ -2174,10 +2175,18 @@ class HttpClientManager: NSObject {
             }
             
             let URL = AppURL().syncCustomerAndRoomInfo
-            
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
+            let manager = Alamofire.SessionManager.default
+            manager.session.configuration.timeoutIntervalForRequest = 1
+            manager.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
                 
                // print(response.result.value.debugDescription)
+//                if let error = response.result.error
+//                {
+//                    if error._code == NSURLErrorTimedOut
+//                    {
+//                        print("TimeOut")
+//                    }
+//                }
                 let response = response.result.value
                 
                 if response != nil{
