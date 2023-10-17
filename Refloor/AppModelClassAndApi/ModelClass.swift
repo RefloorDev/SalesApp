@@ -330,20 +330,24 @@ class RoomDataValue: Mappable,Encodable
     var measurement_exist:String?
     var is_custom_room:String?
     var custom_room_measurement_id:Int?
+    var roomCategory:String?
     
     required init?(map: ObjectMapper.Map){
     }
     
-    init(roomData:rf_master_roomname) {
+    init(roomData:rf_master_roomname)
+    {
         self.id = roomData.room_id
         self.name = roomData.room_name
         self.note = roomData.note
         self.company_id = roomData.company_id
         self.image = roomData.image
+        self.roomCategory = roomData.room_category
         //self.measurement_exist = roomData.mea
         //self.is_custom_room = roomData.isc
         //self.custom_room_measurement_id = roomData.cus
     }
+
    
     
     func mapping(map: ObjectMapper.Map) {
@@ -355,6 +359,7 @@ class RoomDataValue: Mappable,Encodable
         measurement_exist <- map["measurement_exist"]
         is_custom_room <- map["is_custom_room"]
         custom_room_measurement_id <- map["custom_room_measurement_id"]
+        roomCategory <- map["room_category"]
         
     }
 }
@@ -887,6 +892,29 @@ class OrderStatusData: Mappable
     
 }
 
+class AppointmentResultData: Mappable
+{
+    var id: Int?
+    var reason:String?
+    
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        id <- map["reason_id"]
+        reason <- map["reason"]
+        
+        
+    }
+    init(appointmentResultData:rf_appointment_result_reasons_results){
+        self.id = appointmentResultData.reasonId
+        self.reason = appointmentResultData.reason
+    }
+    
+}
+
 class MessuerementDataMap: Mappable
 {
     var result: String?
@@ -1273,6 +1301,7 @@ class PaymentPlanValue: Mappable
     var cost_per_sqft: Double?
     var floor_standard :String?
     var warranty :String?
+    var minimum_Sale_price: Double?
     var sequence :String?
     var monthly_promo:Double?
     var discount: Int?
@@ -1284,6 +1313,7 @@ class PaymentPlanValue: Mappable
     var discount_exclude_amount: Double?
     var eligible_for_discounts: String?
     var unit_of_measure: String?
+    var grade: String?
     var stair_cost: Double?
     var stair_msrp: Double?
     var stairProductId: Int?
@@ -1302,7 +1332,8 @@ class PaymentPlanValue: Mappable
         self.description = paymentPlan.description1
         self.cost_per_sqft = paymentPlan.cost_per_sqft
         self.floor_standard = ""
-        self.warranty = paymentPlan.warranty
+        self.warranty = paymentPlan.warranty_info
+        self.minimum_Sale_price = paymentPlan.min_Sale_Price
         self.sequence = String(paymentPlan.sequence)
         self.monthly_promo = Double(paymentPlan.monthly_promo)
         //self.discount = discount.discount
@@ -1314,6 +1345,7 @@ class PaymentPlanValue: Mappable
         //self.discount_exclude_amount = discount.discount_exclude_amount
         self.eligible_for_discounts = paymentPlan.eligible_for_discounts
         self.unit_of_measure = paymentPlan.unit_of_measure
+        self.grade = paymentPlan.grade
         self.stair_cost = paymentPlan.stair_cost
         self.stair_msrp = paymentPlan.stair_Msrp
         self.stairProductId = paymentPlan.stairProductId
@@ -1326,6 +1358,7 @@ class PaymentPlanValue: Mappable
         company_id <- map["company_id"]
         description <- map["description"]
         warranty <- map["warranty_info"]
+        minimum_Sale_price <- map["min_sale_price"]
         floor_standard <- map["floor_standard"]
         sequence <- map["sequence"]
         company_id <- map["company_id"]
@@ -1382,6 +1415,8 @@ class PaymentOptionDataValue: Mappable
     var Secondary_Payment_Factor__c:String?
     var Balance_Due__c:String?
     var Payment_Info__c:String?
+    var down_payment_message:String?
+    var isHidden: Bool = false
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1398,6 +1433,8 @@ class PaymentOptionDataValue: Mappable
         self.Secondary_Payment_Factor__c = paymentOption.Secondary_Payment_Factor__c
         self.Balance_Due__c = paymentOption.balance_Due__c
         self.Payment_Info__c = paymentOption.payment_info__c
+        self.down_payment_message = paymentOption.down_payment_message
+        //self.isHidden = self.isHidden
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -1414,10 +1451,10 @@ class PaymentOptionDataValue: Mappable
         Secondary_Payment_Factor__c <- map["Secondary_Payment_Factor__c"]
         Balance_Due__c <- map["Balance_Due__c"]
         Payment_Info__c <- map["Payment_Info__c"]
-        
-        
+        down_payment_message <- map["down_payment_message"]
     }
 }
+
 
 class MonthlyPromoDataValue: Mappable
 {
@@ -1614,6 +1651,74 @@ class autoLogoutData: Mappable
     }
     
 }
+
+class InstallerDatesSubmit: Mappable
+{
+    var result:String?
+    var message:String?
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+    }
+}
+
+class InstallerDates: Mappable
+{
+    var result:String?
+    var message:String?
+    var data:DatesValues?
+    var override_json_result:Int?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        data <- map["data"]
+        override_json_result <- map["override_json_result"]
+    }
+}
+class DatesValues: Mappable
+{
+    var availableDates:[AvailableDatesValues]?
+    var saleOrderId: Int?
+    required init?(map: ObjectMapper.Map)
+    {
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        availableDates <- map["available_dates"]
+        saleOrderId <- map["sale_order_id"]
+       
+    }
+}
+
+class AvailableDatesValues: Mappable
+{
+    var installationId:Int?
+    var startDate:String?
+    var endDate:String?
+    var crewId:Int?
+    var crewName:String?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        installationId <- map["installation_id"]
+        startDate <- map["start_date"]
+        endDate <- map["end_date"]
+        crewId <- map["crew_id"]
+        crewName <- map["crew_name"]
+        
+       
+    }
+}
+
 class CashDataResponse: Mappable
 {
     var result: String?
@@ -1621,6 +1726,9 @@ class CashDataResponse: Mappable
     var document:String?
     var paymentStatus:String?
     var paymentMessage:String?
+    var authorize_transaction_id:String?
+    var card_type:String?
+    
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1631,6 +1739,8 @@ class CashDataResponse: Mappable
         document <- map["document"]
         paymentStatus <- map["payment_status"]
         paymentMessage <- map["payment_message"]
+        authorize_transaction_id <- map["authorize_transaction_id"]
+        card_type <- map["card_type"]
         
     }
 }

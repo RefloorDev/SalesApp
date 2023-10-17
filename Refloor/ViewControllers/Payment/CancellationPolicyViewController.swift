@@ -44,6 +44,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
     var document = ""
     var recisionDate:String = String()
     var imagePicker: CaptureImage!
+    var payment_TrasnsactionDict:[String:String] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +68,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
     }
     override func performSegueToReturnBack()
     {
-        if isCardVerified == true
+        if isCardVerified == true || payment_TrasnsactionDict != [:]
         {
             self.alert("You can’t navigate back and change the payment option. ", nil)
         }
@@ -117,7 +118,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         if paymentType == "cash"
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -125,11 +126,12 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "cash"
             web.isCardVerified = false
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
         }
         else if self.paymentType == "check"
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -137,12 +139,13 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "check"
             web.isCardVerified = false
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
             
         }
         else if paymentType == "card"
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -150,18 +153,19 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "card"
             web.isCardVerified = isCardVerified
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
         }
         else 
         {
-            let web = WebViewViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             web.document=document
             web.orderID=orderID
             web.downPayment = downPayment
             web.total = total
             web.balance = balance
             web.paymentType = "finance"
-            
+            web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             self.navigationController?.pushViewController(web, animated: true)
         }
         

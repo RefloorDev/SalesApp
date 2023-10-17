@@ -103,7 +103,6 @@
 		653EA610241FB3BC00EA684E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653EA60F241FB3BC00EA684E /* LoginViewController.swift */; };
 		653FA1DB248768CA0064C5CB /* CustomShapeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FA1DA248768CA0064C5CB /* CustomShapeLineViewController.swift */; };
 		653FA1E02487771B0064C5CB /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FA1DF2487771A0064C5CB /* LineView.swift */; };
-		6544081C29ADE213007B2D35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6544081B29ADE212007B2D35 /* GoogleService-Info.plist */; };
 		654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654F229724E41EC900CCA1E4 /* PaymentDetailsViewController.swift */; };
 		65519FEE2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65519FED2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift */; };
 		655C43A22456B4FB00D5CA2C /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655C43A12456B4FB00D5CA2C /* TransactionViewController.swift */; };
@@ -176,8 +175,15 @@
 		65FFF92F2446D6D000E3534D /* ModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF92E2446D6D000E3534D /* ModelClass.swift */; };
 		65FFF9342447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */; };
 		65FFF93724471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */; };
-		B0238B2B297525B900242BDC /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0238B2A297525B900242BDC /* GoogleService-Info1.plist */; };
+		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
+		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
+		B0A56C162AB1786700891CBC /* ImageAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A56C142AB1786700891CBC /* ImageAnnotation.swift */; };
+		B0B508DE2AAB3D160006C39E /* InstallerPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */; };
+		B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */; };
+		B0D395DB2A94A26A0020497B /* InstallerShedulerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */; };
+		B0D395DD2A94A29A0020497B /* InstallerSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */; };
+		B0D395E02A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -295,7 +301,6 @@
 		653EA60F241FB3BC00EA684E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		653FA1DA248768CA0064C5CB /* CustomShapeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShapeLineViewController.swift; sourceTree = "<group>"; };
 		653FA1DF2487771A0064C5CB /* LineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
-		6544081B29ADE212007B2D35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		654F229724E41EC900CCA1E4 /* PaymentDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailsViewController.swift; sourceTree = "<group>"; };
 		65519FED2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummeryDetailsTilesTableViewCell.swift; sourceTree = "<group>"; };
 		655C43A12456B4FB00D5CA2C /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
@@ -368,9 +373,16 @@
 		65FFF92E2446D6D000E3534D /* ModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelClass.swift; sourceTree = "<group>"; };
 		65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = L_Shape_CustomView_ToolBoxView.xib; sourceTree = "<group>"; };
 		65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L_Shape_CustomView_ToolBoxView.swift; sourceTree = "<group>"; };
-		B0238B2A297525B900242BDC /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
+		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
+		B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellationPolicyViewController.swift; sourceTree = "<group>"; };
+		B0A56C142AB1786700891CBC /* ImageAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnnotation.swift; sourceTree = "<group>"; };
+		B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPopUpViewController.swift; sourceTree = "<group>"; };
+		B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoomCommentPopUpViewController.swift; sourceTree = "<group>"; };
+		B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerShedulerViewController.swift; sourceTree = "<group>"; };
+		B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSuccessViewController.swift; sourceTree = "<group>"; };
+		B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSchedulerCollectionViewCell.swift; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -611,8 +623,7 @@
 		653EA56C241F7AFC00EA684E /* Refloor */ = {
 			isa = PBXGroup;
 			children = (
-				6544081B29ADE212007B2D35 /* GoogleService-Info.plist */,
-				B0238B2A297525B900242BDC /* GoogleService-Info1.plist */,
+				B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */,
 				B04B016728E2F19B00B59E33 /* Refloor.entitlements */,
 				65FFF9292446CF8800E3534D /* AppModelClassAndApi */,
 				653EA601241F9AFF00EA684E /* Delegate */,
@@ -631,6 +642,8 @@
 		653EA584241F9A8600EA684E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				B0A56C132AB1784C00891CBC /* Dynamic Contract */,
+				B0D395D92A94A2490020497B /* InstallerSheduler */,
 				18B683F725820870001E445E /* OrderStatus */,
 				65C01F3124E6576200CA56C7 /* SignatureAndForms */,
 				65ECE66824E3B4E8008164DE /* DownPaymentAndSignature */,
@@ -712,6 +725,7 @@
 				65C4C3A4243EFADF003ABF04 /* SelectAShapeViewController.swift */,
 				65853E5E243DF39B002C6016 /* SelectARoomViewController.swift */,
 				657AE2732477B74E00D205A1 /* SelectTilesViewController.swift */,
+				B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */,
 			);
 			path = Selections;
 			sourceTree = "<group>";
@@ -923,6 +937,34 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		B0A56C132AB1784C00891CBC /* Dynamic Contract */ = {
+			isa = PBXGroup;
+			children = (
+				B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */,
+				B0A56C142AB1786700891CBC /* ImageAnnotation.swift */,
+			);
+			path = "Dynamic Contract";
+			sourceTree = "<group>";
+		};
+		B0D395D92A94A2490020497B /* InstallerSheduler */ = {
+			isa = PBXGroup;
+			children = (
+				B0D395DE2A94AEF40020497B /* CollectionViewCell */,
+				B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */,
+				B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */,
+				B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */,
+			);
+			path = InstallerSheduler;
+			sourceTree = "<group>";
+		};
+		B0D395DE2A94AEF40020497B /* CollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */,
+			);
+			path = CollectionViewCell;
+			sourceTree = "<group>";
+		};
 		DD06FAFD2849DC49008AF42F /* PromoPopUpTableviewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1047,8 +1089,6 @@
 				65209442243CA31100B010CA /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				6520944F243CA31100B010CA /* SF-Pro-Text-Bold.otf in Resources */,
 				6520945E243CA31100B010CA /* SF-Pro-Text-Medium.otf in Resources */,
-				6544081C29ADE213007B2D35 /* GoogleService-Info.plist in Resources */,
-				B0238B2B297525B900242BDC /* GoogleService-Info1.plist in Resources */,
 				6520942C243CA31100B010CA /* loading.gif in Resources */,
 				657C72C524500BFF00F392F3 /* SubSqureToolView.xib in Resources */,
 				6520942B243CA31100B010CA /* CAXSVProgressHUD.xib in Resources */,
@@ -1071,6 +1111,7 @@
 				65209457243CA31100B010CA /* SF-Pro-Text-BoldItalic.otf in Resources */,
 				6520942F243CA31100B010CA /* Inter-UI-Regular.otf in Resources */,
 				6520945A243CA31100B010CA /* SF-Pro-Text-HeavyItalic.otf in Resources */,
+				B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,6 +1197,7 @@
 				6500187024FFC5BE00B183E6 /* SuggetionsTableViewCell.swift in Sources */,
 				653EA578241F7AFC00EA684E /* Refloor.xcdatamodeld in Sources */,
 				65274C7229C19CE700ACFDE3 /* PromoDropDownViewController.swift in Sources */,
+				B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */,
 				65CE7AD224EFEC77002F5D12 /* OtherIncomeViewController.swift in Sources */,
 				650B1CE1254C253C005ED521 /* PromoPopUpViewController.swift in Sources */,
 				65853E5F243DF39B002C6016 /* SelectARoomViewController.swift in Sources */,
@@ -1171,18 +1213,23 @@
 				6597CEBD2420ADC30036BC95 /* NavigationController.swift in Sources */,
 				655C43A42456BB0900D5CA2C /* TrasitionFormTableViewTableViewCell.swift in Sources */,
 				653FA1E02487771B0064C5CB /* LineView.swift in Sources */,
+				B0B508DE2AAB3D160006C39E /* InstallerPopUpViewController.swift in Sources */,
 				65A242F4246015ED00465D59 /* QustionsTableViewCell.swift in Sources */,
 				653EA60E241FA7E300EA684E /* SpalashScreenNewViewController.swift in Sources */,
 				65FFF92F2446D6D000E3534D /* ModelClass.swift in Sources */,
 				6571BCA824A61B51006956D5 /* SubCollectionViewLabelCollectionViewCell.swift in Sources */,
 				18EE840F26584C5F00FB5859 /* OtherIncomeViewControllerForm.swift in Sources */,
+				B0D395DD2A94A29A0020497B /* InstallerSuccessViewController.swift in Sources */,
 				65853E4B243D9549002C6016 /* SelectAFloorViewController.swift in Sources */,
 				18EE840B26584BD100FB5859 /* CoApplicantFormViewControllerForm.swift in Sources */,
 				65ECE66A24E3B938008164DE /* DownFinalPaymentViewController.swift in Sources */,
 				18D95726265BB68700BD9E7D /* ApplicantFormViewController.swift in Sources */,
 				658A050224AF7B2C00F89BB7 /* SuccessFullPaymentViewController.swift in Sources */,
+				B0D395E02A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift in Sources */,
 				65C01F3324E657CC00CA56C7 /* SignatureSubmitViewController.swift in Sources */,
+				B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */,
 				653FA1DB248768CA0064C5CB /* CustomShapeLineViewController.swift in Sources */,
+				B0D395DB2A94A26A0020497B /* InstallerShedulerViewController.swift in Sources */,
 				65A3248B247CFAAF0050A42F /* SummeryDetailsSubHeadingTableViewCell.swift in Sources */,
 				651708AA246AC274001CBF76 /* CustomeShapeViewController.swift in Sources */,
 				6597CEC02420E0500036BC95 /* CustomerListViewController.swift in Sources */,
@@ -1194,6 +1241,7 @@
 				653EA56E241F7AFC00EA684E /* AppDelegate.swift in Sources */,
 				65A3248D247CFB060050A42F /* SummeryDetailsTransitionsTableViewCell.swift in Sources */,
 				6597CEC524210B3D0036BC95 /* CustomerDetailsViewController.swift in Sources */,
+				B0A56C162AB1786700891CBC /* ImageAnnotation.swift in Sources */,
 				65C764E6254817C200F42E12 /* PaymentOptionsNewViewController.swift in Sources */,
 				6597CEC32420E1710036BC95 /* CustomerListTableViewCell.swift in Sources */,
 				65FFF92C2446CFDC00E3534D /* AppConstats.swift in Sources */,
@@ -1398,10 +1446,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: Refloor LLC. (F8JN2G36QM)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3.0;
-				DEVELOPMENT_TEAM = F8JN2G36QM;
+				CURRENT_PROJECT_VERSION = 1.0;
+				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
@@ -1410,11 +1459,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Refloor AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorAdhocNew;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1426,10 +1475,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution: Refloor LLC. (F8JN2G36QM)";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 3.0;
-				DEVELOPMENT_TEAM = F8JN2G36QM;
+				CURRENT_PROJECT_VERSION = 1.0;
+				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
@@ -1438,11 +1488,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Refloor AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorAdhocNew;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

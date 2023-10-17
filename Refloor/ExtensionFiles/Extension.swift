@@ -204,7 +204,7 @@ extension Double
         // numberFormatter.numberStyle = NumberFormatter.Style.none
         
         //   let formattedNumber = numberFormatter.string(from: NSNumber(value: self))
-        let value =  String(Float(self))
+        let value =  String(Double(self))
         
         //       if(value.split(separator: ".").count == 2)
         //       {
@@ -597,6 +597,38 @@ extension UIColor
 
 extension UIViewController:OrderStatusViewDelegate
 {
+    
+    //Dynamic Contract update
+    func getContractUpdateDocumentField(value:Int) -> RealmSwift.List<rf_fields>{
+            var contractUpdateDocumentField : RealmSwift.List<rf_fields>!
+            
+            do{
+                let realm = try Realm()
+                let masterData = realm.objects(MasterData.self)
+                if let contractFields = masterData.first?.contract_document_templates[value].fields{
+                    contractUpdateDocumentField = contractFields
+                }
+            }catch{
+                print(RealmError.initialisationFailed.rawValue)
+            }
+            return contractUpdateDocumentField
+        }
+    func getContractUpdateDocument() -> RealmSwift.List<rf_contract_document_templates_results>{
+            var contractupdatedocument : RealmSwift.List<rf_contract_document_templates_results>!
+            
+            do{
+               
+                let realm = try Realm()
+                let masterData = realm.objects(MasterData.self)
+                if let contractDocument = masterData.first?.contract_document_templates{
+                    contractupdatedocument = contractDocument
+                    
+                }
+            }catch{
+                print(RealmError.initialisationFailed.rawValue)
+            }
+            return contractupdatedocument
+        }
     
     // AutoLogout
     func checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed:Bool)
@@ -1385,7 +1417,71 @@ extension UIViewController:OrderStatusViewDelegate
         }
         navView.addSubview(image)
     }
+   func schedulerSuccessNavBar()
+    {
+        var navView = UIView()
+        navView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height:  110))
+        navView.layer.masksToBounds = false
+        navView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+        self.view.addSubview(navView)
+        
+        let logo = UIImageView()
+        logo.image = UIImage(named: "refloorLogo")
+        navView.addSubview(logo)
+        logo.translatesAutoresizingMaskIntoConstraints = false
+        logo.widthAnchor.constraint(equalToConstant: 126).isActive = true
+        logo.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        logo.centerXAnchor.constraint(equalTo: navView.centerXAnchor).isActive = true
+        logo.centerYAnchor.constraint(equalTo: navView.centerYAnchor).isActive = true
+        
+        //logo.backgroundColor = .green
+        
+    }
     
+    
+    func shedulerInstallerNavBar(with name:String,submitText:String)
+    {
+        var navView = UIView()
+        navView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height:  110))
+        navView.layer.masksToBounds = false
+        navView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+        self.view.addSubview(navView)
+        
+        let nameLabel = UILabel(frame: CGRect(x: 70, y: 40, width: 600, height: 45))
+        nameLabel.text = name.uppercased()
+        nameLabel.textColor = .white
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.2
+        nameLabel.font = UIFont(name: "Avenir-Black", size: 35)
+        navView.addSubview(nameLabel)
+        
+        let submitbutn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 230, y: 40, width: 165, height: 54))
+        submitbutn.addTarget(self, action: #selector(insallerSubmitBtnAction(sender: )), for: .touchUpInside)
+        submitbutn.backgroundColor = UIColor().colorFromHexString("#292562")
+        submitbutn.borderColor = UIColor().colorFromHexString("#A7B0BA")
+        submitbutn.borderWidth = 1
+        submitbutn.setTitle(submitText, for: .normal)
+        submitbutn.setTitleColor(UIColor().colorFromHexString("#FFFFFF"), for: .normal)
+        submitbutn.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 24)
+        navView.addSubview(submitbutn)
+        
+        let skipbutn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 405, y: 40, width: 165, height: 54))
+        skipbutn.addTarget(self, action: #selector(insallerSkipBtnAction(sender: )), for: .touchUpInside)
+        skipbutn.backgroundColor = UIColor().colorFromHexString("#A7B0BA")
+        skipbutn.setTitle("Skip", for: .normal)
+        skipbutn.setTitleColor(UIColor().colorFromHexString("#2D343D"), for: .normal)
+        skipbutn.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 24)
+        navView.addSubview(skipbutn)
+    }
+    
+    @objc func insallerSubmitBtnAction(sender:UIButton)
+    {
+        
+    }
+    @objc func insallerSkipBtnAction(sender:UIButton)
+    {
+        
+    }
     
     
     
@@ -2041,13 +2137,30 @@ extension UIViewController:OrderStatusViewDelegate
         _ = ImageSaveToDirectory.SharedImage.saveImageDocumentDirectory(rfImage: image, saveImgName: imageName)
         do {
             //try data.write(to: fileURL)
-            let mystorage = FloorImageStorage()
-            mystorage.imageName = imageName
-            let realm = try! Realm()
-            let images = realm.objects(FloorImageStorage.self).filter("imageName == %@", imageName)
-            if images.isEmpty{
-                try realm.write{
-                    realm.add(mystorage)
+            if imageName.contains("FloorColor")
+            {
+                let mystorage = FloorImageStorage()
+                mystorage.imageName = imageName
+                let realm = try! Realm()
+                let images = realm.objects(FloorImageStorage.self).filter("imageName == %@", imageName)
+                if images.isEmpty{
+                    try realm.write{
+                        realm.add(mystorage)
+                    }
+                    
+                }
+            }
+            else
+            {
+                let mystorage = StairImageStorage()
+                mystorage.imageName = imageName
+                let realm = try! Realm()
+                let images = realm.objects(StairImageStorage.self).filter("imageName == %@", imageName)
+                if images.isEmpty{
+                    try realm.write{
+                        realm.add(mystorage)
+                    }
+                    
                 }
             }
         } catch let error {
@@ -2076,17 +2189,21 @@ extension UIViewController:OrderStatusViewDelegate
         return nil
     }
     //download photo and saves it in file and its filename in DB
-    func downloadPhoto(imageUrlArray:[String], type: OfflineImageType){
+    func downloadPhoto(imageUrlArray:[[String:String]]){
         // var downloadstastus:Int = 0
         var downloadstatus:[String: Int] = ["percentage": 1]
         var progress:CGFloat! = 0
-        let totalCount = Double(imageUrlArray.filter({URL(string: $0) != nil}).count)
+        //let totalCount = Double(imageUrlArray.filter({URL(string: $0.keys) != nil}).count)
+        let totalCount = Double(imageUrlArray.count)
         print(totalCount)
         DispatchQueue.global().async {
             // progressImgArray.removeAll() // this is the image array
             let group = DispatchGroup()
             for i in 0..<imageUrlArray.count {
-                guard let url = URL(string: imageUrlArray[i])
+                for (key,value) in imageUrlArray[i]
+                {
+                let type = i
+                guard let url = URL(string: key)
                 else {
                     continue
                 }
@@ -2107,8 +2224,12 @@ extension UIViewController:OrderStatusViewDelegate
                             progress = progress + progessPerDownloadRounded
                             progress = progress <= 100 ? progress : 100
                             downloadstatus.updateValue(Int(progress ?? 0), forKey: "percentage")
+                            
                             NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
-                            self.saveImage(imageName: "\(type.rawValue)\(i)", image: image)
+                            
+                            
+                            self.saveImage(imageName: "\(value)"+"\(i)", image: image)
+                            
                         } else if let error = error {
                             
                             print("Sync Error:\(error)")
@@ -2130,6 +2251,7 @@ extension UIViewController:OrderStatusViewDelegate
                 }
                 
                 group.wait()
+            }
                 
             }
             group.notify(queue: .main) {
@@ -2233,6 +2355,24 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
     }
+    func deleteCustomRoomName(appointmentId:Int,roomId:String)
+    {
+        do{
+            let realm = try Realm()
+            let appointments = realm.objects(rf_customRoomName.self).filter("appointment_id == %d AND roomId == %d",appointmentId , roomId)
+                try realm.write{
+//                    for appointment in appointments
+//                    {
+                        realm.delete(appointments)
+                   // }
+//                    if let appointment = appointments.first{
+                       
+                    //}
+                }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
     func deleteAllAppointments() {
         do{
             let realm = try Realm()
@@ -2310,6 +2450,31 @@ extension UIViewController:OrderStatusViewDelegate
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
+        }
+        return roomList
+    }
+    
+    func getcustomRoomNameByApt(appointmentId:Int) -> [RoomDataValue]
+    {
+        var roomList:[RoomDataValue] = []
+        do{
+            let realm = try Realm()
+            
+            let rooms = realm.objects(rf_customRoomName.self).filter("appointment_id == %d",appointmentId )
+            if rooms.count > 0
+            {
+//                if let results = rooms.sorted(byKeyPath: "roomId",ascending: false)
+//                {
+                    for room in rooms{
+                        roomList.append(RoomDataValue(roomData: rf_master_roomname(customRoomName: room)))
+                    }
+                //}
+            }
+            return roomList
+            
+        }
+        catch{
+            print(RealmError.initialisationFailed)
         }
         return roomList
     }
@@ -2580,6 +2745,59 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
+    func saveCustomRoomName(roomId:String,appointmentId: Int, roomName:String, isConfirm:Bool,isNextBtn:Bool)
+    {
+        do
+        {
+            let realm = try Realm()
+             let appointment = realm.objects(rf_customRoomName.self).filter("roomId == %d",roomId)
+            for room in appointment
+            {
+                try realm.write
+                {
+                    room.name = roomName
+                    if isNextBtn
+                    {
+                        room.isConfirm = true
+                    }
+                    //let customRoom = realm.objects(rf_customRoomName.self).filter("roomId == %d",roomId)
+                    //realm.delete(appointment)
+                    realm.create(rf_customRoomName.self, value: ["roomId": roomId,"appointment_id": appointmentId, "roomName":roomName, "isConfirm": isConfirm], update: .all)
+                }
+            }
+            
+        }catch{
+            print(RealmError.initialisationFailed)
+        }
+    }
+    
+    func saveDynamicContractData(templateId:Int,documentURL:String,name:String,type:String)
+    {
+        do
+        {
+            let realm = try Realm()
+             let contract = realm.objects(rf_contract_document_templates_results.self).filter("template_id == %d",templateId)
+            for contractValue in contract
+            {
+                try realm.write
+                {
+
+                    
+                    if let contractData = try? Data(contentsOf: URL(string: contractValue.document_url!)!)
+                            {
+                        contractValue.data = contractData
+                            }
+                    
+    
+                    realm.create(rf_customRoomName.self, value: ["template_id": templateId,"document_url": documentURL, "name":name, "type": type], update: .all)
+                }
+            }
+            
+        }catch{
+            print(RealmError.initialisationFailed)
+        }
+    }
+    
     func identifyMoldingTypesSelectedForRooms() -> [String]{
         var moldingTypeArray:[String] = []
         do{
@@ -2725,6 +2943,37 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return (false,nil)
     }
+    func checkIfCustomRoomExists(appointmentId: Int,roomId:String) -> Bool
+    {
+        do{
+            let realm = try Realm()
+            let room = realm.objects(rf_customRoomName.self).filter("appointment_id == %d AND roomId == %@",appointmentId , roomId)
+            if room.count == 1{
+                return (true)
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return (false)
+    }
+    
+    func getCustomRoomName(appointmentId: Int,roomId:String) -> String
+    {
+        var roomName:String = String()
+        do{
+            let realm = try Realm()
+            let room = realm.objects(rf_customRoomName.self).filter("appointment_id == %d AND roomId == %@",appointmentId , roomId)
+            if room.count == 1{
+                roomName = (room.first?.name)!
+                return roomName
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return roomName
+    }
+    
+    
     
     func checkIfRoomDrawImageExist(appointmentId: Int) -> Bool{
         do{
@@ -3528,6 +3777,17 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return specialPriceData
     }
+    func ruleListTable() -> RealmSwift.Results<rf_ruleList_results>{
+        var ruleLisData : Results<rf_ruleList_results>!
+        do{
+            let realm = try Realm()
+            ruleLisData = realm.objects(rf_ruleList_results.self)
+            return ruleLisData
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return ruleLisData
+    }
     
     func getAppointmentData(appointmentId:Int) -> rf_master_appointment!{
         var appointmentData : rf_master_appointment!
@@ -3611,6 +3871,20 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             let floorImages = realm.objects(FloorImageStorage.self)
+            if floorImages.count - 1 >= index{
+                let floorImage = floorImages[index]
+                return floorImage.imageName
+            }
+            
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return ""
+    }
+    func getStairImageName(atIndex index:Int) -> String{
+        do{
+            let realm = try Realm()
+            let floorImages = realm.objects(StairImageStorage.self)
             if floorImages.count - 1 >= index{
                 let floorImage = floorImages[index]
                 return floorImage.imageName
@@ -3882,6 +4156,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let room_perimeter = room.room_perimeter
                 let moldingName = room.selected_room_molding
                 let selectedColor = room.selected_room_color ?? ""
+                let isCustomRoom = room.is_custom_room
                 var roomColorId:Int = Int()
                 if room_name!.contains("STAIRS")
                 {
@@ -3932,7 +4207,15 @@ extension UIViewController:OrderStatusViewDelegate
                 for i in 0..<room.room_attachments.count{
                     room_image_names.append(room.room_attachments[i])
                 }
-                roomDict["room_id"] = room_id
+                if isCustomRoom == 1
+                {
+                    roomDict["room_id"] = 0
+                    roomDict["is_custom_room"] = isCustomRoom
+                }
+                else
+                {
+                    roomDict["room_id"] = room_id
+                }
                 roomDict["room_name"] = room_name
                 roomDict["room_area"] = room_area
                 roomDict["room_area_image"] = room_area_image
@@ -3967,20 +4250,38 @@ extension UIViewController:OrderStatusViewDelegate
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
+            var room_name:String = String()
             appointment.first?.rooms.forEach({ room in
                 var questionAnswerDictForSingleRoom:[String:Any] = [:]
+
                 let questionAnswers = room.questionnaires
                 questionAnswers.forEach { question in
+                    let isCustomRoomExists = self.checkIfCustomRoomExists(appointmentId: appointmentId, roomId: String(question.room_id))
+                    
                     let room_id = question.room_id
                     let question_id = question.id
+                    if question.room_name != ""
+                    {
+                        room_name = question.room_name!
+                    }
+                     room_name = room_name
+                    
                     let answerObj = question.rf_AnswerOFQustion.first
                     var answerArray:[String] = []
                     answerObj?.answer.forEach({ answer in
                         answerArray.append(answer)
                     })
-                    questionAnswerDictForSingleRoom["room_id"] = room_id
+                    if isCustomRoomExists
+                    {
+                        questionAnswerDictForSingleRoom["room_id"] = 0
+                    }
+                    else
+                    {
+                        questionAnswerDictForSingleRoom["room_id"] = room_id
+                    }
                     questionAnswerDictForSingleRoom["question_id"] = question_id
                     questionAnswerDictForSingleRoom["answer"] = answerArray
+                    questionAnswerDictForSingleRoom["room_name"] = room_name
                     questionAnswerArray.append(questionAnswerDictForSingleRoom)
                 }
             })
@@ -4099,20 +4400,36 @@ extension UIViewController:OrderStatusViewDelegate
     
     func getRoomDrawingForApiCall() -> [[String:Any]]{
         var imageUploadDictArray: [[String:Any]] = []
+        var customRoomName:String = String()
         do{
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
             appointment.first?.rooms.forEach({ room in
+                let isCustomRoomExists = self.checkIfCustomRoomExists(appointmentId: appointmentId, roomId: String(room.room_id))
+                if isCustomRoomExists
+                {
+                    customRoomName = self.getCustomRoomName(appointmentId: appointmentId, roomId:  String(room.room_id))
+                }
                 if let drawImage =  room.draw_image_name{
                     let image_type = "measurement_image"
                     let room_id = room.room_id
+                    let room_name = room.room_name
                     let image_name = drawImage
                     // let file = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: image_name)
                     var imageUploadDict: [String:Any] = [:]
                     imageUploadDict["appointment_id"] = appointmentId
                     imageUploadDict["image_type"] = image_type
-                    imageUploadDict["room_id"] = room_id
+                    if isCustomRoomExists
+                    {
+                        imageUploadDict["room_id"] = 0
+                        imageUploadDict["room_name"] = customRoomName
+                    }
+                    else
+                    {
+                        imageUploadDict["room_id"] = room_id
+                        imageUploadDict["room_name"] = room_name
+                    }
                     imageUploadDict["image_name"] = image_name
                     imageUploadDict["data_completed"] = 0
                     imageUploadDictArray.append(imageUploadDict)
@@ -4126,15 +4443,22 @@ extension UIViewController:OrderStatusViewDelegate
     
     func getRoomImagesForApiCall() -> [[String:Any]]{
         var imageUploadDictArray: [[String:Any]] = []
+        var customRoomName:String = String()
         do{
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
             appointment.first?.rooms.forEach({ room in
                 for roomAttachment in room.room_attachments{
+                    let isCustomRoomExists = self.checkIfCustomRoomExists(appointmentId: appointmentId, roomId: String(room.room_id))
+                    if isCustomRoomExists
+                    {
+                        customRoomName = self.getCustomRoomName(appointmentId: appointmentId, roomId:  String(room.room_id))
+                    }
                     var image_type = ""
                     
                     let room_id = room.room_id
+                    let room_name = room.room_name
                     let image_name = roomAttachment
                     if  image_name.contains("Attachment"){
                         image_type = "room_photo"
@@ -4145,7 +4469,16 @@ extension UIViewController:OrderStatusViewDelegate
                     var imageUploadDict: [String:Any] = [:]
                     imageUploadDict["appointment_id"] = appointmentId
                     imageUploadDict["image_type"] = image_type
-                    imageUploadDict["room_id"] = room_id
+                    if isCustomRoomExists
+                    {
+                        imageUploadDict["room_id"] = 0
+                        imageUploadDict["room_name"] = customRoomName
+                    }
+                    else
+                    {
+                        imageUploadDict["room_id"] = room_id
+                        imageUploadDict["room_name"] = room_name
+                    }
                     imageUploadDict["image_name"] = image_name
                     imageUploadDict["data_completed"] = 0
                     imageUploadDictArray.append(imageUploadDict)
@@ -4159,23 +4492,39 @@ extension UIViewController:OrderStatusViewDelegate
     
     func getApplicantSignatureForApiCall() -> [[String:Any]]{
         var imageUploadDictArray: [[String:Any]] = []
+        var customRoomName:String = String()
         do{
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             if let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId).first{
                 let room = appointment.rooms.first
                 let applicantSignatureImageName = appointment.applicantSignatureImage
-                
+                let isCustomRoomExists = self.checkIfCustomRoomExists(appointmentId: appointmentId, roomId: String(room?.room_id ?? 0))
+                if isCustomRoomExists
+                {
+                    customRoomName = self.getCustomRoomName(appointmentId: appointmentId, roomId:  String(room?.room_id ?? 0))
+                }
                 var image_type = "applicant_signature"
                 var room_id = room?.room_id
+                let room_name = room?.room_name
                 var image_name = (applicantSignatureImageName ?? "")
                 //var file = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: image_name)
                 var imageUploadDict: [String:Any] = [:]
                 imageUploadDict["appointment_id"] = appointmentId
                 imageUploadDict["image_type"] = image_type
-                imageUploadDict["room_id"] = room_id
+                if isCustomRoomExists
+                {
+                    imageUploadDict["room_id"] = 0
+                    imageUploadDict["room_name"] = customRoomName
+                }
+                else
+                {
+                    imageUploadDict["room_id"] = room_id
+                    imageUploadDict["room_name"] = room_name
+                }
                 imageUploadDict["image_name"] = image_name
                 imageUploadDict["data_completed"] = 0
+               
                 imageUploadDictArray.append(imageUploadDict)
                 //initials
                 let applicantInitialsImageName = appointment.applicantInitialsImage
@@ -4186,7 +4535,16 @@ extension UIViewController:OrderStatusViewDelegate
                 imageUploadDict = [:]
                 imageUploadDict["appointment_id"] = appointmentId
                 imageUploadDict["image_type"] = image_type
-                imageUploadDict["room_id"] = room_id
+                if isCustomRoomExists
+                {
+                    imageUploadDict["room_id"] = 0
+                    imageUploadDict["room_name"] = customRoomName
+                }
+                else
+                {
+                    imageUploadDict["room_id"] = room_id
+                    imageUploadDict["room_name"] = room_name
+                }
                 imageUploadDict["image_name"] = image_name
                 imageUploadDict["data_completed"] = 0
                 imageUploadDictArray.append(imageUploadDict)
@@ -4199,23 +4557,39 @@ extension UIViewController:OrderStatusViewDelegate
     
     func getCoApplicantSignatureForApiCall() -> [[String:Any]]{
         var imageUploadDictArray: [[String:Any]] = []
+        var customRoomName:String = String()
         do{
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             if let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId).first{
                 let room = appointment.rooms.first
                 let coApplicantSignatureImageName = appointment.coApplicantSignatureImage
-                
+                let isCustomRoomExists = self.checkIfCustomRoomExists(appointmentId: appointmentId, roomId: String(room?.room_id ?? 0))
+                if isCustomRoomExists
+                {
+                    customRoomName = self.getCustomRoomName(appointmentId: appointmentId, roomId:  String(room?.room_id ?? 0))
+                }
                 var image_type = "co_applicant_signature"
                 var room_id = room?.room_id
+                var room_name = room?.room_name
                 var image_name = (coApplicantSignatureImageName ?? "")
                 var imageUploadDict: [String:Any] = [:]
                 if image_name != ""{
                     imageUploadDict["appointment_id"] = appointmentId
                     imageUploadDict["image_type"] = image_type
-                    imageUploadDict["room_id"] = room_id
+                    if isCustomRoomExists
+                    {
+                        imageUploadDict["room_id"] = 0
+                        imageUploadDict["room_name"] = customRoomName
+                    }
+                    else
+                    {
+                        imageUploadDict["room_id"] = room_id
+                        imageUploadDict["room_name"] = room_name
+                    }
                     imageUploadDict["image_name"] = image_name
                     imageUploadDict["data_completed"] = 0
+                    
                     imageUploadDictArray.append(imageUploadDict)
                 }
                 //initials
@@ -4227,7 +4601,16 @@ extension UIViewController:OrderStatusViewDelegate
                     imageUploadDict = [:]
                     imageUploadDict["appointment_id"] = appointmentId
                     imageUploadDict["image_type"] = image_type
-                    imageUploadDict["room_id"] = room_id
+                    if isCustomRoomExists
+                    {
+                        imageUploadDict["room_id"] = 0
+                        imageUploadDict["room_name"] = customRoomName
+                    }
+                    else
+                    {
+                        imageUploadDict["room_id"] = room_id
+                        imageUploadDict["room_name"] = room_name
+                    }
                     imageUploadDict["image_name"] = image_name
                     imageUploadDict["data_completed"] = 0
                     imageUploadDictArray.append(imageUploadDict)
@@ -4336,6 +4719,19 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return discountCouponsArray
     }
+    func getAptResultReason() -> RealmSwift.List<rf_appointment_result_reasons_results> {
+        var AppointmentResultReasonArray = RealmSwift.List<rf_appointment_result_reasons_results>()
+        do{
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let AppointmentResultReason = masterData.first?.appointment_result_reasons{
+                AppointmentResultReasonArray = AppointmentResultReason
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return AppointmentResultReasonArray
+    }
     func getTransitionheightDropDownValue() -> RealmSwift.List<rf_transitionHeights_results> {
         var discountCouponsArray = RealmSwift.List<rf_transitionHeights_results>()
         do{
@@ -4419,6 +4815,12 @@ extension UIViewController:OrderStatusViewDelegate
             
         }
     }
+    func getTodayWeekDay()-> String{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEEE"
+            let weekDay = dateFormatter.string(from: (AppDelegate.appoinmentslData.appointment_date?.logDate())!)
+            return weekDay
+      }
     
     func getAppointmentResultToShow(className: String,isNextBtn:Bool) -> RealmSwift.List<rf_master_appointments_results_demoedNotDemoed>{
         let classOrderTuple = [(index:1,name:"Customer1",class_Name: "CustomerDetailsOneViewController"),(index:2,name:"Customer2",class_Name: "CustomerDetailsTowViewController"),(index:3,name:"RoomSelection",class_Name: "SelectARoomViewController"),(index:4,name:"RoomDrawing",class_Name: "CustomShapeLineViewController"),(index:5,name:"RoomImageUploading",class_Name: "AboutRoomViewController"),(index:6,name:"RoomQuestionnaire",class_Name: "FurnitureQustionsViewController"),(index:7,name:"RoomMeasurementSummary",class_Name: "SummeryDetailsViewController"),(index:8,name:"MeasurementList",class_Name: "SummeryListViewController"),(index:9,name:"PaymentOption",class_Name: "PaymentOptionsNewViewController"),(index:10,name:"DownFinalPayment",class_Name: "DownFinalPaymentViewController"),(index:11,name:"PaymentSummary",class_Name: "PaymentDetailsViewController"),(index:12,name:"ApplicantInformation",class_Name: "ApplicantFormViewControllerForm"),(index:13,name:"CoApplicantInformation",class_Name: "CoApplicantFormViewControllerForm"),(index:14,name:"OtherIncomeObligation",class_Name: "OtherIncomeViewControllerForm"),(index:15,name:"Signature",class_Name: "SignatureSubmitViewController"),(index:16,name:"CollectDownPayment",class_Name: "DownPaymentViewController"),(index:17,name:"CancellationPolicy",class_Name: "CancellationPolicyViewController"),(index:18,name:"ContractDocument",class_Name: "WebViewViewController")]
@@ -4580,6 +4982,7 @@ func realmResultToListConverter(appointmentResults:Results<rf_master_appointment
 
 enum OfflineImageType: String{
     case floorColor = "FloorColor"
+    case stairColor = "StairColor"
 }
 
 extension Results {
@@ -4627,6 +5030,8 @@ extension RealmCollection
 
 extension String
 {
+    
+
     public func getViewController() -> UIViewController? {
         if let appName = Bundle.main.infoDictionary?["CFBundleName"] as? String {
             if let viewControllerType = Bundle.main.classNamed("\(appName).\(self)") as? UIViewController.Type {
@@ -4847,6 +5252,22 @@ extension String
             return false
         }
     }
+    
+    func installerDate(installationDate:String) -> String
+    {
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateObj = dateFormat.date(from: installationDate)
+        dateFormat.dateFormat = "dd MMM yyyy"
+        return dateFormat.string(from: dateObj!)
+    }
+    
+    func getInstallerWeekDay(installerDate:Date)-> String{
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEEE"
+            let weekDay = dateFormatter.string(from: installerDate)
+            return weekDay
+      }
     
 }
 extension UIImageView

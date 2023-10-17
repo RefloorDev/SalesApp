@@ -9,7 +9,114 @@
 import UIKit
 import RealmSwift
 
-class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
+class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, AddCustomRoomProtocol, EditCustomRoomProtocol, deleteCustomRoomProtocol {
+    func deleteRoomName(roomId: Int) {
+        print("delete")
+        deleteCustomRoomName(appointmentId: AppDelegate.appoinmentslData.id ?? 0, roomId: String(roomId))
+        let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
+        let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+        roomData.removeAll()
+        roomData = getMasterRoomFromDB()
+        let appointmentId = self.appoinmentsData.id ?? 0
+        if customdbRommValues.count > 0
+        {
+            let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+            roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+        }
+        
+        
+        let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
+        let allExistingRoomIds = roomExists.map{$0.room_id}
+        roomData.forEach{ room in
+            if allExistingRoomIds.contains(room.id ?? 0){
+                room.measurement_exist = "true"
+            }
+        }
+        selectedno = -1
+        //roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+        collectionView.reloadData()
+    }
+    
+    func editRoomName(roomName: String, roomId: Int) {
+        let alreadyRoomNames = roomData.filter({$0.name == roomName.uppercased()})
+        if alreadyRoomNames.count == 0
+            
+        {
+            saveCustomRoomName(roomId:String(roomId),appointmentId: AppDelegate.appoinmentslData.id ?? 0, roomName: roomName.uppercased(), isConfirm: false,isNextBtn: false)
+            let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
+            roomData.removeAll()
+            roomData = getMasterRoomFromDB()
+            let appointmentId = self.appoinmentsData.id ?? 0
+            if customdbRommValues.count > 0
+            {
+                let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+                roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+            }
+            
+            
+            let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
+            let allExistingRoomIds = roomExists.map{$0.room_id}
+            roomData.forEach{ room in
+                if allExistingRoomIds.contains(room.id ?? 0){
+                    room.measurement_exist = "true"
+                }
+            }
+            //roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+            selectedno = 0
+            collectionView.reloadData()
+        }
+    }
+    
+    func sendRoomName(roomName: String)
+    {
+        print(roomName)
+        self.customRoomName = roomName
+
+        
+        let alreadyRoomNames = roomData.filter({$0.name == self.customRoomName.uppercased()})
+        if alreadyRoomNames.count == 0
+            
+        {
+          //  saveCustomRoomName(roomId:String(Date().currentTimeMillis()),appointmentId: AppDelegate.appoinmentslData.id ?? 0, roomName: self.customRoomName, isConfirm: false)
+            do{
+                let realm = try Realm()
+                try realm.write{
+                    let appointmentId = self.appoinmentsData.id ?? 0
+                    let customRoom:[String:Any] = ["roomId":String(Date().currentTimeMillis()),"appointment_id":appointmentId, "name":self.customRoomName.uppercased() ,"isConfirm":false]
+                        realm.create(rf_customRoomName.self, value: customRoom, update: .all)
+                    let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
+                    roomData.removeAll()
+                    roomData = getMasterRoomFromDB()
+                    if customdbRommValues.count > 0
+                    {
+                        let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+                        roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+                    }
+                    
+                    
+                    let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
+                    let allExistingRoomIds = roomExists.map{$0.room_id}
+                    roomData.forEach{ room in
+                        if allExistingRoomIds.contains(room.id ?? 0){
+                            room.measurement_exist = "true"
+                        }
+                    }
+                    //roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+                    selectedno = 0
+                    collectionView.reloadData()
+                    
+                }
+            }catch{
+                print(RealmError.initialisationFailed)
+            }
+        }
+        else
+        {
+            self.alert("This room name already exists", nil)
+        }
+        
+    }
+    
     
     static func initialization() -> SelectARoomViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SelectARoomViewController") as? SelectARoomViewController
@@ -26,12 +133,26 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
     var images = [UIImage(named: "kitchen"),UIImage(named: "bedroom"),UIImage(named: "living"),UIImage(named: "bathroom"),UIImage(named: "Other")]
     var selectedno = -1
     var imagePicker: CaptureImage!
+    var customRoomName:String = String()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.setNavigationBarbaclogoAndStatus(with: "Room Selection")
-        //get all master room data
+        
+
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        roomData.removeAll()
+        
         roomData = getMasterRoomFromDB()
+        let customdbRommValues = getcustomRoomNameByApt(appointmentId: AppointmentData().appointment_id ?? 0)
+        if customdbRommValues.count > 0
+        {
+            let sortedcustomdbRommValues = customdbRommValues.sorted(by: {$0.id! > $1.id!})
+            roomData.insert(contentsOf: sortedcustomdbRommValues, at: 0)
+        }
         let appointmentId = AppointmentData().appointment_id ?? 0
         let roomExists = getCompletedRoomFromDB(appointmentId: appointmentId)
         let allExistingRoomIds = roomExists.map{$0.room_id}
@@ -40,38 +161,41 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
                 room.measurement_exist = "true"
             }
         }
-        
-        print(allExistingRoomIds)
-//        let roomsInMasterThatAlreadyExist = roomData.filter { room in
-//            return allExistingRoomIds.interfaces.contains(<#T##Self.Output#>)
-//        }
-//        let appExits = getCompletedAppointmentsFromDB(appointmentId: appoinmentsData.id ?? 0)
-        
-        //getroomDataDetails(nil)
-        // nextButton.isHidden = true
-        // Do any additional setup after loading the view.
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        collectionView.reloadData()
         }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return roomData.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RoomDetailsCollectionViewCell", for: indexPath) as! RoomDetailsCollectionViewCell
-        
+        cell.editBtn.addTarget(self, action: #selector(editBtnPressed(sender: )), for: .touchUpInside)
+        cell.deleteBtn.addTarget(self, action: #selector(deleteBtnPressed(sender: )), for: .touchUpInside)
+        cell.editBtn.tag = indexPath.row
+        cell.deleteBtn.tag = indexPath.row
+        if (roomData[indexPath.row].company_id == 0)
+        {
+            cell.closeImage.isHidden = false
+            cell.deleteBtn .isHidden = false
+            cell.editBtn.isHidden = false
+        }
+        else
+        {
+            cell.deleteBtn .isHidden = true
+            cell.editBtn.isHidden = true
+        }
         if (roomData[indexPath.row].measurement_exist ?? "").lowercased() == "true"
         {
             cell.bGView.backgroundColor = UIColor().colorFromHexString("#586471")
             cell.closeImage.isHidden = false
             cell.roomView.borderColor = UIColor.clear
+            
         }
         else
         {
             cell.closeImage.isHidden = true
             cell.bGView.backgroundColor = UIColor().colorFromHexString("#2D343D")
             cell.roomView.borderColor = UIColor.clear
+            
         }
         if selectedno == indexPath.row
         {
@@ -80,6 +204,7 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
             cell.roomView.layer.borderWidth = 1
             
             cell.bGView.layer.borderWidth = 5
+    
         }
         else
         {
@@ -201,6 +326,25 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         }
     }
     
+    @objc func editBtnPressed(sender:UIButton)
+    {
+       print("Inside edit")
+        let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+        selectRoomPopUp.editDelegate = self
+        selectRoomPopUp.isEdit = true
+        selectRoomPopUp.roomId = roomData[sender.tag].id!
+        selectRoomPopUp.roomname = roomData[sender.tag].name!
+        self.present(selectRoomPopUp, animated: true, completion: nil)
+    }
+    @objc func deleteBtnPressed(sender:UIButton)
+    {
+        let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+        selectRoomPopUp.deleteDelegate = self
+        selectRoomPopUp.isdelete = true
+        selectRoomPopUp.roomId = roomData[sender.tag].id!
+        self.present(selectRoomPopUp, animated: true, completion: nil)
+    }
+    
     func getroomDataDetails(_ name:String?)
     {
         HttpClientManager.SharedHM.RoomListDetailsApi(self.appoinmentsData.id ?? 0) { (result, message, value) in
@@ -308,11 +452,26 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
     //        }
     //    }
     
+    @IBAction func addCustomRoomBtnAction(_ sender: UIButton)
+    {
+        let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+        selectRoomPopUp.delegate = self
+        selectRoomPopUp.isEdit = false
+        self.present(selectRoomPopUp, animated: true, completion: nil)
+    }
     
     @IBAction func nextButtonAction(_ sender: Any) {
         
         if selectedno != -1
         {
+            let customRooms = roomData.filter({$0.company_id == 0})
+            if customRooms.count > 0
+            {
+                for rooms in customRooms
+                {
+                    saveCustomRoomName(roomId:String(rooms.id!),appointmentId: AppDelegate.appoinmentslData.id ?? 0, roomName: rooms.name!.uppercased(), isConfirm: true,isNextBtn: true)
+                }
+            }
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
@@ -321,7 +480,7 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
             //
             
             let string = self.roomData[self.selectedno].name!
-            if((string.contains("STAIR")) || (string.contains("stair")) || (string.contains("Stair")))
+            if((string.contains("STAIR")) || (string.contains("stair")) || (string.contains("Stair"))) && self.roomData[self.selectedno].roomCategory != "Vinyl Flooring"
             {
                 // stairDataUpload()
                 let next = AboutRoomViewController.initialization()!
@@ -330,6 +489,7 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
                 next.roomName = self.roomData[self.selectedno].name ?? ""
                 next.isStair = 1
                 next.area = self.areaValue
+                //let roomId = self.roomData[self.selectedno].id ?? 0
                 
                 self.summaryData = self.createSummaryData(roomID: self.roomData[self.selectedno].id ?? 0, roomName: self.roomData[self.selectedno].name ?? "")
                 let roomSelected = self.roomData[self.selectedno]

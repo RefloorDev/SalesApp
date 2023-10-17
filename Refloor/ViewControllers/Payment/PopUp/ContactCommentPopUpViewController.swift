@@ -15,11 +15,14 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
     static func initialization() -> ContactCommentPopUpViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ContactCommentPopUpViewController") as? ContactCommentPopUpViewController
     }
+    @IBOutlet weak var sendPhysicalBtn: UIButton!
+    @IBOutlet weak var sendPhysicalStackView: UIStackView!
     var delegate: ContractCommentProtocol?
     let placeholderColor = UIColor.lightGray
     let placeholderText = "Enter Here"
     @IBOutlet weak var commentsTextView: UITextView!
     @IBOutlet weak var sendPhysicalDocumentCheckboxButton: UIButton!
+    @IBOutlet weak var sendPhysicalStackViewHeightCnstr: NSLayoutConstraint!
     @IBOutlet weak var flexibleInstallCheckBoxBtn: UIButton!
     var isSendHardCopy = false
     var isFlexibleInstall = false
@@ -29,6 +32,9 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
         commentsTextView.text = placeholderText
         commentsTextView.textColor = placeholderColor
         commentsTextView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+        sendPhysicalBtn.isHidden = true
+        sendPhysicalStackView.isHidden = true
+        sendPhysicalStackViewHeightCnstr.constant = 0
     }
     
     @IBAction func dismissOnBackgroundTap(_ sender: UIControl) {

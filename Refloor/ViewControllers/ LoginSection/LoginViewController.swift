@@ -40,8 +40,8 @@ class LoginViewController: UIViewController {
         //  self.emailTF.text = "mhigley@refloor.com"
         //  self.passwordTF.text = "SALESapp"
 //        
-//     self.emailTF.text = "ajay.jayaram@oneteamus.com" //vrenaud@refloor.com"
-//     self.passwordTF.text = "salesApp"
+//     self.emailTF.text = "bincy.aliyar@oneteamus.com" //vrenaud@refloor.com"
+//     self.passwordTF.text = "Apps@021"
 //        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
 //        self.passwordTF.text = "SALESapp"
 
@@ -51,8 +51,9 @@ class LoginViewController: UIViewController {
         
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
-            if BASE_URL == "http://server.oneteamus.com:2446/api/"{
-                versionNumber.setTitle("Version: \(text) (5.0) - DEV", for: .normal)
+            if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"
+            {
+                versionNumber.setTitle("Version: \(text) (1.0) - DEV", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
             }
@@ -237,6 +238,7 @@ class LoginViewController: UIViewController {
         }
         UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
     }
+
     
     //arb for testing
     func getMasterData(){
@@ -248,8 +250,11 @@ class LoginViewController: UIViewController {
                     //UserDefaults.standard.set(true, forKey: "isMasterDataSaved")
                     let results =  realm.objects(MasterData.self)
                     
-                    var flooringColorImageArray:[String] = []
+                    var flooringColorImageArray:[[String:String]] = []
+                    //var stairColourImageArray:[String] = []
                     if let masterData = results.first{
+                        //dynamic contract
+                       
                         let discountDataArray = masterData.discount_coupons
                         for discountObj in discountDataArray{
                             let discountSuccessPopupImageUrlStr = discountObj.promoUrlImage ?? ""
@@ -258,10 +263,21 @@ class LoginViewController: UIViewController {
                                 self.downloadDiscountSuccessPopupImage(from: discountSuccessPopupImageUrl, code: discountCode)
                             }
                         }
-                        let floorColors = masterData.flooring_colors
+                        let floorColors = masterData.floorColourList
+                        let stairColors = masterData.stairColourList
+                        var dict:[String:String] = [:]
+                        for stairColor in stairColors
+                        {
+                            if let img = stairColor.material_image_url
+                            {
+                                dict = [img:"StairColor"]
+                                flooringColorImageArray.append(dict)
+                            }
+                        }
                         for floorColor in floorColors{
                             if let img = floorColor.material_image_url{
-                                flooringColorImageArray.append(img)
+                                dict = [img:"FloorColor"]
+                                flooringColorImageArray.append(dict)
                             }
                         }
                         UserDefaults.standard.set(self.emailTF.text, forKey: "username")
@@ -277,8 +293,11 @@ class LoginViewController: UIViewController {
                                 self.showhideHUD(viewtype: .SHOW, title:"Master Data Fetching Completed.")
                     
                             }
-                            self.downloadPhoto(imageUrlArray: flooringColorImageArray, type: .floorColor)
+                            
+                            
+                            self.downloadPhoto(imageUrlArray: flooringColorImageArray)
                         }
+                       
                         
                         //                        let questionnaires = masterData.questionnaires
                         //                        let quote_label = masterData.questionnaires.first?.quote_label

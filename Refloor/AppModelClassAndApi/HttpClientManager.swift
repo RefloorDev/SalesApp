@@ -2106,6 +2106,11 @@ class HttpClientManager: NSObject {
                                 let transitionHeightResults = realm.objects(rf_transitionHeights_results.self)
                                 let floorColourList = realm.objects(rf_floorColour_results.self)
                                 let stairColourList = realm.objects(rf_stairColour_results.self)
+                                let ruleList = realm.objects(rf_ruleList_results.self)
+                                let contract_document = realm.objects(rf_contract_document_templates_results.self)
+                                                               // var tempcontract_document:rf_contract_document_templates_results!
+                                let fields = realm.objects(rf_fields.self)
+                                let appointmentResultsReasons = realm.objects(rf_appointment_result_reasons_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2125,7 +2130,10 @@ class HttpClientManager: NSObject {
                                     realm.delete(transitionHeightResults)
                                     realm.delete(floorColourList)
                                     realm.delete(stairColourList)
-                                   
+                                    realm.delete(ruleList)
+                                    realm.delete(contract_document)
+                                    realm.delete(fields)
+                                    realm.delete(appointmentResultsReasons)
                                 }
                             }catch{
                                 print(RealmError.writeFailed.rawValue)
@@ -2157,36 +2165,45 @@ class HttpClientManager: NSObject {
     }
     
     //MARK: - Update Customer & Room Information
-    func updateCustomerAndRoomInfoAPi(parameter:Parameters,isOnlineCollectBtnPressed:Bool,completion:@escaping (_ success: String?, _ object: String? , _ paymentStatus: String? , _ paymentMessage: String? ) -> ()){
+    func updateCustomerAndRoomInfoAPi(parameter:Parameters,isOnlineCollectBtnPressed:Bool,completion:@escaping (_ success: String?, _ object: String? , _ paymentStatus: String? , _ paymentMessage: String?, _ transactionId: String?,  _ cardType: String?) -> ()){
         
         if self.connectedToNetwork() {
+
             if isOnlineCollectBtnPressed == true
             {
             self.showhideHUD(viewtype: .SHOW, title: "Processing Payment")
             }
             
             let URL = AppURL().syncCustomerAndRoomInfo
-            
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
+            let manager = Alamofire.SessionManager.default
+            manager.session.configuration.timeoutIntervalForRequest = 1
+            manager.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
                 
                // print(response.result.value.debugDescription)
+//                if let error = response.result.error
+//                {
+//                    if error._code == NSURLErrorTimedOut
+//                    {
+//                        print("TimeOut")
+//                    }
+//                }
                 let response = response.result.value
                 
                 if response != nil{
                     if(response?.result != nil)
                     {
-                        completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage)
+                        completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
                         self.showhideHUD(viewtype: .HIDE, title: "")
                     }
                 }
                 else{
-                    completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage)
+                    completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
                     self.showhideHUD(viewtype: .HIDE, title: "")
                 }
             }
         }
         else{
-            completion("false", AppAlertMsg.NetWorkAlertMessage,"","")
+            completion("false", AppAlertMsg.NetWorkAlertMessage,"","","","")
             
         }
     }
@@ -2296,8 +2313,79 @@ class HttpClientManager: NSObject {
         }
     }
     
+    
+    func installerDatesAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?, _ installationDates:[AvailableDatesValues]?, _ saleOrderId: Int? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().installationDates
+            self.showhideHUD(viewtype: .SHOW, title: "Fetching available installer schedule dates. Please wait…")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<InstallerDates>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message,response?.data?.availableDates,response?.data?.saleOrderId)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                        AppAlertMsg.serverNotReached, [] , 0)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage, [], 0)
+            
+        }
+    }
+    
+    func installerDatesSubmitAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().installationDatesSubmit
+            self.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<InstallerDatesSubmit>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                               AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
     // MARK: - Sync Images Upload
-    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
+    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
         
         
         if self.connectedToNetwork() {
@@ -2306,9 +2394,9 @@ class HttpClientManager: NSObject {
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName]
             }else{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName]
             }
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)
