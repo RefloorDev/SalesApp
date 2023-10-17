@@ -45,6 +45,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        floorColorNamesArray = getFloorColorList()
+        stairColourNamesArray = getStairColorList()
         self.setNavigationBarbackAndlogo(with: "Measurement Summary".uppercased())
         if !(isFromStatus)
         {
@@ -252,7 +254,9 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         if tableValues[indexPath.row].material_image_url ?? "" == ""{
             cell.colorView.image = UIImage(named: "AppIcon")
         }else{
+            print(tableValues[indexPath.row].material_image_url ?? "")
             cell.colorView.image = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].material_image_url ?? "")
+            
         }
         cell.selectColor.addTarget(self, action: #selector(getColorPopUpFromTableViewButton(sender:)), for: .touchUpInside)
         cell.selectMolding.tag = indexPath.row
@@ -389,18 +393,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     {
         var value:[String] = []
         //arb
-        if tableValues[sender.tag].room_name!.contains("STAIRS")//roomName.contains("STAIRS")
+        if tableValues[sender.tag].room_name!.contains("STAIRS") || area == 0.0//roomName.contains("STAIRS")
         {
-            let  Colorvalue = getStairColorList()
-            self.stairColourNamesArray = Colorvalue
-            value = Colorvalue.compactMap({$0.color})
+            value = self.stairColourNamesArray.compactMap({$0.color})
         }
         else
         {
             
-            let  Colorvalue = getFloorColorList()
-            self.floorColorNamesArray = Colorvalue
-            value = Colorvalue.compactMap({$0.color})
+            value = self.floorColorNamesArray.compactMap({$0.color})
         }
     
         
@@ -650,11 +650,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         {
             //updateTitleColorApi(measurement_id: self.tableValues[cell].contract_measurement_id ?? 0, material_id: self.tableValues[cell].material_colors?[index].material_id ?? 0)
             //arb
-            if tableValues[cell].room_name!.contains("STAIRS")
+            if tableValues[cell].room_name!.contains("STAIRS") || area == 0.0
             {
                 let selectedColor = self.stairColourNamesArray[index].color ?? ""
                 let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
-                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
                 //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
                 let roomId = self.tableValues[cell].room_id ?? 0
                 self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)

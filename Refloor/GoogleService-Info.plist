@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>181916916598-ljhoo3g214ml1qlu3lpkmqmdihm4cioo.apps.googleusercontent.com</string>
+	<string>181916916598-hf7rhjv3oa6qbqtap4naekig3d3871j6.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.181916916598-ljhoo3g214ml1qlu3lpkmqmdihm4cioo</string>
+	<string>com.googleusercontent.apps.181916916598-hf7rhjv3oa6qbqtap4naekig3d3871j6</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCtxylmfAbt2LH1olRY6TkWP_IKOm8emY4</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.oneteamus.tikkit</string>
+	<string>com.refloor.salesapp</string>
 	<key>PROJECT_ID</key>
 	<string>refloor-d2cdc</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:181916916598:ios:1952e4298c78586cb97857</string>
+	<string>1:181916916598:ios:d3b64b94de8f6e40b97857</string>
 </dict>
 </plist>

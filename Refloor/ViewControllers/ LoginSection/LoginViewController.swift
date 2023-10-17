@@ -250,7 +250,8 @@ class LoginViewController: UIViewController {
                     //UserDefaults.standard.set(true, forKey: "isMasterDataSaved")
                     let results =  realm.objects(MasterData.self)
                     
-                    var flooringColorImageArray:[String] = []
+                    var flooringColorImageArray:[[String:String]] = []
+                    //var stairColourImageArray:[String] = []
                     if let masterData = results.first{
                         //dynamic contract
                        
@@ -262,10 +263,21 @@ class LoginViewController: UIViewController {
                                 self.downloadDiscountSuccessPopupImage(from: discountSuccessPopupImageUrl, code: discountCode)
                             }
                         }
-                        let floorColors = masterData.flooring_colors
+                        let floorColors = masterData.floorColourList
+                        let stairColors = masterData.stairColourList
+                        var dict:[String:String] = [:]
+                        for stairColor in stairColors
+                        {
+                            if let img = stairColor.material_image_url
+                            {
+                                dict = [img:"StairColor"]
+                                flooringColorImageArray.append(dict)
+                            }
+                        }
                         for floorColor in floorColors{
                             if let img = floorColor.material_image_url{
-                                flooringColorImageArray.append(img)
+                                dict = [img:"FloorColor"]
+                                flooringColorImageArray.append(dict)
                             }
                         }
                         UserDefaults.standard.set(self.emailTF.text, forKey: "username")
@@ -283,7 +295,7 @@ class LoginViewController: UIViewController {
                             }
                             
                             
-                            self.downloadPhoto(imageUrlArray: flooringColorImageArray, type: .floorColor)
+                            self.downloadPhoto(imageUrlArray: flooringColorImageArray)
                         }
                        
                         
