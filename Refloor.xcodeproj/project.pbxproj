@@ -103,7 +103,6 @@
 		653EA610241FB3BC00EA684E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653EA60F241FB3BC00EA684E /* LoginViewController.swift */; };
 		653FA1DB248768CA0064C5CB /* CustomShapeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FA1DA248768CA0064C5CB /* CustomShapeLineViewController.swift */; };
 		653FA1E02487771B0064C5CB /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653FA1DF2487771A0064C5CB /* LineView.swift */; };
-		6544081C29ADE213007B2D35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6544081B29ADE212007B2D35 /* GoogleService-Info.plist */; };
 		654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654F229724E41EC900CCA1E4 /* PaymentDetailsViewController.swift */; };
 		65519FEE2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65519FED2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift */; };
 		655C43A22456B4FB00D5CA2C /* TransactionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655C43A12456B4FB00D5CA2C /* TransactionViewController.swift */; };
@@ -176,8 +175,8 @@
 		65FFF92F2446D6D000E3534D /* ModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF92E2446D6D000E3534D /* ModelClass.swift */; };
 		65FFF9342447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */; };
 		65FFF93724471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */; };
-		B0238B2B297525B900242BDC /* GoogleService-Info1.plist in Resources */ = {isa = PBXBuildFile; fileRef = B0238B2A297525B900242BDC /* GoogleService-Info1.plist */; };
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
+		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
 		B0A56C162AB1786700891CBC /* ImageAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A56C142AB1786700891CBC /* ImageAnnotation.swift */; };
 		B0B508DE2AAB3D160006C39E /* InstallerPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */; };
@@ -302,7 +301,6 @@
 		653EA60F241FB3BC00EA684E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		653FA1DA248768CA0064C5CB /* CustomShapeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShapeLineViewController.swift; sourceTree = "<group>"; };
 		653FA1DF2487771A0064C5CB /* LineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
-		6544081B29ADE212007B2D35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		654F229724E41EC900CCA1E4 /* PaymentDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDetailsViewController.swift; sourceTree = "<group>"; };
 		65519FED2493725D0094115C /* SummeryDetailsTilesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummeryDetailsTilesTableViewCell.swift; sourceTree = "<group>"; };
 		655C43A12456B4FB00D5CA2C /* TransactionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewController.swift; sourceTree = "<group>"; };
@@ -375,9 +373,9 @@
 		65FFF92E2446D6D000E3534D /* ModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelClass.swift; sourceTree = "<group>"; };
 		65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = L_Shape_CustomView_ToolBoxView.xib; sourceTree = "<group>"; };
 		65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L_Shape_CustomView_ToolBoxView.swift; sourceTree = "<group>"; };
-		B0238B2A297525B900242BDC /* GoogleService-Info1.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info1.plist"; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
+		B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellationPolicyViewController.swift; sourceTree = "<group>"; };
 		B0A56C142AB1786700891CBC /* ImageAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnnotation.swift; sourceTree = "<group>"; };
 		B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPopUpViewController.swift; sourceTree = "<group>"; };
@@ -625,8 +623,7 @@
 		653EA56C241F7AFC00EA684E /* Refloor */ = {
 			isa = PBXGroup;
 			children = (
-				6544081B29ADE212007B2D35 /* GoogleService-Info.plist */,
-				B0238B2A297525B900242BDC /* GoogleService-Info1.plist */,
+				B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */,
 				B04B016728E2F19B00B59E33 /* Refloor.entitlements */,
 				65FFF9292446CF8800E3534D /* AppModelClassAndApi */,
 				653EA601241F9AFF00EA684E /* Delegate */,
@@ -1092,8 +1089,6 @@
 				65209442243CA31100B010CA /* SF-Pro-Display-RegularItalic.otf in Resources */,
 				6520944F243CA31100B010CA /* SF-Pro-Text-Bold.otf in Resources */,
 				6520945E243CA31100B010CA /* SF-Pro-Text-Medium.otf in Resources */,
-				6544081C29ADE213007B2D35 /* GoogleService-Info.plist in Resources */,
-				B0238B2B297525B900242BDC /* GoogleService-Info1.plist in Resources */,
 				6520942C243CA31100B010CA /* loading.gif in Resources */,
 				657C72C524500BFF00F392F3 /* SubSqureToolView.xib in Resources */,
 				6520942B243CA31100B010CA /* CAXSVProgressHUD.xib in Resources */,
@@ -1116,6 +1111,7 @@
 				65209457243CA31100B010CA /* SF-Pro-Text-BoldItalic.otf in Resources */,
 				6520942F243CA31100B010CA /* Inter-UI-Regular.otf in Resources */,
 				6520945A243CA31100B010CA /* SF-Pro-Text-HeavyItalic.otf in Resources */,
+				B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1467,7 +1463,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Refloor AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorAdhocNew;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1496,7 +1492,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Refloor AppStore";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorAdhocNew;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

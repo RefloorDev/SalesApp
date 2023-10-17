@@ -44,6 +44,10 @@ public struct ListTransform<T: RealmSwift.Object>: TransformType where T: BaseMa
 class FloorImageStorage:Object{
     @objc dynamic var imageName:String = ""
 }
+class StairImageStorage:Object
+{
+    @objc dynamic var imageName:String = ""
+}
 
 
 class MasterData : Object, Mappable {

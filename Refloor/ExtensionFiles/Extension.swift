@@ -2137,13 +2137,30 @@ extension UIViewController:OrderStatusViewDelegate
         _ = ImageSaveToDirectory.SharedImage.saveImageDocumentDirectory(rfImage: image, saveImgName: imageName)
         do {
             //try data.write(to: fileURL)
-            let mystorage = FloorImageStorage()
-            mystorage.imageName = imageName
-            let realm = try! Realm()
-            let images = realm.objects(FloorImageStorage.self).filter("imageName == %@", imageName)
-            if images.isEmpty{
-                try realm.write{
-                    realm.add(mystorage)
+            if imageName.contains("FloorColor")
+            {
+                let mystorage = FloorImageStorage()
+                mystorage.imageName = imageName
+                let realm = try! Realm()
+                let images = realm.objects(FloorImageStorage.self).filter("imageName == %@", imageName)
+                if images.isEmpty{
+                    try realm.write{
+                        realm.add(mystorage)
+                    }
+                    
+                }
+            }
+            else
+            {
+                let mystorage = StairImageStorage()
+                mystorage.imageName = imageName
+                let realm = try! Realm()
+                let images = realm.objects(StairImageStorage.self).filter("imageName == %@", imageName)
+                if images.isEmpty{
+                    try realm.write{
+                        realm.add(mystorage)
+                    }
+                    
                 }
             }
         } catch let error {
@@ -2172,17 +2189,21 @@ extension UIViewController:OrderStatusViewDelegate
         return nil
     }
     //download photo and saves it in file and its filename in DB
-    func downloadPhoto(imageUrlArray:[String], type: OfflineImageType){
+    func downloadPhoto(imageUrlArray:[[String:String]]){
         // var downloadstastus:Int = 0
         var downloadstatus:[String: Int] = ["percentage": 1]
         var progress:CGFloat! = 0
-        let totalCount = Double(imageUrlArray.filter({URL(string: $0) != nil}).count)
+        //let totalCount = Double(imageUrlArray.filter({URL(string: $0.keys) != nil}).count)
+        let totalCount = Double(imageUrlArray.count)
         print(totalCount)
         DispatchQueue.global().async {
             // progressImgArray.removeAll() // this is the image array
             let group = DispatchGroup()
             for i in 0..<imageUrlArray.count {
-                guard let url = URL(string: imageUrlArray[i])
+                for (key,value) in imageUrlArray[i]
+                {
+                let type = i
+                guard let url = URL(string: key)
                 else {
                     continue
                 }
@@ -2203,8 +2224,12 @@ extension UIViewController:OrderStatusViewDelegate
                             progress = progress + progessPerDownloadRounded
                             progress = progress <= 100 ? progress : 100
                             downloadstatus.updateValue(Int(progress ?? 0), forKey: "percentage")
+                            
                             NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
-                            self.saveImage(imageName: "\(type.rawValue)\(i)", image: image)
+                            
+                            
+                            self.saveImage(imageName: "\(value)"+"\(i)", image: image)
+                            
                         } else if let error = error {
                             
                             print("Sync Error:\(error)")
@@ -2226,6 +2251,7 @@ extension UIViewController:OrderStatusViewDelegate
                 }
                 
                 group.wait()
+            }
                 
             }
             group.notify(queue: .main) {
@@ -3855,6 +3881,20 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return ""
     }
+    func getStairImageName(atIndex index:Int) -> String{
+        do{
+            let realm = try Realm()
+            let floorImages = realm.objects(StairImageStorage.self)
+            if floorImages.count - 1 >= index{
+                let floorImage = floorImages[index]
+                return floorImage.imageName
+            }
+            
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return ""
+    }
     
     func createSummaryData(roomID:Int,roomName:String) -> SummeryDetailsData{
         let summaryData =  SummeryDetailsData()
@@ -4942,6 +4982,7 @@ func realmResultToListConverter(appointmentResults:Results<rf_master_appointment
 
 enum OfflineImageType: String{
     case floorColor = "FloorColor"
+    case stairColor = "StairColor"
 }
 
 extension Results {
