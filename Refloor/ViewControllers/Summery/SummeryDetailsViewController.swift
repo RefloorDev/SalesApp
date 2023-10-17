@@ -303,7 +303,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             next.roomID = self.summaryData.room_id ?? 0
             next.roomName = self.summaryData.room_name ?? ""
             next.drowingImageID = self.summaryData.contract_measurement_id ?? 0
-            next.area = CGFloat(self.summaryData.room_area ?? 0)
+            next.area = CGFloat(self.summaryData.adjusted_area ?? 0)
             next.delegate = self
             next.value = self.summaryData.attachment_comments ?? ""
             next.uploadedImage = self.summaryData.attachments ?? []
@@ -867,7 +867,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                             var dict:[String:Any] = [:]
                             let questionUniqueIdentifier = question.questionIdUnique
                             let questionId = question.id
-                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID]
+                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
                             realm.create(rf_master_question.self, value: dict, update: .all)
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             

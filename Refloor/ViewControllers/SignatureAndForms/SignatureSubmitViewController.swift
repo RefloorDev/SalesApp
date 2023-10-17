@@ -403,7 +403,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
             if(success ?? "") == "Success"
             {
                 
-                let web = WebViewViewController.initialization()!
+                let web = DynamicContractViewController.initialization()!
                 web.document=value ?? ""
                 web.orderID=self.downpayment.orderID
                 web.downPayment = self.downpayment.DownPaymentcalucaltion().downPayment

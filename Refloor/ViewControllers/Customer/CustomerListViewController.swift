@@ -40,6 +40,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     override func viewDidLoad() {
         super.viewDidLoad()
         print(Realm.Configuration.defaultConfiguration.fileURL!)
+        let masterData = self.getMasterDataFromDB()
+       if masterData.contract_document_templates.first?.data == nil
+        {
+            for contract in masterData.contract_document_templates
+            {
+                self.saveDynamicContractData(templateId: contract.template_id , documentURL: contract.document_url ?? "", name: contract.name ?? "", type: contract.type ?? "")
+            }
+        }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(updateAppointmentOffline), name: UIApplication.willEnterForegroundNotification, object: nil)
         
         
@@ -196,6 +205,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             {
                 for appoinment in tempappoinmentsList ?? []
                 {
+                    
                     if((appoinment.customer_name ?? "").lowercased().contains((sender.text ?? "").lowercased()) || (appoinment.applicant_first_name ?? "").lowercased().contains((sender.text ?? "").lowercased()) || (appoinment.applicant_last_name ?? "").lowercased().contains((sender.text ?? "").lowercased()))
                     {
                         appoinmnets.append(appoinment)
@@ -389,15 +399,21 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         
      
         createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
-
+//
         if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
+//            //print(getTodayWeekDay())
             let details = CustomerDetailsOneViewController.initialization()!
             details.appoinmentslData = self.appoinmentsList![sender.tag]
             _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
 
             UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
+           // let details = InstallerShedulerViewController.initialization()!
             self.navigationController?.pushViewController(details, animated: true)
-        }
+        
+      }
+        
+        
+
     }
     
    
