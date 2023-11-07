@@ -560,6 +560,7 @@ class rf_ruleList_results : Object,Mappable
     //var category = List<rf_categoryData>()
     var restricted_promotions = List<rf_restrictedPromotionData>()
     var restricted_discount = List<rf_restrictedDiscountData>()
+    var conditional_promotions = List<rf_conditionalPromotionData>()
     var company = List<rf_comapnyData>()
     var allowed_days = List<rf_allowedData>()
     var office_location = List<rf_OfficeLocationData>()
@@ -581,6 +582,7 @@ class rf_ruleList_results : Object,Mappable
         //category <- (map["category"], ListTransform<rf_categoryData>())
         restricted_promotions <- (map["restricted_promotions"], ListTransform<rf_restrictedPromotionData>())
         restricted_discount <- (map["restricted_discounts"], ListTransform<rf_restrictedDiscountData>())
+        conditional_promotions <- (map["conditional_promotions"], ListTransform<rf_conditionalPromotionData>())
         company <- (map["company"], ListTransform<rf_comapnyData>())
         allowed_days <- (map["allowed_days"], ListTransform<rf_allowedData>())
         office_location <- (map["office_locations"], ListTransform<rf_OfficeLocationData>())
@@ -638,6 +640,24 @@ class rf_restrictedDiscountData : Object, Mappable
         
     }
 }
+
+class rf_conditionalPromotionData : Object, Mappable
+{
+    @objc dynamic var conditional_id : Int = 0
+    @objc dynamic var conditional_name : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        conditional_id <- map["id"]
+        conditional_name <- map["name"]
+        
+    }
+}
+
 class rf_allowedData : Object, Mappable
 {
     @objc dynamic var allowed_id : Int = 0
