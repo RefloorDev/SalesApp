@@ -266,6 +266,7 @@ class LoginViewController: UIViewController {
                         let floorColors = masterData.floorColourList
                         let stairColors = masterData.stairColourList
                         var dict:[String:String] = [:]
+                        flooringColorImageArray.removeAll()
                         for stairColor in stairColors
                         {
                             if let img = stairColor.material_image_url

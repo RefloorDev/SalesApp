@@ -20,15 +20,26 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         self.promoCodeDropDownSelectedId = promoCodeDropDownSelectedId
         self.calculationType = calculationType
         promoDiscountArray = promocodeArray
+        
         if promocodeArray.count > 0
         {
             self.isPromoApplied = true
+            self.isPromoForPaymentRestriction = true
         }
         else
         {
             self.isPromoApplied = false
+            self.isPromoForPaymentRestriction = true
         }
         self.selectedOption = -1
+        paymentOptionDataValueDetail = paymentRestrictionDataValueDetail
+        for index in paymentOptionDataValueDetail
+        {
+            index.isHidden = false
+        }
+        restrictedPromo.removeAll()
+        restrictedDiscount.removeAll()
+        isApplicableRoom()
         planCollectionView.reloadData()
         
     }
@@ -96,6 +107,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var ruleList:Results<rf_ruleList_results>!
     var isDiscountApplied = false
     var isPromoApplied = false
+    var isPromoForPaymentRestriction = false
     var promoCodeDropDownSelectedId:Int = Int()
     var promoValue: Double = Double()
     var promoDiscountArray:[String] = []
@@ -299,6 +311,44 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 //                                            isPaymentRestrict = false
 //
 //                                        }
+                                    case "promotions":
+                                        if isPromoForPaymentRestriction
+                                        {
+                                            if rules.conditional_promotions.count > 0
+                                            {
+                                                for conditionsPromotions in rules.conditional_promotions
+                                                {
+                                                    if promoCodeDropDownSelectedId == conditionsPromotions.conditional_id
+                                                    {
+                                                        isPaymentRestrict = true
+                                                        if rules.restricted_promotions.count > 0
+                                                        {
+                                                            for promotions in rules.restricted_promotions
+                                                            {
+                                                                restrictedPromo.append([promotions.promotion_id : promotions.promotion_name!])
+                                                            }
+                                                        }
+                                                        
+                                                        if rules.restricted_discount.count > 0
+                                                        {
+                                                            for discounts in rules.restricted_discount
+                                                            {
+                                                                restrictedDiscount.append([discounts.discount_id : discounts.discount_name!])
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        isPaymentRestrict = false
+                                                        
+                                                    }
+                                                }
+                                            }
+                                            
+                                        }
+                                            
+                                        
+                                        
                                     
                                     default:
                                         break
