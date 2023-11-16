@@ -248,7 +248,16 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
-        
+        var value = 0
+//        if !((self.qustionAnswer[19].answerOFQustion?.singleSelection) != nil) {
+//                self.alert("Please answer question number 20", nil)
+//        } else {
+//            if(delegate == nil) {
+//                           self.submitApiCall()
+//                       } else {
+//                           self.submitApiCall()
+//                       }
+//        }
         if(validation() == "")
         {
             if(delegate == nil)
@@ -284,6 +293,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             }
             
             self.DropDownDefaultfunction(sender, sender.bounds.width, names, -1, delegate: self, tag: sender.tag)
+            //            self.dropdownSelectionHandler = { selectedIndex in
+            //                           if selectedIndex == 1 || selectedIndex == 2 {
+            //                               self.isDropdownSelected = true
+            //                           }
         }
         else
         {
@@ -584,6 +597,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
                 let questionNumber = value + 1
                 return "Please answer question number \(questionNumber)"
+            } else if !((self.qustionAnswer[19].answerOFQustion?.singleSelection) != nil) {
+                self.alert("Please answer question number 20", nil)
             }
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {

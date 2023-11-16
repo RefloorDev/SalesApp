@@ -64,10 +64,11 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     var yAxisLayerSharae:CAShapeLayer!
     var xAxisLayerSharae:CAShapeLayer!
     var roomData:RoomDataValue!
+    var addData:CustomeShapeViewController!
     var messurementID = -1
     var imagePicker: CaptureImage!
     var transitionHeightDropDownArray:List<rf_transitionHeights_results>!
-    
+  
  //   var openingsList:[OpeningCustomObject] = [OpeningCustomObject(name: "No Transition", color: .white),OpeningCustomObject(name: "Reducer", color: .yellow),OpeningCustomObject(name: "Square Edge", color: .blue),OpeningCustomObject(name: "Stair Nose", color: .green),OpeningCustomObject(name: "Carpet", color: .red)]
     
     var openingsList:[OpeningCustomObject] = [OpeningCustomObject(name: "No Transition", color: .white),OpeningCustomObject(name: "Reducer", color: .yellow),OpeningCustomObject(name: "Square Edge", color: .blue),OpeningCustomObject(name: "Stair Nose", color: .green),OpeningCustomObject(name: "Carpet", color: .red),OpeningCustomObject(name: "Metal T", color: .cyan),OpeningCustomObject(name: "Rubber", color: .magenta)]
@@ -242,9 +243,12 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     }
     
     override func nextAction() {
-        if(self.drowingView.isConfirmed)
-        {
-            //arb
+        var isSelected = addData?.add_Button.isSelected
+        if(!self.drowingView.isConfirmed) {
+            self.alert("Please press Done to complete the Room Drawing", nil)
+        } else if selected_View.isHidden == true {
+            self.alert("Please Select Add Openings", nil)
+        } else {
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
             let classDisplayName = "RoomDrawing"
@@ -252,10 +256,21 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             //
             self.messurementUpload()
         }
-        else
-        {
-            self.alert("Please press Done to complete the Room Drawing", nil)
-        }
+        
+//        if(self.drowingView.isConfirmed)
+//        {
+//            //arb
+//            let appointmentId = AppointmentData().appointment_id ?? 0
+//            let currentClassName = String(describing: type(of: self))
+//            let classDisplayName = "RoomDrawing"
+//            self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+//            //
+//            self.messurementUpload()
+//        }
+//        else
+//        {
+//            self.alert("Please press Done to complete the Room Drawing", nil)
+//        }
     }
     func setgraphForMoodView(_ sender :UIView)
     {
@@ -529,6 +544,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             }
             self.DropDownDefaultfunction(sender, 200, strings, currentOpening, delegate: self, tag: 2)
             bottomLineViewTopConstraint.constant = 25
+            
         }
         
        
@@ -1169,6 +1185,7 @@ class OpeningCustomObject:NSObject
 {
      var name:String
     var color:UIColor
+    var selected: Bool = false
     init(name: String, color: UIColor) {
        self.name = name
        self.color = color
