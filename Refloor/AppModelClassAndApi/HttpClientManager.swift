@@ -693,6 +693,7 @@ class HttpClientManager: NSObject {
                     if(response?.result != nil)
                     {
                         completion(response?.result!,response?.message, response?.questions_measurement)
+                        print("questions", response?.questions_measurement)
                         
                     }
                     else

@@ -940,7 +940,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "PaymentOption"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-        //
+        // Q4_Change Package Selection
         if !(IsEligibleForDiscounts == 1) {
         let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
             self.navigationController?.pushViewController(downpatmet, animated: true)
@@ -948,7 +948,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             DispatchQueue.main.async
             {
-                self.alert("Are You Sure!", [yes,no])
+                self.alert("Are you sure you Want to select \(self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? "" )?", [yes, no])
+
             }
         }
         if (IsEligibleForDiscounts == 1) {
