@@ -397,28 +397,30 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         
         //updating master appointments results database with value false for not demoed
         
-     
-        createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
+        
+        // Q4_Change Confirmation Popup with Appointment date and time
+        let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
+            self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
 //
-        if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
-//            //print(getTodayWeekDay())
-            let details = CustomerDetailsOneViewController.initialization()!
-            details.appoinmentslData = self.appoinmentsList![sender.tag]
-            _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
-
-            UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
-           // let details = InstallerShedulerViewController.initialization()!
-            self.navigationController?.pushViewController(details, animated: true)
-        
+            if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
+                //            //print(getTodayWeekDay())
+                let details = CustomerDetailsOneViewController.initialization()!
+                details.appoinmentslData = self.appoinmentsList![sender.tag]
+                _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
+                
+                UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
+                // let details = InstallerShedulerViewController.initialization()!
+                self.navigationController?.pushViewController(details, animated: true)
+            }
       }
-        
-        
-
+        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        DispatchQueue.main.async
+        {
+            self.alert("Sure You Want To Begin With" + " " + "\(self.appoinmentsList![sender.tag].appointment_datetime ?? "")", [yes,no])
+        }
     }
     
    
-    
-    
         
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController){
             print("Cancelled")

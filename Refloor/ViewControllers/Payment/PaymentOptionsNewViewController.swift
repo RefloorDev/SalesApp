@@ -865,7 +865,10 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     
     @IBAction func nextButtonAction(_ sender: UIButton)
     {
-        
+//        if !(IsEligibleForDiscounts == 1) {
+//            self.alert("Are You Sure!", nil)
+//            return
+//        }
         
         if(self.selectedPlan<0)
         {
@@ -987,8 +990,22 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "PaymentOption"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-        //
-        self.navigationController?.pushViewController(downpatmet, animated: true)
+        // Q4_Change Package Selection
+        if !(IsEligibleForDiscounts == 1) {
+        let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
+            self.navigationController?.pushViewController(downpatmet, animated: true)
+        }
+            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            DispatchQueue.main.async
+            {
+                self.alert("Are you sure you Want to select \(self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? "" )?", [yes, no])
+
+            }
+        }
+        if (IsEligibleForDiscounts == 1) {
+          self.navigationController?.pushViewController(downpatmet, animated: true)
+        }
+        
     }
     
     func paymentTypeApiCall()

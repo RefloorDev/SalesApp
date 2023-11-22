@@ -248,7 +248,16 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     }
     
     @IBAction func nextButtonAction(_ sender: Any) {
-        
+        var value = 0
+//        if !((self.qustionAnswer[19].answerOFQustion?.singleSelection) != nil) {
+//                self.alert("Please answer question number 20", nil)
+//        } else {
+//            if(delegate == nil) {
+//                           self.submitApiCall()
+//                       } else {
+//                           self.submitApiCall()
+//                       }
+//        }
         if(validation() == "")
         {
             if(delegate == nil)
@@ -275,8 +284,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
     }
     @IBAction func dropDownButtonAction(_ sender: UIButton) {
+        print("dropdown---action")
         if(qustionAnswer[sender.tag].question_type == "simple_choice")
         {
+            print("dropdown---action----simple---choice")
             var names:[String] = []
             for value in qustionAnswer[sender.tag].quote_label ?? []
             {
@@ -284,9 +295,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             }
             
             self.DropDownDefaultfunction(sender, sender.bounds.width, names, -1, delegate: self, tag: sender.tag)
+            print("names", names)
+            //            self.dropdownSelectionHandler = { selectedIndex in
+            //                           if selectedIndex == 1 || selectedIndex == 2 {
+            //                               self.isDropdownSelected = true
+            //                           }
         }
         else
         {
+            print("dropdown---action----No-------simple---choice")
             let multy = SelectionViewController.initialization()!
             multy.delegate = self
             multy.tag  = sender.tag
@@ -584,6 +601,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
                 let questionNumber = value + 1
                 return "Please answer question number \(questionNumber)"
+            } else if !((self.qustionAnswer[21].answerOFQustion?.singleSelection) != nil) {  
+                 if ((self.qustionAnswer[19].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[20].answerOFQustion?.numberVaue ?? 0) > 0) {
+                    //Q4_Change Primer Type Mandatory dropdown
+                    self.alert("You Must Select A Primer Type", nil)
+                }
             }
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {

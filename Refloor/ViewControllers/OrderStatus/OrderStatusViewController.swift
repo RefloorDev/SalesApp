@@ -85,6 +85,20 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         //OrderStatustLisApiCall()
     }
     
+    // Q4_Change Textfield_Validation
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+           let restrictedCharacters = CharacterSet(charactersIn: "&$+/,;=?@#")
+           
+           // Iterate over the Unicode.Scalar values in the replacement text
+           for scalar in text.unicodeScalars {
+               if restrictedCharacters.contains(scalar) {
+                   return false // Block the character
+               }
+           }
+           
+           return true // Allow the character
+       }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.x>0 {
             scrollView.contentOffset.x = 0
