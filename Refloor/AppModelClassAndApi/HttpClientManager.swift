@@ -2404,6 +2404,7 @@ class HttpClientManager: NSObject {
                 multipartFormData.append(imageData!, withName: "file", fileName: imagename, mimeType: "image/jpeg")
                 for (key, value) in parameters
                 {
+                    
                     multipartFormData.append(value.data(using: String.Encoding.utf8)! , withName: key)
                 }
             }, to:URL)
