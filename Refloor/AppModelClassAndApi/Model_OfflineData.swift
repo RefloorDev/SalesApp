@@ -245,6 +245,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var appointment_id = AppointmentData().appointment_id ?? 0
     @objc dynamic var question_name : String?
     @objc dynamic var question_code : String?
+    @objc dynamic var max_allowed_limit = 0
     @objc dynamic var company_id = 0
     @objc dynamic var description1 : String? = ""
     @objc dynamic var question_type : String?
@@ -288,6 +289,7 @@ class rf_master_question :Object, Mappable {
         id <- map["id"]
         question_name <- map["name"]
         question_code <- map["code"]
+        max_allowed_limit <- map["max_allowed_limit"]
         company_id <- map["company_id"]
         description1 <- map["description"]
         question_type <- map["question_type"]

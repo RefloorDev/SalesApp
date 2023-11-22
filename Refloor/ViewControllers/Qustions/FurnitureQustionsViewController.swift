@@ -105,6 +105,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["question_name"] = question.question_name
                         dict["question_code"] = question.question_code
                         dict["company_id"] = question.company_id
+                        dict["max_allowed_limit"] = question.max_allowed_limit
                         dict["description1"] = question.description1
                         dict["question_type"] = question.question_type
                         dict["validation_required"] = question.validation_required
@@ -170,16 +171,41 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             {
                 if !(sender.text ?? "").contains(".")
                 {
+                    if qustionAnswer[sender.tag].max_allowed_limit != 0
+                    {
+                        if qustionAnswer[sender.tag].id == 9
+                        {
+                            if value2 > 15
+                            {
+                                print("reached max value")
+                                self.alert("Stair width value exceeded maximum limit", nil)
+                                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
+                                return
+                            }
+                        }
+                        else if qustionAnswer[sender.tag].id == 1
+                        {
+                            if value2 > 2
+                            {
+                                print("reached max value")
+                                self.alert("Rip multiple layer value exceeded maximum limit", nil)
+                                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
+                                return
+                            }
+                        }
+                    }
                     qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
                     cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
                 }
                 else
                 {
+                    sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
                     self.alert("Please enter a valid value", nil)
                 }
             }
             else
             {
+                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
                 self.alert("Please enter a valid value", nil)
             }
             
@@ -226,6 +252,27 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     
     
     @IBAction func pluseButtonAction(_ sender: UIButton) {
+        if qustionAnswer[sender.tag].max_allowed_limit != 0
+        {
+            if qustionAnswer[sender.tag].id == 9
+            {
+                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == 15
+                {
+                    print("reached max value")
+                    self.alert("Stair width value exceeded maximum limit", nil)
+                    return
+                }
+            }
+            else if qustionAnswer[sender.tag].id == 1
+            {
+                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == 2
+                {
+                   print("reached max value")
+                    self.alert("Rip multiple layer value exceeded maximum limit", nil)
+                    return
+                }
+            }
+        }
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
             qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) + 1
