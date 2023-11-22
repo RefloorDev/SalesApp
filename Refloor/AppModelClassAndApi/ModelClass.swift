@@ -579,6 +579,7 @@ class QuestionsMeasurementData: Mappable
 {
     var id: Int?
     var name :String?
+    var max_allowed_limit: Int?
     var code: String?
     var company_id: Int?
     var description :String?
@@ -608,6 +609,7 @@ class QuestionsMeasurementData: Mappable
     init(masterQuestions:rf_master_question){
         self.id = masterQuestions.id
         self.name = masterQuestions.question_name
+        self.max_allowed_limit = masterQuestions.max_allowed_limit
         self.code = masterQuestions.question_code
         self.company_id = masterQuestions.company_id
         self.description = masterQuestions.description1
@@ -646,6 +648,7 @@ class QuestionsMeasurementData: Mappable
         id <- map["id"]
         name <- map["name"]
         code <- map["code"]
+        max_allowed_limit <- map["max_allowed_limit"]
         company_id <- map["company_id"]
         description <- map["description"]
         question_type <- map["question_type"]
