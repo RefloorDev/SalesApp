@@ -587,8 +587,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     }
     
     
-    func
-    validation () -> String
+    func validation () -> String
     {
         var value = 0
         for question in self.qustionAnswer
