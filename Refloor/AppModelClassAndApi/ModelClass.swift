@@ -625,6 +625,9 @@ class QuestionsMeasurementData: Mappable
         self.setDefaultAnswer = masterQuestions.setDefaultAnswer
         self.applicableCurrentSurface = masterQuestions.applicableCurrentSurface
         
+        print("mandatory----question", self.name)
+        print("question----code", self.code)
+        
         var applicableRoomdetails :[ApplicableRoom] = []
         for rooms in masterQuestions.applicableRooms
         {
