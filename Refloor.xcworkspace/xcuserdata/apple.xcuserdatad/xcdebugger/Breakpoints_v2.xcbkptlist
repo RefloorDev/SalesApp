@@ -78,8 +78,8 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "602"
-            endingLineNumber = "602"
+            startingLineNumber = "610"
+            endingLineNumber = "610"
             landmarkName = "validation()"
             landmarkType = "7">
          </BreakpointContent>
@@ -94,10 +94,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "697"
-            endingLineNumber = "697"
-            landmarkName = "validation()"
-            landmarkType = "7">
+            startingLineNumber = "725"
+            endingLineNumber = "725"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -126,10 +126,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "655"
-            endingLineNumber = "655"
-            landmarkName = "validation()"
-            landmarkType = "7">
+            startingLineNumber = "683"
+            endingLineNumber = "683"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "B6DB8B24-054B-463A-B334-7974223F84A6 - e24a8312b6788193"
@@ -3022,8 +3022,8 @@
             filePath = "Refloor/AppModelClassAndApi/ModelClass.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1019"
-            endingLineNumber = "1019"
+            startingLineNumber = "1022"
+            endingLineNumber = "1022"
             landmarkName = "mapping(map:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -3134,10 +3134,10 @@
             filePath = "Refloor/AppModelClassAndApi/ModelClass.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "994"
-            endingLineNumber = "994"
-            landmarkName = "SummeryDetailsData"
-            landmarkType = "3">
+            startingLineNumber = "997"
+            endingLineNumber = "997"
+            landmarkName = "room_name"
+            landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3150,10 +3150,10 @@
             filePath = "Refloor/AppModelClassAndApi/ModelClass.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "973"
-            endingLineNumber = "973"
-            landmarkName = "SummeryDetailsDataMap"
-            landmarkType = "3">
+            startingLineNumber = "976"
+            endingLineNumber = "976"
+            landmarkName = "init?(map:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "B3AEA0CC-CA7C-43CA-8AD9-A3046EB905CF - 9c5e593cdf00601c"
@@ -5962,8 +5962,8 @@
             filePath = "Refloor/AppModelClassAndApi/ModelClass.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1042"
-            endingLineNumber = "1042"
+            startingLineNumber = "1045"
+            endingLineNumber = "1045"
             landmarkName = "SummeryTransitionDetails"
             landmarkType = "3">
          </BreakpointContent>
@@ -7114,10 +7114,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "738"
-            endingLineNumber = "738"
-            landmarkName = "validation()"
-            landmarkType = "7">
+            startingLineNumber = "766"
+            endingLineNumber = "766"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7130,10 +7130,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "745"
-            endingLineNumber = "745"
-            landmarkName = "validation()"
-            landmarkType = "7">
+            startingLineNumber = "773"
+            endingLineNumber = "773"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7146,10 +7146,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "882"
-            endingLineNumber = "882"
+            startingLineNumber = "910"
+            endingLineNumber = "910"
             landmarkName = "calculateExtraPrice(question:answerOfQuestion:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7162,10 +7162,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "890"
-            endingLineNumber = "890"
+            startingLineNumber = "918"
+            endingLineNumber = "918"
             landmarkName = "calculateExtraPrice(question:answerOfQuestion:)"
-            landmarkType = "9">
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
