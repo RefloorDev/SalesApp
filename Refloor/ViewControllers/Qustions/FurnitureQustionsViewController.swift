@@ -175,7 +175,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     {
                         if qustionAnswer[sender.tag].id == 9
                         {
-                            if value2 > 15
+                            if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
                                 print("reached max value")
                                 self.alert("Stair width value exceeded maximum limit", nil)
@@ -185,7 +185,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                         else if qustionAnswer[sender.tag].id == 1
                         {
-                            if value2 > 2
+                            if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
                                 print("reached max value")
                                 self.alert("Rip multiple layer value exceeded maximum limit", nil)
@@ -256,7 +256,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         {
             if qustionAnswer[sender.tag].id == 9
             {
-                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == 15
+                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
                 {
                     print("reached max value")
                     self.alert("Stair width value exceeded maximum limit", nil)
@@ -265,7 +265,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             }
             else if qustionAnswer[sender.tag].id == 1
             {
-                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == 2
+                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
                 {
                    print("reached max value")
                     self.alert("Rip multiple layer value exceeded maximum limit", nil)

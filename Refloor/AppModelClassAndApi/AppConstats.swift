@@ -192,6 +192,7 @@ struct AppURL {
      let autoLogout = BASE_URL + "check_auto_logout"
      let installationDates = BASE_URL + "get_available_installation_date"
     let installationDatesSubmit = BASE_URL + "submit_selected_installation_date"
+    let additionalComments = BASE_URL + "v1/update_additional_appointment_data"
 }
 
 

@@ -48,6 +48,8 @@ NSException *RLMException(realm::Exception const& exception);
 
 void RLMSetErrorOrThrow(NSError *error, NSError **outError);
 
+RLM_HIDDEN_BEGIN
+
 // returns if the object can be inserted as the given type
 BOOL RLMIsObjectValidForProperty(id obj, RLMProperty *prop);
 // throw an exception if the object is not a valid value for the property
@@ -214,6 +216,7 @@ realm::UUID RLMObjcToUUID(__unsafe_unretained id const value);
 
 // Given a bundle identifier, return the base directory on the disk within which Realm database and support files should
 // be stored.
+FOUNDATION_EXTERN RLM_VISIBLE
 NSString *RLMDefaultDirectoryForBundleIdentifier(NSString *bundleIdentifier);
 
 // Get a NSDateFormatter for ISO8601-formatted strings
@@ -287,11 +290,6 @@ static inline bool numberIsDouble(__unsafe_unretained NSNumber *const obj) {
            data_type == *@encode(unsigned long long);
 }
 
-// The actual condition here is iOS >= 10.0 (or equivalent), but doing runtime
-// checking eliminates a lot of the benefit of using os_unfair_lock (better perf
-// and less storage required), so only use os_unfair_lock when our minimum
-// deployment target is high enough
-#if __clang_major__ >= 14
 class RLMUnfairMutex {
 public:
     RLMUnfairMutex() = default;
@@ -313,6 +311,5 @@ private:
     RLMUnfairMutex(RLMUnfairMutex const&) = delete;
     RLMUnfairMutex& operator=(RLMUnfairMutex const&) = delete;
 };
-#else
-using RLMUnfairMutex = std::mutex;
-#endif
+
+RLM_HIDDEN_END

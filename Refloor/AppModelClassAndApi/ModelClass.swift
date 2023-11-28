@@ -1669,6 +1669,23 @@ class InstallerDatesSubmit: Mappable
     }
 }
 
+// additional comments api
+
+class AdditionalComments: Mappable
+{
+    var result:String?
+    var message:String?
+    var override_json_result:Int?
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        override_json_result <- map["override_json_result"]
+    }
+}
+
 class InstallerDates: Mappable
 {
     var result:String?

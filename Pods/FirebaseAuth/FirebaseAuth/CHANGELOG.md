@@ -1,6 +1,22 @@
+# 10.18.0
+- [fixed] Fix a bug where anonymous account can't be linked with email password credential. (#11911)
+
+# 10.16.0
+- [added] Added custom auth domain support in recaptcha v2 authentication flows. (#7553)
+
+# 10.14.0
+- [added] Added reCAPTCHA verification support in email authentication flows. (#11231)
+
+# 10.13.0
+- [fixed] Fixed a compilation error regression introduced in 10.12.0 building iOS App Extensions. (#11537)
+
+# 10.12.0
+- [added] Added support to Firebase Auth to enroll and sign in a user with
+  TOTP second factor. (#11261)
+
 # 10.8.0
 - [added] Added Firebase App Check support to Firebase Auth. (#11056)
-- [added] Added sign in with Apple token revocation support. (#9906)
+- [added] Added Sign in with Apple token revocation support. (#9906)
 
 # 10.7.0
 - [added] Added an API for developers to pass the fullName from the Sign in with Apple credential to Firebase. (#10068)

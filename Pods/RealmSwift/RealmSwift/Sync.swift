@@ -16,12 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////////
 
+import Combine
 import Realm
 import Realm.Private
-
-#if !(os(iOS) && (arch(i386) || arch(arm)))
-import Combine
-#endif
 
 /**
  An object representing an Atlas App Services user.
@@ -47,7 +44,6 @@ public extension User {
         }
     }
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
     /// Links the currently authenticated user with a new identity, where the identity is defined by the credential
     /// specified as a parameter. This will only be successful if this `User` is the currently authenticated
     /// with the client from which it was created. On success a new user will be returned with the new linked credentials.
@@ -57,9 +53,7 @@ public extension User {
     func linkUser(credentials: Credentials) -> Future<User, Error> {
         return future { self.linkUser(credentials: credentials, $0) }
     }
-#endif
 
-#if canImport(_Concurrency)
     /// Links the currently authenticated user with a new identity, where the identity is defined by the credential
     /// specified as a parameter. This will only be successful if this `User` is the currently authenticated
     /// with the client from which it was created. On success a new user will be returned with the new linked credentials.
@@ -70,7 +64,6 @@ public extension User {
     func linkUser(credentials: Credentials) async throws -> User {
         try await __linkUser(with: ObjectiveCSupport.convert(object: credentials))
     }
-#endif
 }
 
 /**
@@ -87,6 +80,57 @@ public typealias SyncManager = RLMSyncManager
   - see: `RLMSyncTimeoutOptions`
  */
 public typealias SyncTimeoutOptions = RLMSyncTimeoutOptions
+public extension SyncTimeoutOptions {
+    /**
+    Memberwise convenience initializer for SyncTimeoutOptions. All values are
+    in milliseconds, and use a default value if `nil`.
+
+    - Parameters:
+      - connectTimeout: The maximum time to allow for a connection to become
+        fully established. This includes the time to resolve the network
+        address, the TCP connect operation, the SSL handshake, and the
+        WebSocket handshake.
+      - connectionLingerTime: If session multiplexing is enabled, how long to
+        keep connections open while there are no active session.
+      - pingKeepalivePeriod: How long to wait between each ping message sent to
+        the server. The client periodically sends ping messages to the server
+        to check if the connection is still alive. Shorter periods make
+        connection state change notifications more responsive at the cost of
+        battery life (as the antenna will have to wake up more often).
+      - pongKeepaliveTimeout: How long to wait for the server to respond to a
+        ping message. Shorter values make connection state change notifications
+        more responsive, but increase the chance of spurious disconnections.
+      - fastReconnectLimit: When a client first connects to the server, it
+        downloads all data from the server before it begins to upload local
+        changes. This typically reduces the total amount of merging needed and
+        gets the local client into a useful state faster. If a disconnect and
+        reconnect happens within the time span of the fast reconnect limit,
+        this is skipped and the session behaves as if it were continuously
+        connected.
+     */
+    convenience init(connectTimeout: UInt? = nil,
+                     connectionLingerTime: UInt? = nil,
+                     pingKeepalivePeriod: UInt? = nil,
+                     pongKeepaliveTimeout: UInt? = nil,
+                     fastReconnectLimit: UInt? = nil) {
+        self.init()
+        if let connectTimeout {
+            self.connectTimeout = connectTimeout
+        }
+        if let connectionLingerTime {
+            self.connectionLingerTime = connectionLingerTime
+        }
+        if let pingKeepalivePeriod {
+            self.pingKeepalivePeriod = pingKeepalivePeriod
+        }
+        if let pongKeepaliveTimeout {
+            self.pongKeepaliveTimeout = pongKeepaliveTimeout
+        }
+        if let fastReconnectLimit {
+            self.fastReconnectLimit = fastReconnectLimit
+        }
+    }
+}
 
 /**
  A session object which represents communication between the client and server for a specific
@@ -608,7 +652,6 @@ public struct FunctionCallable: Sendable {
     fileprivate let name: String
     fileprivate let user: User
 
-    #if !(os(iOS) && (arch(i386) || arch(arm)))
     /// The implementation of @dynamicCallable that allows  for `Future<AnyBSON, Error>` callable return.
     ///
     ///     let cancellable = user.functions.sum([1, 2, 3, 4, 5])
@@ -631,7 +674,6 @@ public struct FunctionCallable: Sendable {
             }
         }
     }
-    #endif
 }
 
 public extension User {
@@ -900,7 +942,6 @@ extension Realm {
     }
 }
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 public extension User {
     /// Refresh a user's custom data. This will, in effect, refresh the user's auth session.
@@ -994,7 +1035,6 @@ extension User: ObservableObject {
         return UserPublisher(self).receive(on: DispatchQueue.main).eraseToAnyPublisher()
     }
 }
-#endif
 
 public extension User {
     // NEXT-MAJOR: This function returns the incorrect type. It should be Document
@@ -1013,7 +1053,6 @@ public extension User {
     }
 }
 
-#if canImport(_Concurrency)
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 extension FunctionCallable {
     /// The implementation of @dynamicMemberLookup that allows  for `async await` callable return.
@@ -1031,7 +1070,6 @@ extension FunctionCallable {
         throw Realm.Error.callFailed
     }
 }
-#endif // swift(>=5.6)
 
 extension User {
     /**

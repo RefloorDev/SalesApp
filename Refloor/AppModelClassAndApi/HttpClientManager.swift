@@ -2314,6 +2314,44 @@ class HttpClientManager: NSObject {
     }
     
     
+    // func additional comments api
+    
+    func additionalCommentsAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().additionalComments
+            self.showhideHUD(viewtype: .SHOW, title: "Creating Sale Order")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<AdditionalComments>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                        AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    
     func installerDatesAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?, _ installationDates:[AvailableDatesValues]?, _ saleOrderId: Int? ) -> ()){
         
         if self.connectedToNetwork() {
