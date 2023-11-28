@@ -1136,14 +1136,9 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                         self.deleteAnyAppointmentLogsTable(appointmentId: appointmentId)
                         
                         self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: customerAndRoomData as NSDictionary, imageName: "")
-                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
-                            self.isCardVerified = true
-                            iscustomerAndRoomSuccess = true
-                            self.whetheToProceedToInstaller(customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork, appointmentId: appointmentId)
-                        }
                         
-                        
-                        self.alert(message ?? "", [yes])
+                        self.additionalComments(message: message!, customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: true, isNetwork: isNetwork)
+
                         
                     }
                     else if success == "Failed"
@@ -1214,6 +1209,79 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             }
         }
     }
+    
+    func additionalComments(message:String,customerAndRoomData:[String:Any],iscustomerAndRoomSuccess:Bool,isNetwork:Bool)
+    {
+        var iscustomerAndRoomSuccess = iscustomerAndRoomSuccess
+        var parametersAdditionalComments:[String:Any] = [:]
+        let appoint_id = AppointmentData().appointment_id ?? 0
+        let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
+        parametersAdditionalComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison]
+        
+        HttpClientManager.SharedHM.additionalCommentsAPi(parameter: parametersAdditionalComments) { success, usermessage in
+            if(success ?? "") == "Success"
+            {
+                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    self.isCardVerified = true
+                    iscustomerAndRoomSuccess = true
+                    self.whetheToProceedToInstaller(customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork, appointmentId: appoint_id)
+                }
+                
+                
+                self.alert(message ?? "", [yes])
+            }
+            
+            else if success == "Failed"
+            {
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    
+                    self.additionalComments(message: message, customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork)
+                    
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+            }
+            else if success == "false"
+            {
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    
+                    self.additionalComments(message: message, customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork)
+                    
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+            }
+            
+            else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+            {
+                
+                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    
+                    self.fourceLogOutbuttonAction()
+                }
+                
+                self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                
+            }
+            else
+            {
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    
+                    self.additionalComments(message: message, customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork)
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert( AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            }
+        }
+            
+        
+    }
+    
+    
+    
     func whetheToProceedToInstaller(customerAndRoomData:[String:Any],iscustomerAndRoomSuccess:Bool,isNetwork:Bool,appointmentId:Int)
     {
         

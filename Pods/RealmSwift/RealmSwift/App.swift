@@ -17,20 +17,68 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import AuthenticationServices
+import Combine
 import Foundation
 import Realm
 import Realm.Private
-
-#if !(os(iOS) && (arch(i386) || arch(arm)))
-import Combine
-#endif
 
 /**
 An object representing the Realm App configuration
 
 - see: `RLMAppConfiguration`
+
+- note: `AppConfiguration` options cannot be modified once the `App` using it
+         is created. App's configuration values are cached when the App is created so any modifications after it
+         will not have any effect.
 */
 public typealias AppConfiguration = RLMAppConfiguration
+public extension AppConfiguration {
+    /// :nodoc:
+    @available(*, deprecated, message: "localAppName and localAppVersion are not used for anything and should not be supplied")
+    convenience init(baseURL: String? = nil, transport: RLMNetworkTransport? = nil,
+                     localAppName: String?, localAppVersion: String?,
+                     defaultRequestTimeoutMS: UInt? = nil, enableSessionMultiplexing: Bool? = nil,
+                     syncTimeouts: SyncTimeoutOptions? = nil) {
+        self.init(baseURL: baseURL, transport: transport, localAppName: localAppName, localAppVersion: localAppVersion)
+        if let defaultRequestTimeoutMS {
+            self.defaultRequestTimeoutMS = defaultRequestTimeoutMS
+        }
+        if let enableSessionMultiplexing {
+            self.enableSessionMultiplexing = enableSessionMultiplexing
+        }
+        if let syncTimeouts {
+            self.syncTimeouts = syncTimeouts
+        }
+    }
+
+    /**
+     Memberwise convenience initializer
+
+     All fields have sensible defaults if not set and typically do not need to be customized.
+
+     - Parameters:
+       - baseURL: A custom Atlas App Services URL for when using a non-standard deployment
+       - transport: A network transport used for calls to the server.
+       - defaultRequestTimeoutMS: The default timeout for non-sync HTTP requests made to the server.
+       - enableSessionMultiplexing: Use a single network connection per sync user rather than one per sync Realm.
+       - syncTimeouts: Timeout options for sync connections.
+     */
+    @_disfavoredOverload // this is ambiguous with the base init if nil is explicitly passed
+    convenience init(baseURL: String? = nil, transport: RLMNetworkTransport? = nil,
+                     defaultRequestTimeoutMS: UInt? = nil, enableSessionMultiplexing: Bool? = nil,
+                     syncTimeouts: SyncTimeoutOptions? = nil) {
+        self.init(baseURL: baseURL, transport: transport)
+        if let defaultRequestTimeoutMS {
+            self.defaultRequestTimeoutMS = defaultRequestTimeoutMS
+        }
+        if let enableSessionMultiplexing {
+            self.enableSessionMultiplexing = enableSessionMultiplexing
+        }
+        if let syncTimeouts {
+            self.syncTimeouts = syncTimeouts
+        }
+    }
+}
 
 /**
 An object representing a client which performs network calls on
@@ -87,7 +135,6 @@ extension EmailPasswordAuth {
         __callResetPasswordFunction(email, password: password, args: bson as! [RLMBSON], completion: completion)
     }
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
     /**
      Resets the password of an email identity using the
      password reset function set up in the application.
@@ -103,9 +150,7 @@ extension EmailPasswordAuth {
             self.callResetPasswordFunction(email: email, password: password, args: args, $0)
         }
     }
-#endif
 
- #if canImport(_Concurrency)
     /// Resets the password of an email identity using the
     /// password reset function set up in the application.
     /// - Parameters:
@@ -119,7 +164,6 @@ extension EmailPasswordAuth {
         let bson = ObjectiveCSupport.convert(object: .array(args))
         return try await __callResetPasswordFunction(email, password: password, args: bson as! [RLMBSON])
     }
-#endif
 }
 
 /**
@@ -193,7 +237,6 @@ public extension App {
         }
     }
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
     /// Login to a user for the Realm app.
     /// @param credentials The credentials identifying the user.
     /// @returns A publisher that eventually return `User` or `Error`.
@@ -201,9 +244,7 @@ public extension App {
     func login(credentials: Credentials) -> Future<User, Error> {
         return future { self.login(credentials: credentials, $0) }
     }
-#endif
 
-#if canImport(_Concurrency)
     /// Login to a user for the Realm app.
     /// @param credentials The credentials identifying the user.
     /// @returns A publisher that eventually return `User` or `Error`.
@@ -211,7 +252,6 @@ public extension App {
     func login(credentials: Credentials) async throws -> User {
         try await __login(withCredential: ObjectiveCSupport.convert(object: credentials))
     }
-#endif
 }
 
 /// Use this delegate to be provided a callback once authentication has succeed or failed
@@ -242,7 +282,6 @@ extension App {
     }
 }
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
 /// :nodoc:
 @available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 6.0, *)
 @frozen public struct AppSubscription: Subscription {
@@ -278,7 +317,6 @@ public struct AppPublisher: Publisher, @unchecked Sendable { // DispatchQueue
 
     private let app: App
 
-#if swift(>=5.7)
     private let scheduler: any Scheduler
 
     internal init<S: Scheduler>(_ app: App, scheduler: S) {
@@ -296,25 +334,6 @@ public struct AppPublisher: Publisher, @unchecked Sendable { // DispatchQueue
 
         subscriber.receive(subscription: AppSubscription(token: token))
     }
-#else
-    private let scheduler: (@escaping () -> Void) -> Void
-
-    internal init<S: Scheduler>(_ app: App, scheduler: S) {
-        self.app = app
-        self.scheduler = scheduler.schedule
-    }
-
-    /// :nodoc:
-    public func receive<S: Sendable>(subscriber: S) where S: Subscriber, S.Failure == Never, Output == S.Input {
-        let token = app.subscribe { app in
-            self.scheduler {
-                _ = subscriber.receive(app)
-            }
-        }
-
-        subscriber.receive(subscription: AppSubscription(token: token))
-    }
-#endif
 
     /// :nodoc:
     public func receive<S: Scheduler>(on scheduler: S) -> Self {
@@ -508,7 +527,6 @@ public extension PushClient {
         }
     }
 }
-#endif // canImport(Combine)
 
 public extension APIKeyAuth {
     /**

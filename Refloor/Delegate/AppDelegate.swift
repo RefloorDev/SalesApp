@@ -25,12 +25,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     public static var appoinmentslData:AppoinmentDataValue!
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        for family in UIFont.familyNames {
-                        print("family:", family)
-                        for font in UIFont.fontNames(forFamilyName: family) {
-                            print("font:", font)
-                        }
-                    }
+//        for family in UIFont.familyNames {
+//                        print("family:", family)
+//                        for font in UIFont.fontNames(forFamilyName: family) {
+//                            print("font:", font)
+//                        }
+//                    }
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
