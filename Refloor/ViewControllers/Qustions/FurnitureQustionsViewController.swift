@@ -617,7 +617,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
 
                         //Q4_Change Primer Type Mandatory dropdown
 
-                        self.alert("You Must Select A Primer Type", nil)
+                        self.alert("You must select a primer type", nil)
 
                     }
 

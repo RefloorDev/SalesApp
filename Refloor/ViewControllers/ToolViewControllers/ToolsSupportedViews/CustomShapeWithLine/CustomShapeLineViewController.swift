@@ -247,7 +247,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         if(!self.drowingView.isConfirmed) {
             self.alert("Please press Done to complete the Room Drawing", nil)
         } else if selected_View.isHidden == true {     // Q4_Change Add Openings Popup
-            self.alert("Please Select Add Openings", nil)
+            self.alert("Please select add openings", nil)
         } else {
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
