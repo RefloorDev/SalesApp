@@ -596,6 +596,7 @@ class QuestionsMeasurementData: Mappable
     var amount: Double?
     var setDefaultAnswer : Bool?
     var applicableCurrentSurface : String?
+    var calculate_order_wise:Bool?
     var aaplicableRoom : [ApplicableRoom]?
     var quote_label :[QuoteLabelData]?
     var answerOFQustion:AnswerOFQustion?
@@ -625,6 +626,7 @@ class QuestionsMeasurementData: Mappable
         self.default_answer = masterQuestions.default_answer
         self.amount = masterQuestions.amount
         self.setDefaultAnswer = masterQuestions.setDefaultAnswer
+        self.calculate_order_wise = masterQuestions.calculate_order_wise
         self.applicableCurrentSurface = masterQuestions.applicableCurrentSurface
         
         var applicableRoomdetails :[ApplicableRoom] = []
@@ -663,6 +665,7 @@ class QuestionsMeasurementData: Mappable
         amount <- map["amount"]
         quote_label <- map["quote_label"]
         aaplicableRoom <- map["applicable_rooms"]
+        calculate_order_wise <- map["calculate_order_wise"]
         setDefaultAnswer <- map["set_default_answer"]
         applicableCurrentSurface <- map["applicable_current_surface"]
         

@@ -5018,8 +5018,20 @@
                                 <rect key="frame" x="0.0" y="120" width="1366" height="904"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="KzL-8a-HJx">
-                                        <rect key="frame" x="50" y="75" width="656" height="0.0"/>
+                                        <rect key="frame" x="50" y="56.5" width="656" height="37"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="37" id="Abh-B9-zIR"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="30"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Vapor Barrier - 3" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="tHi-aE-eS9">
+                                        <rect key="frame" x="50" y="93.5" width="656" height="37"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="37" id="eRv-6m-UmA"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -5402,9 +5414,12 @@
                                     <constraint firstItem="XUf-SH-VDQ" firstAttribute="top" secondItem="yXP-j4-z0Q" secondAttribute="top" constant="40" id="XkK-ie-rW1"/>
                                     <constraint firstItem="ncb-QD-zVg" firstAttribute="leading" secondItem="Ug4-1F-t9R" secondAttribute="trailing" constant="20" id="dHN-jI-vv2"/>
                                     <constraint firstItem="gJl-R1-9FL" firstAttribute="leading" secondItem="yXP-j4-z0Q" secondAttribute="leading" constant="50" id="dQJ-d7-aGm"/>
+                                    <constraint firstItem="tHi-aE-eS9" firstAttribute="trailing" secondItem="KzL-8a-HJx" secondAttribute="trailing" id="dyc-aM-n45"/>
                                     <constraint firstAttribute="trailing" secondItem="0TX-MS-yww" secondAttribute="trailing" constant="50" id="eIB-H9-C9r"/>
                                     <constraint firstItem="KzL-8a-HJx" firstAttribute="leading" secondItem="yXP-j4-z0Q" secondAttribute="leading" constant="50" id="eKt-dD-6xS"/>
                                     <constraint firstAttribute="trailing" secondItem="XUf-SH-VDQ" secondAttribute="trailing" constant="50" id="pKX-gW-Wje"/>
+                                    <constraint firstItem="tHi-aE-eS9" firstAttribute="top" secondItem="KzL-8a-HJx" secondAttribute="bottom" id="sM7-rP-ZRh"/>
+                                    <constraint firstItem="tHi-aE-eS9" firstAttribute="leading" secondItem="KzL-8a-HJx" secondAttribute="leading" id="wRW-wA-ZaO"/>
                                     <constraint firstItem="ncb-QD-zVg" firstAttribute="centerY" secondItem="XUf-SH-VDQ" secondAttribute="centerY" id="x98-JT-cug"/>
                                     <constraint firstItem="gJl-R1-9FL" firstAttribute="top" secondItem="0TX-MS-yww" secondAttribute="bottom" constant="15" id="z9T-Tl-5Qd"/>
                                 </constraints>
@@ -5425,6 +5440,7 @@
                         <outlet property="nextButton" destination="XUf-SH-VDQ" id="h4C-oY-4TZ"/>
                         <outlet property="swipeLeftLbl" destination="0TX-MS-yww" id="hay-dI-9Pb"/>
                         <outlet property="tableView" destination="gJl-R1-9FL" id="9r0-LM-t8Y"/>
+                        <outlet property="vapourBarrierLbl" destination="tHi-aE-eS9" id="yOY-6s-Jsp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tmx-aT-RxW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -29832,10 +29848,10 @@ Cgo
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WSp-dp-lpW">
-                                <rect key="frame" x="100" y="121" width="823" height="802"/>
+                                <rect key="frame" x="100" y="121" width="1166" height="802"/>
                                 <subviews>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RKh-9I-eaY" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="50" y="106.5" width="723" height="595.5"/>
+                                        <rect key="frame" x="50" y="106.5" width="1066" height="595.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -29847,19 +29863,19 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Applicant Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jUC-kd-ml0">
-                                        <rect key="frame" x="295.5" y="20" width="232.5" height="36"/>
+                                        <rect key="frame" x="467" y="20" width="232.5" height="36"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="26"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Please make your signature as large as possible)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EW3-9B-agM">
-                                        <rect key="frame" x="171.5" y="56" width="480" height="30.5"/>
+                                        <rect key="frame" x="343" y="56" width="480" height="30.5"/>
                                         <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZj-bt-IKt" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="61" y="117.5" width="701" height="573.5"/>
+                                        <rect key="frame" x="61" y="117.5" width="1044" height="573.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -29871,10 +29887,10 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="kZ4-LT-Jf7">
-                                        <rect key="frame" x="50" y="722" width="723" height="60"/>
+                                        <rect key="frame" x="50" y="722" width="1066" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1e-NG-hA0">
-                                                <rect key="frame" x="0.0" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="339.5" height="60"/>
                                                 <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="2BF-iG-Kkd"/>
@@ -29889,7 +29905,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3oc-Iw-qJS">
-                                                <rect key="frame" x="249" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="363.5" y="0.0" width="339" height="60"/>
                                                 <color key="backgroundColor" red="0.65536212920000003" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="6au-5z-6tY"/>
@@ -29904,7 +29920,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nw1-YA-hAi">
-                                                <rect key="frame" x="498" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="726.5" y="0.0" width="339.5" height="60"/>
                                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="jRN-8v-EjI"/>
