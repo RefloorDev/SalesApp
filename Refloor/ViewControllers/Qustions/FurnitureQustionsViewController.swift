@@ -128,6 +128,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["applicableTo"] = question.applicableTo
                         dict["applicableCurrentSurface"] = question.applicableCurrentSurface
                         dict["setDefaultAnswer"] = question.setDefaultAnswer
+                        dict["calculate_order_wise"] = question.calculate_order_wise
                         dict["applicableRooms"] = List<rf_AnswerapplicableRooms>()
                         dict["rf_AnswerOFQustion"] = List<rf_AnswerOFQustion>()
                         realm.create(rf_master_question.self, value: dict, update: .all)
@@ -581,6 +582,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             {
                                 vapourBarrierValue = Int(vapourValue.0) + 1
                             }
+                            UserDefaults.standard.set(qustionAnswer[setDefaultAnswerTrueIndexInt].amount, forKey: "VaporBarrierAmount")
+                            //qustionAnswer[setDefaultAnswerTrueIndexInt].amount
                             qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
                             //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
                             //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
@@ -992,7 +995,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             var dict:[String:Any] = [:]
                             let questionUniqueIdentifier = question.questionIdUnique
                             let questionId = question.id
-                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName,"calculate_order_wise":question.calculate_order_wise]
                             realm.create(rf_master_question.self, value: dict, update: .all)
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             

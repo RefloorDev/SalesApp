@@ -4260,6 +4260,7 @@ extension UIViewController:OrderStatusViewDelegate
                     
                     let room_id = question.room_id
                     let question_id = question.id
+                    let calculate_order_wise = question.calculate_order_wise
                     if question.room_name != ""
                     {
                         room_name = question.room_name!
@@ -4282,6 +4283,14 @@ extension UIViewController:OrderStatusViewDelegate
                     questionAnswerDictForSingleRoom["question_id"] = question_id
                     questionAnswerDictForSingleRoom["answer"] = answerArray
                     questionAnswerDictForSingleRoom["room_name"] = room_name
+                    if calculate_order_wise
+                    {
+                        questionAnswerDictForSingleRoom["calculate_order_wise"] = 1
+                    }
+                    else
+                    {
+                        questionAnswerDictForSingleRoom["calculate_order_wise"] = 0
+                    }
                     questionAnswerArray.append(questionAnswerDictForSingleRoom)
                 }
             })
