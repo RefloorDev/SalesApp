@@ -87,7 +87,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     // Q4_Change Textfield_Validation
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-           let restrictedCharacters = CharacterSet(charactersIn: "&$+/,;=?@#")
+           let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
            
            // Iterate over the Unicode.Scalar values in the replacement text
            for scalar in text.unicodeScalars {

@@ -998,7 +998,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             DispatchQueue.main.async
             {
-                self.alert("Are you sure you Want to select \(self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? "" )?", [yes, no])
+                self.alert("Are you sure you want to select the \(self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? "" ) package?", [yes, no])
 
             }
         }
