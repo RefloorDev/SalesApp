@@ -14,8 +14,8 @@
             filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1221"
-            endingLineNumber = "1221"
+            startingLineNumber = "1222"
+            endingLineNumber = "1222"
             landmarkName = "additionalComments(message:customerAndRoomData:iscustomerAndRoomSuccess:isNetwork:)"
             landmarkType = "7">
             <Locations>
@@ -122,8 +122,8 @@
             filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1225"
-            endingLineNumber = "1225"
+            startingLineNumber = "1226"
+            endingLineNumber = "1226"
             landmarkName = "additionalComments(message:customerAndRoomData:iscustomerAndRoomSuccess:isNetwork:)"
             landmarkType = "7">
             <Locations>
