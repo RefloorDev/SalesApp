@@ -428,7 +428,11 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             DispatchQueue.main.async
             {
-                self.alert("Sure You Want To Begin With" + " " + "\(self.appoinmentsList![sender.tag].appointment_datetime ?? "")", [yes,no])
+                // self.alert("Sure you want to begin with" + " " + "\(self.appoinmentsList![sender.tag].appointment_datetime ?? "")", [yes,no])
+                if let convertedDateString = self.convertDateString(self.appoinmentsList![sender.tag].appointment_datetime ?? "") {
+                //   print("convertedDateString", convertedDateString)
+                  self.alert("Are you sure you want to proceed with this" + " " + "\(convertedDateString) appointment?", [yes,no])
+              }
             }
         } else {
             self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
@@ -443,6 +447,23 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 // let details = InstallerShedulerViewController.initialization()!
                 self.navigationController?.pushViewController(details, animated: true)
             }
+        }
+    }
+
+    func convertDateString(_ inputDateString: String) -> String? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "dd MMM h:mm a"
+        
+        if let date = inputFormatter.date(from: inputDateString) {
+            let outputFormatter = DateFormatter()
+            
+            // Include last two digits of the current year in the output format
+            let currentYear = Calendar.current.component(.year, from: Date()) % 100
+            outputFormatter.dateFormat = "MM/dd/\(String(format: "%02d", currentYear)) h:mma"
+            
+            return outputFormatter.string(from: date).lowercased()
+        } else {
+            return nil
         }
     }
     
