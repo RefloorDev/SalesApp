@@ -1115,7 +1115,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             {
                 iscustomerAndRoomSuccess = true
                 //whetheToProceedToInstaller(customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork, appointmentId: appointmentId)
-                self.additionalComments(message: "Created Sale Order Successfully", customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork)
+                self.additionalComments(message: "Order details updated successfully", customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: iscustomerAndRoomSuccess, isNetwork: isNetwork)
             }
             else
             {

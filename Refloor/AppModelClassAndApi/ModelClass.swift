@@ -1672,6 +1672,22 @@ class InstallerDatesSubmit: Mappable
     }
 }
 
+// versatile api
+
+class VersatileModelClass: Mappable
+{
+    var type:String?
+    var url:String?
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        type <- map["type"]
+        url <- map["url"]
+    }
+}
+
 // additional comments api
 
 class AdditionalComments: Mappable

@@ -566,7 +566,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 if tag == 0
                 {
  
-                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrierBool"}
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
@@ -584,13 +584,13 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             }
                             UserDefaults.standard.set(qustionAnswer[setDefaultAnswerTrueIndexInt].amount, forKey: "VaporBarrierAmount")
                             //qustionAnswer[setDefaultAnswerTrueIndexInt].amount
-                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(qustionAnswer[setDefaultAnswerTrueIndexInt].quote_label![1])
                             //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
                             //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                         }
                         else
                         {
-                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(0)
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(qustionAnswer[setDefaultAnswerTrueIndexInt].quote_label![0])
                             //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
                             //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                         }

@@ -6855,6 +6855,21 @@
             </objects>
             <point key="canvasLocation" x="13302.5390625" y="512.5"/>
         </scene>
+        <!--Versatile View Controller-->
+        <scene sceneID="4Cp-Tv-t8M">
+            <objects>
+                <viewController storyboardIdentifier="VersatileViewController" id="eCP-gM-t50" customClass="VersatileViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="FUx-sC-PLk">
+                        <rect key="frame" x="0.0" y="0.0" width="1366" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="4dy-VD-wrD"/>
+                        <color key="backgroundColor" red="0.14509803921568626" green="0.17254901960784313" blue="0.20784313725490194" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HlF-ep-YE4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="13247" y="1218"/>
+        </scene>
         <!--Down Payment View Controller-->
         <scene sceneID="5iE-JW-W40">
             <objects>
@@ -7471,7 +7486,7 @@ We do not skip this step with any customer.</string>
                             </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="JEm-0j-ciS"/>
-                        <color key="backgroundColor" red="0.1454846561" green="0.17064341899999999" blue="0.2079639435" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.14509803921568626" green="0.17254901960784313" blue="0.20784313725490194" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="JEm-0j-ciS" firstAttribute="trailing" secondItem="X1a-Gs-aC9" secondAttribute="trailing" id="1QM-ub-jEb"/>
                             <constraint firstItem="X1a-Gs-aC9" firstAttribute="top" secondItem="ff5-hq-ocw" secondAttribute="top" constant="118" id="RQj-ok-HUS"/>
@@ -29848,10 +29863,10 @@ Cgo
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WSp-dp-lpW">
-                                <rect key="frame" x="100" y="121" width="1166" height="802"/>
+                                <rect key="frame" x="100" y="121" width="823" height="802"/>
                                 <subviews>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RKh-9I-eaY" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="50" y="106.5" width="1066" height="595.5"/>
+                                        <rect key="frame" x="50" y="106.5" width="723" height="595.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -29863,19 +29878,19 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Applicant Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jUC-kd-ml0">
-                                        <rect key="frame" x="467" y="20" width="232.5" height="36"/>
+                                        <rect key="frame" x="295.5" y="20" width="232.5" height="36"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="26"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Please make your signature as large as possible)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EW3-9B-agM">
-                                        <rect key="frame" x="343" y="56" width="480" height="30.5"/>
+                                        <rect key="frame" x="171.5" y="56" width="480" height="30.5"/>
                                         <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZj-bt-IKt" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="61" y="117.5" width="1044" height="573.5"/>
+                                        <rect key="frame" x="61" y="117.5" width="701" height="573.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -29887,10 +29902,10 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="kZ4-LT-Jf7">
-                                        <rect key="frame" x="50" y="722" width="1066" height="60"/>
+                                        <rect key="frame" x="50" y="722" width="723" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1e-NG-hA0">
-                                                <rect key="frame" x="0.0" y="0.0" width="339.5" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="225" height="60"/>
                                                 <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="2BF-iG-Kkd"/>
@@ -29905,7 +29920,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3oc-Iw-qJS">
-                                                <rect key="frame" x="363.5" y="0.0" width="339" height="60"/>
+                                                <rect key="frame" x="249" y="0.0" width="225" height="60"/>
                                                 <color key="backgroundColor" red="0.65536212920000003" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="6au-5z-6tY"/>
@@ -29920,7 +29935,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nw1-YA-hAi">
-                                                <rect key="frame" x="726.5" y="0.0" width="339.5" height="60"/>
+                                                <rect key="frame" x="498" y="0.0" width="225" height="60"/>
                                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="jRN-8v-EjI"/>
