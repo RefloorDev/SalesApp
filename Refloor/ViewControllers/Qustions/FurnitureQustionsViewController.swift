@@ -593,14 +593,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         for question in self.qustionAnswer
         {
              let TrueSelfLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftTrueSelfLeveling" }) ?? 0
-              print("Index of the last element with code 'TrueSelfLeveling' is: \(TrueSelfLeveling)")
-            
              let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
-              print("Index of the last element with code 'BuildUpLeveling' is: \(BuildUpLeveling)")
-            
              let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
-              print("Index of the last element with code 'PrimerType' is: \(PrimerType)")
-            
+            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
+           
             if ((question.mandatory_answer == true) &&  !(((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.multySelection?.count ?? 0) > 0)))
@@ -608,44 +604,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
                 let questionNumber = value + 1
                 return "Please answer question number \(questionNumber)"
-            } else if let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) {
+            } else  if (((self.qustionAnswer[TrueSelfLeveling].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[BuildUpLeveling].answerOFQustion?.numberVaue ?? 0) > 0)) &&
+                        ((self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection?.value) ?? "") == ""  {
                 
-                if !((self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection) != nil) {
-
-                    if ((self.qustionAnswer[TrueSelfLeveling].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[BuildUpLeveling].answerOFQustion?.numberVaue ?? 0) > 0) {
-
-                        //Q4_Change Primer Type Mandatory dropdown
-
-                        self.alert("You must select a primer type", nil)
-
-                    }
-
-                }
+                //Q4_Change Primer Type Mandatory dropdown
+                return "You must select a primer type"
 
             }
-            
-            
-            
-            
-            
-//            if !((self.qustionAnswer[21].answerOFQustion?.singleSelection) != nil) {
-//                 if ((self.qustionAnswer[19].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[20].answerOFQustion?.numberVaue ?? 0) > 0) {
-//                    //Q4_Change Primer Type Mandatory dropdown
-//                    self.alert("You Must Select A Primer Type", nil)
-//                }
-//            }
-            
-            //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {
-            //
-            //                                         return "Please answer the question \(value)"
-            //
-            //                                      }
-            
+
             value += 1
-            //                    if(value == 3)
-            //                    {
-            //                        break
-            //                    }
         }
         
         return ""

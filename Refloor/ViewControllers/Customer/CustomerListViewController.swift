@@ -389,19 +389,50 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     }
     
     @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
-        //arb
-//        let appointmentId = AppointmentData().appointment_id ?? 0
-//        let currentClassName = String(describing: type(of: self))
-//        let classDisplayName = "Sales Details"
-//        self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+    let appointmentDateTimeString = self.appoinmentsList?[sender.tag].appointment_datetime
+        let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)
+        print("appointmentDateTime", appointmentDateTime)
+
         
-        //updating master appointments results database with value false for not demoed
+        let currentDate = Date()
+        let currentTimeFormatted = getCurrentTimeFormatted()
+        print("Current Time: \(currentTimeFormatted)")
         
+        let dateString = currentTimeFormatted
+//        let dateString = "01 Dec 06:59 AM"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM hh:mm a"
+
+        let date = dateFormatter.date(from: dateString)
+                    
+        let time_difference = appointmentDateTime!.timeIntervalSince(date!)
         
-        // Q4_Change Confirmation Popup with Appointment date and time
-        let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
+        if (appointmentDateTime! < date!) || (time_difference > 2 * 60 * 60) {
+            //  print("appointmentDateTime", appointmentDateTime, "date", date)
+            
+            // Q4_Change Confirmation Popup with Appointment date and time
+            let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
+                self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
+                //
+                if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
+                    //            //print(getTodayWeekDay())
+                    let details = CustomerDetailsOneViewController.initialization()!
+                    details.appoinmentslData = self.appoinmentsList![sender.tag]
+                    _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
+                    
+                    UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
+                    // let details = InstallerShedulerViewController.initialization()!
+                    self.navigationController?.pushViewController(details, animated: true)
+                }
+            }
+            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            DispatchQueue.main.async
+            {
+                self.alert("Sure You Want To Begin With" + " " + "\(self.appoinmentsList![sender.tag].appointment_datetime ?? "")", [yes,no])
+            }
+        } else {
             self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
-//
+            //
             if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
                 //            //print(getTodayWeekDay())
                 let details = CustomerDetailsOneViewController.initialization()!
@@ -412,12 +443,25 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 // let details = InstallerShedulerViewController.initialization()!
                 self.navigationController?.pushViewController(details, animated: true)
             }
-      }
-        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        DispatchQueue.main.async
-        {
-            self.alert("Sure You Want To Begin With" + " " + "\(self.appoinmentsList![sender.tag].appointment_datetime ?? "")", [yes,no])
         }
+    }
+    
+    
+    func getCurrentTimeFormatted() -> String {
+        let currentDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM hh:mm a"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to ensure correct parsing
+
+        return dateFormatter.string(from: currentDate)
+    }
+    
+    func convertStringToDate(_ dateString: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd MMM hh:mm a"
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // Set the locale to ensure correct parsing
+
+        return dateFormatter.date(from: dateString)
     }
     
    
