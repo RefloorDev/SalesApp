@@ -73,6 +73,9 @@ class MasterData : Object, Mappable {
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
+    @objc dynamic var versatileURL:String?
+    @objc dynamic var versatileApiKey:String?
+    @objc dynamic var versatileEntityKey:String?
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -99,6 +102,9 @@ class MasterData : Object, Mappable {
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
+        versatileURL <- map ["versatile_url"]
+        versatileApiKey <- map ["versatile_api_key"]
+        versatileEntityKey <- map ["versatile_entity_key"]
         ruleList <- (map["payment_restriction_rules"], ListTransform<rf_ruleList_results>())
         contract_document_templates <- (map["contract_document_templates"], ListTransform<rf_contract_document_templates_results>())
         appointment_result_reasons <- (map["appointment_result_reasons"], ListTransform<rf_appointment_result_reasons_results>())

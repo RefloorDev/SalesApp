@@ -410,7 +410,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     {
                         
                         
-                        if (roomsAndQuestion.name == "VaporBarrier" && roomsAndQuestion.answers![0].answer != "")
+                        if (roomsAndQuestion.name == "VaporBarrierBool" && roomsAndQuestion.answers![0].answer == "Yes")
                         {
                             vaporArea += summery.adjusted_area!
                         }

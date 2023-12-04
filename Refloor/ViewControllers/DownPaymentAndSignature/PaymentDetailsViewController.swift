@@ -246,7 +246,7 @@ class PaymentDetailsViewController: UIViewController{
         self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
         //
         //test
-       // let dict = self.getPaymentDetailsDataFromAppointmentDetail()
+        // let dict = self.getPaymentDetailsDataFromAppointmentDetail()
         //print(dict)
         //
         
@@ -256,45 +256,70 @@ class PaymentDetailsViewController: UIViewController{
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "PaymentSummary"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+//        if HttpClientManager.SharedHM.connectedToNetwork()
+//        {
+//            let customer = AppDelegate.appoinmentslData!
+//            let primaryApplicantAddress:[String:Any] = ["addressLine1":customer.street!,"addressLine2":customer.street2!,"city":customer.city!,"state":customer.state!,"postalCode":customer.zip!]
+//            let jointApplicantAddress:[String:Any] = ["addressLine1":customer.co_applicant_address ?? "","addressLine2":customer.co_applicant_city ?? "","city":customer.co_applicant_city ?? "","state":customer.co_applicant_state  ?? "","postalCode":customer.co_applicant_zip ?? ""]
+//            let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "","dateOfBirth":"","email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":customer.mobile ?? "","workPhone":"","address":primaryApplicantAddress]
+//            let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "","dateOfBirth": "","email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":customer.co_applicant_secondary_phone ?? "","workPhone":"","address":jointApplicantAddress]
+//
+//            let prefillDictionary:[String:Any] = ["expectedPurchaseAmount":65000,"primaryApplicant":primaryApplicant,"jointApplicant":jointApplicant,"salesAssociate":"RCB","salesAssociateFirstName":"Jimmy","salesAssociateLastName":"Smith","salesAssociateEmail":"jsmith@fakemail.net"]
+//            let parameter:[String:Any] = ["prefill":prefillDictionary,"mode":"full","prequalificationId":"d0a88bb7-4fbd-43c6-9839-340e8c5308ff","applicationId":"861625fa-b505-4924-a933-e5dbf91efa20","returnUrl":"https://versatilecredit.com/landingpage"]
+//
+//            HttpClientManager.SharedHM.versatileAPi(parameter: parameter) { success,url in
+//                if success == "redirect"
+//                {
+//                    let versatile = VersatileViewController.initialization()!
+//                    self.navigationController?.pushViewController(versatile, animated: true)
+//                }
+//            }
+//
+//
+//        }
+//        else
+//        {
+        
         //
-        if(self.financePayment != 0)
-        {
-            let applicant = ApplicantFormViewControllerForm.initialization()!
-            applicant.downOrFinal = self.downOrFinal
-            applicant.totalAmount = self.totalAmount
-            applicant.paymentPlan = self.paymentPlan
-            applicant.paymentPlanValue = self.paymentPlanValue
-            applicant.paymentOptionDataValue = self.paymentOptionDataValue
-            applicant.drowingImageID = self.drowingImageID
-            applicant.area = self.area
-            applicant.downPaymentValue = self.downPaymentValue
-            applicant.finalpayment = self.finalpayment
-            applicant.financePayment = self.financePayment
-            applicant.selectedPaymentMethord = self.selectedPaymentMethord
-            applicant.downpayment = self.downpayment
-            self.navigationController?.pushViewController(applicant, animated: true)
-        }
-        else
-        {
-            let signature = SignatureSubmitViewController.initialization()!
-            signature.downOrFinal = self.downOrFinal
-            signature.totalAmount = self.totalAmount
-            signature.paymentPlan = self.paymentPlan
-            signature.paymentPlanValue = self.paymentPlanValue
-            signature.paymentOptionDataValue = self.paymentOptionDataValue
-            signature.drowingImageID = self.drowingImageID
-            signature.area = self.area
-            signature.downPaymentValue = self.downPaymentValue
-            signature.finalpayment = self.finalpayment
-            signature.financePayment = self.financePayment
-            signature.selectedPaymentMethord = self.selectedPaymentMethord
-            signature.downpayment = self.downpayment
-            if let customer = AppDelegate.appoinmentslData
+            if(self.financePayment != 0)
             {
-                signature.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+                let applicant = ApplicantFormViewControllerForm.initialization()!
+                applicant.downOrFinal = self.downOrFinal
+                applicant.totalAmount = self.totalAmount
+                applicant.paymentPlan = self.paymentPlan
+                applicant.paymentPlanValue = self.paymentPlanValue
+                applicant.paymentOptionDataValue = self.paymentOptionDataValue
+                applicant.drowingImageID = self.drowingImageID
+                applicant.area = self.area
+                applicant.downPaymentValue = self.downPaymentValue
+                applicant.finalpayment = self.finalpayment
+                applicant.financePayment = self.financePayment
+                applicant.selectedPaymentMethord = self.selectedPaymentMethord
+                applicant.downpayment = self.downpayment
+                self.navigationController?.pushViewController(applicant, animated: true)
             }
-            self.navigationController?.pushViewController(signature, animated: true)
-        }
+            else
+            {
+                let signature = SignatureSubmitViewController.initialization()!
+                signature.downOrFinal = self.downOrFinal
+                signature.totalAmount = self.totalAmount
+                signature.paymentPlan = self.paymentPlan
+                signature.paymentPlanValue = self.paymentPlanValue
+                signature.paymentOptionDataValue = self.paymentOptionDataValue
+                signature.drowingImageID = self.drowingImageID
+                signature.area = self.area
+                signature.downPaymentValue = self.downPaymentValue
+                signature.finalpayment = self.finalpayment
+                signature.financePayment = self.financePayment
+                signature.selectedPaymentMethord = self.selectedPaymentMethord
+                signature.downpayment = self.downpayment
+                if let customer = AppDelegate.appoinmentslData
+                {
+                    signature.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+                }
+                self.navigationController?.pushViewController(signature, animated: true)
+            }
+    //}
 //        HttpClientManager.SharedHM.CreateSalesQuotationAPi(parameter: parameter) { (result, message, valuse) in
 //            if(result == "Success" || result == "True")
 //            {

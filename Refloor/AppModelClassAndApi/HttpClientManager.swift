@@ -2314,6 +2314,44 @@ class HttpClientManager: NSObject {
     }
     
     
+    // versatile api
+    
+    func versatileAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            let masterData = self.getMasterDataFromDB()
+            let URL = masterData.versatileURL
+            let headers = ["Content-Type":"application/json","X-API-Key":masterData.versatileApiKey!,"X-Entity-Key":masterData.versatileEntityKey!]
+            self.showhideHUD(viewtype: .SHOW, title: "")
+            Alamofire.request(URL!, method: .post, parameters: parameter,headers: headers).responseObject {
+                (response:DataResponse<VersatileModelClass>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.url != nil)
+                    {
+                        
+                        completion(response?.type,response?.url)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage )
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    
     // func additional comments api
     
     func additionalCommentsAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?) -> ()){
