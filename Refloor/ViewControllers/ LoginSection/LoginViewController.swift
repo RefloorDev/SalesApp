@@ -40,8 +40,8 @@ class LoginViewController: UIViewController {
         //  self.emailTF.text = "mhigley@refloor.com"
         //  self.passwordTF.text = "SALESapp"
 //        
-//     self.emailTF.text = "bincy.aliyar@oneteamus.com" //vrenaud@refloor.com"
-//     self.passwordTF.text = "Apps@021"
+     self.emailTF.text = "bincy.aliyar@oneteamus.com" //vrenaud@refloor.com"
+     self.passwordTF.text = "Apps@021"
 //        self.emailTF.text = "satheesh.nambiar@oneteamus.com"
 //        self.passwordTF.text = "SALESapp"
 

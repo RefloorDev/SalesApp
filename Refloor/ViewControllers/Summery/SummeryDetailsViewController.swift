@@ -993,10 +993,10 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 }
             case "unit":
                 if let answer = answerData{
-                    if question.question_type == "simple_choice" && answer == "Yes"{
+                    if question.question_type == "simple_choice" && answer == "Yes" && question.calculate_order_wise == false{
                         extra_price = amount
                     }
-                    else if question.question_type == "numerical_box" && question.calculate_order_wise == false
+                    else if question.question_type == "numerical_box"
                     {
                         extra_price = (Double(answer) ?? 0.0) * amount
                     }
