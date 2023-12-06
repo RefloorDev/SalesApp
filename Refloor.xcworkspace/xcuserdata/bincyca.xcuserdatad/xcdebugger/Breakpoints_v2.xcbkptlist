@@ -94,6 +94,21 @@
                   endingLineNumber = "1133"
                   offsetFromSymbolStart = "604">
                </Location>
+               <Location
+                  uuid = "29C98457-06DE-4BE3-90B8-9E49C32E7186 - d8664332e89ca21a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in Refloor.DynamicContractViewController.checkForInstallerOrNot(customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, appointmentId: Swift.Int) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1133"
+                  endingLineNumber = "1133"
+                  offsetFromSymbolStart = "604">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -181,6 +196,21 @@
                   moduleName = "Refloor"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20CR%20Nov%2023/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1149"
+                  endingLineNumber = "1149"
+                  offsetFromSymbolStart = "1908">
+               </Location>
+               <Location
+                  uuid = "E514480E-7FB3-4C9F-A591-26EEF9F5D247 - d8664332e89ca02a"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in Refloor.DynamicContractViewController.checkForInstallerOrNot(customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, appointmentId: Swift.Int) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "1149"
@@ -297,6 +327,21 @@
                   endingLineNumber = "322"
                   offsetFromSymbolStart = "160">
                </Location>
+               <Location
+                  uuid = "D7E4B1C6-8ABB-4EE4-BCB1-326C1BB24258 - 5e41ab3905aca7cf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.InstallerShedulerViewController.collectionView(_: __C.UICollectionView, layout: __C.UICollectionViewLayout, insetForSectionAt: Swift.Int) -&gt; __C.UIEdgeInsets"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ViewControllers/InstallerSheduler/InstallerShedulerViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "322"
+                  endingLineNumber = "322"
+                  offsetFromSymbolStart = "160">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -407,6 +452,21 @@
                   endingLineNumber = "2340"
                   offsetFromSymbolStart = "1764">
                </Location>
+               <Location
+                  uuid = "5D293437-1970-4AA0-9457-927CC05C6BE1 - 1dfb1e50bbd7c393"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Refloor.InstallerDates&gt;) -&gt; () in Refloor.HttpClientManager.installerDatesAPi(parameter: Swift.Dictionary&lt;Swift.String, Any&gt;, completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.Array&lt;Refloor.AvailableDatesValues&gt;&gt;, Swift.Optional&lt;Swift.Int&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/AppModelClassAndApi/HttpClientManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2341"
+                  endingLineNumber = "2341"
+                  offsetFromSymbolStart = "1764">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -501,6 +561,21 @@
                   endingLineNumber = "2190"
                   offsetFromSymbolStart = "76">
                </Location>
+               <Location
+                  uuid = "DBDE245D-A662-492F-B039-BCCFF3D1AEDF - 78e7c23a24e92dcb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Refloor.CashDataResponse&gt;) -&gt; () in Refloor.HttpClientManager.updateCustomerAndRoomInfoAPi(parameter: Swift.Dictionary&lt;Swift.String, Any&gt;, isOnlineCollectBtnPressed: Swift.Bool, completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/AppModelClassAndApi/HttpClientManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2191"
+                  endingLineNumber = "2191"
+                  offsetFromSymbolStart = "76">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -564,6 +639,21 @@
                   endingLineNumber = "2206"
                   offsetFromSymbolStart = "1428">
                </Location>
+               <Location
+                  uuid = "466E846B-D1A2-429D-BA3B-406C59F5C0D3 - b9f37591702cc574"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in __C.UIViewController.downloadPhoto(imageUrlArray: Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ExtensionFiles/Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2206"
+                  endingLineNumber = "2206"
+                  offsetFromSymbolStart = "1428">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
@@ -621,6 +711,21 @@
                   moduleName = "Refloor"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20CR%20Nov%2023/SalesApp/Refloor/ExtensionFiles/Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2231"
+                  endingLineNumber = "2231"
+                  offsetFromSymbolStart = "3556">
+               </Location>
+               <Location
+                  uuid = "CF92DB7C-0747-4EE1-A0B2-52A305F9CAED - f6be1b8fe64ccb18"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 () -&gt; () in __C.UIViewController.downloadPhoto(imageUrlArray: Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ExtensionFiles/Extension.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "2231"
@@ -791,6 +896,66 @@
                   moduleName = "Refloor"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/bincyca/Desktop/Projects/Refloor/GitHub/Refloor%20CR%20Nov%2023/SalesApp/Refloor/ExtensionFiles/Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2194"
+                  endingLineNumber = "2194"
+                  offsetFromSymbolStart = "44">
+               </Location>
+               <Location
+                  uuid = "88233321-9F5C-4A10-95FF-9798EC351A9A - 5e614b658cdddee"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__C.UIViewController.downloadPhoto(imageUrlArray: Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ExtensionFiles/Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2194"
+                  endingLineNumber = "2194"
+                  offsetFromSymbolStart = "388">
+               </Location>
+               <Location
+                  uuid = "88233321-9F5C-4A10-95FF-9798EC351A9A - b9f37591702ccbf8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in __C.UIViewController.downloadPhoto(imageUrlArray: Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ExtensionFiles/Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2194"
+                  endingLineNumber = "2194"
+                  offsetFromSymbolStart = "588">
+               </Location>
+               <Location
+                  uuid = "88233321-9F5C-4A10-95FF-9798EC351A9A - f6be1b8fe64cc0dd"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Sendable (Swift.Optional&lt;Foundation.Data&gt;, Swift.Optional&lt;__C.NSURLResponse&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in closure #1 () -&gt; () in __C.UIViewController.downloadPhoto(imageUrlArray: Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ExtensionFiles/Extension.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2194"
+                  endingLineNumber = "2194"
+                  offsetFromSymbolStart = "604">
+               </Location>
+               <Location
+                  uuid = "88233321-9F5C-4A10-95FF-9798EC351A9A - dc6b984a71a9a254"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in closure #1 () -&gt; () in __C.UIViewController.downloadPhoto(imageUrlArray: Swift.Array&lt;Swift.Dictionary&lt;Swift.String, Swift.String&gt;&gt;) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Refloor/KavyaTeamMerge/SalesApp/Refloor/ExtensionFiles/Extension.swift"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "2194"
