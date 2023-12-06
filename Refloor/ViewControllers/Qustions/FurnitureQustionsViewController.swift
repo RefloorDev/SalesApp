@@ -567,9 +567,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 {
  
                     let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrierBool"}
+                   
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                        UserDefaults.standard.set(qustionAnswer[setDefaultAnswerTrueIndexInt].amount, forKey: "VaporBarrierAmount")
                         if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface//"Concrete / Cement"
                         {
                             var vapourBarrierValue : Int = Int()
@@ -582,7 +584,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             {
                                 vapourBarrierValue = Int(vapourValue.0) + 1
                             }
-                            UserDefaults.standard.set(qustionAnswer[setDefaultAnswerTrueIndexInt].amount, forKey: "VaporBarrierAmount")
+                           
                             //qustionAnswer[setDefaultAnswerTrueIndexInt].amount
                             qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(qustionAnswer[setDefaultAnswerTrueIndexInt].quote_label![1])
                             //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
@@ -938,7 +940,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 }
             case "unit":
                 if let answer = answerData{
-                    if question.question_type == "simple_choice" && answer == "Yes"{
+                    if question.question_type == "simple_choice" && answer == "Yes" && question.calculate_order_wise != true{
                         extra_price = amount
                     }else if question.question_type == "numerical_box"{
                         extra_price = (Double(answer) ?? 0.0) * amount
