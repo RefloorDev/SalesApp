@@ -407,8 +407,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1259"
-            endingLineNumber = "1259"
+            startingLineNumber = "1272"
+            endingLineNumber = "1272"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -423,8 +423,8 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1303"
-            endingLineNumber = "1303"
+            startingLineNumber = "1316"
+            endingLineNumber = "1316"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -471,8 +471,8 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "943"
-            endingLineNumber = "943"
+            startingLineNumber = "956"
+            endingLineNumber = "956"
             landmarkName = "calculateExtraPrice(question:answerOfQuestion:)"
             landmarkType = "7">
          </BreakpointContent>

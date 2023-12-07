@@ -628,6 +628,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         var value = 0
         for question in self.qustionAnswer
         {
+            // q4 changes
+            let TrueSelfLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftTrueSelfLeveling" }) ?? 0
+            let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
+            let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
+           let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
             if ((question.mandatory_answer == true) &&  !(((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
@@ -636,6 +641,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
                 let questionNumber = value + 1
                 return "Please answer question number \(questionNumber)"
+            }
+           // q4 changes
+            else  if (((self.qustionAnswer[TrueSelfLeveling].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[BuildUpLeveling].answerOFQustion?.numberVaue ?? 0) > 0)) &&
+                        ((self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection?.value) ?? "") == ""  {
+                
+                //Q4_Change Primer Type Mandatory dropdown
+                return "You must select a primer type"
+
             }
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {
