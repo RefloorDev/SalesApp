@@ -64,6 +64,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     var yAxisLayerSharae:CAShapeLayer!
     var xAxisLayerSharae:CAShapeLayer!
     var roomData:RoomDataValue!
+    var addData:CustomeShapeViewController!
     var messurementID = -1
     var imagePicker: CaptureImage!
     var transitionHeightDropDownArray:List<rf_transitionHeights_results>!
@@ -242,9 +243,16 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     }
     
     override func nextAction() {
-        if(self.drowingView.isConfirmed)
-        {
-            //arb
+        
+        
+        //q4 changes // kavya
+        
+        var isSelected = addData?.add_Button.isSelected
+        if(!self.drowingView.isConfirmed) {
+            self.alert("Please press Done to complete the Room Drawing", nil)
+        } else if selected_View.isHidden == true {     // Q4_Change Add Openings Popup
+            self.alert("Please select add openings", nil)
+        } else {
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
             let classDisplayName = "RoomDrawing"
@@ -252,10 +260,20 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             //
             self.messurementUpload()
         }
-        else
-        {
-            self.alert("Please press Done to complete the Room Drawing", nil)
-        }
+//        if(self.drowingView.isConfirmed)
+//        {
+//            //arb
+//            let appointmentId = AppointmentData().appointment_id ?? 0
+//            let currentClassName = String(describing: type(of: self))
+//            let classDisplayName = "RoomDrawing"
+//            self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+//            //
+//            self.messurementUpload()
+//        }
+//        else
+//        {
+//            self.alert("Please press Done to complete the Room Drawing", nil)
+//        }
     }
     func setgraphForMoodView(_ sender :UIView)
     {
