@@ -53,7 +53,7 @@ class LoginViewController: UIViewController {
         
             if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"
             {
-                versionNumber.setTitle("Version: \(text) (1.0) - DEV", for: .normal)
+                versionNumber.setTitle("Version: \(text) (1.0) - STAGE", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
             }
