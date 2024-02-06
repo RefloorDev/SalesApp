@@ -1091,6 +1091,7 @@ class rf_master_appointment : Object, Mappable {
     @objc dynamic var id = 0
     @objc dynamic var name : String?
     @objc dynamic var customer_name : String?
+    @objc dynamic var improveit_appointment_id:String?
     @objc dynamic var applicant_first_name : String?
     @objc dynamic var applicant_middle_name : String?
     @objc dynamic var applicant_last_name : String?
@@ -1153,6 +1154,7 @@ class rf_master_appointment : Object, Mappable {
         applicant_first_name = appointmentObj["applicant_first_name"] as? String ?? ""
         applicant_middle_name = appointmentObj["applicant_middle_name"] as? String ?? ""
         applicant_last_name = appointmentObj["applicant_last_name"] as? String ?? ""
+        improveit_appointment_id = appointmentObj["improveit_appointment_id"] as? String ?? ""
         street = appointmentObj["state"] as? String ?? ""
         street2 = appointmentObj["state2"] as? String ?? ""
         city = appointmentObj["city"] as? String ?? ""
@@ -1184,6 +1186,7 @@ class rf_master_appointment : Object, Mappable {
         self.id = appointmentData.id ?? 0
         self.name = appointmentData.name
         self.customer_name = appointmentData.customer_name
+         self.improveit_appointment_id = appointmentData.improveit_appointment_id
         self.applicant_first_name = appointmentData.applicant_first_name
         self.applicant_middle_name = appointmentData.applicant_middle_name
         self.applicant_last_name = appointmentData.applicant_last_name
@@ -1228,6 +1231,7 @@ class rf_master_appointment : Object, Mappable {
         id = appointmentObj.appointment_id
         appointment_date = appointmentObj.appointment_date
         customer_id = appointmentObj.customer_id
+        improveit_appointment_id = appointmentObj.improveit_appointment_id
         applicant_first_name = appointmentObj.applicant_first_name
         applicant_middle_name = appointmentObj.applicant_middle_name
         applicant_last_name = appointmentObj.applicant_last_name
@@ -1264,6 +1268,7 @@ class rf_master_appointment : Object, Mappable {
         id <- map["id"]
         name <- map["name"]
         customer_name <- map["customer_name"]
+        improveit_appointment_id <- map["improveit_appointment_id"]
         applicant_first_name <- map["applicant_first_name"]
         applicant_middle_name <- map["applicant_middle_name"]
         applicant_last_name <- map["applicant_last_name"]
@@ -1355,6 +1360,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var appointment_date : String?
     @objc dynamic var appointment_datetime : String?
     @objc dynamic var customer_id = 0
+    @objc dynamic var improveit_appointment_id:String?
     @objc dynamic var applicant_first_name: String?
     @objc dynamic var applicant_middle_name: String?
     @objc dynamic var applicant_last_name: String?
@@ -1413,6 +1419,7 @@ class rf_completed_appointment:Object{
         appointment_date = appointmentObj.appointment_date
         appointment_datetime = appointmentObj.appointment_datetime
         customer_id = appointmentObj.customer_id
+        improveit_appointment_id = appointmentObj.improveit_appointment_id
         applicant_first_name = appointmentObj.applicant_first_name
         applicant_middle_name = appointmentObj.applicant_middle_name
         applicant_last_name = appointmentObj.applicant_last_name

@@ -227,6 +227,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             
         }else{
             self.fieldArray=contractUpdateDocArray[1].fields
+            let feildType = self.fieldArray.filter({$0.field_type == "initial"})
             //url = URL(string: contractUpdateDocArray[1].document_url ?? "")
             contractdata = contractUpdateDocArray[1].data
             addAnnotationsWithoutCoApplicant()

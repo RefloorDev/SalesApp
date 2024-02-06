@@ -412,6 +412,7 @@ class AppoinmentDataValue:NSObject,Mappable
     var  id : Int?
     var  name :String?
     var  customer_name: String?
+    var improveit_appointment_id:String?
     var  applicant_first_name:String?
     
     
@@ -472,6 +473,7 @@ class AppoinmentDataValue:NSObject,Mappable
         self.id = listOfAppointment.id
         self.name = listOfAppointment.name
         self.customer_name = listOfAppointment.customer_name
+        self.improveit_appointment_id = listOfAppointment.improveit_appointment_id
         self.applicant_first_name = listOfAppointment.applicant_first_name
         self.applicant_middle_name = listOfAppointment.applicant_middle_name
         self.applicant_last_name = listOfAppointment.applicant_last_name
@@ -1674,17 +1676,84 @@ class InstallerDatesSubmit: Mappable
 
 // versatile api
 
-class VersatileModelClass: Mappable
+class VersatileModelClass: Codable
 {
     var type:String?
     var url:String?
     
+    enum CodingKeys: String, CodingKey {
+
+        case type = "type"
+        case url = "url"
+       
+    }
+
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        type = try values.decodeIfPresent(String.self, forKey: .type)
+        url = try values.decodeIfPresent(String.self, forKey: .url)
+        
+    }
+}
+
+//get versatileApplication Status
+
+class CreditApplicationStatus: Codable
+{
+    var result:String?
+    var data: CreditApplicationStatusDetails?
+    var message:String?
+    var override_json_result:Int?
+    
+    
+    enum CodingKeys: String, CodingKey {
+
+        case result = "result"
+        case data = "data"
+        case message = "message"
+        case override_json_result = "override_json_result"
+       
+    }
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        result = try values.decodeIfPresent(String.self, forKey: .result)
+        data = try values.decodeIfPresent(CreditApplicationStatusDetails.self, forKey: .data)
+        message = try values.decodeIfPresent(String.self, forKey: .message)
+        override_json_result = try values.decodeIfPresent(Int.self, forKey: .override_json_result)
+        
+    }
+}
+
+class CreditApplicationStatusDetails: Codable
+{
+    var applicationId:String?
+    var provider: String?
+    var providerRefrence:String?
+    var status:String?
+    var approvedAmount:Double?
     required init?(map: ObjectMapper.Map){
     }
     
-    func mapping(map: ObjectMapper.Map) {
-        type <- map["type"]
-        url <- map["url"]
+    
+    enum CodingKeys: String, CodingKey {
+
+        case applicationId = "application_id"
+        case provider = "provider"
+        case providerRefrence = "provider_reference"
+        case status = "status"
+        case approvedAmount = "approved_amount"
+       
+       
+    }
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        applicationId = try values.decodeIfPresent(String.self, forKey: .applicationId)
+        provider = try values.decodeIfPresent(String.self, forKey: .provider)
+        providerRefrence = try values.decodeIfPresent(String.self, forKey: .providerRefrence)
+        status = try values.decodeIfPresent(String.self, forKey: .status)
+        approvedAmount = try values.decodeIfPresent(Double.self, forKey: .approvedAmount)
+       
+        
     }
 }
 

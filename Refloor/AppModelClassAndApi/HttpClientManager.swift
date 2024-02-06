@@ -143,7 +143,8 @@ class HttpClientManager: NSObject {
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
                 let response = response.result.value
-                if response != nil{
+                if response != nil
+                {
                     
                     if(response?.result != nil)
                     {
@@ -2323,30 +2324,63 @@ class HttpClientManager: NSObject {
             let masterData = self.getMasterDataFromDB()
             let URL = masterData.versatileURL
             let headers = ["Content-Type":"application/json","X-API-Key":masterData.versatileApiKey!,"X-Entity-Key":masterData.versatileEntityKey!]
-            self.showhideHUD(viewtype: .SHOW, title: "")
-            Alamofire.request(URL!, method: .post, parameters: parameter,headers: headers).responseObject {
-                (response:DataResponse<VersatileModelClass>) in
+            self.showhideHUD(viewtype: .SHOW, title: "Loading lending platforms.")
+            Alamofire.request(URL!, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
-               // print(response.result.value.debugDescription)
-                print(response.result)
-                let response = response.result.value
-                
-                if response != nil{
-                    if(response?.url != nil)
-                    {
-                        
-                        completion(response?.type,response?.url)
-                            self.showhideHUD(viewtype: .HIDE, title: "")
-                    }
-                }
-                else{
-                    completion("false",AppAlertMsg.NetWorkAlertMessage )
+                print(response)
+                if let jsonData = response.data {
+                    let signInObject = try? JSONDecoder().decode(VersatileModelClass.self, from: jsonData)
+                    completion(signInObject?.type,signInObject?.url)
                 }
             }
+            
+    
            // completion("false", AppAlertMsg.serverNotReached)
         }
         else{
             completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    
+    // CrediApplicationStatus api
+    
+    
+    func versatileStatusAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message:String?, _ creditApplicationDetails: CreditApplicationStatusDetails?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().getCreditApplicationStatus
+            let token = UserData().token
+            let headers = ["Authorization":"Bearer \(token!)"]
+            self.showhideHUD(viewtype: .SHOW, title: "Fetching loan status.")
+            Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+                self.showhideHUD(viewtype: .HIDE)
+                print(response)
+                if let jsonData = response.data {
+                    let signInObject = try? JSONDecoder().decode(CreditApplicationStatus.self, from: jsonData)
+                    if signInObject?.data != nil
+                    {
+                        if let creditData = signInObject?.data
+                        {
+                            completion(signInObject?.result,signInObject?.message, creditData)
+                        }
+                    }
+                    else
+                    {
+                        completion(signInObject?.result,signInObject?.message, nil)
+                    }
+                    
+                }
+            }
+            
+    
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage,nil)
             
         }
     }
