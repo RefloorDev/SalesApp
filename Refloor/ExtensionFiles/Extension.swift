@@ -2189,80 +2189,82 @@ extension UIViewController:OrderStatusViewDelegate
         return nil
     }
     //download photo and saves it in file and its filename in DB
-    func downloadPhoto(imageUrlArray:[[String:String]]){
-        // var downloadstastus:Int = 0
-        var downloadstatus:[String: Int] = ["percentage": 1]
-        var progress:CGFloat! = 0
-        //let totalCount = Double(imageUrlArray.filter({URL(string: $0.keys) != nil}).count)
-        let totalCount = Double(imageUrlArray.count)
-        print(totalCount)
-        DispatchQueue.global().async {
-            // progressImgArray.removeAll() // this is the image array
-            let group = DispatchGroup()
-            for i in 0..<imageUrlArray.count {
-                for (key,value) in imageUrlArray[i]
-                {
-                let type = i
-                guard let url = URL(string: key)
-                else {
-                    continue
-                }
-                
-                print(url)
-                print("-------GROUP ENTER-------")
-                
-                group.enter()
-                
-                if HttpClientManager.SharedHM.connectedToNetwork(){
+    func downloadPhoto(imageUrlArray:[[String:String]], type: OfflineImageType){
+            // var downloadstastus:Int = 0
+            var downloadstatus:[String: Int] = ["percentage": 1]
+            var progress:CGFloat! = 0
+            //let totalCount = Double(imageUrlArray.filter({URL(string: $0.keys) != nil}).count)
+            let totalCount = Double(imageUrlArray.count)
+            print(totalCount)
+            DispatchQueue.global().async {
+                // progressImgArray.removeAll() // this is the image array
+                let group = DispatchGroup()
+                for i in 0..<imageUrlArray.count {
+                    for (key,value) in imageUrlArray[i]
+                    {
+                    let type = i
+                    guard let url = URL(string: key)
+                    else {
+                        continue
+                    }
                     
-                    URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
-                        print(response?.suggestedFilename ?? url.lastPathComponent)
+                    print(url)
+                    print("-------GROUP ENTER-------")
+                    
+                    group.enter()
+                    
+                    if HttpClientManager.SharedHM.connectedToNetwork(){
                         
-                        if let imgData = data, let image = UIImage(data: imgData) {
-                            let progessPerDownload = CGFloat(100.0/totalCount)
-                            let progessPerDownloadRounded = progessPerDownload.rounded()
-                            progress = progress + progessPerDownloadRounded
-                            progress = progress <= 100 ? progress : 100
-                            downloadstatus.updateValue(Int(progress ?? 0), forKey: "percentage")
+                        URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+                            print(response?.suggestedFilename ?? url.lastPathComponent)
                             
-                            NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
-                            
-                            
-                            self.saveImage(imageName: "\(value)"+"\(i)", image: image)
-                            
-                        } else if let error = error {
-                            
-                            print("Sync Error:\(error)")
-                            
-                            //                            downloadstatus.updateValue(1008, forKey: "percentage")
-                            //                            NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
-                            
-                        }
-                        group.leave()
-                    }).resume()
+                            if let imgData = data, let image = UIImage(data: imgData) {
+                                let progressValue = modf(totalCount / 100)
+                                let countProgress = (progressValue.0 * 100.0)
+                                let progessPerDownload = CGFloat(countProgress/totalCount)
+                                let progessPerDownloadRounded = progessPerDownload.rounded()
+                                progress = progress + progessPerDownloadRounded
+                                progress = progress <= 100 ? progress : 100
+                                downloadstatus.updateValue(Int(progress ?? 0), forKey: "percentage")
+                                
+                                NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
+                                
+                                
+                                self.saveImage(imageName: "\(value)"+"\(i)", image: image)
+                                
+                            } else if let error = error {
+                                
+                                print("Sync Error:\(error)")
+                                
+                                //                            downloadstatus.updateValue(1008, forKey: "percentage")
+                                //                            NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
+                                
+                            }
+                            group.leave()
+                        }).resume()
+                        
+                    }
+                    
+                    else
+                    {
+                        downloadstatus.updateValue(1008, forKey: "percentage")
+                        NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
+                        
+                    }
+                    
+                    group.wait()
+                }
                     
                 }
-                
-                else
-                {
-                    downloadstatus.updateValue(1008, forKey: "percentage")
+                group.notify(queue: .main) {
+                    print("Goodbye")
+                    
+                    downloadstatus.updateValue(0, forKey: "percentage")
                     NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
                     
                 }
-                
-                group.wait()
-            }
-                
-            }
-            group.notify(queue: .main) {
-                print("Goodbye")
-                
-                downloadstatus.updateValue(0, forKey: "percentage")
-                NotificationCenter.default.post(name: Notification.Name("MasterDataComplete"), object: nil, userInfo: downloadstatus)
-                
             }
         }
-    }
     //payment option different types
     func getPaymentOptionAndValues(payment_method: String, paymentOptionDict:[String:Any]) -> PaymentOption {
         let paymentOption = PaymentOption()
