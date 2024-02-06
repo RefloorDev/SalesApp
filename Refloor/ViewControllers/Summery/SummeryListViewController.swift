@@ -16,6 +16,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     static func initialization() -> SummeryListViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SummeryListViewController") as? SummeryListViewController
     }
+    @IBOutlet weak var vapourBarrierLbl: UILabel!
     @IBOutlet weak var headingLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addNewButton: UIButton!
@@ -31,12 +32,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var tableValues:[SummeryListData] = []
     var area:Double = 0
     var isFromStatus = false
+    var summaryDetailsData:[SummeryDetailsData] = []
     
     var isselectedColor = 0
     var isselectedMolding = 0
     var globalMeasurement_id:Int = 0
     var globalColor_id:Int = 0
     var globalMoldingName = ""
+    var vaporbarrierValue:Double = 0.0
     
     var moldingNamesArray:[String] = []
     var moldingPriceArray:[Double] = []
@@ -199,7 +202,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 print(extraCostConsideringQuestions)
                 paymentOptions.stairCount = totalStairCount
                 paymentOptions.totalUpchargeCost = totalUpchargeForAllRooms
-                paymentOptions.totalExtraCost = extraCostConsideringQuestions
+                paymentOptions.totalExtraCost = extraCostConsideringQuestions + vaporbarrierValue
                 paymentOptions.totalMoldingPrice = totalMoldingPrice
                 paymentOptions.totalExtraCostToReduce = extraCostToExclude
                 paymentOptions.totalExtraPromoCostToReduced = extraPromoCostExcluded
@@ -354,12 +357,16 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     }
     func tableReload(_ values:[SummeryListData])
     {
+        //SummeryDetailsData
+        summaryDetailsData.removeAll()
         self.tableValues = values
         var area:Double = 0
         var stairTemp:Int = 0
         var validationTempTileColorRoomName = ""
         var validationTempMoldingColorRoomName = ""
+        var vaporArea:Double = 0
         //var validationTileColor = ""
+        
         for value in values
         {
             if (value.striked ?? "").lowercased() == "false"
@@ -369,6 +376,10 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 if(value.color == "Select Color")
                 {
                     validationTempTileColorRoomName = value.room_name ?? ""
+                }
+                if value.stair_count == 0
+                {
+                    self.summaryDetailsData.append(self.createSummaryData(roomID: value.room_id!, roomName: value.room_name!))
                 }
                 if(value.moulding == "")
                 {
@@ -387,6 +398,42 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         self.validationTileColorRoomName = validationTempTileColorRoomName
         self.validationMoldingColorRoomName = validationTempMoldingColorRoomName
         self.headingLabel.text = "Total Area Measured - \(self.area.clean) Sq.Ft"
+        if summaryDetailsData.count > 0
+        {
+            for summery in summaryDetailsData
+            {
+                if summery.questionaire!.count > 0
+                {
+                    
+                    //let vaporBarrierQuestionIndex = summery.questionaire?.
+                    for roomsAndQuestion in summery.questionaire!
+                    {
+                        
+                        
+                        if (roomsAndQuestion.name == "VaporBarrierBool" && roomsAndQuestion.answers![0].answer == "Yes")
+                        {
+                            vaporArea += summery.adjusted_area!
+                        }
+                    }
+                }
+            }
+        }
+        var vapourBarrierValue : Int = Int()
+        let vapourValue = modf(vaporArea / 100)
+        if vapourValue.1 == 0.0
+        {
+            vapourBarrierValue = Int(vapourValue.0)
+        }
+        else
+        {
+            vapourBarrierValue = Int(vapourValue.0) + 1
+        }
+        self.vapourBarrierLbl.text = "Vapor Barrier - \(vapourBarrierValue)"
+        if UserDefaults.standard.value(forKey: "VaporBarrierAmount") != nil
+        {
+            vaporbarrierValue = UserDefaults.standard.value(forKey: "VaporBarrierAmount") as! Double
+            vaporbarrierValue = vaporbarrierValue * Double(vapourBarrierValue)
+        }
         self.tableView.reloadData()
     }
     @objc func getColorPopUpFromTableViewButton(sender:UIButton)

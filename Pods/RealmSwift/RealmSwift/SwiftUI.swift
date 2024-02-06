@@ -18,7 +18,6 @@
 
 import Foundation
 
-#if !(os(iOS) && (arch(i386) || arch(arm)))
 import SwiftUI
 import Combine
 import Realm
@@ -316,12 +315,12 @@ private class ObservableResultsStorage<T>: ObservableStorage<T> where T: RealmSu
     }
 
     private var searchString: String = ""
-    fileprivate func searchText<T: ObjectBase>(_ text: String, on keyPath: KeyPath<T, String>) {
+    fileprivate func searchText<U: ObjectBase>(_ text: String, on keyPath: KeyPath<U, String>) {
         guard text != searchString else { return }
         if text.isEmpty {
             searchFilter = nil
         } else {
-            searchFilter = Query<T>()[dynamicMember: keyPath].contains(text).predicate
+            searchFilter = Query<U>()[dynamicMember: keyPath].contains(text).predicate
         }
         searchString = text
     }
@@ -617,7 +616,7 @@ extension Projection: _ObservedResultsValue { }
     }
 
     nonisolated public func update() {
-        unsafeInvokeAsMainActor {
+        assumeOnMainActorExecutor {
             // When the view updates, it will inject the @Environment
             // into the propertyWrapper
             if storage.configuration == nil {
@@ -976,7 +975,7 @@ extension Projection: _ObservedResultsValue { }
     }
 
     nonisolated public func update() {
-        unsafeInvokeAsMainActor {
+        assumeOnMainActorExecutor {
             // When the view updates, it will inject the @Environment
             // into the propertyWrapper
             if storage.configuration == nil {
@@ -1624,10 +1623,8 @@ private class ObservableAsyncOpenStorage: ObservableObject {
         }
 
         // Setup timeout if needed
-        if let timeout = timeout {
-            let syncTimeoutOptions = SyncTimeoutOptions()
-            syncTimeoutOptions.connectTimeout = timeout
-            app.syncManager.timeoutOptions = syncTimeoutOptions
+        if let timeout {
+            app.syncManager.timeoutOptions = SyncTimeoutOptions(connectTimeout: timeout)
         }
         return app
     }
@@ -1736,21 +1733,9 @@ private class ObservableAsyncOpenStorage: ObservableObject {
     }
 
     nonisolated public func update() {
-        unsafeInvokeAsMainActor {
+        assumeOnMainActorExecutor {
             storage.update(partitionValue, configuration)
         }
-    }
-}
-
-// Invoke a @MainActor function synchronously from a context which is not
-// statically annotated as being on the main actor.
-// This is needed to work around incomplete actor annotations.
-// `DynamicProperty.update()` is documented as being invoked on the UI thread
-// (and is in practice) but isn't marked @MainActor.
-func unsafeInvokeAsMainActor(_ fn: @MainActor () -> Void) {
-    assert(Thread.isMainThread)
-    withoutActuallyEscaping(fn) { fn in
-        unsafeBitCast(fn, to: (() -> Void).self)()
     }
 }
 
@@ -1860,7 +1845,7 @@ func unsafeInvokeAsMainActor(_ fn: @MainActor () -> Void) {
     }
 
     nonisolated public func update() {
-        unsafeInvokeAsMainActor {
+        assumeOnMainActorExecutor {
             storage.update(partitionValue, configuration)
         }
     }
@@ -1884,9 +1869,6 @@ extension SwiftUIKVO {
     }
 }
 
-// Adding `_Concurrency` flag is the only way to verify
-// if the BASE SDK contains latest framework updates
-#if canImport(_Concurrency)
 @available(iOS 15.0, macOS 12.0, tvOS 15.0, watchOS 8.0, *)
 extension View {
     /// Marks this view as searchable, which configures the display of a search field.
@@ -2155,7 +2137,7 @@ extension View {
     }
 
     private func filterCollection<T: ObjectBase>(_ collection: ObservedResults<T>, for text: String, on keyPath: KeyPath<T, String>) {
-        unsafeInvokeAsMainActor {
+        assumeOnMainActorExecutor {
             collection.searchText(text, on: keyPath)
         }
     }
@@ -2450,19 +2432,8 @@ extension View {
     }
 
     private func filterCollection<Key, T: ObjectBase>(_ collection: ObservedSectionedResults<Key, T>, for text: String, on keyPath: KeyPath<T, String>) {
-        unsafeInvokeAsMainActor {
+        assumeOnMainActorExecutor {
             collection.searchText(text, on: keyPath)
         }
     }
 }
-#endif
-#else
-@objc(RLMSwiftUIKVO) internal final class SwiftUIKVO: NSObject {
-    @objc(removeObserversFromObject:) public static func removeObservers(object: NSObject) -> Bool {
-        return false
-    }
-
-    @objc(addObserversToObject:) public static func addObservers(object: NSObject) {
-    }
-}
-#endif

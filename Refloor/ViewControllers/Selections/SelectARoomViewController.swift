@@ -332,6 +332,8 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
         selectRoomPopUp.editDelegate = self
         selectRoomPopUp.isEdit = true
+        selectRoomPopUp.isVersatile = false
+        selectRoomPopUp.isVersaileBack = false
         selectRoomPopUp.roomId = roomData[sender.tag].id!
         selectRoomPopUp.roomname = roomData[sender.tag].name!
         self.present(selectRoomPopUp, animated: true, completion: nil)
@@ -341,6 +343,8 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
         selectRoomPopUp.deleteDelegate = self
         selectRoomPopUp.isdelete = true
+        selectRoomPopUp.isVersatile = false
+        selectRoomPopUp.isVersaileBack = false
         selectRoomPopUp.roomId = roomData[sender.tag].id!
         self.present(selectRoomPopUp, animated: true, completion: nil)
     }
@@ -457,6 +461,8 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
         selectRoomPopUp.delegate = self
         selectRoomPopUp.isEdit = false
+        selectRoomPopUp.isVersatile = false
+        selectRoomPopUp.isVersaileBack = false
         self.present(selectRoomPopUp, animated: true, completion: nil)
     }
     

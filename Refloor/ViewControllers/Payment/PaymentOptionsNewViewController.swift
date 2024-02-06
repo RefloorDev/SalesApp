@@ -91,6 +91,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var oneYrPrice : String = ""
     var totalUpchargeCost: Double = 0.0
     var totalExtraCost: Double = 0.0
+    
     var totalMoldingPrice: Double = 0.07
     var totalExtraCostToReduce: Double = 0.0
     var totalExtraPromoCostToReduced: Double = 0.0
@@ -987,8 +988,21 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "PaymentOption"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-        //
-        self.navigationController?.pushViewController(downpatmet, animated: true)
+        // Q4_Change Package Selection
+        if !(IsEligibleForDiscounts == 1) {
+        let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
+            self.navigationController?.pushViewController(downpatmet, animated: true)
+        }
+            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            DispatchQueue.main.async
+            {
+                self.alert("Are you sure you want to select the \(self.paymentPlanValueDetails[self.selectedPlan].plan_title ?? "" ) package?", [yes, no])
+
+            }
+        }
+        if (IsEligibleForDiscounts == 1) {
+          self.navigationController?.pushViewController(downpatmet, animated: true)
+        }
     }
     
     func paymentTypeApiCall()
