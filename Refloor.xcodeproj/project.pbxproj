@@ -175,6 +175,7 @@
 		65FFF92F2446D6D000E3534D /* ModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF92E2446D6D000E3534D /* ModelClass.swift */; };
 		65FFF9342447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */; };
 		65FFF93724471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */; };
+		B011B1D22B1DB77600C28459 /* VersatileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011B1D12B1DB77600C28459 /* VersatileViewController.swift */; };
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
 		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
@@ -373,6 +374,7 @@
 		65FFF92E2446D6D000E3534D /* ModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelClass.swift; sourceTree = "<group>"; };
 		65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = L_Shape_CustomView_ToolBoxView.xib; sourceTree = "<group>"; };
 		65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L_Shape_CustomView_ToolBoxView.swift; sourceTree = "<group>"; };
+		B011B1D12B1DB77600C28459 /* VersatileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersatileViewController.swift; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
 		B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 		653EA584241F9A8600EA684E /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				B011B1D02B1DB75A00C28459 /* Versatile */,
 				B0A56C132AB1784C00891CBC /* Dynamic Contract */,
 				B0D395D92A94A2490020497B /* InstallerSheduler */,
 				18B683F725820870001E445E /* OrderStatus */,
@@ -937,6 +940,14 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		B011B1D02B1DB75A00C28459 /* Versatile */ = {
+			isa = PBXGroup;
+			children = (
+				B011B1D12B1DB77600C28459 /* VersatileViewController.swift */,
+			);
+			path = Versatile;
+			sourceTree = "<group>";
+		};
 		B0A56C132AB1784C00891CBC /* Dynamic Contract */ = {
 			isa = PBXGroup;
 			children = (
@@ -992,7 +1003,7 @@
 				653EA567241F7AFC00EA684E /* Frameworks */,
 				653EA568241F7AFC00EA684E /* Resources */,
 				5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */,
-				EF3F162A49B72A98025916F5 /* [CP] Copy Pods Resources */,
+				4C277601C358BD2FFDA194E2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1118,6 +1129,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4C277601C358BD2FFDA194E2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1155,23 +1183,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EF3F162A49B72A98025916F5 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1301,6 +1312,7 @@
 				65F34833244453CE00C61100 /* L-Shape_Value_Collection_ViewController.swift in Sources */,
 				6510674D24697C5C007EA42D /* NineZeroDrowingView.swift in Sources */,
 				DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */,
+				B011B1D22B1DB77600C28459 /* VersatileViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1449,7 +1461,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 4.0;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1459,7 +1471,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.3;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1478,7 +1490,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 4.0;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1488,7 +1500,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.2.3;
+				MARKETING_VERSION = 2.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

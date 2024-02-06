@@ -105,6 +105,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["question_name"] = question.question_name
                         dict["question_code"] = question.question_code
                         dict["company_id"] = question.company_id
+                        dict["max_allowed_limit"] = question.max_allowed_limit
                         dict["description1"] = question.description1
                         dict["question_type"] = question.question_type
                         dict["validation_required"] = question.validation_required
@@ -127,6 +128,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["applicableTo"] = question.applicableTo
                         dict["applicableCurrentSurface"] = question.applicableCurrentSurface
                         dict["setDefaultAnswer"] = question.setDefaultAnswer
+                        dict["calculate_order_wise"] = question.calculate_order_wise
                         dict["applicableRooms"] = List<rf_AnswerapplicableRooms>()
                         dict["rf_AnswerOFQustion"] = List<rf_AnswerOFQustion>()
                         realm.create(rf_master_question.self, value: dict, update: .all)
@@ -170,16 +172,41 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             {
                 if !(sender.text ?? "").contains(".")
                 {
+                    if qustionAnswer[sender.tag].max_allowed_limit != 0
+                    {
+                        if qustionAnswer[sender.tag].id == 9
+                        {
+                            if value2 > qustionAnswer[sender.tag].max_allowed_limit!
+                            {
+                                print("reached max value")
+                                self.alert("Stair width value exceeded maximum limit", nil)
+                                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
+                                return
+                            }
+                        }
+                        else if qustionAnswer[sender.tag].id == 1
+                        {
+                            if value2 > qustionAnswer[sender.tag].max_allowed_limit!
+                            {
+                                print("reached max value")
+                                self.alert("Rip multiple layer value exceeded maximum limit", nil)
+                                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
+                                return
+                            }
+                        }
+                    }
                     qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
                     cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
                 }
                 else
                 {
+                    sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
                     self.alert("Please enter a valid value", nil)
                 }
             }
             else
             {
+                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
                 self.alert("Please enter a valid value", nil)
             }
             
@@ -226,6 +253,27 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     
     
     @IBAction func pluseButtonAction(_ sender: UIButton) {
+        if qustionAnswer[sender.tag].max_allowed_limit != 0
+        {
+            if qustionAnswer[sender.tag].id == 9
+            {
+                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
+                {
+                    print("reached max value")
+                    self.alert("Stair width value exceeded maximum limit", nil)
+                    return
+                }
+            }
+            else if qustionAnswer[sender.tag].id == 1
+            {
+                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
+                {
+                   print("reached max value")
+                    self.alert("Rip multiple layer value exceeded maximum limit", nil)
+                    return
+                }
+            }
+        }
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
             qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) + 1
@@ -518,10 +566,12 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 if tag == 0
                 {
  
-                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrier"}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrierBool"}
+                   
                     if setDefaultAnswerTrueIndex != nil
                     {
                         let setDefaultAnswerTrueIndexInt = Int(setDefaultAnswerTrueIndex!)
+                        UserDefaults.standard.set(qustionAnswer[setDefaultAnswerTrueIndexInt].amount, forKey: "VaporBarrierAmount")
                         if qustionAnswer[tag].answerOFQustion?.singleSelection?.value == qustionAnswer[setDefaultAnswerTrueIndexInt].applicableCurrentSurface//"Concrete / Cement"
                         {
                             var vapourBarrierValue : Int = Int()
@@ -534,13 +584,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             {
                                 vapourBarrierValue = Int(vapourValue.0) + 1
                             }
-                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
+                           
+                            //qustionAnswer[setDefaultAnswerTrueIndexInt].amount
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(qustionAnswer[setDefaultAnswerTrueIndexInt].quote_label![1])
                             //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
                             //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                         }
                         else
                         {
-                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(0)
+                            qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(qustionAnswer[setDefaultAnswerTrueIndexInt].quote_label![0])
                             //qustionAnswer[17].answerOFQustion?.numberVaue = vapourBarrierValue
                             //self.tableView.reloadRows(at: [[setDefaultAnswerTrueIndexInt,(setDefaultAnswerTrueIndexInt + 1)]], with: .automatic)
                         }
@@ -576,6 +628,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         var value = 0
         for question in self.qustionAnswer
         {
+            // q4 changes
+            let TrueSelfLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftTrueSelfLeveling" }) ?? 0
+            let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
+            let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
+           let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
             if ((question.mandatory_answer == true) &&  !(((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
@@ -584,6 +641,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
                 let questionNumber = value + 1
                 return "Please answer question number \(questionNumber)"
+            }
+           // q4 changes
+            else  if (((self.qustionAnswer[TrueSelfLeveling].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[BuildUpLeveling].answerOFQustion?.numberVaue ?? 0) > 0)) &&
+                        ((self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection?.value) ?? "") == ""  {
+                
+                //Q4_Change Primer Type Mandatory dropdown
+                return "You must select a primer type"
+
             }
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {
@@ -888,7 +953,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 }
             case "unit":
                 if let answer = answerData{
-                    if question.question_type == "simple_choice" && answer == "Yes"{
+                    if question.question_type == "simple_choice" && answer == "Yes" && question.calculate_order_wise != true{
                         extra_price = amount
                     }else if question.question_type == "numerical_box"{
                         extra_price = (Double(answer) ?? 0.0) * amount
@@ -945,7 +1010,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             var dict:[String:Any] = [:]
                             let questionUniqueIdentifier = question.questionIdUnique
                             let questionId = question.id
-                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName,"calculate_order_wise":question.calculate_order_wise]
                             realm.create(rf_master_question.self, value: dict, update: .all)
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             

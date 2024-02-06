@@ -865,8 +865,6 @@ NS_REFINED_FOR_SWIFT;
  Represents the active subscriptions for this realm, which can be used to add/remove/update
  and search flexible sync subscriptions.
  Getting the subscriptions from a local or partition-based configured realm will thrown an exception.
-
- @warning This feature is currently in beta and its API is subject to change.
  */
 @property (nonatomic, readonly, nonnull) RLMSyncSubscriptionSet *subscriptions;
 
@@ -951,7 +949,9 @@ NS_REFINED_FOR_SWIFT;
 RLM_SWIFT_SENDABLE // is internally thread-safe
 @interface RLMNotificationToken : NSObject
 /// Stops notifications for the change subscription that returned this token.
-- (void)invalidate;
+///
+/// @return True if the token was previously valid, and false if it was already invalidated.
+- (bool)invalidate;
 
 /// Stops notifications for the change subscription that returned this token.
 - (void)stop __attribute__((unavailable("Renamed to -invalidate."))) NS_REFINED_FOR_SWIFT;

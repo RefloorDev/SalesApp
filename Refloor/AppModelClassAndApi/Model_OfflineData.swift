@@ -73,6 +73,9 @@ class MasterData : Object, Mappable {
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
+    @objc dynamic var versatileURL:String?
+    @objc dynamic var versatileApiKey:String?
+    @objc dynamic var versatileEntityKey:String?
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -99,6 +102,9 @@ class MasterData : Object, Mappable {
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
+        versatileURL <- map ["versatile_url"]
+        versatileApiKey <- map ["versatile_api_key"]
+        versatileEntityKey <- map ["versatile_entity_key"]
         ruleList <- (map["payment_restriction_rules"], ListTransform<rf_ruleList_results>())
         contract_document_templates <- (map["contract_document_templates"], ListTransform<rf_contract_document_templates_results>())
         appointment_result_reasons <- (map["appointment_result_reasons"], ListTransform<rf_appointment_result_reasons_results>())
@@ -245,6 +251,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var appointment_id = AppointmentData().appointment_id ?? 0
     @objc dynamic var question_name : String?
     @objc dynamic var question_code : String?
+    @objc dynamic var max_allowed_limit = 0
     @objc dynamic var company_id = 0
     @objc dynamic var description1 : String? = ""
     @objc dynamic var question_type : String?
@@ -264,6 +271,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic var exclude_from_promotion : Bool = false
     @objc dynamic  var setDefaultAnswer : Bool = false
     @objc dynamic var applicableCurrentSurface : String?
+    @objc dynamic var calculate_order_wise:Bool = false
     var quote_label = List<rf_master_question_detail>()
     var rf_AnswerOFQustion = List<rf_AnswerForQuestion>()
     var applicableRooms = List<rf_AnswerapplicableRooms>()
@@ -288,6 +296,7 @@ class rf_master_question :Object, Mappable {
         id <- map["id"]
         question_name <- map["name"]
         question_code <- map["code"]
+        max_allowed_limit <- map["max_allowed_limit"]
         company_id <- map["company_id"]
         description1 <- map["description"]
         question_type <- map["question_type"]
@@ -310,6 +319,7 @@ class rf_master_question :Object, Mappable {
         applicableTo <- map["applicable_to"]
         setDefaultAnswer <- map["set_default_answer"]
         applicableCurrentSurface <- map["applicable_current_surface"]
+        calculate_order_wise <- map["calculate_order_wise"]
         applicableRooms <- (map["applicable_rooms"], ListTransform<rf_AnswerapplicableRooms>())
         //not from api
         rf_AnswerOFQustion <- map["rf_AnswerOFQustion"]
@@ -1081,6 +1091,7 @@ class rf_master_appointment : Object, Mappable {
     @objc dynamic var id = 0
     @objc dynamic var name : String?
     @objc dynamic var customer_name : String?
+    @objc dynamic var improveit_appointment_id:String?
     @objc dynamic var applicant_first_name : String?
     @objc dynamic var applicant_middle_name : String?
     @objc dynamic var applicant_last_name : String?
@@ -1143,6 +1154,7 @@ class rf_master_appointment : Object, Mappable {
         applicant_first_name = appointmentObj["applicant_first_name"] as? String ?? ""
         applicant_middle_name = appointmentObj["applicant_middle_name"] as? String ?? ""
         applicant_last_name = appointmentObj["applicant_last_name"] as? String ?? ""
+        improveit_appointment_id = appointmentObj["improveit_appointment_id"] as? String ?? ""
         street = appointmentObj["state"] as? String ?? ""
         street2 = appointmentObj["state2"] as? String ?? ""
         city = appointmentObj["city"] as? String ?? ""
@@ -1174,6 +1186,7 @@ class rf_master_appointment : Object, Mappable {
         self.id = appointmentData.id ?? 0
         self.name = appointmentData.name
         self.customer_name = appointmentData.customer_name
+         self.improveit_appointment_id = appointmentData.improveit_appointment_id
         self.applicant_first_name = appointmentData.applicant_first_name
         self.applicant_middle_name = appointmentData.applicant_middle_name
         self.applicant_last_name = appointmentData.applicant_last_name
@@ -1218,6 +1231,7 @@ class rf_master_appointment : Object, Mappable {
         id = appointmentObj.appointment_id
         appointment_date = appointmentObj.appointment_date
         customer_id = appointmentObj.customer_id
+        improveit_appointment_id = appointmentObj.improveit_appointment_id
         applicant_first_name = appointmentObj.applicant_first_name
         applicant_middle_name = appointmentObj.applicant_middle_name
         applicant_last_name = appointmentObj.applicant_last_name
@@ -1254,6 +1268,7 @@ class rf_master_appointment : Object, Mappable {
         id <- map["id"]
         name <- map["name"]
         customer_name <- map["customer_name"]
+        improveit_appointment_id <- map["improveit_appointment_id"]
         applicant_first_name <- map["applicant_first_name"]
         applicant_middle_name <- map["applicant_middle_name"]
         applicant_last_name <- map["applicant_last_name"]
@@ -1345,6 +1360,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var appointment_date : String?
     @objc dynamic var appointment_datetime : String?
     @objc dynamic var customer_id = 0
+    @objc dynamic var improveit_appointment_id:String?
     @objc dynamic var applicant_first_name: String?
     @objc dynamic var applicant_middle_name: String?
     @objc dynamic var applicant_last_name: String?
@@ -1403,6 +1419,7 @@ class rf_completed_appointment:Object{
         appointment_date = appointmentObj.appointment_date
         appointment_datetime = appointmentObj.appointment_datetime
         customer_id = appointmentObj.customer_id
+        improveit_appointment_id = appointmentObj.improveit_appointment_id
         applicant_first_name = appointmentObj.applicant_first_name
         applicant_middle_name = appointmentObj.applicant_middle_name
         applicant_last_name = appointmentObj.applicant_last_name

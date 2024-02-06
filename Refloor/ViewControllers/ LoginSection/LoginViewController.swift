@@ -53,7 +53,7 @@ class LoginViewController: UIViewController {
         
             if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"
             {
-                versionNumber.setTitle("Version: \(text) (1.0) - DEV", for: .normal)
+                versionNumber.setTitle("Version: \(text) (1.0) - STAGE", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
             }
@@ -180,6 +180,9 @@ class LoginViewController: UIViewController {
         HttpClientManager.SharedHM.Authentication(usernae: emailTF.text ?? "", password: passwordTF.text ?? "") { (result, message, value) in
             if (result ?? "") == "Success"
             {
+                
+                //salesPersonEmail
+                UserDefaults.standard.set(self.emailTF.text, forKey: "salesPersonEmail")
                 let user = UserData.init(userID: value?[0].user_id ?? 0, userName: value?[0].user_name ?? "", token: value?[0].token ?? "")
                 print("Token: \(value?[0].token ?? "")")
                 //UserData.setLogedInDate(loginDate: Date() as NSDate)
@@ -249,7 +252,7 @@ class LoginViewController: UIViewController {
                     let realm = try Realm()
                     //UserDefaults.standard.set(true, forKey: "isMasterDataSaved")
                     let results =  realm.objects(MasterData.self)
-                    
+                    //var flooringColorImageArray:[String] = []
                     var flooringColorImageArray:[[String:String]] = []
                     //var stairColourImageArray:[String] = []
                     if let masterData = results.first{
@@ -263,6 +266,13 @@ class LoginViewController: UIViewController {
                                 self.downloadDiscountSuccessPopupImage(from: discountSuccessPopupImageUrl, code: discountCode)
                             }
                         }
+                        
+//                        let floorColors = masterData.flooring_colors
+//                                                for floorColor in floorColors{
+//                                                    if let img = floorColor.material_image_url{
+//                                                        flooringColorImageArray.append(img)
+//                                                    }
+//                                                }
                         let floorColors = masterData.floorColourList
                         let stairColors = masterData.stairColourList
                         var dict:[String:String] = [:]
@@ -296,7 +306,7 @@ class LoginViewController: UIViewController {
                             }
                             
                             
-                            self.downloadPhoto(imageUrlArray: flooringColorImageArray)
+                            self.downloadPhoto(imageUrlArray: flooringColorImageArray,type: .floorColor)
                         }
                        
                         

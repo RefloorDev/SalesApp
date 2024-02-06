@@ -23,10 +23,9 @@ struct AppURL {
     
     //Offline live//7007  - new server
      //let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
-    let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
-   // let LIVE_BASE_URL = " https://refloor-stage.odooapps.oneteam.us/" //Stage
+    //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
-    //let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
+    let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446
     //LIVE
     // let BASE_URL = "http://35.245.254.221:7007/api/"
@@ -192,6 +191,8 @@ struct AppURL {
      let autoLogout = BASE_URL + "check_auto_logout"
      let installationDates = BASE_URL + "get_available_installation_date"
     let installationDatesSubmit = BASE_URL + "submit_selected_installation_date"
+    let additionalComments = BASE_URL + "v1/update_additional_appointment_data"
+    let getCreditApplicationStatus = BASE_URL + "v1/get_credit_application_status"
 }
 
 

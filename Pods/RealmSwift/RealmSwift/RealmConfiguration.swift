@@ -310,6 +310,7 @@ extension Realm {
                 rlmConfig.syncUser = eventConfiguration.syncUser
                 rlmConfig.metadata = eventConfiguration.metadata
                 rlmConfig.logger = eventConfiguration.logger
+                rlmConfig.errorHandler = eventConfiguration.errorHandler
                 configuration.eventConfiguration = rlmConfig
             }
 
@@ -338,10 +339,11 @@ extension Realm {
             if let eventConfiguration = rlmConfiguration.eventConfiguration {
                 configuration.eventConfiguration = EventConfiguration(metadata: eventConfiguration.metadata,
                                                                       syncUser: eventConfiguration.syncUser,
-                                                                      partitionPrefix: eventConfiguration.partitionPrefix)
+                                                                      partitionPrefix: eventConfiguration.partitionPrefix,
+                                                                      errorHandler: eventConfiguration.errorHandler)
             }
 
-            configuration.initialSubscriptions = ObjectiveCSupport.convert(block: rlmConfiguration.initialSubscriptions)
+            configuration.initialSubscriptions = rlmConfiguration.initialSubscriptions.map(ObjectiveCSupport.convert(block:))
             configuration.rerunOnOpen = rlmConfiguration.rerunOnOpen
 
             return configuration
