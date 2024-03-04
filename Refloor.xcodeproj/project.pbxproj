@@ -186,6 +186,7 @@
 		B0D395DB2A94A26A0020497B /* InstallerShedulerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */; };
 		B0D395DD2A94A29A0020497B /* InstallerSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */; };
 		B0D395E02A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */; };
+		B0DE347B2B8DB6C800B01D4E /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = B0DE347A2B8DB6C800B01D4E /* test.xml */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -387,6 +388,7 @@
 		B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerShedulerViewController.swift; sourceTree = "<group>"; };
 		B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSuccessViewController.swift; sourceTree = "<group>"; };
 		B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSchedulerCollectionViewCell.swift; sourceTree = "<group>"; };
+		B0DE347A2B8DB6C800B01D4E /* test.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test.xml; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -627,6 +629,7 @@
 		653EA56C241F7AFC00EA684E /* Refloor */ = {
 			isa = PBXGroup;
 			children = (
+				B0DE347A2B8DB6C800B01D4E /* test.xml */,
 				B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */,
 				B04B016728E2F19B00B59E33 /* Refloor.entitlements */,
 				65FFF9292446CF8800E3534D /* AppModelClassAndApi */,
@@ -1094,6 +1097,7 @@
 				65209443243CA31100B010CA /* SF-Pro-Display-Light.otf in Resources */,
 				6520943E243CA31100B010CA /* SF-Pro-Display-Thin.otf in Resources */,
 				653EA57A241F7B0A00EA684E /* Assets.xcassets in Resources */,
+				B0DE347B2B8DB6C800B01D4E /* test.xml in Resources */,
 				65209460243CA31100B010CA /* SF-Pro-Display-BoldItalic.otf in Resources */,
 				6520944D243CA31100B010CA /* SF-Pro-Display-Semibold.otf in Resources */,
 				6520945C243CA31100B010CA /* SF-Pro-Display-ThinItalic.otf in Resources */,
@@ -1462,10 +1466,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.0;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1475,7 +1478,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.0;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1494,7 +1497,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.0;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1504,7 +1507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.3.0;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

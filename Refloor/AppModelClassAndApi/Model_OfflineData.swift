@@ -76,6 +76,7 @@ class MasterData : Object, Mappable {
     @objc dynamic var versatileURL:String?
     @objc dynamic var versatileApiKey:String?
     @objc dynamic var versatileEntityKey:String?
+    @objc dynamic var enableGeoLocation:Bool = false
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -105,6 +106,7 @@ class MasterData : Object, Mappable {
         versatileURL <- map ["versatile_url"]
         versatileApiKey <- map ["versatile_api_key"]
         versatileEntityKey <- map ["versatile_entity_key"]
+        enableGeoLocation <- map ["enable_geolocation"]
         ruleList <- (map["payment_restriction_rules"], ListTransform<rf_ruleList_results>())
         contract_document_templates <- (map["contract_document_templates"], ListTransform<rf_contract_document_templates_results>())
         appointment_result_reasons <- (map["appointment_result_reasons"], ListTransform<rf_appointment_result_reasons_results>())
@@ -1346,6 +1348,25 @@ class rf_customRoomName:Object
     }
     override static func primaryKey() -> String? {
         return "roomId"
+    }
+}
+
+class rf_GeoLocationData:Object
+{
+    @objc dynamic var appointmentId = 0
+    @objc dynamic var entryTime:String?
+    @objc dynamic var exitTime:String?
+    @objc dynamic var syncStatus = false
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    override init(){
+        
+    }
+    override static func primaryKey() -> String? {
+        return "appointmentId"
     }
 }
 

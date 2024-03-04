@@ -598,6 +598,54 @@ extension UIColor
 extension UIViewController:OrderStatusViewDelegate
 {
     
+    
+    // Location from address for geoLocation
+    
+    func getCoordinatesFromAddress(address: String, completion: @escaping ((Double, Double)?) -> Void) {
+        // Encode the address to be URL safe
+        let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let apiKey = AppDetails.GOOGLE_MAP_KEY
+        
+        // Construct the URL for the Geocoding API request
+        let urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=\(encodedAddress)&key=\(apiKey)"
+        let url = URL(string: urlString)!
+        
+        // Create a URLSession task to fetch the data
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            // Check for errors
+            guard error == nil else {
+                print("Error: \(error!.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            // Check if data is available
+            guard let data = data else {
+                print("Data is nil.")
+                completion(nil)
+                return
+            }
+            
+            // Parse the JSON response
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let results = json["results"] as? [[String: Any]],
+                   let geometry = results[0]["geometry"] as? [String: Any],
+                   let location = geometry["location"] as? [String: Double],
+                   let lat = location["lat"],
+                   let lng = location["lng"] {
+                    completion((lat, lng))
+                }
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+                completion(nil)
+            }
+        }
+        
+        // Start the URLSession task
+        task.resume()
+    }
+    
     //Dynamic Contract update
     func getContractUpdateDocumentField(value:Int) -> RealmSwift.List<rf_fields>{
             var contractUpdateDocumentField : RealmSwift.List<rf_fields>!
@@ -2572,6 +2620,8 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return rooms
     }
+    
+    
     
     func getAppointmentLogsFromDB() -> Results<rf_Appointment_Logs> {
         var appointmentLogs:  Results<rf_Appointment_Logs>!

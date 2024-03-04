@@ -2494,6 +2494,44 @@ class HttpClientManager: NSObject {
         }
     }
     
+    
+    // GeoLocation
+    
+    func geoLocationTimeSubmitAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().geoLocationLogs
+            self.showhideHUD(viewtype: .HIDE, title: "")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<InstallerDatesSubmit>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                               AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
     // MARK: - Sync Images Upload
     func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
         

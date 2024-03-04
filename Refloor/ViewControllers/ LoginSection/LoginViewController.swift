@@ -51,9 +51,9 @@ class LoginViewController: UIViewController {
         
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
-            if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"
+            if BASE_URL == "https://refloor-dev.odooapps.oneteam.us/api/"
             {
-                versionNumber.setTitle("Version: \(text) (1.0) - STAGE", for: .normal)
+                versionNumber.setTitle("Version: \(text) (1.0) - DEV", for: .normal)
             }else{
                 versionNumber.setTitle("Version: \(text)", for: .normal)
             }
@@ -183,7 +183,7 @@ class LoginViewController: UIViewController {
                 
                 //salesPersonEmail
                 UserDefaults.standard.set(self.emailTF.text, forKey: "salesPersonEmail")
-                let user = UserData.init(userID: value?[0].user_id ?? 0, userName: value?[0].user_name ?? "", token: value?[0].token ?? "")
+                let user = UserData.init(userID: value?[0].user_id ?? 0, userName: value?[0].user_name ?? "", token: value?[0].token ?? "",restrict_geolocation: value?[0].restrict_geolocation ?? 0)
                 print("Token: \(value?[0].token ?? "")")
                 //UserData.setLogedInDate(loginDate: Date() as NSDate)
                 //                if  UserDefaults.standard.bool(forKey: "isMasterDataSaved") == false{
