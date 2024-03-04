@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Refloor needs to access your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Refloor needs to access your location</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Refloor needs to access your location</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Refloor needs to access your location</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.oneteamus.liveflier</string>

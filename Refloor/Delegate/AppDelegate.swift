@@ -14,6 +14,7 @@ import IQKeyboardManagerSwift
 import FirebaseCore
 import FirebaseMessaging
 import RealmSwift
+
 @UIApplicationMain
 
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate,MessagingDelegate {
@@ -23,6 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     public static var roomData:[RoomDataValue] = []
     public static var floorLevelData:[FloorLevelDataValue] = []
     public static var appoinmentslData:AppoinmentDataValue!
+    public static var locationManager: CLLocationManager?
+    var notificationCenter: UNUserNotificationCenter?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 //        for family in UIFont.familyNames {
@@ -34,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion:  7,//7, // production 7
+            schemaVersion:  7,//7, // production 8
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -78,6 +81,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                }
                application.applicationIconBadgeNumber=0
                application.registerForRemoteNotifications()
+        AppDelegate.locationManager = CLLocationManager()
+        AppDelegate.locationManager!.delegate = self
+        //locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        AppDelegate.locationManager?.requestWhenInUseAuthorization()
+        AppDelegate.locationManager?.requestAlwaysAuthorization()
+        //locationManager?.activityType = .automotiveNavigation
+        //locationManager?.allowsBackgroundLocationUpdates = true
+//        if CLLocationManager.locationServicesEnabled(){
+        AppDelegate.locationManager?.startUpdatingLocation()
+//            }
+        
 
         return true
     }
@@ -233,5 +247,137 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
 
     
+}
+
+extension AppDelegate : CLLocationManagerDelegate
+{
+    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        if region is CLCircularRegion {
+            print("Exit GeoLocation region")
+            let exitTime = Date().dateToString()
+            var parameters:[String:Any] = [:]
+            let entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier) ?? 0)
+            do
+            {
+                let realm = try Realm()
+                try realm.write{
+                    let appointmentId = Int(region.identifier)
+                    let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":exitTime,"syncStatus":false]
+                    realm.create(rf_GeoLocationData.self, value: geoLocationValues, update: .all)
+                    let token = UserData.init().token!
+                    parameters = ["appointment_id":Int(region.identifier) ?? 0, "arrival_date":entryTime,"departure_date": exitTime,"token":token]
+                }
+            }
+            catch{
+                print(RealmError.initialisationFailed)
+            }
+            // Do what you want if this information
+            // self.handleEvent(forRegion: region)
+            geoLocationApiCall(parameter:parameters)
+        }
+    }
+    func geoLocationApiCall(parameter:[String:Any])
+    {
+       if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+           HttpClientManager.SharedHM.geoLocationTimeSubmitAPi(parameter: parameter) {success, message in
+               if success == "Success"
+               {
+               }
+               else
+               {
+                   
+               }
+           }
+        }
+    }
+    func geoLocationTimeForAppointments(appointmentId:Int) -> String
+    {
+        var entryTime = ""
+        do
+        {
+            let realm = try Realm()
+            if let appointment = realm.objects(rf_GeoLocationData.self).filter("appointmentId == %d", (appointmentId)).first
+            {
+                entryTime = appointment.entryTime ?? ""
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return entryTime
+    }
+    
+    // called when user Enters a monitored region
+    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+        //alert("Entered region", nil)
+        if region is CLCircularRegion {
+            print("Did Enter geoLocation region")
+            let entryTime = Date().dateToString()
+            do
+            {
+                let realm = try Realm()
+                try realm.write{
+                    let appointmentId = Int(region.identifier)
+                    let entryTime:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                    realm.create(rf_GeoLocationData.self, value: entryTime, update: .all)
+                }
+            }
+            catch{
+                print(RealmError.initialisationFailed)
+            }
+            // Do what you want if this information
+            // self.handleEvent(forRegion: region)
+        }
+    }
+    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        print("The monitored regions are: \(manager.monitoredRegions)")
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+           if status == .authorizedWhenInUse {
+               AppDelegate.locationManager?.requestLocation()
+           }
+       }
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.last else { return }
+        let monitoredRegions = manager.monitoredRegions
+
+        for region in monitoredRegions {
+            if let circularRegion = region as? CLCircularRegion, circularRegion.contains(location.coordinate) {
+                // The user is inside this region; handle accordingly
+                //alert("User is inside the region", nil)
+                print("Inside the area")
+                var entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
+                if entryTime == ""
+                {
+                    do
+                    {
+                        let realm = try Realm()
+                        try realm.write{
+                            let appointmentId = Int(region.identifier)
+                            entryTime = Date().dateToString()
+                            let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                            realm.create(rf_GeoLocationData.self, value: geoLocationValues, update: .all)
+                        }
+                    }
+                    catch{
+                        print(RealmError.initialisationFailed)
+                    }
+                }
+                else
+                {
+                    return
+                }
+                //handleUserWithinRegion(circularRegion)
+                break
+            }
+        }
+    }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error)
+    {
+            print("error:: \(error.localizedDescription)")
+       }
+
 }
 

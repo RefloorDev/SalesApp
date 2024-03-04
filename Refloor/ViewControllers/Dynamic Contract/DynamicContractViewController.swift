@@ -381,6 +381,16 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                             Annotation.widgetStringValue=self.owner1Email
                             self.page.addAnnotation(Annotation)
                         }
+//                        if self.fieldArray[i].type=="App Signature"{
+//                            
+//                            Annotation.widgetFieldType = .text
+//                            Annotation.isReadOnly = true
+//                            Annotation.font=UIFont.systemFont(ofSize: 13)
+//                            Annotation.backgroundColor = .clear
+//                            Annotation.fieldName = "App Signature"
+//                            Annotation.widgetStringValue=self.owner1Email
+//                            self.page.addAnnotation(Annotation)
+//                        }
                         if self.fieldArray[i].field_type=="checkbox"{
                             self.CheckoximageAnnotation=ImageStampAnnotation(with: UIImage(named:""),  forBounds: checkboxBounds, withProperties: nil)
                             self.page.addAnnotation(self.CheckoximageAnnotation)
@@ -469,21 +479,21 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                             Annotation.widgetStringValue="$" + String(format: "%.2f", balanceDueAmount)
                             self.page.addAnnotation(Annotation)
                         }
-                        if self.fieldArray[i].type=="App Signature"{
-                            
-                            let posY=CGFloat(self.fieldArray[i].posY*1000+38)
-                            let ImageBounds = CGRect(x: posX, y: self.pageheight-posY, width: 60, height: 26)
-                            self.imageAnnotation=ImageStampAnnotation(with: self.applicantSignatureImage,  forBounds: ImageBounds, withProperties: nil)
-                            self.page.addAnnotation(self.imageAnnotation)
-                        }
-                        if self.fieldArray[i].type=="CoApp Sign"{
-                            let posY=CGFloat(self.fieldArray[i].posY*1000+38)
-                            let ImageBounds = CGRect(x: posX, y: self.pageheight-posY, width: 60, height: 26)
-                            
-                            self.imageAnnotation=ImageStampAnnotation(with: self.coApplicantSignatureImage,  forBounds: ImageBounds, withProperties: nil)
-                            
-                            self.page.addAnnotation(self.imageAnnotation)
-                        }
+//                        if self.fieldArray[i].type=="App Signature"{
+//
+//                            let posY=CGFloat(self.fieldArray[i].posY*1000+38)
+//                            let ImageBounds = CGRect(x: posX, y: self.pageheight-posY, width: 60, height: 26)
+//                            self.imageAnnotation=ImageStampAnnotation(with: self.applicantSignatureImage,  forBounds: ImageBounds, withProperties: nil)
+//                            self.page.addAnnotation(self.imageAnnotation)
+//                        }
+//                        if self.fieldArray[i].type=="CoApp Sign"{
+//                            let posY=CGFloat(self.fieldArray[i].posY*1000+38)
+//                            let ImageBounds = CGRect(x: posX, y: self.pageheight-posY, width: 60, height: 26)
+//
+//                            self.imageAnnotation=ImageStampAnnotation(with: self.coApplicantSignatureImage,  forBounds: ImageBounds, withProperties: nil)
+//
+//                            self.page.addAnnotation(self.imageAnnotation)
+//                        }
                         
                         if self.fieldArray[i].field_type=="initial"{
                             

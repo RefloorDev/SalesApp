@@ -193,6 +193,7 @@ struct AppURL {
     let installationDatesSubmit = BASE_URL + "submit_selected_installation_date"
     let additionalComments = BASE_URL + "v1/update_additional_appointment_data"
     let getCreditApplicationStatus = BASE_URL + "v1/get_credit_application_status"
+    let geoLocationLogs = BASE_URL + "v1/update_arrival_departure_time"
 }
 
 
