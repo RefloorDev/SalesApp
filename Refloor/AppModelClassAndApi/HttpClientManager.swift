@@ -257,12 +257,13 @@ class HttpClientManager: NSObject {
             let URL = AppURL().Sync_master_data
             
             let parameters = ["token":UserData.init().token ?? ""]
+            print("--token---", UserData.init().token ?? "")
             
             Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 // print(response.result.value.debugDescription)
                 let response = response.result.value
-                print("test")
+                print("test", response?.result)
                 
                 
             }
@@ -273,7 +274,7 @@ class HttpClientManager: NSObject {
     //api for getting appointment resuls list
     func OrderStatustListApi(completion:@escaping (_ success: String?, _ object: String?,_ user_details : OrderStatusDataMap? ) -> ()){
         
-        
+        print("Inside OrderStatustListApi: ")
         if self.connectedToNetwork() {
             self.showhideHUD(viewtype: .SHOW, title: "The appointment results are being loaded. Please wait...")
             
@@ -291,7 +292,7 @@ class HttpClientManager: NSObject {
                     if(response?.result != nil)
                     {
                         completion(response?.result!,response?.message, response)
-                        
+                        print("response result1 : ", response?.message)
                     }
                 }
                 else{
@@ -310,21 +311,21 @@ class HttpClientManager: NSObject {
     //api for submitting appointment results whether domoed or sold etc
     func submitOrderStatustListApi(parameter:[String:Any],completion:@escaping (_ success: String?,_ object: String? ) -> ()){
         
-        
+        print("submitOrderStatusListApi: ", parameter)
         if self.connectedToNetwork() {
             // self.showhideHUD(viewtype: .SHOW, title: "")
             
             // let URL = AppURL().submit_appointment_result
             let URL = AppURL().submit_appointment_result_without_upload
-            
+            print("-----URL------", URL)
             Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
-                
+                print("parameters1 : ", parameter)
                 // self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
                 let response = response.result.value
                 
                 if response != nil{
-                    
+                    print("submitOrderStatustListApi_result : ", response)
                     completion(response?.result!,response?.message)
                 }
                 
@@ -344,7 +345,7 @@ class HttpClientManager: NSObject {
     }
     
     func submitOrderStatustUploadData(parameter:[String:Any],completion:@escaping (_ success: String?,_ object: String? ) -> ()){
-        
+        print("Inside submitOrderStatustUploadData: ")
         
         if self.connectedToNetwork() {
             // self.showhideHUD(viewtype: .SHOW, title: "")
@@ -371,7 +372,7 @@ class HttpClientManager: NSObject {
     
     //MARK: - SubmitAppointments
     func SubmitAppointmentsApi(parameter:[String:Any],completion:@escaping (_ success: String?, _ object: String?,_ user_details : Int? ) -> ()){
-        
+        print("Inside SubmitAppointmentsApi: ")
         
         if self.connectedToNetwork() {
             self.showhideHUD(viewtype: .SHOW, title: "Submitting Customer Details. Please wait...")
@@ -1054,7 +1055,7 @@ class HttpClientManager: NSObject {
     
     //MARK: - api for creating sales quotation
     func CreateSalesQuotationForSatusAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ object: String?,_ user_details : QuotationApiData? ) -> ()){
-        
+        print("Inside CreateSalesQuotationForSatusAPi: ")
         
         if self.connectedToNetwork() {
             // self.showhideHUD(viewtype: .SHOW, title: "")
@@ -1453,7 +1454,7 @@ class HttpClientManager: NSObject {
     //MARK: - api for getting payment plan details
     func GetPaymentListApi(completion:@escaping (_ success: String?,_  object: String?,_ user_details : PaymentApiData? ) -> ()){
         
-        
+        print("---packes_start_date----")
         if self.connectedToNetwork() {
             self.showhideHUD(viewtype: .SHOW, title: "Package detail is being updated. Please wait...")
             
@@ -1470,6 +1471,7 @@ class HttpClientManager: NSObject {
                 if response != nil{
                     if(response?.result != nil)
                     {
+                        print("---packes_start_date----", response?.result)
                         completion(response?.result!,response?.message, response)
                         
                     }
@@ -1633,7 +1635,7 @@ class HttpClientManager: NSObject {
     //MARK: -  Not using
     func rejectSalesAppointment(parameter:[String:Any],completion:@escaping (_ success: String?,_ object: String? ) -> ()){
         
-        
+        print("Inside rejectSalesAppointment: ")
         if self.connectedToNetwork() {
             self.showhideHUD(viewtype: .SHOW, title: "")
             
@@ -1668,7 +1670,7 @@ class HttpClientManager: NSObject {
     //MARK: -  Not using
     func prposedSalesAppointment(parameter:[String:Any],completion:@escaping (_ success: String?,_ object: String? ) -> ()){
         
-        
+        print("Inside prposedSalesAppointment: ")
         if self.connectedToNetwork() {
             self.showhideHUD(viewtype: .SHOW, title: "")
             
@@ -2167,39 +2169,39 @@ class HttpClientManager: NSObject {
     
     //MARK: - Update Customer & Room Information
     func updateCustomerAndRoomInfoAPi(parameter:Parameters,isOnlineCollectBtnPressed:Bool,completion:@escaping (_ success: String?, _ object: String? , _ paymentStatus: String? , _ paymentMessage: String?, _ transactionId: String?,  _ cardType: String?) -> ()){
-        
         if self.connectedToNetwork() {
-
+            
             if isOnlineCollectBtnPressed == true
             {
-            self.showhideHUD(viewtype: .SHOW, title: "Processing Payment")
+                self.showhideHUD(viewtype: .SHOW, title: "Processing Payment")
             }
             
             let URL = AppURL().syncCustomerAndRoomInfo
             let manager = Alamofire.SessionManager.default
             manager.session.configuration.timeoutIntervalForRequest = 1
-            manager.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
-                
-               // print(response.result.value.debugDescription)
-//                if let error = response.result.error
-//                {
-//                    if error._code == NSURLErrorTimedOut
-//                    {
-//                        print("TimeOut")
-//                    }
-//                }
-                let response = response.result.value
-                
-                if response != nil{
-                    if(response?.result != nil)
-                    {
-                        completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+                manager.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
+                    // print(response.result.value.debugDescription)
+                    //                if let error = response.result.error
+                    //                {
+                    //                    if error._code == NSURLErrorTimedOut
+                    //                    {
+                    //                        print("TimeOut")
+                    //                    }
+                    //                }
+                    let response = response.result.value
+                    if response != nil{
+                        if(response?.result != nil)
+                        {
+                            completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                        }
+                    }
+                    else{
+                        completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
                         self.showhideHUD(viewtype: .HIDE, title: "")
                     }
-                }
-                else{
-                    completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
-                    self.showhideHUD(viewtype: .HIDE, title: "")
                 }
             }
         }
