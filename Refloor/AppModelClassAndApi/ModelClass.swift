@@ -1425,11 +1425,14 @@ class PaymentOptionDataValue: Mappable
     var Payment_Info__c:String?
     var down_payment_message:String?
     var isHidden: Bool = false
+    var start_date: String?
+    var end_date: String?
     
     required init?(map: ObjectMapper.Map){
     }
     
     init(paymentOption:rf_master_payment_option){
+        print("------paymentOption : ", paymentOption)
         self.id = paymentOption.id
         self.sequenceid = paymentOption.sequence
         //self.interest_rate = paymentOption.int
@@ -1442,6 +1445,8 @@ class PaymentOptionDataValue: Mappable
         self.Balance_Due__c = paymentOption.balance_Due__c
         self.Payment_Info__c = paymentOption.payment_info__c
         self.down_payment_message = paymentOption.down_payment_message
+        self.start_date = paymentOption.start_date
+        self.end_date = paymentOption.end_date
         //self.isHidden = self.isHidden
     }
     
@@ -1460,6 +1465,8 @@ class PaymentOptionDataValue: Mappable
         Balance_Due__c <- map["Balance_Due__c"]
         Payment_Info__c <- map["Payment_Info__c"]
         down_payment_message <- map["down_payment_message"]
+        start_date <- map["start_date"]
+        end_date <- map["end_date"]
     }
 }
 

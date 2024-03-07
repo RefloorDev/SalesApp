@@ -14,10 +14,10 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
-            landmarkName = "toDoubleString"
-            landmarkType = "24">
+            startingLineNumber = "83"
+            endingLineNumber = "83"
+            landmarkName = "CGFloat"
+            landmarkType = "21">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -30,10 +30,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "714"
-            endingLineNumber = "714"
-            landmarkName = "SubmitContractMessurementsQuestionsApi(parameter:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "715"
+            endingLineNumber = "715"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -48,7 +48,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "219"
             endingLineNumber = "219"
-            landmarkName = "createSalesQuotation()"
+            landmarkName = "getloanPayment(tag:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -62,9 +62,9 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "445"
-            endingLineNumber = "445"
-            landmarkName = "MultySelectionSelectedAction(_:_:)"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
+            landmarkName = "setCellForDropDown(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -78,10 +78,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "585"
-            endingLineNumber = "585"
-            landmarkName = "FurnitureQustionsViewController"
-            landmarkType = "3">
+            startingLineNumber = "587"
+            endingLineNumber = "587"
+            landmarkName = "DropDownDidSelectedAction(_:_:_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -94,8 +94,8 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "675"
-            endingLineNumber = "675"
+            startingLineNumber = "677"
+            endingLineNumber = "677"
             landmarkName = "FurnitureQustionsViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -110,9 +110,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "669"
-            endingLineNumber = "669"
-            landmarkName = "QustionsListForMessurementsApi(parameter:completion:)"
+            startingLineNumber = "670"
+            endingLineNumber = "670"
+            landmarkName = "DeleteTransactionApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -126,9 +126,9 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "633"
-            endingLineNumber = "633"
-            landmarkName = "chooseAnswerBasedOnQuestionType(question:answer:)"
+            startingLineNumber = "635"
+            endingLineNumber = "635"
+            landmarkName = "validation()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -174,10 +174,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "551"
-            endingLineNumber = "551"
-            landmarkName = "FurnitureQustionsViewController"
-            landmarkType = "3">
+            startingLineNumber = "553"
+            endingLineNumber = "553"
+            landmarkName = "DropDownDidSelectedAction(_:_:_:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "1299B013-2461-4E25-B718-EA4DFB47299B - a77fbb9b8c5245c0"
@@ -222,10 +222,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "552"
-            endingLineNumber = "552"
-            landmarkName = "FurnitureQustionsViewController"
-            landmarkType = "3">
+            startingLineNumber = "554"
+            endingLineNumber = "554"
+            landmarkName = "DropDownDidSelectedAction(_:_:_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -238,10 +238,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1379"
-            endingLineNumber = "1379"
-            landmarkName = "UpdateSummeryDetails(parameter:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "1380"
+            endingLineNumber = "1380"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -254,9 +254,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "645"
-            endingLineNumber = "645"
-            landmarkName = "collectionView(_:layout:minimumInteritemSpacingForSectionAt:)"
+            startingLineNumber = "648"
+            endingLineNumber = "648"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -272,7 +272,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "90"
             endingLineNumber = "90"
-            landmarkName = "loadRefreshData()"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -286,9 +286,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "636"
-            endingLineNumber = "636"
-            landmarkName = "collectionView(_:layout:minimumInteritemSpacingForSectionAt:)"
+            startingLineNumber = "639"
+            endingLineNumber = "639"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -304,7 +304,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "242"
             endingLineNumber = "242"
-            landmarkName = "tableView(_:editActionsForRowAt:)"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -320,7 +320,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "101"
             endingLineNumber = "101"
-            landmarkName = "addNewButtonAction(_:)"
+            landmarkName = "loadRefreshData()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -334,9 +334,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "651"
-            endingLineNumber = "651"
-            landmarkName = "collectionView(_:layout:minimumInteritemSpacingForSectionAt:)"
+            startingLineNumber = "654"
+            endingLineNumber = "654"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -350,9 +350,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "671"
-            endingLineNumber = "671"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "674"
+            endingLineNumber = "674"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -366,9 +366,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "952"
-            endingLineNumber = "952"
-            landmarkName = "labelFormatFinanace(title:amount:)"
+            startingLineNumber = "955"
+            endingLineNumber = "955"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -382,9 +382,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "556"
-            endingLineNumber = "556"
-            landmarkName = "collectionView(_:didSelectItemAt:)"
+            startingLineNumber = "559"
+            endingLineNumber = "559"
+            landmarkName = "discountApplied(discountAmount:discountArray:isDiscountApplied:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -398,25 +398,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "641"
-            endingLineNumber = "641"
-            landmarkName = "collectionView(_:layout:minimumInteritemSpacingForSectionAt:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "743DED20-C44B-4FCB-BFA6-819AA6FBD63D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "644"
+            endingLineNumber = "644"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -432,7 +416,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "172"
             endingLineNumber = "172"
-            landmarkName = "AppinmentListApi(completion:)"
+            landmarkName = "getMasterDataFromDB()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -464,7 +448,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "468"
             endingLineNumber = "468"
-            landmarkName = "contract_lead_safe_status(_:)"
+            landmarkName = "contract_final_payment_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -480,7 +464,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "528"
             endingLineNumber = "528"
-            landmarkName = "contract_plumbing_option_status(_:)"
+            landmarkName = "contract_floor_protection_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -496,8 +480,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "577"
             endingLineNumber = "577"
-            landmarkName = "contract_additional_other_subfloor_status(_:)"
-            landmarkType = "7">
+            landmarkName = "WebViewViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -512,7 +496,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "601"
             endingLineNumber = "601"
-            landmarkName = "contract_additional_other_screwdown_status(_:)"
+            landmarkName = "contract_additional_other_subfloor_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -528,7 +512,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "672"
             endingLineNumber = "672"
-            landmarkName = "electronicsAuthorization2Action(_:)"
+            landmarkName = "electronicsAuthorizationBtn1Action(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -608,7 +592,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
             endingLineNumber = "191"
-            landmarkName = "createSalesQuotation()"
+            landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -624,7 +608,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "220"
             endingLineNumber = "220"
-            landmarkName = "createSalesQuotation()"
+            landmarkName = "getloanPayment(tag:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -638,9 +622,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "981"
-            endingLineNumber = "981"
-            landmarkName = "TilesMaterialUpdateApiViaPaymentPlan(parameter:completion:)"
+            startingLineNumber = "982"
+            endingLineNumber = "982"
+            landmarkName = "TilesMaterialListApiviaPaymentPlan(_:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -686,8 +670,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "986"
-            endingLineNumber = "986"
+            startingLineNumber = "987"
+            endingLineNumber = "987"
             landmarkName = "TilesMaterialUpdateApiViaPaymentPlan(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -784,7 +768,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "336"
             endingLineNumber = "336"
-            landmarkName = "DownorfinalPaymentButtonAction(_:)"
+            landmarkName = "isApplicableRoom()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -798,9 +782,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "649"
-            endingLineNumber = "649"
-            landmarkName = "collectionView(_:layout:minimumInteritemSpacingForSectionAt:)"
+            startingLineNumber = "652"
+            endingLineNumber = "652"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -880,7 +864,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "499"
             endingLineNumber = "499"
-            landmarkName = "contract_floor_protection_status(_:)"
+            landmarkName = "contract_scheduling_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -896,7 +880,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "535"
             endingLineNumber = "535"
-            landmarkName = "contract_plumbing_option_status(_:)"
+            landmarkName = "contract_plumbing_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -912,7 +896,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "576"
             endingLineNumber = "576"
-            landmarkName = "contract_additional_other_subfloor_status(_:)"
+            landmarkName = "contract_plumbing_option_status(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -960,7 +944,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "649"
             endingLineNumber = "649"
-            landmarkName = "contract_additional_other_bifold_removal_status(_:)"
+            landmarkName = "contract_additional_other_door_removal_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -974,9 +958,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1080"
-            endingLineNumber = "1080"
-            landmarkName = "RoomListDetailsApi(_:completion:)"
+            startingLineNumber = "1081"
+            endingLineNumber = "1081"
+            landmarkName = "CreateSalesQuotationForSatusAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -990,9 +974,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1657"
-            endingLineNumber = "1657"
-            landmarkName = "prposedSalesAppointment(parameter:completion:)"
+            startingLineNumber = "1659"
+            endingLineNumber = "1659"
+            landmarkName = "rejectSalesAppointment(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1008,7 +992,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "438"
             endingLineNumber = "438"
-            landmarkName = "submitButtonAction(_:)"
+            landmarkName = "cellforSubHeadingTableViewCell(_:indexPath:tableValue:tag:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1024,7 +1008,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "480"
             endingLineNumber = "480"
-            landmarkName = "summeryDetailsUpdateApi()"
+            landmarkName = "cellforQustionsTableViewCell(_:indexPath:tableValue:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1038,9 +1022,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1407"
-            endingLineNumber = "1407"
-            landmarkName = "UpdateQustionoriesApi(parameter:completion:)"
+            startingLineNumber = "1408"
+            endingLineNumber = "1408"
+            landmarkName = "UpdateSummeryDetails(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1184,8 +1168,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "419"
             endingLineNumber = "419"
-            landmarkName = "CustomerDetailsTowViewController"
-            landmarkType = "3">
+            landmarkName = "checkTextFieldEdited()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1200,7 +1184,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "421"
             endingLineNumber = "421"
-            landmarkName = "submitApi(_:)"
+            landmarkName = "textFieldDidChange(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1216,7 +1200,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "422"
             endingLineNumber = "422"
-            landmarkName = "submitApi(_:)"
+            landmarkName = "textFieldDidChange(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1232,7 +1216,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "94"
             endingLineNumber = "94"
-            landmarkName = "submitAndTransforButtonAction(sender:)"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1280,7 +1264,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "249"
             endingLineNumber = "249"
-            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            landmarkName = "cameraUploadButton(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1296,7 +1280,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "253"
             endingLineNumber = "253"
-            landmarkName = "OrderStatustListApi(completion:)"
+            landmarkName = "BackendApiSyncCallDirect()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1310,9 +1294,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
-            landmarkName = "dropDownButtonAction(_:)"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
+            landmarkName = "textViewDidEndEditing(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -1360,7 +1344,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "227"
             endingLineNumber = "227"
-            landmarkName = "BackendApiSyncCallDirect()"
+            landmarkName = "AppinmentListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1406,9 +1390,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1819"
-            endingLineNumber = "1819"
-            landmarkName = "FormUpdateApi(parameter:completion:)"
+            startingLineNumber = "1821"
+            endingLineNumber = "1821"
+            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1422,9 +1406,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1827"
-            endingLineNumber = "1827"
-            landmarkName = "FormUpdateApi(parameter:completion:)"
+            startingLineNumber = "1829"
+            endingLineNumber = "1829"
+            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -1470,10 +1454,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1831"
-            endingLineNumber = "1831"
-            landmarkName = "FormUpdateApi(parameter:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "1833"
+            endingLineNumber = "1833"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1486,10 +1470,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1838"
-            endingLineNumber = "1838"
-            landmarkName = "HttpClientManager"
-            landmarkType = "3">
+            startingLineNumber = "1840"
+            endingLineNumber = "1840"
+            landmarkName = "FormUpdateApi(parameter:completion:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1504,7 +1488,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "364"
             endingLineNumber = "364"
-            landmarkName = "setPhoneNumberDelegate()"
+            landmarkName = "skipButtonAction(sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1648,7 +1632,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "189"
             endingLineNumber = "189"
-            landmarkName = "didValueChangedSearch(_:)"
+            landmarkName = "updateAppointmentOffline()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1664,7 +1648,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "174"
             endingLineNumber = "174"
-            landmarkName = "AppinmentListApi(completion:)"
+            landmarkName = "getMasterDataFromDB()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -1712,7 +1696,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "136"
             endingLineNumber = "136"
-            landmarkName = "showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1760,7 +1744,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "172"
             endingLineNumber = "172"
-            landmarkName = "updateAppointmentOffline()"
+            landmarkName = "refreshAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1822,9 +1806,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1013"
-            endingLineNumber = "1013"
-            landmarkName = "fourceLogOutbuttonAction()"
+            startingLineNumber = "1018"
+            endingLineNumber = "1018"
+            landmarkName = "setNavigationBarbacklogoResetAndNext(name:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1838,9 +1822,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "971"
-            endingLineNumber = "971"
-            landmarkName = "labelFormatFinanace(title:amount:)"
+            startingLineNumber = "975"
+            endingLineNumber = "975"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1856,7 +1840,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "135"
             endingLineNumber = "135"
-            landmarkName = "showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1934,9 +1918,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "198"
-            endingLineNumber = "198"
-            landmarkName = "saveButtonACtion(_:)"
+            startingLineNumber = "237"
+            endingLineNumber = "237"
+            landmarkName = "whatnextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1950,9 +1934,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "206"
-            endingLineNumber = "206"
-            landmarkName = "saveButtonACtion(_:)"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
+            landmarkName = "whatnextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1968,7 +1952,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "135"
             endingLineNumber = "135"
-            landmarkName = "init(map:)"
+            landmarkName = "init?(map:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1982,9 +1966,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1991"
-            endingLineNumber = "1991"
-            landmarkName = "CreateCreditApplicationPdf(parameter:completion:)"
+            startingLineNumber = "1993"
+            endingLineNumber = "1993"
+            landmarkName = "createcreditapplication(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1998,9 +1982,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1996"
-            endingLineNumber = "1996"
-            landmarkName = "CreateCreditApplicationPdf(parameter:completion:)"
+            startingLineNumber = "1998"
+            endingLineNumber = "1998"
+            landmarkName = "createcreditapplication(parameter:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2046,9 +2030,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2000"
-            endingLineNumber = "2000"
-            landmarkName = "CreateCreditApplicationPdf(parameter:completion:)"
+            startingLineNumber = "2002"
+            endingLineNumber = "2002"
+            landmarkName = "createcreditapplication(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2062,9 +2046,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1998"
-            endingLineNumber = "1998"
-            landmarkName = "CreateCreditApplicationPdf(parameter:completion:)"
+            startingLineNumber = "2000"
+            endingLineNumber = "2000"
+            landmarkName = "createcreditapplication(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2094,9 +2078,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1995"
-            endingLineNumber = "1995"
-            landmarkName = "CreateCreditApplicationPdf(parameter:completion:)"
+            startingLineNumber = "1997"
+            endingLineNumber = "1997"
+            landmarkName = "createcreditapplication(parameter:completion:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2144,7 +2128,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "291"
             endingLineNumber = "291"
-            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkName = "BackendApiSyncCall()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2158,9 +2142,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1028"
-            endingLineNumber = "1028"
-            landmarkName = "setNavigationBarLogoAndLogout(with:)"
+            startingLineNumber = "1033"
+            endingLineNumber = "1033"
+            landmarkName = "setNavigationBarbacklogoResetAndNext(name:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2176,7 +2160,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "250"
             endingLineNumber = "250"
-            landmarkName = "tableView(_:editActionsForRowAt:)"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2192,7 +2176,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "351"
             endingLineNumber = "351"
-            landmarkName = "updateTitleColorApi(measurement_id:material_id:)"
+            landmarkName = "tableView(_:editActionsForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2208,7 +2192,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "349"
             endingLineNumber = "349"
-            landmarkName = "moldingAlert(sender:)"
+            landmarkName = "tableView(_:editActionsForRowAt:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2432,7 +2416,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "257"
             endingLineNumber = "257"
-            landmarkName = "tableReload(_:)"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2510,9 +2494,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "957"
-            endingLineNumber = "957"
-            landmarkName = "labelFormatFinanace(title:amount:)"
+            startingLineNumber = "960"
+            endingLineNumber = "960"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2526,9 +2510,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "960"
-            endingLineNumber = "960"
-            landmarkName = "labelFormatFinanace(title:amount:)"
+            startingLineNumber = "963"
+            endingLineNumber = "963"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2542,9 +2526,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "whthpndButtonAction(_:)"
+            startingLineNumber = "172"
+            endingLineNumber = "172"
+            landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2558,10 +2542,10 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "229"
-            endingLineNumber = "229"
-            landmarkName = "OrderStatusViewController"
-            landmarkType = "3">
+            startingLineNumber = "291"
+            endingLineNumber = "291"
+            landmarkName = "dropDownButtonAction(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2574,9 +2558,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "825"
-            endingLineNumber = "825"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "828"
+            endingLineNumber = "828"
+            landmarkName = "DownorfinalPaymentButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2590,9 +2574,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "840"
-            endingLineNumber = "840"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "843"
+            endingLineNumber = "843"
+            landmarkName = "DownorfinalPaymentButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2608,7 +2592,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "285"
             endingLineNumber = "285"
-            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            landmarkName = "cameraUploadButtonAction(sender:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2656,7 +2640,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "294"
             endingLineNumber = "294"
-            landmarkName = "imageUpload(_:_:)"
+            landmarkName = "cameraUploadButtonAction(sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2672,7 +2656,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "250"
             endingLineNumber = "250"
-            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            landmarkName = "cameraUploadButton(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2686,10 +2670,10 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
-            landmarkName = "OrderStatusViewController"
-            landmarkType = "3">
+            startingLineNumber = "294"
+            endingLineNumber = "294"
+            landmarkName = "dropDownButtonAction(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2702,9 +2686,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "243"
-            endingLineNumber = "243"
-            landmarkName = "OrderStatustLisApiCall()"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "dropDownButtonAction(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -2750,9 +2734,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "244"
-            endingLineNumber = "244"
-            landmarkName = "OrderStatustLisApiCall()"
+            startingLineNumber = "306"
+            endingLineNumber = "306"
+            landmarkName = "dropDownButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2766,9 +2750,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
-            landmarkName = "submitOrderStatustListApi(parameter:completion:)"
+            startingLineNumber = "300"
+            endingLineNumber = "300"
+            landmarkName = "OrderStatustListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2782,10 +2766,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "309"
-            endingLineNumber = "309"
-            landmarkName = "submitOrderStatustListApi(parameter:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "310"
+            endingLineNumber = "310"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2800,8 +2784,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "590"
             endingLineNumber = "590"
-            landmarkName = "contract_additional_other_leveling_status(_:)"
-            landmarkType = "7">
+            landmarkName = "WebViewViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2814,9 +2798,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1855"
-            endingLineNumber = "1855"
-            landmarkName = "CapturePaymentApi(parameter:completion:)"
+            startingLineNumber = "1857"
+            endingLineNumber = "1857"
+            landmarkName = "FormUpdateApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2832,7 +2816,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "583"
             endingLineNumber = "583"
-            landmarkName = "contract_additional_other_subfloor_status(_:)"
+            landmarkName = "contract_additional_other_cost_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2846,8 +2830,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1867"
-            endingLineNumber = "1867"
+            startingLineNumber = "1869"
+            endingLineNumber = "1869"
             landmarkName = "CapturePaymentApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2864,7 +2848,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "415"
             endingLineNumber = "415"
-            landmarkName = "validation()"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2880,7 +2864,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "478"
             endingLineNumber = "478"
-            landmarkName = "validation()"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2896,7 +2880,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "503"
             endingLineNumber = "503"
-            landmarkName = "validation()"
+            landmarkName = "nextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2912,7 +2896,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "935"
             endingLineNumber = "935"
-            landmarkName = "cancelDatePicker()"
+            landmarkName = "dateAcquiredAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2928,7 +2912,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "979"
             endingLineNumber = "979"
-            landmarkName = "DropDownDidSelectedAction(_:_:_:)"
+            landmarkName = "cancelDatePicker()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -2944,8 +2928,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "417"
             endingLineNumber = "417"
-            landmarkName = "nextButtonAction(_:)"
-            landmarkType = "7">
+            landmarkName = "OtherIncomeViewControllerForm"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2990,10 +2974,10 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "632"
-            endingLineNumber = "632"
-            landmarkName = "PaymentOptionsNewViewController"
-            landmarkType = "3">
+            startingLineNumber = "635"
+            endingLineNumber = "635"
+            landmarkName = "didApplyPromoCode(code:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3006,9 +2990,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "678"
-            endingLineNumber = "678"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "681"
+            endingLineNumber = "681"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3038,9 +3022,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "668"
-            endingLineNumber = "668"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "671"
+            endingLineNumber = "671"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3056,7 +3040,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "432"
             endingLineNumber = "432"
-            landmarkName = "nextButtonAction(_:)"
+            landmarkName = "changeAreaButtonAction(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -3102,9 +3086,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
-            landmarkName = "nextButtonAction(_:)"
+            startingLineNumber = "437"
+            endingLineNumber = "437"
+            landmarkName = "changeAreaButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3118,9 +3102,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1410"
-            endingLineNumber = "1410"
-            landmarkName = "UpdateQustionoriesApi(parameter:completion:)"
+            startingLineNumber = "1411"
+            endingLineNumber = "1411"
+            landmarkName = "UpdateSummeryDetails(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3136,8 +3120,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "994"
             endingLineNumber = "994"
-            landmarkName = "mapping(map:)"
-            landmarkType = "7">
+            landmarkName = "SummeryDetailsData"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3152,7 +3136,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "973"
             endingLineNumber = "973"
-            landmarkName = "init(id:name:transition_width:attachments:)"
+            landmarkName = "mapping(map:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -3258,9 +3242,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "673"
-            endingLineNumber = "673"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "676"
+            endingLineNumber = "676"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3274,9 +3258,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "659"
-            endingLineNumber = "659"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "662"
+            endingLineNumber = "662"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3308,8 +3292,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "372"
             endingLineNumber = "372"
-            landmarkName = "submitAPICall()"
-            landmarkType = "7">
+            landmarkName = "AboutRoomViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3324,7 +3308,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "370"
             endingLineNumber = "370"
-            landmarkName = "submitAPICall()"
+            landmarkName = "externalCollectionViewDidSelectbutton2(index:tag:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3340,7 +3324,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "357"
             endingLineNumber = "357"
-            landmarkName = "submitAPICall()"
+            landmarkName = "externalCollectionViewDidSelectbutton2(index:tag:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3356,7 +3340,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "426"
             endingLineNumber = "426"
-            landmarkName = "nextButtonAction(_:)"
+            landmarkName = "changeAreaButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3372,8 +3356,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "51"
             endingLineNumber = "51"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
+            landmarkName = "PaymentDetailsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3404,8 +3388,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "415"
             endingLineNumber = "415"
-            landmarkName = "nextButtonAction(_:)"
-            landmarkType = "7">
+            landmarkName = "OtherIncomeViewControllerForm"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3420,7 +3404,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "290"
             endingLineNumber = "290"
-            landmarkName = "segmentedControlValueChanged(_:)"
+            landmarkName = "termsandconditions()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3452,7 +3436,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "221"
             endingLineNumber = "221"
-            landmarkName = "createSalesQuotation()"
+            landmarkName = "getloanPayment(tag:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -3516,7 +3500,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "276"
             endingLineNumber = "276"
-            landmarkName = "validation()"
+            landmarkName = "addressDidBigen(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3564,7 +3548,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "450"
             endingLineNumber = "450"
-            landmarkName = "nextButtonAction(_:)"
+            landmarkName = "isValidSsn(ssn:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3610,9 +3594,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "465"
-            endingLineNumber = "465"
-            landmarkName = "DropDownDefaultfunction(_:_:_:_:delegate:tag:)"
+            startingLineNumber = "470"
+            endingLineNumber = "470"
+            landmarkName = "promoSpecialDate(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3930,9 +3914,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "712"
-            endingLineNumber = "712"
-            landmarkName = "SubmitContractMessurementsQuestionsApi(parameter:completion:)"
+            startingLineNumber = "713"
+            endingLineNumber = "713"
+            landmarkName = "QustionsListForMessurementsApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -3946,10 +3930,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "715"
-            endingLineNumber = "715"
-            landmarkName = "SubmitContractMessurementsQuestionsApi(parameter:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "716"
+            endingLineNumber = "716"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -3962,8 +3946,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "717"
-            endingLineNumber = "717"
+            startingLineNumber = "718"
+            endingLineNumber = "718"
             landmarkName = "SubmitContractMessurementsQuestionsApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4044,7 +4028,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "819"
             endingLineNumber = "819"
-            landmarkName = "paymentTransactionCashApi(isOnJobCompleation:balancePaymentMethord:)"
+            landmarkName = "goNextPageForPAyButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4060,7 +4044,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "307"
             endingLineNumber = "307"
-            landmarkName = "validateForCheck()"
+            landmarkName = "GoForJobCompleationValidation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4076,7 +4060,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "366"
             endingLineNumber = "366"
-            landmarkName = "validateForCard()"
+            landmarkName = "validateForCheck()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4092,7 +4076,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "259"
             endingLineNumber = "259"
-            landmarkName = "GoForJobCompleationValidation()"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4108,7 +4092,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "274"
             endingLineNumber = "274"
-            landmarkName = "GoForJobCompleation()"
+            landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4124,7 +4108,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "864"
             endingLineNumber = "864"
-            landmarkName = "paymentTransactionCreditCardApi(isOnJobCompleation:balancePaymentMethord:)"
+            landmarkName = "goNextPageForPAyButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4140,7 +4124,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "667"
             endingLineNumber = "667"
-            landmarkName = "goNextPageForPAyButtonAction()"
+            landmarkName = "externalCollectionViewDidSelectbutton(index:tag:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4156,7 +4140,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "438"
             endingLineNumber = "438"
-            landmarkName = "contract_deposit_status(_:)"
+            landmarkName = "contract_lifetime_guarantee_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4172,8 +4156,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "459"
             endingLineNumber = "459"
-            landmarkName = "WebViewViewController"
-            landmarkType = "3">
+            landmarkName = "contract_deposit_status(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4186,9 +4170,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "664"
-            endingLineNumber = "664"
-            landmarkName = "setNavigationBarbacklogoAndSubmit()"
+            startingLineNumber = "669"
+            endingLineNumber = "669"
+            landmarkName = "checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4202,9 +4186,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "747"
-            endingLineNumber = "747"
-            landmarkName = "setNavigationBarbacklogoAndSubmitDisable()"
+            startingLineNumber = "752"
+            endingLineNumber = "752"
+            landmarkName = "checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4218,9 +4202,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "797"
-            endingLineNumber = "797"
-            landmarkName = "setNavigationBarbacklogoAndDoneDisable()"
+            startingLineNumber = "802"
+            endingLineNumber = "802"
+            landmarkName = "getDate()"
             landmarkType = "7">
             <Locations>
                <Location
@@ -4268,8 +4252,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "597"
             endingLineNumber = "597"
-            landmarkName = "WebViewViewController"
-            landmarkType = "3">
+            landmarkName = "contract_additional_other_subfloor_status(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4284,7 +4268,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "620"
             endingLineNumber = "620"
-            landmarkName = "contract_additional_other_hardwood_removal_status(_:)"
+            landmarkName = "contract_additional_other_screwdown_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4300,8 +4284,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "639"
             endingLineNumber = "639"
-            landmarkName = "WebViewViewController"
-            landmarkType = "3">
+            landmarkName = "contract_additional_other_hardwood_removal_status(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4316,7 +4300,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "641"
             endingLineNumber = "641"
-            landmarkName = "contract_additional_other_bifold_removal_status(_:)"
+            landmarkName = "contract_additional_other_hardwood_removal_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4332,7 +4316,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "665"
             endingLineNumber = "665"
-            landmarkName = "electronicsAuthorization2Action(_:)"
+            landmarkName = "contract_additional_other_bifold_removal_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4348,7 +4332,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "670"
             endingLineNumber = "670"
-            landmarkName = "electronicsAuthorization2Action(_:)"
+            landmarkName = "contract_additional_other_bifold_removal_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4364,7 +4348,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "712"
             endingLineNumber = "712"
-            landmarkName = "contract_owner_responsibility_status(_:)"
+            landmarkName = "floorProtectionBtnStatus(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4380,7 +4364,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "733"
             endingLineNumber = "733"
-            landmarkName = "validateFields()"
+            landmarkName = "contract_right_to_cure_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4396,8 +4380,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "610"
             endingLineNumber = "610"
-            landmarkName = "WebViewViewController"
-            landmarkType = "3">
+            landmarkName = "contract_additional_other_leveling_status(_:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4412,7 +4396,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "626"
             endingLineNumber = "626"
-            landmarkName = "contract_additional_other_door_removal_status(_:)"
+            landmarkName = "contract_additional_other_screwdown_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4428,8 +4412,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "631"
             endingLineNumber = "631"
-            landmarkName = "contract_additional_other_door_removal_status(_:)"
-            landmarkType = "7">
+            landmarkName = "WebViewViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4444,8 +4428,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "657"
             endingLineNumber = "657"
-            landmarkName = "electronicsAuthorizationBtn1Action(_:)"
-            landmarkType = "7">
+            landmarkName = "WebViewViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4460,7 +4444,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "662"
             endingLineNumber = "662"
-            landmarkName = "electronicsAuthorizationBtn1Action(_:)"
+            landmarkName = "contract_additional_other_bifold_removal_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4476,7 +4460,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "473"
             endingLineNumber = "473"
-            landmarkName = "contract_scheduling_status(_:)"
+            landmarkName = "contract_final_payment_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4492,7 +4476,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "586"
             endingLineNumber = "586"
-            landmarkName = "contract_additional_other_leveling_status(_:)"
+            landmarkName = "contract_additional_other_cost_status(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4508,7 +4492,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "875"
             endingLineNumber = "875"
-            landmarkName = "paymentTransactionCreditCardApi(isOnJobCompleation:balancePaymentMethord:)"
+            landmarkName = "goNextPageForPAyButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4522,9 +4506,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1480"
-            endingLineNumber = "1480"
-            landmarkName = "PaymentRequestAPi(parameter:completion:)"
+            startingLineNumber = "1482"
+            endingLineNumber = "1482"
+            landmarkName = "GetPaymentListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4540,7 +4524,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "873"
             endingLineNumber = "873"
-            landmarkName = "paymentTransactionCreditCardApi(isOnJobCompleation:balancePaymentMethord:)"
+            landmarkName = "goNextPageForPAyButtonAction()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4554,10 +4538,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1487"
-            endingLineNumber = "1487"
-            landmarkName = "PaymentRequestAPi(parameter:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "1489"
+            endingLineNumber = "1489"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -4570,8 +4554,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1496"
-            endingLineNumber = "1496"
+            startingLineNumber = "1498"
+            endingLineNumber = "1498"
             landmarkName = "PaymentRequestAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -4586,9 +4570,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "704"
-            endingLineNumber = "704"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "707"
+            endingLineNumber = "707"
+            landmarkName = "didApplyDiscountAtCash(cash:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4604,8 +4588,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
             endingLineNumber = "96"
-            landmarkName = "adjustmentButtonAction(_:)"
-            landmarkType = "7">
+            landmarkName = "PaymentOptionsNewViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "648CD121-9845-4256-ACDC-7C6263E05BBF - 4835596b8135cfd9"
@@ -4712,7 +4696,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "176"
             endingLineNumber = "176"
-            landmarkName = "didApplyPromoCode(code:)"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4728,7 +4712,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "211"
             endingLineNumber = "211"
-            landmarkName = "didApplyDiscountAtCash(cash:)"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4744,8 +4728,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "66"
             endingLineNumber = "66"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
+            landmarkName = "PaymentOptionsNewViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "9CEE4465-8B2E-4B7F-88C3-186D44E73904 - 320f4b9f0e72d64e"
@@ -4852,8 +4836,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "71"
             endingLineNumber = "71"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
+            landmarkName = "PaymentOptionsNewViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "D2A1238D-51FF-4A19-AC6A-5D5B5CB017AD - fb87b21d8e7464eb"
@@ -4960,7 +4944,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "251"
             endingLineNumber = "251"
-            landmarkName = "didApplyDiscountAtPersentage(persentage:)"
+            landmarkName = "isApplicableRoom()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -4976,8 +4960,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "115"
             endingLineNumber = "115"
-            landmarkName = "adjustmentButtonAction(_:)"
-            landmarkType = "7">
+            landmarkName = "PaymentOptionsNewViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "81820153-5D63-4F22-A0FE-7FFDFD780004 - 85488a480a4eb3a2"
@@ -5024,8 +5008,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "218"
             endingLineNumber = "218"
-            landmarkName = "didApplyDiscountAtCash(cash:)"
-            landmarkType = "7">
+            landmarkName = "PaymentOptionsNewViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5038,9 +5022,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "721"
-            endingLineNumber = "721"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "724"
+            endingLineNumber = "724"
+            landmarkName = "didApplyDiscountAtCash(cash:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5104,8 +5088,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "76"
             endingLineNumber = "76"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
+            landmarkName = "PaymentOptionsNewViewController"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "72517AA3-02ED-4A75-A80E-F934573E30ED - b96a11d0c5c03ffb"
@@ -5212,7 +5196,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "221"
             endingLineNumber = "221"
-            landmarkName = "didApplyDiscountAtCash(cash:)"
+            landmarkName = "isApplicableRoom()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5226,9 +5210,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "482"
-            endingLineNumber = "482"
-            landmarkName = "paymentTypeApiCall()"
+            startingLineNumber = "485"
+            endingLineNumber = "485"
+            landmarkName = "changeAreaButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5258,9 +5242,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "366"
-            endingLineNumber = "366"
-            landmarkName = "SubmitAppointmentsApi(parameter:completion:)"
+            startingLineNumber = "367"
+            endingLineNumber = "367"
+            landmarkName = "submitOrderStatustUploadData(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5276,7 +5260,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "69"
             endingLineNumber = "69"
-            landmarkName = "tableView(_:cellForRowAt:)"
+            landmarkName = "textViewDidBeginEditing(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5306,8 +5290,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "374"
+            endingLineNumber = "374"
             landmarkName = "SubmitAppointmentsApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5322,8 +5306,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
+            startingLineNumber = "376"
+            endingLineNumber = "376"
             landmarkName = "SubmitAppointmentsApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5338,9 +5322,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "325"
-            endingLineNumber = "325"
-            landmarkName = "leftSpace()"
+            startingLineNumber = "392"
+            endingLineNumber = "392"
+            landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5354,9 +5338,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "whthpndButtonAction(_:)"
+            startingLineNumber = "160"
+            endingLineNumber = "160"
+            landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5370,9 +5354,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "whthpndButtonAction(_:)"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5386,9 +5370,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "whatnextButtonAction(_:)"
+            startingLineNumber = "178"
+            endingLineNumber = "178"
+            landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5402,9 +5386,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "185"
-            endingLineNumber = "185"
-            landmarkName = "saveButtonACtion(_:)"
+            startingLineNumber = "224"
+            endingLineNumber = "224"
+            landmarkName = "whthpndButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5418,9 +5402,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "191"
-            endingLineNumber = "191"
-            landmarkName = "saveButtonACtion(_:)"
+            startingLineNumber = "230"
+            endingLineNumber = "230"
+            landmarkName = "whthpndButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5434,9 +5418,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
-            landmarkName = "updateOrderStatustLisApiCall(status:whatHappendSTring:whatNextString:)"
+            startingLineNumber = "353"
+            endingLineNumber = "353"
+            landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -5482,9 +5466,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "264"
-            endingLineNumber = "264"
-            landmarkName = "OrderStatustListApi(completion:)"
+            startingLineNumber = "265"
+            endingLineNumber = "265"
+            landmarkName = "BackendApiSyncCallDirect()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5498,9 +5482,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
-            landmarkName = "updateOrderStatustLisApiCall(status:whatHappendSTring:whatNextString:)"
+            startingLineNumber = "358"
+            endingLineNumber = "358"
+            landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5514,8 +5498,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "274"
-            endingLineNumber = "274"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "OrderStatustListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5530,9 +5514,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "308"
-            endingLineNumber = "308"
-            landmarkName = "updateOrderStatustLisApiCall(status:whatHappendSTring:whatNextString:)"
+            startingLineNumber = "375"
+            endingLineNumber = "375"
+            landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5546,9 +5530,9 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
-            landmarkName = "updateOrderStatustLisApiCall(status:whatHappendSTring:whatNextString:)"
+            startingLineNumber = "360"
+            endingLineNumber = "360"
+            landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -5596,7 +5580,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "365"
             endingLineNumber = "365"
-            landmarkName = "setPhoneNumberDelegate()"
+            landmarkName = "skipButtonAction(sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5610,9 +5594,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
-            landmarkName = "submitOrderStatustUploadData(parameter:completion:)"
+            startingLineNumber = "330"
+            endingLineNumber = "330"
+            landmarkName = "submitOrderStatustListApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5626,9 +5610,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "949"
-            endingLineNumber = "949"
-            landmarkName = "OrderstatusBarButtonAction()"
+            startingLineNumber = "954"
+            endingLineNumber = "954"
+            landmarkName = "setNavigationBarbacklogoAndNext(name:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5642,10 +5626,10 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "966"
-            endingLineNumber = "966"
-            landmarkName = "UIViewController"
-            landmarkType = "21">
+            startingLineNumber = "971"
+            endingLineNumber = "971"
+            landmarkName = "setNavigationBarbacklogoAndNext(name:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5658,8 +5642,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "434"
-            endingLineNumber = "434"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "AttachmentsMapFn(_:_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5674,9 +5658,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "980"
-            endingLineNumber = "980"
-            landmarkName = "OrderStatusViewDelegateResult()"
+            startingLineNumber = "985"
+            endingLineNumber = "985"
+            landmarkName = "setNavigationBarbacklogoAndNext(name:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5692,8 +5676,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "44"
             endingLineNumber = "44"
-            landmarkName = "viewDidLoad()"
-            landmarkType = "7">
+            landmarkName = "OrderStatusViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5708,8 +5692,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "297"
             endingLineNumber = "297"
-            landmarkName = "CustomerDetailsOneViewController"
-            landmarkType = "3">
+            landmarkName = "textField(_:shouldChangeCharactersIn:replacementString:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5724,7 +5708,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "220"
             endingLineNumber = "220"
-            landmarkName = "imagePickerController(picker:didFinishPickingImage:editingInfo:)"
+            landmarkName = "performSegueToReturnBack()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5740,7 +5724,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "231"
             endingLineNumber = "231"
-            landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
+            landmarkName = "cameraUploadButton(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5754,9 +5738,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "951"
-            endingLineNumber = "951"
-            landmarkName = "screenShotBarButtonAction(sender:)"
+            startingLineNumber = "956"
+            endingLineNumber = "956"
+            landmarkName = "setNavigationBarbacklogoAndNext(name:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5804,8 +5788,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "298"
             endingLineNumber = "298"
-            landmarkName = "CustomerDetailsOneViewController"
-            landmarkType = "3">
+            landmarkName = "textField(_:shouldChangeCharactersIn:replacementString:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5818,9 +5802,9 @@
             filePath = "Refloor/ExtensionFiles/Extension.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "952"
-            endingLineNumber = "952"
-            landmarkName = "screenShotBarButtonAction(sender:)"
+            startingLineNumber = "957"
+            endingLineNumber = "957"
+            landmarkName = "setNavigationBarbacklogoAndNext(name:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -5836,8 +5820,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "301"
             endingLineNumber = "301"
-            landmarkName = "screenShotBarButtonAction(sender:)"
-            landmarkType = "7">
+            landmarkName = "CustomerDetailsOneViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -5948,7 +5932,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "230"
             endingLineNumber = "230"
-            landmarkName = "tableView(_:editActionsForRowAt:)"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6012,7 +5996,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "96"
             endingLineNumber = "96"
-            landmarkName = "application(_:didReceiveRemoteNotification:)"
+            landmarkName = "application(_:didDiscardSceneSessions:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6026,10 +6010,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "724"
-            endingLineNumber = "724"
-            landmarkName = "HttpClientManager"
-            landmarkType = "3">
+            startingLineNumber = "725"
+            endingLineNumber = "725"
+            landmarkName = "SubmitContractMessurementsQuestionsApi(parameter:completion:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   uuid = "C56F30AF-070A-426B-A6A3-49548783074E - 36b6b8d9433d1762"
@@ -6074,9 +6058,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1713"
-            endingLineNumber = "1713"
-            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
+            startingLineNumber = "1715"
+            endingLineNumber = "1715"
+            landmarkName = "RoomDetailsUpdateApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6124,7 +6108,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "170"
             endingLineNumber = "170"
-            landmarkName = "AppinmentListApi(completion:)"
+            landmarkName = "getMasterDataFromDB()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6140,7 +6124,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "419"
             endingLineNumber = "419"
-            landmarkName = "didSelect(image:imageName:)"
+            landmarkName = "imageUploadScreenShot(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6156,7 +6140,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "307"
             endingLineNumber = "307"
-            landmarkName = "imageUploadScreenShot(_:_:)"
+            landmarkName = "validation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6268,7 +6252,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "230"
             endingLineNumber = "230"
-            landmarkName = "BackendApiSyncCallDirect()"
+            landmarkName = "AppinmentListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6282,9 +6266,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "268"
-            endingLineNumber = "268"
-            landmarkName = "OrderStatustListApi(completion:)"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
+            landmarkName = "BackendApiSyncCallDirect()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6298,9 +6282,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "303"
-            endingLineNumber = "303"
-            landmarkName = "submitOrderStatustListApi(parameter:completion:)"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
+            landmarkName = "OrderStatustListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6314,8 +6298,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "502"
-            endingLineNumber = "502"
+            startingLineNumber = "503"
+            endingLineNumber = "503"
             landmarkName = "AttachmentScreenShotsFn(_:_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6330,9 +6314,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "539"
-            endingLineNumber = "539"
-            landmarkName = "TransitionListsApi(parameter:completion:)"
+            startingLineNumber = "540"
+            endingLineNumber = "540"
+            landmarkName = "AttachmentScreenShotsFn(_:_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6346,9 +6330,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "571"
-            endingLineNumber = "571"
-            landmarkName = "AddTransitionApi(parameter:completion:)"
+            startingLineNumber = "572"
+            endingLineNumber = "572"
+            landmarkName = "TransitionListsApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6362,9 +6346,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "603"
-            endingLineNumber = "603"
-            landmarkName = "DeleteImageApi(parameter:completion:)"
+            startingLineNumber = "604"
+            endingLineNumber = "604"
+            landmarkName = "AddTransitionApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6378,9 +6362,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "635"
-            endingLineNumber = "635"
-            landmarkName = "DeleteTransactionApi(parameter:completion:)"
+            startingLineNumber = "636"
+            endingLineNumber = "636"
+            landmarkName = "DeleteImageApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6394,9 +6378,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "672"
-            endingLineNumber = "672"
-            landmarkName = "QustionsListForMessurementsApi(parameter:completion:)"
+            startingLineNumber = "673"
+            endingLineNumber = "673"
+            landmarkName = "DeleteTransactionApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6410,8 +6394,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "786"
-            endingLineNumber = "786"
+            startingLineNumber = "787"
+            endingLineNumber = "787"
             landmarkName = "MesurementSubmitMapFn(room_area:perimeter:attachments:imagename:floor_id:room:appointment_id:trasData:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6426,8 +6410,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "832"
-            endingLineNumber = "832"
+            startingLineNumber = "833"
+            endingLineNumber = "833"
             landmarkName = "StairtSubmitMapFn(floor_id:room:appointment_id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6442,9 +6426,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "870"
-            endingLineNumber = "870"
-            landmarkName = "TilesMaterialListApi(completion:)"
+            startingLineNumber = "871"
+            endingLineNumber = "871"
+            landmarkName = "StairtSubmitMapFn(floor_id:room:appointment_id:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6458,9 +6442,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "904"
-            endingLineNumber = "904"
-            landmarkName = "TilesMaterialUpdateApi(parameter:completion:)"
+            startingLineNumber = "905"
+            endingLineNumber = "905"
+            landmarkName = "TilesMaterialListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6474,9 +6458,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "942"
-            endingLineNumber = "942"
-            landmarkName = "TilesMaterialListApiviaPaymentPlan(_:completion:)"
+            startingLineNumber = "943"
+            endingLineNumber = "943"
+            landmarkName = "TilesMaterialUpdateApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6490,9 +6474,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "977"
-            endingLineNumber = "977"
-            landmarkName = "TilesMaterialUpdateApiViaPaymentPlan(parameter:completion:)"
+            startingLineNumber = "978"
+            endingLineNumber = "978"
+            landmarkName = "TilesMaterialListApiviaPaymentPlan(_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6506,9 +6490,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1012"
-            endingLineNumber = "1012"
-            landmarkName = "CreateSalesQuotationAPi(parameter:completion:)"
+            startingLineNumber = "1013"
+            endingLineNumber = "1013"
+            landmarkName = "TilesMaterialUpdateApiViaPaymentPlan(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6522,9 +6506,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1045"
-            endingLineNumber = "1045"
-            landmarkName = "CreateSalesQuotationForSatusAPi(parameter:completion:)"
+            startingLineNumber = "1046"
+            endingLineNumber = "1046"
+            landmarkName = "CreateSalesQuotationAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6538,9 +6522,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1082"
-            endingLineNumber = "1082"
-            landmarkName = "RoomListDetailsApi(_:completion:)"
+            startingLineNumber = "1083"
+            endingLineNumber = "1083"
+            landmarkName = "CreateSalesQuotationForSatusAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6554,9 +6538,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1119"
-            endingLineNumber = "1119"
-            landmarkName = "RoomSummeryDetailsApi(_:completion:)"
+            startingLineNumber = "1120"
+            endingLineNumber = "1120"
+            landmarkName = "RoomListDetailsApi(_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6570,9 +6554,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1156"
-            endingLineNumber = "1156"
-            landmarkName = "RoomSummeryListApi(_:completion:)"
+            startingLineNumber = "1157"
+            endingLineNumber = "1157"
+            landmarkName = "RoomSummeryDetailsApi(_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6586,9 +6570,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1190"
-            endingLineNumber = "1190"
-            landmarkName = "UpdateTilesColorApi(parameter:completion:)"
+            startingLineNumber = "1191"
+            endingLineNumber = "1191"
+            landmarkName = "RoomSummeryListApi(_:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6602,9 +6586,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1225"
-            endingLineNumber = "1225"
-            landmarkName = "UpdateMoldingApi(parameter:completion:)"
+            startingLineNumber = "1226"
+            endingLineNumber = "1226"
+            landmarkName = "UpdateTilesColorApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6618,9 +6602,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1263"
-            endingLineNumber = "1263"
-            landmarkName = "AddoRommToListApi(appointment_id:room_name:completion:)"
+            startingLineNumber = "1264"
+            endingLineNumber = "1264"
+            landmarkName = "UpdateMoldingApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6634,9 +6618,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1300"
-            endingLineNumber = "1300"
-            landmarkName = "CheckRoomAvailability(parameter:completion:)"
+            startingLineNumber = "1301"
+            endingLineNumber = "1301"
+            landmarkName = "AddoRommToListApi(appointment_id:room_name:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6650,9 +6634,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1336"
-            endingLineNumber = "1336"
-            landmarkName = "DeleteRoomMeasurement(parameter:completion:)"
+            startingLineNumber = "1337"
+            endingLineNumber = "1337"
+            landmarkName = "CheckRoomAvailability(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6666,9 +6650,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1373"
-            endingLineNumber = "1373"
-            landmarkName = "UpdateSummeryDetails(parameter:completion:)"
+            startingLineNumber = "1374"
+            endingLineNumber = "1374"
+            landmarkName = "DeleteRoomMeasurement(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6682,9 +6666,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1450"
-            endingLineNumber = "1450"
-            landmarkName = "GetPaymentListApi(completion:)"
+            startingLineNumber = "1451"
+            endingLineNumber = "1451"
+            landmarkName = "UpdateQustionoriesApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6698,9 +6682,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1522"
-            endingLineNumber = "1522"
-            landmarkName = "PaymentRequestCardAPi(parameter:completion:)"
+            startingLineNumber = "1524"
+            endingLineNumber = "1524"
+            landmarkName = "PaymentRequestAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6714,9 +6698,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1555"
-            endingLineNumber = "1555"
-            landmarkName = "PaymentRequestCheckAPi(parameter:completion:)"
+            startingLineNumber = "1557"
+            endingLineNumber = "1557"
+            landmarkName = "PaymentRequestCardAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6730,9 +6714,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1590"
-            endingLineNumber = "1590"
-            landmarkName = "checkDocumentSigned(parameter:completion:)"
+            startingLineNumber = "1592"
+            endingLineNumber = "1592"
+            landmarkName = "PaymentRequestCheckAPi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6746,9 +6730,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1625"
-            endingLineNumber = "1625"
-            landmarkName = "rejectSalesAppointment(parameter:completion:)"
+            startingLineNumber = "1627"
+            endingLineNumber = "1627"
+            landmarkName = "checkDocumentSigned(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6762,9 +6746,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1659"
-            endingLineNumber = "1659"
-            landmarkName = "prposedSalesAppointment(parameter:completion:)"
+            startingLineNumber = "1661"
+            endingLineNumber = "1661"
+            landmarkName = "rejectSalesAppointment(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6778,9 +6762,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1696"
-            endingLineNumber = "1696"
-            landmarkName = "RoomDetailsUpdateApi(parameter:completion:)"
+            startingLineNumber = "1698"
+            endingLineNumber = "1698"
+            landmarkName = "prposedSalesAppointment(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6794,8 +6778,8 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1789"
-            endingLineNumber = "1789"
+            startingLineNumber = "1791"
+            endingLineNumber = "1791"
             landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -6810,9 +6794,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1860"
-            endingLineNumber = "1860"
-            landmarkName = "CapturePaymentApi(parameter:completion:)"
+            startingLineNumber = "1862"
+            endingLineNumber = "1862"
+            landmarkName = "FormUpdateApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6826,9 +6810,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1895"
-            endingLineNumber = "1895"
-            landmarkName = "DataUploadFromMiddleware(parameter:completion:)"
+            startingLineNumber = "1897"
+            endingLineNumber = "1897"
+            landmarkName = "CapturePaymentApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6842,9 +6826,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1928"
-            endingLineNumber = "1928"
-            landmarkName = "CapturePaymentApiStatus(parameter:completion:)"
+            startingLineNumber = "1930"
+            endingLineNumber = "1930"
+            landmarkName = "DataUploadFromMiddleware(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6858,9 +6842,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1962"
-            endingLineNumber = "1962"
-            landmarkName = "createcreditapplication(parameter:completion:)"
+            startingLineNumber = "1964"
+            endingLineNumber = "1964"
+            landmarkName = "CapturePaymentApiStatus(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6874,9 +6858,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1994"
-            endingLineNumber = "1994"
-            landmarkName = "CreateCreditApplicationPdf(parameter:completion:)"
+            startingLineNumber = "1996"
+            endingLineNumber = "1996"
+            landmarkName = "createcreditapplication(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6890,9 +6874,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1824"
-            endingLineNumber = "1824"
-            landmarkName = "FormUpdateApi(parameter:completion:)"
+            startingLineNumber = "1826"
+            endingLineNumber = "1826"
+            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6906,9 +6890,9 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "732"
-            endingLineNumber = "732"
-            landmarkName = "MesurementSubmitMapFn(room_area:perimeter:attachments:imagename:floor_id:room:appointment_id:trasData:completion:)"
+            startingLineNumber = "733"
+            endingLineNumber = "733"
+            landmarkName = "SubmitContractMessurementsQuestionsApi(parameter:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -6922,10 +6906,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1737"
-            endingLineNumber = "1737"
-            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "1739"
+            endingLineNumber = "1739"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -6938,10 +6922,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1736"
-            endingLineNumber = "1736"
-            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "1738"
+            endingLineNumber = "1738"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
             <Locations>
                <Location
                   uuid = "27F09C0F-38C1-4453-8D83-1336646466FA - 5040f97d4ad6a6e4"
@@ -6986,10 +6970,10 @@
             filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1739"
-            endingLineNumber = "1739"
-            landmarkName = "SignatureMapingpFn(_:_:credit_card:finance_application:contract:appointment_id:applicant_initial:coapplicant_initial:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "1741"
+            endingLineNumber = "1741"
+            landmarkName = "HttpClientManager"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7020,7 +7004,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "237"
             endingLineNumber = "237"
-            landmarkName = "BackendApiSyncCallDirect()"
+            landmarkName = "AppinmentListApi(completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -7034,8 +7018,8 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
+            startingLineNumber = "51"
+            endingLineNumber = "51"
             landmarkName = "viewDidLoad()"
             landmarkType = "7">
             <Locations>
@@ -7082,9 +7066,9 @@
             filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "653"
-            endingLineNumber = "653"
-            landmarkName = "collectionView(_:cellForItemAt:)"
+            startingLineNumber = "656"
+            endingLineNumber = "656"
+            landmarkName = "didApplyPromoCode(code:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -7100,7 +7084,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "120"
             endingLineNumber = "120"
-            landmarkName = "nextButtonAction(_:)"
+            landmarkName = "calculateFloorColorUpchargeAndExtraCost(rooms:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -7114,10 +7098,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "716"
-            endingLineNumber = "716"
-            landmarkName = "submitApiCall()"
-            landmarkType = "7">
+            startingLineNumber = "718"
+            endingLineNumber = "718"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7130,10 +7114,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "723"
-            endingLineNumber = "723"
-            landmarkName = "submitApiCall()"
-            landmarkType = "7">
+            startingLineNumber = "725"
+            endingLineNumber = "725"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7146,10 +7130,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "860"
-            endingLineNumber = "860"
-            landmarkName = "summeryDetailsDataApiCall()"
-            landmarkType = "7">
+            startingLineNumber = "862"
+            endingLineNumber = "862"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -7162,10 +7146,10 @@
             filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "868"
-            endingLineNumber = "868"
-            landmarkName = "summeryDetailsDataApiCall()"
-            landmarkType = "7">
+            startingLineNumber = "870"
+            endingLineNumber = "870"
+            landmarkName = "FurnitureQustionsViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -9580,7 +9564,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "106"
             endingLineNumber = "106"
-            landmarkName = "viewDidLoad()"
+            landmarkName = "getSignatureAndInitials()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -9612,8 +9596,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "135"
             endingLineNumber = "135"
-            landmarkName = "viewWillAppear(_:)"
-            landmarkType = "7">
+            landmarkName = "WebViewViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
