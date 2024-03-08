@@ -1002,8 +1002,8 @@
 				653EA566241F7AFC00EA684E /* Sources */,
 				653EA567241F7AFC00EA684E /* Frameworks */,
 				653EA568241F7AFC00EA684E /* Resources */,
-				5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */,
-				4C277601C358BD2FFDA194E2 /* [CP] Copy Pods Resources */,
+				367D51FDFCB1A86957A861AE /* [CP] Embed Pods Frameworks */,
+				1B71D3CB32F901C4BD4E21CC /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1129,7 +1129,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4C277601C358BD2FFDA194E2 /* [CP] Copy Pods Resources */ = {
+		1B71D3CB32F901C4BD4E21CC /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1146,7 +1146,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */ = {
+		367D51FDFCB1A86957A861AE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (

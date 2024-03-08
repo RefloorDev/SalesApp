@@ -14,7 +14,7 @@ public struct JWT<T:Codable>:Codable {
     public var signature: String?
     public var jwtToken: String?
     
-    public init(header:JWTHeader, payload:T, signature:String) {
+    init(header:JWTHeader, payload:T, signature:String) {
         self.header = header
         self.payload = payload
         self.signature = signature
