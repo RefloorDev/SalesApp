@@ -722,7 +722,7 @@ extension DropDown {
 	
 	fileprivate func fittingWidth() -> CGFloat {
 		if templateCell == nil {
-            templateCell = cellNib.instantiate(withOwner: nil, options: nil)[0] as? DropDownCell
+			templateCell = cellNib.instantiate(withOwner: nil, options: nil)[0] as! DropDownCell
 		}
 		
 		var maxWidth: CGFloat = 0
@@ -1116,13 +1116,13 @@ extension DropDown {
 
 		NotificationCenter.default.addObserver(
 			self,
-			selector: #selector(keyboardUpdate),
+            selector: #selector(keyboardUpdate),
             name: UIResponder.keyboardWillShowNotification,
 			object: nil)
 		NotificationCenter.default.addObserver(
 			self,
 			selector: #selector(keyboardUpdate),
-            name: UIResponder.keyboardWillHideNotification,
+            name: UIResponder.keyboardWillShowNotification,
 			object: nil)
 	}
 
