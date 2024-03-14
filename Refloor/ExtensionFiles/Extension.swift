@@ -3996,7 +3996,7 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
                 let dict:[String:Any] = ["id": id,"room_id":roomId, "questionnaires":questionAndAnswer]
-                print("id : ", id, " room_id : ", roomId, " questionnaires : ", questionAndAnswer)
+                print("saveQuestionAndAnswerToCompletedAppointment : ", id, " room_id : ", roomId, " questionnaires : ", questionAndAnswer)
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -4030,6 +4030,7 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
                 let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPrice":extraCost]
+                print("extraCostOfAppointment : ", roomId, " id : ", id, "extraCost : ", extraCost)
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }

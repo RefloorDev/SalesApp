@@ -1173,10 +1173,47 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
         else
         {
-            paymentOptionDataValueDetail = paymentRestrictionDataValueDetail.filter({$0.isHidden == false})
+//            let currentDate = "2029-03-16"  // or use Date() for current date
+            let currentDate = Date()
+
+            // Filter the payment options based on visibility and date range
+            let filteredData = paymentRestrictionDataValueDetail.filter { cellData in
+                // Filter based on visibility
+                guard !cellData.isHidden else { return false }
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                // Filter based on date range
+                if let startDateString = cellData.start_date,
+                   let endDateString = cellData.end_date,
+                   let startDate = dateFormatter.date(from: startDateString),
+                   let endDate = dateFormatter.date(from: endDateString) {
+                    
+                    let formattedStartDate = dateFormatter.string(from: startDate)
+                    let formattedEndDate = dateFormatter.string(from: endDate)
+                    let formattedCurrentDate = dateFormatter.string(from: currentDate)
+                    return formattedCurrentDate >= formattedStartDate && formattedCurrentDate <= formattedEndDate
+                }
+                return false // Return false if start_date or end_date is nil or cannot be converted to Date
+            }
+
+            // Update paymentOptionDataValueDetail with filtered data
+            paymentOptionDataValueDetail = filteredData
+
+            // Count the visible cells
+            let visibleCellsCount = paymentOptionDataValueDetail.filter { !$0.isHidden }.count
+            print("paymentOptionDataValueDetail_Visible cells count: \(visibleCellsCount)")
+
+            // Return the count of visible cells
+            return visibleCellsCount
+
+            
+            //            paymentOptionDataValueDetail = paymentRestrictionDataValueDetail.filter({$0.isHidden == false})
 //            paymentOptionDataValueDetail.removeLast()
            // paymentOptionDataValueDetail.removeLast()
-            return paymentOptionDataValueDetail.count
+//            print("paymentOptionDataValueDetail.count : ", paymentOptionDataValueDetail.count)
+//            return paymentOptionDataValueDetail.count
         }
     }
     
@@ -1607,7 +1644,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentOptionsBottomCollectionViewCell", for: indexPath) as! PaymentOptionsBottomCollectionViewCell
             //let paymentRestrictionArray = paymentOptionDataValueDetail.filter({$0.isHidden == false})
             
-            // let currentDate = "2029-03-16"
+//             let currentDate = "2029-03-16"
             let currentDate = Date()
             let startDateString = paymentOptionDataValueDetail[indexPath.row].start_date ?? ""
             let endDateString = paymentOptionDataValueDetail[indexPath.row].end_date ?? ""
@@ -1620,7 +1657,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             print("end_Date : ", dateFormatter.string(from: dateFormatter.date(from: endDateString) ?? Date()))
             
             do {
-            //            let current_date = dateFormatter.string(from: dateFormatter.date(from: currentDate)!)
+//                        let current_date = dateFormatter.string(from: dateFormatter.date(from: currentDate)!)
             let current_date = dateFormatter.string(from: currentDate)
             let start_Date = dateFormatter.string(from: dateFormatter.date(from: startDateString) ?? Date())
             let end_Date = dateFormatter.string(from: dateFormatter.date(from: endDateString) ?? Date())
@@ -1825,11 +1862,12 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 return cell
             } else {
                 cell.isHidden = true
+                paymentOptionDataValueDetail[indexPath.row].isHidden == true
                 return cell
             }
         } catch {
-                return cell
-            }
+            return cell
+         }
         }
     }
     

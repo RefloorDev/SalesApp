@@ -96,22 +96,65 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // Check if the textView being edited is priceQuotedTextView
         if let priceTextView = priceQuotedTextView, textView == priceTextView {
-            // Check if the replacement text is numeric or empty (backspace)
+            // Check if the replacement text is numeric, a decimal point, or empty (backspace)
             let allowedNumericCharacterSet = CharacterSet(charactersIn: "0123456789.")
             let replacementNumericCharacterSet = CharacterSet(charactersIn: text)
-            let isNumeric = allowedNumericCharacterSet.isSuperset(of: replacementNumericCharacterSet)
+            let isNumeric = allowedNumericCharacterSet.isSuperset(of: replacementNumericCharacterSet) || text == "."
             
-            // Check if the resulting text will be within 12 characters
-            let currentText = textView.text ?? ""
-            let newText = (currentText as NSString).replacingCharacters(in: range, with: text)
+            // Get the current text in the textView
+            var currentText = textView.text ?? ""
             
-            // Ensure that newText only contains digits and is within the 12-digit limit
-            if newText.isEmpty || (isNumeric && newText.count <= 12) {
-                return true
+            // If the new text is numeric, a decimal point, or empty and the current text is empty
+            if range.location == 0 && range.length == 0 && text != "" && currentText.isEmpty {
+                if isNumeric {
+                    // Prepend "$" to the text
+                    currentText = "$" + text
+                }
             } else {
+                // Concatenate the new text with the current text
+                currentText = (currentText as NSString).replacingCharacters(in: range, with: text)
+            }
+            
+            // Remove non-numeric characters, except for the decimal point, and the "$" symbol
+            var digits = currentText.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
+            
+            // Ensure that the text does not exceed 12 characters
+            if digits.count > 12 {
                 return false
             }
-        } else {
+            
+            // Split the text into integer and fractional parts
+            let parts = digits.components(separatedBy: ".")
+            var formattedText = ""
+            
+            // Format the integer part with commas
+            if let integerPart = parts.first {
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .decimal
+                if let number = formatter.number(from: integerPart) {
+                    formattedText += formatter.string(from: number) ?? ""
+                }
+            }
+            
+            // Add the decimal point if it exists
+            if parts.count > 1 {
+                formattedText += "."
+                // Ensure that only digits are displayed after the decimal point
+                if parts.count > 1 {
+                    let fractionalPart = parts[1].filter({ $0.isNumber })
+                    formattedText += fractionalPart
+                }
+            }
+            
+            // Prepend "$" to the formatted text
+            formattedText = "$" + formattedText
+            
+            // Set the formatted text to the textView
+            textView.text = formattedText
+            
+            // Return false to prevent the default behavior of the text view
+            return false
+        }  else {
             // Check for other text views and restrict characters
             let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
             
@@ -256,7 +299,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     
     @IBAction func priceQuotedButton(_ sender: Any) {
-        
+
         if orderstatusLabel.text=="Select Result"{
             priceQuotedTextView.isUserInteractionEnabled=false
             priceQuoted.isHidden=false
