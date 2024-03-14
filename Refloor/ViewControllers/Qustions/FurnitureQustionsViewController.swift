@@ -1036,6 +1036,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             let questionUniqueIdentifier = question.questionIdUnique
                             let questionId = question.id
                             dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName,"calculate_order_wise":question.calculate_order_wise]
+                            print("--------dict----------", dict, " question : ", question.question_name)
                             realm.create(rf_master_question.self, value: dict, update: .all)
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             
