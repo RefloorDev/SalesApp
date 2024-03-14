@@ -990,8 +990,8 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "438"
-            endingLineNumber = "438"
+            startingLineNumber = "439"
+            endingLineNumber = "439"
             landmarkName = "cellforSubHeadingTableViewCell(_:indexPath:tableValue:tag:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1006,8 +1006,8 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "480"
-            endingLineNumber = "480"
+            startingLineNumber = "481"
+            endingLineNumber = "481"
             landmarkName = "cellforQustionsTableViewCell(_:indexPath:tableValue:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1294,8 +1294,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "210"
-            endingLineNumber = "210"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
             landmarkName = "textViewDidEndEditing(_:)"
             landmarkType = "7">
             <Locations>
@@ -1918,8 +1918,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "237"
-            endingLineNumber = "237"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
             landmarkName = "whatnextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1934,8 +1934,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
             landmarkName = "whatnextButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2526,8 +2526,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
             landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2542,8 +2542,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
             landmarkName = "dropDownButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2670,8 +2670,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "294"
-            endingLineNumber = "294"
+            startingLineNumber = "337"
+            endingLineNumber = "337"
             landmarkName = "dropDownButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -2686,8 +2686,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "305"
-            endingLineNumber = "305"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
             landmarkName = "dropDownButtonAction(_:)"
             landmarkType = "7">
             <Locations>
@@ -2734,8 +2734,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "306"
-            endingLineNumber = "306"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "dropDownButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5322,8 +5322,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "392"
-            endingLineNumber = "392"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5338,8 +5338,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "160"
-            endingLineNumber = "160"
+            startingLineNumber = "203"
+            endingLineNumber = "203"
             landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5354,8 +5354,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "167"
-            endingLineNumber = "167"
+            startingLineNumber = "210"
+            endingLineNumber = "210"
             landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5370,8 +5370,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "imageUploadScreenShotOrderStatus(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5386,8 +5386,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "224"
-            endingLineNumber = "224"
+            startingLineNumber = "267"
+            endingLineNumber = "267"
             landmarkName = "whthpndButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5402,8 +5402,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "230"
-            endingLineNumber = "230"
+            startingLineNumber = "273"
+            endingLineNumber = "273"
             landmarkName = "whthpndButtonAction(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5418,8 +5418,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "353"
-            endingLineNumber = "353"
+            startingLineNumber = "396"
+            endingLineNumber = "396"
             landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
             <Locations>
@@ -5482,8 +5482,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "358"
-            endingLineNumber = "358"
+            startingLineNumber = "401"
+            endingLineNumber = "401"
             landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5514,8 +5514,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "375"
-            endingLineNumber = "375"
+            startingLineNumber = "418"
+            endingLineNumber = "418"
             landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -5530,8 +5530,8 @@
             filePath = "Refloor/ViewControllers/OrderStatus/OrderStatusViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "360"
-            endingLineNumber = "360"
+            startingLineNumber = "403"
+            endingLineNumber = "403"
             landmarkName = "saveButtonACtion(_:)"
             landmarkType = "7">
             <Locations>
@@ -9598,6 +9598,38 @@
             endingLineNumber = "135"
             landmarkName = "WebViewViewController"
             landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B2F614CB-6D12-4400-8147-4B9614CDA5E0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "936"
+            endingLineNumber = "936"
+            landmarkName = "calculateExtraPrice(question:answerOfQuestion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "DD73A9C9-1229-499B-A8D0-51B57E1EF15D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1106"
+            endingLineNumber = "1106"
+            landmarkName = "checkForInstallerOrNot(customerAndRoomData:appointmentId:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
