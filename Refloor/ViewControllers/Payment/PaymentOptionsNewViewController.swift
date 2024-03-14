@@ -1173,9 +1173,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
         else
         {
-//            let currentDate = "2029-03-16"  // or use Date() for current date
-            let currentDate = Date()
-
+            let appointment_date = appointmentDate ?? Date()
+//            let formattedAppointmentDate = "2022-02-16"
+            
             // Filter the payment options based on visibility and date range
             let filteredData = paymentRestrictionDataValueDetail.filter { cellData in
                 // Filter based on visibility
@@ -1192,8 +1192,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     
                     let formattedStartDate = dateFormatter.string(from: startDate)
                     let formattedEndDate = dateFormatter.string(from: endDate)
-                    let formattedCurrentDate = dateFormatter.string(from: currentDate)
-                    return formattedCurrentDate >= formattedStartDate && formattedCurrentDate <= formattedEndDate
+                    let formattedAppointmentDate = dateFormatter.string(from: appointment_date)
+                    return formattedAppointmentDate >= formattedStartDate && formattedAppointmentDate <= formattedEndDate
                 }
                 return false // Return false if start_date or end_date is nil or cannot be converted to Date
             }
@@ -1263,9 +1263,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         {
             if collectionView == paymentCollectionView
             {
-//                let currentDate = "2029-03-16"
-                 let currentDate = Date()
-                
+            
+                let appointmentDateString = appointmentDate ?? Date()
+               
                    let filteredData = paymentOptionDataValueDetail.filter { cellData in
                        let dateFormatter = DateFormatter()
                        dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -1276,8 +1276,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                            
                            let formattedStartDate = dateFormatter.string(from: startDate ?? Date())
                            let formattedEndDate = dateFormatter.string(from: endDate ?? Date())
-                           let formattedCurrentDate = dateFormatter.string(from: currentDate)
-                           return formattedCurrentDate >= formattedStartDate && formattedCurrentDate <= formattedEndDate
+                           let formattedAppointmentDate = dateFormatter.string(from: appointmentDateString)
+                           return formattedAppointmentDate >= formattedStartDate && formattedAppointmentDate <= formattedEndDate
                        }
                        return false // Return false if start_date or end_date is nil or cannot be converted to Date
                    }
@@ -1643,26 +1643,27 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentOptionsBottomCollectionViewCell", for: indexPath) as! PaymentOptionsBottomCollectionViewCell
             //let paymentRestrictionArray = paymentOptionDataValueDetail.filter({$0.isHidden == false})
-            
-//             let currentDate = "2029-03-16"
-            let currentDate = Date()
+            print("------appointmentDate------", appointmentDate)
+
+//            let appointmentDateString = "2022-02-16"
+            let appointmentDateString = appointmentDate ?? Date()
             let startDateString = paymentOptionDataValueDetail[indexPath.row].start_date ?? ""
             let endDateString = paymentOptionDataValueDetail[indexPath.row].end_date ?? ""
             
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd"
             
-            print("current_date : ", dateFormatter.string(from: currentDate))
+            print("appointment_date : ", dateFormatter.string(from: appointmentDateString))
             print("start_Date : ", dateFormatter.string(from: dateFormatter.date(from: startDateString) ?? Date()))
             print("end_Date : ", dateFormatter.string(from: dateFormatter.date(from: endDateString) ?? Date()))
             
             do {
-//                        let current_date = dateFormatter.string(from: dateFormatter.date(from: currentDate)!)
-            let current_date = dateFormatter.string(from: currentDate)
+//                let appointment_date = dateFormatter.string(from: dateFormatter.date(from: appointmentDateString)!)
+            let appointment_date = dateFormatter.string(from: appointmentDateString)
             let start_Date = dateFormatter.string(from: dateFormatter.date(from: startDateString) ?? Date())
             let end_Date = dateFormatter.string(from: dateFormatter.date(from: endDateString) ?? Date())
             
-            if current_date >= start_Date && current_date <= end_Date {
+            if appointment_date >= start_Date && appointment_date <= end_Date {
                 cell.isHidden = false
                 cell.borderWidth = 1
                 cell.borderColor = UIColor().colorFromHexString("#586471")
