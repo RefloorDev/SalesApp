@@ -96,24 +96,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // Check if the textView being edited is priceQuotedTextView
         if let priceTextView = priceQuotedTextView, textView == priceTextView {
-            // Check if the replacement text is numeric, a decimal point, or empty (backspace)
-            let allowedNumericCharacterSet = CharacterSet(charactersIn: "0123456789.")
-            let replacementNumericCharacterSet = CharacterSet(charactersIn: text)
-            let isNumeric = allowedNumericCharacterSet.isSuperset(of: replacementNumericCharacterSet) || text == "."
-            
             // Get the current text in the textView
             var currentText = textView.text ?? ""
             
-            // If the new text is numeric, a decimal point, or empty and the current text is empty
-            if range.location == 0 && range.length == 0 && text != "" && currentText.isEmpty {
-                if isNumeric {
-                    // Prepend "$" to the text
-                    currentText = "$" + text
-                }
-            } else {
-                // Concatenate the new text with the current text
-                currentText = (currentText as NSString).replacingCharacters(in: range, with: text)
-            }
+            // Concatenate the new text with the current text
+            currentText = (currentText as NSString).replacingCharacters(in: range, with: text)
             
             // Remove non-numeric characters, except for the decimal point, and the "$" symbol
             var digits = currentText.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
@@ -146,15 +133,17 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 }
             }
             
-            // Prepend "$" to the formatted text
-            formattedText = "$" + formattedText
+            // Prepend "$" to the formatted text if it's not empty
+            if !formattedText.isEmpty {
+                formattedText = "$" + formattedText
+            }
             
             // Set the formatted text to the textView
             textView.text = formattedText
             
             // Return false to prevent the default behavior of the text view
             return false
-        }  else {
+        } else {
             // Check for other text views and restrict characters
             let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
             
@@ -297,7 +286,6 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     }
     
     
-    
     @IBAction func priceQuotedButton(_ sender: Any) {
 
         if orderstatusLabel.text=="Select Result"{
@@ -316,7 +304,6 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             lastPricerrorLabel.isHidden=true
         }
     }
-    
     
     @IBAction func dropDownButtonAction(_ sender: UIButton) {
         
@@ -827,6 +814,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     }
     
     func createCustomerParameter() -> [String:Any]{
+        let priceTextWithoutSymbol = self.priceQuotedTextView.text?.replacingOccurrences(of: "$", with: "")
+        print("Price Text Without Symbol:", priceTextWithoutSymbol)
         var customerDict = self.getCustomerDetailsForApiCall()
         customerDict["appointment_result"] = self.orderstatusLabel.text ?? ""
         let (date,timeZone) = Date().getCompletedDateStringAndTimeZone()
@@ -834,7 +823,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         customerDict["timezone"] = timeZone
         customerDict["what_happened_notes"] = self.whthpndTextView.text ?? ""
         customerDict["whats_next_notes"] = self.whatsnewTextView.text ?? ""
-        customerDict["last_price_quoted_value"] = Double(self.priceQuotedTextView.text ?? "")
+        customerDict["last_price_quoted_value"] = Double(priceTextWithoutSymbol ?? "")
         customerDict["resulting_reason_id"] = self.selectedAptResultReasonId
         return customerDict
     }
