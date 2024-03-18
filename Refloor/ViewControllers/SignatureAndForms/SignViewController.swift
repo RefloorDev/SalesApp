@@ -63,7 +63,7 @@ class SignViewController: UIViewController {
         }
         else
         {
-            self.alert("Please draw the signature and tap on button 'confirm'", nil)
+            self.alert("Please draw the signature and tap on 'confirm' button", nil)
         }
     }
     

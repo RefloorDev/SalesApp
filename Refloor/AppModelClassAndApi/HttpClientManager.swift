@@ -2112,6 +2112,7 @@ class HttpClientManager: NSObject {
                                                                // var tempcontract_document:rf_contract_document_templates_results!
                                 let fields = realm.objects(rf_fields.self)
                                 let appointmentResultsReasons = realm.objects(rf_appointment_result_reasons_results.self)
+                                let external_credentials = realm.objects(rf_extrenal_credential_results.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2135,6 +2136,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(contract_document)
                                     realm.delete(fields)
                                     realm.delete(appointmentResultsReasons)
+                                    realm.delete(external_credentials)
                                 }
                             }catch{
                                 print(RealmError.writeFailed.rawValue)
@@ -2317,15 +2319,41 @@ class HttpClientManager: NSObject {
     
     // versatile api
     
-    func versatileAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?) -> ()){
+    func versatileAPi(url:String,apiKey:String,entityKey:String,parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?) -> ()){
         
         if self.connectedToNetwork() {
             
-            let masterData = self.getMasterDataFromDB()
-            let URL = masterData.versatileURL
-            let headers = ["Content-Type":"application/json","X-API-Key":masterData.versatileApiKey!,"X-Entity-Key":masterData.versatileEntityKey!]
-            self.showhideHUD(viewtype: .SHOW, title: "Loading lending platforms.")
-            Alamofire.request(URL!, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+            let URL = url//masterData.versatileURL
+            let headers = ["Content-Type":"application/json","X-API-Key":apiKey,"X-Entity-Key":entityKey]
+            self.showhideHUD(viewtype: .SHOW, title: "Loading versatile credit platforms.")
+            Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+                self.showhideHUD(viewtype: .HIDE)
+                print(response)
+                if let jsonData = response.data {
+                    let signInObject = try? JSONDecoder().decode(VersatileModelClass.self, from: jsonData)
+                    completion(signInObject?.type,signInObject?.url)
+                }
+            }
+            
+    
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    
+    // hunter api
+    
+    func hunterAPi(url:String,apiKey:String,entityKey:String,parameter:Parameters,completion:@escaping (_ success: String?, _ message: String?) -> ()){
+        
+        if self.connectedToNetwork() {
+            let URL = url//masterData.versatileURL
+            let headers = ["Content-Type":"application/json","apiKey":apiKey,"apiSecret":entityKey]
+            self.showhideHUD(viewtype: .SHOW, title: "Loading hunter financial platforms.")
+            Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
                 print(response)
                 if let jsonData = response.data {

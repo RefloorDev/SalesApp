@@ -4780,6 +4780,24 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return discountCouponsArray
     }
+    
+    func externalCredentialsValue() -> RealmSwift.List<rf_extrenal_credential_results>
+    {
+        var externalCredentialArray = RealmSwift.List<rf_extrenal_credential_results>()
+        do
+        {
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let credentialArray = masterData.first?.external_credentials
+            {
+                externalCredentialArray = credentialArray
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return externalCredentialArray
+    }
     func getAptResultReason() -> RealmSwift.List<rf_appointment_result_reasons_results> {
         var AppointmentResultReasonArray = RealmSwift.List<rf_appointment_result_reasons_results>()
         do{

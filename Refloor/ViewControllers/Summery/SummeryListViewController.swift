@@ -170,6 +170,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     @IBAction func addNewButtonAction(_ sender: Any) {
         let room = SelectARoomViewController.initialization()!
         room.appoinmentsData = AppDelegate.appoinmentslData
+        self.applyAllSelectedColour = ""
+        self.applyAllSelectedMoldName = ""
         self.navigationController?.pushViewController(room, animated: true)
     }
     
@@ -196,13 +198,18 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     {
         for rooms in tableValues
         {
-            if applyAllSelectedColour == ""
+            if  applyAllSelectColorTxtFld.text != "Select Color"
             {
-                applyAllSelectedColour = rooms.color ?? ""
-                applyAllSelectedMaterialFileName = rooms.material_image_url ?? ""
-                applyAllColourUpCharge =  rooms.colorUpCharge ?? 0.0
+//                applyAllSelectedColour = rooms.color ?? ""
+//                applyAllSelectedMaterialFileName = rooms.material_image_url ?? ""
+//                applyAllColourUpCharge =  rooms.colorUpCharge ?? 0.0
+                self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0)
             }
-            self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0)
+            else
+            {
+                self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: rooms.color ?? "", colorImageUrl: rooms.material_image_url ?? "", colorUpCharge: rooms.colorUpCharge ?? 0.0, moldPrice: 0.0)
+            }
+            
             if applyAllSelectMoldingTxtFld.text != "" && applyAllSelectedMoldName != ""
             {
                 if rooms.room_name!.contains("STAIRS") || rooms.room_area == 0.0
