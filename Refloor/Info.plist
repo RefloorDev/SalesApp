@@ -3,13 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Refloor needs to access your location</string>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Refloor needs to access your location</string>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Refloor needs to access your location</string>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>NSLocationUsageDescription</key>
-	<string>Refloor needs to access your location</string>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.oneteamus.liveflier</string>

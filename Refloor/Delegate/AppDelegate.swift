@@ -90,6 +90,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         //locationManager?.allowsBackgroundLocationUpdates = true
 //        if CLLocationManager.locationServicesEnabled(){
         AppDelegate.locationManager?.startUpdatingLocation()
+        geoLocationApiCallSync()
 //            }
         
 
@@ -206,11 +207,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.applicationIconBadgeNumber = 0
         CustomerListViewController().BackendApiSyncCall()
         window?.endEditing(true)
+        geoLocationApiCallSync()
         
     }
     func applicationDidBecomeActive(_ application: UIApplication)
     {
         UIApplication.shared.applicationIconBadgeNumber = 0
+        geoLocationApiCallSync()
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -251,11 +254,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
 extension AppDelegate : CLLocationManagerDelegate
 {
+    
+    func saveScreenCompletionTimeToDb(appointmentId: Int, className: String, displayName: String, time: Date){
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        let timeStr = dateFormatter.string(from: time)
+        let realm = try! Realm()
+            let completionTime = ScreenCompletion(appointment_id: appointmentId, className: className, displayName: displayName, completionTime: timeStr)
+            try! realm.write {
+                realm.add(completionTime)
+            
+        }
+    }
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         if region is CLCircularRegion {
             print("Exit GeoLocation region")
             let exitTime = Date().dateToString()
             var parameters:[String:Any] = [:]
+            let currentClassName = String(describing: type(of: self))
+            let classDisplayName = "GeoLocation"
+            self.saveScreenCompletionTimeToDb(appointmentId: Int(region.identifier) ?? 0, className: currentClassName, displayName: classDisplayName, time: Date())
             let entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier) ?? 0)
             do
             {
@@ -273,20 +291,65 @@ extension AppDelegate : CLLocationManagerDelegate
             }
             // Do what you want if this information
             // self.handleEvent(forRegion: region)
-            geoLocationApiCall(parameter:parameters)
+           
+            geoLocationApiCall(parameter:parameters) {success in
+                if success!
+                {
+                    let appointmentId = Int(region.identifier)
+                    let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":exitTime,"syncStatus":true]
+                    self.updatingGeolocationSyncValues(geoLocationValues: geoLocationValues)
+                   
+                }
+            }
+        
+            
         }
     }
-    func geoLocationApiCall(parameter:[String:Any])
+    
+    func geoLocationApiCallSync()
+    {
+        let geoLocationData = geoLocationDataForSync() // for any data which is sync false to send to odoo
+        for resultsData in geoLocationData
+        {
+            if resultsData.entryTime != "" || resultsData.exitTime != ""
+            {
+                let token = UserData.init().token!
+                let parameter:[String:Any] = ["appointment_id":resultsData.appointmentId, "arrival_date":resultsData.entryTime!,"departure_date": resultsData.exitTime!,"token":token]
+                geoLocationApiCall(parameter:parameter) {success in
+                    var geoLocationValues:[String:Any] = parameter
+                    geoLocationValues["syncStatus"] = true
+                    self.updatingGeolocationSyncValues(geoLocationValues: geoLocationValues)
+                }
+                
+            }
+        }
+    }
+    
+    func updatingGeolocationSyncValues(geoLocationValues:[String:Any])
+    {
+        do
+        {
+            let realm = try Realm()
+            try realm.write{
+                realm.create(rf_GeoLocationData.self, value: geoLocationValues, update: .all)
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed)
+        }
+    }
+    func geoLocationApiCall(parameter:[String:Any],completion:@escaping (_ success: Bool?) -> ())
     {
        if HttpClientManager.SharedHM.connectedToNetwork()
         {
            HttpClientManager.SharedHM.geoLocationTimeSubmitAPi(parameter: parameter) {success, message in
                if success == "Success"
                {
+                   completion(true)
                }
                else
                {
-                   
+                   completion(false)
                }
            }
         }
@@ -307,24 +370,59 @@ extension AppDelegate : CLLocationManagerDelegate
         }
         return entryTime
     }
+    func geoLocationDataForSync() -> RealmSwift.Results<rf_GeoLocationData>
+    {
+        var geoLocationData : Results<rf_GeoLocationData>!
+        do
+        {
+            let realm = try Realm()
+            geoLocationData = realm.objects(rf_GeoLocationData.self).filter("syncStatus == %@", (false))
+            return geoLocationData
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return geoLocationData
+    }
     
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         //alert("Entered region", nil)
         if region is CLCircularRegion {
             print("Did Enter geoLocation region")
-            let entryTime = Date().dateToString()
-            do
+            var parameters:[String:Any] = [:]
+            var entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
+            if entryTime == ""
             {
-                let realm = try Realm()
-                try realm.write{
-                    let appointmentId = Int(region.identifier)
-                    let entryTime:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
-                    realm.create(rf_GeoLocationData.self, value: entryTime, update: .all)
+                let entryTime = Date().dateToString()
+                do
+                {
+                    let realm = try Realm()
+                    try realm.write{
+                        let appointmentId = Int(region.identifier)
+                        let entryTime:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                        realm.create(rf_GeoLocationData.self, value: entryTime, update: .all)
+                        let token = UserData.init().token!
+                        parameters = ["appointment_id":Int(region.identifier) ?? 0, "arrival_date":entryTime,"departure_date": "","token":token]
+                    }
+                }
+                catch{
+                    print(RealmError.initialisationFailed)
+                }
+                
+                geoLocationApiCall(parameter:parameters) {success in
+                    if success!
+                    {
+                        let appointmentId = Int(region.identifier)
+                        let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                        self.updatingGeolocationSyncValues(geoLocationValues: geoLocationValues)
+                       
+                    }
                 }
             }
-            catch{
-                print(RealmError.initialisationFailed)
+            else
+            {
+                return
             }
             // Do what you want if this information
             // self.handleEvent(forRegion: region)
@@ -348,6 +446,7 @@ extension AppDelegate : CLLocationManagerDelegate
                 // The user is inside this region; handle accordingly
                 //alert("User is inside the region", nil)
                 print("Inside the area")
+                var parameters:[String:Any] = [:]
                 var entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
                 if entryTime == ""
                 {
@@ -359,10 +458,21 @@ extension AppDelegate : CLLocationManagerDelegate
                             entryTime = Date().dateToString()
                             let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
                             realm.create(rf_GeoLocationData.self, value: geoLocationValues, update: .all)
+                            let token = UserData.init().token!
+                            parameters = ["appointment_id":Int(region.identifier) ?? 0, "arrival_date":entryTime,"departure_date": "","token":token]
                         }
                     }
                     catch{
                         print(RealmError.initialisationFailed)
+                    }
+                    geoLocationApiCall(parameter:parameters) {success in
+                        if success!
+                        {
+                            let appointmentId = Int(region.identifier)
+                            let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                            self.updatingGeolocationSyncValues(geoLocationValues: geoLocationValues)
+                           
+                        }
                     }
                 }
                 else
