@@ -269,6 +269,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     @IBAction func saveButtonACtion(_ sender: Any)
     {
+        whathpnderrorLabel.isHidden = true
+        whatsnxterrorLabel.isHidden = true
+      
         if  self.orderstatusLabel.text == "Select Result"
         {
             self.alert("Please select appointment result", nil)
@@ -283,11 +286,12 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             whatsnxterrorLabel.isHidden=false
         }
         else if whthpndTextView.text=="" || whthpndTextView.text=="Enter here"{
-            whathpnderrorLabel.isHidden=false
-            
-        }else if whatsnewTextView.text=="" || whatsnewTextView.text=="Enter here"{
-            whatsnxterrorLabel.isHidden=false
-        }
+          whathpnderrorLabel.isHidden=false
+          
+      }
+      else if whatsnewTextView.text=="" || whatsnewTextView.text=="Enter here"{
+          whatsnxterrorLabel.isHidden=false
+      }
         else
         {
             whathpnderrorLabel.isHidden = true
