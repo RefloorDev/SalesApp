@@ -70,12 +70,15 @@ class MasterData : Object, Mappable {
     var ruleList = List<rf_ruleList_results>()
     var contract_document_templates = List<rf_contract_document_templates_results>()
     var appointment_result_reasons = List<rf_appointment_result_reasons_results>()
+    var external_credentials = List<rf_extrenal_credential_results>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
-    @objc dynamic var versatileURL:String?
-    @objc dynamic var versatileApiKey:String?
-    @objc dynamic var versatileEntityKey:String?
+//    @objc dynamic var versatileURL:String?
+//    @objc dynamic var versatileApiKey:String?
+//    @objc dynamic var versatileEntityKey:String?
+    @objc dynamic var enableGeoLocation:Bool = false
+    @objc dynamic var geoLocationRadius: Int = 0
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -102,10 +105,13 @@ class MasterData : Object, Mappable {
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
-        versatileURL <- map ["versatile_url"]
-        versatileApiKey <- map ["versatile_api_key"]
-        versatileEntityKey <- map ["versatile_entity_key"]
+//        versatileURL <- map ["versatile_url"]
+//        versatileApiKey <- map ["versatile_api_key"]
+//        versatileEntityKey <- map ["versatile_entity_key"]
+        enableGeoLocation <- map ["enable_geolocation"]
+        geoLocationRadius <- map ["geolocation_radius_limit"]
         ruleList <- (map["payment_restriction_rules"], ListTransform<rf_ruleList_results>())
+        external_credentials <- (map["external_credentials"], ListTransform<rf_extrenal_credential_results>())
         contract_document_templates <- (map["contract_document_templates"], ListTransform<rf_contract_document_templates_results>())
         appointment_result_reasons <- (map["appointment_result_reasons"], ListTransform<rf_appointment_result_reasons_results>())
     }
@@ -474,6 +480,30 @@ class rf_appointment_result_reasons_results: Object,Mappable
     }
 }
 
+// external credential details  rf_extrenal_credential_results
+
+class rf_extrenal_credential_results: Object,Mappable
+{
+    @objc dynamic var url : String?
+    @objc dynamic var entityKey : String?
+    @objc dynamic var apiKey : String?
+    @objc dynamic var provider : String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        url <- map["url"]
+        entityKey <- map["entity_key"]
+        apiKey <- map["api_key"]
+        provider <- map["provider"]
+        
+    }
+}
+
+
 //Dynamic contract
 class rf_contract_document_templates_results :Object,Mappable
 {
@@ -526,6 +556,7 @@ class rf_fields:Object,Mappable
     @objc dynamic var isSelected=0
     @objc dynamic var id=contractIndex
     @objc dynamic var option:String?
+    @objc dynamic var requiredField: Int = 0
     
     
     
@@ -559,6 +590,7 @@ class rf_fields:Object,Mappable
         height <- map["height"]
         field_type <- map["field_type"]
         option <- map["option"]
+        requiredField <- map["required"]
     }
 }
 
@@ -1351,6 +1383,25 @@ class rf_customRoomName:Object
     }
     override static func primaryKey() -> String? {
         return "roomId"
+    }
+}
+
+class rf_GeoLocationData:Object
+{
+    @objc dynamic var appointmentId = 0
+    @objc dynamic var entryTime:String?
+    @objc dynamic var exitTime:String?
+    @objc dynamic var syncStatus = false
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    override init(){
+        
+    }
+    override static func primaryKey() -> String? {
+        return "appointmentId"
     }
 }
 

@@ -457,7 +457,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                     else
                     {
-                        saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100)
+                        saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100).rounded()
                     }
                 }
                 mrp = mrp + stairPrice

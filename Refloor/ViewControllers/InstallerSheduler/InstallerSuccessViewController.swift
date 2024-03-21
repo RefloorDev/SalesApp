@@ -8,15 +8,23 @@
 
 import UIKit
 
+protocol CreditApplicationProtocol
+{
+    func creditApplicationCall(isVersatile:Bool)
+}
+
 class InstallerSuccessViewController: UIViewController {
     
     @IBOutlet weak var installerSubheadingBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var installerViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var hunterLoanProviderOutlet: UILabel!
+    @IBOutlet weak var hunterLoanProvidert: UILabel!
     @IBOutlet weak var approvedAmountOutlet: UILabel!
     @IBOutlet weak var refrenceNumberOutlet: UILabel!
     @IBOutlet weak var loanProviderOutlet: UILabel!
     @IBOutlet weak var tryAgainBtn: UIButton!
     @IBOutlet weak var gotToCreditAplBtn: UIButton!
+    @IBOutlet weak var gotToHunterAplBtn: UIButton!
     @IBOutlet weak var versatileViewHeightConstraints: NSLayoutConstraint!
     @IBOutlet weak var installerSuccess: UIImageView!
     @IBOutlet weak var approvedAmountLbl: UILabel!
@@ -34,10 +42,13 @@ class InstallerSuccessViewController: UIViewController {
     @IBOutlet weak var thankYouBtn: UIButton!
     @IBOutlet weak var goToAptBtn: UIButton!
     @IBOutlet weak var customerNameLbl: UILabel!
+    var creditApplication: CreditApplicationProtocol?
+    
     var appointmentdate:String = String()
     var customerName:String = String()
     var installationDate:String = String()
     var isVersatile:Bool = Bool()
+    var isHunter:Bool = Bool()
     
     var downOrFinal:Double = 0
     var totalAmount:Double = 0
@@ -71,7 +82,39 @@ class InstallerSuccessViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         schedulerSuccessNavBar()
-        if isVersatile
+        if isHunter
+        {
+            installerViewHeightConstraint.constant = 0
+            installerSubheadingBottomConstraint.constant = 15
+            installerSuccessview.isHidden = true
+            versatileView.isHidden = false
+            if successMsg == "Success"
+            {
+                if status == "Pending"
+                {
+                    versatileViewHeightConstraints.constant = 128
+                    installerSubheadingBottomConstraint.constant = 46
+                    installerViewHeightConstraint.constant = 128
+                    //status = "approved"
+                    confirmLbl.text = "Submitted"
+                    subHeading.text = "Your loan application has been submitted successfully to hunter financial."
+                    installerSuccess.image = UIImage(named: "installerSuccess")
+                    hunterLoanProvidert.text = "Hunter Financial"
+                    hunterLoanProvidert.isHidden = false
+                    hunterLoanProviderOutlet.isHidden = false
+                    loanProviderLbl.isHidden = true
+                    loanProviderOutlet.isHidden = true
+                    thankYouBtn.isHidden = false
+                    referenceNumberLbl.isHidden = true
+                    approvedAmountLbl.isHidden = true
+                    goToAptBtn.isHidden = true
+                    refrenceNumberOutlet.isHidden = true
+                    approvedAmountOutlet.isHidden = true
+                    
+                }
+            }
+        }
+       else if isVersatile
         {
             installerViewHeightConstraint.constant = 0
             installerSubheadingBottomConstraint.constant = 15
@@ -113,6 +156,7 @@ class InstallerSuccessViewController: UIViewController {
                     versatileViewHeightConstraints.constant = 0
                     gotoCreditBtnHeightConstraint.constant = 70
                     gotToCreditAplBtn.isHidden = false
+                    gotToHunterAplBtn.isHidden = false
                     thankYouBtn.isHidden = true
                     
                     
@@ -145,40 +189,61 @@ class InstallerSuccessViewController: UIViewController {
                 }
             }
             else
-            {
-                status = "awaiting"
-                if status.lowercased() == "error"
+           {
+                if loanProvider == "" && approvedAmount == "0.0"
                 {
-                    subHeading.text = "Processing error - please resubmit your application."
+                    self.status = "DECLINED"
+                    self.confirmLbl.text = self.status
+                    self.confirmLbl.textColor = UIColor().colorFromHexString("#C93F48")
+                    self.subHeading.text = "Your loan application through lending platform is declined."
+                    self.installerSuccess.image = UIImage(named: "versatileDeclined")
+                    self.versatileViewHeightConstraints.constant = 0
+                    self.gotToCreditAplBtn.isHidden = false
+                    self.gotToHunterAplBtn.isHidden = false
+                    gotoCreditBtnHeightConstraint.constant = 70
+                    self.tryAgainBtn.isHidden = true
+                    loanProviderOutlet.isHidden = true
+                    refrenceNumberOutlet.isHidden = true
+                    approvedAmountOutlet.isHidden = true
+                    approvedAmountLbl.isHidden = true
+                    
                 }
-                else if status.lowercased() == "awaiting"
+                else
                 {
-                    subHeading.text = "Loan processing is pending as we are await data from lending platform."
+                    status = "awaiting"
+                    if status.lowercased() == "error"
+                    {
+                        subHeading.text = "Processing error - please resubmit your application."
+                    }
+                    else if status.lowercased() == "awaiting"
+                    {
+                        subHeading.text = "Loan processing is pending as we are await data from lending platform."
+                    }
+                    
+                    //status = "awaiting" //
+                    versatileView.isHidden = true
+                    confirmLbl.textColor = UIColor().colorFromHexString("#D37A52")
+                    //subHeading.text = "Awaiting data from lending platform"
+                    installerSuccess.image = UIImage(named: "versatileAwaiting")
+                    versatileViewHeightConstraints.constant = 0
+                    gotoCreditBtnHeightConstraint.constant = 0
+                    tryAgainTopConstraints.constant = 0
+                    
+                    //gotToCreditAplBtn.isHidden = false
+                    thankYouBtn.isHidden = true
+                    tryAgainBtn.isHidden = false
+                    timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(versatileTimerActivated), userInfo: nil, repeats: true)
                 }
+                confirmLbl.text = status.uppercased()
                 
-                //status = "awaiting" //
-                versatileView.isHidden = true
-                confirmLbl.textColor = UIColor().colorFromHexString("#D37A52")
-                //subHeading.text = "Awaiting data from lending platform"
-                installerSuccess.image = UIImage(named: "versatileAwaiting")
-                versatileViewHeightConstraints.constant = 0
-                gotoCreditBtnHeightConstraint.constant = 0
-                tryAgainTopConstraints.constant = 0
                 
-                //gotToCreditAplBtn.isHidden = false
-                thankYouBtn.isHidden = true
-                tryAgainBtn.isHidden = false
-                timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(versatileTimerActivated), userInfo: nil, repeats: true)
+                
+                loanProviderLbl.text = loanProvider
+                referenceNumberLbl.text = refernceNumber
+                let approvedAmountDouble = Double(approvedAmount)
+                approvedAmountLbl.text = "$" + String.localizedStringWithFormat("%.2f",approvedAmountDouble ?? 0.0)
+                goToAptBtn.isHidden = true
             }
-            confirmLbl.text = status.uppercased()
-            
-            
-            
-            loanProviderLbl.text = loanProvider
-            referenceNumberLbl.text = refernceNumber
-            let approvedAmountDouble = Double(approvedAmount)
-            approvedAmountLbl.text = "$" + String.localizedStringWithFormat("%.2f",approvedAmountDouble ?? 0.0)
-            goToAptBtn.isHidden = true
         }
         else
         {
@@ -194,6 +259,7 @@ class InstallerSuccessViewController: UIViewController {
             goToAptBtn.isHidden = false
             tryAgainBtn.isHidden = true
             gotToCreditAplBtn.isHidden = true
+            gotToHunterAplBtn.isHidden = true
             let appointmentId = AppointmentData().appointment_id ?? 0
             appointmentIdLbl.text = String(appointmentId)
             customerNameLbl.text = customerName
@@ -212,7 +278,15 @@ class InstallerSuccessViewController: UIViewController {
             versatileStatusApiCall()
         }
     }
-
+    @IBAction func goToHunterBtnPressed(_ sender: UIButton)
+    {
+        if isVersatile
+        {
+            creditApplication?.creditApplicationCall(isVersatile: isVersatile)
+        }
+       // self.creditApplication = self
+        
+    }
     @IBAction func goToCreditAplBtnPressed(_ sender: UIButton)
     {
         let applicant = ApplicantFormViewControllerForm.initialization()!
@@ -271,6 +345,7 @@ class InstallerSuccessViewController: UIViewController {
                         self.installerSuccess.image = UIImage(named: "versatileDeclined")
                         self.versatileViewHeightConstraints.constant = 0
                         self.gotToCreditAplBtn.isHidden = false
+                        self.gotToHunterAplBtn.isHidden = false
                         gotoCreditBtnHeightConstraint.constant = 70
                         self.tryAgainBtn.isHidden = true
                     }
@@ -293,6 +368,7 @@ class InstallerSuccessViewController: UIViewController {
                     self.versatileViewHeightConstraints.constant = 0
                     self.tryAgainBtn.isHidden = true
                     self.gotToCreditAplBtn.isHidden = false
+                    self.gotToHunterAplBtn.isHidden = false
                     gotoCreditBtnHeightConstraint.constant = 70
                 }
             }
@@ -324,3 +400,11 @@ class InstallerSuccessViewController: UIViewController {
     
     
 }
+
+//extension InstallerSuccessViewController: CreditApplicationProtocol
+//{
+//    if isVersatile
+//    {
+//        creditApplication?.creditApplicationCall(isVersatile: isVersatile)
+//    }
+//}

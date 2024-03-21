@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import SwiftUI
+import CoreLocation
 
 
 class CustomerListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource, UIDocumentPickerDelegate {
@@ -36,6 +37,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     var comments:String = String()
     var sendPhysical:Bool = Bool()
     var masterDataLastSyncDateTime = ""
+    var geocoder = CLGeocoder()
+    
     //
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,8 +70,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         self.noAppoinmentLabel.isHidden = true
         self.view.addSubview(noAppoinmentLabel)
         self.navigationController?.viewControllers = [self]
-        //self.BackendApiSyncCall()
-        // Do any additional setup after loading the view.
+
     }
     
    
@@ -76,6 +78,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     
     override func viewWillAppear(_ animated: Bool) {
         //
+//        self.locationManager = CLLocationManager()
+//        self.locationManager!.delegate = self
         masterDataLastSyncDateTime = UserDefaults.standard.value(forKey: "MasterDataSyncDate") as? String ?? ""
         masterDataLastSyncDateTimeLabel.text = "Master Data Last Synced On: " + masterDataLastSyncDateTime
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -111,6 +115,50 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         isLoadedFirstTime = false
         //  checkBuildStatus()
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        let masterData = self.getMasterDataFromDB()
+        let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
+        if masterData.enableGeoLocation && restrictGeoLocation == 0
+        {
+            startGeoLocation(appointments: appoinmentsList!)
+            
+        }
+        
+    }
+    
+    func startGeoLocation(appointments:[AppoinmentDataValue])
+    {
+        if appointments.count > 0
+        {
+            for appointment in appointments {
+                
+                self.geoFencing(latitude: appointment.partner_latitude ?? 0.0, longtitude: appointment.partner_longitude ?? 0.0,appointmentId: appointment.id!)
+                    //print("Lat: \(lat), Lon: \(lon)")
+               // }
+                
+            }
+        //let address = "1600 Amphitheatre Parkway, Mountain View, CA"
+            
+}
+    }
+    
+    func geoFencing (latitude:CLLocationDegrees,longtitude:CLLocationDegrees,appointmentId:Int)
+    {
+        let masterData = self.getMasterDataFromDB()
+        var radius = Double(masterData.geoLocationRadius) * 0.305
+        let geofenceRegionCenter = CLLocationCoordinate2DMake(latitude, longtitude)
+        let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter,
+                                              radius: radius,
+                                              identifier: "\(appointmentId)")
+        geofenceRegion.notifyOnEntry = true
+        geofenceRegion.notifyOnExit = true
+        //let locationManager = CLLocationManager()
+        
+        AppDelegate.locationManager?.startMonitoring(for: geofenceRegion)
+        
+        
+        
+        
+        print("started monitoring")
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -173,6 +221,13 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         //BackendApiSyncCall()
        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: true)
+        let masterData = self.getMasterDataFromDB()
+        let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
+        if masterData.enableGeoLocation && restrictGeoLocation == 0
+        {
+            startGeoLocation(appointments: appoinmentsList!)
+            
+        }
     }
     
     @objc  func updateAppointmentOffline()
@@ -283,7 +338,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             
         }
     }
-    
+ 
     
     func BackendApiSyncCall()
     {
@@ -388,7 +443,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         return UITableView.automaticDimension
     }
     
-    @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
+    @IBAction func startButtonActionFromCustomerList(_ sender: UIButton)
+    {
         let appointmentDateTimeString = self.appoinmentsList?[sender.tag].appointment_datetime
             let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)
             print("appointmentDateTime", appointmentDateTime)
@@ -598,6 +654,63 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     }
     
 }
+
+//extension CustomerListViewController : CLLocationManagerDelegate
+//{
+////    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+////        if region is CLCircularRegion {
+////            print("Exit GeoLocation region")
+////            // Do what you want if this information
+////            // self.handleEvent(forRegion: region)
+////        }
+////    }
+//    
+//    // called when user Enters a monitored region
+//    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
+//        alert("Entered region", nil)
+//        if region is CLCircularRegion {
+//            print("Did Enter geoLocation region")
+//            let entryTime = Date().dateToString()
+//            do
+//            {
+//                let realm = try Realm()
+//                try realm.write{
+//                    let appointmentId = Int(region.identifier)
+//                    let entryTime:[String:Any] = ["appointment_id":appointmentId!, "entryTime": entryTime,"exitTime":""]
+//                    realm.create(rf_GeoLocationData.self, value: entryTime, update: .all)
+//                }
+//            }
+//            catch{
+//                print(RealmError.initialisationFailed)
+//            }
+//            // Do what you want if this information
+//            // self.handleEvent(forRegion: region)
+//        }
+//    }
+//    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+//        print("The monitored regions are: \(manager.monitoredRegions)")
+//    }
+//    
+//    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+//           if status == .authorizedWhenInUse {
+//               locationManager?.requestLocation()
+//           }
+//       }
+//    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+//        guard let location = locations.last else { return }
+//        let monitoredRegions = manager.monitoredRegions
+//
+//        for region in monitoredRegions {
+//            if let circularRegion = region as? CLCircularRegion, circularRegion.contains(location.coordinate) {
+//                // The user is inside this region; handle accordingly
+//                alert("User is inside the region", nil)
+//                //handleUserWithinRegion(circularRegion)
+//                break
+//            }
+//        }
+//    }
+//
+//}
 
 
 

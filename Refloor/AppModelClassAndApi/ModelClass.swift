@@ -191,6 +191,7 @@ class UserData: NSObject
     var user_id: Int?
     var user_name :String?
     var token: String?
+    var restrict_geolocation: Int?
     public static func isLogedIn() -> Bool
     {
         return UserDefaults.standard.bool(forKey: "User_isLogedIn")
@@ -219,13 +220,15 @@ class UserData: NSObject
         
         return date as NSDate
     }
-    init(userID:Int,userName:String,token:String) {
+    init(userID:Int,userName:String,token:String,restrict_geolocation:Int) {
         self.user_id = userID
         self.user_name = userName
         self.token = token
+        self.restrict_geolocation = restrict_geolocation
         UserDefaults.standard.set(userID, forKey: "User_ID")
         UserDefaults.standard.set(userName, forKey: "User_Name")
         UserDefaults.standard.set(token, forKey: "User_Token")
+        UserDefaults.standard.set(restrict_geolocation, forKey: "restrict_geolocation")
     }
     override init() {
         self.user_id = UserDefaults.standard.integer(forKey: "User_ID")
@@ -243,8 +246,10 @@ class UserLoginDataValue: Mappable
     var token: String?
     var can_view_phone_number : Int?
     var company_logo_url : String?
+    var restrict_geolocation: Int?
     
-    required init?(map: ObjectMapper.Map){
+    required init?(map: ObjectMapper.Map)
+    {
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -253,6 +258,7 @@ class UserLoginDataValue: Mappable
         token <- map["token"]
         can_view_phone_number <- map["can_view_phone_number"]
         company_logo_url <- map["company_logo_url"]
+        restrict_geolocation <- map["restrict_geolocation"]
         
     }
 }

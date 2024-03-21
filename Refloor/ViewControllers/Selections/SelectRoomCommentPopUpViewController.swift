@@ -36,6 +36,9 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SelectRoomCommentPopUpViewController") as? SelectRoomCommentPopUpViewController
     }
     
+    @IBOutlet weak var lendingBackTitle: UILabel!
+    @IBOutlet weak var lendingSubTitle: UILabel!
+    @IBOutlet weak var lendingPlatformTitle: UILabel!
     @IBOutlet weak var versatileView: UIView!
     @IBOutlet weak var deleteView: UIView!
     @IBOutlet weak var addEditView: UIView!
@@ -55,6 +58,8 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isdelete:Bool = Bool()
     var isVersatile:Bool = Bool()
     var isVersaileBack:Bool = Bool()
+    var isHunterBack:Bool = Bool()
+    var isHunter:Bool = Bool()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,6 +81,17 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             deleteView.isHidden = true
             addEditView.isHidden = true
             versatileBackView.isHidden = true
+            lendingPlatformTitle.text = "Versatile Credit"
+            lendingSubTitle.text = lendingSubTitle.text! + "Versatile Credit?"
+        }
+        else if isHunter
+        {
+            versatileView.isHidden = false
+            deleteView.isHidden = true
+            addEditView.isHidden = true
+            versatileBackView.isHidden = true
+            lendingPlatformTitle.text = "Hunter Financial"
+            lendingSubTitle.text = lendingSubTitle.text! + "Hunter Financial?"
         }
         else if isVersaileBack
         {
@@ -83,6 +99,15 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             deleteView.isHidden = true
             addEditView.isHidden = true
             versatileBackView.isHidden = false
+            lendingBackTitle.text = "Versatile Credit"
+        }
+        else if isHunterBack
+        {
+            versatileView.isHidden = true
+            deleteView.isHidden = true
+            addEditView.isHidden = true
+            versatileBackView.isHidden = false
+            lendingBackTitle.text = "Hunter Financial"
         }
         else
         {
