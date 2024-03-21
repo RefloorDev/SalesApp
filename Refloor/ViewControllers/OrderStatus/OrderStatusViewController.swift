@@ -39,24 +39,29 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     @IBOutlet weak var aptResultScrollView: UIScrollView!
     @IBOutlet weak var whtnextButton: UIButton!
     @IBOutlet weak var whthpndButton: UIButton!
-    
+    @IBOutlet weak var priceQuoted: UIButton!
     @IBOutlet weak var whatsnxterrorLabel: UILabel!
     @IBOutlet weak var whathpnderrorLabel: UILabel!
+    @IBOutlet weak var lastPricerrorLabel: UILabel!
     @IBOutlet weak var whatsnewTextView: UITextView!
     @IBOutlet weak var whthpndTextView: UITextView!
+    @IBOutlet weak var priceQuotedTextView: UITextView!
     var imagesArray: [[String:Any]] = []
     var selectedAptResultReasonId:Int = Int()
     var appointmentResults = List<rf_master_appointments_results_demoedNotDemoed>()
     var appointDetailsResults:List<rf_appointment_result_reasons_results>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         aptResultScrollView.isDirectionalLockEnabled = true
-
+        priceQuotedTextView.delegate = self
         //  self.setNavigationBarbackAndlogo(with: "Customer 1 Details")
         whatsnewTextView.text = "Enter here"
         whatsnewTextView.textColor = placeholderColor
         whthpndTextView.text = "Enter here"
-        whthpndTextView.textColor = placeholderColor
+        whthpndTextView.textColor = placeholderColor 
+        priceQuotedTextView.text = "Enter here"
+        priceQuotedTextView.textColor = placeholderColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,13 +69,16 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         if orderstatusLabel.text=="Select Result" || aptResultDetailsLbl.text == "Select Result Details"{
             whthpndTextView.isUserInteractionEnabled=false
             whatsnewTextView.isUserInteractionEnabled=false
+            priceQuotedTextView.isUserInteractionEnabled=false
         }else{
             whthpndTextView.isUserInteractionEnabled=true
             whatsnewTextView.isUserInteractionEnabled=true
+            priceQuotedTextView.isUserInteractionEnabled=true
         }
         
         whatsnewTextView.leftSpace()
         whthpndTextView.leftSpace()
+        priceQuotedTextView.leftSpace()
         //self.activity.showhideHUD(viewtype: .SHOW, title: "")
 //        let masterData = self.getMasterDataFromDB()
 //        appointmentResults = masterData.appointmentResults
@@ -85,26 +93,89 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         //OrderStatustLisApiCall()
     }
     
-    
-    // Q4_Change Textfield_Validation
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-           let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
-           
-           // Iterate over the Unicode.Scalar values in the replacement text
-           for scalar in text.unicodeScalars {
-               if restrictedCharacters.contains(scalar) {
-                   return false // Block the character
-               }
-           }
-           
-           return true // Allow the character
-       }
+        // Check if the textView being edited is priceQuotedTextView
+        if let priceTextView = priceQuotedTextView, textView == priceTextView {
+            // Get the current text in the textView
+            var currentText = textView.text ?? ""
+            
+            // Concatenate the new text with the current text
+            currentText = (currentText as NSString).replacingCharacters(in: range, with: text)
+            
+            // Remove non-numeric characters, except for the decimal point, and the "$" symbol
+            var digits = currentText.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression)
+            
+            // Ensure that the text does not exceed 12 characters
+            if digits.count > 12 {
+                return false
+            }
+            
+            // Split the text into integer and fractional parts
+            let parts = digits.components(separatedBy: ".")
+            var formattedText = ""
+            
+            // Format the integer part with commas
+            if let integerPart = parts.first {
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .decimal
+                if let number = formatter.number(from: integerPart) {
+                    formattedText += formatter.string(from: number) ?? ""
+                }
+            }
+            
+            // Add the decimal point if it exists
+            if parts.count > 1 {
+                formattedText += "."
+                // Ensure that only digits are displayed after the decimal point
+                if parts.count > 1 {
+                    let fractionalPart = parts[1].filter({ $0.isNumber })
+                    formattedText += fractionalPart
+                }
+            }
+            
+            // Prepend "$" to the formatted text if it's not empty
+            if !formattedText.isEmpty {
+                formattedText = "$" + formattedText
+            }
+            
+            // Set the formatted text to the textView
+            textView.text = formattedText
+            
+            // Return false to prevent the default behavior of the text view
+            return false
+        } else {
+            // Check for other text views and restrict characters
+            let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
+            
+            // Iterate over the Unicode.Scalar values in the replacement text
+            for scalar in text.unicodeScalars {
+                if restrictedCharacters.contains(scalar) {
+                    return false // Block the character
+                }
+            }
+            return true // Allow the character
+        }
+    }
+
+//    // Q4_Change Textfield_Validation
+//    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+//           let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
+//           
+//           // Iterate over the Unicode.Scalar values in the replacement text
+//           for scalar in text.unicodeScalars {
+//               if restrictedCharacters.contains(scalar) {
+//                   return false // Block the character
+//               }
+//           }
+//           return true // Allow the character
+//       }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.x>0 {
             scrollView.contentOffset.x = 0
         }
     }
+    
     
     func imageUploadScreenShotOrderStatus(_ image:UIImage,_ name:String )
     {
@@ -213,6 +284,27 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             whatsnxterrorLabel.isHidden=true
         }
     }
+    
+    
+    @IBAction func priceQuotedButton(_ sender: Any) {
+
+        if orderstatusLabel.text=="Select Result"{
+            priceQuotedTextView.isUserInteractionEnabled=false
+            priceQuoted.isHidden=false
+            self.alert("Please select appointment result", nil)
+            priceQuotedTextView.borderColor = UIColor().colorFromHexString("#A7B0BA")
+            priceQuotedTextView.borderWidth = 1
+        } else{
+            priceQuotedTextView.borderColor = UIColor().colorFromHexString("#A7B0BA")
+            priceQuotedTextView.borderWidth = 1
+            priceQuotedTextView.isUserInteractionEnabled=true
+            priceQuoted.isHidden=true
+            priceQuotedTextView.text=""
+            priceQuotedTextView.becomeFirstResponder()
+            lastPricerrorLabel.isHidden=true
+        }
+    }
+    
     @IBAction func dropDownButtonAction(_ sender: UIButton) {
         
         if sender.tag == 0
@@ -269,9 +361,6 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     @IBAction func saveButtonACtion(_ sender: Any)
     {
-        whathpnderrorLabel.isHidden = true
-        whatsnxterrorLabel.isHidden = true
-      
         if  self.orderstatusLabel.text == "Select Result"
         {
             self.alert("Please select appointment result", nil)
@@ -281,26 +370,30 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         {
             self.alert("Please select appointment result details", nil)
         }
-        else if whthpndTextView.text=="Enter here" && whatsnewTextView.text=="Enter here"{
+        else if whthpndTextView.text=="Enter here" && whatsnewTextView.text=="Enter here" && priceQuotedTextView.text=="Enter here"{
             whathpnderrorLabel.isHidden=false
             whatsnxterrorLabel.isHidden=false
+            lastPricerrorLabel.isHidden=false
         }
         else if whthpndTextView.text=="" || whthpndTextView.text=="Enter here"{
-          whathpnderrorLabel.isHidden=false
-          
-      }
-      else if whatsnewTextView.text=="" || whatsnewTextView.text=="Enter here"{
-          whatsnxterrorLabel.isHidden=false
-      }
+            whathpnderrorLabel.isHidden=false
+            
+        }else if whatsnewTextView.text=="" || whatsnewTextView.text=="Enter here"{
+            whatsnxterrorLabel.isHidden=false
+        }
+        else if priceQuotedTextView.text=="" || priceQuotedTextView.text=="Enter here"{
+            lastPricerrorLabel.isHidden=false
+        }
         else
         {
             whathpnderrorLabel.isHidden = true
             whatsnxterrorLabel.isHidden = true
+            lastPricerrorLabel.isHidden = true
             //  self.activity.showhideHUDDark(viewtype: .SHOW, title: "The appointment results are being submitting. Please wait...")
             if(isAPIcalled)
             {
                 isAPIcalled = false
-                //self.updateOrderStatustLisApiCall(status:self.orderstatusLabel.text ?? "",whatHappendSTring: self.whthpndTextView.text ?? "",whatNextString: self.whatsnewTextView.text ?? "")
+//                self.updateOrderStatustLisApiCall(status:self.orderstatusLabel.text ?? "",whatHappendSTring: self.whthpndTextView.text ?? "",whatNextString: self.whatsnewTextView.text ?? "", priceQuotedString: Double(self.priceQuotedTextView.text) ?? 0.0)
                 print("The appointment results are being submitting")
             }
             
@@ -334,7 +427,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
 //                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
 //                        }
                     }
-                    print(contactApiData)
+                    print("TEST-1",contactApiData)
                     var customerAndRoomData =  self.createFinalParameterForCustomerApiCall(data_completed: 0)
                     for (key,value) in contactApiData{
                         customerAndRoomData[key] = value
@@ -352,8 +445,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
 //                        print(jwtToken)
 //                    }
                     //customerAndRoomData = ["data":customerAndRoomData]
-                    print(customerAndRoomData)
+                    print("customerAndRoomData2 : ", customerAndRoomData)
                     createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams:customerAndRoomData as NSDictionary, imageName: "")
+                    
                     //self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ContactDetails, url: AppURL().syncContactInfo, requestType: RequestType.post, requestParams: contactApiData as NSDictionary, imageName: "")
                     imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
                     var lastImageDict = imagesArray[imagesArray.count-1]
@@ -385,8 +479,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
 //                        print(jwtToken)
 //                    }
                     //customerAndRoomData = ["data":customerAndRoomData]
-                    print(customerAndRoomData)
+                    print("customerAndRoomData1 : ", customerAndRoomData)
                     createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                    
                     imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
                     var lastImageDict = imagesArray[imagesArray.count-1]
                     lastImageDict["data_completed"] = 1
@@ -424,8 +519,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
 //                    print(jwtToken)
 //                }
                 //customerAndRoomData = ["data":customerAndRoomData]
-                print(customerAndRoomData)
+                print("customerAndRoomData : ", customerAndRoomData)
                 createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                
                 let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
                 let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
                 self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
@@ -706,6 +802,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     func createAppointmentsRequestDataToDatabase(title:RequestTitle,url:String,requestType:RequestType,requestParams:NSDictionary,imageName:String){
        
             self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName)
+        print("createAppointmentsRequestDataToDatabase_requestParameter : ", requestParams)
     }
     
     func createRoomParameters() -> [[String:Any]]{
@@ -717,6 +814,12 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     }
     
     func createCustomerParameter() -> [String:Any]{
+        let priceTextWithoutCommas = self.priceQuotedTextView.text?.replacingOccurrences(of: ",", with: "")
+        // print("Price Text Without Commas:", priceTextWithoutCommas)
+          // Remove the "$" symbol if present
+          let priceTextWithoutSymbol = priceTextWithoutCommas?.replacingOccurrences(of: "$", with: "")
+//        let priceTextWithoutSymbol = self.priceQuotedTextView.text?.replacingOccurrences(of: "$", with: "")
+        print("Price Text Without Symbol:", priceTextWithoutSymbol)
         var customerDict = self.getCustomerDetailsForApiCall()
         customerDict["appointment_result"] = self.orderstatusLabel.text ?? ""
         let (date,timeZone) = Date().getCompletedDateStringAndTimeZone()
@@ -724,6 +827,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         customerDict["timezone"] = timeZone
         customerDict["what_happened_notes"] = self.whthpndTextView.text ?? ""
         customerDict["whats_next_notes"] = self.whatsnewTextView.text ?? ""
+        customerDict["last_price_quoted_value"] = Double(priceTextWithoutSymbol ?? "")
         customerDict["resulting_reason_id"] = self.selectedAptResultReasonId
         return customerDict
     }
@@ -915,17 +1019,18 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         }
     }
     
-    func updateOrderStatustLisApiCall(status:String,whatHappendSTring:String,whatNextString:String)
+    func updateOrderStatustLisApiCall(status:String,whatHappendSTring:String,whatNextString:String,priceQuotedString:Double)
     {
         
         // let parameter = ["token":UserData.init().token ?? "","appointment_id":AppDelegate.appoinmentslData.id ?? 0] as [String : Any]
-        let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString] as [String : Any]
-        
+        let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString, "last_price_quoted_value": Double(priceQuotedString) ?? 0.0] as [String : Any]
+        print("parameter_what_happened_notes1 : ", parameter)
         HttpClientManager.SharedHM.submitOrderStatustListApi(parameter: parameter) { (success, message) in
             if(success ?? "").lowercased() == "success" || (success ?? "").lowercased() == "true"
             {
                 self.isAPIcalled = true
                 HttpClientManager.SharedHM.submitOrderStatustUploadData(parameter: parameter) {_,_ in
+                    print("parameter_what_happened_notes : ", parameter)
                 }
                 
                 self.activity.showhideHUD(viewtype: .HIDE, title: "")
@@ -939,7 +1044,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             {
                 let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
                     self.isAPIcalled = true
-                    self.updateOrderStatustLisApiCall(status: self.orderstatusLabel.text ?? "",whatHappendSTring: self.whthpndTextView.text ?? "",whatNextString: self.whatsnewTextView.text ?? "")
+                    self.updateOrderStatustLisApiCall(status: self.orderstatusLabel.text ?? "",whatHappendSTring: self.whthpndTextView.text ?? "",whatNextString: self.whatsnewTextView.text ?? "", priceQuotedString: Double(self.priceQuotedTextView.text) ?? 0.0)
+                    print("")
                 }
                 //let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 let no = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in

@@ -19,6 +19,11 @@ import CryptoKit
 import CommonCrypto
 
 
+enum MyErrors: String, Error {
+   case badError = "I think it went wrong here"
+   case evilError = "This should have never happened"
+}
+
 extension UILabel {
     
     func startBlink() {
@@ -2535,8 +2540,12 @@ extension UIViewController:OrderStatusViewDelegate
             let realm = try Realm()
             masterData =  realm.objects(MasterData.self).first
             
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
+        } catch let error {
+            print("error : ", error)
+//            if let myError = error as? MyErrors {
+//                   print(myError.rawValue)
+//               }
+//            print(RealmError.initialisationFailed.rawValue)
         }
         return masterData
     }
@@ -2708,8 +2717,8 @@ extension UIViewController:OrderStatusViewDelegate
                  
          if let data = data, let model = try? decoder.decode(paymentMethodDetailsSecret.self, from: data) {
              print(model)
-             let jwt = JWT<paymentMethodDetailsSecret>(header: header, payload: model, signature: signature)
-             jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//             let jwt = JWT<paymentMethodDetailsSecret>(header: header, payload: model, signature: signature)
+//             jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
              print(jwtToken)
          
          }
@@ -2728,8 +2737,8 @@ extension UIViewController:OrderStatusViewDelegate
                   
           if let data = data, let model = try? decoder.decode(ApplicantInfoDetailsSecret.self, from: data) {
               print(model)
-              let jwt = JWT<ApplicantInfoDetailsSecret>(header: header, payload: model, signature: signature)
-              jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+//              let jwt = JWT<ApplicantInfoDetailsSecret>(header: header, payload: model, signature: signature)
+//              jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
               print(jwtToken)
           
           }
@@ -3601,6 +3610,7 @@ extension UIViewController:OrderStatusViewDelegate
     }
     
     func createAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String){
+        print("createAppointmentRequest : ", requestParameter)
         let appointmentId = AppointmentData().appointment_id ?? 0
         do{
             let realm = try Realm()
@@ -3613,7 +3623,8 @@ extension UIViewController:OrderStatusViewDelegate
                                       "request_type" : requestType.rawValue,
                                       "sync_status" : false,
                                       "image_name": imageName]
-                
+                print("Dictionary to be created/updated in Realm: \(dict)")
+                print("Dictionary to be created/updated in Realm1: \(rf_Completed_Appointment_Request.self)")
                 realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
             }
         }catch{
@@ -4035,6 +4046,7 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
                 let dict:[String:Any] = ["id": id,"room_id":roomId, "questionnaires":questionAndAnswer]
+                print("saveQuestionAndAnswerToCompletedAppointment : ", id, " room_id : ", roomId, " questionnaires : ", questionAndAnswer)
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -4068,6 +4080,7 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
                 let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPrice":extraCost]
+                print("extraCostOfAppointment : ", roomId, " id : ", id, "extraCost : ", extraCost)
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -4139,6 +4152,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let stairsDict = self.getStairCountAndWidth(roomId: roomId)
                 let stairCount = stairsDict["StairCount"] ?? ""
                 let stairWidth = stairsDict["StairWidth"] ?? ""
+                print("stairCount : ", stairCount, " stairWidth : ", stairWidth)
                 let dict:[String:Any] = ["id":id, "room_id":roomId, "stairCount":stairCount, "stairWidth":stairWidth]
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)

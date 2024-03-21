@@ -17,6 +17,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FurnitureQustionsViewController") as? FurnitureQustionsViewController
     }
     var currentSurfaceAnswerScore = 0.0
+    var stair_Count = ""
     var roomName = ""
     var roomID = 0
     var floorID = 0
@@ -33,6 +34,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var qustionAnswer:[QuestionsMeasurementData] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("-----viewDidLoad-----")
         if !isUpdated{
             self.addQuestions()
         }
@@ -50,7 +52,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         
         //arb
-        //questionsListApiCall()
+//        questionsListApiCall()
         var questionsList = RealmSwift.List<rf_master_question>()
         questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var qustionAnswer: [QuestionsMeasurementData] = []
@@ -896,15 +898,36 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
 //        summaryData.questionaire = questionsArray
 //       return summaryData
 //    }
-    
     func calculateExtraPrice(question:rf_master_question,answerOfQuestion:List<rf_AnswerForQuestion>) -> Double{
         var extra_price :Double = 0.0
         var amount :Double = 0.0
         var amountIncluded :Double = 0.0
         var simpleChoiceTypeCheck :Bool = false
+        var answer_score :Double = 0.0
+        
+        if question.question_code == "StairCount" {
+            stair_Count = answerOfQuestion.first?.answer.first ?? ""
+        }
+        
+        let answerData1 = answerOfQuestion.first?.answer.first
+        if question.question_code == "StairCoverRisers" {
+            if let answer = answerData1 {
+                if answer.contains("White Risers") {
+                    do {
+                        answer_score = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+                        return (Double(stair_Count) ?? 0.0) * answer_score
+                    } catch {
+                        return 0
+                    }
+                }
+            }
+        }
+        
+        print("question.question_code : ", question.question_code)
         if question.question_code == "CurrentCoveringType"{
             extra_price = 0.0
             currentSurfaceAnswerScore = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+            print("currentSurfaceAnswerScore : ", currentSurfaceAnswerScore)
             return extra_price//satheesh
         }
         amount = question.amount
@@ -916,6 +939,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
                     let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
                     extra_price = net_room_area * currentSurfaceAnswerScore
+                    print("extra_price : ", extra_price,  " currentSurfaceAnswerScore : ", currentSurfaceAnswerScore)
                 }
             }
         }else{
@@ -929,6 +953,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             let answerScore = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
                             amount = answerScore
                             simpleChoiceTypeCheck = true
+                            print("----answerScore---- : ", answerScore)
                         }
                         else if(amount != 0 && answer != "")
                         {
@@ -1011,18 +1036,24 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             let questionUniqueIdentifier = question.questionIdUnique
                             let questionId = question.id
                             dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName,"calculate_order_wise":question.calculate_order_wise]
+                            print("--------dict----------", dict, " question : ", question.question_name)
                             realm.create(rf_master_question.self, value: dict, update: .all)
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             
                             let additionalCost = self.calculateExtraPrice(question: question, answerOfQuestion: questionsArray)
+                            print("------additionalCost : ", additionalCost, " question : ", question.question_code)
                             if question.exclude_from_discount{
                                 extraCostExclude = extraCostExclude + additionalCost
+                                print("------additionalCost_extraCostExclude : ", extraCostExclude)
                             }
                             if question.exclude_from_promotion
                             {
                                 extraPromoCostExcluded = extraPromoCostExcluded + additionalCost
+                                print("------additionalCost_extraPromoCostExcluded : ", extraPromoCostExcluded)
                             }
                             extraCost = extraCost + additionalCost
+                            additional_cost = Int(extraCost)
+                            print("------additionalCost_extraCost : ", extraCost)
                         }
                     }catch{
                         print(RealmError.initialisationFailed)

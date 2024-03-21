@@ -196,6 +196,8 @@ class rf_master_payment_option : Object, Mappable {
     @objc dynamic var sequence : Int = 0
     @objc dynamic var last_updated_date : String?
     @objc dynamic var down_payment_message:String?
+    @objc dynamic var start_date : String?
+    @objc dynamic var end_date : String?
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
     }
@@ -213,8 +215,11 @@ class rf_master_payment_option : Object, Mappable {
         sequence <- map["sequence"]
         last_updated_date <- map["last_updated_date"]
         down_payment_message <- map["down_payment_message"]
+        start_date <- map["start_date"]
+        end_date <- map["end_date"]
     }
 }
+
 
 class rf_AnswerForQuestion:Object{
     @objc dynamic var id = UUID().uuidString

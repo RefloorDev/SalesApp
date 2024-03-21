@@ -1164,6 +1164,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
 
     func checkForInstallerOrNot(customerAndRoomData:[String:Any],appointmentId:Int)
     {
+        print("----checkForInstallerOrNot------", customerAndRoomData)
         var iscustomerAndRoomSuccess:Bool = Bool()
         var isNetwork:Bool = Bool()
         
