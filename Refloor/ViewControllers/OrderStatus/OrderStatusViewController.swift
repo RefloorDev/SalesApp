@@ -814,7 +814,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     }
     
     func createCustomerParameter() -> [String:Any]{
-        let priceTextWithoutSymbol = self.priceQuotedTextView.text?.replacingOccurrences(of: "$", with: "")
+        let priceTextWithoutCommas = self.priceQuotedTextView.text?.replacingOccurrences(of: ",", with: "")
+        // print("Price Text Without Commas:", priceTextWithoutCommas)
+          // Remove the "$" symbol if present
+          let priceTextWithoutSymbol = priceTextWithoutCommas?.replacingOccurrences(of: "$", with: "")
+//        let priceTextWithoutSymbol = self.priceQuotedTextView.text?.replacingOccurrences(of: "$", with: "")
         print("Price Text Without Symbol:", priceTextWithoutSymbol)
         var customerDict = self.getCustomerDetailsForApiCall()
         customerDict["appointment_result"] = self.orderstatusLabel.text ?? ""
