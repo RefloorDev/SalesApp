@@ -147,7 +147,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         var radius = Double(masterData.geoLocationRadius) * 0.305
         let geofenceRegionCenter = CLLocationCoordinate2DMake(latitude, longtitude)
         let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter,
-                                              radius: 10,
+                                              radius: radius,
                                               identifier: "\(appointmentId)")
         geofenceRegion.notifyOnEntry = true
         geofenceRegion.notifyOnExit = true
