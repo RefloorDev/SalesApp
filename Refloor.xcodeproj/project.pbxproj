@@ -179,12 +179,14 @@
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
 		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
+		B09C93E82B75010800C8E408 /* FinanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09C93E72B75010800C8E408 /* FinanceViewController.swift */; };
 		B0A56C162AB1786700891CBC /* ImageAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0A56C142AB1786700891CBC /* ImageAnnotation.swift */; };
 		B0B508DE2AAB3D160006C39E /* InstallerPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */; };
 		B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */; };
 		B0D395DB2A94A26A0020497B /* InstallerShedulerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */; };
 		B0D395DD2A94A29A0020497B /* InstallerSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */; };
 		B0D395E02A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */; };
+		B0DE347B2B8DB6C800B01D4E /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = B0DE347A2B8DB6C800B01D4E /* test.xml */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -379,12 +381,14 @@
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
 		B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellationPolicyViewController.swift; sourceTree = "<group>"; };
+		B09C93E72B75010800C8E408 /* FinanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceViewController.swift; sourceTree = "<group>"; };
 		B0A56C142AB1786700891CBC /* ImageAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageAnnotation.swift; sourceTree = "<group>"; };
 		B0B508DD2AAB3D160006C39E /* InstallerPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerPopUpViewController.swift; sourceTree = "<group>"; };
 		B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoomCommentPopUpViewController.swift; sourceTree = "<group>"; };
 		B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerShedulerViewController.swift; sourceTree = "<group>"; };
 		B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSuccessViewController.swift; sourceTree = "<group>"; };
 		B0D395DF2A94AF1B0020497B /* InstallerSchedulerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSchedulerCollectionViewCell.swift; sourceTree = "<group>"; };
+		B0DE347A2B8DB6C800B01D4E /* test.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test.xml; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -625,6 +629,7 @@
 		653EA56C241F7AFC00EA684E /* Refloor */ = {
 			isa = PBXGroup;
 			children = (
+				B0DE347A2B8DB6C800B01D4E /* test.xml */,
 				B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */,
 				B04B016728E2F19B00B59E33 /* Refloor.entitlements */,
 				65FFF9292446CF8800E3534D /* AppModelClassAndApi */,
@@ -870,6 +875,7 @@
 				651E8ED0249CCE460049D754 /* DownPaymentViewController.swift */,
 				B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */,
 				6581F9ED24AE280D008A2F01 /* WebViewViewController.swift */,
+				B09C93E72B75010800C8E408 /* FinanceViewController.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -1002,8 +1008,8 @@
 				653EA566241F7AFC00EA684E /* Sources */,
 				653EA567241F7AFC00EA684E /* Frameworks */,
 				653EA568241F7AFC00EA684E /* Resources */,
-				367D51FDFCB1A86957A861AE /* [CP] Embed Pods Frameworks */,
-				1B71D3CB32F901C4BD4E21CC /* [CP] Copy Pods Resources */,
+				5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */,
+				4C277601C358BD2FFDA194E2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1091,6 +1097,7 @@
 				65209443243CA31100B010CA /* SF-Pro-Display-Light.otf in Resources */,
 				6520943E243CA31100B010CA /* SF-Pro-Display-Thin.otf in Resources */,
 				653EA57A241F7B0A00EA684E /* Assets.xcassets in Resources */,
+				B0DE347B2B8DB6C800B01D4E /* test.xml in Resources */,
 				65209460243CA31100B010CA /* SF-Pro-Display-BoldItalic.otf in Resources */,
 				6520944D243CA31100B010CA /* SF-Pro-Display-Semibold.otf in Resources */,
 				6520945C243CA31100B010CA /* SF-Pro-Display-ThinItalic.otf in Resources */,
@@ -1129,7 +1136,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1B71D3CB32F901C4BD4E21CC /* [CP] Copy Pods Resources */ = {
+		4C277601C358BD2FFDA194E2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1146,7 +1153,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		367D51FDFCB1A86957A861AE /* [CP] Embed Pods Frameworks */ = {
+		5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1265,6 +1272,7 @@
 				655FBC1B245814D500333759 /* ImageViewAndRemoveViewController.swift in Sources */,
 				DDAF8F302747849A004AAE86 /* NetworkClass.swift in Sources */,
 				657AE2762477BFAC00D205A1 /* TilesImageCollectionViewCell.swift in Sources */,
+				B09C93E82B75010800C8E408 /* FinanceViewController.swift in Sources */,
 				657AE2742477B74E00D205A1 /* SelectTilesViewController.swift in Sources */,
 				6562802124ACC48C0061D191 /* RecognizerViewController.swift in Sources */,
 				6500187224FFE04000B183E6 /* AddressEntryViewController.swift in Sources */,
@@ -1458,10 +1466,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.0;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1471,7 +1478,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1490,7 +1497,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.0;
+				CURRENT_PROJECT_VERSION = 1.0;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
@@ -1500,7 +1507,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.4.0;
+				MARKETING_VERSION = 2.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

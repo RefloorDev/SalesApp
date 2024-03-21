@@ -16,6 +16,10 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     static func initialization() -> SummeryListViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SummeryListViewController") as? SummeryListViewController
     }
+    @IBOutlet weak var applyAllBtn: UIButton!
+    @IBOutlet weak var applyAllSelectColorImageView: UIImageView!
+    @IBOutlet weak var applyAllSelectMoldingTxtFld: UITextField!
+    @IBOutlet weak var applyAllSelectColorTxtFld: UITextField!
     @IBOutlet weak var vapourBarrierLbl: UILabel!
     @IBOutlet weak var headingLabel: UILabel!
     @IBOutlet weak var tableView: UITableView!
@@ -46,6 +50,12 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var floorColorNamesArray:Results<rf_floorColour_results>!
     var stairColourNamesArray:Results<rf_stairColour_results>!
     
+    var applyAllSelectedColour:String = String()
+    var applyAllColourUpCharge:Double = Double()
+    var applyAllSelectedMaterialFileName:String = String()
+    var applyAllSelectedMoldName:String = String()
+    var applyAllSelectedMoldPrice:Double = Double()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         floorColorNamesArray = getFloorColorList()
@@ -58,12 +68,17 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 self.navigationController?.viewControllers = [firstViewController,self]
                 
             }
+        
         }
         else
         {
             self.addNewButton.isHidden = true
             self.nextButton.isHidden = true
         }
+        applyAllSelectColorImageView.image = UIImage(named: "AppIcon")
+        applyAllBtn.isUserInteractionEnabled = false
+        applyAllBtn.setTitleColor(UIColor().colorFromHexString("A6AFB9"), for: .normal)
+        
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -155,9 +170,79 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     @IBAction func addNewButtonAction(_ sender: Any) {
         let room = SelectARoomViewController.initialization()!
         room.appoinmentsData = AppDelegate.appoinmentslData
+        self.applyAllSelectedColour = ""
+        self.applyAllSelectedMoldName = ""
         self.navigationController?.pushViewController(room, animated: true)
     }
     
+    
+    @IBAction func applyAllSelectMoldingdropBtnAction(_ sender: UIButton)
+    {
+        var value:[String] = []
+        var moldingPriceValue :[Double] = []
+        let  moldValue = self.getMoldList()
+        value = moldValue.compactMap({$0.name})
+        moldingPriceValue = moldValue.compactMap({$0.unit_price})
+        self.moldingPriceArray = moldingPriceValue
+        self.moldingNamesArray = value
+        if(value.count != 0)
+        {
+            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 4, cell: sender.tag)
+        }
+        else
+        {
+            self.alert("Not Available", nil)
+        }
+    }
+    @IBAction func applyAllBtnAction(_ sender: UIButton)
+    {
+        for rooms in tableValues
+        {
+            if  applyAllSelectColorTxtFld.text != "Select Color"
+            {
+//                applyAllSelectedColour = rooms.color ?? ""
+//                applyAllSelectedMaterialFileName = rooms.material_image_url ?? ""
+//                applyAllColourUpCharge =  rooms.colorUpCharge ?? 0.0
+                self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0)
+            }
+            else
+            {
+                self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: rooms.color ?? "", colorImageUrl: rooms.material_image_url ?? "", colorUpCharge: rooms.colorUpCharge ?? 0.0, moldPrice: 0.0)
+            }
+            
+            if applyAllSelectMoldingTxtFld.text != "" && applyAllSelectedMoldName != ""
+            {
+                if rooms.room_name!.contains("STAIRS") || rooms.room_area == 0.0
+                {
+                }
+                else
+                {
+                    if applyAllSelectedMoldName == ""
+                    {
+                        applyAllSelectedMoldName = rooms.moulding ?? ""
+                        applyAllSelectedMoldPrice = rooms.mouldingPrice ?? 0.0
+                    }
+                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: applyAllSelectedMoldName, moldPrice: applyAllSelectedMoldPrice)
+                }
+            }
+        }
+        
+        self.loadRefreshData()
+    }
+    
+    @IBAction func applyAllSelectColorDropDownBtnAction(_ sender: UIButton)
+    {
+        var value:[String] = []
+        value = self.floorColorNamesArray.compactMap({$0.color})
+        if(value.count != 0)
+        {
+            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag)
+        }
+        else
+        {
+            self.alert("Not Available", nil)
+        }
+    }
     @IBAction func nextButtonAction(_ sender: Any) {
         
         if(validationTileColorRoomName != "")
@@ -718,6 +803,29 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 self.loadRefreshData()
             }
             //
+        }
+        else if tag == 3
+        {
+            applyAllBtn.isUserInteractionEnabled = true
+            applyAllBtn.setTitleColor(.white, for: .normal)
+            applyAllSelectColorTxtFld.text = item
+            let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+            applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
+            self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
+            self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
+            self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+            
+            
+        }
+        else if tag == 4
+        {
+            applyAllBtn.isUserInteractionEnabled = true
+            applyAllBtn.setTitleColor(.white, for: .normal)
+            applyAllSelectMoldingTxtFld.text = item
+            self.applyAllSelectedMoldName = self.moldingNamesArray[index]
+            self.applyAllSelectedMoldPrice = self.moldingPriceArray[index]
+//            let selectedMold = self.moldingNamesArray[index]
+//            let moldPrice = self.moldingPriceArray[index]
         }
         
     }
