@@ -2667,8 +2667,8 @@ extension UIViewController:OrderStatusViewDelegate
                  
          if let data = data, let model = try? decoder.decode(paymentMethodDetailsSecret.self, from: data) {
              print(model)
-//             let jwt = JWT<paymentMethodDetailsSecret>(header: header, payload: model, signature: signature)
-//             jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+            let jwt = JWT<paymentMethodDetailsSecret>(header: header, payload: model, signature: signature)
+            jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
              print(jwtToken)
          
          }
