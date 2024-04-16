@@ -574,17 +574,18 @@ keyPaths:(std::optional<std::vector<std::vector<std::pair<realm::TableKey, realm
                                confinedTo:(RLMScheduler *)confinement
                                completion:(RLMResultsCompletionBlock)completion
                                     error:(NSError *_Nullable)error {
+    auto tsr = (error != nil) ? nil : reference;
     RLMRealmConfiguration *configuration = _realm.configuration;
     [confinement invoke:^{
-        if (error) {
-            return completion(nil, error);
+        if (tsr) {
+            NSError *err;
+            RLMRealm *realm = [RLMRealm realmWithConfiguration:configuration error:&err];
+            RLMResults *collection = [realm resolveThreadSafeReference:tsr];
+            collection.associatedSubscriptionId = self.associatedSubscriptionId;
+            completion(collection, err);
+        } else {
+            completion(nil, error);
         }
-
-        NSError *err;
-        RLMRealm *realm = [RLMRealm realmWithConfiguration:configuration error:&err];
-        RLMResults *collection = [realm resolveThreadSafeReference:reference];
-        collection.associatedSubscriptionId = self.associatedSubscriptionId;
-        completion(collection, err);
     }];
 }
 

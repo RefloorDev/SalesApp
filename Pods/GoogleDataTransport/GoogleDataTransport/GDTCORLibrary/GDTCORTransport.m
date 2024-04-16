@@ -71,10 +71,6 @@
   return [[GDTCOREvent alloc] initWithMappingID:_mappingID target:_target];
 }
 
-- (GDTCOREvent *)eventForTransportWithProductData:(GDTCORProductData *)productData {
-  return [[GDTCOREvent alloc] initWithMappingID:_mappingID productData:productData target:_target];
-}
-
 #pragma mark - Private helper methods
 
 /** Sends the given event through the transport pipeline.

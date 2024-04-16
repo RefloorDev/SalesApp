@@ -122,22 +122,19 @@ static NSString *const kFakeToken = @"NO_RECAPTCHA";
                                              }
                                            });
                                      } else {
-                                       FIRLogError(kFIRLoggerAuth, @"I-AUT000026",
-                                                   @"reCAPTCHA verification failed because "
-                                                   @"reCAPTCHA SDK not linked.");
+                                       NSLog(@"reCAPTCHA verification faled because reCAPTCHA SDK "
+                                             @"not linked.");
                                        completion(nil,
                                                   [FIRAuthErrorUtils recaptchaSDKNotLinkedError]);
                                      }
                                    } else {
-                                     FIRLogError(kFIRLoggerAuth, @"I-AUT000026",
-                                                 @"reCAPTCHA verification failed because reCAPTCHA "
-                                                 @"SDK not linked.");
+                                     NSLog(@"reCAPTCHA verification faled because reCAPTCHA SDK "
+                                           @"not linked.");
                                      completion(nil,
                                                 [FIRAuthErrorUtils recaptchaSDKNotLinkedError]);
                                    }
                                  } else {
-                                   FIRLogInfo(kFIRLoggerAuth, @"I-AUT000027",
-                                              @"reCAPTCHA verification succeeded.");
+                                   NSLog(@"reCAPTCHA verification succeeded.");
                                    [self retrieveRecaptchaTokenWithAction:action
                                                                completion:completion];
                                  }
@@ -163,12 +160,10 @@ static NSString *const kFakeToken = @"NO_RECAPTCHA";
                 callback:^(FIRGetRecaptchaConfigResponse *_Nullable response,
                            NSError *_Nullable error) {
                   if (error) {
-                    FIRLogError(kFIRLoggerAuth, @"I-AUT000028",
-                                @"reCAPTCHA config retrieval failed.");
+                    NSLog(@"reCAPTCHA config retrieval failed.");
                     completion(error);
                   }
-                  FIRLogInfo(kFIRLoggerAuth, @"I-AUT000029",
-                             @"reCAPTCHA config retrieval succeeded.");
+                  NSLog(@"reCAPTCHA config retrieval succeeded.");
                   FIRAuthRecaptchaConfig *config = [[FIRAuthRecaptchaConfig alloc] init];
                   // Response's site key is of the format projects/<project-id>/keys/<site-key>'
                   config.siteKey = [response.recaptchaKey componentsSeparatedByString:@"/"][3];
@@ -223,13 +218,11 @@ static NSString *const kFakeToken = @"NO_RECAPTCHA";
                execute:customAction
             completion:^(NSString *_Nullable token, NSError *_Nullable error) {
               if (!error) {
-                FIRLogInfo(kFIRLoggerAuth, @"I-AUT000030", @"reCAPTCHA token retrieval succeeded.");
+                NSLog(@"reCAPTCHA token retrieval succeeded.");
                 completion(token, nil);
                 return;
               } else {
-                FIRLogError(
-                    kFIRLoggerAuth, @"I-AUT000031",
-                    @"reCAPTCHA token retrieval failed. NO_RECAPTCHA sent as the fake code.");
+                NSLog(@"reCAPTCHA token retrieval failed. NO_RECAPTCHA sent as the fake code.");
                 completion(kFakeToken, nil);
               }
             }];

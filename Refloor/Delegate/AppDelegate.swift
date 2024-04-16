@@ -37,7 +37,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion:  7,//7, // production 8
+            schemaVersion:  10,//7, // production 9
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -342,7 +342,11 @@ extension AppDelegate : CLLocationManagerDelegate
     {
        if HttpClientManager.SharedHM.connectedToNetwork()
         {
-           HttpClientManager.SharedHM.geoLocationTimeSubmitAPi(parameter: parameter) {success, message in
+           let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+           var parameterToPass:[String:Any] = [:]
+           parameterToPass = parameter
+           parameterToPass["timezone"] = timeZone
+           HttpClientManager.SharedHM.geoLocationTimeSubmitAPi(parameter: parameterToPass) {success, message in
                if success == "Success"
                {
                    completion(true)

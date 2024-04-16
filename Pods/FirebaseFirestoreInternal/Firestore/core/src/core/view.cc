@@ -246,9 +246,13 @@ bool View::ShouldWaitForSyncedDocument(const Document& new_doc,
           !new_doc->has_local_mutations());
 }
 
-ViewChange View::ApplyChanges(const ViewDocumentChanges& doc_changes,
-                              const absl::optional<TargetChange>& target_change,
-                              bool targetIsPendingReset) {
+ViewChange View::ApplyChanges(const ViewDocumentChanges& doc_changes) {
+  return ApplyChanges(doc_changes, {});
+}
+
+ViewChange View::ApplyChanges(
+    const ViewDocumentChanges& doc_changes,
+    const absl::optional<TargetChange>& target_change) {
   HARD_ASSERT(!doc_changes.needs_refill(),
               "Cannot apply changes that need a refill");
 
@@ -271,14 +275,8 @@ ViewChange View::ApplyChanges(const ViewDocumentChanges& doc_changes,
       });
 
   ApplyTargetChange(target_change);
-  std::vector<LimboDocumentChange> limbo_changes =
-      targetIsPendingReset ? std::vector<LimboDocumentChange>{}
-                           : UpdateLimboDocuments();
-
-  // We are at synced state if there is no limbo docs are waiting to be
-  // resolved, view is current with the backend, and the query is not pending
-  // to reset due to existence filter mismatch.
-  bool synced = limbo_documents_.empty() && current_ && !targetIsPendingReset;
+  std::vector<LimboDocumentChange> limbo_changes = UpdateLimboDocuments();
+  bool synced = limbo_documents_.empty() && current_;
   SyncState new_sync_state = synced ? SyncState::Synced : SyncState::Local;
   bool sync_state_changed = new_sync_state != sync_state_;
   sync_state_ = new_sync_state;

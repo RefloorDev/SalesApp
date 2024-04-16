@@ -893,8 +893,10 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 }
             }
             
+            
         }
         
+        print("additionalCost for room", extraCost)
         self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
         //save extra cost of selected room to appointment
         self.saveExtraCostToCompletedAppointment(roomId: self.roomID, extraCost: extraCost)

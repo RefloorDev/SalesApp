@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1300"
+   LastUpgradeVersion = "1500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B7593ED31AE6D88544DFA591F77E40DD"
-               BuildableName = "MaterialShowcase"
+               BuildableName = "MaterialShowcase.framework"
                BlueprintName = "MaterialShowcase"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

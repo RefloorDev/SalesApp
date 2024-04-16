@@ -20,8 +20,8 @@
   @_exported import FirebaseFirestoreInternal
 #endif // SWIFT_PACKAGE
 
-@_implementationOnly import FirebaseCoreExtension
 import FirebaseSharedSwift
+@_implementationOnly import FirebaseCoreExtension
 
 extension CodingUserInfoKey {
   static let documentRefUserInfoKey =
@@ -66,7 +66,7 @@ extension DocumentReference: DocumentIDWrappable {
 /// existential type for protocols though, so this protocol (to which DocumentID
 /// conforms) indirectly makes it possible to test for and act on any
 /// `DocumentID<Value>`.
-protocol DocumentIDProtocol {
+internal protocol DocumentIDProtocol {
   /// Initializes the DocumentID from a DocumentReference.
   init(from documentReference: DocumentReference?) throws
 }
@@ -145,7 +145,7 @@ public struct DocumentID<Value: DocumentIDWrappable & Codable>:
 }
 
 extension DocumentID: DocumentIDProtocol {
-  init(from documentReference: DocumentReference?) throws {
+  internal init(from documentReference: DocumentReference?) throws {
     if let documentReference = documentReference {
       value = try Value.wrap(documentReference)
     } else {

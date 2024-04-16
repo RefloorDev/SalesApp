@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import FirebaseSharedSwift
 import Foundation
+import FirebaseSharedSwift
 
 #if SWIFT_PACKAGE
   @_exported import FirebaseFirestoreInternalWrapper
@@ -23,7 +23,7 @@ import Foundation
   @_exported import FirebaseFirestoreInternal
 #endif // SWIFT_PACKAGE
 
-struct FirestorePassthroughTypes: StructureCodingPassthroughTypeResolver {
+internal struct FirestorePassthroughTypes: StructureCodingPassthroughTypeResolver {
   static func isPassthroughType<T>(_ t: T) -> Bool {
     return
       t is GeoPoint ||

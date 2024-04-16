@@ -238,14 +238,13 @@ extension Persisted: Decodable where Value: Decodable {
 
 extension Persisted: Encodable where Value: Encodable {
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
         switch storage {
         case .unmanaged(let value, _, _):
-            try container.encode(value)
+            try value.encode(to: encoder)
         case .unmanagedObserved(let value, _):
-            try container.encode(value)
+            try value.encode(to: encoder)
         case .unmanagedNoDefault:
-            try container.encode(Value._rlmDefaultValue())
+            try Value._rlmDefaultValue().encode(to: encoder)
         default:
             // We need a reference to the parent object to be able to read from
             // a managed property. There's probably a way to do this with some

@@ -133,14 +133,9 @@ static const NSTimeInterval kDefaultFetchTokenInterval = 7 * 24 * 60 * 60;  // 7
   return [self.scope isEqualToString:kFIRMessagingDefaultTokenScope];
 }
 
-#pragma mark - NSSecureCoding
-
-+ (BOOL)supportsSecureCoding {
-  return YES;
-}
+#pragma mark - NSCoding
 
 - (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
-  BOOL needsMigration = NO;
   // These value cannot be nil
 
   id authorizedEntity = [aDecoder decodeObjectForKey:kFIRInstanceIDAuthorizedEntityKey];
@@ -169,27 +164,26 @@ static const NSTimeInterval kDefaultFetchTokenInterval = 7 * 24 * 60 * 60;  // 7
   if (firebaseAppID && ![firebaseAppID isKindOfClass:[NSString class]]) {
     return nil;
   }
-  NSSet *classes = [[NSSet alloc] initWithArray:@[ FIRMessagingAPNSInfo.class ]];
-  FIRMessagingAPNSInfo *rawAPNSInfo = [aDecoder decodeObjectOfClasses:classes
-                                                               forKey:kFIRInstanceIDAPNSInfoKey];
-  if (rawAPNSInfo && ![rawAPNSInfo isKindOfClass:[FIRMessagingAPNSInfo class]]) {
-    // If the decoder fails to decode a FIRMessagingAPNSInfo, check if this was archived by a
-    // FirebaseMessaging 10.18.0 or earlier.
-    // TODO(#12246) This block may be replaced with `rawAPNSInfo = nil` once we're confident all
-    // users have upgraded to at least 10.19.0. Perhaps, after privacy manifests have been required
-    // for awhile?
+
+  id rawAPNSInfo = [aDecoder decodeObjectForKey:kFIRInstanceIDAPNSInfoKey];
+  if (rawAPNSInfo && ![rawAPNSInfo isKindOfClass:[NSData class]]) {
+    return nil;
+  }
+
+  FIRMessagingAPNSInfo *APNSInfo = nil;
+  if (rawAPNSInfo) {
+    // TODO(chliangGoogle: Use the new API and secureCoding protocol.
     @try {
       [NSKeyedUnarchiver setClass:[FIRMessagingAPNSInfo class]
                      forClassName:@"FIRInstanceIDAPNSInfo"];
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-      rawAPNSInfo = [NSKeyedUnarchiver unarchiveObjectWithData:(NSData *)rawAPNSInfo];
-      needsMigration = YES;
+      APNSInfo = [NSKeyedUnarchiver unarchiveObjectWithData:rawAPNSInfo];
 #pragma clang diagnostic pop
     } @catch (NSException *exception) {
       FIRMessagingLoggerInfo(kFIRMessagingMessageCodeTokenInfoBadAPNSInfo,
                              @"Could not parse raw APNS Info while parsing archived token info.");
-      rawAPNSInfo = nil;
+      APNSInfo = nil;
     } @finally {
     }
   }
@@ -206,9 +200,8 @@ static const NSTimeInterval kDefaultFetchTokenInterval = 7 * 24 * 60 * 60;  // 7
     _token = [token copy];
     _appVersion = [appVersion copy];
     _firebaseAppID = [firebaseAppID copy];
-    _APNSInfo = [rawAPNSInfo copy];
+    _APNSInfo = [APNSInfo copy];
     _cacheTime = cacheTime;
-    _needsMigration = needsMigration;
   }
   return self;
 }
@@ -219,8 +212,16 @@ static const NSTimeInterval kDefaultFetchTokenInterval = 7 * 24 * 60 * 60;  // 7
   [aCoder encodeObject:self.token forKey:kFIRInstanceIDTokenKey];
   [aCoder encodeObject:self.appVersion forKey:kFIRInstanceIDAppVersionKey];
   [aCoder encodeObject:self.firebaseAppID forKey:kFIRInstanceIDFirebaseAppIDKey];
+  NSData *rawAPNSInfo;
   if (self.APNSInfo) {
-    [aCoder encodeObject:self.APNSInfo forKey:kFIRInstanceIDAPNSInfoKey];
+    // TODO(chliangGoogle: Use the new API and secureCoding protocol.
+    [NSKeyedArchiver setClassName:@"FIRInstanceIDAPNSInfo" forClass:[FIRMessagingAPNSInfo class]];
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    rawAPNSInfo = [NSKeyedArchiver archivedDataWithRootObject:self.APNSInfo];
+#pragma clang diagnostic pop
+
+    [aCoder encodeObject:rawAPNSInfo forKey:kFIRInstanceIDAPNSInfoKey];
   }
   [aCoder encodeObject:self.cacheTime forKey:kFIRInstanceIDCacheTimeKey];
 }

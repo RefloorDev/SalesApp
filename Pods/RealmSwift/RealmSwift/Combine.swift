@@ -894,8 +894,13 @@ extension RealmKeyedCollection {
 @frozen public struct AsyncOpenSubscription: Subscription {
     private let task: Realm.AsyncOpenTask
 
-    internal init(task: Realm.AsyncOpenTask) {
+    internal init(task: Realm.AsyncOpenTask,
+                  callbackQueue: DispatchQueue,
+                  onProgressNotificationCallback: ((SyncSession.Progress) -> Void)?) {
         self.task = task
+        if let onProgressNotificationCallback = onProgressNotificationCallback {
+            self.task.addProgressNotification(queue: callbackQueue, block: onProgressNotificationCallback)
+        }
     }
 
     /// A unique identifier for identifying publisher streams.
@@ -963,20 +968,14 @@ public enum RealmPublishers {
 
         /// :nodoc:
         public func receive<S>(subscriber: S) where S: Subscriber, S.Failure == Failure, Output == S.Input {
-            let rlmTask = RLMRealm.asyncOpen(with: configuration.rlmConfiguration,
-                                             callbackQueue: callbackQueue) { rlmRealm, error in
+            subscriber.receive(subscription: AsyncOpenSubscription(task: Realm.AsyncOpenTask(rlmTask: RLMRealm.asyncOpen(with: configuration.rlmConfiguration, callbackQueue: callbackQueue, callback: { rlmRealm, error in
                 if let realm = rlmRealm.flatMap(Realm.init) {
                     _ = subscriber.receive(realm)
                     subscriber.receive(completion: .finished)
                 } else {
                     subscriber.receive(completion: .failure(error ?? Realm.Error.callFailed))
                 }
-            }
-            let task = Realm.AsyncOpenTask(rlmTask: rlmTask)
-            if let onProgressNotificationCallback {
-                task.addProgressNotification(queue: callbackQueue, block: onProgressNotificationCallback)
-            }
-            subscriber.receive(subscription: AsyncOpenSubscription(task: task))
+            })), callbackQueue: callbackQueue, onProgressNotificationCallback: onProgressNotificationCallback))
         }
 
         /// Specifies the scheduler on which to perform the async open task.

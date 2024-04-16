@@ -16,7 +16,6 @@
 #import "GDTCOREvent.h"
 #import "GDTCOREventDataObject.h"
 #import "GDTCOREventTransformer.h"
-#import "GDTCORProductData.h"
 #import "GDTCORTargets.h"
 #import "GDTCORTransport.h"
 #import "GoogleDataTransport.h"
