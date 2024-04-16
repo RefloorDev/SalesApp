@@ -182,6 +182,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         self.appoinmentslData.customer_name = (self.customerFirstName.text ?? "")
         self.appoinmentslData.street =  (self.Street_Address_TF.text ?? "")
         self.appoinmentslData.state_code = (self.state_TF.text ?? "")
+        self.appoinmentslData.state = (self.state_TF.text ?? "")
         self.appoinmentslData.city =  (self.city_TF.text ?? "")
         self.appoinmentslData.zip = (self.zipTF.text ?? "")
         self.appoinmentslData.applicant_first_name = self.customerFirstName.text ?? ""
@@ -190,7 +191,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         self.appoinmentslData.phone = self.customerContactNumberTF.text ?? ""
         self.appoinmentslData.applicant_last_name = self.customerLastName.text ?? ""
         //arb
-        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!]
+        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!]
 
         self.updateAppointmentData(appointmentChangesDict: applicantOneDetails)
         let details = CustomerDetailsTowViewController.initialization()!

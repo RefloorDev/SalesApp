@@ -20,7 +20,6 @@
 #import "GDTCORTargets.h"
 
 @class GDTCOREvent;
-@class GDTCORProductData;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -87,14 +86,6 @@ NS_ASSUME_NONNULL_BEGIN
  * @return An event that is suited for use by this transport.
  */
 - (GDTCOREvent *)eventForTransport;
-
-/**
- * Creates an event with the given product data for use by this transport.
- *
- * @param productData The given product data to associate with the created event.
- * @return An event that is suited for use by this transport.
- */
-- (GDTCOREvent *)eventForTransportWithProductData:(nonnull GDTCORProductData *)productData;
 
 @end
 

@@ -26,7 +26,6 @@
 #include <realm/sync/subscriptions.hpp>
 
 #include <realm/util/checked_mutex.hpp>
-#include <realm/util/future.hpp>
 #include <realm/util/optional.hpp>
 #include <realm/version_id.hpp>
 
@@ -104,8 +103,6 @@ private:
 } // namespace _impl
 
 class SyncSession : public std::enable_shared_from_this<SyncSession> {
-    struct Private {};
-
 public:
     enum class State {
         Active,
@@ -121,15 +118,12 @@ public:
         Connected,
     };
 
+    using StateChangeCallback = void(State old_state, State new_state);
     using ConnectionStateChangeCallback = void(ConnectionState old_state, ConnectionState new_state);
     using TransactionCallback = void(VersionID old_version, VersionID new_version);
     using ProgressNotifierCallback = _impl::SyncProgressNotifier::ProgressNotifierCallback;
     using ProgressDirection = _impl::SyncProgressNotifier::NotifierType;
 
-    explicit SyncSession(Private, _impl::SyncClient&, std::shared_ptr<DB>, const RealmConfig&,
-                         SyncManager* sync_manager);
-    SyncSession(const SyncSession&) = delete;
-    SyncSession& operator=(const SyncSession&) = delete;
     ~SyncSession();
     State state() const REQUIRES(!m_state_mutex);
     ConnectionState connection_state() const REQUIRES(!m_connection_state_mutex);
@@ -273,14 +267,10 @@ public:
     // Return an existing external reference to this session, if one exists. Otherwise, returns `nullptr`.
     std::shared_ptr<SyncSession> existing_external_reference() REQUIRES(!m_external_reference_mutex);
 
-    struct OnlyForTesting;
-
     // Expose some internal functionality to other parts of the ObjectStore
     // without making it public to everyone
     class Internal {
         friend class _impl::RealmCoordinator;
-        friend struct OnlyForTesting;
-        friend class AsyncOpenTask;
 
         static void nonsync_transact_notify(SyncSession& session, VersionID::version_type version)
         {
@@ -291,8 +281,6 @@ public:
         {
             return session.m_db;
         }
-
-        static util::Future<void> pause_async(SyncSession& session);
     };
 
     // Expose some internal functionality to testing code.
@@ -317,7 +305,7 @@ public:
             return session.send_test_command(std::move(request));
         }
 
-        static sync::SaltedFileIdent get_file_ident(const SyncSession& session)
+        static sync::SaltedFileIdent get_file_ident(SyncSession& session)
         {
             return session.get_file_ident();
         }
@@ -326,8 +314,6 @@ public:
         {
             return session.get_subscription_store_base();
         }
-
-        static util::Future<void> pause_async(SyncSession& session);
     };
 
 private:
@@ -359,8 +345,15 @@ private:
     static std::shared_ptr<SyncSession> create(_impl::SyncClient& client, std::shared_ptr<DB> db,
                                                const RealmConfig& config, SyncManager* sync_manager)
     {
+        struct MakeSharedEnabler : public SyncSession {
+            MakeSharedEnabler(_impl::SyncClient& client, std::shared_ptr<DB> db, const RealmConfig& config,
+                              SyncManager* sync_manager)
+                : SyncSession(client, std::move(db), config, sync_manager)
+            {
+            }
+        };
         REALM_ASSERT(config.sync_config);
-        return std::make_shared<SyncSession>(Private(), client, std::move(db), config, std::move(sync_manager));
+        return std::make_shared<MakeSharedEnabler>(client, std::move(db), config, std::move(sync_manager));
     }
     // }
 
@@ -369,9 +362,10 @@ private:
     static util::UniqueFunction<void(util::Optional<app::AppError>)>
     handle_refresh(const std::shared_ptr<SyncSession>&, bool);
 
+    SyncSession(_impl::SyncClient&, std::shared_ptr<DB>, const RealmConfig&, SyncManager* sync_manager);
+
     // Initialize or tear down the subscription store based on whether or not flx_sync_requested is true
-    void update_subscription_store(bool flx_sync_requested, std::optional<sync::SubscriptionSet> new_subs)
-        REQUIRES(!m_state_mutex);
+    void update_subscription_store(bool flx_sync_requested) REQUIRES(!m_state_mutex);
     void create_subscription_store() REQUIRES(m_state_mutex);
     void set_write_validator_factory(std::weak_ptr<sync::SubscriptionStore> weak_sub_mgr);
     // Update the sync config after a PBS->FLX migration or FLX->PBS rollback occurs
@@ -381,17 +375,15 @@ private:
     void download_fresh_realm(sync::ProtocolErrorInfo::Action server_requests_action)
         REQUIRES(!m_config_mutex, !m_state_mutex, !m_connection_state_mutex);
     void handle_fresh_realm_downloaded(DBRef db, Status status,
-                                       sync::ProtocolErrorInfo::Action server_requests_action,
-                                       std::optional<sync::SubscriptionSet> new_subs = std::nullopt)
+                                       sync::ProtocolErrorInfo::Action server_requests_action)
         REQUIRES(!m_state_mutex, !m_config_mutex, !m_connection_state_mutex);
     void handle_error(sync::SessionErrorInfo) REQUIRES(!m_state_mutex, !m_config_mutex, !m_connection_state_mutex);
     void handle_bad_auth(const std::shared_ptr<SyncUser>& user, Status status)
         REQUIRES(!m_state_mutex, !m_config_mutex);
-    void handle_location_update_failed(Status status)
-        REQUIRES(!m_state_mutex, !m_config_mutex, !m_connection_state_mutex);
     // If sub_notify_error is set (including Status::OK()), then the pending subscription waiters will
     // also be called with the sub_notify_error status value.
-    void cancel_pending_waits(util::CheckedUniqueLock, Status) RELEASE(m_state_mutex);
+    void cancel_pending_waits(util::CheckedUniqueLock, Status, std::optional<Status> subs_notify_error = std::nullopt)
+        RELEASE(m_state_mutex);
     enum class ShouldBackup { yes, no };
     void update_error_and_mark_file_for_deletion(SyncError&, ShouldBackup) REQUIRES(m_state_mutex, !m_config_mutex);
     void handle_progress_update(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
@@ -406,7 +398,7 @@ private:
 
     void become_active() REQUIRES(m_state_mutex, !m_config_mutex);
     void become_dying(util::CheckedUniqueLock) RELEASE(m_state_mutex) REQUIRES(!m_connection_state_mutex);
-    void become_inactive(util::CheckedUniqueLock, Status = Status::OK(), bool = true) RELEASE(m_state_mutex)
+    void become_inactive(util::CheckedUniqueLock, Status ec = Status::OK()) RELEASE(m_state_mutex)
         REQUIRES(!m_connection_state_mutex);
     void become_paused(util::CheckedUniqueLock) RELEASE(m_state_mutex) REQUIRES(!m_connection_state_mutex);
     void become_waiting_for_access_token() REQUIRES(m_state_mutex);
@@ -417,7 +409,7 @@ private:
 
     // do_become_inactive is called from both become_paused()/become_inactive() and does all the steps to
     // shutdown and cleanup the sync session besides setting m_state.
-    void do_become_inactive(util::CheckedUniqueLock, Status, bool) RELEASE(m_state_mutex)
+    void do_become_inactive(util::CheckedUniqueLock, Status) RELEASE(m_state_mutex)
         REQUIRES(!m_connection_state_mutex);
     // do_revive is called from both revive_if_needed() and resume(). It does all the steps to transition
     // from a state that is not Active to Active.
@@ -428,7 +420,6 @@ private:
 
     sync::SaltedFileIdent get_file_ident() const;
     std::string get_appservices_connection_id() const REQUIRES(!m_state_mutex);
-    std::optional<std::string> get_sync_route() const REQUIRES(!m_state_mutex);
 
     util::Future<std::string> send_test_command(std::string body) REQUIRES(!m_state_mutex);
 
@@ -442,6 +433,9 @@ private:
     }
 
     void assert_mutex_unlocked() ASSERT_CAPABILITY(!m_state_mutex) ASSERT_CAPABILITY(!m_config_mutex) {}
+
+    // Create active subscription set after PBS -> FLX migration to cover the data.
+    void make_active_subscription_set() REQUIRES(!m_state_mutex);
 
     // Return the subscription_store_base - to be used only for testing
     std::shared_ptr<sync::SubscriptionStore> get_subscription_store_base() REQUIRES(!m_state_mutex);
@@ -465,6 +459,7 @@ private:
     // m_flx_subscription_store will either point to m_subscription_store_base if currently using FLX
     // or set to nullptr if currently using PBS (mutable for client PBS->FLX migration)
     std::shared_ptr<sync::SubscriptionStore> m_flx_subscription_store GUARDED_BY(m_state_mutex);
+    std::optional<sync::SubscriptionSet> m_active_subscriptions_after_migration GUARDED_BY(m_state_mutex);
     // Original sync config for reverting back to PBS if FLX migration is rolled back
     const std::shared_ptr<SyncConfig> m_original_sync_config; // does not change after construction
     std::shared_ptr<SyncConfig> m_migrated_sync_config GUARDED_BY(m_config_mutex);
@@ -495,9 +490,6 @@ private:
     mutable util::CheckedMutex m_external_reference_mutex;
     class ExternalReference;
     std::weak_ptr<ExternalReference> m_external_reference GUARDED_BY(m_external_reference_mutex);
-
-    // Set if ProtocolError::schema_version_changed error is received from the server.
-    std::optional<uint64_t> m_previous_schema_version GUARDED_BY(m_state_mutex);
 };
 
 } // namespace realm

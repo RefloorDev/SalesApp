@@ -10,6 +10,7 @@ import Foundation
 import ObjectMapper
 import RealmSwift
 import SwiftUI
+import ObjectMapper_Realm
 
 class UserLoginData: Mappable
 {
@@ -413,7 +414,7 @@ class FloorLevelDataValue: Mappable
     }
 }
 
-class AppoinmentDataValue:NSObject,Mappable
+class AppoinmentDataValue:Object,Mappable
 {
     var  id : Int?
     var  name :String?
@@ -463,6 +464,7 @@ class AppoinmentDataValue:NSObject,Mappable
     var is_room_measurement_exist : Bool?
     var recisionDate : String?
     var officeLocationId:Int?
+    var externalEntityKey = RealmSwift.List<rf_External_Entity_Key>()
     
     var appointmentStatus:AppointmentStatus!
     
@@ -518,6 +520,7 @@ class AppoinmentDataValue:NSObject,Mappable
         self.is_room_measurement_exist = listOfAppointment.is_room_measurement_exist
         self.recisionDate = listOfAppointment.recisionDate
         self.officeLocationId = listOfAppointment.officeLocationId
+        self.externalEntityKey = listOfAppointment.externalEntityKey
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -564,6 +567,7 @@ class AppoinmentDataValue:NSObject,Mappable
         co_applicant_secondary_phone <- map["co_applicant_secondary_phone"]
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
+        externalEntityKey <- (map["external_entity_keys"],ListTransform<rf_External_Entity_Key>())
         
     }
 }

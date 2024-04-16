@@ -20,7 +20,7 @@ def sh(*args)
 end
 
 def platforms(xcode_version)
-  if xcode_version.start_with? '15.2'
+  if xcode_version.start_with? '15.1'
     %w{osx ios watchos tvos catalyst visionos}
   else
     %w{osx ios watchos tvos catalyst}
@@ -110,11 +110,14 @@ Dir.mktmpdir do |tmp|
   end
 end
 
+# Our normal Xcode 15 xcframework includes visionOS slices build with a beta
+# version of Xcode, but Carthage doesn't like that so we have to build a
+# separate xcframework without visionOS
 puts 'Creating Carthage release zip'
 Dir.mktmpdir do |tmp|
   tmp = File.realpath tmp
   Dir.chdir(tmp) do
-    for platform in platforms('15.1')
+    for platform in platforms('14')
       sh 'unzip', "#{ROOT}/realm-#{platform}-#{OBJC_XCODE_VERSION}.zip"
     end
     create_xcframework tmp, '', 'Release', 'RealmSwift'

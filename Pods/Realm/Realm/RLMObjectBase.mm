@@ -752,13 +752,8 @@ RLM_DIRECT_MEMBERS
             completion();
         }
     };
-    try {
-        _token = _object.add_notification_callback(ObjectChangeCallbackWrapper{block, obj, completion},
-                                                   obj->_info->keyPathArrayFromStringArray(keyPaths));
-    }
-    catch (const realm::Exception& e) {
-        @throw RLMException(e);
-    }
+    _token = _object.add_notification_callback(ObjectChangeCallbackWrapper{block, obj, completion},
+                                               obj->_info->keyPathArrayFromStringArray(keyPaths));
 }
 
 - (void)registrationComplete:(void (^)())completion {

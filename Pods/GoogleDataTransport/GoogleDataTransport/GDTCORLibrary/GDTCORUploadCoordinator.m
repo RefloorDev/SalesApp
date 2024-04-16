@@ -168,7 +168,7 @@
 }
 
 - (void)appWillTerminate:(GDTCORApplication *)application {
-  dispatch_async(_coordinationQueue, ^{
+  dispatch_sync(_coordinationQueue, ^{
     [self stopTimer];
   });
 }

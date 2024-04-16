@@ -90,8 +90,7 @@ extension ObjectId: Encodable {
     ///
     /// - Parameter encoder: The encoder to write data to.
     public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(stringValue)
+        try self.stringValue.encode(to: encoder)
     }
 }
 

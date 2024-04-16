@@ -241,27 +241,48 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         let customer = AppDelegate.appoinmentslData!
         let primaryApplicantAddress:[String:Any] = ["addressLine1":customer.street!,"addressLine2":customer.street2!,"city":customer.city!,"state":customer.state!,"postalCode":customer.zip!]
         let jointApplicantAddress:[String:Any] = ["addressLine1":customer.co_applicant_address ?? "","addressLine2":customer.co_applicant_city ?? "","city":customer.co_applicant_city ?? "","state":customer.co_applicant_state  ?? "","postalCode":customer.co_applicant_zip ?? ""]
-        let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "","dateOfBirth":(isHunter ? nil : ""),"email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":customer.mobile ?? "","workPhone":"","address":primaryApplicantAddress]
-        let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "","dateOfBirth": (isHunter ? nil : ""),"email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":customer.co_applicant_secondary_phone ?? "","workPhone":"","address":jointApplicantAddress]
+        let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "","dateOfBirth":(isHunter ? nil : ""),"email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":((isHunter && customer.mobile == "") ? customer.phone: customer.mobile ?? ""),"workPhone":"","address":primaryApplicantAddress]
+        let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "","dateOfBirth": (isHunter ? nil : ""),"email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":((isHunter && customer.co_applicant_phone == "") ? customer.co_applicant_secondary_phone: customer.co_applicant_phone ?? ""),"workPhone":"","address":jointApplicantAddress]
         let salesPerson = customer.sales_person?.split(separator: " ")
         let salesPersonFirstName = salesPerson?[0]
         let salesPersonLastName = salesPerson?[1]
         let salesPersonEmail = UserDefaults.standard.value(forKey: "salesPersonEmail") as! String
-
-        let prefillDictionary:[String:Any] = ["expectedPurchaseAmount": isHunter ?  (totalAmount + adminFee) : (totalAmount + adminFee) * 100,"downPaymentAmount" :downPaymentValue,"primaryApplicant":primaryApplicant,"jointApplicant":jointApplicant,"salesAssociate":"RCB","salesAssociateFirstName":salesPersonFirstName ?? "","salesAssociateLastName":salesPersonLastName ?? "","salesAssociateEmail":salesPersonEmail]
+        var versatileTotalPrice:Double = 0.0
+        if isVersatile
+        {
+            if totalAmount + adminFee < 3500
+            {
+                versatileTotalPrice = 3500
+            }
+            else
+            {
+                versatileTotalPrice = totalAmount + adminFee
+            }
+        }
+        
+        let prefillDictionary:[String:Any] = ["expectedPurchaseAmount": isHunter ?  (totalAmount + adminFee) : (versatileTotalPrice) * 100,"downPaymentAmount" :downPaymentValue,"primaryApplicant":primaryApplicant,"jointApplicant":jointApplicant,"salesAssociate":"RCB","salesAssociateFirstName":salesPersonFirstName ?? "","salesAssociateLastName":salesPersonLastName ?? "","salesAssociateEmail":salesPersonEmail]
         let parameter:[String:Any] = ["prefill":prefillDictionary,"mode":"full","prequalificationId":"d0a88bb7-4fbd-43c6-9839-340e8c5308ff","applicationId":"861625fa-b505-4924-a933-e5dbf91efa20","returnUrl":"https://versatilecredit.com/landingpage", "externalCustomerId": customer.improveit_appointment_id ?? ""]
         
         if isHunter
         {
             let hunterArray = externalCredentialsArray.filter({$0.provider == "hunter"})
-            hunterCall(parameter: parameter, customer: customer, url: (hunterArray.first?.url)!, apiKey: (hunterArray.first?.apiKey)!, entityKey: (hunterArray.first?.entityKey)!)
+            if hunterArray.count > 0
+            {
+                hunterCall(parameter: parameter, customer: customer, url: (hunterArray.first?.url)!, apiKey: (hunterArray.first?.apiKey)!, entityKey: (hunterArray.first?.entityKey)!)
+            }
             
         }
         else
         {
             let versatileArray = externalCredentialsArray.filter({$0.provider == "versatile"})
-            
-            versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: (versatileArray.first?.entityKey)!)
+            if customer.externalEntityKey.count > 0
+            {
+                versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: customer.externalEntityKey[0].entityKey ?? "")
+            }
+            else
+            {
+                self.alert("Versatile credit application feature is not available for your location", nil)
+            }
         }
     }
     

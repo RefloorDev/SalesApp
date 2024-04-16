@@ -506,12 +506,7 @@ RLMNotificationToken *RLMAddNotificationBlock(id c, id block,
     RLMClassInfo *info = collection.objectInfo;
     if (!queue) {
         [realm verifyNotificationsAreSupported:true];
-        try {
-            token->_token = [collection addNotificationCallback:block keyPaths:info->keyPathArrayFromStringArray(keyPaths)];
-        }
-        catch (const realm::Exception& e) {
-            @throw RLMException(e);
-        }
+        token->_token = [collection addNotificationCallback:block keyPaths:info->keyPathArrayFromStringArray(keyPaths)];
         return token;
     }
 

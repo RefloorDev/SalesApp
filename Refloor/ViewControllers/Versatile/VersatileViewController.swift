@@ -16,6 +16,8 @@ protocol backToCreditApplicationProtocol
 
 class VersatileViewController: UIViewController, ImagePickerDelegate, versatileBackprotocol,CreditApplicationProtocol
 {
+   
+    
     func creditApplicationCall(isVersatile: Bool)
     {
         creditApplicationDelegate?.creditApplicationCall(isVersatile: isVersatile)
@@ -79,6 +81,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
         
         sendRequest(urlString: url)
         versatileWebView.navigationDelegate = self
+        
 //        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"versatile"]
 //        HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
 //            success, data in
@@ -198,7 +201,7 @@ extension VersatileViewController:WKNavigationDelegate
                 if navigationAction.request.url == redirectURL || navigationAction.request.url == hunterRedirectURL {
                     if isVersatile
                     {
-                        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"versatile"]
+                        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"versatile","improveit_appointment_id":AppDelegate.appoinmentslData.improveit_appointment_id ?? ""]
                         HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
                         success, message, data in
                         
@@ -236,7 +239,7 @@ extension VersatileViewController:WKNavigationDelegate
                 }
                     else if isHunter
                     {
-                        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"hunter"]
+                        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"hunter","improveit_appointment_id":AppDelegate.appoinmentslData.improveit_appointment_id ?? ""]
                         HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
                         success, message, data in
                         

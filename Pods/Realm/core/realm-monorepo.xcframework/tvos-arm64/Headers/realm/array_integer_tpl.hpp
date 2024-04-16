@@ -24,34 +24,37 @@
 
 namespace realm {
 
-template <class cond>
-bool ArrayInteger::find(value_type value, size_t start, size_t end, QueryStateBase* state) const
+template <class cond, class Callback>
+bool ArrayInteger::find(value_type value, size_t start, size_t end, QueryStateBase* state, Callback callback) const
 {
-    return ArrayWithFind(*this).find<cond>(value, start, end, 0, state);
+    return ArrayWithFind(*this).find<cond, Callback>(value, start, end, 0, state, callback);
 }
 
-inline bool ArrayIntNull::find_impl(int cond, value_type value, size_t start, size_t end, QueryStateBase* state) const
+template <class Callback>
+inline bool ArrayIntNull::find_impl(int cond, value_type value, size_t start, size_t end, QueryStateBase* state,
+                                    Callback callback) const
 {
     switch (cond) {
         case cond_Equal:
-            return find_impl<Equal>(value, start, end, state);
+            return find_impl<Equal>(value, start, end, state, callback);
         case cond_NotEqual:
-            return find_impl<NotEqual>(value, start, end, state);
+            return find_impl<NotEqual>(value, start, end, state, callback);
         case cond_Greater:
-            return find_impl<Greater>(value, start, end, state);
+            return find_impl<Greater>(value, start, end, state, callback);
         case cond_Less:
-            return find_impl<Less>(value, start, end, state);
+            return find_impl<Less>(value, start, end, state, callback);
         case cond_None:
-            return find_impl<None>(value, start, end, state);
+            return find_impl<None>(value, start, end, state, callback);
         case cond_LeftNotNull:
-            return find_impl<NotNull>(value, start, end, state);
+            return find_impl<NotNull>(value, start, end, state, callback);
     }
     REALM_ASSERT_DEBUG(false);
     return false;
 }
 
-template <class cond>
-bool ArrayIntNull::find_impl(value_type opt_value, size_t start, size_t end, QueryStateBase* state) const
+template <class cond, class Callback>
+bool ArrayIntNull::find_impl(value_type opt_value, size_t start, size_t end, QueryStateBase* state,
+                             Callback callback) const
 {
     int64_t null_value = Array::get(0);
     bool find_null = !bool(opt_value);
@@ -76,7 +79,7 @@ bool ArrayIntNull::find_impl(value_type opt_value, size_t start, size_t end, Que
         }
 
         // Fall back to plain Array find.
-        return ArrayWithFind(*this).find<cond>(value, start2, end2, baseindex2, state);
+        return ArrayWithFind(*this).find<cond>(value, start2, end2, baseindex2, state, callback);
     }
     else {
         cond c;
@@ -92,7 +95,8 @@ bool ArrayIntNull::find_impl(value_type opt_value, size_t start, size_t end, Que
             int64_t v = Array::get(i);
             bool value_is_null = (v == null_value);
             if (c(v, value, value_is_null, find_null)) {
-                if (!state->match(i + baseindex2)) {
+                util::Optional<int64_t> v2 = value_is_null ? util::none : util::make_optional(v);
+                if (!ArrayWithFind(*this).find_action(i + baseindex2, v2, state, callback)) {
                     return false; // tell caller to stop aggregating/search
                 }
             }
@@ -105,7 +109,7 @@ template <class cond>
 size_t ArrayIntNull::find_first(value_type value, size_t start, size_t end) const
 {
     QueryStateFindFirst state;
-    find_impl<cond>(value, start, end, &state);
+    find_impl<cond>(value, start, end, &state, nullptr);
 
     if (state.match_count() > 0)
         return to_size_t(state.m_state);
@@ -113,10 +117,11 @@ size_t ArrayIntNull::find_first(value_type value, size_t start, size_t end) cons
         return not_found;
 }
 
-template <class cond>
-inline bool ArrayIntNull::find(value_type value, size_t start, size_t end, QueryStateBase* state) const
+template <class cond, class Callback>
+inline bool ArrayIntNull::find(value_type value, size_t start, size_t end, QueryStateBase* state,
+                               Callback callback) const
 {
-    return find_impl<cond>(value, start, end, state);
+    return find_impl<cond, Callback>(value, start, end, state, callback);
 }
 
 } // namespace realm

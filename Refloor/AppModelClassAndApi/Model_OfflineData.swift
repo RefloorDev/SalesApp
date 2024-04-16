@@ -1173,8 +1173,9 @@ class rf_master_appointment : Object, Mappable {
     @objc dynamic var applicantAndIncomeData: String?
     @objc dynamic var recisionDate:String?
     @objc dynamic var officeLocationId = 0
+    var externalEntityKey = List<rf_External_Entity_Key>()
    
-    
+    //var payment_options = List<rf_paymentOptionData>()
     override static func primaryKey() -> String? {
         return "id"
     }
@@ -1217,6 +1218,7 @@ class rf_master_appointment : Object, Mappable {
         partner_longitude = appointmentObj["appointment_date"] as? Double ?? 0.0
         recisionDate = appointmentObj["recision_date"] as? String ?? ""
         officeLocationId = appointmentObj["office_location_id"] as? Int ?? 0
+        externalEntityKey = appointmentObj["external_entity_keys"] as? List<rf_External_Entity_Key> ?? List<rf_External_Entity_Key>()
     }
     
      init(appointmentData:AppoinmentDataValue) {
@@ -1262,6 +1264,7 @@ class rf_master_appointment : Object, Mappable {
         self.is_room_measurement_exist = appointmentData.is_room_measurement_exist ?? false
         self.recisionDate = appointmentData.recisionDate
          self.officeLocationId = appointmentData.officeLocationId ?? 0
+         self.externalEntityKey = appointmentData.externalEntityKey
     }
     
     init(appointmentObj:rf_completed_appointment) {
@@ -1297,6 +1300,8 @@ class rf_master_appointment : Object, Mappable {
         partner_longitude = appointmentObj.partner_longitude
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
+        externalEntityKey = appointmentObj.external_entity_keys
+        
         
     }
     
@@ -1345,6 +1350,8 @@ class rf_master_appointment : Object, Mappable {
         partner_longitude <- map["partner_longitude"]
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
+        externalEntityKey <- (map["external_entity_keys"], ListTransform<rf_External_Entity_Key>())
+            // payment_options <- (map["payment_options"], ListTransform<rf_paymentOptionData>())
     }
     
 }
@@ -1413,6 +1420,7 @@ class rf_completed_appointment:Object{
     var rooms = List<rf_completed_room>()
     var questionnaires = List<rf_master_question>()
     var snanpshotImages =  List<String>()
+    var external_entity_keys = List<rf_External_Entity_Key>()
     @objc dynamic var appointment_date : String?
     @objc dynamic var appointment_datetime : String?
     @objc dynamic var customer_id = 0
@@ -1458,6 +1466,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var recisionDate : String?
     @objc dynamic var sync_status = false
     @objc dynamic var officeLocationId = 0
+    
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -1505,6 +1514,23 @@ class rf_completed_appointment:Object{
         partner_longitude = appointmentObj.partner_longitude
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
+        external_entity_keys = appointmentObj.externalEntityKey
+    }
+}
+
+class rf_External_Entity_Key: Object, Mappable
+{
+    @objc dynamic var entityKey:String?
+    @objc dynamic var provider:String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        entityKey <- map["entity_key"]
+        provider <- map["provider"]
+        
     }
 }
 

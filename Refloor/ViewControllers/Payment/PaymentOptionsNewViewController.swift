@@ -95,7 +95,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var totalMoldingPrice: Double = 0.07
     var totalExtraCostToReduce: Double = 0.0
     var totalExtraPromoCostToReduced: Double = 0.0
-    var  additionalCost :Double = 0
+    var  additionalCost :Double = 0.0
     var discountArray:[DiscountDetailStruct] = []
     var isProgressiveDiscountApplied = false
     var isroomSpclPriceApplied = false
@@ -430,8 +430,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 {
                     saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
                     saleprice = saleprice + stairPrice
-                    saleprice = saleprice + Double(additional_cost)
-//                    saleprice = saleprice + additionalCost
+                    //saleprice = saleprice + Double(additional_cost)
+                    saleprice = saleprice + additionalCost
                 }
                 else
                 {
@@ -449,8 +449,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 //                        saleprice = msrppersqft * area
 //                    }
                
-                    saleprice = saleprice + Double(additional_cost) +  stairPrice
-//                   saleprice = saleprice + additionalCost +  stairPrice
+                    //saleprice = saleprice + Double(additional_cost) +  stairPrice
+                   saleprice = saleprice + additionalCost +  stairPrice
                     if calculationType == "fixed"
                     {
                         saleprice = saleprice - promoValue
@@ -461,8 +461,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                 }
                 mrp = mrp + stairPrice
-                mrp = (mrp + Double(additional_cost)).rounded()
-//                mrp = (mrp + additionalCost).rounded()
+               // mrp = (mrp + Double(additional_cost)).rounded()
+                mrp = (mrp + additionalCost).rounded()
                 saleprice = saleprice.rounded()
                 let prize = saleprice.rounded(.towardZero)
                 if(prize < self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00)
@@ -969,8 +969,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             return
         }
         downpatmet.adjustmentValue = self.selectedPlan == 2 ? self.adjestmentValue : 0
-        downpatmet.paymentPlan?.additional_cost = Double(additional_cost)
-//        downpatmet.paymentPlan?.additional_cost = additionalCost
+       // downpatmet.paymentPlan?.additional_cost = Double(additional_cost)
+       downpatmet.paymentPlan?.additional_cost = additionalCost
         
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
@@ -1427,8 +1427,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 //                    saleprice = msrppersqft * area
 //                }
            
-                saleprice = saleprice + Double(additional_cost) +  stairPrice
-//               saleprice = saleprice + additionalCost +  stairPrice
+                //saleprice = saleprice + Double(additional_cost) +  stairPrice
+              saleprice = saleprice + additionalCost +  stairPrice
                 if calculationType == "fixed"
                 {
                     saleprice = saleprice - promoValue
@@ -1446,8 +1446,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 self.stairPrice = stairPrice
                 print("self.minimumFee.clean2 : ", stairperprice, " stairPrice : ", stairPrice, " stairCount : ", stairCount)
             }
-            mrp = (mrp + Double(additional_cost)).rounded()
-//            mrp = (mrp + additionalCost).rounded()
+            //mrp = (mrp + Double(additional_cost)).rounded()
+            mrp = (mrp + additionalCost).rounded()
             saleprice = saleprice.rounded()
             cell.mrpLabel.text = "$\(mrp.clean)"
             print("self.minimumFee.clean1 : ", mrp.clean, "additionalCost : ", additional_cost)

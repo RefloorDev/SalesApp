@@ -244,6 +244,12 @@ class InstallerSuccessViewController: UIViewController {
                 approvedAmountLbl.text = "$" + String.localizedStringWithFormat("%.2f",approvedAmountDouble ?? 0.0)
                 goToAptBtn.isHidden = true
             }
+           confirmLbl.text = status.uppercased()
+           loanProviderLbl.text = loanProvider
+           referenceNumberLbl.text = refernceNumber
+           let approvedAmountDouble = Double(approvedAmount)
+           approvedAmountLbl.text = "$" + String.localizedStringWithFormat("%.2f",approvedAmountDouble ?? 0.0)
+           goToAptBtn.isHidden = true
         }
         else
         {
@@ -251,7 +257,7 @@ class InstallerSuccessViewController: UIViewController {
             installerViewHeightConstraint.constant = 128
             installerSubheadingBottomConstraint.constant = 46
             installerSuccess.image = UIImage(named: "installerSuccess")
-            confirmLbl.text = "APPROVED"
+            confirmLbl.text = "CONFIRMED"
             subHeading.text = "Your installation request has been submitted successfully"
             installerSuccessview.isHidden = false
             versatileView.isHidden = true
