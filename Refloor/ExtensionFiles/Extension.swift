@@ -2966,9 +2966,9 @@ extension UIViewController:OrderStatusViewDelegate
         return answer
     }
     
-    func checkIfAnswerPendingForAnyMandatoryQuestion(appointmentId:Int,roomId: Int, roomName: String) -> Bool{
+    func checkIfAnswerPendingForAnyMandatoryQuestion(appointmentId:Int,roomId: Int, roomName: String,roomArea:Double) -> Bool{
         var isStair = false
-        if roomName.localizedCaseInsensitiveContains("stair") {
+        if roomArea == 0.0 {
             isStair = true
         }
         do{
@@ -3998,19 +3998,20 @@ extension UIViewController:OrderStatusViewDelegate
         let rooms = getCompletedRoomsFromDB(appointmentId: appointmentId, roomId: roomID)
         if let questionsArr = rooms.first?.questionnaires{
             for question in questionsArr{
-                if !roomName.localizedCaseInsensitiveContains("stair") {
+                if /*!roomName.localizedCaseInsensitiveContains("stair") &&*/ rooms.first?.room_area != "0" && rooms.first?.room_area != nil{
                     if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
                         questions.append(question)
                     }
                 }else{
                     if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "stairs"){
                         questions.append(question)
+                        
                     }
                 }
             }
             for qstnAnswer in questions{
                 let answer = SummeryQustionAnswerData(id: qstnAnswer.id, answer: (qstnAnswer.rf_AnswerOFQustion.first?.answer.first ?? ""))
-                let qtn = SummeryQustionsDetails(question_id: qstnAnswer.id, name: qstnAnswer.question_code ?? "", question: qstnAnswer.question_name ?? "", question_type: qstnAnswer.question_type ?? "", answers: [answer])
+                let qtn = SummeryQustionsDetails(question_id: qstnAnswer.id, name: qstnAnswer.question_code ?? "", question: qstnAnswer.question_name ?? "", question_type: qstnAnswer.question_type ?? "", answers: [answer],calculate_order_wise: qstnAnswer.calculate_order_wise)
                 questionsArray.append(qtn)
             }
         }
@@ -4224,7 +4225,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let selectedColor = room.selected_room_color ?? ""
                 let isCustomRoom = room.is_custom_room
                 var roomColorId:Int = Int()
-                if room_name!.contains("STAIRS")
+                if room_name!.contains("STAIRS") && (room_area == "0" || room_area == nil)
                 {
                     roomColorId = masterData?.stairColourList.filter("color == %@",selectedColor).first?.material_id ?? 0
                 }

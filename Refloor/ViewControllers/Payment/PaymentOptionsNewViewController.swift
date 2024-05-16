@@ -123,6 +123,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var OneYearPrice:Double = Double()
     var restrictedPromo:[[Int:String]] = [[:]]
     var restrictedDiscount:[[Int:String]] = [[:]]
+    var vapurBarrierValue:Double = 0.0
     override func viewWillAppear(_ animated: Bool)
     {
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
@@ -457,7 +458,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                     else
                     {
-                        saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100).rounded()
+                        //totalExtraPromoCostToReduced = totalExtraPromoCostToReduced + vapurBarrierValue
+                        saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced - vapurBarrierValue)) * promoValue / 100).rounded()
                     }
                 }
                 mrp = mrp + stairPrice
@@ -974,7 +976,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
-        downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
+        if isPromoApplied
+        {
+            downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced + vapurBarrierValue
+        }
+        else
+        {
+            downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
+        }
         downpatmet.minSalePrice = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
@@ -1435,7 +1444,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 }
                 else
                 {
-                    saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100).rounded()
+                    //totalExtraPromoCostToReduced = totalExtraPromoCostToReduced + vapurBarrierValue
+                    saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced + vapurBarrierValue))  * promoValue / 100).rounded()
                 }
             }
 

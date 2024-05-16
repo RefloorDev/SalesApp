@@ -260,7 +260,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             }
         }
         
-        let prefillDictionary:[String:Any] = ["expectedPurchaseAmount": isHunter ?  (totalAmount + adminFee) : (versatileTotalPrice) * 100,"downPaymentAmount" :downPaymentValue,"primaryApplicant":primaryApplicant,"jointApplicant":jointApplicant,"salesAssociate":"RCB","salesAssociateFirstName":salesPersonFirstName ?? "","salesAssociateLastName":salesPersonLastName ?? "","salesAssociateEmail":salesPersonEmail]
+        let prefillDictionary:[String:Any] = ["expectedPurchaseAmount": isHunter ?  (totalAmount + adminFee) : (versatileTotalPrice) * 100,"downPaymentAmount" :isHunter ? downPaymentValue : (downPaymentValue * 100),"primaryApplicant":primaryApplicant,"jointApplicant":jointApplicant,"salesAssociate":"RCB","salesAssociateFirstName":salesPersonFirstName ?? "","salesAssociateLastName":salesPersonLastName ?? "","salesAssociateEmail":salesPersonEmail]
         let parameter:[String:Any] = ["prefill":prefillDictionary,"mode":"full","prequalificationId":"d0a88bb7-4fbd-43c6-9839-340e8c5308ff","applicationId":"861625fa-b505-4924-a933-e5dbf91efa20","returnUrl":"https://versatilecredit.com/landingpage", "externalCustomerId": customer.improveit_appointment_id ?? ""]
         
         if isHunter

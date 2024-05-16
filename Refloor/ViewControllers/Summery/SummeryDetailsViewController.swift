@@ -77,7 +77,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var qustionAnswer: [QuestionsMeasurementData] = []
         questionsList.forEach{ question in
-            if !roomName.localizedCaseInsensitiveContains("stair") {
+            if /*!roomName.localizedCaseInsensitiveContains("stair")*/  self.summaryData.room_area != 0 {
                 if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
                     qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
                 }

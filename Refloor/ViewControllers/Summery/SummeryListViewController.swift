@@ -198,31 +198,36 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     {
         for rooms in tableValues
         {
-            if  applyAllSelectColorTxtFld.text != "Select Color"
-            {
-//                applyAllSelectedColour = rooms.color ?? ""
-//                applyAllSelectedMaterialFileName = rooms.material_image_url ?? ""
-//                applyAllColourUpCharge =  rooms.colorUpCharge ?? 0.0
-                self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0)
-            }
-            else
-            {
-                self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: rooms.color ?? "", colorImageUrl: rooms.material_image_url ?? "", colorUpCharge: rooms.colorUpCharge ?? 0.0, moldPrice: 0.0)
-            }
             
-            if applyAllSelectMoldingTxtFld.text != "" && applyAllSelectedMoldName != ""
+            
+            if rooms.room_area != 0
             {
-                if rooms.room_name!.contains("STAIRS") || rooms.room_area == 0.0
+                if  applyAllSelectColorTxtFld.text != "Select Color"
                 {
+                    //                applyAllSelectedColour = rooms.color ?? ""
+                    //                applyAllSelectedMaterialFileName = rooms.material_image_url ?? ""
+                    //                applyAllColourUpCharge =  rooms.colorUpCharge ?? 0.0
+                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0)
                 }
                 else
                 {
-                    if applyAllSelectedMoldName == ""
+                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: rooms.color ?? "", colorImageUrl: rooms.material_image_url ?? "", colorUpCharge: rooms.colorUpCharge ?? 0.0, moldPrice: 0.0)
+                }
+                
+                if applyAllSelectMoldingTxtFld.text != "" && applyAllSelectedMoldName != ""
+                {
+                    if rooms.room_name!.contains("STAIRS") && rooms.room_area == 0.0
                     {
-                        applyAllSelectedMoldName = rooms.moulding ?? ""
-                        applyAllSelectedMoldPrice = rooms.mouldingPrice ?? 0.0
                     }
-                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: applyAllSelectedMoldName, moldPrice: applyAllSelectedMoldPrice)
+                    else
+                    {
+                        if applyAllSelectedMoldName == ""
+                        {
+                            applyAllSelectedMoldName = rooms.moulding ?? ""
+                            applyAllSelectedMoldPrice = rooms.mouldingPrice ?? 0.0
+                        }
+                        self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: applyAllSelectedMoldName, moldPrice: applyAllSelectedMoldPrice)
+                    }
                 }
             }
         }
@@ -265,7 +270,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     return
                 }
                 for room in tableValues{
-                    if self.checkIfAnswerPendingForAnyMandatoryQuestion(appointmentId: appoinmentID, roomId: room.room_id ?? -1,roomName: room.name ?? ""){
+                    if self.checkIfAnswerPendingForAnyMandatoryQuestion(appointmentId: appoinmentID, roomId: room.room_id ?? -1,roomName: room.name ?? "",roomArea: room.room_area ?? 0.0){
                         self.alert("Please answer mandatory questions for \(room.name ?? "room")", nil)
                         return
                     }
@@ -291,6 +296,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 paymentOptions.totalMoldingPrice = totalMoldingPrice
                 paymentOptions.totalExtraCostToReduce = extraCostToExclude
                 paymentOptions.totalExtraPromoCostToReduced = extraPromoCostExcluded
+                paymentOptions.vapurBarrierValue = vaporbarrierValue
                 paymentOptions.discount_exclude_amount = extraCostToExclude
                 //
                 self.navigationController?.pushViewController(paymentOptions, animated: true)
@@ -357,10 +363,13 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             // isselectedColor=1
             // cell.colorLabel.borderWidth = 3
             cell.colorLabel.textColor = UIColor.redColor
+            validationTileColorRoomName = tableValues[indexPath.row].room_name ?? ""
             
         }
-        if(cell.molding.text == "Select Molding")
+        if(cell.molding.text == "Select Molding") && tableValues[indexPath.row].room_area != 0
         {
+            
+            validationMoldingColorRoomName = tableValues[indexPath.row].room_name ?? ""
             //
             //            if((tableValues[indexPath.row].stair_count ?? 0 ) > 0)
             //            {
@@ -462,7 +471,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 {
                     validationTempTileColorRoomName = value.room_name ?? ""
                 }
-                if value.stair_count == 0
+                if value.stair_count == 0 || value.stair_count == nil
                 {
                     self.summaryDetailsData.append(self.createSummaryData(roomID: value.room_id!, roomName: value.room_name!))
                 }
@@ -471,7 +480,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     
                   //  if(value.room_name != "Stairs")
                     let string = value.room_name!
-                    if(!((string.contains("STAIR")) || (string.contains("stair")) || (string.contains("Stair"))))
+                    if(!((string.contains("STAIR")) || (string.contains("stair")) || (string.contains("Stair"))) && value.room_area! > 0)
                     {
                         validationTempMoldingColorRoomName = value.room_name ?? ""
                     }
@@ -495,7 +504,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     {
                         
                         
-                        if (roomsAndQuestion.name == "VaporBarrierBool" && roomsAndQuestion.answers![0].answer == "Yes")
+                        if (roomsAndQuestion.name == "VaporBarrierBool" && roomsAndQuestion.answers![0].answer == "Yes" && roomsAndQuestion.calculate_order_wise == true)
                         {
                             vaporArea += summery.adjusted_area!
                         }
@@ -525,7 +534,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     {
         var value:[String] = []
         //arb
-        if tableValues[sender.tag].room_name!.contains("STAIRS") || area == 0.0//roomName.contains("STAIRS")
+        if tableValues[sender.tag].room_name!.contains("STAIRS") && tableValues[sender.tag].room_area == 0.0//roomName.contains("STAIRS")
         {
             value = self.stairColourNamesArray.compactMap({$0.color})
         }
@@ -782,7 +791,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         {
             //updateTitleColorApi(measurement_id: self.tableValues[cell].contract_measurement_id ?? 0, material_id: self.tableValues[cell].material_colors?[index].material_id ?? 0)
             //arb
-            if tableValues[cell].room_name!.contains("STAIRS") || area == 0.0
+            if tableValues[cell].room_name!.contains("STAIRS") && tableValues[cell].room_area == 0.0
             {
                 let selectedColor = self.stairColourNamesArray[index].color ?? ""
                 let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
