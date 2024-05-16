@@ -1070,7 +1070,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         //save extra cost to exclude
         self.saveExtraCostExcludeToCompletedAppointment(roomId: self.roomID, extraCostExclude: extraCostExclude, extraPromoPriceToExclude: extraPromoCostExcluded)
         //to save stair count and width to appointment room details
-        if roomName.localizedCaseInsensitiveContains("stair"){
+        let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
+        if room_area == 0{
             self.saveStairDetailsToCompletedAppointment(roomId: self.roomID)
         }
         

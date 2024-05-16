@@ -1092,6 +1092,7 @@ class SummeryQustionsDetails: Mappable
     var question:String?
     var question_type:String?
     var answers :[SummeryQustionAnswerData]?
+    var calculate_order_wise : Bool?
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1104,14 +1105,16 @@ class SummeryQustionsDetails: Mappable
         question_type <- map["question_type"]
         question <- map["question"]
         question_id <- map["question_id"]
+        calculate_order_wise <- map["calculate_order_wise"]
     }
     
-     init(question_id:Int,name :String,question:String,question_type:String,answers :[SummeryQustionAnswerData]){
+    init(question_id:Int,name :String,question:String,question_type:String,answers :[SummeryQustionAnswerData],calculate_order_wise: Bool){
          self.question_id = question_id
          self.name = name
          self.question = question
          self.question_type = question_type
          self.answers = answers
+        self.calculate_order_wise = calculate_order_wise
     }
 }
 
