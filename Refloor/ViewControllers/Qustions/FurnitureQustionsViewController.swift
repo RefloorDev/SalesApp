@@ -568,7 +568,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 if tag == 0
                 {
  
-                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.setDefaultAnswer == true && $0.code == "VaporBarrierBool"}
+                    let setDefaultAnswerTrueIndex = qustionAnswer.lastIndex { $0.code == "VaporBarrierBool"}
                    
                     if setDefaultAnswerTrueIndex != nil
                     {

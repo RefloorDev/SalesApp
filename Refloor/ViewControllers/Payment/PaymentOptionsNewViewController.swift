@@ -459,7 +459,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     else
                     {
                         //totalExtraPromoCostToReduced = totalExtraPromoCostToReduced + vapurBarrierValue
-                        saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced - vapurBarrierValue)) * promoValue / 100).rounded()
+                        saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced)) * promoValue / 100).rounded()
                     }
                 }
                 mrp = mrp + stairPrice
@@ -976,14 +976,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
-        if isPromoApplied
-        {
-            downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced + vapurBarrierValue
-        }
-        else
-        {
+       
             downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
-        }
+        
         downpatmet.minSalePrice = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
@@ -1445,7 +1440,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 else
                 {
                     //totalExtraPromoCostToReduced = totalExtraPromoCostToReduced + vapurBarrierValue
-                    saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced + vapurBarrierValue))  * promoValue / 100).rounded()
+                    saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced))  * promoValue / 100).rounded()
                 }
             }
 
