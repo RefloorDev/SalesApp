@@ -1318,10 +1318,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x:  UIScreen.main.bounds.width - 560, y: 40, width: 128, height: 45))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
     }
@@ -1479,7 +1487,15 @@ extension UIViewController:OrderStatusViewDelegate
         self.view.addSubview(navView)
         
         let logo = UIImageView()
-        logo.image = UIImage(named: "refloorLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            logo.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            logo.image = UIImage(named: "refloorLogo")
+        }
         navView.addSubview(logo)
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.widthAnchor.constraint(equalToConstant: 126).isActive = true
@@ -1564,10 +1580,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 310, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
         
@@ -1607,10 +1631,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 295, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
         
@@ -1651,10 +1683,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 415, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
         
@@ -1931,7 +1971,8 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(refreshtbutn)
         
         let viewLogButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 254, y: 40, width: 52, height: 52))
-        viewLogButton.setBackgroundImage(UIImage(named: "viewLog"), for: .normal)
+       
+            viewLogButton.setBackgroundImage(UIImage(named: "viewLog"), for: .normal)
         viewLogButton.addTarget(self, action: #selector(viewLogbuttonAction), for: .touchUpInside)
         navView.addSubview(viewLogButton)
         
@@ -1939,13 +1980,21 @@ extension UIViewController:OrderStatusViewDelegate
         image.contentMode = .scaleAspectFit
         //image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = UIColor.clear
-        if let savedLogoImage = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-//            image.image = image.image?.withRenderingMode(.alwaysTemplate)
-            //image.tintColor = UIColor().colorFromHexString("#2D343D")
-            image.image = savedLogoImage
-            image.contentMode = .scaleAspectFit
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                //            image.image = image.image?.withRenderingMode(.alwaysTemplate)
+                //image.tintColor = UIColor().colorFromHexString("#2D343D")
+                image.image = savedLogoImage
+                image.contentMode = .scaleAspectFit
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         
         navView.addSubview(image)

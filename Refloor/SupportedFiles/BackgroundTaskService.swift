@@ -27,6 +27,7 @@ class BackgroundTaskService {
     var testResult = "TEST"
     var i = 1
     var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    //var isCallingApi = false
     
     func enterBackground() {
         print("Enter Background !!")
@@ -377,7 +378,7 @@ extension BackgroundTaskService {
                 self.cancelAllTaskRequests()
                 
             }
-            //SceneDelegate.timer.invalidate()
+           // SceneDelegate.timer.invalidate()
             
             for appointmentRequest in appointmentRequestArray
             {
@@ -391,17 +392,21 @@ extension BackgroundTaskService {
                     switch appointmentRequest.reqest_title {
                     case RequestTitle.CustomerAndRoom.rawValue:
                         let (appointmentId, requestParams, _) =  self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                        self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
-                            
-                            if !ifSuccess{
-                                print("Spinner Count:1")
-                                ifAnyApiFailed = true
-                                return
-                            }else{
-                                print("Spinner Count:2")
-                                ifAnyApiFailed = false
-                            }
-                        }
+//                       if !isCallingApi
+//                        {
+                           self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
+//                               self.isCallingApi = false
+                               if !ifSuccess{
+                                   print("Spinner Count:1")
+                                   ifAnyApiFailed = true
+                                   return
+                               }else{
+                                   print("Spinner Count:2")
+                                   ifAnyApiFailed = false
+                               }
+                           }
+                       //}
+                        
                         break
 //                    case RequestTitle.ContactDetails.rawValue:
 //                        let (appointmentId, requestParams, _) =  self.createContractDetailsParametersForApiCall(completedAppointmentRequest: appointmentRequest)
@@ -419,6 +424,7 @@ extension BackgroundTaskService {
                     case RequestTitle.ImageUpload.rawValue:
                         let requestParams =  self.createImageUploadParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                         self.syncImages(imageDict: requestParams){ ifSuccess in
+                            //self.isCallingApi = false
                             if !ifSuccess{
                                 print("Spinner Count:5")
                                 ifAnyApiFailed = true
@@ -432,6 +438,7 @@ extension BackgroundTaskService {
                     case RequestTitle.GenerateContract.rawValue:
                         let (appointmentId, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                         self.syncGenerateContract(appointmentId:appointmentId,parameter: requestParams){ ifSuccess in
+                            //self.isCallingApi = false
                             if !ifSuccess{
                                 print("Spinner Count:7")
                                 ifAnyApiFailed = true
@@ -792,6 +799,7 @@ extension BackgroundTaskService {
         let room_id = (room["room_id"] as? Int ?? 0)
         let room_name = room["room_name"] as? String ?? ""
         let room_id_str = String(room_id)
+        //isCallingApi = true
         HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name) { success, message, imageName in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
@@ -817,6 +825,7 @@ extension BackgroundTaskService {
         let name = lastName == ""  ? firstName : firstName + " " + lastName
         let date = appointment?.appointment_datetime ?? ""
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
+        //isCallingApi = true
         HttpClientManager.SharedHM.generateContactAPi(parameter: parameter) { success, message in
             
             if(success ?? "") == "Success"{

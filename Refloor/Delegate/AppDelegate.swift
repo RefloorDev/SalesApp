@@ -88,7 +88,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         AppDelegate.locationManager?.requestAlwaysAuthorization()
         //locationManager?.activityType = .automotiveNavigation
         //locationManager?.allowsBackgroundLocationUpdates = true
-//        if CLLocationManager.locationServicesEnabled(){
+        if CLLocationManager.locationServicesEnabled() {
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                print("No access")
+                AppDelegate.locationManager?.requestAlwaysAuthorization()
+                //promptToChangeLocationSettings()
+            case .authorizedAlways, .authorizedWhenInUse:
+                print("Access")
+            @unknown default:
+                    break
+                
+            }
+        } else {
+            print("Location services are not enabled")
+        }
+
         AppDelegate.locationManager?.startUpdatingLocation()
         geoLocationApiCallSync()
 //            }

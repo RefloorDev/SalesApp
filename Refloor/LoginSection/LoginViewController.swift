@@ -16,14 +16,24 @@ class LoginViewController: UIViewController {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "LoginViewController") as? LoginViewController
     }
     
+    @IBOutlet weak var stackViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var hiddenStackHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var hiddenStackView: UIStackView!
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     @IBOutlet weak var versionNumber: UIButton!
     @IBOutlet weak var trainingCheckboxButton: UIButton!
-    
+    @IBOutlet weak var stagingCheckboxButton:UIButton!
+    @IBOutlet weak var tapGesatureView: UIView!
     var isPasswordVisble = false
+   
     override func viewDidLoad() {
         super.viewDidLoad()
+        hiddenStackHeightConstraint.constant = 0
+        stackViewBottomConstraint.constant = 0
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(_:)))
+                     longPressGestureRecognizer.minimumPressDuration = 6.0 // Duration for the long press
+        tapGesatureView.addGestureRecognizer(longPressGestureRecognizer)
         BASE_URL = AppURL().LIVE_BASE_URL
         self.setClearNavigationBar()
        
@@ -51,7 +61,7 @@ class LoginViewController: UIViewController {
         
         if let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
         
-            if BASE_URL == "https://refloor-stage.odooapps.oneteam.us/api/"
+            if BASE_URL == "https://odoostage.myx.ac/api/"
             {
                 versionNumber.setTitle("Version: \(text) (1.0) - STAGE", for: .normal)
             }else{
@@ -62,6 +72,33 @@ class LoginViewController: UIViewController {
         
         // Do any additional setup after loading the view.
     }
+    
+    @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+            if gesture.state == .began {
+                // Get the location of the long press
+                let location = gesture.location(in: self.view)
+                
+                // Define the top left corner area (e.g., 100x100 points)
+                //let topLeftCornerRect = CGRect(x: 0, y: 0, width: 100, height: 100)
+                
+                // Check if the long press is within the top left corner area
+//                if topLeftCornerRect.contains(location) {
+                    // Enable the button if the long press is within the specified area
+                if hiddenStackView.isHidden
+                {
+                    hiddenStackView.isHidden = false
+                    hiddenStackHeightConstraint.constant = 30
+                    stackViewBottomConstraint.constant = 30
+                }
+                else
+                {
+                    hiddenStackView.isHidden = true
+                    hiddenStackHeightConstraint.constant = 0
+                    stackViewBottomConstraint.constant = 0
+                }
+                //}
+            }
+        }
     
     func showhideHUD(viewtype: SHOWHIDEHUD,title: String)
     {
@@ -139,6 +176,9 @@ class LoginViewController: UIViewController {
 //            passwordTF.text = UserDefaults.standard.value(forKey: "password") as? String
 //        }
     }
+    
+    
+    
     @IBAction func forgotPasswordButtonAction(_ sender: Any) {
         
         self.alert("Please contact refloor admin for changing the password" , nil)
@@ -229,18 +269,55 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @IBAction func trainingAction(_ sender: UIButton) {
-        if sender.isSelected{
-            sender.isSelected = false
-            trainingCheckboxButton.isSelected = false
-            BASE_URL = AppURL().LIVE_BASE_URL
-        }else{
-            sender.isSelected = true
-            trainingCheckboxButton.isSelected = true
-            BASE_URL = AppURL().TRAINING_BASE_URL
-        }
-        UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
-    }
+//    @IBAction func trainingAction(_ sender: UIButton) {
+//        if sender.isSelected{
+//            sender.isSelected = false
+//            trainingCheckboxButton.isSelected = false
+//            BASE_URL = AppURL().LIVE_BASE_URL
+//        }else{
+//            sender.isSelected = true
+//            trainingCheckboxButton.isSelected = true
+//            BASE_URL = AppURL().TRAINING_BASE_URL
+//        }
+//        UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+//    }
+    
+    @IBAction func stagingAction(_ sender: UIButton) {
+        let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+           if sender.isSelected{
+               sender.isSelected = false
+               stagingCheckboxButton.isSelected = false
+               BASE_URL = AppURL().LIVE_BASE_URL
+               versionNumber.setTitle("Version: \(String(describing: text!))", for: .normal)
+           }else{
+               sender.isSelected = true
+               stagingCheckboxButton.isSelected = true
+               BASE_URL = AppURL().STAGE_BASE_URL
+               versionNumber.setTitle("Version: \(String(describing: text!)) (1.0) - STAGE", for: .normal)
+               if trainingCheckboxButton.isSelected
+               {
+                   trainingCheckboxButton.isSelected = false
+               }
+           }
+           UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+       }
+       
+       @IBAction func trainingAction(_ sender: UIButton) {
+           if sender.isSelected{
+               sender.isSelected = false
+               trainingCheckboxButton.isSelected = false
+               BASE_URL = AppURL().LIVE_BASE_URL
+           }else{
+               sender.isSelected = true
+               trainingCheckboxButton.isSelected = true
+               BASE_URL = AppURL().TRAINING_BASE_URL
+               if stagingCheckboxButton.isSelected
+               {
+                   stagingCheckboxButton.isSelected = false
+               }
+           }
+           UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+       }
 
     
     //arb for testing

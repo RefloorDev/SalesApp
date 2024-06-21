@@ -295,7 +295,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 paymentOptions.totalExtraCost = extraCostConsideringQuestions + vaporbarrierValue
                 paymentOptions.totalMoldingPrice = totalMoldingPrice
                 paymentOptions.totalExtraCostToReduce = extraCostToExclude
-                paymentOptions.totalExtraPromoCostToReduced = extraPromoCostExcluded
+                paymentOptions.totalExtraPromoCostToReduced = extraPromoCostExcluded + vaporbarrierValue + totalMoldingPrice 
                 paymentOptions.vapurBarrierValue = vaporbarrierValue
                 paymentOptions.discount_exclude_amount = extraCostToExclude
                 //

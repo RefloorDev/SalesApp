@@ -144,7 +144,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func geoFencing (latitude:CLLocationDegrees,longtitude:CLLocationDegrees,appointmentId:Int)
     {
         let masterData = self.getMasterDataFromDB()
-        var radius = Double(masterData.geoLocationRadius) * 0.305
+        var radius = 1.0//Double(masterData.geoLocationRadius) * 0.305
         let geofenceRegionCenter = CLLocationCoordinate2DMake(latitude, longtitude)
         let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter,
                                               radius: radius,
@@ -168,7 +168,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         {
             if(!SceneDelegate.timer.isValid)
             {
-                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { _ in
+                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
                     
                     print("TIMER WAKEUP Appointment")
                     BackgroundTaskService.shared.startSyncProcess()
