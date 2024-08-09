@@ -10,7 +10,7 @@
 import UIKit
 
 var BASE_URL = ""
-
+var additional_cost = 0
 struct AppURL {
     
     //App Details
@@ -22,8 +22,10 @@ struct AppURL {
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-     //let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
+    //let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
+    let STAGE_BASE_URL = "https://odoostage.myx.ac/api/"
     //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
+   // let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
     let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446
@@ -193,6 +195,7 @@ struct AppURL {
     let installationDatesSubmit = BASE_URL + "submit_selected_installation_date"
     let additionalComments = BASE_URL + "v1/update_additional_appointment_data"
     let getCreditApplicationStatus = BASE_URL + "v1/get_credit_application_status"
+    let geoLocationLogs = BASE_URL + "v1/update_arrival_departure_time"
 }
 
 

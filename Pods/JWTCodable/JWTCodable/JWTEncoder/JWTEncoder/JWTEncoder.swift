@@ -21,7 +21,6 @@ public class JWTEncoder {
         }
         let header = self.base64EncodedString(data: headerData)
         let payload = self.base64EncodedString(data: payloadData)
-        //payload = payload.data(using: .utf8)
         let jwtToken = [header,payload,signature].joined(separator: ".")
         self.log(jwtToken)
         return jwtToken

@@ -10,6 +10,7 @@ import Foundation
 import ObjectMapper
 import RealmSwift
 import SwiftUI
+import ObjectMapper_Realm
 
 class UserLoginData: Mappable
 {
@@ -191,6 +192,7 @@ class UserData: NSObject
     var user_id: Int?
     var user_name :String?
     var token: String?
+    var restrict_geolocation: Int?
     public static func isLogedIn() -> Bool
     {
         return UserDefaults.standard.bool(forKey: "User_isLogedIn")
@@ -219,13 +221,15 @@ class UserData: NSObject
         
         return date as NSDate
     }
-    init(userID:Int,userName:String,token:String) {
+    init(userID:Int,userName:String,token:String,restrict_geolocation:Int) {
         self.user_id = userID
         self.user_name = userName
         self.token = token
+        self.restrict_geolocation = restrict_geolocation
         UserDefaults.standard.set(userID, forKey: "User_ID")
         UserDefaults.standard.set(userName, forKey: "User_Name")
         UserDefaults.standard.set(token, forKey: "User_Token")
+        UserDefaults.standard.set(restrict_geolocation, forKey: "restrict_geolocation")
     }
     override init() {
         self.user_id = UserDefaults.standard.integer(forKey: "User_ID")
@@ -243,8 +247,10 @@ class UserLoginDataValue: Mappable
     var token: String?
     var can_view_phone_number : Int?
     var company_logo_url : String?
+    var restrict_geolocation: Int?
     
-    required init?(map: ObjectMapper.Map){
+    required init?(map: ObjectMapper.Map)
+    {
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -253,6 +259,7 @@ class UserLoginDataValue: Mappable
         token <- map["token"]
         can_view_phone_number <- map["can_view_phone_number"]
         company_logo_url <- map["company_logo_url"]
+        restrict_geolocation <- map["restrict_geolocation"]
         
     }
 }
@@ -407,7 +414,7 @@ class FloorLevelDataValue: Mappable
     }
 }
 
-class AppoinmentDataValue:NSObject,Mappable
+class AppoinmentDataValue:Object,Mappable
 {
     var  id : Int?
     var  name :String?
@@ -457,6 +464,7 @@ class AppoinmentDataValue:NSObject,Mappable
     var is_room_measurement_exist : Bool?
     var recisionDate : String?
     var officeLocationId:Int?
+    var externalEntityKey = RealmSwift.List<rf_External_Entity_Key>()
     
     var appointmentStatus:AppointmentStatus!
     
@@ -512,6 +520,7 @@ class AppoinmentDataValue:NSObject,Mappable
         self.is_room_measurement_exist = listOfAppointment.is_room_measurement_exist
         self.recisionDate = listOfAppointment.recisionDate
         self.officeLocationId = listOfAppointment.officeLocationId
+        self.externalEntityKey = listOfAppointment.externalEntityKey
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -558,6 +567,7 @@ class AppoinmentDataValue:NSObject,Mappable
         co_applicant_secondary_phone <- map["co_applicant_secondary_phone"]
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
+        externalEntityKey <- (map["external_entity_keys"],ListTransform<rf_External_Entity_Key>())
         
     }
 }
@@ -1082,6 +1092,7 @@ class SummeryQustionsDetails: Mappable
     var question:String?
     var question_type:String?
     var answers :[SummeryQustionAnswerData]?
+    var calculate_order_wise : Bool?
     
     required init?(map: ObjectMapper.Map){
     }
@@ -1094,14 +1105,16 @@ class SummeryQustionsDetails: Mappable
         question_type <- map["question_type"]
         question <- map["question"]
         question_id <- map["question_id"]
+        calculate_order_wise <- map["calculate_order_wise"]
     }
     
-     init(question_id:Int,name :String,question:String,question_type:String,answers :[SummeryQustionAnswerData]){
+    init(question_id:Int,name :String,question:String,question_type:String,answers :[SummeryQustionAnswerData],calculate_order_wise: Bool){
          self.question_id = question_id
          self.name = name
          self.question = question
          self.question_type = question_type
          self.answers = answers
+        self.calculate_order_wise = calculate_order_wise
     }
 }
 
@@ -1425,11 +1438,14 @@ class PaymentOptionDataValue: Mappable
     var Payment_Info__c:String?
     var down_payment_message:String?
     var isHidden: Bool = false
+    var start_date: String?
+    var end_date: String?
     
     required init?(map: ObjectMapper.Map){
     }
     
     init(paymentOption:rf_master_payment_option){
+        print("------paymentOption : ", paymentOption)
         self.id = paymentOption.id
         self.sequenceid = paymentOption.sequence
         //self.interest_rate = paymentOption.int
@@ -1442,6 +1458,8 @@ class PaymentOptionDataValue: Mappable
         self.Balance_Due__c = paymentOption.balance_Due__c
         self.Payment_Info__c = paymentOption.payment_info__c
         self.down_payment_message = paymentOption.down_payment_message
+        self.start_date = paymentOption.start_date
+        self.end_date = paymentOption.end_date
         //self.isHidden = self.isHidden
     }
     
@@ -1460,6 +1478,8 @@ class PaymentOptionDataValue: Mappable
         Balance_Due__c <- map["Balance_Due__c"]
         Payment_Info__c <- map["Payment_Info__c"]
         down_payment_message <- map["down_payment_message"]
+        start_date <- map["start_date"]
+        end_date <- map["end_date"]
     }
 }
 

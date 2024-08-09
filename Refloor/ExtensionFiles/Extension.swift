@@ -19,6 +19,11 @@ import CryptoKit
 import CommonCrypto
 
 
+enum MyErrors: String, Error {
+   case badError = "I think it went wrong here"
+   case evilError = "This should have never happened"
+}
+
 extension UILabel {
     
     func startBlink() {
@@ -597,6 +602,54 @@ extension UIColor
 
 extension UIViewController:OrderStatusViewDelegate
 {
+    
+    
+    // Location from address for geoLocation
+    
+    func getCoordinatesFromAddress(address: String, completion: @escaping ((Double, Double)?) -> Void) {
+        // Encode the address to be URL safe
+        let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let apiKey = AppDetails.GOOGLE_MAP_KEY
+        
+        // Construct the URL for the Geocoding API request
+        let urlString = "https://maps.googleapis.com/maps/api/geocode/json?address=\(encodedAddress)&key=\(apiKey)"
+        let url = URL(string: urlString)!
+        
+        // Create a URLSession task to fetch the data
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            // Check for errors
+            guard error == nil else {
+                print("Error: \(error!.localizedDescription)")
+                completion(nil)
+                return
+            }
+            
+            // Check if data is available
+            guard let data = data else {
+                print("Data is nil.")
+                completion(nil)
+                return
+            }
+            
+            // Parse the JSON response
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let results = json["results"] as? [[String: Any]],
+                   let geometry = results[0]["geometry"] as? [String: Any],
+                   let location = geometry["location"] as? [String: Double],
+                   let lat = location["lat"],
+                   let lng = location["lng"] {
+                    completion((lat, lng))
+                }
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+                completion(nil)
+            }
+        }
+        
+        // Start the URLSession task
+        task.resume()
+    }
     
     //Dynamic Contract update
     func getContractUpdateDocumentField(value:Int) -> RealmSwift.List<rf_fields>{
@@ -1265,10 +1318,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x:  UIScreen.main.bounds.width - 560, y: 40, width: 128, height: 45))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
     }
@@ -1426,7 +1487,15 @@ extension UIViewController:OrderStatusViewDelegate
         self.view.addSubview(navView)
         
         let logo = UIImageView()
-        logo.image = UIImage(named: "refloorLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            logo.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            logo.image = UIImage(named: "refloorLogo")
+        }
         navView.addSubview(logo)
         logo.translatesAutoresizingMaskIntoConstraints = false
         logo.widthAnchor.constraint(equalToConstant: 126).isActive = true
@@ -1511,10 +1580,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 310, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
         
@@ -1554,10 +1631,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 295, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
         
@@ -1598,10 +1683,18 @@ extension UIViewController:OrderStatusViewDelegate
         
         let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 415, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
-        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-            image.image = savedLogoImage
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                image.image = savedLogoImage
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         navView.addSubview(image)
         
@@ -1878,7 +1971,8 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(refreshtbutn)
         
         let viewLogButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 254, y: 40, width: 52, height: 52))
-        viewLogButton.setBackgroundImage(UIImage(named: "viewLog"), for: .normal)
+       
+            viewLogButton.setBackgroundImage(UIImage(named: "viewLog"), for: .normal)
         viewLogButton.addTarget(self, action: #selector(viewLogbuttonAction), for: .touchUpInside)
         navView.addSubview(viewLogButton)
         
@@ -1886,13 +1980,21 @@ extension UIViewController:OrderStatusViewDelegate
         image.contentMode = .scaleAspectFit
         //image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = UIColor.clear
-        if let savedLogoImage = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
-//            image.image = image.image?.withRenderingMode(.alwaysTemplate)
-            //image.tintColor = UIColor().colorFromHexString("#2D343D")
-            image.image = savedLogoImage
-            image.contentMode = .scaleAspectFit
-        }else{
-            image.image = UIImage(named: "tabLogo")
+        if BASE_URL == "https://odoostage.myx.ac/api/"
+        {
+            image.image = UIImage(named: "RefloorStage")
+            //viewLogButton.setBackgroundImage(UIImage(named: "RefloorStage"), for: .normal)
+        }
+        else
+        {
+            if let savedLogoImage = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+                //            image.image = image.image?.withRenderingMode(.alwaysTemplate)
+                //image.tintColor = UIColor().colorFromHexString("#2D343D")
+                image.image = savedLogoImage
+                image.contentMode = .scaleAspectFit
+            }else{
+                image.image = UIImage(named: "tabLogo")
+            }
         }
         
         navView.addSubview(image)
@@ -2487,8 +2589,12 @@ extension UIViewController:OrderStatusViewDelegate
             let realm = try Realm()
             masterData =  realm.objects(MasterData.self).first
             
-        }catch{
-            print(RealmError.initialisationFailed.rawValue)
+        } catch let error {
+            print("error : ", error)
+//            if let myError = error as? MyErrors {
+//                   print(myError.rawValue)
+//               }
+//            print(RealmError.initialisationFailed.rawValue)
         }
         return masterData
     }
@@ -2572,6 +2678,8 @@ extension UIViewController:OrderStatusViewDelegate
         }
         return rooms
     }
+    
+    
     
     func getAppointmentLogsFromDB() -> Results<rf_Appointment_Logs> {
         var appointmentLogs:  Results<rf_Appointment_Logs>!
@@ -2907,9 +3015,9 @@ extension UIViewController:OrderStatusViewDelegate
         return answer
     }
     
-    func checkIfAnswerPendingForAnyMandatoryQuestion(appointmentId:Int,roomId: Int, roomName: String) -> Bool{
+    func checkIfAnswerPendingForAnyMandatoryQuestion(appointmentId:Int,roomId: Int, roomName: String,roomArea:Double) -> Bool{
         var isStair = false
-        if roomName.localizedCaseInsensitiveContains("stair") {
+        if roomArea == 0.0 {
             isStair = true
         }
         do{
@@ -3551,6 +3659,7 @@ extension UIViewController:OrderStatusViewDelegate
     }
     
     func createAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String){
+        print("createAppointmentRequest : ", requestParameter)
         let appointmentId = AppointmentData().appointment_id ?? 0
         do{
             let realm = try Realm()
@@ -3563,7 +3672,8 @@ extension UIViewController:OrderStatusViewDelegate
                                       "request_type" : requestType.rawValue,
                                       "sync_status" : false,
                                       "image_name": imageName]
-                
+                print("Dictionary to be created/updated in Realm: \(dict)")
+                print("Dictionary to be created/updated in Realm1: \(rf_Completed_Appointment_Request.self)")
                 realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
             }
         }catch{
@@ -3937,19 +4047,20 @@ extension UIViewController:OrderStatusViewDelegate
         let rooms = getCompletedRoomsFromDB(appointmentId: appointmentId, roomId: roomID)
         if let questionsArr = rooms.first?.questionnaires{
             for question in questionsArr{
-                if !roomName.localizedCaseInsensitiveContains("stair") {
+                if /*!roomName.localizedCaseInsensitiveContains("stair") &&*/ rooms.first?.room_area != "0" && rooms.first?.room_area != nil{
                     if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
                         questions.append(question)
                     }
                 }else{
                     if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "stairs"){
                         questions.append(question)
+                        
                     }
                 }
             }
             for qstnAnswer in questions{
                 let answer = SummeryQustionAnswerData(id: qstnAnswer.id, answer: (qstnAnswer.rf_AnswerOFQustion.first?.answer.first ?? ""))
-                let qtn = SummeryQustionsDetails(question_id: qstnAnswer.id, name: qstnAnswer.question_code ?? "", question: qstnAnswer.question_name ?? "", question_type: qstnAnswer.question_type ?? "", answers: [answer])
+                let qtn = SummeryQustionsDetails(question_id: qstnAnswer.id, name: qstnAnswer.question_code ?? "", question: qstnAnswer.question_name ?? "", question_type: qstnAnswer.question_type ?? "", answers: [answer],calculate_order_wise: qstnAnswer.calculate_order_wise)
                 questionsArray.append(qtn)
             }
         }
@@ -3985,6 +4096,7 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
                 let dict:[String:Any] = ["id": id,"room_id":roomId, "questionnaires":questionAndAnswer]
+                print("saveQuestionAndAnswerToCompletedAppointment : ", id, " room_id : ", roomId, " questionnaires : ", questionAndAnswer)
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -4018,6 +4130,7 @@ extension UIViewController:OrderStatusViewDelegate
             let room = appointment.first?.rooms.filter("room_id == %d", roomId)
             if let id = room?.first?.id{
                 let dict:[String:Any] = ["id":id, "room_id":roomId, "extraPrice":extraCost]
+                print("extraCostOfAppointment : ", roomId, " id : ", id, "extraCost : ", extraCost)
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
                 }
@@ -4089,6 +4202,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let stairsDict = self.getStairCountAndWidth(roomId: roomId)
                 let stairCount = stairsDict["StairCount"] ?? ""
                 let stairWidth = stairsDict["StairWidth"] ?? ""
+                print("stairCount : ", stairCount, " stairWidth : ", stairWidth)
                 let dict:[String:Any] = ["id":id, "room_id":roomId, "stairCount":stairCount, "stairWidth":stairWidth]
                 try realm.write{
                     realm.create(rf_completed_room.self, value: dict, update: .all)
@@ -4160,7 +4274,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let selectedColor = room.selected_room_color ?? ""
                 let isCustomRoom = room.is_custom_room
                 var roomColorId:Int = Int()
-                if room_name!.contains("STAIRS")
+                if room_name!.contains("STAIRS") && (room_area == "0" || room_area == nil)
                 {
                     roomColorId = masterData?.stairColourList.filter("color == %@",selectedColor).first?.material_id ?? 0
                 }
@@ -4729,6 +4843,24 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
         return discountCouponsArray
+    }
+    
+    func externalCredentialsValue() -> RealmSwift.List<rf_extrenal_credential_results>
+    {
+        var externalCredentialArray = RealmSwift.List<rf_extrenal_credential_results>()
+        do
+        {
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let credentialArray = masterData.first?.external_credentials
+            {
+                externalCredentialArray = credentialArray
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return externalCredentialArray
     }
     func getAptResultReason() -> RealmSwift.List<rf_appointment_result_reasons_results> {
         var AppointmentResultReasonArray = RealmSwift.List<rf_appointment_result_reasons_results>()
