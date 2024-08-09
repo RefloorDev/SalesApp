@@ -95,7 +95,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var totalMoldingPrice: Double = 0.07
     var totalExtraCostToReduce: Double = 0.0
     var totalExtraPromoCostToReduced: Double = 0.0
-    var  additionalCost :Double = 0
+    var  additionalCost :Double = 0.0
     var discountArray:[DiscountDetailStruct] = []
     var isProgressiveDiscountApplied = false
     var isroomSpclPriceApplied = false
@@ -123,6 +123,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var OneYearPrice:Double = Double()
     var restrictedPromo:[[Int:String]] = [[:]]
     var restrictedDiscount:[[Int:String]] = [[:]]
+    var vapurBarrierValue:Double = 0.0
     override func viewWillAppear(_ animated: Bool)
     {
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
@@ -430,6 +431,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 {
                     saleprice = (self.isPromoApplied) ? (msrppersqft - promoValue) * area : (msrppersqft) * area
                     saleprice = saleprice + stairPrice
+                    //saleprice = saleprice + Double(additional_cost)
                     saleprice = saleprice + additionalCost
                 }
                 else
@@ -448,6 +450,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 //                        saleprice = msrppersqft * area
 //                    }
                
+                    //saleprice = saleprice + Double(additional_cost) +  stairPrice
                    saleprice = saleprice + additionalCost +  stairPrice
                     if calculationType == "fixed"
                     {
@@ -455,10 +458,12 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                     else
                     {
-                        saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100)
+                        //totalExtraPromoCostToReduced = totalExtraPromoCostToReduced + vapurBarrierValue
+                        saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced)) * promoValue / 100).rounded()
                     }
                 }
                 mrp = mrp + stairPrice
+               // mrp = (mrp + Double(additional_cost)).rounded()
                 mrp = (mrp + additionalCost).rounded()
                 saleprice = saleprice.rounded()
                 let prize = saleprice.rounded(.towardZero)
@@ -894,9 +899,13 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         downpatmet.totalAmount = self.amountTotel
         if area == 0.0
         {
-            if stairPrice < self.minimumFee
+            if stairPrice < self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500
             {
-                downpatmet.stairPrice = minimumFee
+                downpatmet.stairPrice = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500
+            }
+            else
+            {
+                downpatmet.stairPrice = stairPrice
             }
         }
         else
@@ -966,11 +975,14 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             return
         }
         downpatmet.adjustmentValue = self.selectedPlan == 2 ? self.adjestmentValue : 0
-        downpatmet.paymentPlan?.additional_cost = additionalCost
+       // downpatmet.paymentPlan?.additional_cost = Double(additional_cost)
+       downpatmet.paymentPlan?.additional_cost = additionalCost
         
         //downpatmet.drowingImageID = self.drowingImageID
         downpatmet.area = self.area
-        downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
+       
+            downpatmet.excluded_amount_promotion = totalExtraPromoCostToReduced
+        
         downpatmet.minSalePrice = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500.00
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
@@ -1169,10 +1181,47 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         }
         else
         {
-            paymentOptionDataValueDetail = paymentRestrictionDataValueDetail.filter({$0.isHidden == false})
+            let appointment_date = appointmentDate ?? Date()
+//            let formattedAppointmentDate = "2022-02-16"
+            
+            // Filter the payment options based on visibility and date range
+            let filteredData = paymentRestrictionDataValueDetail.filter { cellData in
+                // Filter based on visibility
+                guard !cellData.isHidden else { return false }
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd"
+                
+                // Filter based on date range
+                if let startDateString = cellData.start_date,
+                   let endDateString = cellData.end_date,
+                   let startDate = dateFormatter.date(from: startDateString),
+                   let endDate = dateFormatter.date(from: endDateString) {
+                    
+                    let formattedStartDate = dateFormatter.string(from: startDate)
+                    let formattedEndDate = dateFormatter.string(from: endDate)
+                    let formattedAppointmentDate = dateFormatter.string(from: appointment_date)
+                    return formattedAppointmentDate >= formattedStartDate && formattedAppointmentDate <= formattedEndDate
+                }
+                return false // Return false if start_date or end_date is nil or cannot be converted to Date
+            }
+
+            // Update paymentOptionDataValueDetail with filtered data
+            paymentOptionDataValueDetail = filteredData
+
+            // Count the visible cells
+            let visibleCellsCount = paymentOptionDataValueDetail.filter { !$0.isHidden }.count
+            print("paymentOptionDataValueDetail_Visible cells count: \(visibleCellsCount)")
+
+            // Return the count of visible cells
+            return visibleCellsCount
+
+            
+            //            paymentOptionDataValueDetail = paymentRestrictionDataValueDetail.filter({$0.isHidden == false})
 //            paymentOptionDataValueDetail.removeLast()
            // paymentOptionDataValueDetail.removeLast()
-            return paymentOptionDataValueDetail.count
+//            print("paymentOptionDataValueDetail.count : ", paymentOptionDataValueDetail.count)
+//            return paymentOptionDataValueDetail.count
         }
     }
     
@@ -1222,8 +1271,29 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         {
             if collectionView == paymentCollectionView
             {
+            
+                let appointmentDateString = appointmentDate ?? Date()
+               
+                   let filteredData = paymentOptionDataValueDetail.filter { cellData in
+                       let dateFormatter = DateFormatter()
+                       dateFormatter.dateFormat = "yyyy-MM-dd"
+                       if let startDateString = cellData.start_date,
+                          let endDateString = cellData.end_date,
+                          let startDate = dateFormatter.date(from: startDateString),
+                          let endDate = dateFormatter.date(from: endDateString) {
+                           
+                           let formattedStartDate = dateFormatter.string(from: startDate ?? Date())
+                           let formattedEndDate = dateFormatter.string(from: endDate ?? Date())
+                           let formattedAppointmentDate = dateFormatter.string(from: appointmentDateString)
+                           return formattedAppointmentDate >= formattedStartDate && formattedAppointmentDate <= formattedEndDate
+                       }
+                       return false // Return false if start_date or end_date is nil or cannot be converted to Date
+                   }
+                
                 let CellWidth = 290
-                let CellCount = paymentOptionDataValueDetail.count
+                let CellCount = filteredData.count
+                print("filteredData : ", filteredData.count)
+//                let CellCount = paymentOptionDataValueDetail.count
                 let totalCellWidth = CellWidth * CellCount
                     let totalSpacingWidth = 20 * (CellCount - 1)
 
@@ -1339,6 +1409,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
             //let additionalCost = (paymentPlanValueDetails[indexPath.row].additional_cost ?? 0)
             additionalCost = totalUpchargeCost + totalExtraCost + totalMoldingPrice
+            print("-------additionalCost--------", additionalCost)
             let stairPrice = Double(self.stairCount) * stairperprice
             var mrp = msrppersqft * area
             self.minimumFee = paymentPlanValueDetails[indexPath.row].minimum_Sale_price ?? 1500.00
@@ -1364,25 +1435,31 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 //                    saleprice = msrppersqft * area
 //                }
            
-               saleprice = saleprice + additionalCost +  stairPrice
+                //saleprice = saleprice + Double(additional_cost) +  stairPrice
+              saleprice = saleprice + additionalCost +  stairPrice
                 if calculationType == "fixed"
                 {
                     saleprice = saleprice - promoValue
                 }
                 else
                 {
-                    saleprice = saleprice - ((saleprice - totalExtraPromoCostToReduced) * promoValue / 100).rounded()
+                    //totalExtraPromoCostToReduced = totalExtraPromoCostToReduced + vapurBarrierValue
+                    saleprice = saleprice - ((saleprice - (totalExtraPromoCostToReduced))  * promoValue / 100).rounded()
                 }
             }
 
             mrp = mrp + stairPrice
+            print("self.minimumFee.clean3 : ", mrp, " stairperprice : ", stairperprice, " stairCount : ", stairCount)
             if selectedPlan == indexPath.row
             {
                 self.stairPrice = stairPrice
+                print("self.minimumFee.clean2 : ", stairperprice, " stairPrice : ", stairPrice, " stairCount : ", stairCount)
             }
+            //mrp = (mrp + Double(additional_cost)).rounded()
             mrp = (mrp + additionalCost).rounded()
             saleprice = saleprice.rounded()
             cell.mrpLabel.text = "$\(mrp.clean)"
+            print("self.minimumFee.clean1 : ", mrp.clean, "additionalCost : ", additional_cost)
             cell.warrentyLabel.text = paymentPlanValueDetails[indexPath.row].warranty
             // cell.discoutTF.tag = indexPath.row
             //cell.discoutTF.text = "\(paymentPlanValueDetails[indexPath.row].discount ?? 0)"
@@ -1402,6 +1479,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             {
                 mrp = self.minimumFee
                 cell.mrpLabel.text = "$\(self.minimumFee.clean)"
+                print("self.minimumFee.clean : ", self.minimumFee.clean)
             }
             if prize == self.minimumFee
             {
@@ -1574,203 +1652,232 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentOptionsBottomCollectionViewCell", for: indexPath) as! PaymentOptionsBottomCollectionViewCell
             //let paymentRestrictionArray = paymentOptionDataValueDetail.filter({$0.isHidden == false})
+            print("------appointmentDate------", appointmentDate)
 
-            cell.borderWidth = 1
-            cell.borderColor = UIColor().colorFromHexString("#586471")
-            let htmlString = paymentOptionDataValueDetail[indexPath.row].Name
-            let str = htmlString?.replacingOccurrences(of: "<[^>]+>", with: " ", options: .regularExpression, range: nil)
-            cell.headingLabel.text = str
-            let DownDouble = Double(self.paymentOptionDataValueDetail[indexPath.row].Down_Payment__c ?? "0") ?? 0
-            let FinalDouble = Double(self.paymentOptionDataValueDetail[indexPath.row].Final_Payment__c ?? "0") ?? 0
-            let Payment_Factor = Double(self.paymentOptionDataValueDetail[indexPath.row].Payment_Factor__c ?? "0") ?? 0
-            let secondaryFactor = Double(self.paymentOptionDataValueDetail[indexPath.row].Secondary_Payment_Factor__c ?? "0") ?? 0
-            let today = Date()
-            let Balance_DueDt = Double(self.paymentOptionDataValueDetail[indexPath.row].Balance_Due__c ?? "0") ?? 0
-            let modifiedDate = Calendar.current.date(byAdding: .day, value: Int(Balance_DueDt), to: today)!
-            emiAmount = amountTotel
-
-            let tempValue = self.emiAmount - downOrFinal
-            cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
+//            let appointmentDateString = "2022-02-16"
+            let appointmentDateString = appointmentDate ?? Date()
+            let startDateString = paymentOptionDataValueDetail[indexPath.row].start_date ?? ""
+            let endDateString = paymentOptionDataValueDetail[indexPath.row].end_date ?? ""
             
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
-           
-            cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
-            if(paymentOptionDataValueDetail[indexPath.row].Name == "Cash" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
-            {
-                
-                // if(downOrFinal > 0)
-                //  {
-                //    self.emiAmount = downOrFinal
-                //  }
-                // var modValue = (self.emiAmount * DownDouble)
-                let temp = emiAmount.truncatingRemainder(dividingBy:2)
-                let FinalTemp = (self.emiAmount * FinalDouble) + temp
-                
-                
-                // cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
-                cell.amountTitle.text = "$\((self.emiAmount.rounded()).clean)"
-                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
-                if(downOrFinal > 0)
-                {
-                    let tempValue = self.emiAmount - downOrFinal
-                    
-                    cell.subTitle.text = "$\((self.downOrFinal).clean) Down" + " / " + "$\((tempValue).clean) Before Installation"
-                }
-                else
-                {
-                    let tempdown = self.emiAmount/2
-                    var tempfinal = self.emiAmount/2
-                    
-                    // let temp = downOrFinal % 2
-                    let temp = self.emiAmount.truncatingRemainder(dividingBy:2)
-                    tempfinal = tempfinal + temp
-                    cell.subTitle.text = "$\((tempdown).clean) Down" + " / " + "$\((tempfinal).clean) Before Installation"
-                    if(self.selectedPlan<0)
-                    {
-                        cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
-                    }
-                    
-                }
-                cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
-                
-                
-                // cell.subTitle.text = "Down Payment:" + "$\((self.emiAmount * DownDouble).toRoundeString)" + "\n\nAt Completion:" + " $\((self.emiAmount * FinalDouble).toRoundeString)"
-                //                print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
-                //                 print("Amount:\(self.emiAmount)")
-                //                print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
-                //                print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
-            }
-            else if(paymentOptionDataValueDetail[indexPath.row].Name == "1 Year<br />No Payments<br />No Interest" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
             
-            {
+            print("appointment_date : ", dateFormatter.string(from: appointmentDateString))
+            print("start_Date : ", dateFormatter.string(from: dateFormatter.date(from: startDateString) ?? Date()))
+            print("end_Date : ", dateFormatter.string(from: dateFormatter.date(from: endDateString) ?? Date()))
+            
+            do {
+//                let appointment_date = dateFormatter.string(from: dateFormatter.date(from: appointmentDateString)!)
+            let appointment_date = dateFormatter.string(from: appointmentDateString)
+            let start_Date = dateFormatter.string(from: dateFormatter.date(from: startDateString) ?? Date())
+            let end_Date = dateFormatter.string(from: dateFormatter.date(from: endDateString) ?? Date())
+            
+            if appointment_date >= start_Date && appointment_date <= end_Date {
+                cell.isHidden = false
+                cell.borderWidth = 1
+                cell.borderColor = UIColor().colorFromHexString("#586471")
+                let htmlString = paymentOptionDataValueDetail[indexPath.row].Name
+                let str = htmlString?.replacingOccurrences(of: "<[^>]+>", with: " ", options: .regularExpression, range: nil)
+                cell.headingLabel.text = str
+                let DownDouble = Double(self.paymentOptionDataValueDetail[indexPath.row].Down_Payment__c ?? "0") ?? 0
+                let FinalDouble = Double(self.paymentOptionDataValueDetail[indexPath.row].Final_Payment__c ?? "0") ?? 0
+                let Payment_Factor = Double(self.paymentOptionDataValueDetail[indexPath.row].Payment_Factor__c ?? "0") ?? 0
+                let secondaryFactor = Double(self.paymentOptionDataValueDetail[indexPath.row].Secondary_Payment_Factor__c ?? "0") ?? 0
+                let today = Date()
+                let Balance_DueDt = Double(self.paymentOptionDataValueDetail[indexPath.row].Balance_Due__c ?? "0") ?? 0
+                let modifiedDate = Calendar.current.date(byAdding: .day, value: Int(Balance_DueDt), to: today)!
+                emiAmount = amountTotel
                 
-                
-                
-                // cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nPayment:", amount: " $\((self.emiAmount * Payment_Factor).toDoubleString)")
-                
-                //   cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
                 let tempValue = self.emiAmount - downOrFinal
                 cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
                 
-                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
-                
-                
+                cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
                 
                 cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
-                
-                print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
-                print("Amount:\(self.emiAmount)")
-                print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
-                print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
-                
-                
-                //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nPayment: $\((self.emiAmount * Payment_Factor).toRoundeString)"
-            }
-            else if(paymentOptionDataValueDetail[indexPath.row].Name == "Zero Interest Program" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
-            
-            {
-                if(downOrFinal > 0 )
-                {
-                    self.emiAmount = self.emiAmount - downOrFinal
-                }
-                if(emiAmount > 0)
+                if(paymentOptionDataValueDetail[indexPath.row].Name == "Cash" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
                 {
                     
-                    //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On:" + modifiedDate.DateFromStringMonthDate()
-                    cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On: ", amount: modifiedDate.DateFromStringMonthDate())
+                    // if(downOrFinal > 0)
+                    //  {
+                    //    self.emiAmount = downOrFinal
+                    //  }
+                    // var modValue = (self.emiAmount * DownDouble)
+                    let temp = emiAmount.truncatingRemainder(dividingBy:2)
+                    let FinalTemp = (self.emiAmount * FinalDouble) + temp
+                    
+                    
+                    // cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
+                    cell.amountTitle.text = "$\((self.emiAmount.rounded()).clean)"
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                    if(downOrFinal > 0)
+                    {
+                        let tempValue = self.emiAmount - downOrFinal
+                        
+                        cell.subTitle.text = "$\((self.downOrFinal).clean) Down" + " / " + "$\((tempValue).clean) Before Installation"
+                    }
+                    else
+                    {
+                        let tempdown = self.emiAmount/2
+                        var tempfinal = self.emiAmount/2
+                        
+                        // let temp = downOrFinal % 2
+                        let temp = self.emiAmount.truncatingRemainder(dividingBy:2)
+                        tempfinal = tempfinal + temp
+                        cell.subTitle.text = "$\((tempdown).clean) Down" + " / " + "$\((tempfinal).clean) Before Installation"
+                        if(self.selectedPlan<0)
+                        {
+                            cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")
+                        }
+                        
+                    }
+                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    
+                    
+                    // cell.subTitle.text = "Down Payment:" + "$\((self.emiAmount * DownDouble).toRoundeString)" + "\n\nAt Completion:" + " $\((self.emiAmount * FinalDouble).toRoundeString)"
+                    //                print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
+                    //                 print("Amount:\(self.emiAmount)")
+                    //                print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
+                    //                print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
                 }
-                else
+                else if(paymentOptionDataValueDetail[indexPath.row].Name == "1 Year<br />No Payments<br />No Interest" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
+                        
                 {
-                    // cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On:"
-                    cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On: ", amount: modifiedDate.DateFromStringMonthDate())
+                    
+                    
+                    
+                    // cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nPayment:", amount: " $\((self.emiAmount * Payment_Factor).toDoubleString)")
+                    
+                    //   cell.subTitle.attributedText = self.labelFormat(down: " $\((self.emiAmount * DownDouble).clean)", final: " $\(FinalTemp.clean)")
+                    let tempValue = self.emiAmount - downOrFinal
+                    cell.amountTitle.text = "$\((tempValue.rounded()).clean)"
+                    
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
+                    
+                    
+                    
+                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    
+                    print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
+                    print("Amount:\(self.emiAmount)")
+                    print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
+                    print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
+                    
+                    
+                    //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nPayment: $\((self.emiAmount * Payment_Factor).toRoundeString)"
                 }
-                if secondaryFactor == 0 ||  self.emiAmount == 0
+                else if(paymentOptionDataValueDetail[indexPath.row].Name == "Zero Interest Program" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
+                        
                 {
-                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
-                }
-                else
-                {
-                    //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
-                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
-                }
-                
+                    if(downOrFinal > 0 )
+                    {
+                        self.emiAmount = self.emiAmount - downOrFinal
+                    }
+                    if(emiAmount > 0)
+                    {
+                        
+                        //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On:" + modifiedDate.DateFromStringMonthDate()
+                        cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On: ", amount: modifiedDate.DateFromStringMonthDate())
+                    }
+                    else
+                    {
+                        // cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On:"
+                        cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nBalance Due On: ", amount: modifiedDate.DateFromStringMonthDate())
+                    }
+                    if secondaryFactor == 0 ||  self.emiAmount == 0
+                    {
+                        cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                    }
+                    else
+                    {
+                        //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
+                        cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                    }
+                    
                     cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing:paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
-                
-                cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
-                
-                print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
-                print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")
-                print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
-                print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
-                
-                
-            }
-            else if(paymentOptionDataValueDetail[indexPath.row].Name == "Low Monthly Payment" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
-            
-            {
-                // let Payment_Factor = Double(self.paymentOptionDataValueDetail[indexPath.row].Payment_Factor__c ?? "0") ?? 0
-                if(downOrFinal > 0 )
-                {
-                    self.emiAmount = self.emiAmount - downOrFinal
+                    
+                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    
+                    print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
+                    print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")
+                    print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
+                    print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
+                    
+                    
                 }
-                
-                //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment: $\((self.emiAmount * Payment_Factor).toRoundeString)"
-                
-                //   cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment:", amount: " $\((self.emiAmount * Payment_Factor).toDoubleString)")
-                if secondaryFactor == 0 ||  self.emiAmount == 0
+                else if(paymentOptionDataValueDetail[indexPath.row].Name == "Low Monthly Payment" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
+                        
                 {
-                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
-                }
-                else
-                {
-                    //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
-                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
-                }
-                   cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
-            
-                cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
-                
-                print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
-                print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")
-                print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
-                print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
-            }
-            else
-            {
-                if(downOrFinal > 0 )
-                {
-                    self.emiAmount = self.emiAmount - downOrFinal
-                }
-                if secondaryFactor == 0 ||  self.emiAmount == 0
-                {
-                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                    // let Payment_Factor = Double(self.paymentOptionDataValueDetail[indexPath.row].Payment_Factor__c ?? "0") ?? 0
+                    if(downOrFinal > 0 )
+                    {
+                        self.emiAmount = self.emiAmount - downOrFinal
+                    }
+                    
+                    //  cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment: $\((self.emiAmount * Payment_Factor).toRoundeString)"
+                    
+                    //   cell.subTitle.attributedText = labelFormatFinanace(title: (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String + "\nLow Monthly Payment:", amount: " $\((self.emiAmount * Payment_Factor).toDoubleString)")
+                    if secondaryFactor == 0 ||  self.emiAmount == 0
+                    {
+                        cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                    }
+                    else
+                    {
+                        //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
+                        cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                    }
+                    cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
+                    
+                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    
+                    print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
+                    print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")
+                    print("Amount bottomTitle:\(paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "")")
+                    print("Bottom Title:\(paymentOptionDataValueDetail[indexPath.row].Description__c ?? "")")
                 }
                 else
                 {
-                    //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
-                    cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                    if(downOrFinal > 0 )
+                    {
+                        self.emiAmount = self.emiAmount - downOrFinal
+                    }
+                    if secondaryFactor == 0 ||  self.emiAmount == 0
+                    {
+                        cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean)"
+                    }
+                    else
+                    {
+                        //cell.amountTitle.text = "$\((self.emiAmount * 2569).rounded().clean) - $\((self.emiAmount * 36985).rounded().clean)"
+                        cell.amountTitle.text = "$\((self.emiAmount * Payment_Factor).rounded().clean) - $\((self.emiAmount * secondaryFactor).rounded().clean)"
+                    }
+                    
                 }
-                
+                if(selectedOption == indexPath.row)
+                {
+                    
+                    
+                    cell.bgView.borderWidth = 5
+                    cell.bgView.borderColor = UIColor().colorFromHexString("#292562")
+                    cell.borderColor = UIColor().colorFromHexString("#A7B0BA")
+                    cell.borderWidth = 0.5
+                    
+                }
+                else
+                {
+                    
+                    cell.bgView.borderWidth = 0
+                    cell.bgView.borderColor = .clear
+                    //                cell.borderColor = .clear
+                    //                cell.borderWidth = 0
+                }
+                return cell
+            } else {
+                cell.isHidden = true
+                paymentOptionDataValueDetail[indexPath.row].isHidden == true
+                return cell
             }
-            if(selectedOption == indexPath.row)
-            {
-                
-                
-                cell.bgView.borderWidth = 5
-                cell.bgView.borderColor = UIColor().colorFromHexString("#292562")
-                cell.borderColor = UIColor().colorFromHexString("#A7B0BA")
-                cell.borderWidth = 0.5
-                
-            }
-            else
-            {
-                
-                cell.bgView.borderWidth = 0
-                cell.bgView.borderColor = .clear
-//                cell.borderColor = .clear
-//                cell.borderWidth = 0
-            }
+        } catch {
             return cell
+         }
         }
     }
     

@@ -32,6 +32,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @available(iOS 13.0, *)
     func sceneDidBecomeActive(_ scene: UIScene) {
         
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                    return
+                }
+        appDelegate.geoLocationApiCallSync()
         /*  let now = Date()
          let LastGoggedInDate =  UserData.getLoggedInDate()
          let df = DateFormatter()
@@ -73,6 +77,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     @available(iOS 13.0, *)
     func sceneWillEnterForeground(_ scene: UIScene) {
         //code here
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+                    return
+                }
+        appDelegate.geoLocationApiCallSync()
         if((UserData.isLogedIn() == true))
         {
             let customer = CustomerListViewController.initialization()!
@@ -101,7 +109,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         {
             if(!SceneDelegate.timer.isValid)
             {
-                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 3, repeats: true, block: { _ in
+                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
                     
                     print("TIMER WAKEUP Scene")
                     BackgroundTaskService.shared.startSyncProcess()

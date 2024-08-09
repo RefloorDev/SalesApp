@@ -22,6 +22,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SummeryDetailsViewController") as? SummeryDetailsViewController
     }
     var isStair = 0
+    var stair_Count = ""
     @IBOutlet weak var tableView: UITableView!
     var isADetailView = false
     var edit_for_qustionaries = 10
@@ -76,7 +77,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var qustionAnswer: [QuestionsMeasurementData] = []
         questionsList.forEach{ question in
-            if !roomName.localizedCaseInsensitiveContains("stair") {
+            if /*!roomName.localizedCaseInsensitiveContains("stair")*/  self.summaryData.room_area != 0 {
                 if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
                     qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
                 }
@@ -868,28 +869,34 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                             let questionUniqueIdentifier = question.questionIdUnique
                             let questionId = question.id
                             dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+                            print("---dict2------", dict, " question : ", question.question_name)
                             realm.create(rf_master_question.self, value: dict, update: .all)
                             questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
                             
                             let additionalCost = self.calculateExtraPrice(question: question, answerOfQuestion: questionsArray)
+                            print("------additionalCost1 : ", additionalCost, " question1 : ", question.question_code)
                             if question.exclude_from_discount{
                                 extraCostExclude = extraCostExclude + additionalCost
+                                print("------additionalCost_extraCostExclude1 : ", extraCostExclude)
                             }
                             if question.exclude_from_promotion
                             {
                                 extrapromoToexclude = extrapromoToexclude + additionalCost
+                                print("------additionalCost_extrapromoToexclude : ", extrapromoToexclude)
                             }
                             extraCost = extraCost + additionalCost
+                            print("------additionalCost_extraCost1 : ", extraCost)
                         }
                     }catch{
                         print(RealmError.initialisationFailed)
                     }
                 }
-                
             }
+            
             
         }
         
+        print("additionalCost for room", extraCost)
         self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
         //save extra cost of selected room to appointment
         self.saveExtraCostToCompletedAppointment(roomId: self.roomID, extraCost: extraCost)
@@ -941,6 +948,26 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         var amount :Double = 0.0
         var amountIncluded :Double = 0.0
         var simpleChoiceTypeCheck :Bool = false
+        var answer_score :Double = 0.0
+        
+        if question.question_code == "StairCount" {
+            stair_Count = answerOfQuestion.first?.answer.first ?? ""
+        }
+        
+        let answerData1 = answerOfQuestion.first?.answer.first
+        if question.question_code == "StairCoverRisers" {
+            if let answer = answerData1 {
+                if answer.contains("White Risers") {
+                    do {
+                        answer_score = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+                        return (Double(stair_Count) ?? 0.0) * answer_score
+                    } catch {
+                        return 0
+                    }
+                }
+            }
+        }
+        
         if question.question_code == "CurrentCoveringType"{
             extra_price = 0.0
             currentSurfaceAnswerScore = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0

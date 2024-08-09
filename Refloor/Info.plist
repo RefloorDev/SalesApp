@@ -2,6 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.oneteamus.liveflier</string>
@@ -9,7 +17,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string></string>
+	<string>Refloor</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleGetInfoString</key>

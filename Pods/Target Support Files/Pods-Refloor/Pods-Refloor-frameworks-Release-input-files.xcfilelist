@@ -25,6 +25,7 @@ ${BUILT_PRODUCTS_DIR}/JWTCodable/JWTCodable.framework
 ${BUILT_PRODUCTS_DIR}/KituraContracts/KituraContracts.framework
 ${BUILT_PRODUCTS_DIR}/LoggerAPI/LoggerAPI.framework
 ${BUILT_PRODUCTS_DIR}/Logging/Logging.framework
+${BUILT_PRODUCTS_DIR}/MaterialShowcase/MaterialShowcase.framework
 ${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework
 ${BUILT_PRODUCTS_DIR}/ObjectMapper+Realm/ObjectMapper_Realm.framework
 ${PODS_ROOT}/PayCardsRecognizer/Source/PayCardsRecognizer.framework
