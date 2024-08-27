@@ -27,6 +27,7 @@ class BackgroundTaskService {
     var testResult = "TEST"
     var i = 1
     var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    var networkMessage = ""
     //var isCallingApi = false
     
     func enterBackground() {
@@ -37,6 +38,17 @@ class BackgroundTaskService {
         
         //step 5: request The Background Task
         requestUplouadBackgroungTask()
+        
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            
+            let speedTest = HttpClientManager.NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                self.networkMessage = String(speed)
+            }
+        }
+        
     }
     
 }
@@ -366,6 +378,12 @@ extension BackgroundTaskService {
         var ifAnyApiFailed = false
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
+           
+//            let speedTest = HttpClientManager.NetworkSpeedTest()
+//            speedTest.testUploadSpeed { speed in
+//                print("Upload speed: \(speed) Mbps")
+//                self.networkMessage = String(speed)
+//            }
             print("Inside API !!")
             let appointmentRequestArray = getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
             
@@ -671,7 +689,10 @@ extension BackgroundTaskService {
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameter, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
+       
+        var reqParameter = parameter
+        reqParameter["network_strength"] = networkMessage
+        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: reqParameter, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success" {
                 //print(parameter.ke)
                
@@ -795,12 +816,23 @@ extension BackgroundTaskService {
         //log
         self.addImageStatLogs(appointmentId: appoint_id, imageType: image_type)
         //
+        if ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: image_name) == nil
+        {
+            completion(false)
+            return
+        }
         let file = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: image_name) ?? UIImage()
         let room_id = (room["room_id"] as? Int ?? 0)
         let room_name = room["room_name"] as? String ?? ""
         let room_id_str = String(room_id)
         //isCallingApi = true
-        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name) { success, message, imageName in
+//        var networkMessage = ""
+//        let speedTest = HttpClientManager.NetworkSpeedTest()
+//        speedTest.testUploadSpeed { speed in
+//            print("Upload speed: \(speed) Mbps")
+//            networkMessage = String(speed)
+//        }
+        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage:networkMessage) { success, message, imageName in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
                 if let imageNam = imageName{
@@ -826,7 +858,15 @@ extension BackgroundTaskService {
         let date = appointment?.appointment_datetime ?? ""
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         //isCallingApi = true
-        HttpClientManager.SharedHM.generateContactAPi(parameter: parameter) { success, message in
+//        var networkMessage = ""
+//        let speedTest = HttpClientManager.NetworkSpeedTest()
+//        speedTest.testUploadSpeed { speed in
+//            print("Upload speed: \(speed) Mbps")
+//            networkMessage = String(speed)
+//        }
+        var reqParameter = parameter
+        reqParameter["network_strength"] = networkMessage
+        HttpClientManager.SharedHM.generateContactAPi(parameter: reqParameter) { success, message in
             
             if(success ?? "") == "Success"{
                 self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
@@ -847,6 +887,7 @@ extension BackgroundTaskService {
         var data = params["data"] as? [String:Any] ?? [:]
         data["sync_delay"] = sync_delay
         params["data"] = data
+        params["network_strength"] = networkMessage
         print("*&*&*&*&&**&* sync_delay = \(sync_delay)")
         HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
             if(success ?? "") == "Success"{

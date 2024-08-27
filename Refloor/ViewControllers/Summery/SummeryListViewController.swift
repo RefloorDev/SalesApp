@@ -101,7 +101,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) 
+    {
         loadRefreshData()
         //summertListApi()
     }
@@ -334,6 +335,13 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "SummeryListNewTableViewCell") as! SummeryListNewTableViewCell
         //cell.selectColorNewBgView.frame.size.width = cell.colorLabel.frame.size.width
         cell.colorLabel.setRightPaddingPoints(5)
+        cell.outOfStockView.applyGradient(colors: [UIColor().colorFromHexString("#72C36F00").cgColor,UIColor().colorFromHexString("#72C36F27").cgColor])
+        cell.outOfStockLbl.text = "The selected item is available"
+        cell.outOfStockLbl.textColor = UIColor().colorFromHexString("#72C36F")
+        cell.outOfStockView.layer.cornerRadius = 24
+                                cell.outOfStockView.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMinXMinYCorner]
+
+
         let floorName = tableValues[indexPath.row].room_name ?? "Other"
         
         cell.strickView.isHidden = ((tableValues[indexPath.row].striked ?? "").lowercased() == "false")

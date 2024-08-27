@@ -1587,6 +1587,7 @@ class rf_AnswerOFQustion:Object
     @objc dynamic var answerID:Int = 0
     @objc dynamic var qustionLineID:Int = 0
     @objc dynamic var numberVaue:Int = 0
+    @objc dynamic var stairWidthDouble:Double = 0.0
     @objc dynamic var textValue:String?
     var singleSelection:QuoteLabelData?
     var multySelection:[QuoteLabelData]? = []
@@ -1603,6 +1604,7 @@ class rf_AnswerOFQustion:Object
         self.answerID = answerOfQstn.answerID
         self.qustionLineID = answerOfQstn.qustionLineID
         self.numberVaue = answerOfQstn.numberVaue ?? 0
+        self.stairWidthDouble = answerOfQstn.stairWidthDouble
         self.textValue = answerOfQstn.textValue
         self.singleSelection = answerOfQstn.singleSelection
         self.multySelection = answerOfQstn.multySelection

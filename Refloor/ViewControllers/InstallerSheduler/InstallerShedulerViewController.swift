@@ -31,10 +31,19 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     //let count = 7
     var currentIndex = 0
     let itemsPerPage = 5
+    var networkMessage = ""
     //var dates = ["00","01","02","03","04","05","06"]//,"07","08","09","10","11","12","13","14","15","16","17","18","19"]
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            let speedTest = HttpClientManager.NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                self.networkMessage = String(speed)
+            }
+        }
         installerLeftBtn.layer.cornerRadius = installerLeftBtn.frame.height / 2
         installerRightBtn.layer.cornerRadius = installerRightBtn.frame.height / 2
         //installerLeftBtn.borderWidth = 0
@@ -53,7 +62,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
  
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
-            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": saleOrderId ,"installation_id": installationId]
+            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": saleOrderId ,"installation_id": installationId,"network_strength":networkMessage]
             
             HttpClientManager.SharedHM.installerDatesSubmitAPi(parameter: parameter) { success, message in
                 if success == "Success"

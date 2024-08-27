@@ -50,9 +50,17 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     var selectedAptResultReasonId:Int = Int()
     var appointmentResults = List<rf_master_appointments_results_demoedNotDemoed>()
     var appointDetailsResults:List<rf_appointment_result_reasons_results>!
-    
+    var networkMessage = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            let speedTest = HttpClientManager.NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                self.networkMessage = String(speed)
+            }
+        }
         aptResultScrollView.isDirectionalLockEnabled = true
         priceQuotedTextView.delegate = self
         //  self.setNavigationBarbackAndlogo(with: "Customer 1 Details")
@@ -669,7 +677,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             let room_name = room["room_name"] as? String ?? ""
             let room_id_str = String(room_id)
             group.enter()
-            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name) { success, message, imageName in
+           
+            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name, networkMessage: networkMessage) { success, message, imageName in
                 if(success ?? "") == "Success"{
                     group.leave()
                     print(message ?? "No msg")

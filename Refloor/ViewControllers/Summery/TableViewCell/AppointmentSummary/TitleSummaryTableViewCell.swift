@@ -10,6 +10,7 @@ import UIKit
 
 class TitleSummaryTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var roomTitle: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

@@ -109,6 +109,9 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     var ishuntertearmAndCondition = false
     var huntertearmStatus = "No"
     var imagePicker: CaptureImage!
+    var totalPrice:Double = Double()
+    var finalPayment:Double = Double()
+    var financeAmount:Double = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()

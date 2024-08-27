@@ -690,12 +690,17 @@ class AnswerOFQustion:NSObject
     var answerID:Int = 0
     var qustionLineID:Int = 0
     var numberVaue:Int?
+    var stairWidthDouble:Double = 0.0
     var textValue:String?
     var singleSelection:QuoteLabelData?
     var multySelection:[QuoteLabelData]?
     init(_ numberVaue:Int)
     {
         self.numberVaue = numberVaue
+    }
+    init(_ stairWidthDouble:Double)
+    {
+        self.stairWidthDouble = stairWidthDouble
     }
     init(_ textValue:String)
     {
@@ -714,6 +719,7 @@ class AnswerOFQustion:NSObject
         self.answerID = rf_AnsOFQustion.answerID
         self.qustionLineID = rf_AnsOFQustion.qustionLineID
         self.numberVaue = rf_AnsOFQustion.numberVaue
+        self.stairWidthDouble = rf_AnsOFQustion.stairWidthDouble
         self.textValue = rf_AnsOFQustion.textValue
         self.singleSelection = rf_AnsOFQustion.singleSelection
         self.multySelection = rf_AnsOFQustion.multySelection

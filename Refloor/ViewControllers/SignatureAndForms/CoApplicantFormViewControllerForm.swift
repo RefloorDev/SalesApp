@@ -92,6 +92,9 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     var applicantData:ApplicationData!
     var isCoAppSkiped = 0
     var imagePicker: CaptureImage!
+    var totalPrice:Double = Double()
+    var finalPayment:Double = Double()
+    var financeAmount:Double = Double()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Co-Applicant Information".uppercased())

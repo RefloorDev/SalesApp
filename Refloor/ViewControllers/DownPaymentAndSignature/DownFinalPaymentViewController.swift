@@ -349,8 +349,13 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
             self.paymentMethordCollectionView.reloadData()
         }
     }
-    @IBAction func nextButtonAction(_ sender: Any) {
-        
+    @IBAction func nextButtonAction(_ sender: Any) 
+    {
+        if isPaymentByCash && downPaymentTF.text == ""
+        {
+            self.alert("Please enter at least 1$ as down payment to proceed.", nil)
+            return
+        }
         if(validation() != "")
         {
             self.alert(validation(), nil)

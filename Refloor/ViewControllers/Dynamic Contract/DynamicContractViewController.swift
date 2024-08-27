@@ -85,10 +85,18 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
     var contractDataStatus:ContractData?
     var CheckoximageAnnotation:ImageStampAnnotation!
     var imagePicker: CaptureImage!
-    
+    var networkMessage = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            let speedTest = HttpClientManager.NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                self.networkMessage = String(speed)
+            }
+        }
         self.setNavigationBarbacklogoAndDone()
         getCurrentShortDate()
         self.getSignatureAndInitials()
@@ -1190,7 +1198,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                 let decodeOption:[String:Bool] = ["verify_signature":false]
                 
                 
-                parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData]
+                parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage]
                 HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
                     if(success ?? "") == "Success"
                     {
@@ -1278,7 +1286,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         var parametersAdditionalComments:[String:Any] = [:]
         let appoint_id = AppointmentData().appointment_id ?? 0
         let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-        parametersAdditionalComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison]
+        parametersAdditionalComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison,"network_strength":networkMessage]
         
         HttpClientManager.SharedHM.additionalCommentsAPi(parameter: parametersAdditionalComments) { success, usermessage in
             if(success ?? "") == "Success"
