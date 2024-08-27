@@ -265,6 +265,16 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     self.alert("Stair width value exceeded maximum limit", nil)
                     return
                 }
+                else
+                {
+                    if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
+                    {
+                        qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) + 0.5
+                        
+                        cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)"
+                    }
+                    return
+                }
             }
             else if qustionAnswer[sender.tag].id == 1
             {

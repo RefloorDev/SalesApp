@@ -112,7 +112,39 @@ class HttpClientManager: NSObject {
     }
     //MARK: - Device Type
     
-    
+    class NetworkSpeedTest {
+
+        func testUploadSpeed(completion: @escaping (Double) -> Void) {
+            // Generate data to upload (1 MB of data in this example)
+            let dataSize = 1 * 1024 * 1024 // 1 MB
+            let data = Data(repeating: 0, count: dataSize)
+            
+            // Start measuring time
+            let startTime = Date()
+            
+            // URL to upload data
+            let url = URL(string: "https://odoostage.myx.ac/api/")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            let task = URLSession.shared.uploadTask(with: request, from: data) { responseData, response, error in
+                // End measuring time
+                let endTime = Date()
+                
+                // Calculate time taken in seconds
+                let timeInterval = endTime.timeIntervalSince(startTime)
+                
+                // Calculate upload speed in Mbps
+                let speed = Double(dataSize) * 8 / timeInterval / (1024 * 1024) // Mbps
+                
+                // Return the upload speed
+                completion(speed)
+            }
+            
+            // Start the upload task
+            task.resume()
+        }
+    }
     
     
     
@@ -134,9 +166,9 @@ class HttpClientManager: NSObject {
             //            {
             //                regid = "13131313132112121"
             //            }
+            let version = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!)
             
-            
-            let parameters = ["login":usernae,"password":password,"device_reg_id":fcmToken,"restrict_multi_login":isoffline] as [String : Any]
+            let parameters = ["login":usernae,"password":password,"device_reg_id":fcmToken,"restrict_multi_login":isoffline,"device_name":AppDetails.deviceName,"device_os":AppDetails.osVersion,"app_version":version] as [String : Any]
             
             Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<UserLoginData>) in
                 
@@ -2563,7 +2595,7 @@ class HttpClientManager: NSObject {
     }
     
     // MARK: - Sync Images Upload
-    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
+    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,networkMessage:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
         
         
         if self.connectedToNetwork() {
@@ -2572,9 +2604,9 @@ class HttpClientManager: NSObject {
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage]
             }else{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage]
             }
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)

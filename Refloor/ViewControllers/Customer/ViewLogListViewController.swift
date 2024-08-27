@@ -28,8 +28,17 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     var message:String = String()
     var isFetchData:Bool = Bool()
     var appStatus:String = String()
+    var networkMessage = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            let speedTest = HttpClientManager.NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                self.networkMessage = String(speed)
+            }
+        }
         //viewLogTableView.estimatedRowHeight = 70
         NotificationCenter.default.addObserver(self, selector: #selector(reloadAndRefresh), name: Notification.Name("UpdateLogView"), object: nil)
         viewLogTableView.dataSource = self
@@ -275,7 +284,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         }
         
         else{
-            // self.alert(message ?? AppAlertMsg.serverNotReached , nil)
+            // self.alert(message ?? AppAlertMsg.serverNotReached , nil)-
             let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
                 self.syncAllAction(sender)
             }
@@ -699,7 +708,8 @@ extension ViewLogListViewController{
         let room_id = (room["room_id"] as? Int ?? 0)
         let room_name = room["room_name"] as? String ?? ""
         let room_id_str = String(room_id)
-        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name) { success, message, imageName in
+        
+        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
                 if let imageNam = imageName{
