@@ -298,6 +298,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     @IBAction func minusButtonAction(_ sender: UIButton) {
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
+            if qustionAnswer[sender.tag].id == 9
+            {
+                if ((qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) > 0.0)
+                {
+                    qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) - 0.5
+                    
+                    cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)"
+                }
+            }
             if ((qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) > 0)
             {
                 qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 1) - 1
@@ -407,7 +416,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         print("Indexpath : \(index) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
         cell.numerical_Answer_Label.tag = index
-        cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)"
+        if qustionAnswer[index].id == 9
+        {
+            cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.stairWidthDouble ?? 0.0)"
+        }
+        else
+        {
+            cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)"
+        }
         cell.numerical_Answer_Label.isUserInteractionEnabled = true
         return cell
     }
@@ -488,9 +504,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         {
                             let value = Int(answer.answers![0].answer ?? "") ?? 0
                             let val =  AnswerOFQustion(value)
+                            if answer.question_id == 9
+                            {
+                                let value = Double(answer.answers![0].answer ?? "") ?? 0.0
+                                let strairVal = AnswerOFQustion(value)
+                                qustion.answerOFQustion = strairVal
+                            }
                             val.qustionLineID = answer.contract_question_line_id ?? 0
                             val.answerID = answer.answers![0].id ?? 0
-                            qustion.answerOFQustion = val
+                            if !( answer.question_id == 9)
+                            {
+                                qustion.answerOFQustion = val
+                            }
                         }
                     }
                     else if(answer.question_type == "textbox")
@@ -646,7 +671,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
-            if ((question.mandatory_answer == true) &&  !(((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
+            if ((question.mandatory_answer == true) &&  !((((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || (self.qustionAnswer[value].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.multySelection?.count ?? 0) > 0)))
             {
@@ -830,6 +855,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             if((answer.numberVaue ?? 0) != 0)
             {
                 let param:[String:Any] = ["question_id":question.id ,"answer":value]
+                return param
+            }
+            else if question.id == 9
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
                 return param
             }
         case "textbox":

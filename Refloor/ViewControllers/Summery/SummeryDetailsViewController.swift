@@ -107,9 +107,20 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                         {
                             let value = Int(answer.answers![0].answer ?? "") ?? 0
                             let val =  AnswerOFQustion(value)
+                            if answer.question_id == 9
+                            {
+                                let value = Double(answer.answers![0].answer ?? "") ?? 0.0
+                                let strairVal = AnswerOFQustion(value)
+                                qustion.answerOFQustion = strairVal
+                            }
                             val.qustionLineID = answer.contract_question_line_id ?? 0
                             val.answerID = answer.answers![0].id ?? 0
-                            qustion.answerOFQustion = val
+                            
+                            
+                            if !( answer.question_id == 9)
+                            {
+                                qustion.answerOFQustion = val
+                            }
                         }
                     }
                     else if(answer.question_type == "textbox")
@@ -920,6 +931,11 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             if((answer.numberVaue ?? 0) != 0)
             {
                 let param:[String:Any] = ["question_id":question.id ,"answer":value]
+                return param
+            }
+            else if question.id == 9
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
                 return param
             }
         case "textbox":
