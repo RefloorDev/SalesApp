@@ -26,6 +26,24 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     func whetherToProceedBack()
     {
         self.navigationController?.popViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if self.isVersatile {
+//    self.alert("Unsuccessful due to incomplete compliance training", nil)
+                //Q3 changes
+                print("inside whetherToProceedBack")
+                // Create the alert
+                let alert = UIAlertController(
+                    title: "Error!",
+                    message: "Application was unsuccessful due to incomplete compliance training.",
+                    preferredStyle: .alert
+                )
+                // Add the "OK" action button
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                
+                // Present the alert
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
     }
     
     func didSelect(image: UIImage?, imageName: String?) {
