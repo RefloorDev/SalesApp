@@ -1009,7 +1009,7 @@
 				653EA567241F7AFC00EA684E /* Frameworks */,
 				653EA568241F7AFC00EA684E /* Resources */,
 				5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */,
-				7D873827ABE8A74802195EEC /* [CP] Copy Pods Resources */,
+				4EF4D2A8ED0977CC9FF4372A /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1136,6 +1136,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4EF4D2A8ED0977CC9FF4372A /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1173,23 +1190,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		7D873827ABE8A74802195EEC /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -1477,8 +1477,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wrizto.app;
+
+				MARKETING_VERSION = 2.6.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -1503,8 +1504,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.wrizto.app;
+				MARKETING_VERSION = 2.6.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
+
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
