@@ -126,6 +126,8 @@ public:
         TlsHandshakeFailed = RLM_ERR_TLS_HANDSHAKE_FAILED,
         WrongSyncType = RLM_ERR_WRONG_SYNC_TYPE,
         SyncWriteNotAllowed = RLM_ERR_SYNC_WRITE_NOT_ALLOWED,
+        SyncLocalClockBeforeEpoch = RLM_ERR_SYNC_LOCAL_CLOCK_BEFORE_EPOCH,
+        SyncSchemaMigrationError = RLM_ERR_SYNC_SCHEMA_MIGRATION_ERROR,
 
         SystemError = RLM_ERR_SYSTEM_ERROR,
 

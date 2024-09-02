@@ -899,9 +899,13 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         downpatmet.totalAmount = self.amountTotel
         if area == 0.0
         {
-            if stairPrice < self.minimumFee
+            if stairPrice < self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500
             {
-                downpatmet.stairPrice = minimumFee
+                downpatmet.stairPrice = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 1500
+            }
+            else
+            {
+                downpatmet.stairPrice = stairPrice
             }
         }
         else
