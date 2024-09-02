@@ -12,8 +12,7 @@ import SwiftUI
 import CoreLocation
 
 
-class CustomerListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource, UIDocumentPickerDelegate {
-    
+class CustomerListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource, UIDocumentPickerDelegate, CLLocationManagerDelegate {
     
     
     static func initialization() -> CustomerListViewController? {
@@ -38,7 +37,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     var sendPhysical:Bool = Bool()
     var masterDataLastSyncDateTime = ""
     var geocoder = CLGeocoder()
-    
+    let locationManager = CLLocationManager()
     //
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -443,8 +442,47 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         return UITableView.automaticDimension
     }
     
-    @IBAction func startButtonActionFromCustomerList(_ sender: UIButton)
-    {
+    @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
+        //Q3 changes
+        locationManager.delegate = self
+        
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+              
+              if CLLocationManager.locationServicesEnabled() {
+                  switch authorizationStatus {
+                  case .notDetermined:
+                      // Request permission to use location services
+                      print("notDetermined: ", authorizationStatus)
+                      locationManager.requestWhenInUseAuthorization()
+                  case .restricted, .denied:
+                      // Location services are disabled, show a custom alert
+                      print("restricted and denied: ", authorizationStatus)
+                      showEnableLocationServicesAlert()
+                  case .authorizedWhenInUse, .authorizedAlways:
+                      // Location is enabled and authorized, proceed with your action
+                      print("authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
+                      performAppointmentAction(sender: sender)
+                  @unknown default:
+                      break
+                  }
+              } else {
+                  print("not authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
+                  showEnableLocationServicesAlert()
+              }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        print("inside locationManager")
+           if status == .authorizedWhenInUse || status == .authorizedAlways {
+               // Location access granted, proceed with your action
+               // Assuming `startButtonActionFromCustomerList` was called by a button action
+               if let sender = manager.delegate as? UIButton {
+                   performAppointmentAction(sender: sender)
+               }
+           }
+       }
+    
+    func performAppointmentAction(sender: UIButton) {
         let appointmentDateTimeString = self.appoinmentsList?[sender.tag].appointment_datetime
             let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)
             print("appointmentDateTime", appointmentDateTime)
@@ -519,9 +557,21 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //            self.navigationController?.pushViewController(details, animated: true)
 //
 //      }
-        
 
     }
+    
+    func showEnableLocationServicesAlert() {
+          let alert = UIAlertController(title: "Refloor Location Services Required", message: "You must enable location services and set it to \"Always\" for the Refloor app in order to proceed.", preferredStyle: .alert)
+          let settingsAction = UIAlertAction(title: "Settings", style: .default) { (_) in
+              if let url = URL(string: UIApplication.openSettingsURLString) {
+                  UIApplication.shared.open(url)
+              }
+          }
+          let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+          alert.addAction(settingsAction)
+          alert.addAction(cancelAction)
+          present(alert, animated: true, completion: nil)
+      }
     
     func convertDateString(_ inputDateString: String) -> String? {
            let inputFormatter = DateFormatter()
