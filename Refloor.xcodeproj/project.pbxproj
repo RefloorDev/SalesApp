@@ -493,13 +493,13 @@
 				DDF18F45277B253100321FFE /* BackgroundTaskService.swift */,
 				652093EB243CA31000B010CA /* SVProgressCustomLoader */,
 				653875F824E5771A009C3D25 /* DrowingView */,
-				652093EF243CA31000B010CA /* UIFonts */,
 				65209425243CA31000B010CA /* Customcell */,
 				6562801E24ACAF650061D191 /* MonthYearPickerView.swift */,
 				186F4BA526EA6E4F00AA192C /* CaptureImage.swift */,
 				DDAF8F2F2747849A004AAE86 /* NetworkClass.swift */,
 				DDEA244027552AEA00FD7F0B /* ImageSaveToDirectory.swift */,
 				DD30685C274B698E0007AA3B /* RealmDatabaseManager.swift */,
+				65209426243CA31000B010CA /* MyCell.swift */,
 			);
 			path = SupportedFiles;
 			sourceTree = "<group>";
@@ -584,7 +584,7 @@
 		65209425243CA31000B010CA /* Customcell */ = {
 			isa = PBXGroup;
 			children = (
-				65209426243CA31000B010CA /* MyCell.swift */,
+				652093EF243CA31000B010CA /* UIFonts */,
 				65209427243CA31000B010CA /* MyCell.xib */,
 			);
 			path = Customcell;
