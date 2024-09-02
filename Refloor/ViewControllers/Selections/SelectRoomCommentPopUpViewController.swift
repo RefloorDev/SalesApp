@@ -160,7 +160,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
 //        }
 //        return true
         
-        
+        //Q3 changes
         let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
         if range.location == 0 && string == " "
         {
@@ -169,7 +169,17 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
             let filtered = string.components(separatedBy: cs).joined(separator: "")
 
-            return (string == filtered)
+//            return (string == filtered)
+        if string != filtered {
+               return false
+           }
+           
+           // Calculate the new length of the text
+           let currentText = textField.text ?? ""
+           let newLength = currentText.count + string.count - range.length
+           
+           // Restrict the total length to 40 characters
+           return newLength <= 40
                  
     }
     
