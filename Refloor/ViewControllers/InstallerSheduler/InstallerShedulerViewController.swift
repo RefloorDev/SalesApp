@@ -53,58 +53,65 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
  
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
-            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": saleOrderId ,"installation_id": installationId]
-            
-            HttpClientManager.SharedHM.installerDatesSubmitAPi(parameter: parameter) { success, message in
-                if success == "Success"
-                {
-                    // self.installerConfirm?.installerConfirm()
-                    
-                    
-                    let installer = InstallerSuccessViewController.initialization()!
-                    installer.installationDate = self.installationDate
-                    installer.customerName = self.name
-                    self.navigationController?.pushViewController(installer, animated: true)
-                    
-                    
-                }
-                else if success == "Failed" && message == "Selected Date is not available now. Please select different date"
-                {
-                    let installerPopUp = InstallerPopUpViewController.initialization()!
-                    installerPopUp.installationId = self.installationId
-                    installerPopUp.saleOrderId = self.saleOrderId
-                    //installerPopUp.installerConfirm = self
-                    self.present(installerPopUp, animated: true, completion: nil)
-                }
-                else if success == "false"
-                {
-                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                        self.installerSubmitBtnApiCall()
-                    }
-                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                    
-                    self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
-                }
-                else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
-                {
-                    
-                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(speed)
+                let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": self.saleOrderId ,"installation_id": self.installationId,"network_strength":networkMessage]
+                
+                HttpClientManager.SharedHM.installerDatesSubmitAPi(parameter: parameter) { success, message in
+                    if success == "Success"
+                    {
+                        // self.installerConfirm?.installerConfirm()
                         
-                        self.fourceLogOutbuttonAction()
+                        
+                        let installer = InstallerSuccessViewController.initialization()!
+                        installer.installationDate = self.installationDate
+                        installer.customerName = self.name
+                        self.navigationController?.pushViewController(installer, animated: true)
+                        
+                        
                     }
-                    
-                    self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
-                    
-                }
-                else{
-                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                        self.installerSubmitBtnApiCall()
+                    else if success == "Failed" && message == "Selected Date is not available now. Please select different date"
+                    {
+                        let installerPopUp = InstallerPopUpViewController.initialization()!
+                        installerPopUp.installationId = self.installationId
+                        installerPopUp.saleOrderId = self.saleOrderId
+                        //installerPopUp.installerConfirm = self
+                        self.present(installerPopUp, animated: true, completion: nil)
                     }
-                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                    
-                    self.alert(message ?? AppAlertMsg.NetWorkAlertMessage, [yes,no])
+                    else if success == "false"
+                    {
+                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                            self.installerSubmitBtnApiCall()
+                        }
+                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        
+                        self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
+                    }
+                    else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+                    {
+                        
+                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                            
+                            self.fourceLogOutbuttonAction()
+                        }
+                        
+                        self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                        
+                    }
+                    else{
+                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                            self.installerSubmitBtnApiCall()
+                        }
+                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        
+                        self.alert(message ?? AppAlertMsg.NetWorkAlertMessage, [yes,no])
+                    }
                 }
             }
+      
         }
             else{
                 let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
