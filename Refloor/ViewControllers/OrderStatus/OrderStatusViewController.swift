@@ -145,7 +145,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             return false
         } else {
             // Check for other text views and restrict characters
-            let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
+            let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#<>")
             
             // Iterate over the Unicode.Scalar values in the replacement text
             for scalar in text.unicodeScalars {
