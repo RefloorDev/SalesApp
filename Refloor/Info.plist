@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
-	<key>NSLocationUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
 		<string>com.oneteamus.liveflier</string>
@@ -47,6 +39,14 @@
 	<string>Refloor app needs to access camera/gallery in order to upload room photos</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Refloor app needs to access camera/gallery in order to upload room photos</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Refloor app needs to access device gallery in order to upload room images</string>
 	<key>UIApplicationSceneManifest</key>
@@ -70,6 +70,7 @@
 	</dict>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>fetch</string>
 		<string>processing</string>
 		<string>remote-notification</string>
