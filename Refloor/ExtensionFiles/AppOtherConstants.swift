@@ -15,6 +15,8 @@ struct AppDetails {
     static let BUNDIL_ID = ""
     static let LANGUAGE_CODE = AppLanguage.getAppLanguage()
     static let GOOGLE_MAP_KEY = "AIzaSyCYzS-zbXb3xGqwhMHaYvodL9DDoBeo5rI"//"AIzaSyACAwHfZTycvArwSqXqNuML3MkGIX3cZN8"
+    static let deviceName = UIDevice.modelName
+    static let osVersion = UIDevice.current.systemVersion
 }
 
 
