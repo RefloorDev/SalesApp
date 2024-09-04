@@ -675,7 +675,8 @@ extension BackgroundTaskService {
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
             HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
@@ -813,7 +814,8 @@ extension BackgroundTaskService {
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
             HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
                 if(success ?? "") == "Success"{
                     print(message ?? "No msg")
@@ -847,7 +849,8 @@ extension BackgroundTaskService {
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
             HttpClientManager.SharedHM.generateContactAPi(parameter: params) { success, message in
@@ -878,7 +881,8 @@ extension BackgroundTaskService {
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
             params["network_strength"] = networkMessage
             HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
                 if(success ?? "") == "Success"{

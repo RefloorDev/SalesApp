@@ -750,7 +750,8 @@ extension ViewLogListViewController{
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
         }
         HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
             if(success ?? "") == "Success"{
