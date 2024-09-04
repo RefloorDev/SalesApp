@@ -581,7 +581,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
         HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
@@ -603,7 +604,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                     let speedTest = NetworkSpeedTest()
                     speedTest.testUploadSpeed { speed in
                         print("Upload speed: \(speed) Mbps")
-                        networkMessage = String(speed)
+                        networkMessage = String(format: "%.2f", speed)
+                        networkMessage += "Mbps"
                         if HttpClientManager.SharedHM.connectedToNetwork(){
                             let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appointmentId,"network_strength": networkMessage]
                             HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
@@ -688,7 +690,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             let speedTest = NetworkSpeedTest()
             speedTest.testUploadSpeed { speed in
                 print("Upload speed: \(speed) Mbps")
-                networkMessage = String(speed)
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
                 HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name, networkMessage: networkMessage) { success, message, imageName in
                     if(success ?? "") == "Success"{
                         group.leave()
@@ -714,7 +717,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 let speedTest = NetworkSpeedTest()
                 speedTest.testUploadSpeed { speed in
                     print("Upload speed: \(speed) Mbps")
-                    networkMessage = String(speed)
+                    networkMessage = String(format: "%.2f", speed)
+                    networkMessage += "Mbps"
                     let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appoint_id,"network_strength": networkMessage]
                     HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
                     }
@@ -1056,7 +1060,8 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
             print("Upload speed: \(speed) Mbps")
-            networkMessage = String(speed)
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
             let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString, "last_price_quoted_value": Double(priceQuotedString) ?? 0.0,"network_strength":networkMessage] as [String : Any]
             print("parameter_what_happened_notes1 : ", parameter)
             HttpClientManager.SharedHM.submitOrderStatustListApi(parameter: parameter) { (success, message) in
