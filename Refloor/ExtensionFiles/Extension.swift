@@ -606,6 +606,7 @@ extension UIView {
         gradientLayer.startPoint = startPoint
         gradientLayer.endPoint = endPoint
         gradientLayer.frame = self.bounds
+        gradientLayer.opacity = 0.5
         
         // Ensure the gradient is applied behind all other subviews
         if let sublayers = self.layer.sublayers, sublayers.count > 0 {
@@ -973,7 +974,7 @@ extension UIViewController:OrderStatusViewDelegate
         
     };
     
-    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int)
+    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -1)
     {
         let dropDown = DropDown()
         let appearance = DropDown.appearance()
@@ -986,12 +987,27 @@ extension UIViewController:OrderStatusViewDelegate
         dropDown.cellNib = UINib(nibName: "MyCell", bundle: nil)
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
             guard let cell = cell as? MyCell else { return }
-            if selectedIntex == index || selectedIntex == -2 {
-                
-                cell.optionLabel.textColor = UIColor.black
-            }else{
-                
-                cell.optionLabel.textColor = UIColor.gray
+            if selectedIndex >= 0
+            {
+                if selectedIndex == index
+                {
+                    cell.optionLabel.textColor = UIColor().colorFromHexString("#2A8BF6")
+                }
+                else
+                {
+                    cell.optionLabel.textColor = UIColor.black
+                }
+            }
+            else
+            {
+                if selectedIntex == index || selectedIntex == -2
+                {
+                    
+                    cell.optionLabel.textColor = UIColor.black
+                }else{
+                    
+                    cell.optionLabel.textColor = UIColor.gray
+                }
             }
             
         }
@@ -2743,6 +2759,25 @@ extension UIViewController:OrderStatusViewDelegate
         self.saveCreatedRoomToAppointment(appointmentId: appointmentId,roomId: roomId)
         return savedRooms
     }
+    func saveRoomMiscellaneousComments(miscellanousComments: String,appointmentId: Int,roomId:Int) 
+    {
+        do{
+            let realm = try Realm()
+            //let alreadySavedUrls = realm.object(ofType: rf_completed_room.self, forPrimaryKey: roomId)?.room_attachments
+            let rooms = realm.objects(rf_completed_room.self).filter("appointment_id == %d AND room_id == %d",appointmentId , roomId)
+            for room in rooms{
+                try realm.write{
+                    room.appointment_id = appointmentId
+                    //realm.add(savedRooms, update: .all)
+                    realm.create(rf_completed_room.self, value: ["id":room.id,"appointment_id": appointmentId,"room_id":roomId, "miscellaneous_comments":miscellanousComments], update: .all)
+                    
+                }
+            }
+        }catch{
+            print(RealmError.initialisationFailed)
+        }
+        self.saveCreatedRoomToAppointment(appointmentId: appointmentId,roomId: roomId)
+    }
     
     func saveSnapshotImage(savedImageName: String,appointmentId: Int) -> RealmSwift.List<String>{
         var savedRooms = RealmSwift.List<String>()
@@ -3141,13 +3176,13 @@ extension UIViewController:OrderStatusViewDelegate
     }
     
     
-    func updateRoomComment(appointmentId: Int,roomId:Int,comment:String){
+    func updateRoomComment(appointmentId: Int,roomId:Int,comment:String,miscellaneous_comments:String){
         do{
             let realm = try Realm()
             let room = realm.objects(rf_completed_room.self).filter("appointment_id == %d AND room_id == %d",appointmentId , roomId)
             if room.count == 1{
                 if let id = room.first?.id{
-                    let dict:[String:Any] = ["id":id ,"room_summary_comment":comment,"room_id":roomId]
+                    let dict:[String:Any] = ["id":id ,"room_summary_comment":comment,"room_id":roomId,"miscellaneous_comments":miscellaneous_comments]
                     try realm.write{
                         realm.create(rf_completed_room.self, value: dict, update: .all)
                     }
@@ -3194,6 +3229,7 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.colorUpCharge = room.selected_room_Upcharge
                     summaryList.colorUpChargePrice = room.selected_room_UpchargePrice
                     summaryList.room_perimeter = room.room_perimeter
+                    //summaryList.miscellaneous_comments = room.miscellaneous_comments
                     summaryListArray.append(summaryList)
                 }
             }
@@ -4037,13 +4073,17 @@ extension UIViewController:OrderStatusViewDelegate
             summaryData.room_id = roomID
             summaryData.appointment_id = appointmentId
             summaryData.room_area = Double(room?.first?.room_area ?? "0.0")
+            summaryData.room_perimeter = Double(room?.first?.room_perimeter ?? 0.0)
             summaryData.stair_count = room?.first?.room_type == "Floor" ? 0 : 0
             summaryData.adjusted_area = room?.first?.draw_area_adjusted == nil ? Double(room?.first?.room_area ?? "0.0") : Double(room?.first?.draw_area_adjusted ?? "0.0")
             summaryData.comments = room?.first?.room_summary_comment ?? ""
             summaryData.striked = (room?.first?.room_strike_status ?? false) ? "1" : "0"
+            summaryData.miscellaneous_comments = room?.first?.miscellaneous_comments ?? ""
             var room_Attachments:[AttachmentDataValue] = []
-            if let roomAttachments = room?.first?.room_attachments{
-                for room in roomAttachments{
+            if let roomAttachments = room?.first?.room_attachments
+            {
+                for room in roomAttachments
+                {
                     room_Attachments.append(AttachmentDataValue(savedImageUrl: room, savedImageName: "", id: 0))
                 }
             }
@@ -4120,6 +4160,22 @@ extension UIViewController:OrderStatusViewDelegate
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
+        }
+    }
+    func savemiscellaneousComments(miscelleneous_Comments:String,appointmentId:Int,roomID:Int)
+    {
+        let partiallyCompletedRoomToUpdate:[String:Any] = ["room_id":roomID ,"appointment_id":appointmentId,"miscellaneous_comments":miscelleneous_Comments]
+        do{
+            let realm = try Realm()
+            try realm.write
+            {
+                if realm.objects(rf_completed_room.self).filter("appointment_id == %d AND room_id == %d",appointmentId,roomID).count == 0{
+                    realm.create(rf_completed_room.self, value: partiallyCompletedRoomToUpdate, update: .all)
+                }
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed)
         }
     }
     
@@ -4290,6 +4346,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let moldingName = room.selected_room_molding
                 let selectedColor = room.selected_room_color ?? ""
                 let isCustomRoom = room.is_custom_room
+                let mis_comments = room.miscellaneous_comments
                 var roomColorId:Int = Int()
                 if room_name!.contains("STAIRS") && (room_area == "0" || room_area == nil)
                 {
@@ -4354,6 +4411,7 @@ extension UIViewController:OrderStatusViewDelegate
                 roomDict["room_area_image"] = room_area_image
                 roomDict["room_adjusted_area"] = room_adjusted_area
                 roomDict["room_perimeter"] = room_perimeter
+                roomDict["misc_charge_comments"] = mis_comments
 //                roomDict["transition1_name"] = transition1_name
 //                roomDict["transition1_width"] = transition1_width
 //                roomDict["transition2_name"] = transition2_name

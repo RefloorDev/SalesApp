@@ -268,6 +268,17 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         installer.financeAmount = financeAmount
         self.present(installer, animated: true, completion: nil)
     }
+    override func performSegueToReturnBack()
+    {
+        if isCardVerified == true || payment_TrasnsactionDict != [:]
+        {
+            self.alert("You can’t navigate back and change the payment option. ", nil)
+        }
+        else
+        {
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
     @objc func nextBtnAction(sender:UIButton)
     {
         let appointmentId = AppointmentData().appointment_id ?? 0
@@ -289,7 +300,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         else if self.paymentType == "check"
         {
-            let web = DynamicContractViewController.initialization()!
+            let web = CancellationPolicyViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -303,7 +314,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         else if paymentType == "card"
         {
-            let web = DynamicContractViewController.initialization()!
+            let web = CancellationPolicyViewController.initialization()!
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
             web.total = total
             web.balance = balance
@@ -314,7 +325,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         else
         {
-            let web = DynamicContractViewController.initialization()!
+            let web = CancellationPolicyViewController.initialization()!
             web.document=document
             web.orderID=orderID
             web.downPayment = downPayment

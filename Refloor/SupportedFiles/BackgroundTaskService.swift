@@ -307,6 +307,33 @@ extension BackgroundTaskService {
         }
     }
     
+    
+    func updateForceSynDB(aptId:Int,requestTitle: RequestTitle)
+    {
+        do{
+            let realm = try Realm()
+            try realm.write{
+                let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND reqest_title == %@", aptId,requestTitle.rawValue)
+                var dict:[String:Any] = [:]
+                if appointmentRequest.count > 0{
+                    for obj in appointmentRequest
+                    {
+
+//                            if let appointmentRequestObj = obj{
+                        dict = ["id": obj.id,
+                                    "sync_status" : true]
+
+                            realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+                     //   }
+                    }
+                }
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
+    
     // MARK: - GET DATA TO SYNC
     func getAppointmentsToSyncFromDB(requestTitle:RequestTitle) -> Results<rf_Completed_Appointment_Request> {
         var reqTitle:RequestTitle = requestTitle

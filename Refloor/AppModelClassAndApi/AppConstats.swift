@@ -197,6 +197,7 @@ struct AppURL {
     let additionalComments = BASE_URL + "v1/update_additional_appointment_data"
     let getCreditApplicationStatus = BASE_URL + "v1/get_credit_application_status"
     let geoLocationLogs = BASE_URL + "v1/update_arrival_departure_time"
+    let forecSync = BASE_URL + "v1/get_appointment_sync_status"
 }
 
 
@@ -262,6 +263,14 @@ enum RequestTitle: String{
     case ImageUpload = "Sales_Images"
     case GenerateContract = "Sales_Contract_Generate"
     case InitiateSync = "Sales_Sync_Update"
+}
+
+enum ApiUrlTitle: String
+{
+    case CustomerAndRoom = "/api/create_order_and_update_measurements_encoded"
+    case ImageUpload = "/api/upload_images"
+    case GenerateContract = "/api/generate_contract_document"
+    case InitiateSync = "/api/initiate_sync_to_i360_json"
 }
 
 enum RequestType: String{

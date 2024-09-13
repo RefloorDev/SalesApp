@@ -2405,6 +2405,47 @@ class HttpClientManager: NSObject {
         }
     }
     
+    // force sync
+    
+    func forceSyncAPi(completion:@escaping (_ success: String?, _ message:String?, _ forceSyncDetails: ForceSyncDetails?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().forecSync
+            let token = UserData().token
+            let headers = ["Authorization":"Bearer \(token!)"]
+            //self.showhideHUD(viewtype: .SHOW, title: "Fetching loan status.")
+            Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+                self.showhideHUD(viewtype: .HIDE)
+                print(response)
+                if let jsonData = response.data {
+                    let signInObject = try? JSONDecoder().decode(ForceSync.self, from: jsonData)
+                    if signInObject?.data != nil
+                    {
+                        if let creditData = signInObject?.data
+                        {
+                            completion(signInObject?.result,signInObject?.message, creditData)
+                        }
+                    }
+                    else
+                    {
+                        completion(signInObject?.result,signInObject?.message, nil)
+                    }
+                    
+                }
+            }
+            
+    
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage,nil)
+            
+        }
+    }
+    
+    
     
     // CrediApplicationStatus api
     

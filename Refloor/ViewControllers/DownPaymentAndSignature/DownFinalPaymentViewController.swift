@@ -351,9 +351,11 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     }
     @IBAction func nextButtonAction(_ sender: Any) 
     {
-        if isPaymentByCash && downPaymentTF.text == ""
+        let masterData = getMasterDataFromDB()
+        let minAmount = masterData.min_downpayment_amount
+        if isPaymentByCash && Double(downPaymentTF.text ?? "") ?? 0.0 < minAmount
         {
-            self.alert("Please enter at least 1$ as down payment to proceed.", nil)
+            self.alert("Please enter at least \(minAmount)$ as down payment to proceed.", nil)
             return
         }
         if(validation() != "")

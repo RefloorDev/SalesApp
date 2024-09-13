@@ -40,6 +40,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
     var roomName = ""
     var currentSurfaceAnswerScore = 0.0
     var qustionAnswer:[QuestionsMeasurementData] = []
+    var miscellaneous_coments = ""
     //
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +50,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.roomID = self.summaryData.room_id ?? 0
         self.roomName = self.summaryData.room_name ?? ""
+        self.miscellaneous_coments = self.summaryData.miscellaneous_comments ?? ""
         setQuestion()
         self.setNavigationBarbackAndlogo(with: "Room Summary".uppercased())
         self.tableReaload()
@@ -291,9 +293,11 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             furnitureQustions.floorID = self.summaryData.floor_id ?? 0
             furnitureQustions.appoinmentID = self.summaryData.appointment_id ?? 0
             furnitureQustions.area = summaryData.adjusted_area ?? 0.0
+            furnitureQustions.perimeter = summaryData.room_perimeter ?? 0.0
             furnitureQustions.delegate = self
             furnitureQustions.summaryQustions = self.summaryData.questionaire ?? []
-            self.deleteDiscountArrayFromDb() 
+            furnitureQustions.miscelleneous_Comments = self.miscellaneous_coments
+            self.deleteDiscountArrayFromDb()
             self.navigationController?.pushViewController(furnitureQustions, animated: true)
         }
         else if(sender.tag == self.edit_for_transitions)
@@ -652,7 +656,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         //arb
         self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))
         self.submitApiCall()
-        self.updateRoomComment(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , comment: summaryData.comments ?? "")
+        self.updateRoomComment(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , comment: summaryData.comments ?? "",miscellaneous_comments: self.miscellaneous_coments)
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))

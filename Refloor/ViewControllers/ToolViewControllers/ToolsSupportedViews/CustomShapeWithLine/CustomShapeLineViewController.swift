@@ -1056,6 +1056,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                     next.roomName = self.roomData.name ?? ""
 //                    next.drowingImageID = data ?? 0
                     next.area = self.areaValue
+                    next.perimeter = Double(tempPerimeter)!
 //                    //
 //                    next.value = self.summaryData.attachment_comments ?? ""
 //                    next.uploadedImage = self.summaryData.attachments ?? []
