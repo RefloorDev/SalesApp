@@ -30,10 +30,25 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var delegate:SummeryEditDelegate?
     var isUpdated = true
     var imagePicker: CaptureImage!
+    var isMiscellaneousTxtView = false
+    var perimeter = 0.0
+    var miscelleneous_Comments = "Enter your comments about Miscellaneous Charge"
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var areaLbl: UILabel!
+    @IBOutlet weak var perimeterLbl: UILabel!
     var qustionAnswer:[QuestionsMeasurementData] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        if area != 0.0
+        {
+            areaLbl.text = "Area: \(area) Sq.Ft"
+            perimeterLbl.text = "Perimeter: \(perimeter) M"
+        }
+        else
+        {
+            areaLbl.isHidden = true
+            perimeterLbl.isHidden = true
+        }
         print("-----viewDidLoad-----")
         if !isUpdated{
             self.addQuestions()
@@ -222,44 +237,94 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     
     
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if(placeHolder == (textView.text ?? ""))
+        
+        if textView.tag == qustionAnswer.count + 1
         {
             textView.text = ""
             textView.textColor = .white
+            isMiscellaneousTxtView = true
+            return
         }
+        if(placeHolder == (textView.text ?? ""))
+        {
+            if textView.text == "Enter your comments about Miscellaneous Charge"
+            {
+                textView.text = ""
+            }
+            textView.textColor = .white
+        }
+        
     }
     func textViewDidEndEditing(_ textView: UITextView) {
-        let value = textView.text ?? ""
         
-        if(value).removeUnvantedcharactoes() == ""
+        if textView.tag == qustionAnswer.count + 1
         {
-            textView.text = placeHolder
-            textView.textColor = UIColor.placeHolderColor
-            self.qustionAnswer[textView.tag].answerOFQustion = nil
+            if textView.text == ""
+            {
+                textView.text = "Enter your comments about Miscellaneous Charge"
+                textView.textColor = UIColor().colorFromHexString("#586471")
+                isMiscellaneousTxtView = false
+                miscelleneous_Comments = textView.text
+                return
+            }
+            else
+            {
+                miscelleneous_Comments = textView.text
+                return
+            }
         }
         else
         {
-            self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+            let value = textView.text ?? ""
             
+            if(value).removeUnvantedcharactoes() == ""
+            {
+                textView.text = placeHolder
+                textView.textColor = UIColor.placeHolderColor
+                self.qustionAnswer[textView.tag].answerOFQustion = nil
+            }
+            else
+            {
+                self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+                
+            }
         }
     }
     
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
     {
-        let  value = textView.text ?? ""
-        self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+        
+        if textView.tag != qustionAnswer.count + 1
+        {
+            let  value = textView.text ?? ""
+            self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+            return true
+        }
+        else
+        {
+            let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
+            if range.location == 0 && text == " "
+            {
+                return false
+            }
+                let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
+                let filtered = text.components(separatedBy: cs).joined(separator: "")
+            self.miscelleneous_Comments = textView.text
+                return (text == filtered)
+        }
         return true
     }
     
     
     
     @IBAction func pluseButtonAction(_ sender: UIButton) {
+        let masterData = getMasterDataFromDB()
         if qustionAnswer[sender.tag].max_allowed_limit != 0
         {
             if qustionAnswer[sender.tag].id == 9
             {
-                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
+                if qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble == masterData.max_stair_width//qustionAnswer[sender.tag].max_allowed_limit
                 {
                     print("reached max value")
                     self.alert("Stair width value exceeded maximum limit", nil)
@@ -366,39 +431,70 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return qustionAnswer.count + 1
+   
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int 
+    {
+        
+        
+            return qustionAnswer.count + 2
+        
+        
     }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = QustionsTableViewCell()
-        if(indexPath.row == 0)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell 
+    {
+        
+            var cell = QustionsTableViewCell()
+            if(indexPath.row == 0)
+            {
+                cell = tableView.dequeueReusableCell(withIdentifier: "HeaderQustionsTableViewCell") as! QustionsTableViewCell
+                //  cell.skipButton.isHidden = (self.delegate != nil)
+                
+                cell.nextButton.setTitle((self.delegate != nil) ? "Save":"Next", for: .normal)
+                // cell.areaLabel.text = "\((self.roomData.name ?? "Unknown")) > Total Area: \(area) Sq.Fts"
+                cell.headingLabel.text =  "What is in this room ?"
+            }
+        else if indexPath.row == qustionAnswer.count + 1
         {
-            cell = tableView.dequeueReusableCell(withIdentifier: "HeaderQustionsTableViewCell") as! QustionsTableViewCell
-            //  cell.skipButton.isHidden = (self.delegate != nil)
+            print(indexPath.row)
+             cell = self.tableView.dequeueReusableCell(withIdentifier: "MiscellaneousTextEntryTableViewCell") as! QustionsTableViewCell
+            cell.miscellaneousTxtView.leftSpace()
+            cell.miscellaneousTxtView.delegate = self
+            cell.miscellaneousTxtView.tag = indexPath.row
+            if miscelleneous_Comments != "Enter your comments about Miscellaneous Charge"
+            {
+                cell.miscellaneousTxtView.text = miscelleneous_Comments
+                cell.miscellaneousTxtView.textColor = .white
+            }
             
-            cell.nextButton.setTitle((self.delegate != nil) ? "Save":"Next", for: .normal)
-            // cell.areaLabel.text = "\((self.roomData.name ?? "Unknown")) > Total Area: \(area) Sq.Fts"
-            cell.headingLabel.text =  "What is in this room ?"
+                       // return cell
+            //cell = setCellForNumerical(indexPath.row - 2)
         }
-        else
-        {
-            let index = indexPath.row - 1
-            
-            if(qustionAnswer[index].question_type ?? "") == "numerical_box"
-            {
-                cell = setCellForNumerical(index)
-            }
-            else if(qustionAnswer[index].question_type ?? "") == "textbox"
-            {
-                cell = setCellForTextEntry(index)
-            }
             else
             {
-                cell = setCellForDropDown(index)
+                let index = indexPath.row - 1
+                
+                if(qustionAnswer[index].question_type ?? "") == "numerical_box"
+                {
+                    cell = setCellForNumerical(index)
+                }
+                else if(qustionAnswer[index].question_type ?? "") == "textbox"
+                {
+                    cell = setCellForTextEntry(index)
+                }
+                else
+                {
+                    cell = setCellForDropDown(index)
+                }
+                
             }
-            
-        }
-        return cell
+            return cell
+        
+          //
+                    
+        
+        
+//
     }
     
     
@@ -669,6 +765,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             let TrueSelfLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftTrueSelfLeveling" }) ?? 0
             let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
             let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
+            let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
             if ((question.mandatory_answer == true) &&  !((((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || (self.qustionAnswer[value].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
@@ -687,6 +784,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 return "You must select a primer type"
 
             }
+             if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+            {
+                if miscelleneous_Comments == "Enter your comments about Miscellaneous Charge"
+                {
+                   return "You must enter comments about miscellaneous charge"
+                }
+//                 else
+//                 {
+//                    self.miscelleneous_Comments =
+//                }
+            }
+            
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {
             //
@@ -1104,6 +1213,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             
         }
         
+        saveRoomMiscellaneousComments(miscellanousComments: self.miscelleneous_Comments, appointmentId: appointmentId, roomId: roomID)
+        
         self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
         //save extra cost of selected room to appointment
         self.saveExtraCostToCompletedAppointment(roomId: self.roomID, extraCost: extraCost)
@@ -1348,3 +1459,6 @@ extension FurnitureQustionsViewController: ImagePickerDelegate {
         
     }
 }
+
+
+

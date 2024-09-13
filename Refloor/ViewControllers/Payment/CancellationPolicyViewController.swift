@@ -70,17 +70,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
-    override func performSegueToReturnBack()
-    {
-        if isCardVerified == true || payment_TrasnsactionDict != [:]
-        {
-            self.alert("You can’t navigate back and change the payment option. ", nil)
-        }
-        else
-        {
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
+   
     override func screenShotBarButtonAction(sender:UIButton)
         {
             self.imagePicker = CaptureImage(presentationController: self, delegate: self)
@@ -140,7 +130,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         }
         else if self.paymentType == "check"
         {
-            let web = AppointmentSummaryViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -149,31 +139,31 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.paymentType = "check"
             web.isCardVerified = false
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            web.area = getTotalAdjustedAreaForAllRooms()
-            web.totalPrice = totalPrice
-            web.finalPayment = self.finalPayment
-            web.financeAmount = self.financeAmount
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = totalPrice
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
             
         }
         else if paymentType == "card"
         {
-            let web = AppointmentSummaryViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
             web.total = total
             web.balance = balance
             web.paymentType = "card"
             web.isCardVerified = isCardVerified
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            web.area = getTotalAdjustedAreaForAllRooms()
-            web.totalPrice = totalPrice
-            web.finalPayment = self.finalPayment
-            web.financeAmount = self.financeAmount
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = totalPrice
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
         }
         else 
         {
-            let web = AppointmentSummaryViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             web.document=document
             web.orderID=orderID
             web.downPayment = downPayment
@@ -181,10 +171,10 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "finance"
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            web.area = getTotalAdjustedAreaForAllRooms()
-            web.totalPrice = totalPrice
-            web.finalPayment = self.finalPayment
-            web.financeAmount = self.financeAmount
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = totalPrice
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
         }
         

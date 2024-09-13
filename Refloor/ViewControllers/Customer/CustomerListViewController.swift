@@ -157,8 +157,11 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         print("started monitoring")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) 
+    {
         
+   
+        //forceSync()
         let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
         if(appointmentRequestArray.count != 0)
         {
@@ -177,6 +180,96 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             self.deleteAllRoomImagesFromAppointmentRequest()
         }
         
+    }
+    
+    func strtBgSync()
+    {
+        let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+        if(appointmentRequestArray.count != 0)
+        {
+            if(!SceneDelegate.timer.isValid)
+            {
+                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+                    
+                    print("TIMER WAKEUP Appointment")
+                    BackgroundTaskService.shared.startSyncProcess()
+                })
+            }
+            
+            BackgroundTaskService.shared.enterBackground()
+        }else{
+            //delete item
+            self.deleteAllRoomImagesFromAppointmentRequest()
+        }
+    }
+    
+    
+    func forceSync()
+    {
+        HttpClientManager.SharedHM.forceSyncAPi() { success, message, userData in
+            if success == "Success"
+            {
+                if userData?.forceSyncEnabled == 0
+                {
+                    self.strtBgSync()
+                }
+                else
+                {
+                    for aptId in userData!.appointments!
+                    {
+                        switch aptId.last_api
+                        {
+                        case "/api/create_order_and_update_measurements_encoded":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.CustomerAndRoom)
+                            
+                        case "/api/upload_images":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.ImageUpload)
+                        case "/api/generate_contract_document":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.GenerateContract)
+                        case "/api/initiate_sync_to_i360_json":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.InitiateSync)
+                        default:
+                            break
+                        }
+                    }
+                    self.strtBgSync()
+                }
+                
+                
+                
+                
+                
+            }
+        
+            else if success == "false"
+            {
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    self.forceSync()
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            }
+            else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+            {
+                
+                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    
+                    self.fourceLogOutbuttonAction()
+                }
+                
+                self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                
+            }
+            else{
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    self.forceSync()
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert(message ?? AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            }
+        }
     }
     
     func showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase(){
