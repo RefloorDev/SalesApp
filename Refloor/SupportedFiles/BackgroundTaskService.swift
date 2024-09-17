@@ -671,45 +671,55 @@ extension BackgroundTaskService {
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameter, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
-            if(success ?? "") == "Success" {
-                //print(parameter.ke)
-               
-                if success == "Success"
-                {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            var params = parameter
+            params["network_strength"] = networkMessage
+            HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
+                if(success ?? "") == "Success" {
+                    //print(parameter.ke)
+                   
+                    if success == "Success"
+                    {
+                        
+                    }
+                    print(message ?? "No msg")
+                    //Writing Logs
                     
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.roomDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    //
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.packageDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.CustomerAndRoom,paymentStatus: payment_status ?? "",paymentMessage: payment_message ?? "")
+                    completion(true)
                 }
-                print(message ?? "No msg")
-                //Writing Logs
-                
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.roomDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                //
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.packageDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.CustomerAndRoom,paymentStatus: payment_status ?? "",paymentMessage: payment_message ?? "")
-                completion(true)
-            }
-            else if success == "Failed" && transactionId != "Invalid"
-            {
-                let paymentFailureParam = self.transactionInfoAppendingOnData(parameter: parameter, transactionId: transactionId ?? "", cardType: cardType ?? "")
-                completion(false)
-            }
-                
-            else{
-                //Writing Logs
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.roomDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                //
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.packageDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                completion(false)
+                else if success == "Failed" && transactionId != "Invalid"
+                {
+                    let paymentFailureParam = self.transactionInfoAppendingOnData(parameter: parameter, transactionId: transactionId ?? "", cardType: cardType ?? "")
+                    completion(false)
+                }
+                    
+                else{
+                    //Writing Logs
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.roomDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    //
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.packageDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncFailed.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    completion(false)
+                }
             }
         }
+ 
 
     }
 
@@ -800,20 +810,29 @@ extension BackgroundTaskService {
         let room_name = room["room_name"] as? String ?? ""
         let room_id_str = String(room_id)
         //isCallingApi = true
-        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name) { success, message, imageName in
-            if(success ?? "") == "Success"{
-                print(message ?? "No msg")
-                if let imageNam = imageName{
-                    self.addImageCompleteLogs(appointmentId: appoint_id)
-                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle:  RequestTitle.ImageUpload, imageName: imageNam,paymentStatus: "",paymentMessage: "")
-                    completion(true)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
+                if(success ?? "") == "Success"{
+                    print(message ?? "No msg")
+                    if let imageNam = imageName{
+                        self.addImageCompleteLogs(appointmentId: appoint_id)
+                        self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle:  RequestTitle.ImageUpload, imageName: imageNam,paymentStatus: "",paymentMessage: "")
+                        completion(true)
+                    }
+                    completion(false)
+                }else{
+                    self.addImageFailLogs(appointmentId: appoint_id, errorMessage: "Error image upload not complete")
+                    completion(false)
                 }
-                completion(false)
-            }else{
-                self.addImageFailLogs(appointmentId: appoint_id, errorMessage: "Error image upload not complete")
-                completion(false)
             }
         }
+        
+      
         
     }
     
@@ -826,19 +845,29 @@ extension BackgroundTaskService {
         let date = appointment?.appointment_datetime ?? ""
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         //isCallingApi = true
-        HttpClientManager.SharedHM.generateContactAPi(parameter: parameter) { success, message in
-            
-            if(success ?? "") == "Success"{
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-                print(message ?? "No msg")
-                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.GenerateContract,paymentStatus: "",paymentMessage: "")
-                self.deleteSyncCompletedAppointmentFromAppointmentDB(appointmentId: appointmentId)
-                completion(true)
-            }else{
-                self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date)
-                completion(false)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            var params = parameter
+            params["network_strength"] = networkMessage
+            HttpClientManager.SharedHM.generateContactAPi(parameter: params) { success, message in
+                
+                if(success ?? "") == "Success"{
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
+                    print(message ?? "No msg")
+                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.GenerateContract,paymentStatus: "",paymentMessage: "")
+                    self.deleteSyncCompletedAppointmentFromAppointmentDB(appointmentId: appointmentId)
+                    completion(true)
+                }else{
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date)
+                    completion(false)
+                }
             }
         }
+   
     }
     
     // MARK: - i360 Sync Api
@@ -848,15 +877,24 @@ extension BackgroundTaskService {
         data["sync_delay"] = sync_delay
         params["data"] = data
         print("*&*&*&*&&**&* sync_delay = \(sync_delay)")
-        HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
-            if(success ?? "") == "Success"{
-                print(message ?? "No msg")
-                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync,paymentStatus: "",paymentMessage: "")
-                if (UIApplication.getTopViewController() as? ViewLogListViewController) != nil {
-                    NotificationCenter.default.post(name: Notification.Name("UpdateLogView"), object: nil)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            params["network_strength"] = networkMessage
+            HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
+                if(success ?? "") == "Success"{
+                    print(message ?? "No msg")
+                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync,paymentStatus: "",paymentMessage: "")
+                    if (UIApplication.getTopViewController() as? ViewLogListViewController) != nil {
+                        NotificationCenter.default.post(name: Notification.Name("UpdateLogView"), object: nil)
+                    }
                 }
             }
         }
+      
     }
     
     // MARK: - Save log for image start

@@ -81,6 +81,7 @@ class InstallerSuccessViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
+        print("inside InstallerSuccessViewController")
         schedulerSuccessNavBar()
         if isHunter
         {
@@ -195,7 +196,8 @@ class InstallerSuccessViewController: UIViewController {
                     self.status = "DECLINED"
                     self.confirmLbl.text = self.status
                     self.confirmLbl.textColor = UIColor().colorFromHexString("#C93F48")
-                    self.subHeading.text = "Your loan application through lending platform is declined."
+                    self.subHeading.text = "Application was unsuccessful due to incomplete compliance training."//Q3 changes
+//                    self.subHeading.text = "Your loan application through lending platform is declined."
                     self.installerSuccess.image = UIImage(named: "versatileDeclined")
                     self.versatileViewHeightConstraints.constant = 0
                     self.gotToCreditAplBtn.isHidden = false

@@ -819,131 +819,154 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             //deleteRoomFromAppointment(appointmentId:AppointmentData().appointment_id ?? 0, roomId: self.roomData.id ?? 0)
             if HttpClientManager.SharedHM.connectedToNetwork()
             {
-                self.getCardDetails()
-                var parameter = self.createContractParameters()
-                let appointmentId = AppointmentData().appointment_id ?? 0
-                if let applicantDataDict = parameter as? [String:Any]
-                {
-                    if  let applicant = applicantDataDict["application_info_secret"] as? String{
-                        if applicant == ""
-                        {
-
-                        }
-                        else
-                        {
-                            var applicantData:[String:Any] = [:]
-                            let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-                            applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-                            self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-                        }
-                    }
-//                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
-//                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
-                   // }
-                }//createFinalParameterForCustomerApiCall()
-                var parameterToPass:[String:Any] = [:]
-                //var jwtToken:String = String()
-                let contactApiData = createFinalParameterForCustomerApiCall()//self.createContractParameters()
-                for (key,value) in contactApiData{
-                    parameter[key] = value
-                }
-                print(parameter)
-                
-//                let json = (parameter as NSDictionary).JsonString()
-//                let data = json.data(using: .utf8)
-//
-//                let decoder = JSONDecoder()
-//
-//                if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
-//                    print(model)
-//                    let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
-//                    jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
-//                    print(jwtToken)
-
-                let decodeOption:[String:Bool] = ["verify_signature":false]
+                DispatchQueue.main.async {
                     
-                    
-                  parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter]
-               // }
-                // let paymentOptionUserDetails = paymentOptionUser(payment_Method: "cash", paymentDetails: userPaymentDetails)
-             
-     
-                
-                let dbParameter = parameter
-                //
-               
-                //parameter["token"] = UserData.init().token ?? ""
-                
-                HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message,transactionId,cardType  in
-                    if(success ?? "") == "Success" || (success == "Failed" && transactionId != "Invalid"){
-                        print("success")
-                        let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
-                        let firstName = appointment?.applicant_first_name ?? ""
-                        let lastName = appointment?.applicant_last_name ?? ""
-                        let name = lastName == ""  ? firstName : firstName + " " + lastName
-                        let date = appointment?.appointment_datetime ?? ""
-                        let appointmentId = AppointmentData().appointment_id ?? 0
-                       // self.saveLogDetailsForAppointment(appointmentId: appoint, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-                        self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
-                        self.deleteAnyAppointmentLogsTable(appointmentId: appointmentId)
-                        self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: dbParameter as NSDictionary, imageName: "")
-                        //self.alert(message ?? "", nil)
-                        if success == "Success"
-                        {
-                            self.isCardVerifiedSuccessfully = true
-                        }
-                        else
-                        {
-                            self.payment_TrasnsactionDict = ["authorize_transaction_id":transactionId ?? "","card_type":cardType ?? ""]
-                            self.isCardVerifiedSuccessfully = false
-                        }
-                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
-                            
-                            self.cardDetailsAPiSuccess()
-                        }
-
-                            
-                            self.alert(payment_message ?? "", [yes])
-                    }
-                    else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
-                    {
-                        
-                        let yes = UIAlertAction(title: "OK", style:.default) { (_) in
-                            
-                            self.fourceLogOutbuttonAction()
-                        }
-                        
-                        self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
-                        
-                    }
-                    else
-                    {
-                        //self.alert(message ?? "", nil)
-                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                            
-                            self.goNextPageForPAyButtonAction()
-                            
-                        }
-                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                        
-                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
-                    }
+                    HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW, title: "Processing Payment")
+                    var networkMessage = ""
+                    let speedTest = NetworkSpeedTest()
+                    speedTest.testUploadSpeed { speed in
+                        print("Upload speed: \(speed) Mbps")
+                        networkMessage = String(format: "%.2f", speed)
+                        networkMessage += "Mbps"
+                        self.networkProceedToPayment(networkMessage: networkMessage)
+                                            }
                 }
             }
+                else
+                {
+                    getCardDetails()
+                    cardDetailsAPiSuccess()
+                }
+            }
+            //arb
             else
             {
                 getCardDetails()
                 cardDetailsAPiSuccess()
             }
-        }
-        //arb
-        else
-        {
-            getCardDetails()
-            cardDetailsAPiSuccess()
-        }
+                
+         
         
                 
+    }
+    func networkProceedToPayment(networkMessage:String)
+    {
+        DispatchQueue.main.async {
+            
+            self.getCardDetails()
+            var parameter = self.createContractParameters()
+            let appointmentId = AppointmentData().appointment_id ?? 0
+            if let applicantDataDict = parameter as? [String:Any]
+            {
+                if  let applicant = applicantDataDict["application_info_secret"] as? String{
+                    if applicant == ""
+                    {
+                        
+                    }
+                    else
+                    {
+                        var applicantData:[String:Any] = [:]
+                        let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+                        applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+                    }
+                }
+                //                    if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]{
+                //                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
+                // }
+            }//createFinalParameterForCustomerApiCall()
+            var parameterToPass:[String:Any] = [:]
+            //var jwtToken:String = String()
+            let contactApiData = self.createFinalParameterForCustomerApiCall()//self.createContractParameters()
+            for (key,value) in contactApiData{
+                parameter[key] = value
+            }
+            print(parameter)
+            
+            //                let json = (parameter as NSDictionary).JsonString()
+            //                let data = json.data(using: .utf8)
+            //
+            //                let decoder = JSONDecoder()
+            //
+            //                if let data = data, let model = try? decoder.decode(CustomerEncodingDecodingDetails.self, from: data) {
+            //                    print(model)
+            //                    let jwt = JWT<CustomerEncodingDecodingDetails>(header: header, payload: model, signature: signature)
+            //                    jwtToken = JWTEncoder.shared.encode(jwt: jwt) ?? ""
+            //                    print(jwtToken)
+            
+            let decodeOption:[String:Bool] = ["verify_signature":false]
+            
+            // params["network_strength"] = networkMessage
+            
+            
+            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter,"network_strength":networkMessage]
+            // }
+            // let paymentOptionUserDetails = paymentOptionUser(payment_Method: "cash", paymentDetails: userPaymentDetails)
+            
+            
+            
+            let dbParameter = parameter
+            //
+            
+            //parameter["token"] = UserData.init().token ?? ""
+            
+            HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message,transactionId,cardType  in
+                if(success ?? "") == "Success" || (success == "Failed" && transactionId != "Invalid"){
+                    print("success")
+                    let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
+                    let firstName = appointment?.applicant_first_name ?? ""
+                    let lastName = appointment?.applicant_last_name ?? ""
+                    let name = lastName == ""  ? firstName : firstName + " " + lastName
+                    let date = appointment?.appointment_datetime ?? ""
+                    let appointmentId = AppointmentData().appointment_id ?? 0
+                    // self.saveLogDetailsForAppointment(appointmentId: appoint, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
+                    self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.customerDetailsSyncCompleted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status: payment_status ?? "",payment_message: payment_message ?? "")
+                    self.deleteAnyAppointmentLogsTable(appointmentId: appointmentId)
+                    self.createDBAppointmentRequest(requestTitle: RequestTitle.CustomerAndRoom, requestUrl: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParameter: dbParameter as NSDictionary, imageName: "")
+                    //self.alert(message ?? "", nil)
+                    if success == "Success"
+                    {
+                        self.isCardVerifiedSuccessfully = true
+                    }
+                    else
+                    {
+                        self.payment_TrasnsactionDict = ["authorize_transaction_id":transactionId ?? "","card_type":cardType ?? ""]
+                        self.isCardVerifiedSuccessfully = false
+                    }
+                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                        
+                        self.cardDetailsAPiSuccess()
+                    }
+                    
+                    
+                    self.alert(payment_message ?? "", [yes])
+                }
+                else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+                {
+                    
+                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                        
+                        self.fourceLogOutbuttonAction()
+                    }
+                    
+                    self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                    
+                }
+                else
+                {
+                    //self.alert(message ?? "", nil)
+                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                        
+                        self.goNextPageForPAyButtonAction()
+                        
+                    }
+                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                }
+            }
+        }
+
     }
     
     @objc func cardDetailsAPiSuccess()
