@@ -56,8 +56,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var applyAllSelectedMoldName:String = String()
     var applyAllSelectedMoldPrice:Double = Double()
     
-    var stairIndex = 0
-    var roomIndex = 0
+    var stairIndex = -1
+    var roomIndex = -1
     var officeLocationId = AppDelegate.appoinmentslData.officeLocationId
     
     override func viewDidLoad() {
@@ -343,7 +343,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         cell.outOfStockLbl.text = "The selected item is available"
         cell.outOfStockLbl.textColor = UIColor().colorFromHexString("#72C36F")
         cell.outOfStockView.layer.cornerRadius = 24
-                                cell.outOfStockView.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMinXMinYCorner]
+        cell.outOfStockView.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMinXMinYCorner]
 
 
         let floorName = tableValues[indexPath.row].room_name ?? "Other"
@@ -565,6 +565,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             
             value = self.floorColorNamesArray.compactMap({$0.color})
         }
+        
         //
 //        for val in tableValues[sender.tag].material_colors ?? []
 //        {
@@ -575,11 +576,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         {
            if tableValues[sender.tag].room_area == 0.0
             {
-               self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: stairIndex)
+               self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: stairIndex,stairColour: stairColourNamesArray)
            }
             else
             {
-                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: roomIndex)
+                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray)
             }
         }
         else
@@ -828,7 +829,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             //arb
             if tableValues[cell].room_name!.contains("STAIRS") && tableValues[cell].room_area == 0.0
             {
-                stairIndex = index
+                
                 var InOfficeLocation = false
                 for officeids in self.stairColourNamesArray[index].Office_location_ids
                 {
@@ -837,13 +838,25 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         InOfficeLocation = true
                     }
                 }
+                if self.stairColourNamesArray[index].specialOrder == 0 && self.stairColourNamesArray[index].in_stock == 0 && InOfficeLocation == true
+                {
+                    let installer = AppointmentPaymentSummaryViewController.initialization()!
+                    installer.isOutOfstock = true
+                    self.present(installer, animated: true, completion: nil)
+//                    self.alert("Stock Not Available", nil)
+//                    return
+                }
                 if self.stairColourNamesArray[index].specialOrder == 0 && self.stairColourNamesArray[index].in_stock == 0 && InOfficeLocation == false
                 {
-                    self.alert("Stock Not Available", nil)
-                    return
+                    let installer = AppointmentPaymentSummaryViewController.initialization()!
+                    installer.isOutOfstock = true
+                    self.present(installer, animated: true, completion: nil)
+//                    self.alert("Stock Not Available", nil)
+//                    return
                 }
-                if self.stairColourNamesArray[index].specialOrder == 1 || self.stairColourNamesArray[index].in_stock == 1 || InOfficeLocation == false
+                if (self.stairColourNamesArray[index].specialOrder == 1 || self.stairColourNamesArray[index].in_stock == 1) && InOfficeLocation == false
                 {
+                    stairIndex = index
                     let selectedColor = self.stairColourNamesArray[index].color ?? ""
                     let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
                     let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
@@ -855,7 +868,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             }
             else
             {
-                roomIndex = index
+               
                 let selectedColor = self.floorColorNamesArray[index].color ?? ""
                 var InOfficeLocation = false
                 for officeids in self.floorColorNamesArray[index].Office_location_ids
@@ -865,13 +878,21 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         InOfficeLocation = true
                     }
                 }
-                if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == false
+                if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == true
                 {
-                    self.alert("Stock Not Available", nil)
-                    return
+                    let installer = AppointmentPaymentSummaryViewController.initialization()!
+                    installer.isOutOfstock = true
+                    self.present(installer, animated: true, completion: nil)
                 }
-                if self.floorColorNamesArray[index].specialOrder == 1 || self.floorColorNamesArray[index].in_stock == 1 || InOfficeLocation == false
+                else if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == false
                 {
+                    let installer = AppointmentPaymentSummaryViewController.initialization()!
+                    installer.isOutOfstock = true
+                    self.present(installer, animated: true, completion: nil)
+                }
+                else if (self.floorColorNamesArray[index].specialOrder == 1 || self.floorColorNamesArray[index].in_stock == 1 ) && InOfficeLocation == false
+                {
+                    roomIndex = index
                     let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
                     let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
                     let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
@@ -894,17 +915,24 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     InOfficeLocation = true
                 }
             }
-            if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == false
+            if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == true
             {
-                self.alert("Stock Not Available", nil)
-                return
+                let installer = AppointmentPaymentSummaryViewController.initialization()!
+                installer.isOutOfstock = true
+                self.present(installer, animated: true, completion: nil)
+            }
+            else if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == false
+            {
+                let installer = AppointmentPaymentSummaryViewController.initialization()!
+                installer.isOutOfstock = true
+                self.present(installer, animated: true, completion: nil)
             }
             
             
-            if self.floorColorNamesArray[index].specialOrder == 1 || self.floorColorNamesArray[index].in_stock == 1 || InOfficeLocation == false
+            if (self.floorColorNamesArray[index].specialOrder == 1 || self.floorColorNamesArray[index].in_stock == 1) && InOfficeLocation == false
             {
                 
-                
+                roomIndex = index
                 applyAllBtn.isUserInteractionEnabled = true
                 applyAllBtn.setTitleColor(.white, for: .normal)
                 applyAllSelectColorTxtFld.text = item

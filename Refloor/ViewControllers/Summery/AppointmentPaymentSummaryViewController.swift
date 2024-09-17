@@ -19,7 +19,10 @@ class AppointmentPaymentSummaryViewController: UIViewController {
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
     var downPayment:Double = 0
+    var isOutOfstock = false
 
+    @IBOutlet weak var paymentView: UIView!
+    @IBOutlet weak var outOfStockView: UIView!
     @IBOutlet weak var downPaymentLbl: UILabel!
     @IBOutlet weak var financeAmountLbl: UILabel!
     @IBOutlet weak var finalPaymentLbl: UILabel!
@@ -28,6 +31,16 @@ class AppointmentPaymentSummaryViewController: UIViewController {
     override func viewDidLoad() 
     {
         super.viewDidLoad()
+        if isOutOfstock
+        {
+            outOfStockView.isHidden = false
+            paymentView.isHidden = true
+        }
+        else
+        {
+            outOfStockView.isHidden = true
+            paymentView.isHidden = false
+        }
         
         downPaymentLbl.text = "$\(downPayment.toDoubleString)"
         finalPaymentLbl.text = "$\(finalPayment.toDoubleString)"

@@ -39,6 +39,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var qustionAnswer:[QuestionsMeasurementData] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        if miscelleneous_Comments == ""
+        {
+            miscelleneous_Comments = "Enter your comments about Miscellaneous Charge"
+        }
         if area != 0.0
         {
             areaLbl.text = "Area: \(area) Sq.Ft"
@@ -240,17 +244,21 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         
         if textView.tag == qustionAnswer.count + 1
         {
-            textView.text = ""
-            textView.textColor = .white
-            isMiscellaneousTxtView = true
-            return
+            let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
+            if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+            {
+                if textView.text == "Enter your comments about Miscellaneous Charge"
+                {
+                    textView.text = ""
+                }
+                textView.textColor = .white
+                isMiscellaneousTxtView = true
+                return
+            }
         }
         if(placeHolder == (textView.text ?? ""))
         {
-            if textView.text == "Enter your comments about Miscellaneous Charge"
-            {
-                textView.text = ""
-            }
+           
             textView.textColor = .white
         }
         
@@ -303,16 +311,24 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         else
         {
-            let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
-            if range.location == 0 && text == " "
-            {
-                return false
+            let restrictedCharacters = CharacterSet(charactersIn: "<>&\"'")
+            
+            // Check if the input contains any restricted characters
+            if text.rangeOfCharacter(from: restrictedCharacters) != nil {
+                return false // Don't allow the change
             }
-                let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
-                let filtered = text.components(separatedBy: cs).joined(separator: "")
-            self.miscelleneous_Comments = textView.text
-                return (text == filtered)
+            miscelleneous_Comments = textView.text
         }
+//            let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_., "
+//            if range.location == 0 && text == " "
+//            {
+//                return false
+//            }
+//                let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
+//                let filtered = text.components(separatedBy: cs).joined(separator: "")
+//            self.miscelleneous_Comments = textView.text
+//                return (text == filtered)
+//        }
         return true
     }
     
@@ -351,11 +367,22 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 }
             }
         }
+//        else
+//        {
+//            if qustionAnswer[sender.tag].id == 32
+//            {
+//                self.tableView.reloadData()
+//            }
+//        }
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
             qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) + 1
             
             cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
+            if qustionAnswer[sender.tag].id == 32
+            {
+                self.tableView.reloadData()
+            }
         }
         
     }
@@ -377,6 +404,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 1) - 1
                 
                 cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
+            }
+            if qustionAnswer[sender.tag].id == 32
+            {
+                self.tableView.reloadData()
             }
         }
     }
@@ -436,8 +467,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int 
     {
         
-        
+        let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
+        if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+        {
             return qustionAnswer.count + 2
+        }
+        else
+        {
+            return qustionAnswer.count + 1
+        }
         
         
     }
@@ -461,10 +499,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             cell.miscellaneousTxtView.leftSpace()
             cell.miscellaneousTxtView.delegate = self
             cell.miscellaneousTxtView.tag = indexPath.row
-            if miscelleneous_Comments != "Enter your comments about Miscellaneous Charge"
+            if miscelleneous_Comments != "Enter your comments about Miscellaneous Charge" || miscelleneous_Comments == ""
             {
                 cell.miscellaneousTxtView.text = miscelleneous_Comments
                 cell.miscellaneousTxtView.textColor = .white
+            }
+            else
+            {
+                cell.miscellaneousTxtView.text = "Enter your comments about Miscellaneous Charge"
             }
             
                        // return cell
