@@ -145,7 +145,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             return false
         } else {
             // Check for other text views and restrict characters
-            let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#")
+            let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#<>")
             
             // Iterate over the Unicode.Scalar values in the replacement text
             for scalar in text.unicodeScalars {
@@ -577,7 +577,15 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.paymentDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.creditFormDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.contractDetailsSyncStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
-        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameter, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            var params = parameter
+            params["network_strength"] = networkMessage
+        HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
                 //Writing Logs
@@ -592,15 +600,23 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 switch appointmentStatus {
                 case .startedAppointment:
                     //call i360
-                    if HttpClientManager.SharedHM.connectedToNetwork(){
-                        let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appointmentId]
-                        HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
-                            if(success ?? "") == "Success"{
-                                self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
+                    var networkMessage = ""
+                    let speedTest = NetworkSpeedTest()
+                    speedTest.testUploadSpeed { speed in
+                        print("Upload speed: \(speed) Mbps")
+                        networkMessage = String(format: "%.2f", speed)
+                        networkMessage += "Mbps"
+                        if HttpClientManager.SharedHM.connectedToNetwork(){
+                            let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appointmentId,"network_strength": networkMessage]
+                            HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
+                                if(success ?? "") == "Success"{
+                                    self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
+                                }
                             }
+                            
                         }
-                        
                     }
+                   
                     DispatchQueue.main.async{
                         self.showhideHUD(viewtype: .HIDE)
                         self.dismiss(animated: true) {
@@ -618,18 +634,18 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                         }
                     }
                     break
-//                case .paymentAdded:
-//
-//                    if HttpClientManager.SharedHM.connectedToNetwork(){
-//                        var contactApiData = self.createContractParameters()
-//                        contactApiData["token"] = UserData.init().token ?? ""
-//                        self.syncContractData(parameter: contactApiData)
-//                    }else{
-//                        self.dismiss(animated: true) {
-//                            self.delegate?.OrderStatusViewDelegateResult()
-//                        }
-//                    }
-//                    break
+                    //                case .paymentAdded:
+                    //
+                    //                    if HttpClientManager.SharedHM.connectedToNetwork(){
+                    //                        var contactApiData = self.createContractParameters()
+                    //                        contactApiData["token"] = UserData.init().token ?? ""
+                    //                        self.syncContractData(parameter: contactApiData)
+                    //                    }else{
+                    //                        self.dismiss(animated: true) {
+                    //                            self.delegate?.OrderStatusViewDelegateResult()
+                    //                        }
+                    //                    }
+                    //                    break
                 }
                 
                 //
@@ -651,6 +667,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             }
         }
     }
+    }
     
     func syncImages(imageArray:[[String:Any]], appointmentStatus: AppointmentStatusEnum){
         let group = DispatchGroup()
@@ -669,28 +686,44 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             let room_name = room["room_name"] as? String ?? ""
             let room_id_str = String(room_id)
             group.enter()
-            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name) { success, message, imageName in
-                if(success ?? "") == "Success"{
-                    group.leave()
-                    print(message ?? "No msg")
-                    if let imageNam = imageName{
-                        let appoint_id = (AppointmentData().appointment_id ?? 0)
-                        self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle: RequestTitle.ImageUpload,imageName: imageNam)
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name, networkMessage: networkMessage) { success, message, imageName in
+                    if(success ?? "") == "Success"{
+                        group.leave()
+                        print(message ?? "No msg")
+                        if let imageNam = imageName{
+                            let appoint_id = (AppointmentData().appointment_id ?? 0)
+                            self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle: RequestTitle.ImageUpload,imageName: imageNam)
+                        }
+                    }else{
+                        print(message ?? "No msg")
+                        group.leave()
                     }
-                }else{
-                    print(message ?? "No msg")
-                    group.leave()
                 }
             }
+
         }
         group.notify(queue: .main) {
             switch appointmentStatus {
             case .addedRooms:
                 //call i360
                 let appoint_id = (AppointmentData().appointment_id ?? 0)
-                let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appoint_id]
-                HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
+                var networkMessage = ""
+                let speedTest = NetworkSpeedTest()
+                speedTest.testUploadSpeed { speed in
+                    print("Upload speed: \(speed) Mbps")
+                    networkMessage = String(format: "%.2f", speed)
+                    networkMessage += "Mbps"
+                    let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appoint_id,"network_strength": networkMessage]
+                    HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
+                    }
                 }
+               
                 
                 DispatchQueue.main.async{
                     self.showhideHUD(viewtype: .HIDE)
@@ -1023,40 +1056,48 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     {
         
         // let parameter = ["token":UserData.init().token ?? "","appointment_id":AppDelegate.appoinmentslData.id ?? 0] as [String : Any]
-        let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString, "last_price_quoted_value": Double(priceQuotedString) ?? 0.0] as [String : Any]
-        print("parameter_what_happened_notes1 : ", parameter)
-        HttpClientManager.SharedHM.submitOrderStatustListApi(parameter: parameter) { (success, message) in
-            if(success ?? "").lowercased() == "success" || (success ?? "").lowercased() == "true"
-            {
-                self.isAPIcalled = true
-                HttpClientManager.SharedHM.submitOrderStatustUploadData(parameter: parameter) {_,_ in
-                    print("parameter_what_happened_notes : ", parameter)
-                }
-                
-                self.activity.showhideHUD(viewtype: .HIDE, title: "")
-                self.dismiss(animated: true) {
-                    self.delegate?.OrderStatusViewDelegateResult()
-                }
-                
-            }
-            
-            else
-            {
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString, "last_price_quoted_value": Double(priceQuotedString) ?? 0.0,"network_strength":networkMessage] as [String : Any]
+            print("parameter_what_happened_notes1 : ", parameter)
+            HttpClientManager.SharedHM.submitOrderStatustListApi(parameter: parameter) { (success, message) in
+                if(success ?? "").lowercased() == "success" || (success ?? "").lowercased() == "true"
+                {
                     self.isAPIcalled = true
-                    self.updateOrderStatustLisApiCall(status: self.orderstatusLabel.text ?? "",whatHappendSTring: self.whthpndTextView.text ?? "",whatNextString: self.whatsnewTextView.text ?? "", priceQuotedString: Double(self.priceQuotedTextView.text) ?? 0.0)
-                    print("")
-                }
-                //let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                    HttpClientManager.SharedHM.submitOrderStatustUploadData(parameter: parameter) {_,_ in
+                        print("parameter_what_happened_notes : ", parameter)
+                    }
                     
                     self.activity.showhideHUD(viewtype: .HIDE, title: "")
-                })
+                    self.dismiss(animated: true) {
+                        self.delegate?.OrderStatusViewDelegateResult()
+                    }
+                    
+                }
                 
-                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
-                // self.alert(message ?? AppAlertMsg.serverNotReached, nil)
+                else
+                {
+                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                        self.isAPIcalled = true
+                        self.updateOrderStatustLisApiCall(status: self.orderstatusLabel.text ?? "",whatHappendSTring: self.whthpndTextView.text ?? "",whatNextString: self.whatsnewTextView.text ?? "", priceQuotedString: Double(self.priceQuotedTextView.text) ?? 0.0)
+                        print("")
+                    }
+                    //let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: { (action: UIAlertAction!) in
+                        
+                        self.activity.showhideHUD(viewtype: .HIDE, title: "")
+                    })
+                    
+                    self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                    // self.alert(message ?? AppAlertMsg.serverNotReached, nil)
+                }
             }
         }
+  
     }
     func showhideHUD(viewtype: SHOWHIDEHUD,title: String = "")
     {

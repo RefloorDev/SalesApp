@@ -87,22 +87,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BF3D5311-ED66-4306-A243-81713E77979A"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Payment/DownPaymentViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "878"
-            endingLineNumber = "878"
-            landmarkName = "goNextPageForPAyButtonAction()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "8FFD09EC-A5A1-4EAC-990B-71E2D9419917"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -274,6 +258,324 @@
             endingLineNumber = "1641"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1327"
+            endingLineNumber = "1327"
+            landmarkName = "additionalCommentsApiCall(message:customerAndRoomData:iscustomerAndRoomSuccess:isNetwork:networkMessage:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88 - 8f4a5ce46982b28e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+               <Location
+                  uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88 - 8607e49ac5b37ce3"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+               <Location
+                  uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88 - 716913097283aeb6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UIAlertAction) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+               <Location
+                  uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88 - 66b849444c3ed8b1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 (__C.UIAlertAction) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+               <Location
+                  uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88 - 6b86bf9f19ea02b0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (__C.UIAlertAction) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+               <Location
+                  uuid = "1D7E78DB-DFDB-4000-99DA-B2571ECEFE88 - 84242a15cd5cd6b2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #5 (__C.UIAlertAction) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CD4C5717-FA00-47CC-8C87-FF17D07F26CB"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1306"
+            endingLineNumber = "1306"
+            landmarkName = "additionalComments(message:customerAndRoomData:iscustomerAndRoomSuccess:isNetwork:networkMessage:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A96DBC01-1C3C-4F7A-B3C4-661A593F592D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1189"
+            endingLineNumber = "1189"
+            landmarkName = "checkForInstallerOrNot(customerAndRoomData:appointmentId:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "A96DBC01-1C3C-4F7A-B3C4-661A593F592D - 8b8cb02c4ea84eee"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.checkForInstallerOrNot(customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, appointmentId: Swift.Int) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1189"
+                  endingLineNumber = "1189">
+               </Location>
+               <Location
+                  uuid = "A96DBC01-1C3C-4F7A-B3C4-661A593F592D - e7673ef6eade703e"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Double) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.checkForInstallerOrNot(customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, appointmentId: Swift.Int) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1189"
+                  endingLineNumber = "1189">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E55F864F-5D44-4F48-82CF-90E4E98733EF"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1242"
+            endingLineNumber = "1242"
+            landmarkName = "proceedWithNetworkStrength(networkMessage:customerAndRoomData:appointmentId:isNetwork:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B425BC7D-DDED-4C0B-BE0F-9275474976AC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Dynamic Contract/DynamicContractViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1336"
+            endingLineNumber = "1336"
+            landmarkName = "additionalCommentsApiCall(message:customerAndRoomData:iscustomerAndRoomSuccess:isNetwork:networkMessage:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B425BC7D-DDED-4C0B-BE0F-9275474976AC - 8607e49ac5b37dc8"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1335"
+                  endingLineNumber = "1335">
+               </Location>
+               <Location
+                  uuid = "B425BC7D-DDED-4C0B-BE0F-9275474976AC - 716913097283aeb6"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__C.UIAlertAction) -&gt; () in closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in closure #1 @Swift.MainActor () -&gt; () in Refloor.DynamicContractViewController.additionalCommentsApiCall(message: Swift.String, customerAndRoomData: Swift.Dictionary&lt;Swift.String, Any&gt;, iscustomerAndRoomSuccess: Swift.Bool, isNetwork: Swift.Bool, networkMessage: Swift.String) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/ViewControllers/Dynamic%20Contract/DynamicContractViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "1326"
+                  endingLineNumber = "1326">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E209F86B-12DE-4671-B6E8-DD1DDEBC6A8B"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/LoginSection/LoginViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "220"
+            endingLineNumber = "220"
+            landmarkName = "login_Api_Call()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "E209F86B-12DE-4671-B6E8-DD1DDEBC6A8B - ca60fda15367c702"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.LoginViewController.login_Api_Call() -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/LoginSection/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "220"
+                  endingLineNumber = "220">
+               </Location>
+               <Location
+                  uuid = "E209F86B-12DE-4671-B6E8-DD1DDEBC6A8B - 40cf49e2ab6ea688"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.Array&lt;Refloor.UserLoginDataValue&gt;&gt;) -&gt; () in Refloor.LoginViewController.login_Api_Call() -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/LoginSection/LoginViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "221"
+                  endingLineNumber = "221">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "28DF524D-7131-4588-8CDA-C59B8A2A3A08"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/AppModelClassAndApi/HttpClientManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "Authentication(usernae:password:completion:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "28DF524D-7131-4588-8CDA-C59B8A2A3A08 - 1de531d783cb3e0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Refloor.HttpClientManager.Authentication(usernae: Swift.String, password: Swift.String, completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.Array&lt;Refloor.UserLoginDataValue&gt;&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/AppModelClassAndApi/HttpClientManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "141"
+                  endingLineNumber = "141">
+               </Location>
+               <Location
+                  uuid = "28DF524D-7131-4588-8CDA-C59B8A2A3A08 - fb59aa3f7cf305ec"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Refloor.UserLoginData&gt;) -&gt; () in Refloor.HttpClientManager.Authentication(usernae: Swift.String, password: Swift.String, completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.Array&lt;Refloor.UserLoginDataValue&gt;&gt;) -&gt; ()) -&gt; ()"
+                  moduleName = "Refloor"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/bincyca/Desktop/Kavya%20Build/SalesApp/Refloor/AppModelClassAndApi/HttpClientManager.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "143"
+                  endingLineNumber = "143">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

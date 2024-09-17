@@ -53,7 +53,37 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
  
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
-            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": saleOrderId ,"installation_id": installationId]
+            DispatchQueue.main.async {
+                
+                var networkMessage = ""
+                let speedTest = NetworkSpeedTest()
+                speedTest.testUploadSpeed { speed in
+                    print("Upload speed: \(speed) Mbps")
+                    networkMessage = String(format: "%.2f", speed)
+                    networkMessage += "Mbps"
+                }
+            }
+            
+            
+      
+        }
+            else{
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    self.installerSubmitBtnApiCall()
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel,handler: nil)
+                    
+                  
+                
+                self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            }
+        }
+    
+    func installerSubmitNetworkMessage(networkMessage:String)
+    {
+        DispatchQueue.main.async {
+            
+            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": self.saleOrderId ,"installation_id": self.installationId,"network_strength":networkMessage]
             
             HttpClientManager.SharedHM.installerDatesSubmitAPi(parameter: parameter) { success, message in
                 if success == "Success"
@@ -106,25 +136,44 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                 }
             }
         }
-            else{
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                    self.installerSubmitBtnApiCall()
-                }
-                let no = UIAlertAction(title: "Cancel", style: .cancel,handler: nil)
-                    
-                  
-                
-                self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
-            }
-        }
+    }
     
     
     func installerDatesApiCall()
     {
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
-        let parameter : [String:Any] = ["token": UserData.init().token!, "appointment_id": AppDelegate.appoinmentslData.id!]
-        
+            HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW, title: "Fetching available installer schedule dates. Please wait…")
+            DispatchQueue.main.async {
+                
+                var networkMessage = ""
+                let speedTest = NetworkSpeedTest()
+                speedTest.testUploadSpeed { speed in
+                    print("Upload speed: \(speed) Mbps")
+                    networkMessage = String(format: "%.2f", speed)
+                    networkMessage += "Mbps"
+                    self.installerNetrworkProceed(networkMessage: networkMessage)
+                }
+            }
+        }
+        else{
+            let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                self.installerDatesApiCall()
+            }
+            let no = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+                self.shedulerInstallerNavBar(with: "SCHEDULE INSTALLATION",submitText: "Retry")
+            }
+            
+            self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
+        }
+    }
+    
+    func installerNetrworkProceed(networkMessage:String)
+    {
+        DispatchQueue.main.async {
+            
+            let parameter : [String:Any] = ["token": UserData.init().token!, "appointment_id": AppDelegate.appoinmentslData.id!,"network_strength":networkMessage]
+            
             HttpClientManager.SharedHM.installerDatesAPi(parameter: parameter) { success, message, availableDates, saleOrderId in
                 if success == "Success"
                 {
@@ -160,7 +209,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                     
                     self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                 }
-        
+                
                 else
                 {
                     //self.alert(message ?? "", nil)
@@ -177,16 +226,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                 }
             }
         }
-        else{
-            let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                self.installerDatesApiCall()
-            }
-            let no = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
-                self.shedulerInstallerNavBar(with: "SCHEDULE INSTALLATION",submitText: "Retry")
-            }
-            
-            self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
-        }
+
     }
     
     @IBAction func installerLeftBtnAction(_ sender: UIButton)

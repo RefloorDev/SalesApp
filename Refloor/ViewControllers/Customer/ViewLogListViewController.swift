@@ -65,6 +65,53 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         
     }
     
+//    @IBAction func uploadImages(_ sender: UIButton) 
+//    {
+//        let roomDrawingParams = getRoomDrawingForApiCallCustom(aptId: 45233)
+//        let roomImagesParams = getRoomImagesForApiCallCustom(aptId: 45233)
+//        let applicantSignatureParams = getApplicantSignatureForApiCallCustom(aptId: 45233)
+//        let coApplicantSignatureParams = getCoApplicantSignatureForApiCallCustom(aptId: 45233)
+//         
+//        let group = DispatchGroup()
+//        for drawing in roomDrawingParams
+//        {
+//            group.enter()
+//            BackgroundTaskService.shared.syncImages(imageDict: drawing) { success in
+//                group.leave()
+//            }
+//        }
+//        for rooms in roomImagesParams
+//        {
+//            group.enter()
+//            BackgroundTaskService.shared.syncImages(imageDict: rooms) { success in
+//                group.leave()
+//            }
+//        }
+//        
+//        for applSignature in applicantSignatureParams
+//        {
+//            group.enter()
+//            BackgroundTaskService.shared.syncImages(imageDict: applSignature) { success in
+//                group.leave()
+//            }
+//        }
+//        for coApplSignature in coApplicantSignatureParams
+//        {
+//            group.enter()
+//            BackgroundTaskService.shared.syncImages(imageDict: coApplSignature) { success in
+//                group.leave()
+//            }
+//        }
+//        
+//        group.notify(queue: DispatchQueue.main)
+//        {
+//            print("Success")
+//        }
+//        
+//        
+//        
+//        
+//    }
     override func performSegueToReturnBack()
     {
         let details = CustomerListViewController.initialization()!
@@ -699,7 +746,14 @@ extension ViewLogListViewController{
         let room_id = (room["room_id"] as? Int ?? 0)
         let room_name = room["room_name"] as? String ?? ""
         let room_id_str = String(room_id)
-        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name) { success, message, imageName in
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+        }
+        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
                 if let imageNam = imageName{
