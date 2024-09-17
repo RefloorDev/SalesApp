@@ -974,7 +974,7 @@ extension UIViewController:OrderStatusViewDelegate
         
     };
     
-    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -1)
+    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -2,stairColour:Results<rf_stairColour_results>? = nil, floorColor:Results<rf_floorColour_results>? = nil)
     {
         let dropDown = DropDown()
         let appearance = DropDown.appearance()
@@ -983,15 +983,68 @@ extension UIViewController:OrderStatusViewDelegate
         dropDown.dismissMode = .onTap
         dropDown.width = width + 15
         dropDown.dataSource = values
+        var stairArray = stairColour
+        var floorArray = floorColor
+        let officeLocationId = AppDelegate.appoinmentslData.officeLocationId
+       // var selectedArray = (stairColour != nil ? stairColour : floorColor)
+        if stairArray != nil
+        {
+            
+        }
+        else if floorArray != nil
+        {
+             
+        }
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "MyCell", bundle: nil)
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
             guard let cell = cell as? MyCell else { return }
-            if selectedIndex >= 0
+            
+            
+            
+            if selectedIndex >= 0 || selectedIndex == -1
             {
                 if selectedIndex == index
                 {
                     cell.optionLabel.textColor = UIColor().colorFromHexString("#2A8BF6")
+                }
+                else if stairArray != nil
+                {
+                    var InOfficeLocation = false
+                    for officeids in stairArray![index].Office_location_ids
+                    {
+                        if officeids == officeLocationId
+                        {
+                            InOfficeLocation = true
+                        }
+                    }
+                    if stairArray![index].specialOrder == 0 && stairArray![index].in_stock == 0 && InOfficeLocation == true
+                    {
+                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                    }
+                    if stairArray![index].specialOrder == 0 && stairArray![index].in_stock == 0 && InOfficeLocation == false
+                    {
+                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                    }
+                }
+                else if floorArray != nil
+                {
+                    var InOfficeLocation = false
+                    for officeids in floorArray![index].Office_location_ids
+                    {
+                        if officeids == officeLocationId
+                        {
+                            InOfficeLocation = true
+                        }
+                    }
+                    if floorArray![index].specialOrder == 0 && floorArray![index].in_stock == 0 && InOfficeLocation == true
+                    {
+                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                    }
+                    if floorArray![index].specialOrder == 0 && floorArray![index].in_stock == 0 && InOfficeLocation == false
+                    {
+                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                    }
                 }
                 else
                 {

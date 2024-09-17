@@ -71,7 +71,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     
  //   var openingsList:[OpeningCustomObject] = [OpeningCustomObject(name: "No Transition", color: .white),OpeningCustomObject(name: "Reducer", color: .yellow),OpeningCustomObject(name: "Square Edge", color: .blue),OpeningCustomObject(name: "Stair Nose", color: .green),OpeningCustomObject(name: "Carpet", color: .red)]
     
-    var openingsList:[OpeningCustomObject] = [OpeningCustomObject(name: "No Transition", color: .white),OpeningCustomObject(name: "Reducer", color: .yellow),OpeningCustomObject(name: "Square Edge", color: .blue),OpeningCustomObject(name: "Stair Nose", color: .green),OpeningCustomObject(name: "Carpet", color: .red),OpeningCustomObject(name: "Metal T", color: .cyan),OpeningCustomObject(name: "Rubber", color: .magenta)]
+    var openingsList:[OpeningCustomObject] = [OpeningCustomObject(name: "No Transition", color: .white),OpeningCustomObject(name: "Reducer", color: .yellow),OpeningCustomObject(name: "Square Edge", color: .blue),OpeningCustomObject(name: "Stair Nose", color: .green),OpeningCustomObject(name: "Carpet", color: .red),OpeningCustomObject(name: "Metal T", color: .cyan)]//,OpeningCustomObject(name: "Rubber", color: .magenta)]
      
   
     var currentOpening:Int = -1
