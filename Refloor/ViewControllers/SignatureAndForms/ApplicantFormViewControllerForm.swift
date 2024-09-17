@@ -94,6 +94,9 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     let datePickerMYOnly = MonthYearPickerView()
     var monthlyEarnings:String = String()
     var co_Applicant_Skipped:Bool = Bool()
+    var totalPrice:Double = Double()
+    var finalPayment:Double = Double()
+    var financeAmount:Double = Double()
     
     var creditRequest = ["Individual Credit - relying on my income or assets as well as income or assets from other sources","Joint Credit - We intend to apply for joint credit"]
     var selectedReq = 0

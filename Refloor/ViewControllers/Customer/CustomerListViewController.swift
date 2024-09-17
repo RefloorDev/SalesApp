@@ -71,10 +71,6 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         self.navigationController?.viewControllers = [self]
 
     }
-    
-   
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         //
 //        self.locationManager = CLLocationManager()
@@ -160,8 +156,11 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         print("started monitoring")
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) 
+    {
         
+   
+        //forceSync()
         let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
         if(appointmentRequestArray.count != 0)
         {
@@ -180,6 +179,96 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             self.deleteAllRoomImagesFromAppointmentRequest()
         }
         
+    }
+    
+    func strtBgSync()
+    {
+        let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+        if(appointmentRequestArray.count != 0)
+        {
+            if(!SceneDelegate.timer.isValid)
+            {
+                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+                    
+                    print("TIMER WAKEUP Appointment")
+                    BackgroundTaskService.shared.startSyncProcess()
+                })
+            }
+            
+            BackgroundTaskService.shared.enterBackground()
+        }else{
+            //delete item
+            self.deleteAllRoomImagesFromAppointmentRequest()
+        }
+    }
+    
+    
+    func forceSync()
+    {
+        HttpClientManager.SharedHM.forceSyncAPi() { success, message, userData in
+            if success == "Success"
+            {
+                if userData?.forceSyncEnabled == 0
+                {
+                    self.strtBgSync()
+                }
+                else
+                {
+                    for aptId in userData!.appointments!
+                    {
+                        switch aptId.last_api
+                        {
+                        case "/api/create_order_and_update_measurements_encoded":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.CustomerAndRoom)
+                            
+                        case "/api/upload_images":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.ImageUpload)
+                        case "/api/generate_contract_document":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.GenerateContract)
+                        case "/api/initiate_sync_to_i360_json":
+                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.InitiateSync)
+                        default:
+                            break
+                        }
+                    }
+                    self.strtBgSync()
+                }
+                
+                
+                
+                
+                
+            }
+        
+            else if success == "false"
+            {
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    self.forceSync()
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            }
+            else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+            {
+                
+                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    
+                    self.fourceLogOutbuttonAction()
+                }
+                
+                self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                
+            }
+            else{
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    self.forceSync()
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert(message ?? AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            }
+        }
     }
     
     func showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase(){
@@ -352,87 +441,99 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerListTableViewCell") as! CustomerListTableViewCell
         
-        var name = ""
-        if((appoinmentsList?[indexPath.row].applicant_first_name ?? "") != "")
-        {
-            name = "\((appoinmentsList?[indexPath.row].applicant_first_name ?? "")) \((appoinmentsList?[indexPath.row].applicant_middle_name ?? "")) \((appoinmentsList?[indexPath.row].applicant_last_name ?? ""))"
-        }
-        else
-        {
-            name = appoinmentsList?[indexPath.row].customer_name ?? "Unknown"
-        }
-        // cell.timeLabel.text = Date().TimeOnlyForCustomerList(datestr: appoinmentsList?[indexPath.row].appointment_date ?? "")
-        cell.timeLabel.text =  appoinmentsList?[indexPath.row].appointment_datetime ?? ""
-        
-        
-        cell.customerNameLabel.text = name
-        
-        
-        // cell.cutomerphoneNumberLabel.text = ((appoinmentsList?[indexPath.row].mobile ?? "") == "") ? "No Phone Number" : (appoinmentsList?[indexPath.row].mobile ?? "")
-        //        ((self.appoinmentsList?[indexPath.row].mobile ?? "") == "") ? (self.appoinmentsList?[indexPath.row].phone ?? "") : "No Phone Number"
-        
-        cell.cutomerphoneNumberLabel.text = self.appoinmentsList?[indexPath.row].phone ?? ""
-        //arb
-        if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 1{
-            cell.customerPhoneStackView.isHidden = false
-        } else if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 0{
-            cell.customerPhoneStackView.isHidden = true
-        }
-        //cell.customerPhoneStackView.isHidden = true
-        //
-        var address = ""
-        if let street = appoinmentsList?[indexPath.row].street2
-        {
-            address = street
-        }
-        if let street2 = appoinmentsList?[indexPath.row].street
-        {
-            if street2 != ""
+            var name = ""
+            if((appoinmentsList?[indexPath.row].applicant_first_name ?? "") != "")
             {
-                address = (address == "") ? street2 : (address + ", " + street2)
+                name = "\((appoinmentsList?[indexPath.row].applicant_first_name ?? "")) \((appoinmentsList?[indexPath.row].applicant_middle_name ?? "")) \((appoinmentsList?[indexPath.row].applicant_last_name ?? ""))"
             }
-        }
-        if let city = appoinmentsList?[indexPath.row].city
-        {
-            if city != ""
+            else
             {
-                address = (address == "") ? city : (address + ", " + city)
+                name = appoinmentsList?[indexPath.row].customer_name ?? "Unknown"
             }
-        }
-        if let state = appoinmentsList?[indexPath.row].state_code
-        {
-            if state != ""
-            {
-                address = (address == "") ? state : (address + ", " + state)
+            
+            cell.customerNameLabel.text = name
+            
+            // cell.timeLabel.text = Date().TimeOnlyForCustomerList(datestr: appoinmentsList?[indexPath.row].appointment_date ?? "")
+            cell.timeLabel.text =  appoinmentsList?[indexPath.row].appointment_datetime ?? ""
+            
+            
+            
+            
+            // cell.cutomerphoneNumberLabel.text = ((appoinmentsList?[indexPath.row].mobile ?? "") == "") ? "No Phone Number" : (appoinmentsList?[indexPath.row].mobile ?? "")
+            //        ((self.appoinmentsList?[indexPath.row].mobile ?? "") == "") ? (self.appoinmentsList?[indexPath.row].phone ?? "") : "No Phone Number"
+            
+            cell.cutomerphoneNumberLabel.text = self.appoinmentsList?[indexPath.row].phone ?? ""
+            //arb
+            if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 1{
+                cell.customerPhoneStackView.isHidden = false
+            } else if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 0{
+                cell.customerPhoneStackView.isHidden = true
             }
-        }
-        if let zip = appoinmentsList?[indexPath.row].zip
+            //cell.customerPhoneStackView.isHidden = true
+            //
+        if indexPath.row == 0
         {
-            if zip != ""
+            var address = ""
+            if let street = appoinmentsList?[indexPath.row].street2
             {
-                address = (address == "") ? zip : (address + " " + zip)
+                address = street
+            }
+            if let street2 = appoinmentsList?[indexPath.row].street
+            {
+                if street2 != ""
+                {
+                    address = (address == "") ? street2 : (address + ", " + street2)
+                }
+            }
+            if let city = appoinmentsList?[indexPath.row].city
+            {
+                if city != ""
+                {
+                    address = (address == "") ? city : (address + ", " + city)
+                }
+            }
+            if let state = appoinmentsList?[indexPath.row].state_code
+            {
+                if state != ""
+                {
+                    address = (address == "") ? state : (address + ", " + state)
+                }
+            }
+            if let zip = appoinmentsList?[indexPath.row].zip
+            {
+                if zip != ""
+                {
+                    address = (address == "") ? zip : (address + " " + zip)
+                }
+                else
+                {
+                    address = (address + " " + "48083")
+                }
             }
             else
             {
                 address = (address + " " + "48083")
             }
+            if address == ""
+            {
+                address = "N/A"
+            }
+            cell.locationImageView.isHidden = false
+            cell.customerLocationLabel.text = address
         }
         else
         {
-            address = (address + " " + "48083")
+            cell.customerLocationLabel.text = ""
+            cell.locationImageView.isHidden = true
         }
-        if address == ""
-        {
-            address = "N/A"
-        }
-        cell.customerLocationLabel.text = address
-        cell.startButton.tag = indexPath.row
-        //arb
-        if self.appoinmentsList?[indexPath.row].appointmentStatus == AppointmentStatus.sync{
-            cell.startButton.setTitle("Sync", for: .normal)
-        }else if self.appoinmentsList?[indexPath.row].appointmentStatus == AppointmentStatus.start{
-            cell.startButton.setTitle("Start", for: .normal)
-        }
+            cell.startButton.tag = indexPath.row
+            //arb
+            if self.appoinmentsList?[indexPath.row].appointmentStatus == AppointmentStatus.sync{
+                cell.startButton.setTitle("Sync", for: .normal)
+            }else if self.appoinmentsList?[indexPath.row].appointmentStatus == AppointmentStatus.start{
+                cell.startButton.setTitle("Start", for: .normal)
+            }
+            
         
         
         return cell

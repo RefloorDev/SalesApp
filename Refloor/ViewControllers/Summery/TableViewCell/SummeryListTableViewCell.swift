@@ -34,8 +34,11 @@ class SummeryListNewTableViewCell: UITableViewCell {
     @IBOutlet weak var strickView: UIView!
     @IBOutlet weak var areaLabel: UILabel!
     @IBOutlet weak var selectColorNewBgView: UIView!
+    @IBOutlet weak var outOfStockView: UIView!
     @IBOutlet weak var molding: UITextField!
-      @IBOutlet weak var moldingHeader: UILabel!
+    @IBOutlet weak var outOfStockLbl: UILabel!
+    @IBOutlet weak var checkAvailableBtn: UIButton!
+    @IBOutlet weak var moldingHeader: UILabel!
     @IBOutlet weak var selectMolding: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
