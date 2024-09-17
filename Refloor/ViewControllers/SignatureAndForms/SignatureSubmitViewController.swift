@@ -140,12 +140,14 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                 }
                 else
                 {
-                    let cancel = CancellationPolicyViewController.initialization()!
+                    let cancel = AppointmentSummaryViewController.initialization()!
                    // web.document=value ?? ""
                     cancel.orderID=self.downpayment.orderID
                     cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
                     cancel.total = self.totalAmount
                     cancel.balance = self.totalAmount - self.downPaymentValue
+                    cancel.finalPayment =  self.finalpayment
+                    cancel.financeAmount =  self.financePayment
                     if self.totalAmount == self.financePayment{
                         cancel.paymentType = "finance"
                     }
@@ -353,7 +355,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                 }
                 else
                 {
-                    let cancel = CancellationPolicyViewController.initialization()!
+                    let cancel = AppointmentSummaryViewController.initialization()!
                     cancel.document=value ?? ""
                     cancel.orderID=self.downpayment.orderID
                     cancel.downPayment = self.downpayment.DownPaymentcalucaltion().downPayment

@@ -37,6 +37,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
     var protrusionImageNames:[String] = []
     var isRoomImage: Bool!
     var isRoomCollectionViewTapped: Bool!
+    var perimeter = 0.0
     //
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -188,6 +189,7 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             next.roomID = self.roomID
             next.drowingImageID = self.drowingImageID
             next.area = self.area
+            next.perimeter = perimeter
             if(self.isStair == 1)
             {
                 next.isStair = self.isStair

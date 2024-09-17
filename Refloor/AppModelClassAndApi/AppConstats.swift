@@ -11,6 +11,7 @@ import UIKit
 
 var BASE_URL = ""
 var additional_cost = 0
+
 struct AppURL {
     
     //App Details
@@ -22,12 +23,12 @@ struct AppURL {
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-    //let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
+    let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
     let STAGE_BASE_URL = "https://odoostage.myx.ac/api/"
     //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
    // let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
-    let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
+    //let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446
     //LIVE
     // let BASE_URL = "http://35.245.254.221:7007/api/"
@@ -196,6 +197,7 @@ struct AppURL {
     let additionalComments = BASE_URL + "v1/update_additional_appointment_data"
     let getCreditApplicationStatus = BASE_URL + "v1/get_credit_application_status"
     let geoLocationLogs = BASE_URL + "v1/update_arrival_departure_time"
+    let forecSync = BASE_URL + "v1/get_appointment_sync_status"
 }
 
 
@@ -261,6 +263,14 @@ enum RequestTitle: String{
     case ImageUpload = "Sales_Images"
     case GenerateContract = "Sales_Contract_Generate"
     case InitiateSync = "Sales_Sync_Update"
+}
+
+enum ApiUrlTitle: String
+{
+    case CustomerAndRoom = "/api/create_order_and_update_measurements_encoded"
+    case ImageUpload = "/api/upload_images"
+    case GenerateContract = "/api/generate_contract_document"
+    case InitiateSync = "/api/initiate_sync_to_i360_json"
 }
 
 enum RequestType: String{

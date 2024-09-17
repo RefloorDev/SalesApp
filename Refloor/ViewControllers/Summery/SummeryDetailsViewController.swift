@@ -40,6 +40,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
     var roomName = ""
     var currentSurfaceAnswerScore = 0.0
     var qustionAnswer:[QuestionsMeasurementData] = []
+    var miscellaneous_coments = ""
     //
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,6 +50,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.roomID = self.summaryData.room_id ?? 0
         self.roomName = self.summaryData.room_name ?? ""
+        self.miscellaneous_coments = self.summaryData.miscellaneous_comments ?? ""
         setQuestion()
         self.setNavigationBarbackAndlogo(with: "Room Summary".uppercased())
         self.tableReaload()
@@ -107,9 +109,20 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                         {
                             let value = Int(answer.answers![0].answer ?? "") ?? 0
                             let val =  AnswerOFQustion(value)
+                            if answer.question_id == 9
+                            {
+                                let value = Double(answer.answers![0].answer ?? "") ?? 0.0
+                                let strairVal = AnswerOFQustion(value)
+                                qustion.answerOFQustion = strairVal
+                            }
                             val.qustionLineID = answer.contract_question_line_id ?? 0
                             val.answerID = answer.answers![0].id ?? 0
-                            qustion.answerOFQustion = val
+                            
+                            
+                            if !( answer.question_id == 9)
+                            {
+                                qustion.answerOFQustion = val
+                            }
                         }
                     }
                     else if(answer.question_type == "textbox")
@@ -280,9 +293,11 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             furnitureQustions.floorID = self.summaryData.floor_id ?? 0
             furnitureQustions.appoinmentID = self.summaryData.appointment_id ?? 0
             furnitureQustions.area = summaryData.adjusted_area ?? 0.0
+            furnitureQustions.perimeter = summaryData.room_perimeter ?? 0.0
             furnitureQustions.delegate = self
             furnitureQustions.summaryQustions = self.summaryData.questionaire ?? []
-            self.deleteDiscountArrayFromDb() 
+            furnitureQustions.miscelleneous_Comments = self.miscellaneous_coments
+            self.deleteDiscountArrayFromDb()
             self.navigationController?.pushViewController(furnitureQustions, animated: true)
         }
         else if(sender.tag == self.edit_for_transitions)
@@ -641,7 +656,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         //arb
         self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))
         self.submitApiCall()
-        self.updateRoomComment(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , comment: summaryData.comments ?? "")
+        self.updateRoomComment(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , comment: summaryData.comments ?? "",miscellaneous_comments: self.miscellaneous_coments)
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
@@ -920,6 +935,11 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             if((answer.numberVaue ?? 0) != 0)
             {
                 let param:[String:Any] = ["question_id":question.id ,"answer":value]
+                return param
+            }
+            else if question.id == 9
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
                 return param
             }
         case "textbox":

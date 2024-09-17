@@ -112,7 +112,39 @@ class HttpClientManager: NSObject {
     }
     //MARK: - Device Type
     
-    
+    class NetworkSpeedTest {
+
+        func testUploadSpeed(completion: @escaping (Double) -> Void) {
+            // Generate data to upload (1 MB of data in this example)
+            let dataSize = 1 * 1024 * 1024 // 1 MB
+            let data = Data(repeating: 0, count: dataSize)
+            
+            // Start measuring time
+            let startTime = Date()
+            
+            // URL to upload data
+            let url = URL(string: "https://odoostage.myx.ac/api/")!
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            
+            let task = URLSession.shared.uploadTask(with: request, from: data) { responseData, response, error in
+                // End measuring time
+                let endTime = Date()
+                
+                // Calculate time taken in seconds
+                let timeInterval = endTime.timeIntervalSince(startTime)
+                
+                // Calculate upload speed in Mbps
+                let speed = Double(dataSize) * 8 / timeInterval / (1024 * 1024) // Mbps
+                
+                // Return the upload speed
+                completion(speed)
+            }
+            
+            // Start the upload task
+            task.resume()
+        }
+    }
     
     
     
@@ -134,7 +166,6 @@ class HttpClientManager: NSObject {
             //            {
             //                regid = "13131313132112121"
             //            }
-            
             let version = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!)
             let parameters = ["login":usernae,"password":password,"device_reg_id":fcmToken,"restrict_multi_login":isoffline,"device_name":AppDetails.deviceName,"device_os":AppDetails.osVersion,"app_version":version] as [String : Any]
             
@@ -2372,6 +2403,47 @@ class HttpClientManager: NSObject {
             
         }
     }
+    
+    // force sync
+    
+    func forceSyncAPi(completion:@escaping (_ success: String?, _ message:String?, _ forceSyncDetails: ForceSyncDetails?) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().forecSync
+            let token = UserData().token
+            let headers = ["Authorization":"Bearer \(token!)"]
+            //self.showhideHUD(viewtype: .SHOW, title: "Fetching loan status.")
+            Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+                self.showhideHUD(viewtype: .HIDE)
+                print(response)
+                if let jsonData = response.data {
+                    let signInObject = try? JSONDecoder().decode(ForceSync.self, from: jsonData)
+                    if signInObject?.data != nil
+                    {
+                        if let creditData = signInObject?.data
+                        {
+                            completion(signInObject?.result,signInObject?.message, creditData)
+                        }
+                    }
+                    else
+                    {
+                        completion(signInObject?.result,signInObject?.message, nil)
+                    }
+                    
+                }
+            }
+            
+    
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage,nil)
+            
+        }
+    }
+    
     
     
     // CrediApplicationStatus api
