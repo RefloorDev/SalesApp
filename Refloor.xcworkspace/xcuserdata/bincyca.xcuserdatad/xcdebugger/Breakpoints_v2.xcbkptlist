@@ -366,8 +366,8 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "807"
-            endingLineNumber = "807"
+            startingLineNumber = "819"
+            endingLineNumber = "819"
             landmarkName = "DropDownDidSelectedAction(index:item:tag:cell:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -382,9 +382,9 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "896"
-            endingLineNumber = "896"
-            landmarkName = "DropDownDidSelectedAction(index:item:tag:cell:)"
+            startingLineNumber = "908"
+            endingLineNumber = "908"
+            landmarkName = "didSelect(image:imageName:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -398,9 +398,9 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "860"
-            endingLineNumber = "860"
-            landmarkName = "DropDownDidSelectedAction(index:item:tag:cell:)"
+            startingLineNumber = "872"
+            endingLineNumber = "872"
+            landmarkName = "imageUploadScreenShot(_:_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -542,9 +542,9 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "557"
-            endingLineNumber = "557"
-            landmarkName = "getColorPopUpFromTableViewButton(sender:)"
+            startingLineNumber = "569"
+            endingLineNumber = "569"
+            landmarkName = "getmoldingPopUpFromTableViewButton(sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -574,9 +574,9 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "577"
-            endingLineNumber = "577"
-            landmarkName = "getColorPopUpFromTableViewButton(sender:)"
+            startingLineNumber = "589"
+            endingLineNumber = "589"
+            landmarkName = "getmoldingPopUpFromTableViewButton(sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -654,8 +654,8 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "805"
-            endingLineNumber = "805"
+            startingLineNumber = "817"
+            endingLineNumber = "817"
             landmarkName = "DropDownDidSelectedAction(index:item:tag:cell:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -670,10 +670,10 @@
             filePath = "Refloor/ViewControllers/Summery/SummeryListViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "881"
-            endingLineNumber = "881"
-            landmarkName = "DropDownDidSelectedAction(index:item:tag:cell:)"
-            landmarkType = "7">
+            startingLineNumber = "893"
+            endingLineNumber = "893"
+            landmarkName = "SummeryListViewController"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
