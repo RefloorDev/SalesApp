@@ -53,6 +53,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
  
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
+            HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
             DispatchQueue.main.async {
                 
                 var networkMessage = ""
