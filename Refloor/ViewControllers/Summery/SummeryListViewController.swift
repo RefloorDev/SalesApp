@@ -55,6 +55,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var applyAllSelectedMaterialFileName:String = String()
     var applyAllSelectedMoldName:String = String()
     var applyAllSelectedMoldPrice:Double = Double()
+    var firstLoad = 1
     
     var stairIndex = -1
     var roomIndex = -1
@@ -246,7 +247,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         value = self.floorColorNamesArray.compactMap({$0.color})
         if(value.count != 0)
         {
-            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag)
+            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray)
         }
         else
         {
@@ -339,9 +340,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "SummeryListNewTableViewCell") as! SummeryListNewTableViewCell
         //cell.selectColorNewBgView.frame.size.width = cell.colorLabel.frame.size.width
         cell.colorLabel.setRightPaddingPoints(5)
-        cell.outOfStockView.applyGradient(colors: [UIColor().colorFromHexString("#72C36F00").cgColor,UIColor().colorFromHexString("#72C36F27").cgColor])
-        cell.outOfStockLbl.text = "The selected item is available"
-        cell.outOfStockLbl.textColor = UIColor().colorFromHexString("#72C36F")
+        if ((tableValues[indexPath.row].color ?? "") != "Select Color")
+        {
+            cell.outOfStockView.clearGradient()
+            cell.outOfStockView.applyGradient(colors: [UIColor().colorFromHexString("#72C36F00").cgColor,UIColor().colorFromHexString("#72C36F27").cgColor])
+            cell.outOfStockLbl.text = "The selected item is available"
+            cell.outOfStockLbl.textColor = UIColor().colorFromHexString("#72C36F")
+        }
+        
         cell.outOfStockView.layer.cornerRadius = 24
         cell.outOfStockView.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMinXMinYCorner]
 
@@ -362,6 +368,16 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         {
             cell.outOfStockView.isHidden = false
         }
+//        if !((tableValues[indexPath.row].color ?? "") == "Select Color") && tableValues[indexPath.row].room_area == 0.0
+//        {
+//            let index = stairColourNamesArray.firstIndex(of: stairColourNamesArray.filter({$0.color == self.tableValues[indexPath.row].color}).first ?? rf_stairColour_results()) ?? 0
+//            stairIndex = index
+//        }
+//        else
+//        {
+//            let index = floorColorNamesArray.firstIndex(of: floorColorNamesArray.filter({$0.color == self.tableValues[indexPath.row].color}).first ?? rf_floorColour_results()) ?? 0
+//            roomIndex = index
+//        }
         cell.molding.text = ((tableValues[indexPath.row].moulding ?? "") == "") ? "Select Molding" : (tableValues[indexPath.row].moulding ?? "")
         //cell.summeryAttachmentView.loadImageFormWeb(URL(string: tableValues[indexPath.row].room_image_url ?? ""))
         cell.summeryAttachmentView.image = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].room_image_url ?? "")
@@ -570,6 +586,16 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //        for val in tableValues[sender.tag].material_colors ?? []
 //        {
 //            value.append(val.color ?? "Unknown")
+//        }
+//        if !((tableValues[sender.tag].color ?? "") == "Select Color") && tableValues[sender.tag].room_area == 0.0
+//        {
+//            let index = stairColourNamesArray.firstIndex(of: stairColourNamesArray.filter({$0.color_name == self.tableValues[sender.tag].color}).first ?? rf_stairColour_results()) ?? -1
+//            stairIndex = index
+//        }
+//        else
+//        {
+//            let index = floorColorNamesArray.firstIndex(of: floorColorNamesArray.filter({$0.color_name == self.tableValues[sender.tag].color}).first ?? rf_floorColour_results()) ?? -1
+//            roomIndex = index
 //        }
         
         if(value.count != 0)

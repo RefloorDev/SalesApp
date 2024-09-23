@@ -4499,7 +4499,7 @@
 		99C4D1DD721C3B8D80FDBFA5D79338FF /* ssl_key_logging.h in Headers */ = {isa = PBXBuildFile; fileRef = C13A3136A93F64BEB3884C3753F1A7A4 /* ssl_key_logging.h */; };
 		99D3085A3E5C49B7B05FCAF57191E269 /* zipkin.upbdefs.h in Copy src/core/ext/upbdefs-generated/envoy/config/trace/v3 Private Headers */ = {isa = PBXBuildFile; fileRef = E1E4FDA8014D7B7BE4BB7E55F0625D89 /* zipkin.upbdefs.h */; };
 		99DA4B5EC19DF79EC213857E35CC9F39 /* div.c in Sources */ = {isa = PBXBuildFile; fileRef = B7DF6F7B3F3DE6EB2922CE83B802CC28 /* div.c */; settings = {COMPILER_FLAGS = "-DOPENSSL_NO_ASM -GCC_WARN_INHIBIT_ALL_WARNINGS -w -DBORINGSSL_PREFIX=GRPC -fno-objc-arc"; }; };
-		99DB69F4E7AE2CDEFD1EF072A0CA2E6D /* Realm-realm_objc_privacy in Resources */ = {isa = PBXBuildFile; fileRef = 1AFC594BA8F7A6BF67C9A715020849EE /* Realm-realm_objc_privacy */; };
+		99DB69F4E7AE2CDEFD1EF072A0CA2E6D /* realm_objc_privacy.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1AFC594BA8F7A6BF67C9A715020849EE /* realm_objc_privacy.bundle */; };
 		99E4CD87752BB37E100DBC2A588F2B2F /* xds_http_rbac_filter.h in Headers */ = {isa = PBXBuildFile; fileRef = E5B63E469369373421DFB8298EA6EFCE /* xds_http_rbac_filter.h */; };
 		99F42A9D9D41981CEAB040FD4C504F3B /* client_callback.h in Headers */ = {isa = PBXBuildFile; fileRef = 5BD2FAA2BB3E4D1F6F743CF91F628B38 /* client_callback.h */; };
 		99F5785E03CB5E94079100745D121F1F /* xds_certificate_provider.h in Headers */ = {isa = PBXBuildFile; fileRef = 656CDFB488E1A6FD8800986F43BFD596 /* xds_certificate_provider.h */; };
@@ -15707,7 +15707,7 @@
 		1AE4F425470B32C4AFD5A1B6D39E2671 /* client_callback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = client_callback.h; path = include/grpcpp/impl/codegen/client_callback.h; sourceTree = "<group>"; };
 		1AE82C018084A0434B7F63705870BE73 /* by_dir.c */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.c; name = by_dir.c; path = src/crypto/x509/by_dir.c; sourceTree = "<group>"; };
 		1AE9464DF1B6E5DC0103A376F0F1BDC1 /* grpclb_balancer_addresses.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = grpclb_balancer_addresses.h; path = src/core/ext/filters/client_channel/lb_policy/grpclb/grpclb_balancer_addresses.h; sourceTree = "<group>"; };
-		1AFC594BA8F7A6BF67C9A715020849EE /* Realm-realm_objc_privacy */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = "Realm-realm_objc_privacy"; path = realm_objc_privacy.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		1AFC594BA8F7A6BF67C9A715020849EE /* realm_objc_privacy.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = realm_objc_privacy.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B02FCB945E29BCF318F229129D0E2E4 /* init.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = init.h; path = src/core/lib/surface/init.h; sourceTree = "<group>"; };
 		1B10101AE43B1EC2E83CF9C42CACD453 /* FIRAuthAPNSTokenManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRAuthAPNSTokenManager.m; path = FirebaseAuth/Sources/SystemService/FIRAuthAPNSTokenManager.m; sourceTree = "<group>"; };
 		1B1806F50CB29257144AAE94D8FF0AAD /* reader.cc */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = reader.cc; path = Firestore/core/src/nanopb/reader.cc; sourceTree = "<group>"; };
@@ -18220,7 +18220,7 @@
 		92000153CD73F7FC2DBAB4AB708269F3 /* FirebaseFirestore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FirebaseFirestore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		920BA6A483024988BB417CC022E230D2 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+ImageContentType.h"; path = "SDWebImage/NSData+ImageContentType.h"; sourceTree = "<group>"; };
 		92169A75DA112CB8B6FF72651B76EF10 /* GDTCOREvent+GDTCCTSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "GDTCOREvent+GDTCCTSupport.m"; path = "GoogleDataTransport/GDTCCTLibrary/GDTCOREvent+GDTCCTSupport.m"; sourceTree = "<group>"; };
-		921BE4A82C4A7A5C72A0C6F8B8FEF200 /* Realm */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Realm; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		921BE4A82C4A7A5C72A0C6F8B8FEF200 /* Realm.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Realm.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9224C4A3755808A2D8A8DEA43D799463 /* any.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = any.h; path = absl/types/any.h; sourceTree = "<group>"; };
 		922507118707ADE4C2FFAAB7D21D02DD /* xds_resolver.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = xds_resolver.h; path = src/core/ext/filters/client_channel/resolver/xds/xds_resolver.h; sourceTree = "<group>"; };
 		922546178FAB1E54B8301B5758EEB9AD /* FIRFirestoreSettings.mm */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.objcpp; name = FIRFirestoreSettings.mm; path = Firestore/Source/API/FIRFirestoreSettings.mm; sourceTree = "<group>"; };
@@ -28156,8 +28156,8 @@
 				DE5E126DB4244502440108BA989BF9BF /* ObjectMapper_Realm.framework */,
 				F7703A2ECAA0B752D713AAE1F4D25589 /* Pods-Refloor */,
 				3347A1AB6546F0A3977529B8F199DC41 /* FBLPromises.framework */,
-				921BE4A82C4A7A5C72A0C6F8B8FEF200 /* Realm */,
-				1AFC594BA8F7A6BF67C9A715020849EE /* Realm-realm_objc_privacy */,
+				921BE4A82C4A7A5C72A0C6F8B8FEF200 /* Realm.framework */,
+				1AFC594BA8F7A6BF67C9A715020849EE /* realm_objc_privacy.bundle */,
 				437919EE08EC6BFCCBAC3BD346309742 /* RealmSwift */,
 				AC70800BBC39EB966B610857C5D5404A /* RealmSwift-realm_swift_privacy */,
 				33D34D2210961B1CBFEC1D194B0AAB9F /* RecaptchaInterop.framework */,
@@ -32630,7 +32630,7 @@
 			);
 			name = Realm;
 			productName = Realm;
-			productReference = 921BE4A82C4A7A5C72A0C6F8B8FEF200 /* Realm */;
+			productReference = 921BE4A82C4A7A5C72A0C6F8B8FEF200 /* Realm.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		6AE4A3D573DED275B034E20506596C62 /* FirebaseAuth */ = {
@@ -33000,7 +33000,7 @@
 			);
 			name = "Realm-realm_objc_privacy";
 			productName = realm_objc_privacy;
-			productReference = 1AFC594BA8F7A6BF67C9A715020849EE /* Realm-realm_objc_privacy */;
+			productReference = 1AFC594BA8F7A6BF67C9A715020849EE /* realm_objc_privacy.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
 		DBA2B63E3A5FE83FE89E731664C9269F /* FirebaseFirestore */ = {
@@ -33514,7 +33514,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				99DB69F4E7AE2CDEFD1EF072A0CA2E6D /* Realm-realm_objc_privacy in Resources */,
+				99DB69F4E7AE2CDEFD1EF072A0CA2E6D /* realm_objc_privacy.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -61,6 +61,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                     print("Upload speed: \(speed) Mbps")
                     networkMessage = String(format: "%.2f", speed)
                     networkMessage += "Mbps"
+                    self.installerSubmitNetworkMessage(networkMessage: networkMessage)
                 }
             }
             
