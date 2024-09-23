@@ -33,6 +33,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var isMiscellaneousTxtView = false
     var perimeter = 0.0
     var miscelleneous_Comments = "Enter your comments about Miscellaneous Charge"
+    @IBOutlet weak var perimeterHeightConsrtraint: NSLayoutConstraint!
+    @IBOutlet weak var areaheightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var areaLbl: UILabel!
     @IBOutlet weak var perimeterLbl: UILabel!
@@ -46,12 +48,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         if area != 0.0
         {
             areaLbl.text = "Area: \(area) Sq.Ft"
-            perimeterLbl.text = "Perimeter: \(perimeter) M"
+            let perimeterString = String(format: "%.2f", perimeter)
+            perimeterLbl.text = "Perimeter: \(perimeterString) ft"
+            areaheightConstraint.constant = 36
+            perimeterHeightConsrtraint.constant = 36
+            //String(format: "%.2f", speed)
         }
         else
         {
             areaLbl.isHidden = true
             perimeterLbl.isHidden = true
+            areaheightConstraint.constant = 30
+            perimeterHeightConsrtraint.constant = 30
         }
         print("-----viewDidLoad-----")
         if !isUpdated{
@@ -216,6 +224,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             }
                         }
                     }
+                    else if qustionAnswer[sender.tag].id == 32
+                    {
+                        if value2 > 0
+                        {
+                            qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
+                            cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
+                            self.tableView.reloadData()
+                        }
+                    }
                     qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
                     cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
                 }
@@ -317,7 +334,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             if text.rangeOfCharacter(from: restrictedCharacters) != nil {
                 return false // Don't allow the change
             }
-            miscelleneous_Comments = textView.text
+            miscelleneous_Comments = textView.text + text
         }
 //            let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_., "
 //            if range.location == 0 && text == " "
@@ -1254,8 +1271,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             }
             
         }
-        
-        saveRoomMiscellaneousComments(miscellanousComments: self.miscelleneous_Comments, appointmentId: appointmentId, roomId: roomID)
+        if miscelleneous_Comments != "Enter your comments about Miscellaneous Charge" && miscelleneous_Comments != ""
+        {
+            
+            saveRoomMiscellaneousComments(miscellanousComments: self.miscelleneous_Comments, appointmentId: appointmentId, roomId: roomID)
+        }
         
         self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
         //save extra cost of selected room to appointment

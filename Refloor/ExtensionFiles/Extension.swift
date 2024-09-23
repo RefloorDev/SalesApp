@@ -606,7 +606,7 @@ extension UIView {
         gradientLayer.startPoint = startPoint
         gradientLayer.endPoint = endPoint
         gradientLayer.frame = self.bounds
-        gradientLayer.opacity = 0.5
+        //gradientLayer.opacity = 0.5
         
         // Ensure the gradient is applied behind all other subviews
         if let sublayers = self.layer.sublayers, sublayers.count > 0 {
@@ -615,6 +615,14 @@ extension UIView {
             self.layer.addSublayer(gradientLayer)
         }
     }
+    func clearGradient() {
+            // Remove any existing gradient layers
+            self.layer.sublayers?.forEach { layer in
+                if layer is CAGradientLayer {
+                    layer.removeFromSuperlayer()
+                }
+            }
+        }
 }
 
 
@@ -987,14 +995,6 @@ extension UIViewController:OrderStatusViewDelegate
         var floorArray = floorColor
         let officeLocationId = AppDelegate.appoinmentslData.officeLocationId
        // var selectedArray = (stairColour != nil ? stairColour : floorColor)
-        if stairArray != nil
-        {
-            
-        }
-        else if floorArray != nil
-        {
-             
-        }
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
         dropDown.cellNib = UINib(nibName: "MyCell", bundle: nil)
         dropDown.customCellConfiguration = { (index: Index, item: String, cell: DropDownCell) -> Void in
@@ -5649,10 +5649,10 @@ extension Date{
         formatter1.pmSymbol = "PM"
         return formatter1.string(from: self)
     }
-    
+   
     func getSyncDateAsString() -> String{
         let formatter1 = DateFormatter()
-        formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        formatter1.dateFormat = "MM/dd/yyyy HH:mm:ss"
         return formatter1.string(from: self)
     }
     

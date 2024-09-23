@@ -218,15 +218,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                     {
                         switch aptId.last_api
                         {
-                        case "/api/create_order_and_update_measurements_encoded":
-                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.CustomerAndRoom)
-                            
-                        case "/api/upload_images":
-                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.ImageUpload)
-                        case "/api/generate_contract_document":
-                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.GenerateContract)
-                        case "/api/initiate_sync_to_i360_json":
-                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.InitiateSync)
+                        //case "/api/create_order_and_update_measurements_encoded":
+//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.CustomerAndRoom)
+//                            
+//                        case "/api/upload_images":
+//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.ImageUpload)
+//                        case "/api/generate_contract_document":
+//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.GenerateContract)
+//                        case "/api/initiate_sync_to_i360_json":
+//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.InitiateSync)
                         default:
                             break
                         }
