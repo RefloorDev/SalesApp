@@ -1018,11 +1018,11 @@ extension UIViewController:OrderStatusViewDelegate
                             InOfficeLocation = true
                         }
                     }
-                    if stairArray![index].specialOrder == 0 && stairArray![index].in_stock == 0 && InOfficeLocation == true
+                    if stairArray![index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
                     {
                         cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                     }
-                    if stairArray![index].specialOrder == 0 && stairArray![index].in_stock == 0 && InOfficeLocation == false
+                    if stairArray![index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == false
                     {
                         cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                     }
@@ -1037,11 +1037,11 @@ extension UIViewController:OrderStatusViewDelegate
                             InOfficeLocation = true
                         }
                     }
-                    if floorArray![index].specialOrder == 0 && floorArray![index].in_stock == 0 && InOfficeLocation == true
+                    if floorArray![index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
                     {
                         cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                     }
-                    if floorArray![index].specialOrder == 0 && floorArray![index].in_stock == 0 && InOfficeLocation == false
+                    if floorArray![index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == false
                     {
                         cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                     }
