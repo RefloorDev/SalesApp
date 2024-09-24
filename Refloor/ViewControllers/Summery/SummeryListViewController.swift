@@ -864,7 +864,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         InOfficeLocation = true
                     }
                 }
-                if self.stairColourNamesArray[index].specialOrder == 0 && self.stairColourNamesArray[index].in_stock == 0 && InOfficeLocation == true
+                if self.stairColourNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */&& InOfficeLocation == true
                 {
                     let installer = AppointmentPaymentSummaryViewController.initialization()!
                     installer.isOutOfstock = true
@@ -872,7 +872,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //                    self.alert("Stock Not Available", nil)
 //                    return
                 }
-                if self.stairColourNamesArray[index].specialOrder == 0 && self.stairColourNamesArray[index].in_stock == 0 && InOfficeLocation == false
+                if self.stairColourNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */&& InOfficeLocation == false
                 {
                     let installer = AppointmentPaymentSummaryViewController.initialization()!
                     installer.isOutOfstock = true
@@ -880,7 +880,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //                    self.alert("Stock Not Available", nil)
 //                    return
                 }
-                if (self.stairColourNamesArray[index].specialOrder == 1 || self.stairColourNamesArray[index].in_stock == 1) && InOfficeLocation == false
+                if (self.stairColourNamesArray[index].specialOrder == 1) && InOfficeLocation == false
                 {
                     stairIndex = index
                     let selectedColor = self.stairColourNamesArray[index].color ?? ""
@@ -904,19 +904,19 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         InOfficeLocation = true
                     }
                 }
-                if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == true
+                if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
                 {
                     let installer = AppointmentPaymentSummaryViewController.initialization()!
                     installer.isOutOfstock = true
                     self.present(installer, animated: true, completion: nil)
                 }
-                else if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == false
+                else if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == false
                 {
                     let installer = AppointmentPaymentSummaryViewController.initialization()!
                     installer.isOutOfstock = true
                     self.present(installer, animated: true, completion: nil)
                 }
-                else if (self.floorColorNamesArray[index].specialOrder == 1 || self.floorColorNamesArray[index].in_stock == 1 ) && InOfficeLocation == false
+                else if (self.floorColorNamesArray[index].specialOrder == 1) && InOfficeLocation == false
                 {
                     roomIndex = index
                     let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
@@ -941,13 +941,13 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     InOfficeLocation = true
                 }
             }
-            if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == true
+            if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
             {
                 let installer = AppointmentPaymentSummaryViewController.initialization()!
                 installer.isOutOfstock = true
                 self.present(installer, animated: true, completion: nil)
             }
-            else if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0 && InOfficeLocation == false
+            else if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == false
             {
                 let installer = AppointmentPaymentSummaryViewController.initialization()!
                 installer.isOutOfstock = true
@@ -955,7 +955,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             }
             
             
-            if (self.floorColorNamesArray[index].specialOrder == 1 || self.floorColorNamesArray[index].in_stock == 1) && InOfficeLocation == false
+            if (self.floorColorNamesArray[index].specialOrder == 1) && InOfficeLocation == false
             {
                 
                 roomIndex = index
