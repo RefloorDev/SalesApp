@@ -125,6 +125,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
             self.downpayment.downPaymentValue =  self.downPaymentValue
             self.downpayment.finalpayment =  self.finalpayment
             self.downpayment.financePayment =  self.financePayment
+            self.downpayment.area = self.area
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
