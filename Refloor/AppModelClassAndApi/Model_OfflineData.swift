@@ -466,11 +466,17 @@ class rf_floorColour_results : Object,Mappable {
         color_upcharge <- map["color_up_charge_price"]
         in_stock <- map["in_stock"]
         specialOrder <- map["special_order"]
-        Office_location_ids <- map["office_location_ids"]
-        //Office_location_ids <- (map["office_location_ids"], ListTransform<Int>())
+        if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: officeLocationIdsArray)
+                    self.Office_location_ids = realmList
+                }
+//        Office_location_ids <- map["office_location_ids"]
+//        Office_location_ids <- (map["office_location_ids"], ListTransform<Int>())
     }
     
 }
+
 
 // appointment results details
 
@@ -807,7 +813,11 @@ class rf_stairColour_results : Object,Mappable {
         color_upcharge <- map["color_up_charge_price"]
         in_stock <- map["in_stock"]
         specialOrder <- map["special_order"]
-        Office_location_ids <- map["office_location_ids"]
+        if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: officeLocationIdsArray)
+                    self.Office_location_ids = realmList
+                }
     }
     
 }
