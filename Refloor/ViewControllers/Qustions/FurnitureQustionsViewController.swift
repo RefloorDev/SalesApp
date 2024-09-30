@@ -203,7 +203,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 {
                     if qustionAnswer[sender.tag].max_allowed_limit != 0
                     {
-                        if qustionAnswer[sender.tag].id == 9
+                        if qustionAnswer[sender.tag].code == "StairWidth"
                         {
                             if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
@@ -213,7 +213,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                 return
                             }
                         }
-                        else if qustionAnswer[sender.tag].id == 1
+                        else if qustionAnswer[sender.tag].code == "RipMultipleLayers"
                         {
                             if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
@@ -224,7 +224,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             }
                         }
                     }
-                    else if qustionAnswer[sender.tag].id == 32
+                    else if qustionAnswer[sender.tag].code == "miscellaneouscharge"
                     {
                         if value2 > 0
                         {
@@ -355,7 +355,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         let masterData = getMasterDataFromDB()
         if qustionAnswer[sender.tag].max_allowed_limit != 0
         {
-            if qustionAnswer[sender.tag].id == 9
+            if qustionAnswer[sender.tag].code == "StairWidth"
             {
                 if qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble == masterData.max_stair_width//qustionAnswer[sender.tag].max_allowed_limit
                 {
@@ -374,7 +374,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     return
                 }
             }
-            else if qustionAnswer[sender.tag].id == 1
+            else if qustionAnswer[sender.tag].code == "RipMultipleLayers"
             {
                 if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
                 {
@@ -396,7 +396,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) + 1
             
             cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
-            if qustionAnswer[sender.tag].id == 32
+            if qustionAnswer[sender.tag].code == "miscellaneouscharge"
             {
                 self.tableView.reloadData()
             }
@@ -407,7 +407,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     @IBAction func minusButtonAction(_ sender: UIButton) {
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
-            if qustionAnswer[sender.tag].id == 9
+            if qustionAnswer[sender.tag].code == "StairWidth"
             {
                 if ((qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) > 0.0)
                 {
@@ -422,7 +422,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
                 cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
             }
-            if qustionAnswer[sender.tag].id == 32
+            if qustionAnswer[sender.tag].code == "miscellaneouscharge"
             {
                 self.tableView.reloadData()
             }
@@ -571,7 +571,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         print("Indexpath : \(index) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
         cell.numerical_Answer_Label.tag = index
-        if qustionAnswer[index].id == 9
+        if qustionAnswer[index].code == "StairWidth"
         {
             cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.stairWidthDouble ?? 0.0)"
         }
@@ -1025,7 +1025,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 let param:[String:Any] = ["question_id":question.id ,"answer":value]
                 return param
             }
-            else if question.id == 9
+            else if question.question_code == "StairWidth"
             {
                 let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
                 return param
