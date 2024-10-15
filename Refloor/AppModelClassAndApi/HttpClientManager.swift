@@ -2385,7 +2385,7 @@ class HttpClientManager: NSObject {
         if self.connectedToNetwork() {
             let URL = url//masterData.versatileURL
             let headers = ["Content-Type":"application/json","apiKey":apiKey,"apiSecret":entityKey]
-            self.showhideHUD(viewtype: .SHOW, title: "Loading hunter financial platforms.")
+            self.showhideHUD(viewtype: .SHOW, title: "Loading credit card rate lending platforms.")
             Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
                 print(response)

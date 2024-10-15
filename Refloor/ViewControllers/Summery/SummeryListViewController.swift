@@ -247,7 +247,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         value = self.floorColorNamesArray.compactMap({$0.color})
         if(value.count != 0)
         {
-            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray)
+            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray,isColour: true)
         }
         else
         {
@@ -602,11 +602,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         {
            if tableValues[sender.tag].room_area == 0.0
             {
-               self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: stairIndex,stairColour: stairColourNamesArray)
+               self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: stairIndex,stairColour: stairColourNamesArray,isColour: true)
            }
             else
             {
-                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray)
+                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray,isColour: true)
             }
         }
         else
