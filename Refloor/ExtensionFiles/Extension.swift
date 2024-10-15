@@ -982,7 +982,7 @@ extension UIViewController:OrderStatusViewDelegate
         
     };
     
-    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -2,stairColour:Results<rf_stairColour_results>? = nil, floorColor:Results<rf_floorColour_results>? = nil)
+    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -2,stairColour:Results<rf_stairColour_results>? = nil, floorColor:Results<rf_floorColour_results>? = nil,isColour:Bool = false)
     {
         let dropDown = DropDown()
         let appearance = DropDown.appearance()
@@ -1001,55 +1001,61 @@ extension UIViewController:OrderStatusViewDelegate
             guard let cell = cell as? MyCell else { return }
             
             
-            
-            if selectedIndex >= 0 || selectedIndex == -1
+            if isColour
             {
-                if selectedIndex == index
+                if selectedIndex >= 0 || selectedIndex == -1
                 {
-                    cell.optionLabel.textColor = UIColor().colorFromHexString("#2A8BF6")
-                }
-                else if stairArray != nil
-                {
-                    var InOfficeLocation = false
-                    for officeids in stairArray![index].Office_location_ids
+                    if selectedIndex == index
                     {
-                        if officeids == officeLocationId
+                        cell.optionLabel.textColor = UIColor().colorFromHexString("#2A8BF6")
+                    }
+                    else if stairArray != nil
+                    {
+                        var InOfficeLocation = false
+                        for officeids in stairArray![index].Office_location_ids
                         {
-                            InOfficeLocation = true
+                            if officeids == officeLocationId
+                            {
+                                InOfficeLocation = true
+                            }
+                        }
+                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == false && stairArray![index].in_stock == 0)
+                        {
+                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                            
+                        }
+                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == true && stairArray![index].in_stock == 1)
+                        {
+                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                        }
+                        else//if  stairArray![index].specialOrder == 1
+                        {
+                            cell.optionLabel.textColor = UIColor.black
+                            
                         }
                     }
-                    if (stairArray![index].specialOrder == 0  && InOfficeLocation == false && stairArray![index].in_stock == 0)
+                    else if floorArray != nil
                     {
-                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                        
-                    }
-                    if (stairArray![index].specialOrder == 0  && InOfficeLocation == true && stairArray![index].in_stock == 1)
-                    {
-                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                    }
-                    else//if  stairArray![index].specialOrder == 1
-                    {
-                        cell.optionLabel.textColor = UIColor.black
-                        
-                    }
-                }
-                else if floorArray != nil
-                {
-                    var InOfficeLocation = false
-                    for officeids in floorArray![index].Office_location_ids
-                    {
-                        if officeids == officeLocationId
+                        var InOfficeLocation = false
+                        for officeids in floorArray![index].Office_location_ids
                         {
-                            InOfficeLocation = true
+                            if officeids == officeLocationId
+                            {
+                                InOfficeLocation = true
+                            }
                         }
-                    }
-                    if (floorArray![index].specialOrder == 0 && InOfficeLocation == false && floorArray![index].in_stock == 0)
-                    {
-                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                    }
-                    if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 1)
-                    {
-                        cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == false && floorArray![index].in_stock == 0)
+                        {
+                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                        }
+                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 1)
+                        {
+                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                        }
+                        else
+                        {
+                            cell.optionLabel.textColor = UIColor.black
+                        }
                     }
                     else
                     {
@@ -1058,12 +1064,19 @@ extension UIViewController:OrderStatusViewDelegate
                 }
                 else
                 {
-                    cell.optionLabel.textColor = UIColor.black
+                    if selectedIntex == index || selectedIntex == -2
+                    {
+                        
+                        cell.optionLabel.textColor = UIColor.black
+                    }else{
+                        
+                        cell.optionLabel.textColor = UIColor.gray
+                    }
                 }
             }
             else
             {
-                if selectedIntex == index || selectedIntex == -2
+                if selectedIntex == index || selectedIntex == -1
                 {
                     
                     cell.optionLabel.textColor = UIColor.black
@@ -5661,6 +5674,11 @@ extension Date{
     }
    
     func getSyncDateAsString() -> String{
+        let formatter1 = DateFormatter()
+        formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        return formatter1.string(from: self)
+    }
+    func getMasterDataSyncDateAsString() -> String{
         let formatter1 = DateFormatter()
         formatter1.dateFormat = "MM/dd/yyyy HH:mm:ss"
         return formatter1.string(from: self)

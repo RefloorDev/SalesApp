@@ -38,9 +38,17 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     var masterDataLastSyncDateTime = ""
     var geocoder = CLGeocoder()
     let locationManager = CLLocationManager()
+    
+    let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
     //
     override func viewDidLoad() {
         super.viewDidLoad()
+//        let button = UIButton(type: .roundedRect)
+//        button.frame = CGRect(x: 200, y: 100, width: 100, height: 30)
+//        button.setTitle("Test Crash", for: [])
+//        button.addTarget(self, action: #selector(self.crashButtonTapped(_:)), for: .touchUpInside)
+//        self.view.addSubview(button)
+        //self.customerListTableView.isHidden = true
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         let masterData = self.getMasterDataFromDB()
        if masterData.contract_document_templates.first?.data == nil
@@ -71,6 +79,10 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         self.navigationController?.viewControllers = [self]
 
     }
+    @IBAction func crashButtonTapped(_ sender: AnyObject) {
+          let numbers = [0]
+          let _ = numbers[1]
+      }
     override func viewWillAppear(_ animated: Bool) {
         //
 //        self.locationManager = CLLocationManager()
@@ -110,13 +122,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         isLoadedFirstTime = false
         //  checkBuildStatus()
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        let masterData = self.getMasterDataFromDB()
-        let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
-        if masterData.enableGeoLocation && restrictGeoLocation == 0
-        {
-            startGeoLocation(appointments: appoinmentsList!)
-            
-        }
+      
+        
         
     }
     
@@ -139,7 +146,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func geoFencing (latitude:CLLocationDegrees,longtitude:CLLocationDegrees,appointmentId:Int)
     {
         let masterData = self.getMasterDataFromDB()
-        var radius = 1.0//Double(masterData.geoLocationRadius) * 0.305
+        let radius = Double(masterData.geoLocationRadius)// * 0.305
         let geofenceRegionCenter = CLLocationCoordinate2DMake(latitude, longtitude)
         let geofenceRegion = CLCircularRegion(center: geofenceRegionCenter,
                                               radius: radius,
@@ -147,11 +154,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         geofenceRegion.notifyOnEntry = true
         geofenceRegion.notifyOnExit = true
         //let locationManager = CLLocationManager()
-        
+        //self.alert("Geofence set for location : \(latitude), \(longtitude)", nil)
         AppDelegate.locationManager?.startMonitoring(for: geofenceRegion)
-        
-        
-        
         
         print("started monitoring")
     }
@@ -309,13 +313,14 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         //BackendApiSyncCall()
        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: true)
-        let masterData = self.getMasterDataFromDB()
-        let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
-        if masterData.enableGeoLocation && restrictGeoLocation == 0
-        {
-            startGeoLocation(appointments: appoinmentsList!)
-            
-        }
+//        let masterData = self.getMasterDataFromDB()
+//        let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
+//        if masterData.enableGeoLocation && restrictGeoLocation == 0
+//        {
+//            startGeoLocation(appointments: appoinmentsList!)
+//            
+//        }
+//        startGeoLocation(appointments: appoinmentsList!)
     }
     
     @objc  func updateAppointmentOffline()
@@ -473,6 +478,14 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             //
         if indexPath.row == 0
         {
+            let masterData = getMasterDataFromDB()
+            if masterData.enableGeoLocation && restrictGeoLocation == 0
+            {
+                //startGeoLocation(appointments: appoinmentsList!)
+                self.geoFencing(latitude: appoinmentsList?[indexPath.row].partner_latitude ?? 0.0, longtitude: appoinmentsList?[indexPath.row].partner_longitude ?? 0.0,appointmentId: appoinmentsList?[indexPath.row].id ?? 0)
+                
+            }
+           // self.geoFencing(latitude: appoinmentsList?[indexPath.row].partner_latitude ?? 0.0, longtitude: appoinmentsList?[indexPath.row].partner_longitude ?? 0.0,appointmentId: appoinmentsList?[indexPath.row].id ?? 0)
             var address = ""
             if let street = appoinmentsList?[indexPath.row].street2
             {

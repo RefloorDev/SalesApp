@@ -152,7 +152,7 @@ class LoginViewController: UIViewController {
                 DispatchQueue.main.async
                 {   UserData.setLogedInVal(true)
                     self.showhideHUD(viewtype: .HIDE, title: "")
-                    let masterdataSyncCompletedDateTime = Date().getSyncDateAsString()
+                    let masterdataSyncCompletedDateTime = Date().getMasterDataSyncDateAsString()
                     UserDefaults.standard.set(masterdataSyncCompletedDateTime, forKey: "MasterDataSyncDate")
                     self.navigationController?.pushViewController(CustomerListViewController.initialization()!, animated: true)
                 }
