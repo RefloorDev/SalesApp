@@ -690,12 +690,17 @@ class AnswerOFQustion:NSObject
     var answerID:Int = 0
     var qustionLineID:Int = 0
     var numberVaue:Int?
+    var stairWidthDouble:Double = 0.0
     var textValue:String?
     var singleSelection:QuoteLabelData?
     var multySelection:[QuoteLabelData]?
     init(_ numberVaue:Int)
     {
         self.numberVaue = numberVaue
+    }
+    init(_ stairWidthDouble:Double)
+    {
+        self.stairWidthDouble = stairWidthDouble
     }
     init(_ textValue:String)
     {
@@ -714,6 +719,7 @@ class AnswerOFQustion:NSObject
         self.answerID = rf_AnsOFQustion.answerID
         self.qustionLineID = rf_AnsOFQustion.qustionLineID
         self.numberVaue = rf_AnsOFQustion.numberVaue
+        self.stairWidthDouble = rf_AnsOFQustion.stairWidthDouble
         self.textValue = rf_AnsOFQustion.textValue
         self.singleSelection = rf_AnsOFQustion.singleSelection
         self.multySelection = rf_AnsOFQustion.multySelection
@@ -1013,12 +1019,14 @@ class SummeryDetailsData:NSObject, Mappable
     var room_name :String?
     var appointment_id: Int?
     var room_area :Double?
+    var room_perimeter: Double?
     var stair_count :Double?
     var adjusted_area:Double?
     var comments: String?
     var striked :String?
     var attachments:[AttachmentDataValue]?
     var attachment_comments:String?
+    var miscellaneous_comments:String?
     var drawing_attachment:[AttachmentDataValue]?
     var transition:[SummeryTransitionDetails]?
     var questionaire:[SummeryQustionsDetails]?
@@ -1048,6 +1056,7 @@ class SummeryDetailsData:NSObject, Mappable
         prefix <- map["prefix"]
         adjusted_area <- map["adjusted_area"]
         stair_count <- map["stair_count"]
+        miscellaneous_comments <- map["miscellaneous_comments"]
         
     }
     
@@ -1188,6 +1197,7 @@ class SummeryListData: Mappable
     var total_stair_count :Int?
     var colorUpCharge : Double?
     var colorUpChargePrice : Double?
+    var miscellaneous_comments:String?
     
     
     required init?(map: ObjectMapper.Map){
@@ -1221,6 +1231,7 @@ class SummeryListData: Mappable
         stair_count <- map["stair_count"]
         total_stair_count <- map["total_stair_count"]
         color <- map["color"]
+        miscellaneous_comments <- map["miscellaneous_comments"]
     }
     
     init(){
@@ -1741,6 +1752,68 @@ class CreditApplicationStatus: Codable
         message = try values.decodeIfPresent(String.self, forKey: .message)
         override_json_result = try values.decodeIfPresent(Int.self, forKey: .override_json_result)
         
+    }
+}
+
+class ForceSync: Codable
+{
+    var result:String?
+    var data: ForceSyncDetails?
+    var message:String?
+    var override_json_result:Int?
+    
+    
+    enum CodingKeys: String, CodingKey {
+
+        case result = "result"
+        case data = "data"
+        case message = "message"
+        case override_json_result = "override_json_result"
+       
+    }
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        result = try values.decodeIfPresent(String.self, forKey: .result)
+        data = try values.decodeIfPresent(ForceSyncDetails.self, forKey: .data)
+        message = try values.decodeIfPresent(String.self, forKey: .message)
+        override_json_result = try values.decodeIfPresent(Int.self, forKey: .override_json_result)
+        
+    }
+}
+class ForceSyncDetails:Codable
+{
+    var forceSyncEnabled:Int?
+    var appointments:[AppointmentDetails]?
+    
+    enum CodingKeys: String, CodingKey {
+        
+        case forceSyncEnabled = "force_sync_enabled"
+        case appointments = "appointments"
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        forceSyncEnabled = try values.decodeIfPresent(Int.self, forKey: .forceSyncEnabled)
+        appointments = try values.decodeIfPresent([AppointmentDetails].self, forKey: .appointments)
+    }
+}
+
+class AppointmentDetails: Codable
+{
+    var appointment_id: Int?
+    var last_api:String?
+    
+    enum CodingKeys: String, CodingKey 
+    {
+        
+        case appointment_id = "appointment_id"
+        case last_api = "last_api"
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        appointment_id = try values.decodeIfPresent(Int.self, forKey: .appointment_id)
+        last_api = try values.decodeIfPresent(String.self, forKey: .last_api)
     }
 }
 

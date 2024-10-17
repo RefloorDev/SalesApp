@@ -74,6 +74,8 @@ class MasterData : Object, Mappable {
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
+    @objc dynamic var max_stair_width : Double = 0.0
+    @objc dynamic var min_downpayment_amount = 0.0
 //    @objc dynamic var versatileURL:String?
 //    @objc dynamic var versatileApiKey:String?
 //    @objc dynamic var versatileEntityKey:String?
@@ -105,6 +107,8 @@ class MasterData : Object, Mappable {
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
+        max_stair_width <- map ["max_stair_width"]
+        min_downpayment_amount <- map ["min_down_payment_amount"]
 //        versatileURL <- map ["versatile_url"]
 //        versatileApiKey <- map ["versatile_api_key"]
 //        versatileEntityKey <- map ["versatile_entity_key"]
@@ -444,6 +448,9 @@ class rf_floorColour_results : Object,Mappable {
     @objc dynamic var color : String?
     @objc dynamic var material_image_url : String?
     @objc dynamic var color_upcharge: Double = 0.0
+    @objc dynamic var in_stock : Int = 0
+    @objc dynamic var specialOrder: Int = 0
+    var Office_location_ids = List<Int>()
     @objc dynamic var last_updated_date : String?
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -457,9 +464,19 @@ class rf_floorColour_results : Object,Mappable {
         color <- map["color"]
         material_image_url <- map["material_image_url"]
         color_upcharge <- map["color_up_charge_price"]
+        in_stock <- map["in_stock"]
+        specialOrder <- map["special_order"]
+        if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: officeLocationIdsArray)
+                    self.Office_location_ids = realmList
+                }
+//        Office_location_ids <- map["office_location_ids"]
+//        Office_location_ids <- (map["office_location_ids"], ListTransform<Int>())
     }
     
 }
+
 
 // appointment results details
 
@@ -778,6 +795,9 @@ class rf_stairColour_results : Object,Mappable {
     @objc dynamic var color : String?
     @objc dynamic var material_image_url : String?
     @objc dynamic var color_upcharge: Double = 0.0
+    @objc dynamic var in_stock : Int = 0
+    @objc dynamic var specialOrder: Int = 0
+    var Office_location_ids = List<Int>()
     @objc dynamic var last_updated_date : String?
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -791,6 +811,13 @@ class rf_stairColour_results : Object,Mappable {
         color <- map["color"]
         material_image_url <- map["material_image_url"]
         color_upcharge <- map["color_up_charge_price"]
+        in_stock <- map["in_stock"]
+        specialOrder <- map["special_order"]
+        if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: officeLocationIdsArray)
+                    self.Office_location_ids = realmList
+                }
     }
     
 }
@@ -1548,6 +1575,7 @@ class rf_completed_room: Object{
     @objc dynamic var drawing_id: Int = 0
     @objc dynamic var draw_image_name: String?
     @objc dynamic var room_summary_comment: String?
+    @objc dynamic var miscellaneous_comments: String?
     @objc dynamic var selected_room_color: String?
     @objc dynamic var selected_room_Upcharge: Double = 0.0
     @objc dynamic var selected_room_UpchargePrice: Double = 0.0
@@ -1587,6 +1615,7 @@ class rf_AnswerOFQustion:Object
     @objc dynamic var answerID:Int = 0
     @objc dynamic var qustionLineID:Int = 0
     @objc dynamic var numberVaue:Int = 0
+    @objc dynamic var stairWidthDouble:Double = 0.0
     @objc dynamic var textValue:String?
     var singleSelection:QuoteLabelData?
     var multySelection:[QuoteLabelData]? = []
@@ -1603,6 +1632,7 @@ class rf_AnswerOFQustion:Object
         self.answerID = answerOfQstn.answerID
         self.qustionLineID = answerOfQstn.qustionLineID
         self.numberVaue = answerOfQstn.numberVaue ?? 0
+        self.stairWidthDouble = answerOfQstn.stairWidthDouble
         self.textValue = answerOfQstn.textValue
         self.singleSelection = answerOfQstn.singleSelection
         self.multySelection = answerOfQstn.multySelection

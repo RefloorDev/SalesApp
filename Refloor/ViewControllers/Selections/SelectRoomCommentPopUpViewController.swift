@@ -90,8 +90,8 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             deleteView.isHidden = true
             addEditView.isHidden = true
             versatileBackView.isHidden = true
-            lendingPlatformTitle.text = "Hunter Financial"
-            lendingSubTitle.text = lendingSubTitle.text! + "Hunter Financial?"
+            lendingPlatformTitle.text = "Credit Card Rate Lending"
+            lendingSubTitle.text = lendingSubTitle.text! + "Credit Card Rate Lending?"
         }
         else if isVersaileBack
         {
@@ -107,7 +107,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             deleteView.isHidden = true
             addEditView.isHidden = true
             versatileBackView.isHidden = false
-            lendingBackTitle.text = "Hunter Financial"
+            lendingBackTitle.text = "Credit Card Rate Lending"
         }
         else
         {

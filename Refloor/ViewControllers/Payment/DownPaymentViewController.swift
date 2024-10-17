@@ -68,6 +68,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     var isCardVerifiedSuccessfully = false
     var imagePicker: CaptureImage!
     var roomData:RoomDataValue!
+    var area = 0.0
     //let header = JWTHeader(alg: .hs256)
     let header = JWTHeader(typ: "JWT", alg: .hs256)
     var payment_TrasnsactionDict:[String:String] = [:]
@@ -91,7 +92,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
         
-        self.totalAreaLabel.text = "\(getTotalAdjustedAreaForAllRooms().toRoundeString) Sq.ft"
+        self.totalAreaLabel.text = "\(area) Sq.ft"
         self.packegeLabel.text = packageName //"\(self.QuotationPaymentPlanValueDetails.package ?? "")"
         self.financeAmountLabel.text = "$\(self.financePayment.toDoubleString)"
         self.finalPaymentLabel.text = "$\(self.finalpayment.toDoubleString)"
@@ -973,7 +974,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     {
         if self.paymentType == .Cash
         {
-            let cancel = CancellationPolicyViewController.initialization()!
+            let cancel = AppointmentSummaryViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -982,11 +983,15 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cancel.paymentType = "cash"
             cancel.isCardVerified = false
             cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+            cancel.area = getTotalAdjustedAreaForAllRooms()
+            cancel.totalPrice = totalAmount
+            cancel.finalPayment = self.finalpayment
+            cancel.financeAmount = self.financePayment
             self.navigationController?.pushViewController(cancel, animated: true)
         }
         else if self.paymentType == .Check
         {
-            let cancel = CancellationPolicyViewController.initialization()!
+            let cancel = AppointmentSummaryViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -995,12 +1000,16 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cancel.paymentType = "check"
             cancel.isCardVerified = false
             cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+            cancel.area = getTotalAdjustedAreaForAllRooms()
+            cancel.totalPrice = totalAmount
+            cancel.finalPayment = self.finalpayment
+            cancel.financeAmount = self.financePayment
             self.navigationController?.pushViewController(cancel, animated: true)
             
         }
         else
         {
-            let cancel = CancellationPolicyViewController.initialization()!
+            let cancel = AppointmentSummaryViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -1009,6 +1018,10 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cancel.paymentType = "card"
             cancel.isCardVerified = self.isCardVerifiedSuccessfully
             cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+            cancel.area = getTotalAdjustedAreaForAllRooms()
+            cancel.totalPrice = totalAmount
+            cancel.finalPayment = self.finalpayment
+            cancel.financeAmount = self.financePayment
             self.navigationController?.pushViewController(cancel, animated: true)
         }
     }

@@ -92,7 +92,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var totalUpchargeCost: Double = 0.0
     var totalExtraCost: Double = 0.0
     
-    var totalMoldingPrice: Double = 0.07
+    var totalMoldingPrice: Double = 0.0
     var totalExtraCostToReduce: Double = 0.0
     var totalExtraPromoCostToReduced: Double = 0.0
     var  additionalCost :Double = 0.0

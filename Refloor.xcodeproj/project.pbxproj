@@ -169,6 +169,14 @@
 		65FFF92F2446D6D000E3534D /* ModelClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF92E2446D6D000E3534D /* ModelClass.swift */; };
 		65FFF9342447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */; };
 		65FFF93724471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */; };
+		B00B9D782C999BF800B88469 /* AppointmentSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B9D762C999BF800B88469 /* AppointmentSummaryViewController.swift */; };
+		B00B9D792C999BF800B88469 /* AppointmentPaymentSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B9D772C999BF800B88469 /* AppointmentPaymentSummaryViewController.swift */; };
+		B00B9D802C999C1800B88469 /* RoomsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B9D7A2C999C1800B88469 /* RoomsTableViewCell.swift */; };
+		B00B9D812C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7B2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.xib */; };
+		B00B9D822C999C1800B88469 /* TitleSummaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B9D7C2C999C1800B88469 /* TitleSummaryTableViewCell.swift */; };
+		B00B9D832C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B9D7D2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift */; };
+		B00B9D842C999C1800B88469 /* TitleSummaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */; };
+		B00B9D852C999C1800B88469 /* RoomsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */; };
 		B011B1D22B1DB77600C28459 /* VersatileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011B1D12B1DB77600C28459 /* VersatileViewController.swift */; };
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
 		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
@@ -370,6 +378,14 @@
 		65FFF92E2446D6D000E3534D /* ModelClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelClass.swift; sourceTree = "<group>"; };
 		65FFF9332447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = L_Shape_CustomView_ToolBoxView.xib; sourceTree = "<group>"; };
 		65FFF93624471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L_Shape_CustomView_ToolBoxView.swift; sourceTree = "<group>"; };
+		B00B9D762C999BF800B88469 /* AppointmentSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppointmentSummaryViewController.swift; path = ../../../../../../../../2.7.0/SalesApp/Refloor/ViewControllers/Summery/AppointmentSummaryViewController.swift; sourceTree = "<group>"; };
+		B00B9D772C999BF800B88469 /* AppointmentPaymentSummaryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppointmentPaymentSummaryViewController.swift; path = ../../../../../../../../2.7.0/SalesApp/Refloor/ViewControllers/Summery/AppointmentPaymentSummaryViewController.swift; sourceTree = "<group>"; };
+		B00B9D7A2C999C1800B88469 /* RoomsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoomsTableViewCell.swift; path = AppointmentSummary/RoomsTableViewCell.swift; sourceTree = "<group>"; };
+		B00B9D7B2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AppointmentSummaryFirstRowTableViewCell.xib; path = AppointmentSummary/AppointmentSummaryFirstRowTableViewCell.xib; sourceTree = "<group>"; };
+		B00B9D7C2C999C1800B88469 /* TitleSummaryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TitleSummaryTableViewCell.swift; path = AppointmentSummary/TitleSummaryTableViewCell.swift; sourceTree = "<group>"; };
+		B00B9D7D2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppointmentSummaryFirstRowTableViewCell.swift; path = AppointmentSummary/AppointmentSummaryFirstRowTableViewCell.swift; sourceTree = "<group>"; };
+		B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TitleSummaryTableViewCell.xib; path = AppointmentSummary/TitleSummaryTableViewCell.xib; sourceTree = "<group>"; };
+		B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RoomsTableViewCell.xib; path = AppointmentSummary/RoomsTableViewCell.xib; sourceTree = "<group>"; };
 		B011B1D12B1DB77600C28459 /* VersatileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersatileViewController.swift; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
@@ -783,6 +799,8 @@
 			children = (
 				65A32485247CFA4B0050A42F /* TableViewCell */,
 				65A32483247CFA450050A42F /* SummeryDetailsViewController.swift */,
+				B00B9D772C999BF800B88469 /* AppointmentPaymentSummaryViewController.swift */,
+				B00B9D762C999BF800B88469 /* AppointmentSummaryViewController.swift */,
 				65ADC867247E9285003CD87C /* SummeryListViewController.swift */,
 			);
 			path = Summery;
@@ -791,6 +809,12 @@
 		65A32485247CFA4B0050A42F /* TableViewCell */ = {
 			isa = PBXGroup;
 			children = (
+				B00B9D7D2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift */,
+				B00B9D7B2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.xib */,
+				B00B9D7A2C999C1800B88469 /* RoomsTableViewCell.swift */,
+				B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */,
+				B00B9D7C2C999C1800B88469 /* TitleSummaryTableViewCell.swift */,
+				B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */,
 				65A32486247CFA760050A42F /* SummeryDetailsHeadingTableViewCell.swift */,
 				65A32488247CFA960050A42F /* SummeryDetailsSubDetailsTableViewCell.swift */,
 				65A3248A247CFAAF0050A42F /* SummeryDetailsSubHeadingTableViewCell.swift */,
@@ -1010,6 +1034,7 @@
 				653EA568241F7AFC00EA684E /* Resources */,
 				5C17E9EB1BC3141EBB5FA687 /* [CP] Embed Pods Frameworks */,
 				4EF4D2A8ED0977CC9FF4372A /* [CP] Copy Pods Resources */,
+				B0C366DB2CABB5B700D9E401 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1093,6 +1118,7 @@
 				6520944B243CA31100B010CA /* SFUIText-Medium.otf in Resources */,
 				65209458243CA31100B010CA /* SF-Pro-Text-RegularItalic.otf in Resources */,
 				6520944A243CA31100B010CA /* SFUIText-Regular.otf in Resources */,
+				B00B9D812C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.xib in Resources */,
 				DD0F8332284DCDC500F0A1D6 /* DiscountTableViewCell.xib in Resources */,
 				65209443243CA31100B010CA /* SF-Pro-Display-Light.otf in Resources */,
 				6520943E243CA31100B010CA /* SF-Pro-Display-Thin.otf in Resources */,
@@ -1114,10 +1140,12 @@
 				65209446243CA31100B010CA /* SF-Pro-Display-Bold.otf in Resources */,
 				DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */,
 				65209447243CA31100B010CA /* SF-Pro-Display-Medium.otf in Resources */,
+				B00B9D842C999C1800B88469 /* TitleSummaryTableViewCell.xib in Resources */,
 				6520942E243CA31100B010CA /* Inter-UI-BoldItalic.ttf in Resources */,
 				6520943B243CA31100B010CA /* Inter-UI-Italic.ttf in Resources */,
 				6571BCA924A61B51006956D5 /* SubCollectionViewLabelCollectionViewCell.xib in Resources */,
 				65209435243CA31100B010CA /* Inter-UI-Regular.ttf in Resources */,
+				B00B9D852C999C1800B88469 /* RoomsTableViewCell.xib in Resources */,
 				658D494E24AA21A90034DF69 /* PaymentTypeTableViewCell.xib in Resources */,
 				65209449243CA31100B010CA /* SFUIText-Heavy.otf in Resources */,
 				65209451243CA31100B010CA /* SF-Pro-Display-HeavyItalic.otf in Resources */,
@@ -1192,6 +1220,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		B0C366DB2CABB5B700D9E401 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(SRCROOT)/newInputFile$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1211,13 +1261,16 @@
 				DD525A5F2848D71E001645D6 /* PromoPopUpViewControllerNew.swift in Sources */,
 				B0BBFC692BAC1E43009E6287 /* SpalshScreenViewController.swift in Sources */,
 				DDF18F46277B253100321FFE /* BackgroundTaskService.swift in Sources */,
+				B00B9D782C999BF800B88469 /* AppointmentSummaryViewController.swift in Sources */,
 				6500187024FFC5BE00B183E6 /* SuggetionsTableViewCell.swift in Sources */,
+				B00B9D792C999BF800B88469 /* AppointmentPaymentSummaryViewController.swift in Sources */,
 				653EA578241F7AFC00EA684E /* Refloor.xcdatamodeld in Sources */,
 				65274C7229C19CE700ACFDE3 /* PromoDropDownViewController.swift in Sources */,
 				B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */,
 				65CE7AD224EFEC77002F5D12 /* OtherIncomeViewController.swift in Sources */,
 				650B1CE1254C253C005ED521 /* PromoPopUpViewController.swift in Sources */,
 				65853E5F243DF39B002C6016 /* SelectARoomViewController.swift in Sources */,
+				B00B9D802C999C1800B88469 /* RoomsTableViewCell.swift in Sources */,
 				65C0F0BE245195FF00A8575B /* SubSqureView.swift in Sources */,
 				DDA10633284487AB008B1FE6 /* ContactCommentPopUpViewController.swift in Sources */,
 				65A242F22460157C00465D59 /* FurnitureQustionsViewController.swift in Sources */,
@@ -1249,6 +1302,7 @@
 				6597CEC02420E0500036BC95 /* CustomerListViewController.swift in Sources */,
 				DDC417FB2785C3D100CE2BB2 /* CreditCardValidator.swift in Sources */,
 				DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */,
+				B00B9D822C999C1800B88469 /* TitleSummaryTableViewCell.swift in Sources */,
 				65CB188224DBF23800A0BD39 /* AboutRoomHeaderTableViewCell.swift in Sources */,
 				65BA8410249A3EAA003F9A79 /* PaymentOptionsBottomCollectionViewCell.swift in Sources */,
 				65853E5B243DCEA1002C6016 /* FloorDetailsCollectionViewCell.swift in Sources */,
@@ -1288,6 +1342,7 @@
 				651E8ED1249CCE460049D754 /* DownPaymentViewController.swift in Sources */,
 				65F34838244491EC00C61100 /* L_Shape_CustomView.swift in Sources */,
 				65FFF93724471D7800E3534D /* L_Shape_CustomView_ToolBoxView.swift in Sources */,
+				B00B9D832C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift in Sources */,
 				65F34836244491DB00C61100 /* CustomView.swift in Sources */,
 				657AE2782477BFC100D205A1 /* CommentsCollectionViewCell.swift in Sources */,
 				65094BC724F4DB9C00C9C879 /* ImportentAgreementViewController.swift in Sources */,
@@ -1467,9 +1522,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = F8JN2G36QM;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1477,10 +1534,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.2;
+				MARKETING_VERSION = 2.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorDevelopment2023;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1493,9 +1551,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = F8JN2G36QM;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1503,10 +1563,11 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.6.2;
+				MARKETING_VERSION = 2.7.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorDevelopment2023;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
