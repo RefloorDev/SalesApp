@@ -53,6 +53,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
  
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
+            HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
             DispatchQueue.main.async {
                 
                 var networkMessage = ""
@@ -61,6 +62,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                     print("Upload speed: \(speed) Mbps")
                     networkMessage = String(format: "%.2f", speed)
                     networkMessage += "Mbps"
+                    self.installerSubmitNetworkMessage(networkMessage: networkMessage)
                 }
             }
             

@@ -10,6 +10,7 @@ import UIKit
 
 class CustomerListTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var locationImageView: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var customerLocationLabel: UILabel!
     @IBOutlet weak var cutomerphoneNumberLabel: UILabel!

@@ -45,6 +45,10 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
     var recisionDate:String = String()
     var imagePicker: CaptureImage!
     var payment_TrasnsactionDict:[String:String] = [:]
+    var area:Double = Double()
+    var totalPrice:Double = Double()
+    var finalPayment:Double = Double()
+    var financeAmount:Double = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,17 +70,7 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
-    override func performSegueToReturnBack()
-    {
-        if isCardVerified == true || payment_TrasnsactionDict != [:]
-        {
-            self.alert("You can’t navigate back and change the payment option. ", nil)
-        }
-        else
-        {
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
+   
     override func screenShotBarButtonAction(sender:UIButton)
         {
             self.imagePicker = CaptureImage(presentationController: self, delegate: self)
@@ -111,7 +105,8 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
         }
     }
     
-    @IBAction func nextBtnAction(_ sender: UIButton) {
+    @IBAction func nextBtnAction(_ sender: UIButton) 
+    {
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "CancellationPolicy"
@@ -127,6 +122,10 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.paymentType = "cash"
             web.isCardVerified = false
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = total
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
         }
         else if self.paymentType == "check"
@@ -140,20 +139,26 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.paymentType = "check"
             web.isCardVerified = false
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = totalPrice
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
             
         }
         else if paymentType == "card"
         {
             let web = DynamicContractViewController.initialization()!
-            //web.downPayment = self.DownPaymentcalucaltion().downPayment
-            //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
             web.total = total
             web.balance = balance
             web.paymentType = "card"
             web.isCardVerified = isCardVerified
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = totalPrice
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
         }
         else 
@@ -166,6 +171,10 @@ class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
             web.balance = balance
             web.paymentType = "finance"
             web.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+//            web.area = getTotalAdjustedAreaForAllRooms()
+//            web.totalPrice = totalPrice
+//            web.finalPayment = self.finalPayment
+//            web.financeAmount = self.financeAmount
             self.navigationController?.pushViewController(web, animated: true)
         }
         

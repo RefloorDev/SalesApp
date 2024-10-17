@@ -34,10 +34,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                            print("font:", font)
 //                        }
 //                    }
+        
+//        let initialViewController = LoginViewController()
+//            
+//            // Embed it inside a UINavigationController
+//            let navigationController = UINavigationController(rootViewController: initialViewController)
+//            
+//            // Set the rootViewController to the navigation controller
+//            window?.rootViewController = navigationController
+//            window?.makeKeyAndVisible()
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion:  11,//7, // production 9
+            schemaVersion:  17,//7, // production 12
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -65,11 +74,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         Messaging.messaging().delegate = self
         
         if #available(iOS 10.0, *) {
+                  self.notificationCenter = UNUserNotificationCenter.current()
                    // For iOS 10 display notification (sent via APNS)
-                   UNUserNotificationCenter.current().delegate = self
+            self.notificationCenter!.delegate = self
                    
                    let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-                   UNUserNotificationCenter.current().requestAuthorization(
+                   self.notificationCenter!.requestAuthorization(
                        options: authOptions,
                        completionHandler: {_, _ in })
                }
@@ -82,10 +92,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                application.applicationIconBadgeNumber=0
                application.registerForRemoteNotifications()
         AppDelegate.locationManager = CLLocationManager()
-        AppDelegate.locationManager!.delegate = self
+        AppDelegate.locationManager?.delegate = self
+        let status = CLLocationManager.authorizationStatus()
+               if status == .notDetermined {
+                   // Request "When In Use" first
+                   AppDelegate.locationManager?.requestWhenInUseAuthorization()
+               } else if status == .authorizedWhenInUse {
+                   // If already authorized for "When In Use," request "Always"
+                   AppDelegate.locationManager?.requestAlwaysAuthorization()
+               }
+//        else if status == .denied
+//        {
+//            showLocationPermissionDeniedAlert()
+//        }
+
         //locationManager?.desiredAccuracy = kCLLocationAccuracyBest
-        AppDelegate.locationManager?.requestWhenInUseAuthorization()
-        AppDelegate.locationManager?.requestAlwaysAuthorization()
+//        AppDelegate.locationManager?.requestWhenInUseAuthorization()
+//        AppDelegate.locationManager?.requestAlwaysAuthorization()
         //locationManager?.activityType = .automotiveNavigation
         //locationManager?.allowsBackgroundLocationUpdates = true
         if CLLocationManager.locationServicesEnabled() {
@@ -112,6 +135,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
    
+    
+    
 
     
     // MARK: UISceneSession Lifecycle
@@ -299,6 +324,7 @@ extension AppDelegate : CLLocationManagerDelegate
                     realm.create(rf_GeoLocationData.self, value: geoLocationValues, update: .all)
                     let token = UserData.init().token!
                     parameters = ["appointment_id":Int(region.identifier) ?? 0, "arrival_date":entryTime,"departure_date": exitTime,"token":token]
+                    AppDelegate.locationManager?.stopMonitoringVisits()
                 }
             }
             catch{
@@ -319,6 +345,7 @@ extension AppDelegate : CLLocationManagerDelegate
         
             
         }
+        handleEvent(forRegion: region, action: "Exited Location")
     }
     
     func geoLocationApiCallSync()
@@ -403,7 +430,35 @@ extension AppDelegate : CLLocationManagerDelegate
         }
         return geoLocationData
     }
-    
+    func handleEvent(forRegion region: CLRegion!,action: String) {
+        // customize your notification content
+           let content = UNMutableNotificationContent()
+           content.title = "Refloor"
+        content.body = action
+        content.sound = UNNotificationSound.default
+
+           // when the notification will be triggered
+           var timeInSeconds: TimeInterval = 1 // 60s * 15 = 15min
+
+           // the actual trigger object
+           let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInSeconds,
+                                                           repeats: false)
+
+           // notification unique identifier, for this example, same as the region to avoid duplicate notifications
+           let identifier = region.identifier
+
+           // the notification request object
+           let request = UNNotificationRequest(identifier: identifier,
+                                               content: content,
+                                               trigger: trigger)
+
+           // trying to add the notification request to notification center
+//        UNUserNotificationCenter.current().add(request) { error in
+//                    if let error = error {
+//                        print("Error adding notification: \(error.localizedDescription)")
+//                    }
+//                }
+    }
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         //alert("Entered region", nil)
@@ -446,16 +501,39 @@ extension AppDelegate : CLLocationManagerDelegate
             // Do what you want if this information
             // self.handleEvent(forRegion: region)
         }
+        handleEvent(forRegion: region, action: "Enter Location")
     }
     func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
         print("The monitored regions are: \(manager.monitoredRegions)")
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-           if status == .authorizedWhenInUse {
-               AppDelegate.locationManager?.requestLocation()
+               switch status {
+               case .denied:
+                   // Show alert directing user to enable location
+                   DispatchQueue.main.async {
+                       let alertController = UIAlertController(
+                           title: "Location Permission Denied",
+                           message: "Please enable location services in Settings",
+                           preferredStyle: .alert
+                       )
+                       alertController.addAction(UIAlertAction(title: "Settings", style: .default) { _ in
+                           if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+                               UIApplication.shared.open(appSettings)
+                           }
+                       })
+                       alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                       self.window?.rootViewController?.present(alertController, animated: true, completion: nil)
+                   }
+
+                   
+               case .authorizedWhenInUse:
+                   AppDelegate.locationManager?.requestAlwaysAuthorization()
+                   
+               default:
+                   break
+               }
            }
-       }
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let monitoredRegions = manager.monitoredRegions

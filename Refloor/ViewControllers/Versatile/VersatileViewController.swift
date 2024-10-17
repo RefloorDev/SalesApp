@@ -94,7 +94,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
         }
         else
         {
-            self.setNavigationBarbackAndlogo(with: "Hunter Financial")
+            self.setNavigationBarbackAndlogo(with: "Credit Card Rate Lending")
         }
         
         sendRequest(urlString: url)

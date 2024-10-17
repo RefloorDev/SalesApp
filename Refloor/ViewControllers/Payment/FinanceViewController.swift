@@ -110,6 +110,9 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var selectedPaymentMethord:PaymentType?
     var downpayment = DownPaymentViewController.initialization()!
     var externalCredentialsArray:List<rf_extrenal_credential_results>!
+    var totalPrice:Double = Double()
+    var finalPayment:Double = Double()
+    var financeAmount:Double = Double()
     
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
@@ -308,6 +311,10 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 versatile.downpayment = self.downpayment
                 versatile.appointmentId = customer.id!
                 versatile.isHunter = true
+                versatile.finalpayment = self.finalpayment
+                versatile.financePayment = self.financePayment
+                versatile.selectedPaymentMethord = self.selectedPaymentMethord
+                versatile.downpayment = self.downpayment
                 if let customer = AppDelegate.appoinmentslData
                 {
                     versatile.isCoAppSkiped = customer.co_applicant_skipped ?? 0

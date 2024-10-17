@@ -24,6 +24,7 @@ class QustionsTableViewCell: UITableViewCell {
     @IBOutlet weak var selection_Answer_Label: UILabel!
     @IBOutlet weak var selection_DropDown_Button: UIButton!
     
+    @IBOutlet weak var miscellaneousTxtView: UITextView!
     
     @IBOutlet weak var entry_Qustion_Label: UILabel!
     @IBOutlet weak var entry_Answer_TextView: UITextView!
@@ -43,3 +44,4 @@ class QustionsTableViewCell: UITableViewCell {
     }
     
 }
+

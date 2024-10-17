@@ -645,6 +645,9 @@ PODS:
   - DropDown (2.3.2)
   - Firebase/CoreOnly (10.21.0):
     - FirebaseCore (= 10.21.0)
+  - Firebase/Crashlytics (10.21.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 10.21.0)
   - Firebase/Messaging (10.21.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 10.21.0)
@@ -682,6 +685,14 @@ PODS:
     - FirebaseCore (~> 10.0)
   - FirebaseCoreInternal (10.21.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseCrashlytics (10.21.0):
+    - FirebaseCore (~> 10.5)
+    - FirebaseInstallations (~> 10.0)
+    - FirebaseSessions (~> 10.5)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (~> 2.1)
   - FirebaseFirestore (10.21.0):
     - FirebaseCore (~> 10.0)
     - FirebaseCoreExtension (~> 10.0)
@@ -715,6 +726,14 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseSessions (10.24.0):
+    - FirebaseCore (~> 10.5)
+    - FirebaseCoreExtension (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.10)
+    - nanopb (< 2.30911.0, >= 2.30908.0)
+    - PromisesSwift (~> 2.1)
   - FirebaseSharedSwift (10.21.0)
   - GoogleAppMeasurement (10.21.0):
     - GoogleAppMeasurement/AdIdSupport (= 10.21.0)
@@ -859,6 +878,8 @@ PODS:
     - RealmSwift
   - PayCardsRecognizer (1.1.7)
   - PromisesObjC (2.3.1)
+  - PromisesSwift (2.3.1):
+    - PromisesObjC (= 2.3.1)
   - Realm (10.46.0):
     - Realm/Headers (= 10.46.0)
   - Realm/Headers (10.46.0)
@@ -884,6 +905,7 @@ DEPENDENCIES:
   - AlamofireObjectMapper (= 5.1.0)
   - CHRTextFieldFormatter
   - DropDown (= 2.3.2)
+  - Firebase/Crashlytics
   - Firebase/Messaging
   - FirebaseAnalytics
   - FirebaseAuth
@@ -918,10 +940,12 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseCrashlytics
     - FirebaseFirestore
     - FirebaseFirestoreInternal
     - FirebaseInstallations
     - FirebaseMessaging
+    - FirebaseSessions
     - FirebaseSharedSwift
     - GoogleAppMeasurement
     - GoogleDataTransport
@@ -944,6 +968,7 @@ SPEC REPOS:
     - "ObjectMapper+Realm"
     - PayCardsRecognizer
     - PromisesObjC
+    - PromisesSwift
     - Realm
     - RealmSwift
     - RecaptchaInterop
@@ -968,10 +993,12 @@ SPEC CHECKSUMS:
   FirebaseCore: 74f647ad9739ea75112ce6c3b3b91f5488ce1122
   FirebaseCoreExtension: 1c044fd46e95036cccb29134757c499613f3f564
   FirebaseCoreInternal: 43c1788eaeee9d1b97caaa751af567ce11010d00
+  FirebaseCrashlytics: 063b883186d7ccb1db1837c19113ca6294880c1b
   FirebaseFirestore: cadbbc63223d27fdbdaca7cbdae2a6dc809a3929
   FirebaseFirestoreInternal: 7ac1e0c5b4e75aeb898dfe4b1d6d77abbac9eca3
   FirebaseInstallations: 390ea1d10a4d02b20c965cbfd527ee9b3b412acb
   FirebaseMessaging: b285329399cc6edd73b5b32864c68454177bcf3f
+  FirebaseSessions: 2651b464e241c93fd44112f995d5ab663c970487
   FirebaseSharedSwift: 19b3f709993d6fa1d84941d41c01e3c4c11eab93
   GoogleAppMeasurement: a65314d316443969ed3d3709b3a187448ed6418f
   GoogleDataTransport: 57c22343ab29bc686febbf7cbb13bad167c2d8fe
@@ -994,6 +1021,7 @@ SPEC CHECKSUMS:
   "ObjectMapper+Realm": 0f8d0ac5b0e87ba63d2d0bea76a111b4eae98b9a
   PayCardsRecognizer: 2e4d1b2fdd5f1528fb56064a91e1d58a1af7a2db
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   Realm: 699b80d8e5fc66acafd2d530199e77781a2d69d3
   RealmSwift: 3230b8fc63759433a6938a0dd2a5dc0dc2b15760
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
@@ -1001,6 +1029,6 @@ SPEC CHECKSUMS:
   SVProgressHUD: 4837c74bdfe2e51e8821c397825996a8d7de6e22
   SwiftJWT: 88c412708f58c169d431d344c87bc79a87c830ae
 
-PODFILE CHECKSUM: 126bd5007e7d193d40cc2d7f7a9100007b126ea4
+PODFILE CHECKSUM: a69fa4fc50cad7379ab36ec1d9bbbeaac88f2f85
 
 COCOAPODS: 1.15.2

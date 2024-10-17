@@ -125,6 +125,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
             self.downpayment.downPaymentValue =  self.downPaymentValue
             self.downpayment.finalpayment =  self.finalpayment
             self.downpayment.financePayment =  self.financePayment
+            self.downpayment.area = self.area
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
@@ -140,12 +141,14 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                 }
                 else
                 {
-                    let cancel = CancellationPolicyViewController.initialization()!
+                    let cancel = AppointmentSummaryViewController.initialization()!
                    // web.document=value ?? ""
                     cancel.orderID=self.downpayment.orderID
                     cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
                     cancel.total = self.totalAmount
                     cancel.balance = self.totalAmount - self.downPaymentValue
+                    cancel.finalPayment =  self.finalpayment
+                    cancel.financeAmount =  self.financePayment
                     if self.totalAmount == self.financePayment{
                         cancel.paymentType = "finance"
                     }
@@ -353,7 +356,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                 }
                 else
                 {
-                    let cancel = CancellationPolicyViewController.initialization()!
+                    let cancel = AppointmentSummaryViewController.initialization()!
                     cancel.document=value ?? ""
                     cancel.orderID=self.downpayment.orderID
                     cancel.downPayment = self.downpayment.DownPaymentcalucaltion().downPayment

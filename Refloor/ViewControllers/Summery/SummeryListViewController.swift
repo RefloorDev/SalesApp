@@ -55,6 +55,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var applyAllSelectedMaterialFileName:String = String()
     var applyAllSelectedMoldName:String = String()
     var applyAllSelectedMoldPrice:Double = Double()
+    var firstLoad = 1
+    
+    var stairIndex = -1
+    var roomIndex = -1
+    var officeLocationId = AppDelegate.appoinmentslData.officeLocationId
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,7 +106,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) 
+    {
         loadRefreshData()
         //summertListApi()
     }
@@ -241,7 +247,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         value = self.floorColorNamesArray.compactMap({$0.color})
         if(value.count != 0)
         {
-            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag)
+            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 3, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray,isColour: true)
         }
         else
         {
@@ -334,12 +340,44 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         let cell = tableView.dequeueReusableCell(withIdentifier: "SummeryListNewTableViewCell") as! SummeryListNewTableViewCell
         //cell.selectColorNewBgView.frame.size.width = cell.colorLabel.frame.size.width
         cell.colorLabel.setRightPaddingPoints(5)
+        if ((tableValues[indexPath.row].color ?? "") != "Select Color")
+        {
+            cell.outOfStockView.clearGradient()
+            cell.outOfStockView.applyGradient(colors: [UIColor().colorFromHexString("#72C36F00").cgColor,UIColor().colorFromHexString("#72C36F27").cgColor])
+            cell.outOfStockLbl.text = "The selected item is available"
+            cell.outOfStockLbl.textColor = UIColor().colorFromHexString("#72C36F")
+        }
+        
+        cell.outOfStockView.layer.cornerRadius = 24
+        cell.outOfStockView.layer.maskedCorners = [.layerMinXMaxYCorner,.layerMinXMinYCorner]
+
+
         let floorName = tableValues[indexPath.row].room_name ?? "Other"
         
         cell.strickView.isHidden = ((tableValues[indexPath.row].striked ?? "").lowercased() == "false")
         cell.floorNameLabel.text = floorName.uppercased()
         // cell.colorView.backgroundColor = .brown
         cell.colorLabel.text = ((tableValues[indexPath.row].color ?? "") == "") ? "Select Color" : (tableValues[indexPath.row].color ?? "")
+        //((tableValues[indexPath.row].color ?? "") == "Select Color") ? cell.outOfStockView.isHidden = true : cell.outOfStockView.isHidden = false
+        
+        if ((tableValues[indexPath.row].color ?? "") == "Select Color")
+        {
+            cell.outOfStockView.isHidden = true
+        }
+        else
+        {
+            cell.outOfStockView.isHidden = false
+        }
+//        if !((tableValues[indexPath.row].color ?? "") == "Select Color") && tableValues[indexPath.row].room_area == 0.0
+//        {
+//            let index = stairColourNamesArray.firstIndex(of: stairColourNamesArray.filter({$0.color == self.tableValues[indexPath.row].color}).first ?? rf_stairColour_results()) ?? 0
+//            stairIndex = index
+//        }
+//        else
+//        {
+//            let index = floorColorNamesArray.firstIndex(of: floorColorNamesArray.filter({$0.color == self.tableValues[indexPath.row].color}).first ?? rf_floorColour_results()) ?? 0
+//            roomIndex = index
+//        }
         cell.molding.text = ((tableValues[indexPath.row].moulding ?? "") == "") ? "Select Molding" : (tableValues[indexPath.row].moulding ?? "")
         //cell.summeryAttachmentView.loadImageFormWeb(URL(string: tableValues[indexPath.row].room_image_url ?? ""))
         cell.summeryAttachmentView.image = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].room_image_url ?? "")
@@ -543,18 +581,33 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             
             value = self.floorColorNamesArray.compactMap({$0.color})
         }
-    
         
-         
         //
 //        for val in tableValues[sender.tag].material_colors ?? []
 //        {
 //            value.append(val.color ?? "Unknown")
 //        }
+//        if !((tableValues[sender.tag].color ?? "") == "Select Color") && tableValues[sender.tag].room_area == 0.0
+//        {
+//            let index = stairColourNamesArray.firstIndex(of: stairColourNamesArray.filter({$0.color_name == self.tableValues[sender.tag].color}).first ?? rf_stairColour_results()) ?? -1
+//            stairIndex = index
+//        }
+//        else
+//        {
+//            let index = floorColorNamesArray.firstIndex(of: floorColorNamesArray.filter({$0.color_name == self.tableValues[sender.tag].color}).first ?? rf_floorColour_results()) ?? -1
+//            roomIndex = index
+//        }
         
         if(value.count != 0)
         {
-            self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag)
+           if tableValues[sender.tag].room_area == 0.0
+            {
+               self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: stairIndex,stairColour: stairColourNamesArray,isColour: true)
+           }
+            else
+            {
+                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag,selectedIndex: roomIndex,floorColor: floorColorNamesArray,isColour: true)
+            }
         }
         else
         {
@@ -767,7 +820,16 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
     }
     
-    func DropDownDidSelectedAction(index: Int, item: String, tag: Int, cell: Int) {
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
+//    {
+//        return ((self.tableValues[indexPath.row].color ?? "") == "Select Color") ? 200 : 300
+//    }
+    
+    func DropDownDidSelectedAction(index: Int, item: String, tag: Int, cell: Int) 
+    {
+        
+        let masterData = getMasterDataFromDB()
+        let officeLocationId = AppDelegate.appoinmentslData.officeLocationId
         if(tag == 2)
         {
             //  let moudlings = ["VINYL WHITE","PRIMED WHITE","UNFINISHED","MATCHING"]
@@ -793,41 +855,142 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             //arb
             if tableValues[cell].room_name!.contains("STAIRS") && tableValues[cell].room_area == 0.0
             {
-                let selectedColor = self.stairColourNamesArray[index].color ?? ""
-                let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
-                let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
-                //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
-                let roomId = self.tableValues[cell].room_id ?? 0
-                self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
-                self.loadRefreshData()
+                
+                var InOfficeLocation = false
+                for officeids in self.stairColourNamesArray[index].Office_location_ids
+                {
+                    if officeids == officeLocationId
+                    {
+                        InOfficeLocation = true
+                    }
+                }
+                if self.stairColourNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */&& InOfficeLocation == true
+                {
+                    let installer = AppointmentPaymentSummaryViewController.initialization()!
+                    installer.isOutOfstock = true
+                    self.present(installer, animated: true, completion: nil)
+//                    self.alert("Stock Not Available", nil)
+//                    return
+                }
+                if (self.stairColourNamesArray[index].specialOrder == 0 && InOfficeLocation == false) || (self.stairColourNamesArray[index].specialOrder == 1)
+                {
+                    stairIndex = index
+                    let selectedColor = self.stairColourNamesArray[index].color ?? ""
+                    let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
+                    let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
+                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+                    let roomId = self.tableValues[cell].room_id ?? 0
+                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
+                    self.loadRefreshData()
+                }
+//                if (self.stairColourNamesArray[index].specialOrder == 1) //&& InOfficeLocation == false
+//                {
+//                    stairIndex = index
+//                    let selectedColor = self.stairColourNamesArray[index].color ?? ""
+//                    let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
+//                    let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
+//                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+//                    let roomId = self.tableValues[cell].room_id ?? 0
+//                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
+//                    self.loadRefreshData()
+//                }
             }
             else
             {
+               
                 let selectedColor = self.floorColorNamesArray[index].color ?? ""
-                let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
-                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
-                //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
-                let roomId = self.tableValues[cell].room_id ?? 0
-                self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
-                self.loadRefreshData()
+                var InOfficeLocation = false
+                for officeids in self.floorColorNamesArray[index].Office_location_ids
+                {
+                    if officeids == officeLocationId
+                    {
+                        InOfficeLocation = true
+                    }
+                }
+                if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
+                {
+                    let installer = AppointmentPaymentSummaryViewController.initialization()!
+                    installer.isOutOfstock = true
+                    self.present(installer, animated: true, completion: nil)
+                }
+                else if (self.floorColorNamesArray[index].specialOrder == 0 && InOfficeLocation == false) || self.floorColorNamesArray[index].specialOrder == 1
+                {
+                    roomIndex = index
+                    let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
+                    let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
+                    let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+                    let roomId = self.tableValues[cell].room_id ?? 0
+                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
+                    self.loadRefreshData()
+                }
+//                else if (self.floorColorNamesArray[index].specialOrder == 1) //&& InOfficeLocation == false
+//                {
+//                    roomIndex = index
+//                    let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
+//                    let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
+//                    let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+//                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+//                    let roomId = self.tableValues[cell].room_id ?? 0
+//                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
+//                    self.loadRefreshData()
+//                }
             }
             //
         }
         else if tag == 3
         {
-            applyAllBtn.isUserInteractionEnabled = true
-            applyAllBtn.setTitleColor(.white, for: .normal)
-            applyAllSelectColorTxtFld.text = item
-            let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
-            applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
-            self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
-            self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
-            self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+            roomIndex = index
+            var InOfficeLocation = false
+            for officeids in self.floorColorNamesArray[index].Office_location_ids
+            {
+                if officeids == officeLocationId
+                {
+                    InOfficeLocation = true
+                }
+            }
+            if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
+            {
+                let installer = AppointmentPaymentSummaryViewController.initialization()!
+                installer.isOutOfstock = true
+                self.present(installer, animated: true, completion: nil)
+            }
+            else if (self.floorColorNamesArray[index].specialOrder == 0  && InOfficeLocation == false) || (self.floorColorNamesArray[index].specialOrder == 1)
+            {
+                roomIndex = index
+                applyAllBtn.isUserInteractionEnabled = true
+                applyAllBtn.setTitleColor(.white, for: .normal)
+                applyAllSelectColorTxtFld.text = item
+                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
+                self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
+                self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
+                self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+            }
             
+            
+//            if (self.floorColorNamesArray[index].specialOrder == 1) && InOfficeLocation == false
+//            {
+//                
+//                roomIndex = index
+//                applyAllBtn.isUserInteractionEnabled = true
+//                applyAllBtn.setTitleColor(.white, for: .normal)
+//                applyAllSelectColorTxtFld.text = item
+//                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+//                applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
+//                self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
+//                self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
+//                self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+//            }
             
         }
         else if tag == 4
         {
+//            if self.floorColorNamesArray[index].specialOrder == 0 && self.floorColorNamesArray[index].in_stock == 0
+//            {
+//                self.alert("Stock Not Available", nil)
+//                return
+//            }
             applyAllBtn.isUserInteractionEnabled = true
             applyAllBtn.setTitleColor(.white, for: .normal)
             applyAllSelectMoldingTxtFld.text = item

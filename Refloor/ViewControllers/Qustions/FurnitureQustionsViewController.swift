@@ -30,10 +30,37 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var delegate:SummeryEditDelegate?
     var isUpdated = true
     var imagePicker: CaptureImage!
+    var isMiscellaneousTxtView = false
+    var perimeter = 0.0
+    var miscelleneous_Comments = "Enter your comments about Miscellaneous Charge"
+    @IBOutlet weak var perimeterHeightConsrtraint: NSLayoutConstraint!
+    @IBOutlet weak var areaheightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var areaLbl: UILabel!
+    @IBOutlet weak var perimeterLbl: UILabel!
     var qustionAnswer:[QuestionsMeasurementData] = []
     override func viewDidLoad() {
         super.viewDidLoad()
+        if miscelleneous_Comments == ""
+        {
+            miscelleneous_Comments = "Enter your comments about Miscellaneous Charge"
+        }
+        if area != 0.0
+        {
+            areaLbl.text = "Area: \(area) Sq.Ft"
+            let perimeterString = String(format: "%.2f", perimeter)
+            perimeterLbl.text = "Perimeter: \(perimeterString) ft"
+            areaheightConstraint.constant = 36
+            perimeterHeightConsrtraint.constant = 36
+            //String(format: "%.2f", speed)
+        }
+        else
+        {
+            areaLbl.isHidden = true
+            perimeterLbl.isHidden = true
+            areaheightConstraint.constant = 30
+            perimeterHeightConsrtraint.constant = 30
+        }
         print("-----viewDidLoad-----")
         if !isUpdated{
             self.addQuestions()
@@ -176,7 +203,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 {
                     if qustionAnswer[sender.tag].max_allowed_limit != 0
                     {
-                        if qustionAnswer[sender.tag].id == 9
+                        if qustionAnswer[sender.tag].code == "StairWidth"
                         {
                             if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
@@ -186,7 +213,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                 return
                             }
                         }
-                        else if qustionAnswer[sender.tag].id == 1
+                        else if qustionAnswer[sender.tag].code == "RipMultipleLayers"
                         {
                             if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
@@ -195,6 +222,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                 sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
                                 return
                             }
+                        }
+                    }
+                    else if qustionAnswer[sender.tag].code == "miscellaneouscharge"
+                    {
+                        if value2 > 0
+                        {
+                            qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
+                            cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
+                            self.tableView.reloadData()
                         }
                     }
                     qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
@@ -222,51 +258,123 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     
     
     func textViewDidBeginEditing(_ textView: UITextView) {
+        
+        if textView.tag == qustionAnswer.count + 1
+        {
+            let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
+            if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+            {
+                if textView.text == "Enter your comments about Miscellaneous Charge"
+                {
+                    textView.text = ""
+                }
+                textView.textColor = .white
+                isMiscellaneousTxtView = true
+                return
+            }
+        }
         if(placeHolder == (textView.text ?? ""))
         {
-            textView.text = ""
+           
             textView.textColor = .white
         }
+        
     }
     func textViewDidEndEditing(_ textView: UITextView) {
-        let value = textView.text ?? ""
         
-        if(value).removeUnvantedcharactoes() == ""
+        if textView.tag == qustionAnswer.count + 1
         {
-            textView.text = placeHolder
-            textView.textColor = UIColor.placeHolderColor
-            self.qustionAnswer[textView.tag].answerOFQustion = nil
+            if textView.text == ""
+            {
+                textView.text = "Enter your comments about Miscellaneous Charge"
+                textView.textColor = UIColor().colorFromHexString("#586471")
+                isMiscellaneousTxtView = false
+                miscelleneous_Comments = textView.text
+                return
+            }
+            else
+            {
+                miscelleneous_Comments = textView.text
+                return
+            }
         }
         else
         {
-            self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+            let value = textView.text ?? ""
             
+            if(value).removeUnvantedcharactoes() == ""
+            {
+                textView.text = placeHolder
+                textView.textColor = UIColor.placeHolderColor
+                self.qustionAnswer[textView.tag].answerOFQustion = nil
+            }
+            else
+            {
+                self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+                
+            }
         }
     }
     
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool
     {
-        let  value = textView.text ?? ""
-        self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+        
+        if textView.tag != qustionAnswer.count + 1
+        {
+            let  value = textView.text ?? ""
+            self.qustionAnswer[textView.tag].answerOFQustion = AnswerOFQustion(value)
+            return true
+        }
+        else
+        {
+            let restrictedCharacters = CharacterSet(charactersIn: "<>&\"'")
+            
+            // Check if the input contains any restricted characters
+            if text.rangeOfCharacter(from: restrictedCharacters) != nil {
+                return false // Don't allow the change
+            }
+            miscelleneous_Comments = textView.text + text
+        }
+//            let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_., "
+//            if range.location == 0 && text == " "
+//            {
+//                return false
+//            }
+//                let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
+//                let filtered = text.components(separatedBy: cs).joined(separator: "")
+//            self.miscelleneous_Comments = textView.text
+//                return (text == filtered)
+//        }
         return true
     }
     
     
     
     @IBAction func pluseButtonAction(_ sender: UIButton) {
+        let masterData = getMasterDataFromDB()
         if qustionAnswer[sender.tag].max_allowed_limit != 0
         {
-            if qustionAnswer[sender.tag].id == 9
+            if qustionAnswer[sender.tag].code == "StairWidth"
             {
-                if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
+                if qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble == masterData.max_stair_width//qustionAnswer[sender.tag].max_allowed_limit
                 {
                     print("reached max value")
                     self.alert("Stair width value exceeded maximum limit", nil)
                     return
                 }
+                else
+                {
+                    if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
+                    {
+                        qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) + 0.5
+                        
+                        cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)"
+                    }
+                    return
+                }
             }
-            else if qustionAnswer[sender.tag].id == 1
+            else if qustionAnswer[sender.tag].code == "RipMultipleLayers"
             {
                 if qustionAnswer[sender.tag].answerOFQustion!.numberVaue == qustionAnswer[sender.tag].max_allowed_limit
                 {
@@ -276,11 +384,22 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 }
             }
         }
+//        else
+//        {
+//            if qustionAnswer[sender.tag].id == 32
+//            {
+//                self.tableView.reloadData()
+//            }
+//        }
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
             qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) + 1
             
             cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
+            if qustionAnswer[sender.tag].code == "miscellaneouscharge"
+            {
+                self.tableView.reloadData()
+            }
         }
         
     }
@@ -288,11 +407,24 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     @IBAction func minusButtonAction(_ sender: UIButton) {
         if let cell = tableView.cellForRow(at: [0, (sender.tag + 1)]) as? QustionsTableViewCell
         {
+            if qustionAnswer[sender.tag].code == "StairWidth"
+            {
+                if ((qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) > 0.0)
+                {
+                    qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) - 0.5
+                    
+                    cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)"
+                }
+            }
             if ((qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) > 0)
             {
                 qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 1) - 1
                 
                 cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
+            }
+            if qustionAnswer[sender.tag].code == "miscellaneouscharge"
+            {
+                self.tableView.reloadData()
             }
         }
     }
@@ -347,39 +479,81 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return qustionAnswer.count + 1
-    }
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = QustionsTableViewCell()
-        if(indexPath.row == 0)
+   
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int 
+    {
+        
+        let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
+        if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
         {
-            cell = tableView.dequeueReusableCell(withIdentifier: "HeaderQustionsTableViewCell") as! QustionsTableViewCell
-            //  cell.skipButton.isHidden = (self.delegate != nil)
-            
-            cell.nextButton.setTitle((self.delegate != nil) ? "Save":"Next", for: .normal)
-            // cell.areaLabel.text = "\((self.roomData.name ?? "Unknown")) > Total Area: \(area) Sq.Fts"
-            cell.headingLabel.text =  "What is in this room ?"
+            return qustionAnswer.count + 2
         }
         else
         {
-            let index = indexPath.row - 1
-            
-            if(qustionAnswer[index].question_type ?? "") == "numerical_box"
+            return qustionAnswer.count + 1
+        }
+        
+        
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell 
+    {
+        
+            var cell = QustionsTableViewCell()
+            if(indexPath.row == 0)
             {
-                cell = setCellForNumerical(index)
+                cell = tableView.dequeueReusableCell(withIdentifier: "HeaderQustionsTableViewCell") as! QustionsTableViewCell
+                //  cell.skipButton.isHidden = (self.delegate != nil)
+                
+                cell.nextButton.setTitle((self.delegate != nil) ? "Save":"Next", for: .normal)
+                // cell.areaLabel.text = "\((self.roomData.name ?? "Unknown")) > Total Area: \(area) Sq.Fts"
+                cell.headingLabel.text =  "What is in this room ?"
             }
-            else if(qustionAnswer[index].question_type ?? "") == "textbox"
+        else if indexPath.row == qustionAnswer.count + 1
+        {
+            print(indexPath.row)
+             cell = self.tableView.dequeueReusableCell(withIdentifier: "MiscellaneousTextEntryTableViewCell") as! QustionsTableViewCell
+            cell.miscellaneousTxtView.leftSpace()
+            cell.miscellaneousTxtView.delegate = self
+            cell.miscellaneousTxtView.tag = indexPath.row
+            if miscelleneous_Comments != "Enter your comments about Miscellaneous Charge" || miscelleneous_Comments == ""
             {
-                cell = setCellForTextEntry(index)
+                cell.miscellaneousTxtView.text = miscelleneous_Comments
+                cell.miscellaneousTxtView.textColor = .white
             }
             else
             {
-                cell = setCellForDropDown(index)
+                cell.miscellaneousTxtView.text = "Enter your comments about Miscellaneous Charge"
             }
             
+                       // return cell
+            //cell = setCellForNumerical(indexPath.row - 2)
         }
-        return cell
+            else
+            {
+                let index = indexPath.row - 1
+                
+                if(qustionAnswer[index].question_type ?? "") == "numerical_box"
+                {
+                    cell = setCellForNumerical(index)
+                }
+                else if(qustionAnswer[index].question_type ?? "") == "textbox"
+                {
+                    cell = setCellForTextEntry(index)
+                }
+                else
+                {
+                    cell = setCellForDropDown(index)
+                }
+                
+            }
+            return cell
+        
+          //
+                    
+        
+        
+//
     }
     
     
@@ -397,7 +571,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         print("Indexpath : \(index) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
         cell.numerical_Answer_Label.tag = index
-        cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)"
+        if qustionAnswer[index].code == "StairWidth"
+        {
+            cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.stairWidthDouble ?? 0.0)"
+        }
+        else
+        {
+            cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)"
+        }
         cell.numerical_Answer_Label.isUserInteractionEnabled = true
         return cell
     }
@@ -478,9 +659,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         {
                             let value = Int(answer.answers![0].answer ?? "") ?? 0
                             let val =  AnswerOFQustion(value)
+                            if answer.question_id == 9
+                            {
+                                let value = Double(answer.answers![0].answer ?? "") ?? 0.0
+                                let strairVal = AnswerOFQustion(value)
+                                qustion.answerOFQustion = strairVal
+                            }
                             val.qustionLineID = answer.contract_question_line_id ?? 0
                             val.answerID = answer.answers![0].id ?? 0
-                            qustion.answerOFQustion = val
+                            if !( answer.question_id == 9)
+                            {
+                                qustion.answerOFQustion = val
+                            }
                         }
                     }
                     else if(answer.question_type == "textbox")
@@ -634,9 +824,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             let TrueSelfLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftTrueSelfLeveling" }) ?? 0
             let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
             let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
+            let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
-            if ((question.mandatory_answer == true) &&  !(((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
+            if ((question.mandatory_answer == true) &&  !((((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || (self.qustionAnswer[value].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.multySelection?.count ?? 0) > 0)))
             {
@@ -652,6 +843,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 return "You must select a primer type"
 
             }
+             if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+            {
+                if miscelleneous_Comments == "Enter your comments about Miscellaneous Charge"
+                {
+                   return "You must enter comments about miscellaneous charge"
+                }
+//                 else
+//                 {
+//                    self.miscelleneous_Comments =
+//                }
+            }
+            
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {
             //
@@ -820,6 +1023,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             if((answer.numberVaue ?? 0) != 0)
             {
                 let param:[String:Any] = ["question_id":question.id ,"answer":value]
+                return param
+            }
+            else if question.question_code == "StairWidth"
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
                 return param
             }
         case "textbox":
@@ -1062,6 +1270,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 
             }
             
+        }
+        if miscelleneous_Comments != "Enter your comments about Miscellaneous Charge" && miscelleneous_Comments != ""
+        {
+            
+            saveRoomMiscellaneousComments(miscellanousComments: self.miscelleneous_Comments, appointmentId: appointmentId, roomId: roomID)
         }
         
         self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
@@ -1308,3 +1521,6 @@ extension FurnitureQustionsViewController: ImagePickerDelegate {
         
     }
 }
+
+
+

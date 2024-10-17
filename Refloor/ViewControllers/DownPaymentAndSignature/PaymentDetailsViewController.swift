@@ -302,6 +302,11 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.selectedPaymentMethord = self.selectedPaymentMethord
                 applicant.downpayment = self.downpayment
                 applicant.adminFee = self.adminFee
+                applicant.downPaymentValue = self.downPaymentValue
+                applicant.finalpayment = self.finalpayment
+                applicant.financePayment = self.financePayment
+                applicant.selectedPaymentMethord = self.selectedPaymentMethord
+                applicant.downpayment = self.downpayment
                 self.navigationController?.pushViewController(applicant, animated: true)
                 //let masterData = self.getMasterDataFromDB()
                 
