@@ -344,31 +344,37 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "ApplicantInformation"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-        let signature = SignatureSubmitViewController.initialization()!
-        if co_Applicant_Skipped == true{
-            signature.isCoAppSkiped = 1
-        }
-        else{
-            signature.isCoAppSkiped = 0
-        }
-        signature.downOrFinal = self.downOrFinal
-        signature.totalAmount = self.totalAmount
-        signature.paymentPlan = self.paymentPlan
-        signature.paymentPlanValue = self.paymentPlanValue
-        signature.paymentOptionDataValue = self.paymentOptionDataValue
-        signature.drowingImageID = self.drowingImageID
-        signature.area = self.area
-        signature.downPaymentValue = self.downPaymentValue
-        signature.finalpayment = self.finalpayment
-        signature.financePayment = self.financePayment
-        signature.selectedPaymentMethord = self.selectedPaymentMethord
-        signature.downpayment = self.downpayment
+//        let signature = SignatureSubmitViewController.initialization()!
+//        if co_Applicant_Skipped == true{
+//            signature.isCoAppSkiped = 1
+//        }
+//        else{
+//            signature.isCoAppSkiped = 0
+//        }
+//        signature.downOrFinal = self.downOrFinal
+//        signature.totalAmount = self.totalAmount
+//        signature.paymentPlan = self.paymentPlan
+//        signature.paymentPlanValue = self.paymentPlanValue
+//        signature.paymentOptionDataValue = self.paymentOptionDataValue
+//        signature.drowingImageID = self.drowingImageID
+//        signature.area = self.area
+//        signature.downPaymentValue = self.downPaymentValue
+//        signature.finalpayment = self.finalpayment
+//        signature.financePayment = self.financePayment
+//        signature.selectedPaymentMethord = self.selectedPaymentMethord
+//        signature.downpayment = self.downpayment
 //        if let customer = AppDelegate.appoinmentslData
 //        {
 //            signature.isCoAppSkiped = customer.co_applicant_skipped ?? 0
 //        }
-        self.navigationController?.pushViewController(signature, animated: true)
-        
+//        self.navigationController?.pushViewController(signature, animated: true)
+     
+        let details = UpdateCustomerDetailsOneViewController.initialization()!
+        details.floorLevelData = AppDelegate.floorLevelData
+        details.floorShapeData = []
+        details.roomData = AppDelegate.roomData
+        details.appoinmentslData = AppDelegate.appoinmentslData
+        self.navigationController?.pushViewController(details, animated: true)
     }
     
     
