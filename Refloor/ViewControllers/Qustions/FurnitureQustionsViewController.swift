@@ -39,6 +39,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     @IBOutlet weak var areaLbl: UILabel!
     @IBOutlet weak var perimeterLbl: UILabel!
     var qustionAnswer:[QuestionsMeasurementData] = []
+    var removeCurrentCoveringAnswer: String? = nil
+    var currentCoveringTypeAnswer: String? = nil
+    var existingSubSurfaceAnswer: String? = nil
     override func viewDidLoad() {
         super.viewDidLoad()
         if miscelleneous_Comments == ""
@@ -84,6 +87,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var qustionAnswer: [QuestionsMeasurementData] = []
         questionsList.forEach{ question in
+            print("questionsList : ", questionsList)
             //if !roomName.localizedCaseInsensitiveContains("stair") && area != 0
             if area != 0
             {
@@ -113,7 +117,28 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     }
     override func viewWillAppear(_ animated: Bool)
     {
+        setDefaultAnswerForToiletQuestion()
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    
+    func setDefaultAnswerForToiletQuestion() {
+        print("roomName : ", roomName)
+        if roomName.lowercased().contains("bathroom") {
+            print("inside setDefaultAnswerForToiletQuestion")
+            if let toiletQuestionIndex = qustionAnswer.firstIndex(where: { $0.code == "Toilet" }) {
+                
+                // Fetch the "Yes" answer from quote_label if it exists
+                if let yesAnswer = qustionAnswer[toiletQuestionIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                    
+                    // Set the default answer to "Yes" for the "Toilet" question
+                    qustionAnswer[toiletQuestionIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                    print("Default answer set to 'Yes' for question 'Toilet'")
+                } else {
+                    print("No 'Yes' option found in quote_label for 'Toilet' question.")
+                }
+            }
+        }
     }
     
     func addQuestions(){
@@ -409,7 +434,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         {
             if qustionAnswer[sender.tag].code == "StairWidth"
             {
-                if ((qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) > 0.0)
+                if ((qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) > 3.0)
                 {
                     qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) - 0.5
                     
@@ -626,8 +651,76 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         cell.selection_Answer_Label.textColor = (name == "") ? UIColor.placeHolderColor : UIColor.white
         cell.selection_DropDown_Button.tag = index
         
+        // Q4 Deepa Start
+        if let questionCode = qustionAnswer[index].code {
+              if questionCode == "RemoveCurrentCovering" {
+                  removeCurrentCoveringAnswer = name
+              }
+              
+              if questionCode == "CurrentCoveringType" {
+                  currentCoveringTypeAnswer = name
+              } 
+            
+            if questionCode == "ExistingSubSurface" {
+                existingSubSurfaceAnswer = name
+              }
+          }
+          
+          // Check if both answers are set after the slight delay
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+              if let removeAnswer = self.removeCurrentCoveringAnswer,
+                 let currentCoverAnswer = self.currentCoveringTypeAnswer, let existingSubSurface = self.existingSubSurfaceAnswer {
+                  self.checkAndSelectPrimerTypeAnswer(removeCurrentCoveringAnswer: removeAnswer, currentCoveringTypeAnswer: currentCoverAnswer, existingSubSurfaceAnswer: existingSubSurface)
+              } else {
+                  print("Waiting for both answers to be set.")
+              }
+          }
+        // Q4 Deepa
+        
         return cell
     }
+    
+    // Q4 Deepa Start
+    func checkAndSelectPrimerTypeAnswer(removeCurrentCoveringAnswer: String?, currentCoveringTypeAnswer: String?, existingSubSurfaceAnswer: String?) {
+        
+        if (removeCurrentCoveringAnswer == "No" && currentCoveringTypeAnswer == "Concrete / Cement / Gypsum") || (removeCurrentCoveringAnswer == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
+            
+            if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                    qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                    tableView.reloadData()
+                } else {
+                    print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                }
+            }
+            
+        }
+        
+        if (removeCurrentCoveringAnswer == "No" && (currentCoveringTypeAnswer == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || currentCoveringTypeAnswer == "Epoxy" || currentCoveringTypeAnswer == "Glued Down Hard Surface" || currentCoveringTypeAnswer == "Hardwood or Engineered Hardwood" || currentCoveringTypeAnswer == "Particle Board" || currentCoveringTypeAnswer == "Plywood / OSB" || currentCoveringTypeAnswer == "Adhesive Concrete/Cement/Gypsum")) || (removeCurrentCoveringAnswer == "Yes" && (existingSubSurfaceAnswer == "Plywood / OSB" || existingSubSurfaceAnswer == "Particle Board" || existingSubSurfaceAnswer == "Adhesive on Concrete / Gypsum" || existingSubSurfaceAnswer == "Epoxy")) {
+            
+            if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                    qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                    tableView.reloadData()
+                } else {
+                    print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                }
+            }
+            
+        }
+        
+        if (currentCoveringTypeAnswer == "Concrete / Cement / Gypsum") || (removeCurrentCoveringAnswer == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
+            if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                      if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                          qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                          tableView.reloadData()
+                      }
+                  }
+        }
+    }
+    // Q4 Deepa
     
     
     func foreditingFunctions()
@@ -738,6 +831,12 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     }
     
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
+        //Q4 Changes Deepa Start
+              let selectedValue = item
+              let questionCode = qustionAnswer[tag].code  // Assuming `code` holds the question code
+                print("Selected Value: \(selectedValue), Question Code: \(questionCode)")
+        //Q4 Changes Deepa
+        
         if(delegate == nil)
         {
             qustionAnswer[tag].answerOFQustion = AnswerOFQustion( qustionAnswer[tag].quote_label![index])
@@ -749,6 +848,29 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             qustionAnswer[tag].answerOFQustion?.qustionLineID = value?.qustionLineID ?? 0
             qustionAnswer[tag].answerOFQustion?.answerID = value?.answerID ?? 0
         }
+        
+        //Q4 Changes Deepa Start
+              if questionCode == "CurrentCoveringType" {
+                  if selectedValue == "Carpet" || selectedValue == "Floating Floor (LVP or Laminate)" {
+                      print("inside_DropDownDidSelectedAction")
+
+                      if let removeCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" }) {
+                          print("Found RemoveCurrentCovering at index: \(removeCoveringIndex)")
+                          if let yesAnswer = qustionAnswer[removeCoveringIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                              // Set the default answer to "Yes" for the "Toilet" question
+                              qustionAnswer[removeCoveringIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                              
+                              tableView.reloadData()
+                              print("Default answer set to 'Yes' for question 'RemoveCurrentCovering'")
+                          } else {
+                              print("No 'Yes' option found in quote_label for 'RemoveCurrentCovering' question.")
+                          }
+                      }
+                      
+                  }
+              }
+        //Q4 Changes Deepa
+        
         // qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
         
             //var setDefaultAnswerTrueIndex = qustionAnswer.firstIndex(of: qustionAnswer.filter({$0.setde == UnitNumberId}).first ?? Unit_list()) ?? 0
