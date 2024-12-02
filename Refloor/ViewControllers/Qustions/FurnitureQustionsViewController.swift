@@ -598,6 +598,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         cell.numerical_Answer_Label.tag = index
         if qustionAnswer[index].code == "StairWidth"
         {
+            cell.numerical_Answer_Label.isUserInteractionEnabled = false
             cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.stairWidthDouble ?? 0.0)"
         }
         else
@@ -714,6 +715,13 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         if (currentCoveringTypeAnswer == "Concrete / Cement / Gypsum") || (removeCurrentCoveringAnswer == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
             if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
                       if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                          qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                          tableView.reloadData()
+                      }
+                  }
+        } else {
+            if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                      if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
                           qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
                           tableView.reloadData()
                       }
@@ -867,9 +875,43 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                           }
                       }
                       
+                  } else {
+                      if let removeCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" }) {
+                          print("Found RemoveCurrentCovering at index: \(removeCoveringIndex)")
+                          if let yesAnswer = qustionAnswer[removeCoveringIndex].quote_label?.first(where: { $0.value == "No" }) {
+                              // Set the default answer to "Yes" for the "Toilet" question
+                              qustionAnswer[removeCoveringIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                              
+                              tableView.reloadData()
+                              print("Default answer set to 'Yes' for question 'RemoveCurrentCovering'")
+                          } else {
+                              print("No 'Yes' option found in quote_label for 'RemoveCurrentCovering' question.")
+                          }
+                      }
                   }
               }
         //Q4 Changes Deepa
+        
+//        if removeCurrentCoveringAnswer == "Yes" {
+//            if questionCode == "CurrentCoveringType" {
+//                if (selectedValue == "Carpet" || selectedValue == "Floating Floor (LVP or Laminate)") {
+//                    if let removeCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+//                        print("Found RemoveCurrentCovering at index: \(removeCoveringIndex)")
+//                        if let yesAnswer = qustionAnswer[removeCoveringIndex].quote_label?.first(where: { $0.value == "" }) {
+//                            // Set the default answer to "Yes" for the "Toilet" question
+//                            qustionAnswer[removeCoveringIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+//                            
+//                            tableView.reloadData()
+//                            print("Default answer set to 'Yes' for question 'RemoveCurrentCovering'")
+//                        } else {
+//                            print("No 'Yes' option found in quote_label for 'RemoveCurrentCovering' question.")
+//                        }
+//                    }
+//                    
+//                }
+//            }
+//        }
+        
         
         // qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
         
