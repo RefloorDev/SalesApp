@@ -50,6 +50,20 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     
     var imagePicker: CaptureImage!
     
+    var downOrFinal:Double = 0
+    var totalAmount:Double = 0
+    var paymentPlan:PaymentPlanValue?
+    var paymentPlanValue:PaymentPlanValue?
+    var paymentOptionDataValue:PaymentOptionDataValue?
+    var drowingImageID = 0
+    var area:Double = 0
+    var downPaymentValue:Double = 0
+    var finalpayment:Double = 0
+    var financePayment:Double = 0
+    var selectedPaymentMethord:PaymentType?
+    var downpayment = DownPaymentViewController.initialization()!
+    var co_Applicant_Skipped:Bool = Bool()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
@@ -199,6 +213,21 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         details.roomData = self.roomData
         details.appoinmentslData = self.appoinmentslData
         details.isEditedtextField = isEditedtextField
+        
+        
+        details.downOrFinal = self.downOrFinal
+        details.totalAmount = self.totalAmount
+        details.paymentPlan = self.paymentPlan
+        details.paymentPlanValue = self.paymentPlanValue
+        details.paymentOptionDataValue = self.paymentOptionDataValue
+        details.drowingImageID = self.drowingImageID
+        details.area = self.area
+        details.downPaymentValue = self.downPaymentValue
+        details.finalpayment = self.finalpayment
+        details.financePayment = self.financePayment
+        details.selectedPaymentMethord = self.selectedPaymentMethord
+        details.downpayment = self.downpayment
+        
         self.navigationController?.pushViewController(details, animated: true)
         
         

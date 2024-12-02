@@ -374,6 +374,30 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         details.floorShapeData = []
         details.roomData = AppDelegate.roomData
         details.appoinmentslData = AppDelegate.appoinmentslData
+        
+//        if co_Applicant_Skipped == true{
+//            details.isCoAppSkiped = 1
+//            }
+//            else{
+//                details.isCoAppSkiped = 0
+//            }
+        details.downOrFinal = self.downOrFinal
+        details.totalAmount = self.totalAmount
+        details.paymentPlan = self.paymentPlan
+        details.paymentPlanValue = self.paymentPlanValue
+        details.paymentOptionDataValue = self.paymentOptionDataValue
+        details.drowingImageID = self.drowingImageID
+        details.area = self.area
+        details.downPaymentValue = self.downPaymentValue
+        details.finalpayment = self.finalpayment
+        details.financePayment = self.financePayment
+        details.selectedPaymentMethord = self.selectedPaymentMethord
+        details.downpayment = self.downpayment
+//            if let customer = AppDelegate.appoinmentslData
+//            {
+//                details.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+//            }
+            
         self.navigationController?.pushViewController(details, animated: true)
     }
     
