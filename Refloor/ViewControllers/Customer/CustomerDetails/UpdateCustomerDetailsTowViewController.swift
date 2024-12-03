@@ -65,6 +65,7 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
+        print("inside heiyfgeyfughjfghj")
         if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 0{
             customerPhoneStackView.isHidden = true
             customerContactNumberStackView.isHidden = true
@@ -149,6 +150,90 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
         
          isSkippbuttonCalled = 0
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        update()
+    }
+    
+   func update() {
+    
+        //arb
+        if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 0{
+            customerPhoneStackView.isHidden = true
+            customerContactNumberStackView.isHidden = true
+            customerContactNumberHeightConstraint.constant = 0
+            customerPhoneHeightConstraint.constant = 0
+            
+            customerContactNumbertopConstraint.constant = 0
+            customerContactNumberbottomConstraint.constant = 0
+            
+            customerPhoneNumbertopConstraint.constant = 0
+            customerPhoneNumberbottomConstraint.constant = 0
+        }else{
+            customerPhoneStackView.isHidden = false
+            customerContactNumberStackView.isHidden = false
+            customerContactNumberHeightConstraint.constant = 111
+            customerPhoneHeightConstraint.constant = 111
+            
+            customerContactNumbertopConstraint.constant = 10
+            customerContactNumberbottomConstraint.constant = 30
+            
+            customerPhoneNumbertopConstraint.constant = 10
+            customerPhoneNumberbottomConstraint.constant = 30
+            
+        }
+        //
+
+        // AppDelegate.appoinmentslData.id = appoinmentslData.id
+        AppDelegate.appoinmentslData = self.appoinmentslData
+        self.setNavigationBarbackAndlogo(with: "Update Customer 2 Details")
+        self.customerFirstName.setPlaceHolderWithColor(placeholder: "Enter Here", colour: UIColor.placeHolderColor)
+        self.customerLastName.setPlaceHolderWithColor(placeholder: "Enter Here", colour: UIColor.placeHolderColor)
+        self.customerMiddleName.setPlaceHolderWithColor(placeholder: "Enter Here", colour: UIColor.placeHolderColor)
+        
+        self.customerContactNumberTF.setPlaceHolderWithColor(placeholder: "Contact Number", colour: UIColor.placeHolderColor)
+        
+        
+        
+        self.customerEmail.setPlaceHolderWithColor(placeholder: "Enter Here", colour: UIColor.placeHolderColor)
+        self.customerPhone.setPlaceHolderWithColor(placeholder: "Enter Here", colour: UIColor.placeHolderColor)
+        self.customerContactNumberTF.setPlaceHolderWithColor(placeholder: "Enter Here", colour: UIColor.placeHolderColor)
+        
+        self.Street_Address_TF.setPlaceHolderWithColor(placeholder: "Street", colour: UIColor.placeHolderColor)
+        self.state_TF.setPlaceHolderWithColor(placeholder: "State Code", colour: UIColor.placeHolderColor)
+        self.city_TF.setPlaceHolderWithColor(placeholder: "City", colour: UIColor.placeHolderColor)
+        self.zipTF.setPlaceHolderWithColor(placeholder: "Zip", colour: UIColor.placeHolderColor)
+        
+        self.customerFirstName.text = ((self.appoinmentslData?.co_applicant_first_name ?? "") == "") ? (self.appoinmentslData.co_applicant ?? "") : (self.appoinmentslData?.co_applicant_first_name ?? "")
+        self.customerMiddleName.text = self.appoinmentslData.co_applicant_middle_name ?? ""
+        self.customerLastName.text = self.appoinmentslData.co_applicant_last_name
+        
+        self.customerContactNumberTF.text = self.appoinmentslData.co_applicant_secondary_phone
+        self.customerEmail.text = self.appoinmentslData.co_applicant_email
+        
+        self.Street_Address_TF.text = self.appoinmentslData.co_applicant_address
+        self.city_TF.text = self.appoinmentslData.co_applicant_city
+        self.state_TF.text = self.appoinmentslData.co_applicant_state
+        self.zipTF.text = self.appoinmentslData.co_applicant_zip
+        self.customerPhone.text = self.appoinmentslData.co_applicant_phone
+        self.appoinmentslData.co_applicant_skipped = 0
+        
+        self.checkTextFieldEdited()
+        self.zipTF.keyboardType = .asciiCapableNumberPad
+         self.zipTF.delegate = self
+        setPhoneNumberDelegate()
+        //         self.customerAddressTF.isUserInteractionEnabled = false
+        //         self.customerContactNumberTF.isUserInteractionEnabled = false
+        //         self.customerSpouseNameTF.isUserInteractionEnabled = false
+        //         self.customerNameTF.isUserInteractionEnabled = false
+        
+        // Do any additional setup after loading the view.
+        if AppDelegate.appoinmentslData.co_applicant_skipped == 1
+        {
+            co_Applicant_Skipped = true
+        }
+        else
+        {
+            co_Applicant_Skipped = false
+        }
     }
     
     @IBAction func submitAndTransforButtonAction(sender: UIButton)

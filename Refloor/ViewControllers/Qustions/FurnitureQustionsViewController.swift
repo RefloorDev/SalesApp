@@ -230,6 +230,13 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     {
                         if qustionAnswer[sender.tag].code == "StairWidth"
                         {
+                            if value2 < 3 { // Automatically set to 3 if value is less than
+
+                                self.alert("Stair width value must be at least 3.", nil)
+                                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)
+                                return
+                            }
+                            
                             if value2 > qustionAnswer[sender.tag].max_allowed_limit!
                             {
                                 print("reached max value")
@@ -237,6 +244,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                 sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
                                 return
                             }
+                            qustionAnswer[sender.tag].answerOFQustion?.stairWidthDouble = Double(value2)
+                            cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion?.stairWidthDouble ?? 3)"
+                            self.tableView.reloadData()
                         }
                         else if qustionAnswer[sender.tag].code == "RipMultipleLayers"
                         {
@@ -395,6 +405,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) + 0.5
                         
                         cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)"
+                        self.tableView.reloadData()
                     }
                     return
                 }
@@ -439,6 +450,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble =  (qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble) - 0.5
                     
                     cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)"
+                    self.tableView.reloadData()
                 }
             }
             if ((qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) > 0)
@@ -598,7 +610,6 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         cell.numerical_Answer_Label.tag = index
         if qustionAnswer[index].code == "StairWidth"
         {
-            cell.numerical_Answer_Label.isUserInteractionEnabled = false
             cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.stairWidthDouble ?? 0.0)"
         }
         else
