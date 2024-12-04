@@ -279,8 +279,12 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             }
             else
             {
-                sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
-                self.alert("Please enter a valid value", nil)
+                if qustionAnswer[sender.tag].code == "StairWidth" {
+                    sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)
+                } else {
+                    sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.numberVaue!)
+                    self.alert("Please enter a valid value", nil)
+                }
             }
             
             
@@ -701,7 +705,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
                 if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
                     qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                    tableView.reloadData()
+//                    tableView.reloadData()
                 } else {
                     print("No 'Porous' option found in quote_label for 'PrimerType' question.")
                 }
@@ -715,7 +719,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
                 if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
                     qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                    tableView.reloadData()
+//                    tableView.reloadData()
                 } else {
                     print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
                 }
@@ -727,14 +731,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
                       if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
                           qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                          tableView.reloadData()
+//                          tableView.reloadData()
                       }
                   }
         } else {
             if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
                       if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
                           qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                          tableView.reloadData()
+//                          tableView.reloadData()
                       }
                   }
         }
