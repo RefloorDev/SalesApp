@@ -245,7 +245,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                 return
                             }
                             qustionAnswer[sender.tag].answerOFQustion?.stairWidthDouble = Double(value2)
-                            cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion?.stairWidthDouble ?? 3)"
+                            cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion?.stairWidthDouble ?? 0.0)"
                             self.tableView.reloadData()
                         }
                         else if qustionAnswer[sender.tag].code == "RipMultipleLayers"
@@ -608,12 +608,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         if(qustionAnswer[index].answerOFQustion == nil)
         {
             qustionAnswer[index].answerOFQustion = AnswerOFQustion(0)
-            
+            print(" qustionAnswer[index].answerOFQustion : ",  qustionAnswer[index].answerOFQustion?.numberVaue)
         }
         print("Indexpath : \(index) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
+        print("Indexpath : \(qustionAnswer[index].question_type) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
+        
         cell.numerical_Answer_Label.tag = index
         if qustionAnswer[index].code == "StairWidth"
         {
+            print("Indexpath : \(index) numberValue: \(qustionAnswer[index].answerOFQustion?.numberVaue ?? -1)")
             cell.numerical_Answer_Label.text = "\(qustionAnswer[index].answerOFQustion?.stairWidthDouble ?? 0.0)"
         }
         else
@@ -1006,13 +1009,32 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
+            let StairCount = qustionAnswer.lastIndex(where: {$0.code == "StairCount"}) ?? 0
+            let StairWidth = qustionAnswer.lastIndex(where: {$0.code == "StairWidth"}) ?? 0
+            
+            print("StairCount answer1 : ", self.qustionAnswer[StairCount].answerOFQustion?.numberVaue)
+            print("StairCount answer2 : ", self.qustionAnswer[StairCount].answerOFQustion?.stairWidthDouble)
+            
+            print("StairWidth answer1 : ", self.qustionAnswer[StairWidth].answerOFQustion?.numberVaue)
+            print("StairWidth answer2 : ", self.qustionAnswer[StairWidth].answerOFQustion?.stairWidthDouble)
+         
+            print("question : ", qustionAnswer)
+            
+            print("mandatory value : ", "\(question.mandatory_answer == true)", ", NUMVAL: ", ((self.qustionAnswer[StairCount].answerOFQustion?.numberVaue ?? 0) > 0), ", STRWDT: ", "\((self.qustionAnswer[StairCount].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0)", "textvalue : ", "\((self.qustionAnswer[StairCount].answerOFQustion?.textValue?.count ?? 0) > 0)")
+            
             if ((question.mandatory_answer == true) &&  !((((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || (self.qustionAnswer[value].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.multySelection?.count ?? 0) > 0)))
             {
-                
+         
                 let questionNumber = value + 1
                 return "Please answer question number \(questionNumber)"
+            } else if roomName.contains("STAIRS") {
+                if ((question.mandatory_answer == true) && !((self.qustionAnswer[StairCount].answerOFQustion?.numberVaue ?? 0) > 0) ) {
+                    var StairCount = qustionAnswer.lastIndex(where: {$0.code == "StairCount"}) ?? 0
+                    StairCount = StairCount + 1
+                    return "Please answer question number \(StairCount)"
+                }
             }
            // q4 changes
             else  if (((self.qustionAnswer[TrueSelfLeveling].answerOFQustion?.numberVaue ?? 0) > 0) || ((self.qustionAnswer[BuildUpLeveling].answerOFQustion?.numberVaue ?? 0) > 0)) &&
@@ -1047,7 +1069,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             //                        break
             //                    }
         }
-        
+        print("question1 : ", qustionAnswer)
         return ""
     }
     
