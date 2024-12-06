@@ -686,14 +686,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
           }
           
           // Check if both answers are set after the slight delay
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-              if let removeAnswer = self.removeCurrentCoveringAnswer,
-                 let currentCoverAnswer = self.currentCoveringTypeAnswer, let existingSubSurface = self.existingSubSurfaceAnswer {
-                  self.checkAndSelectPrimerTypeAnswer(removeCurrentCoveringAnswer: removeAnswer, currentCoveringTypeAnswer: currentCoverAnswer, existingSubSurfaceAnswer: existingSubSurface)
-              } else {
-                  print("Waiting for both answers to be set.")
-              }
-          }
+//          DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//              if let removeAnswer = self.removeCurrentCoveringAnswer,
+//                 let currentCoverAnswer = self.currentCoveringTypeAnswer, let existingSubSurface = self.existingSubSurfaceAnswer {
+//                  self.checkAndSelectPrimerTypeAnswer(removeCurrentCoveringAnswer: removeAnswer, currentCoveringTypeAnswer: currentCoverAnswer, existingSubSurfaceAnswer: existingSubSurface)
+//              } else {
+//                  print("Waiting for both answers to be set.")
+//              }
+//          }
         // Q4 Deepa
         
         return cell
@@ -907,29 +907,143 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                           }
                       }
                   }
+                  
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                      if (removeCurrentCoveringAnswer == "No" && selectedValue == "Concrete / Cement / Gypsum") {
+                          
+                          if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                              print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                              if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                                  qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                  tableView.reloadData()
+                              } else {
+                                  print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                              }
+                          }
+                      }
+                      
+                      if (removeCurrentCoveringAnswer == "No" && (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")) {
+                          
+                          if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                              print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                              if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                                  qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                  tableView.reloadData()
+                              } else {
+                                  print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                              }
+                          }
+                      }
+                      
+                      if (selectedValue == "Concrete / Cement / Gypsum") {
+                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                  tableView.reloadData()
+                              }
+                          }
+                      } else {
+                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                  tableView.reloadData()
+                              }
+                          }
+                      }
+                  }
               }
         //Q4 Changes Deepa
         
-//        if removeCurrentCoveringAnswer == "Yes" {
-//            if questionCode == "CurrentCoveringType" {
-//                if (selectedValue == "Carpet" || selectedValue == "Floating Floor (LVP or Laminate)") {
-//                    if let removeCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-//                        print("Found RemoveCurrentCovering at index: \(removeCoveringIndex)")
-//                        if let yesAnswer = qustionAnswer[removeCoveringIndex].quote_label?.first(where: { $0.value == "" }) {
-//                            // Set the default answer to "Yes" for the "Toilet" question
-//                            qustionAnswer[removeCoveringIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-//                            
-//                            tableView.reloadData()
-//                            print("Default answer set to 'Yes' for question 'RemoveCurrentCovering'")
-//                        } else {
-//                            print("No 'Yes' option found in quote_label for 'RemoveCurrentCovering' question.")
-//                        }
-//                    }
-//                    
-//                }
-//            }
-//        }
         
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+            if questionCode == "ExistingSubSurface" {
+                if (removeCurrentCoveringAnswer == "Yes" && selectedValue == "Concrete / Cement / Gypsum") {
+                    
+                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                            tableView.reloadData()
+                        } else {
+                            print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                        }
+                    }
+                }
+                
+                if  (removeCurrentCoveringAnswer == "Yes" && (selectedValue == "Plywood / OSB" || selectedValue == "Particle Board" || selectedValue == "Adhesive on Concrete / Gypsum" || selectedValue == "Epoxy")) {
+                    
+                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                            tableView.reloadData()
+                        } else {
+                            print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                        }
+                    }
+                }
+                
+                if (removeCurrentCoveringAnswer == "Yes" && selectedValue == "Concrete / Cement / Gypsum") {
+                    if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                        if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                            qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                            tableView.reloadData()
+                        }
+                    }
+                } else {
+                    if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                        if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+                            qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                            tableView.reloadData()
+                        }
+                    }
+                }
+            }
+        }
+        
+        if questionCode == "RemoveCurrentCovering" {
+            if (selectedValue == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
+                
+                if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                    print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                    if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                        qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                        tableView.reloadData()
+                    } else {
+                        print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                    }
+                }
+            }
+            
+            if  (selectedValue == "Yes" && (existingSubSurfaceAnswer == "Plywood / OSB" || existingSubSurfaceAnswer == "Particle Board" || existingSubSurfaceAnswer == "Adhesive on Concrete / Gypsum" || existingSubSurfaceAnswer == "Epoxy")) {
+                
+                if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                    print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                    if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                        qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                        tableView.reloadData()
+                    } else {
+                        print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                    }
+                }
+            }
+            
+            if (selectedValue == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
+                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                        qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                        tableView.reloadData()
+                    }
+                }
+            } else {
+                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+                        qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                        tableView.reloadData()
+                    }
+                }
+            }
+        }
         
         // qustionAnswer[setDefaultAnswerTrueIndexInt].answerOFQustion = AnswerOFQustion(vapourBarrierValue)
         
