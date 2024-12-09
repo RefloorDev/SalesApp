@@ -920,6 +920,7 @@ class AppointmentResultData: Mappable
 {
     var id: Int?
     var reason:String?
+    var applicable_result_ids:[Int]?
     
     
     required init?(map: ObjectMapper.Map){
@@ -929,12 +930,14 @@ class AppointmentResultData: Mappable
         
         id <- map["reason_id"]
         reason <- map["reason"]
+        applicable_result_ids <- map["applicable_result_ids"]
         
         
     }
     init(appointmentResultData:rf_appointment_result_reasons_results){
         self.id = appointmentResultData.reasonId
         self.reason = appointmentResultData.reason
+        self.applicable_result_ids = Array(appointmentResultData.applicableResultId)
     }
     
 }
@@ -1198,6 +1201,7 @@ class SummeryListData: Mappable
     var colorUpCharge : Double?
     var colorUpChargePrice : Double?
     var miscellaneous_comments:String?
+    var deliveryOptions:String?
     
     
     required init?(map: ObjectMapper.Map){
@@ -1232,6 +1236,7 @@ class SummeryListData: Mappable
         total_stair_count <- map["total_stair_count"]
         color <- map["color"]
         miscellaneous_comments <- map["miscellaneous_comments"]
+        deliveryOptions <- map["delivery_options"]
     }
     
     init(){

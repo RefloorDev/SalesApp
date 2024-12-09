@@ -153,7 +153,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                                               identifier: "\(appointmentId)")
         geofenceRegion.notifyOnEntry = true
         geofenceRegion.notifyOnExit = true
-        //let locationManager = CLLocationManager()
+        let locationManager = CLLocationManager()
         //self.alert("Geofence set for location : \(latitude), \(longtitude)", nil)
         AppDelegate.locationManager?.startMonitoring(for: geofenceRegion)
         
@@ -478,6 +478,10 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             //
         if indexPath.row == 0
         {
+            if locationManager.monitoredRegions.count >= 20 // check current monitored region Apple allowed only 20 at time
+                {
+                locationManager.stopMonitoring(for: locationManager.monitoredRegions.first!) // if have to add new one then need to remove older then 20 else it will not add new one
+                 }
             let masterData = getMasterDataFromDB()
             if masterData.enableGeoLocation && restrictGeoLocation == 0
             {
@@ -743,7 +747,6 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                    realm.add(appointmentInDemoedNotDemoed)
                }
            }
-
         }
 //        if data.count > 0
 //        {

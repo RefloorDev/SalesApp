@@ -83,6 +83,32 @@ class ImageSaveToDirectory: NSObject
             return nil
         }
     }
+    
+    public func getImageFromDocumentDirectoryURL(rfImage:String)->String?
+    {
+        
+        let fileManager = FileManager.default
+        
+        let imagePath = (getDirectoryPath() as NSURL).appendingPathComponent(rfImage) // here assigned img name who assigned to img when saved in document directory. Here I Assigned Image Name "MyImage.png"
+        
+        let urlString: String = imagePath!.absoluteString
+        return urlString
+        
+//        if fileManager.fileExists(atPath: urlString)
+//        {
+//            if let GetImageFromDirectory = UIImage(contentsOfFile: urlString){ // get this image from Document Directory And Use This Image In Show In Imageview
+//
+//            //imgViewOutlet.image = GetImageFromDirectory
+//            return GetImageFromDirectory
+//            }
+//            return nil
+//        }
+//        else
+//        {
+//            print("No Image Found")
+//            return nil
+//        }
+    }
 
     public func deleteImageFromDocumentDirectory(rfImage:String)->Bool
     {

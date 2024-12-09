@@ -359,6 +359,167 @@ extension BackgroundTaskService {
         return isAppointmentsPendingToSink
     }
     
+    func getAppointmentsToSyncNowFromDB(appointment_Id:Int) -> Results<rf_Completed_Appointment_Request> {
+        var appointmentRequestArray:Results<rf_Completed_Appointment_Request>!
+        do{
+            let realm = try Realm()
+            let filteredappointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointment_Id)
+            startSyncProcessForsyncNow(appointmentRequestArray: filteredappointmentRequestArray)
+            return appointmentRequestArray
+        }
+        catch{
+                print(RealmError.initialisationFailed.rawValue)
+            }
+            return appointmentRequestArray
+        
+    }
+//    var appointmentData : Results<rf_Completed_Appointment_Request>!
+//    do{
+//        let realm = try Realm()
+//         let appointment = realm.objects(rf_Completed_Appointment_Request.self)
+//            appointmentData = appointment
+//        return appointmentData
+//    }catch{
+//        print(RealmError.initialisationFailed.rawValue)
+//    }
+//    return appointmentData
+    
+    
+    
+    
+    // MARK: -  SYNC START FOR SYNC NOW ACTION
+
+        func startSyncProcessForsyncNow(appointmentRequestArray:Results<rf_Completed_Appointment_Request>!){
+            
+            var syncDelayValue:Int = 0
+            print("Timer called")
+            var ifAnyApiFailed = false
+            if HttpClientManager.SharedHM.connectedToNetwork()
+            {
+                print("Inside API !!")
+               
+                
+                if(appointmentRequestArray.count == 0)
+                {
+                    if(SceneDelegate.timer.isValid)
+                    {
+                        SceneDelegate.timer.invalidate()
+                    }
+                    self.cancelAllTaskRequests()
+                    
+                }
+                // SceneDelegate.timer.invalidate()
+                
+                for appointmentRequest in appointmentRequestArray
+                {
+                    //                count = count + 1
+                    //                if count > 1{
+                    //                    break
+                    //                }
+                    if stop_syncAppointmentArray.contains(appointmentRequest.appointment_id)
+                    {
+                        
+                    }else{
+                        
+                        print("Date Before \(Date().toString())")
+                        switch appointmentRequest.reqest_title {
+                        case RequestTitle.CustomerAndRoom.rawValue:
+                            let (appointmentId, requestParams, _) =  self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                            //                       if !isCallingApi
+                            //                        {
+                            self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
+                                //                               self.isCallingApi = false
+                                if !ifSuccess{
+                                    print("Spinner Count:1")
+                                    ifAnyApiFailed = true
+                                    return
+                                }else{
+                                    print("Spinner Count:2")
+                                    ifAnyApiFailed = false
+                                }
+                            }
+                            //}
+                            
+                            break
+                            //                    case RequestTitle.ContactDetails.rawValue:
+                            //                        let (appointmentId, requestParams, _) =  self.createContractDetailsParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                            //                        self.syncContractData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
+                            //                            if !ifSuccess{
+                            //                                print("Spinner Count:3")
+                            //                                ifAnyApiFailed = true
+                            //                                return
+                            //                            }else{
+                            //                                print("Spinner Count:4")
+                            //                                ifAnyApiFailed = false
+                            //                            }
+                            //                        }
+                            //                        break
+                        case RequestTitle.ImageUpload.rawValue:
+                            let requestParams =  self.createImageUploadParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                            self.syncImages(imageDict: requestParams){ ifSuccess in
+                                //self.isCallingApi = false
+                                if !ifSuccess{
+                                    print("Spinner Count:5")
+                                    ifAnyApiFailed = true
+                                    return
+                                }else{
+                                    print("Spinner Count:6")
+                                    ifAnyApiFailed = false
+                                }
+                            }
+                            break
+                        case RequestTitle.GenerateContract.rawValue:
+                            let (appointmentId, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                            self.syncGenerateContract(appointmentId:appointmentId,parameter: requestParams){ ifSuccess in
+                                //self.isCallingApi = false
+                                if !ifSuccess{
+                                    print("Spinner Count:7")
+                                    ifAnyApiFailed = true
+                                    return
+                                }else{
+                                    print("Spinner Count:8")
+                                    ifAnyApiFailed = false
+                                }
+                            }
+                            break
+                        case RequestTitle.InitiateSync.rawValue:
+                            let (appointmentId, requestParams, _) = self.createInitiate_i360_SyncParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                            syncDelayValue = syncDelayValue + 1
+                            if HttpClientManager.SharedHM.connectedToNetwork(){
+                                print("Spinner Count:9")
+                                self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue)
+                                //  self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
+                                
+                                if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
+                                    NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                                }
+                            }
+                            break
+                        case .none:
+                            break
+                        case .some(_):
+                            break
+                        }
+                        
+                    }
+                }
+                        
+                        
+                        if ifAnyApiFailed
+                        {
+                            
+                            self.startSyncProcess()
+                            
+                        }
+                    
+                
+            }
+       
+    }
+
+        
+    
+    
     // MARK: - START SYNC ACTION
     func startSyncProcess(){
         var syncDelayValue:Int = 0

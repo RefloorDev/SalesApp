@@ -899,6 +899,7 @@ PODS:
     - BlueRSA (~> 1.0)
     - KituraContracts (~> 1.2)
     - LoggerAPI (~> 1.7)
+  - Zip (2.1.2)
 
 DEPENDENCIES:
   - Alamofire (= 4.7.3)
@@ -921,6 +922,7 @@ DEPENDENCIES:
   - SDWebImage/WebP (~> 4.4.1)
   - SVProgressHUD
   - SwiftJWT
+  - Zip
 
 SPEC REPOS:
   trunk:
@@ -975,6 +977,7 @@ SPEC REPOS:
     - SDWebImage
     - SVProgressHUD
     - SwiftJWT
+    - Zip
 
 SPEC CHECKSUMS:
   abseil: 926fb7a82dc6d2b8e1f2ed7f3a718bce691d1e46
@@ -1028,7 +1031,8 @@ SPEC CHECKSUMS:
   SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
   SVProgressHUD: 4837c74bdfe2e51e8821c397825996a8d7de6e22
   SwiftJWT: 88c412708f58c169d431d344c87bc79a87c830ae
+  Zip: b3fef584b147b6e582b2256a9815c897d60ddc67
 
-PODFILE CHECKSUM: a69fa4fc50cad7379ab36ec1d9bbbeaac88f2f85
+PODFILE CHECKSUM: a4947f1b6e0bab50be4e54ecfef345300fe5aaa9
 
 COCOAPODS: 1.15.2
