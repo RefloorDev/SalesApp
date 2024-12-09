@@ -8,7 +8,8 @@
 
 import UIKit
 import RealmSwift
-
+import Zip
+var stop_syncAppointmentArray = [Int]()
 class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     static func initialization() -> ViewLogListViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ViewLogListViewController") as? ViewLogListViewController
@@ -124,6 +125,9 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ViewLogTableViewCell", for: indexPath) as! ViewLogTableViewCell
+        
+        
+        
         cell.transactionMsgLbl.isHidden = true
         //cell.transactionMsgLblHeightConstraint.constant = 0
         cell.selectionStyle = .none
@@ -135,6 +139,19 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         }
         if appStatus == "Sync Pending"
         {
+//            if appointmentLogsArray[indexPath.row].stop_sync == false{
+//                cell.stopSyncButton.isHidden = false
+//                cell.syncNowButton.isHidden = true
+//        }else{
+//            cell.stopSyncButton.isHidden = true
+//            cell.syncNowButton.isHidden = false
+//        }
+            
+            let isStopSync = appointmentLogsArray[indexPath.row].stop_sync
+            cell.stopSyncButton.isHidden = isStopSync
+            cell.syncNowButton.isHidden = !isStopSync
+
+            
             if isFetchData == true
             {
                 fetchDataBtn.isHidden = false
@@ -142,7 +159,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
             cell.syncBtn.setBackgroundImage(UIImage(named: "syncPending"), for: .normal)
             cell.appointmentStatusLabel.textColor = UIColor.lightGray
             cell.appointmentStatusLabel.text = appStatus
-            if message != "" && intAppointment == appointmentLogsArray[indexPath.row].appointment_id 
+            if message != "" && intAppointment == appointmentLogsArray[indexPath.row].appointment_id
             {
                 cell.transactionMsgLbl.isHidden = false
                 cell.transactionMsgLbl.text = message
@@ -155,6 +172,9 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         }
         else
         {
+            cell.stopSyncButton.isHidden = true
+            cell.syncNowButton.isHidden = true
+            
             if isFetchData == true
             {
                 fetchDataBtn.isHidden = true
@@ -201,6 +221,12 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         let mutableAttributedString = NSMutableAttributedString.init(string: text)
         mutableAttributedString.addAttribute(NSAttributedString.Key.font, value: UIFont(name: "Avenir-Medium", size: 18)!, range: range)
         cell.appointmentIdLabel.attributedText = mutableAttributedString
+       
+        cell.stopSyncButton.tag = indexPath.row
+        cell.stopSyncButton.addTarget(self, action: #selector(stopsyncButtonAction(sender:)), for: .touchUpInside)
+        cell.syncNowButton.tag = indexPath.row
+        cell.syncNowButton.addTarget(self, action: #selector(syncNowButtonAction(sender:)), for: .touchUpInside)
+        
         return cell
     }
     
@@ -263,6 +289,37 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         }
         let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         self.alert("Are you sure you want to delete all logs?", [yes,no])
+    }
+    
+    @objc func stopsyncButtonAction( sender: UIButton) {
+        let appointment_Id = appointmentLogsArray[sender.tag].appointment_id
+//        let allAppointmentsAvailable = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d" , appointment_Id)
+        stop_syncAppointmentArray.append(appointment_Id)
+        let realm = try! Realm()
+
+        try! realm.write{
+            appointmentLogsArray[sender.tag].stop_sync = true
+        }
+        viewLogTableView.reloadData()
+        SceneDelegate.timer.invalidate()
+        BackgroundTaskService.shared.cancelAllTaskRequests()
+        BackgroundTaskService.shared.startSyncProcess()
+        
+    }
+    @objc func syncNowButtonAction( sender: UIButton) {
+        let appointment_Id = appointmentLogsArray[sender.tag].appointment_id
+        if stop_syncAppointmentArray.contains(appointment_Id){
+            if let index = stop_syncAppointmentArray.firstIndex(of: appointment_Id) {
+                stop_syncAppointmentArray.remove(at: index)
+                print("Value not found in the array.")
+            }
+            
+        }
+        
+        SceneDelegate.timer.invalidate()
+        BackgroundTaskService.shared.cancelAllTaskRequests()
+        BackgroundTaskService.shared.getAppointmentsToSyncNowFromDB(appointment_Id: appointment_Id)
+        
     }
     
     @IBAction func fetchDataBtnClicked(_ sender: UIButton)
@@ -854,8 +911,46 @@ extension ViewLogListViewController{
     
     func retrieveData()
     {
+        HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW, title: "Submitting Data and making zip file...")
         let completedAppointments = getCompletedAppointmentData()
+        let completedAppointmenturlParamaterData = getCompletedAppointmentUrlParameterData()
+        //getAppointmentsToSyncFromDB(requestTitle: RequestTitle.GenerateContract)
+        //fetchGenerateContractFromAppointmentRequest()
         //var completedAppointmentsArray:[[String:Any]] = [[:]]
+        if completedAppointmenturlParamaterData!.count > 0
+        {
+            for appointments in completedAppointmenturlParamaterData!
+            {
+                var completedAppointmentDictionary:[String:Any] = [:]
+                completedAppointmentDictionary["appointment_id"] = appointments.appointment_id
+                completedAppointmentDictionary["reqest_title"] = appointments.reqest_title
+                completedAppointmentDictionary["request_url"] = appointments.request_url
+                completedAppointmentDictionary["request_parameter"] = appointments.request_parameter
+                completedAppointmentDictionary["request_type"] = appointments.request_type
+                completedAppointmentDictionary["image_name"] = appointments.image_name
+                completedAppointmentDictionary["sync_status"] = appointments.sync_status
+                
+                let url = createAppointmentZip(appointmentID: String(appointments.appointment_id), data: completedAppointmentDictionary, imagePaths: [])
+                 HttpClientManager.SharedHM.CompressFileOfAppointment(appointmentId: String(appointmentId), fileURL: url) { success, message in
+                     if(success ?? "") == "Success"
+                     {
+                         
+                     }
+                     else
+                     {
+                         
+                     }
+                 }
+                //appointment_id: Int = 0
+//                @objc dynamic var reqest_title: String?
+//                @objc dynamic var request_url: String?
+//                @objc dynamic var request_parameter: String?
+//                @objc dynamic var request_type: String?
+//                @objc dynamic var sync_status: Bool = false
+//                @objc dynamic var image_name: String?
+            }
+        }
+        
         if completedAppointments!.count > 0
         {
             for appointments in completedAppointments!
@@ -919,6 +1014,7 @@ extension ViewLogListViewController{
                     var otherIncomeData = otherIncome(otherIncomedata:appointments.otherIncomeData)
                     completedAppointmentDictionary["otherIncomeData"] = otherIncomeData
                 }
+                
                 let json = (completedAppointmentDictionary as NSDictionary).JsonString()
                 //let json = "{'result': 'Success', 'message': 'Data stored successfully', 'override_json_result': 1}"
                 let token = UserData.init().token ?? ""
@@ -926,36 +1022,167 @@ extension ViewLogListViewController{
                 
                 var parameter : [String:Any] = [:]
                 parameter = ["token":token,"appointment_id":appointmentId,"data":json]
-            
-                HttpClientManager.SharedHM.fetchDataBaseInfoAPi(parameter: parameter) { success, message in
-                    if(success ?? "") == "Success"{
-                        let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
-                            completedAppointmentDictionary.removeAll()
-                            print(message ?? "No msg")
-                            
-                        }
-                        self.alert("Debug data collected and sent to support team successfully." ?? AppAlertMsg.serverNotReached, [ok])
+                //let imageBaseUrl = ImageSaveToDirectory.SharedImage.getDirectoryPath()
+                
+                var imageString:[String] = []
+                for roomImage in appointments.rooms
+                {
+                  for images in  roomImage.room_attachments
+                    {
+//                      let imagePath = imageBaseUrl.appendingPathComponent(images) // Here Image Saved With This Name ."MyImage.png"
+//                      let urlString: String = imagePath!.absoluteString
+//                      imageString.append(urlString)
+                      let imagePath = getImagePath(imageName: images)
+                      imageString.append(imagePath)
+                  }
+//                    let imagePath = imageBaseUrl.appendingPathComponent(roomImage.draw_image_name ?? "") // Here Image Saved With This Name ."MyImage.png"
+//                    let urlString: String = imagePath!.absoluteString
+                    imageString.append(getImagePath(imageName: roomImage.draw_image_name ?? ""))
+                
+                }
+                imageString.append(getImagePath(imageName: appointments.applicantSignatureImage ?? "")) // Here Image Saved With This Name ."MyImage.png"
+                imageString.append(getImagePath(imageName: appointments.applicantInitialsImage ?? "")) // Here Image Saved With This Name ."MyImage.png"
+                imageString.append(getImagePath(imageName: appointments.coApplicantSignatureImage ?? "")) // Here Image Saved With This Name ."MyImage.png"
+               
+                imageString.append(getImagePath(imageName: appointments.coApplicantInitialsImage ?? "")) // Here Image Saved With This Name ."MyImage.png"
+                // fetching contract details
+                
+                let contractRequestArray = fetchGenerateContractFromAppointmentRequestForceSync(aptId: appointmentId)
+                for contract in contractRequestArray
+                {
+                    let (appointmentId, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: contract)
+                    completedAppointmentDictionary["ContractDetails"] = requestParams
+                }
+                let i360RequestArray = fetchi360FromAppointmentRequestForceSync(aptId: appointmentId)
+                for i360 in i360RequestArray
+                {
+                    let (appointmentId, requestParams, _) =  self.createInitiate_i360_SyncParametersForApiCall(completedAppointmentRequest: i360)
+                    completedAppointmentDictionary["i360Params"] = requestParams
+                }
+               let url = createAppointmentZip(appointmentID: String(appointmentId), data: completedAppointmentDictionary, imagePaths: imageString)
+                HttpClientManager.SharedHM.CompressFileOfAppointment(appointmentId: String(appointmentId), fileURL: url) { success, message in
+                    if(success ?? "") == "Success"
+                    {
+                        
                     }
                     else
                     {
-                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                            completedAppointmentDictionary.removeAll()
-                            self.retrieveData()
-                            
-                        }
-                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                         
-                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                     }
                 }
+            
+//                HttpClientManager.SharedHM.fetchDataBaseInfoAPi(parameter: parameter) { success, message in
+//                    if(success ?? "") == "Success"{
+//                        let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
+//                            completedAppointmentDictionary.removeAll()
+//                            print(message ?? "No msg")
+//
+//                        }
+//                        self.alert("Debug data collected and sent to support team successfully." ?? AppAlertMsg.serverNotReached, [ok])
+//                    }
+//                    else
+//                    {
+//                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+//                            completedAppointmentDictionary.removeAll()
+//                            self.retrieveData()
+//
+//                        }
+//                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//
+//                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+//                    }
+//                }
                 
                 
             }
             
         }
+        HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE,title: "")
         
         
     }
+    
+    func getImagePath(imageName:String) -> String
+    {
+        let imagePath = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectoryURL(rfImage: imageName) ?? ""
+        return imagePath
+    }
+    
+    
+    func createAppointmentZip(appointmentID: String, data: [String: Any], imagePaths: [String]) -> URL? {
+        let fileManager = FileManager.default
+        
+        // Step 1: Create a folder named after the appointment ID
+        let folderURL = fileManager.temporaryDirectory.appendingPathComponent(appointmentID)
+        do {
+            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+        } catch {
+            print("Error creating folder: \(error)")
+            return nil
+        }
+        
+        // Step 2: Write room data to a text file
+        let dataFileURL = folderURL.appendingPathComponent("data.txt")
+        let dataText = data.map { "\($0): \($1)" }.joined(separator: "\n")
+        do {
+            try dataText.write(to: dataFileURL, atomically: true, encoding: .utf8)
+        } catch {
+            print("Error writing data to file: \(error)")
+            return nil
+        }
+        
+        // Step 3: Copy images to the folder
+        for imagePath in imagePaths {
+            let imageFileName = (imagePath as NSString).lastPathComponent
+            let destinationURL = folderURL.appendingPathComponent(imageFileName)
+            do {
+                try fileManager.copyItem(atPath: imagePath, toPath: destinationURL.path)
+            } catch {
+                print("Error copying image: \(error)")
+            }
+        }
+        
+        let refloorOfflineAssetURL = folderURL.appendingPathComponent("Refloor_Offline_Asset")
+            if fileManager.fileExists(atPath: refloorOfflineAssetURL.path) {
+                do {
+                    try fileManager.removeItem(at: refloorOfflineAssetURL)
+                    print("Removed existing 'Refloor_Offline_Asset' folder.")
+                } catch {
+                    print("Error removing 'Refloor_Offline_Asset' folder: \(error)")
+                    //return .fa(error)
+                }
+            }
+        
+        // Step 5: Copy the folder to "On My iPad" section
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            print("Error accessing 'On My iPad' section.")
+           // return .failure(NSError(domain: "FileManagerError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to access 'On My iPad' section"]))
+            return nil
+        }
+        let destinationFolderURL = documentsURL.appendingPathComponent(appointmentID)
+        
+        do {
+            if fileManager.fileExists(atPath: destinationFolderURL.path) {
+                try fileManager.removeItem(at: destinationFolderURL)
+            }
+            try fileManager.copyItem(at: folderURL, to: destinationFolderURL)
+            print("Folder copied to 'On My iPad' section.")
+        } catch {
+            print("Error copying folder to 'On My iPad': \(error)")
+            //return .failure(error)
+        }
+        
+        // Step 4: Create a zip file
+        let zipFilePath = fileManager.temporaryDirectory.appendingPathComponent("\(appointmentID).zip")
+        do {
+            try Zip.zipFiles(paths: [folderURL], zipFilePath: zipFilePath, password: nil, progress: nil)
+            return zipFilePath
+        } catch {
+            print("Error zipping folder: \(error)")
+            return nil
+        }
+    }
+
     func otherIncome(otherIncomedata:rf_OtherIncomeData) -> [String:Any]
     {
         var otherIncomeData:[String:Any] = [:]
@@ -1255,4 +1482,7 @@ class ViewLogTableViewCell:UITableViewCell{
     @IBOutlet weak var appointmentLogsLabel: UILabel!
     @IBOutlet weak var syncBtn: UIButton!
     @IBOutlet weak var appointmentStatusLabel: UILabel!
+    @IBOutlet weak var stopSyncButton: UIButton!
+    
+    @IBOutlet weak var syncNowButton: UIButton!
 }

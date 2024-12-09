@@ -484,6 +484,7 @@ class rf_appointment_result_reasons_results: Object,Mappable
 {
     @objc dynamic var reasonId : Int = 0
     @objc dynamic var reason : String?
+    var applicableResultId = List<Int>()
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -493,6 +494,12 @@ class rf_appointment_result_reasons_results: Object,Mappable
         
         reasonId <- map["reason_id"]
         reason <- map["reason"]
+        if let applicableResultArray = map["applicable_result_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: applicableResultArray)
+                    self.applicableResultId = realmList
+                }
+        //applicableResultId <- map["applicable_result_ids"]
         
     }
 }
@@ -850,6 +857,8 @@ class rf_master_molding : Object,Mappable {
     @objc dynamic var name : String?
     @objc dynamic var last_updated_date : String?
     @objc dynamic var unit_price : Double = 0.0
+    @objc dynamic var defaultDelivery:String?
+    var deliveryOptions = List<String>()
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -861,6 +870,12 @@ class rf_master_molding : Object,Mappable {
         name <- map["name"]
         last_updated_date <- map["last_updated_date"]
         unit_price <- map["unit_price"]
+        defaultDelivery <- map["default_delivery"]
+        if let defaultDeliveryArray = map["delivery_options"].currentValue as? [String] {
+                    let realmList = List<String>()
+                    realmList.append(objectsIn: defaultDeliveryArray)
+                    self.deliveryOptions = realmList
+                }
     }
     
 }
@@ -1581,6 +1596,7 @@ class rf_completed_room: Object{
     @objc dynamic var selected_room_UpchargePrice: Double = 0.0
     @objc dynamic var selected_room_molding: String?
     @objc dynamic var selected_room_MoldingPrice: Double = 0.0
+    @objc dynamic var delivery_option:String?
     @objc dynamic var room_strike_status: Bool = false
     @objc dynamic var extraPrice: Double = 0.0
     @objc dynamic var extraPriceToExclude: Double = 0.0
@@ -2042,6 +2058,7 @@ class rf_Appointment_Logs:Object
     @objc dynamic var appBaseUrl: String?
     @objc dynamic var paymentStatus:String?
     @objc dynamic var paymentMessage:String?
+    @objc dynamic var stop_sync: Bool = false
     
     override static func primaryKey() -> String? {
         return "appointment_id"
