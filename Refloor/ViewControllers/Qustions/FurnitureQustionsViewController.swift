@@ -115,9 +115,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         //
     }
+    
     override func viewWillAppear(_ animated: Bool)
     {
-        setDefaultAnswerForToiletQuestion()
+        if(delegate == nil) {
+            print("setDefaultAnswerForToiletQuestion1")
+            setDefaultAnswerForToiletQuestion()
+        } else {
+            print("setDefaultAnswerForToiletQuestion2")
+        }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
