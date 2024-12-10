@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AppointmentSummaryViewController: UIViewController, ImagePickerDelegate 
+class AppointmentSummaryViewController: UIViewController, ImagePickerDelegate
 {
     
     var imagePicker: CaptureImage!
@@ -115,7 +115,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         
     }
-    func numberOfSections(in tableView: UITableView) -> Int 
+    func numberOfSections(in tableView: UITableView) -> Int
     {
         return 5
     }
@@ -358,3 +358,4 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
     
     
 }
+

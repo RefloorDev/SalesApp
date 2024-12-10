@@ -690,7 +690,7 @@ class AnswerOFQustion:NSObject
     var answerID:Int = 0
     var qustionLineID:Int = 0
     var numberVaue:Int?
-    var stairWidthDouble:Double = 0.0
+    var stairWidthDouble:Double = 3.0
     var textValue:String?
     var singleSelection:QuoteLabelData?
     var multySelection:[QuoteLabelData]?
