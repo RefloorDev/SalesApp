@@ -941,21 +941,21 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                           }
                       }
                       
-                      if (selectedValue == "Concrete / Cement / Gypsum") {
-                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
-                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
-                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                  tableView.reloadData()
-                              }
-                          }
-                      } else {
-                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
-                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
-                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                  tableView.reloadData()
-                              }
-                          }
-                      }
+//                      if (selectedValue == "Concrete / Cement / Gypsum") {
+//                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+//                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+//                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+//                                  tableView.reloadData()
+//                              }
+//                          }
+//                      } else {
+//                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+//                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+//                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+//                                  tableView.reloadData()
+//                              }
+//                          }
+//                      }
                   }
               }
         //Q4 Changes Deepa
@@ -1034,18 +1034,42 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 }
             }
             
-            if (selectedValue == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
-                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
-                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
-                        qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                        tableView.reloadData()
-                    }
-                }
+//            if (selectedValue == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
+//                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+//                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+//                        qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+//                        tableView.reloadData()
+//                    }
+//                }
+//            } else {
+//                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+//                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+//                        qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+//                        tableView.reloadData()
+//                    }
+//                }
+//            }
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+            if questionCode == "VaporBarrierBool" {
+                
             } else {
-                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
-                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
-                        qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                        tableView.reloadData()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                    if (existingSubSurfaceAnswer == "Concrete / Cement / Gypsum" && removeCurrentCoveringAnswer == "Yes") || (currentCoveringTypeAnswer == "Concrete / Cement / Gypsum") {
+                        if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                            if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                                qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                tableView.reloadData()
+                            }
+                        }
+                    } else {
+                        if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                            if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+                                qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                tableView.reloadData()
+                            }
+                        }
                     }
                 }
             }
