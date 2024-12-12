@@ -1034,6 +1034,33 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 }
             }
             
+            
+            if (selectedValue == "No" && currentCoveringTypeAnswer == "Concrete / Cement / Gypsum") {
+                
+                if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                    print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                    if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                        qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                        tableView.reloadData()
+                    } else {
+                        print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                    }
+                }
+            }
+            
+            if (selectedValue == "No" && (currentCoveringTypeAnswer == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || currentCoveringTypeAnswer == "Epoxy" || currentCoveringTypeAnswer == "Glued Down Hard Surface" || currentCoveringTypeAnswer == "Hardwood or Engineered Hardwood" || currentCoveringTypeAnswer == "Particle Board" || selectedValue == "Plywood / OSB" || currentCoveringTypeAnswer == "Adhesive Concrete/Cement/Gypsum")) {
+                
+                if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                    print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                    if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                        qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                        tableView.reloadData()
+                    } else {
+                        print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                    }
+                }
+            }
+            
 //            if (selectedValue == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum") {
 //                if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
 //                    if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
