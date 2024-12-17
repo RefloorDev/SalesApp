@@ -176,6 +176,8 @@
 		B00B9D842C999C1800B88469 /* TitleSummaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */; };
 		B00B9D852C999C1800B88469 /* RoomsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */; };
 		B011B1D22B1DB77600C28459 /* VersatileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011B1D12B1DB77600C28459 /* VersatileViewController.swift */; };
+		B03F63D82D07FF7F00ED8B70 /* UpdateCustomerDetailsOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03F63D62D07FF7F00ED8B70 /* UpdateCustomerDetailsOneViewController.swift */; };
+		B03F63D92D07FF7F00ED8B70 /* UpdateCustomerDetailsTowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B03F63D72D07FF7F00ED8B70 /* UpdateCustomerDetailsTowViewController.swift */; };
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
 		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
@@ -385,6 +387,8 @@
 		B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TitleSummaryTableViewCell.xib; path = AppointmentSummary/TitleSummaryTableViewCell.xib; sourceTree = "<group>"; };
 		B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RoomsTableViewCell.xib; path = AppointmentSummary/RoomsTableViewCell.xib; sourceTree = "<group>"; };
 		B011B1D12B1DB77600C28459 /* VersatileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersatileViewController.swift; sourceTree = "<group>"; };
+		B03F63D62D07FF7F00ED8B70 /* UpdateCustomerDetailsOneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UpdateCustomerDetailsOneViewController.swift; path = ../../../../../../../Refloorkavya/SalesApp/Refloor/ViewControllers/Customer/CustomerDetails/UpdateCustomerDetailsOneViewController.swift; sourceTree = "<group>"; };
+		B03F63D72D07FF7F00ED8B70 /* UpdateCustomerDetailsTowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UpdateCustomerDetailsTowViewController.swift; path = ../../../../../../../Refloorkavya/SalesApp/Refloor/ViewControllers/Customer/CustomerDetails/UpdateCustomerDetailsTowViewController.swift; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
 		B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -466,6 +470,8 @@
 		650512B8254031C70026B8FC /* CustomerDetails */ = {
 			isa = PBXGroup;
 			children = (
+				B03F63D62D07FF7F00ED8B70 /* UpdateCustomerDetailsOneViewController.swift */,
+				B03F63D72D07FF7F00ED8B70 /* UpdateCustomerDetailsTowViewController.swift */,
 				650512B9254031E70026B8FC /* CustomerDetailsOLD */,
 				650512BA25403C040026B8FC /* CustomerDetailsOneViewController.swift */,
 				650512BC254051C80026B8FC /* CustomerDetailsTowViewController.swift */,
@@ -1314,6 +1320,7 @@
 				65FFF92C2446CFDC00E3534D /* AppConstats.swift in Sources */,
 				6520942D243CA31100B010CA /* CAXSVProgressHUD.swift in Sources */,
 				65A32484247CFA450050A42F /* SummeryDetailsViewController.swift in Sources */,
+				B03F63D92D07FF7F00ED8B70 /* UpdateCustomerDetailsTowViewController.swift in Sources */,
 				B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */,
 				654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */,
 				65209462243CA31100B010CA /* MyCell.swift in Sources */,
@@ -1348,6 +1355,7 @@
 				658D494D24AA21A90034DF69 /* PaymentTypeTableViewCell.swift in Sources */,
 				650512BD254051C80026B8FC /* CustomerDetailsTowViewController.swift in Sources */,
 				65B87127248372F900FAEE0F /* SummeryDetailsFooterTableViewCell.swift in Sources */,
+				B03F63D82D07FF7F00ED8B70 /* UpdateCustomerDetailsOneViewController.swift in Sources */,
 				18378A562580E589007AA78E /* QuoteStatusViewController.swift in Sources */,
 				65C01F3524E657F300CA56C7 /* SignViewController.swift in Sources */,
 				6520946A243CA49000B010CA /* Protocols.swift in Sources */,

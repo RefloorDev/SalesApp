@@ -2035,6 +2035,7 @@ class rf_Completed_Appointment_Request:Object
     @objc dynamic var request_type: String?
     @objc dynamic var sync_status: Bool = false
     @objc dynamic var image_name: String?
+    @objc dynamic var stop_sync:Bool = false
     
     
     override static func primaryKey() -> String? {

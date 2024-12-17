@@ -24,13 +24,13 @@ struct AppURL
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"
     
     //Offline live//7007  - new server
-    let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
+   // let LIVE_BASE_URL = "https://refloor-dev.odooapps.oneteam.us/api/" //Dev
     //let STAGE_BASE_URL = "http://34.48.50.165:7007/api/"//"https://odoostage.myx.ac/api/"
     let STAGE_BASE_URL = "https://odoostage.myx.ac/api/"
     //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
    // let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
-    //let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
+    let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446
     //LIVE
     // let BASE_URL = "http://35.245.254.221:7007/api/"

@@ -36,6 +36,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SelectRoomCommentPopUpViewController") as? SelectRoomCommentPopUpViewController
     }
     
+    @IBOutlet weak var stopSyncView: UIView!
     @IBOutlet weak var lendingBackTitle: UILabel!
     @IBOutlet weak var lendingSubTitle: UILabel!
     @IBOutlet weak var lendingPlatformTitle: UILabel!
@@ -60,6 +61,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isVersaileBack:Bool = Bool()
     var isHunterBack:Bool = Bool()
     var isHunter:Bool = Bool()
+    var isStopSync:Bool = Bool()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +76,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             addEditView.isHidden = true
             versatileView.isHidden = true
             versatileBackView.isHidden = true
+            stopSyncView.isHidden = true
         }
         else if isVersatile
         {
@@ -83,6 +86,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileBackView.isHidden = true
             lendingPlatformTitle.text = "Versatile Credit"
             lendingSubTitle.text = lendingSubTitle.text! + "Versatile Credit?"
+            stopSyncView.isHidden = true
         }
         else if isHunter
         {
@@ -92,6 +96,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileBackView.isHidden = true
             lendingPlatformTitle.text = "Credit Card Rate Lending"
             lendingSubTitle.text = lendingSubTitle.text! + "Credit Card Rate Lending?"
+            stopSyncView.isHidden = true
         }
         else if isVersaileBack
         {
@@ -100,6 +105,15 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             addEditView.isHidden = true
             versatileBackView.isHidden = false
             lendingBackTitle.text = "Versatile Credit"
+            stopSyncView.isHidden = true
+        }
+        else if isStopSync
+        {
+            deleteView.isHidden = true
+            addEditView.isHidden = true
+            versatileView.isHidden = true
+            versatileBackView.isHidden = true
+            stopSyncView.isHidden = false
         }
         else if isHunterBack
         {
@@ -108,6 +122,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             addEditView.isHidden = true
             versatileBackView.isHidden = false
             lendingBackTitle.text = "Credit Card Rate Lending"
+            stopSyncView.isHidden = true
         }
         else
         {
@@ -115,6 +130,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             addEditView.isHidden = false
             versatileView.isHidden = true
             versatileBackView.isHidden = true
+            stopSyncView.isHidden = true
         }
         
         if isEdit == true
@@ -183,6 +199,18 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
                  
     }
     
+    @IBAction func stopSynBtnAction(_ sender: UIButton) 
+    {
+        self.dismiss(animated: true) {
+            self.versatileBack?.whetherToProceedBack()
+        }
+    }
+    @IBAction func stopSyncCancelBtnAction(_ sender: UIButton) 
+    {
+        self.dismiss(animated: true)
+            
+
+    }
     @IBAction func addRoomConfirmBtnAction(_ sender: UIButton)
     {
         
