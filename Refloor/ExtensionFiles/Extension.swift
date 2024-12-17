@@ -2568,6 +2568,21 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
     }
+    
+    func syncStatusForAppointment(appointmentId:Int) -> Bool {
+        do{
+            let realm = try Realm()
+            let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND sync_status == %@",appointmentId, true)
+            if appointments.count > 0
+            {
+                return true
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return false
+    }
+    
     func deleteCustomRoomName(appointmentId:Int,roomId:String)
     {
         do{
@@ -2610,7 +2625,7 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             if deleteAll{
-                let appointments = realm.objects(rf_Appointment_Logs.self)
+                let appointments = realm.objects(rf_Appointment_Logs.self).filter("stop_sync == %@",false)
                 let appointmentLogData = realm.objects(rf_Appointment_Log_Data.self)
                 if appointments.count > 0{
                     try realm.write{
@@ -2628,22 +2643,31 @@ extension UIViewController:OrderStatusViewDelegate
                 }
                 
             }else{
-                let appointments = realm.objects(rf_Appointment_Logs.self).filter("appointment_id == %d",appointmentId)
-                let appointmentLog = realm.objects(rf_Appointment_Log_Data.self).filter("appointment_id == %d",appointmentId)
+                let appointments = realm.objects(rf_Appointment_Logs.self).filter("appointment_id == %d AND stop_sync == %@",appointmentId,false)
+                
                 if appointments.count == 1{
                     try realm.write{
                         if let appointment = appointments.first{
                             realm.delete(appointment)
                         }
                     }
-                }
-                if appointmentLog.count > 0{
-                    try realm.write{
-                        appointmentLog.forEach { log in
-                            realm.delete(log)
+                    let appointmentLog = realm.objects(rf_Appointment_Log_Data.self).filter("appointment_id == %d",appointmentId)
+                    if appointmentLog.count > 0{
+                        try realm.write{
+                            appointmentLog.forEach { log in
+                                realm.delete(log)
+                            }
                         }
                     }
                 }
+                else{
+                    self.alert("You cannot delete an appointment log which is in ‘Sync Stopped’ state.", nil)
+                }
+//                if appointments.count>0
+//                {
+//                    
+//                }
+                
                 
             }
         }catch{
@@ -2810,6 +2834,51 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
         return appointmentLogs
+    }
+    
+    func setStopSyncValue(appointmentId:Int)
+    {
+        
+        do{
+            let realm = try Realm()
+            try realm.write{
+                let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointmentId )
+                var dict:[String:Any] = [:]
+                for apointments in appointmentRequest
+                {
+                    dict = ["id": apointments.id,
+                            "stop_sync" : true]
+                    realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+                }
+            }
+                
+            }
+        
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
+    func setSyncNowValue(appointmentId:Int)
+    {
+        
+        do{
+            let realm = try Realm()
+            try realm.write{
+                let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointmentId )
+                var dict:[String:Any] = [:]
+                for apointments in appointmentRequest
+                {
+                    dict = ["id": apointments.id,
+                            "stop_sync" : false]
+                    realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+                }
+            }
+                
+            }
+        
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
     }
     
     

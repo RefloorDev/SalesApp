@@ -10,7 +10,38 @@ import UIKit
 import RealmSwift
 import Zip
 var stop_syncAppointmentArray = [Int]()
-class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableViewDelegate, versatileBackprotocol {
+    func whetherToProceedBack() {
+        SceneDelegate.timer.invalidate()
+        let appointment_Id = appointmentLogsArray[selectedIndex].appointment_id
+//        let allAppointmentsAvailable = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d" , appointment_Id)
+        stop_syncAppointmentArray.append(appointment_Id)
+        let realm = try! Realm()
+
+        try! realm.write{
+            appointmentLogsArray[selectedIndex].stop_sync = true
+        }
+        setStopSyncValue(appointmentId: appointment_Id)
+        viewLogTableView.reloadData()
+       
+//        BackgroundTaskService.shared.cancelAllTaskRequests()
+//        BackgroundTaskService.shared.startSyncProcess()
+        let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+        if(appointmentRequestArray.count != 0)
+        {
+            if(!SceneDelegate.timer.isValid)
+            {
+                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+                    
+                    print("TIMER WAKEUP Appointment")
+                    BackgroundTaskService.shared.startSyncProcess()
+                })
+            }
+            
+            BackgroundTaskService.shared.enterBackground()
+        }
+    }
+    
     static func initialization() -> ViewLogListViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ViewLogListViewController") as? ViewLogListViewController
     }
@@ -29,6 +60,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     var message:String = String()
     var isFetchData:Bool = Bool()
     var appStatus:String = String()
+    var selectedIndex:Int = Int()
     override func viewDidLoad() {
         super.viewDidLoad()
         //viewLogTableView.estimatedRowHeight = 70
@@ -250,21 +282,37 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "DELETE") {  (contextualAction, view, boolValue) in
             print(indexPath.row)
-            let appointmentId = self.appointmentLogsArray[indexPath.row].appointment_id
-            self.deleteAppointmentLog(appointmentId: appointmentId, deleteAll: false)
-            self.appointmentLogsArray = self.getAppointmentLogsFromDB()
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            boolValue(true)
-            if self.appointmentLogsArray.count == 0{
-                DispatchQueue.main.async{
-                    self.deleteAllButton.isHidden = true
-                    self.uploadLogButton.isHidden = true
-                    self.noLogLabel.isHidden = false
-                    self.viewLogTableView.isHidden = true
-                    self.swipeDeleteTextButton.isHidden = true
+            if self.syncStatusForAppointment(appointmentId: self.appointmentLogsArray[indexPath.row].appointment_id)
+            {
+                
+                if self.appointmentLogsArray[indexPath.row].stop_sync != true
+                {
+                    let appointmentId = self.appointmentLogsArray[indexPath.row].appointment_id
+                    self.deleteAppointmentLog(appointmentId: appointmentId, deleteAll: false)
+                    self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                    boolValue(true)
+                    if self.appointmentLogsArray.count == 0{
+                        DispatchQueue.main.async{
+                            self.deleteAllButton.isHidden = true
+                            self.uploadLogButton.isHidden = true
+                            self.noLogLabel.isHidden = false
+                            self.viewLogTableView.isHidden = true
+                            self.swipeDeleteTextButton.isHidden = true
+                        }
+                    }
+                }
+                
+                else
+                {
+                    self.alert("You cannot delete an appointment log which is in ‘Sync Stopped’ state.", nil)
                 }
             }
-        }
+            else
+            {
+                self.alert("You cannot delete an appointment log which is in ‘Sync Pending’ state.", nil)
+            }
+    }
         deleteAction.image = UIImage(systemName: "trash")
 //        //deleteAction.image = UIGraphicsImageRenderer(size: CGSize(width: 36, height: 36)).image {
 //            _ in UIImage(named: "trash")!.draw(in: CGRect(x: 0, y: 0, width: 150, height: 80))
@@ -277,14 +325,57 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     // MARK: - DELETE LOGS
     @IBAction func deleteAllLogsAction(_ sender: UIButton) {
         let yes = UIAlertAction(title: "Delete", style:.default) { (_) in
-            self.deleteAppointmentLog(appointmentId: 0, deleteAll: true)
-            self.viewLogTableView.reloadData()
+            for appointments in self.appointmentLogsArray
+            {
+                if self.syncStatusForAppointment(appointmentId: appointments.appointment_id) == true
+                {
+                    let realm = try! Realm()
+
+                    try! realm.write{
+                        //workIndex = workRequestIdArray.firstIndex(of: workRequestIdArray.filter({$0.work_Request_id == workId}).first ?? Work_request_list()) ?? 0
+                        let logIndex = self.appointmentLogsArray.firstIndex(of: self.appointmentLogsArray.filter({$0.appointment_id == appointments.appointment_id}).first ?? rf_Appointment_Logs()) ?? 0
+                        self.appointmentLogsArray[logIndex].stop_sync = false
+                    }
+                    self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
+                    self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+                    self.viewLogTableView.reloadData()
+               }
+                else
+                {
+                    let logArray = self.appointmentLogsArray.filter("stop_sync == %@", true)
+                    if logArray.count > 0
+                    {
+                        self.alert("You cannot delete an appointment log which is in ‘Sync Stopped’ state.", nil)
+                    }
+                    else
+                    {
+                        self.alert("You cannot delete an appointment log which is in ‘Sync Pending’ state.", nil)
+                    }
+                }
+            }
+            
+            //self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+            
             DispatchQueue.main.async{
-                self.deleteAllButton.isHidden = true
-                self.uploadLogButton.isHidden = true
-                self.noLogLabel.isHidden = false
-                self.viewLogTableView.isHidden = true
-                self.swipeDeleteTextButton.isHidden = true
+                
+                
+                if self.appointmentLogsArray.count == 0
+                {
+                    self.noLogLabel.isHidden = false
+                    self.viewLogTableView.isHidden = true
+                    self.deleteAllButton.isHidden = true
+                    self.uploadLogButton.isHidden = true
+                    self.swipeDeleteTextButton.isHidden = false
+                    //self.alert("Unable to delete logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
+                }
+                else
+                {
+                    self.noLogLabel.isHidden = true
+                    self.viewLogTableView.isHidden = false
+                    self.deleteAllButton.isHidden = false
+                    self.uploadLogButton.isHidden = false                }
+                    self.swipeDeleteTextButton.isHidden = false
+                    
             }
         }
         let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -292,21 +383,20 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     }
     
     @objc func stopsyncButtonAction( sender: UIButton) {
-        let appointment_Id = appointmentLogsArray[sender.tag].appointment_id
-//        let allAppointmentsAvailable = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d" , appointment_Id)
-        stop_syncAppointmentArray.append(appointment_Id)
-        let realm = try! Realm()
-
-        try! realm.write{
-            appointmentLogsArray[sender.tag].stop_sync = true
-        }
-        viewLogTableView.reloadData()
-        SceneDelegate.timer.invalidate()
-        BackgroundTaskService.shared.cancelAllTaskRequests()
-        BackgroundTaskService.shared.startSyncProcess()
+        
+        selectedIndex = sender.tag
+        let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+        selectRoomPopUp.versatileBack = self
+        selectRoomPopUp.isEdit = false
+        selectRoomPopUp.isVersatile = false
+        selectRoomPopUp.isStopSync = true
+        self.present(selectRoomPopUp, animated: true, completion: nil)
+       
         
     }
     @objc func syncNowButtonAction( sender: UIButton) {
+        selectedIndex = sender.tag
+        SceneDelegate.timer.invalidate()
         let appointment_Id = appointmentLogsArray[sender.tag].appointment_id
         if stop_syncAppointmentArray.contains(appointment_Id){
             if let index = stop_syncAppointmentArray.firstIndex(of: appointment_Id) {
@@ -315,10 +405,31 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
             }
             
         }
-        
-        SceneDelegate.timer.invalidate()
-        BackgroundTaskService.shared.cancelAllTaskRequests()
-        BackgroundTaskService.shared.getAppointmentsToSyncNowFromDB(appointment_Id: appointment_Id)
+        let realm = try! Realm()
+
+        try! realm.write{
+            appointmentLogsArray[selectedIndex].stop_sync = false
+        }
+        viewLogTableView.reloadData()
+        setSyncNowValue(appointmentId: appointment_Id)
+        let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+        if(appointmentRequestArray.count != 0)
+        {
+            if(!SceneDelegate.timer.isValid)
+            {
+                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+                    
+                    print("TIMER WAKEUP Appointment")
+                    BackgroundTaskService.shared.startSyncProcess()
+                })
+            }
+            
+            BackgroundTaskService.shared.enterBackground()
+        }
+       
+//        BackgroundTaskService.shared.cancelAllTaskRequests()
+//       let filteredappointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncNowFromDB(appointment_Id: appointment_Id)
+//        BackgroundTaskService.shared.startSyncProcessForsyncNow(appointmentRequestArray: filteredappointmentRequestArray)
         
     }
     
@@ -397,61 +508,112 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
             self.uploadLog()
         }
         let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        self.alert("Are you sure you want to upload all log files?\nOnce uploaded, it will be removed from this device.", [yes,no])
+        self.alert("Are you sure you want to upload all log files?", [yes,no])
     }
     
     
     func uploadLog(){
-        let appointmentLogs = self.getAppointmentLogDetailsFromDB()
-        var appointmentLogsArray:[[String:Any]] = []
-        appointmentLogs.forEach { appointmentLog in
-            let appointmentId = appointmentLog.appointment_id
-            let message = appointmentLog.sync_message ?? ""
-            //let appointmentTime = appointmentLog.sync_time?.logDate().logDataAsString() ?? ""
-            let appointmentTime = appointmentLog.sync_time ?? ""
-            let dict:[String:Any] = ["appointment_id":appointmentId,"message":message,"sync_time":appointmentTime]
-            appointmentLogsArray.append(dict)
-        }
-        let paramsDict:[String:Any] = ["token":UserData.init().token ?? "", "data":appointmentLogsArray]
-        HttpClientManager.SharedHM.uploadLogsToServer(parameter: paramsDict) { result, message in
-            if (result ?? "") == "Success"
+        
+        for appointments in self.appointmentLogsArray
+        {
+            if self.syncStatusForAppointment(appointmentId: appointments.appointment_id)
             {
-                let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
-                    self.deleteAppointmentLog(appointmentId: 0, deleteAll: true)
-                    self.viewLogTableView.reloadData()
-                    DispatchQueue.main.async{
-                        self.deleteAllButton.isHidden = true
-                        self.uploadLogButton.isHidden = true
-                        self.noLogLabel.isHidden = false
-                        self.viewLogTableView.isHidden = true
-                        self.swipeDeleteTextButton.isHidden = true
-                        self.syncAllButton.isHidden = true
-                        if self.appStatus == "Sync Completed" && self.viewLogTableView.isHidden == true
-                        {
-                            self.fetchDataBtn.isHidden = true
+                
+                
+                let appointmentLogs = self.getAppointmentLogDetailsFromDB().filter({$0.appointment_id == appointments.appointment_id})
+                if appointmentLogs.count > 0
+                {
+                    
+                
+                var appointmentLogsArray:[[String:Any]] = []
+                appointmentLogs.forEach { appointmentLog in
+                    let appointmentId = appointmentLog.appointment_id
+                    let message = appointmentLog.sync_message ?? ""
+                    //let appointmentTime = appointmentLog.sync_time?.logDate().logDataAsString() ?? ""
+                    let appointmentTime = appointmentLog.sync_time ?? ""
+                    let dict:[String:Any] = ["appointment_id":appointmentId,"message":message,"sync_time":appointmentTime]
+                    appointmentLogsArray.append(dict)
+                }
+                
+                let paramsDict:[String:Any] = ["token":UserData.init().token ?? "", "data":appointmentLogsArray]
+                HttpClientManager.SharedHM.uploadLogsToServer(parameter: paramsDict) { result, message in
+                    if (result ?? "") == "Success"
+                    {
+                        let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
+                            self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
+                            self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+                            self.viewLogTableView.reloadData()
+                            DispatchQueue.main.async{
+                                
+                                
+                                if appointmentLogsArray.count == 0
+                                {
+                                    self.viewLogTableView.isHidden = true
+                                    self.noLogLabel.isHidden = false
+                                    self.deleteAllButton.isHidden = true
+                                    self.uploadLogButton.isHidden = true
+                                    self.swipeDeleteTextButton.isHidden = true
+                                    self.syncAllButton.isHidden = true
+                                }
+                                else
+                                {
+                                    self.viewLogTableView.isHidden = false
+                                    self.viewLogTableView.reloadData()
+                                    self.noLogLabel.isHidden = true
+                                    self.deleteAllButton.isHidden = false
+                                    self.uploadLogButton.isHidden = false
+                                    self.swipeDeleteTextButton.isHidden = false
+                                    self.syncAllButton.isHidden = false
+                                }
+                                
+                                if self.appStatus == "Sync Completed" && self.viewLogTableView.isHidden == true
+                                {
+                                    self.fetchDataBtn.isHidden = true
+                                }
+                                else
+                                {
+                                    self.fetchDataBtn.isHidden = false
+                                }
+                                //self.viewLogTableView.reloadData()
+                                
+                            }
                         }
-                        else
-                        {
-                            self.fetchDataBtn.isHidden = false
+                        self.alert(message ?? AppAlertMsg.serverNotReached, [ok])
+                    }
+                    
+                    else
+                    {
+                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                            
+                            self.uploadLog()
+                            
                         }
-                        //self.viewLogTableView.reloadData()
+                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                         
+                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                     }
                 }
-                self.alert(message ?? AppAlertMsg.serverNotReached, [ok])
+            }
+                else
+                {
+                    self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
+                    self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+                    self.viewLogTableView.reloadData()
+                }
             }
             else
             {
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                    
-                    self.uploadLog()
-                    
+                if appointments.stop_sync == true
+                {
+                    self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
                 }
-                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                
-                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
             }
         }
+       // }
+//        else
+//        {
+//            self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
+//        }
     }
 }
 

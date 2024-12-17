@@ -310,11 +310,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         
         if sender.tag == 0
         {
-            if aptResultDetailsLbl.text != "Select Result Details"
-            {
-                aptResultDetailsLbl.text = "Select Result Details"
-                aptResultDetailsLbl.textColor = UIColor().colorFromHexString("A7B0BA")
-            }
+//            if aptResultDetailsLbl.text != "Select Result Details"
+//            {
+//                aptResultDetailsLbl.text = "Select Result Details"
+//                aptResultDetailsLbl.textColor = UIColor().colorFromHexString("A7B0BA")
+//            }
             var value:[String] = []
             for val in tempstatusList
             {
@@ -341,9 +341,12 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 var value:[String] = []
                 for val in aptResultList
                 {
-                    if val.applicable_result_ids?[0] == selectedResultId
+                    if val.applicable_result_ids?.count ?? 0 > 0
                     {
-                        value.append(val.reason ?? "Unknown")
+                        if val.applicable_result_ids?[0] == selectedResultId
+                        {
+                            value.append(val.reason ?? "Unknown")
+                        }
                     }
                 }
                 
@@ -948,9 +951,24 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         if tag == 0
         {
             selectedResultId = index + 1
-            self.orderstatusLabel.text = item
+            //self.orderstatusLabel.text = item
             self.orderstatusLabel.textColor = .white
+            if item != orderstatusLabel.text
+            {
+                self.orderstatusLabel.text = item
+                
+                if aptResultDetailsLbl.text != "Select Result Details"
+                {
+                    aptResultDetailsLbl.text = "Select Result Details"
+                    aptResultDetailsLbl.textColor = UIColor().colorFromHexString("A7B0BA")
+                }
+            }
+            else
+            {
+                self.orderstatusLabel.text = item
+            }
         }
+        
         else
         {
             let selectedAptResultReasonArray = appointDetailsResults.filter({$0.reason == item})

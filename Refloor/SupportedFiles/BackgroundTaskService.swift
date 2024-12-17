@@ -190,7 +190,7 @@ extension BackgroundTaskService {
         var appointmentRequestArray : Results<rf_Completed_Appointment_Request>!
         do{
             let realm = try Realm()
-            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@",false,RequestTitle.CustomerAndRoom.rawValue)
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@ AND stop_sync == %@ ",false,RequestTitle.CustomerAndRoom.rawValue,false)
             return appointmentRequestArray
         }catch{
             print(RealmError.initialisationFailed.rawValue)
@@ -214,7 +214,7 @@ extension BackgroundTaskService {
         var appointmentRequestArray : Results<rf_Completed_Appointment_Request>!
         do{
             let realm = try Realm()
-            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND image_name != %@",false,"")
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND image_name != %@ AND stop_sync == %@",false,"",false)
             return appointmentRequestArray
         }catch{
             print(RealmError.initialisationFailed.rawValue)
@@ -226,7 +226,7 @@ extension BackgroundTaskService {
         var appointmentRequestArray : Results<rf_Completed_Appointment_Request>!
         do{
             let realm = try Realm()
-            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@",false,RequestTitle.GenerateContract.rawValue)
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@ AND stop_sync == %@",false,RequestTitle.GenerateContract.rawValue,false)
             return appointmentRequestArray
         }catch{
             print(RealmError.initialisationFailed.rawValue)
@@ -238,7 +238,7 @@ extension BackgroundTaskService {
         var appointmentRequestArray : Results<rf_Completed_Appointment_Request>!
         do{
             let realm = try Realm()
-            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@",false,RequestTitle.InitiateSync.rawValue)
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@ AND stop_sync == %@",false,RequestTitle.InitiateSync.rawValue,false)
             return appointmentRequestArray
         }catch{
             print(RealmError.initialisationFailed.rawValue)
@@ -363,8 +363,8 @@ extension BackgroundTaskService {
         var appointmentRequestArray:Results<rf_Completed_Appointment_Request>!
         do{
             let realm = try Realm()
-            let filteredappointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointment_Id)
-            startSyncProcessForsyncNow(appointmentRequestArray: filteredappointmentRequestArray)
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointment_Id)
+            
             return appointmentRequestArray
         }
         catch{
@@ -543,91 +543,94 @@ extension BackgroundTaskService {
             
             for appointmentRequest in appointmentRequestArray
             {
-//                count = count + 1
-//                if count > 1{
-//                    break
-//                }
-
-              
+                //                count = count + 1
+                //                if count > 1{
+                //                    break
+                //                }
+//                if !(stop_syncAppointmentArray.contains(appointmentRequest.appointment_id))
+//                {
+                
+                
                 print("Date Before \(Date().toString())")
-                    switch appointmentRequest.reqest_title {
-                    case RequestTitle.CustomerAndRoom.rawValue:
-                        let (appointmentId, requestParams, _) =  self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-//                       if !isCallingApi
-//                        {
-                           self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
-//                               self.isCallingApi = false
-                               if !ifSuccess{
-                                   print("Spinner Count:1")
-                                   ifAnyApiFailed = true
-                                   return
-                               }else{
-                                   print("Spinner Count:2")
-                                   ifAnyApiFailed = false
-                               }
-                           }
-                       //}
-                        
-                        break
-//                    case RequestTitle.ContactDetails.rawValue:
-//                        let (appointmentId, requestParams, _) =  self.createContractDetailsParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-//                        self.syncContractData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
-//                            if !ifSuccess{
-//                                print("Spinner Count:3")
-//                                ifAnyApiFailed = true
-//                                return
-//                            }else{
-//                                print("Spinner Count:4")
-//                                ifAnyApiFailed = false
-//                            }
-//                        }
-//                        break
-                    case RequestTitle.ImageUpload.rawValue:
-                        let requestParams =  self.createImageUploadParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                        self.syncImages(imageDict: requestParams){ ifSuccess in
-                            //self.isCallingApi = false
-                            if !ifSuccess{
-                                print("Spinner Count:5")
-                                ifAnyApiFailed = true
-                                return
-                            }else{
-                                print("Spinner Count:6")
-                                ifAnyApiFailed = false
-                            }
+                switch appointmentRequest.reqest_title {
+                case RequestTitle.CustomerAndRoom.rawValue:
+                    let (appointmentId, requestParams, _) =  self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    //                       if !isCallingApi
+                    //                        {
+                    self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
+                        //                               self.isCallingApi = false
+                        if !ifSuccess{
+                            print("Spinner Count:1")
+                            ifAnyApiFailed = true
+                            return
+                        }else{
+                            print("Spinner Count:2")
+                            ifAnyApiFailed = false
                         }
-                        break
-                    case RequestTitle.GenerateContract.rawValue:
-                        let (appointmentId, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                        self.syncGenerateContract(appointmentId:appointmentId,parameter: requestParams){ ifSuccess in
-                            //self.isCallingApi = false
-                            if !ifSuccess{
-                                print("Spinner Count:7")
-                                ifAnyApiFailed = true
-                                return
-                            }else{
-                                print("Spinner Count:8")
-                                ifAnyApiFailed = false
-                            }
-                        }
-                        break
-                    case RequestTitle.InitiateSync.rawValue:
-                        let (appointmentId, requestParams, _) = self.createInitiate_i360_SyncParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                        syncDelayValue = syncDelayValue + 1
-                        if HttpClientManager.SharedHM.connectedToNetwork(){
-                            print("Spinner Count:9")
-                            self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue)
-                            //  self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
-                            
-                            if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
-                                NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
-                            }
-                        }
-                        break
-                    case .none:
-                        break
-                    case .some(_):
-                        break
                     }
+                    //}
+                    
+                    break
+                    //                    case RequestTitle.ContactDetails.rawValue:
+                    //                        let (appointmentId, requestParams, _) =  self.createContractDetailsParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    //                        self.syncContractData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
+                    //                            if !ifSuccess{
+                    //                                print("Spinner Count:3")
+                    //                                ifAnyApiFailed = true
+                    //                                return
+                    //                            }else{
+                    //                                print("Spinner Count:4")
+                    //                                ifAnyApiFailed = false
+                    //                            }
+                    //                        }
+                    //                        break
+                case RequestTitle.ImageUpload.rawValue:
+                    let requestParams =  self.createImageUploadParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    self.syncImages(imageDict: requestParams){ ifSuccess in
+                        //self.isCallingApi = false
+                        if !ifSuccess{
+                            print("Spinner Count:5")
+                            ifAnyApiFailed = true
+                            return
+                        }else{
+                            print("Spinner Count:6")
+                            ifAnyApiFailed = false
+                        }
+                    }
+                    break
+                case RequestTitle.GenerateContract.rawValue:
+                    let (appointmentId, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    self.syncGenerateContract(appointmentId:appointmentId,parameter: requestParams){ ifSuccess in
+                        //self.isCallingApi = false
+                        if !ifSuccess{
+                            print("Spinner Count:7")
+                            ifAnyApiFailed = true
+                            return
+                        }else{
+                            print("Spinner Count:8")
+                            ifAnyApiFailed = false
+                        }
+                    }
+                    break
+                case RequestTitle.InitiateSync.rawValue:
+                    let (appointmentId, requestParams, _) = self.createInitiate_i360_SyncParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    syncDelayValue = syncDelayValue + 1
+                    if HttpClientManager.SharedHM.connectedToNetwork(){
+                        print("Spinner Count:9")
+                        self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue)
+                        //  self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
+                        
+                        if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
+                            NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                        }
+                    }
+                    break
+                case .none:
+                    break
+                case .some(_):
+                    break
+                }
+           // }
                     
                 
             }
