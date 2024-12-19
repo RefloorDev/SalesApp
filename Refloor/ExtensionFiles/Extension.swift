@@ -2573,9 +2573,12 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND sync_status == %@",appointmentId, true)
-            if appointments.count > 0
+            for index in 0...appointments.count - 1
             {
-                return true
+                if appointments[index].sync_status 
+                {
+                    return true
+                }
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
