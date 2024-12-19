@@ -2572,18 +2572,15 @@ extension UIViewController:OrderStatusViewDelegate
     func syncStatusForAppointment(appointmentId:Int) -> Bool {
         do{
             let realm = try Realm()
-            let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND sync_status == %@",appointmentId, true)
-            for index in 0...appointments.count - 1
+            let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND sync_status == %@",appointmentId, false)
+            if appointments.count > 0
             {
-                if appointments[index].sync_status 
-                {
-                    return true
-                }
+                return false
             }
         }catch{
             print(RealmError.initialisationFailed.rawValue)
         }
-        return false
+        return true
     }
     
     func deleteCustomRoomName(appointmentId:Int,roomId:String)
