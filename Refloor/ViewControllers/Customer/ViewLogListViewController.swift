@@ -516,10 +516,8 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         
         for appointments in self.appointmentLogsArray
         {
-            if self.syncStatusForAppointment(appointmentId: appointments.appointment_id)
-            {
-                
-                
+//            if self.syncStatusForAppointment(appointmentId: appointments.appointment_id)
+//            {
                 let appointmentLogs = self.getAppointmentLogDetailsFromDB().filter({$0.appointment_id == appointments.appointment_id})
                 if appointmentLogs.count > 0
                 {
@@ -540,7 +538,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
                     if (result ?? "") == "Success"
                     {
                         let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
-                            self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
+                            //self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
                             self.appointmentLogsArray = self.getAppointmentLogsFromDB()
                             self.viewLogTableView.reloadData()
                             DispatchQueue.main.async{
@@ -596,18 +594,18 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
             }
                 else
                 {
-                    self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
+                    //self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
                     self.appointmentLogsArray = self.getAppointmentLogsFromDB()
                     self.viewLogTableView.reloadData()
                 }
-            }
-            else
-            {
-                if appointments.stop_sync == true
-                {
-                    self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
-                }
-            }
+          //  }
+//            else
+//            {
+//                if appointments.stop_sync == true
+//                {
+//                    self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
+//                }
+//            }
         }
        // }
 //        else
@@ -1079,39 +1077,39 @@ extension ViewLogListViewController{
         //getAppointmentsToSyncFromDB(requestTitle: RequestTitle.GenerateContract)
         //fetchGenerateContractFromAppointmentRequest()
         //var completedAppointmentsArray:[[String:Any]] = [[:]]
-        if completedAppointmenturlParamaterData!.count > 0
-        {
-            for appointments in completedAppointmenturlParamaterData!
-            {
-                var completedAppointmentDictionary:[String:Any] = [:]
-                completedAppointmentDictionary["appointment_id"] = appointments.appointment_id
-                completedAppointmentDictionary["reqest_title"] = appointments.reqest_title
-                completedAppointmentDictionary["request_url"] = appointments.request_url
-                completedAppointmentDictionary["request_parameter"] = appointments.request_parameter
-                completedAppointmentDictionary["request_type"] = appointments.request_type
-                completedAppointmentDictionary["image_name"] = appointments.image_name
-                completedAppointmentDictionary["sync_status"] = appointments.sync_status
-                
-                let url = createAppointmentZip(appointmentID: String(appointments.appointment_id), data: completedAppointmentDictionary, imagePaths: [])
-                 HttpClientManager.SharedHM.CompressFileOfAppointment(appointmentId: String(appointmentId), fileURL: url) { success, message in
-                     if(success ?? "") == "Success"
-                     {
-                         
-                     }
-                     else
-                     {
-                         
-                     }
-                 }
-                //appointment_id: Int = 0
-//                @objc dynamic var reqest_title: String?
-//                @objc dynamic var request_url: String?
-//                @objc dynamic var request_parameter: String?
-//                @objc dynamic var request_type: String?
-//                @objc dynamic var sync_status: Bool = false
-//                @objc dynamic var image_name: String?
-            }
-        }
+//        if completedAppointmenturlParamaterData!.count > 0
+//        {
+//            for appointments in completedAppointmenturlParamaterData!
+//            {
+//                var completedAppointmentDictionary:[String:Any] = [:]
+//                completedAppointmentDictionary["appointment_id"] = appointments.appointment_id
+//                completedAppointmentDictionary["reqest_title"] = appointments.reqest_title
+//                completedAppointmentDictionary["request_url"] = appointments.request_url
+//                completedAppointmentDictionary["request_parameter"] = appointments.request_parameter
+//                completedAppointmentDictionary["request_type"] = appointments.request_type
+//                completedAppointmentDictionary["image_name"] = appointments.image_name
+//                completedAppointmentDictionary["sync_status"] = appointments.sync_status
+//                
+//                let url = createAppointmentZip(appointmentID: String(appointments.appointment_id), data: completedAppointmentDictionary, imagePaths: [])
+//                 HttpClientManager.SharedHM.CompressFileOfAppointment(appointmentId: String(appointmentId), fileURL: url) { success, message in
+//                     if(success ?? "") == "Success"
+//                     {
+//                         
+//                     }
+//                     else
+//                     {
+//                         
+//                     }
+//                 }
+//                //appointment_id: Int = 0
+////                @objc dynamic var reqest_title: String?
+////                @objc dynamic var request_url: String?
+////                @objc dynamic var request_parameter: String?
+////                @objc dynamic var request_type: String?
+////                @objc dynamic var sync_status: Bool = false
+////                @objc dynamic var image_name: String?
+//            }
+//        }
         
         if completedAppointments!.count > 0
         {
@@ -1225,11 +1223,11 @@ extension ViewLogListViewController{
                 HttpClientManager.SharedHM.CompressFileOfAppointment(appointmentId: String(appointmentId), fileURL: url) { success, message in
                     if(success ?? "") == "Success"
                     {
-                        
+                        self.alert(message ?? "Debug log uploaded successfully", nil)
                     }
                     else
                     {
-                        
+                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, nil)
                     }
                 }
             
