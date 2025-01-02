@@ -25,7 +25,11 @@ class SummeryListTableViewCell: UITableViewCell {
     
 }
 class SummeryListNewTableViewCell: UITableViewCell {
+    @IBOutlet weak var deliveryBtn: UIButton!
+    @IBOutlet weak var deliveryTxtFld: UITextField!
     @IBOutlet weak var summeryAttachmentView: UIImageView!
+    @IBOutlet weak var deliveryView: UIView!
+    @IBOutlet weak var deliveryLbl: UILabel!
     @IBOutlet weak var moldingBgView: UIView!
     @IBOutlet weak var colorView: UIImageView!
     @IBOutlet weak var colorLabel: UITextField!

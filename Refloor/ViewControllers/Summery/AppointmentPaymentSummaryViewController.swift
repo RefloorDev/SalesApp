@@ -28,7 +28,7 @@ class AppointmentPaymentSummaryViewController: UIViewController {
     @IBOutlet weak var finalPaymentLbl: UILabel!
     @IBOutlet weak var totalPriceLblSummary: UILabel!
     @IBOutlet weak var totalPriceLbl: UILabel!
-    override func viewDidLoad() 
+    override func viewDidLoad()
     {
         super.viewDidLoad()
         if isOutOfstock
@@ -52,10 +52,11 @@ class AppointmentPaymentSummaryViewController: UIViewController {
     }
     
 
-    @IBAction func okBtnClicked(_ sender: UIButton) 
+    @IBAction func okBtnClicked(_ sender: UIButton)
     {
         
         self.dismiss(animated: true)
     }
 
 }
+

@@ -109,6 +109,11 @@
 			<key>orderHint</key>
 			<integer>15</integer>
 		</dict>
+		<key>FirebaseCrashlytics.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>56</integer>
+		</dict>
 		<key>FirebaseFirestore.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -136,6 +141,11 @@
 			<false/>
 			<key>orderHint</key>
 			<integer>19</integer>
+		</dict>
+		<key>FirebaseSessions.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>54</integer>
 		</dict>
 		<key>FirebaseSharedSwift.xcscheme</key>
 		<dict>
@@ -269,6 +279,11 @@
 			<false/>
 			<key>orderHint</key>
 			<integer>44</integer>
+		</dict>
+		<key>PromisesSwift.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>55</integer>
 		</dict>
 		<key>Realm-realm_objc_privacy.xcscheme</key>
 		<dict>

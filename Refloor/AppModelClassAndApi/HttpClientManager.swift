@@ -2641,6 +2641,7 @@ class HttpClientManager: NSObject {
         if self.connectedToNetwork() {
             
             let URL = AppURL().syncImageInfo
+            
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
@@ -2680,6 +2681,60 @@ class HttpClientManager: NSObject {
         }
         else{
             completion("false", AppAlertMsg.NetWorkAlertMessage,nil)
+            
+        }
+    }
+    
+    func CompressFileOfAppointment(appointmentId: String,fileURL:URL?,completion:@escaping (_ success: String?, _ message: String?) -> ()){
+        
+        
+        if self.connectedToNetwork() {
+            
+            let URL = AppURL().compressedFiles
+            self.showhideHUD(viewtype: .SHOW, title: "Submitting Data and making zip file...")
+            let user = UserData.init()
+            var parameters:[String:String] = [:]
+            let headers: HTTPHeaders = [
+                "Content-Type": "multipart/form-data",
+                "Authorization":"Bearer \(user.token ?? "")"
+                ]
+//            if dataCompleted != ""{
+//                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName]
+//            }else{
+                parameters = ["appointment_id":appointmentId]
+            //}
+            
+            //let imageData = attachments.jpegData(compressionQuality: 0.0)
+            Alamofire.upload(multipartFormData: { (multipartFormData) in
+                multipartFormData.append(fileURL!, withName: "file", fileName: "\(appointmentId).zip", mimeType: "application/zip")
+                for (key, value) in parameters
+                {
+                    
+                    multipartFormData.append(value.data(using: String.Encoding.utf8)! , withName: key)
+                }
+            }, to:URL,headers:headers)
+            { (result) in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let upload, _, _):
+                        upload.responseJSON { response in
+                            //print response.result
+                            let value = response.result.value
+                            let result = Mapper<OfflineAttachment>().map(JSONObject: value)
+                            self.showhideHUD(viewtype: .HIDE, title: "i")
+                            completion(result?.result,result?.message)
+                            
+                        }
+                        break
+                    case .failure(let encodingError):
+                        completion("false",encodingError.localizedDescription)
+                        break
+                    }}
+            }
+            
+        }
+        else{
+            completion("false", AppAlertMsg.NetWorkAlertMessage)
             
         }
     }
