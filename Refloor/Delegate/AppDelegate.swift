@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion:  17,//7, // production 12
+            schemaVersion:  21,//7, // production 12
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -106,7 +106,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //            showLocationPermissionDeniedAlert()
 //        }
 
-        //locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        AppDelegate.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
 //        AppDelegate.locationManager?.requestWhenInUseAuthorization()
 //        AppDelegate.locationManager?.requestAlwaysAuthorization()
         //locationManager?.activityType = .automotiveNavigation
@@ -314,7 +314,13 @@ extension AppDelegate : CLLocationManagerDelegate
             let currentClassName = String(describing: type(of: self))
             let classDisplayName = "GeoLocation"
             self.saveScreenCompletionTimeToDb(appointmentId: Int(region.identifier) ?? 0, className: currentClassName, displayName: classDisplayName, time: Date())
+            let appointment = self.getAppointmentData(appointmentId: Int(region.identifier) ?? 0)
+            let firstName = appointment?.applicant_first_name ?? ""
+            let lastName = appointment?.applicant_last_name ?? ""
+            let name = lastName == ""  ? firstName : firstName + " " + lastName
+            let date = appointment?.appointment_datetime ?? ""
             let entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier) ?? 0)
+            saveLogDetailsForAppointment(appointmentId: Int(region.identifier) ?? 0, logMessage: AppointmentLogMessages.geoLocationExitRegion.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status:  "",payment_message: "")
             do
             {
                 let realm = try Realm()
@@ -346,6 +352,59 @@ extension AppDelegate : CLLocationManagerDelegate
             
         }
         handleEvent(forRegion: region, action: "Exited Location")
+    }
+    
+    func getAppointmentData(appointmentId:Int) -> rf_master_appointment!{
+        var appointmentData : rf_master_appointment!
+        do{
+            let realm = try Realm()
+            if let appointment = realm.objects(rf_master_appointment.self).filter("id == %d",appointmentId).first{
+                appointmentData = appointment
+            }else if let  appointmentReq = realm.objects(rf_Completed_Appointment_Request.self).filter("reqest_title == %d AND appointment_id == %d", RequestTitle.CustomerAndRoom.rawValue,appointmentId).first{
+                let customerFullDict = appointmentReq.request_parameter?.dictionaryValue() ?? [:]
+                //let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: appointmentReq.request_parameter ?? "")
+                //let customerDictData = customerFullDict["data"] as? [String:Any]
+                let customerDict = customerFullDict["customer"] as? [String:Any] ?? [:]
+                appointmentData = rf_master_appointment(appointmentObj: customerDict)
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return appointmentData
+    }
+    func saveLogDetailsForAppointment(appointmentId: Int, logMessage: String ,time:String, errorMessage: String = "",name:String,appointmentDate:String,payment_status:String = "",payment_message:String = ""){
+        do{
+            let realm = try Realm()
+            var dict:[String:Any] = [:]
+            try realm.write{
+                let appointmentLogs = realm.objects(rf_Appointment_Logs.self).filter("appointment_id == %@",appointmentId)
+                if appointmentLogs.count == 0{
+                    let logList = RealmSwift.List<rf_Appointment_Log_Data>()
+                    logList.append(rf_Appointment_Log_Data(message: logMessage, time: time, appointmentId: appointmentId,customerName:name,appointmentDateTime: appointmentDate))
+                    let dict:[String:Any] = ["appointment_id":appointmentId,"sync_message":logList,"appBaseUrl":BASE_URL,"paymentStatus":payment_status,"paymentMessage":payment_message]
+                    realm.create(rf_Appointment_Logs.self, value: dict, update: .all)
+                }else{
+                    if let appointmentLogsAlreadyExist = appointmentLogs.first{
+                        let logArrayList = appointmentLogsAlreadyExist.sync_message
+                        logArrayList.append(rf_Appointment_Log_Data(message: logMessage, time: time, appointmentId: appointmentId,customerName:name,appointmentDateTime: appointmentDate))
+                        if payment_status == ""
+                        {
+                            let pay_message = appointmentLogsAlreadyExist.paymentMessage
+                          
+                           let pay_status = appointmentLogsAlreadyExist.paymentStatus
+                            dict = ["appointment_id":appointmentId,"sync_message":logArrayList,"appBaseUrl":BASE_URL,"paymentStatus":pay_status ?? "","paymentMessage":pay_message ?? ""]
+                        }
+                        else
+                        {
+                            dict = ["appointment_id":appointmentId,"sync_message":logArrayList,"appBaseUrl":BASE_URL,"paymentStatus":payment_status ,"paymentMessage":payment_message ]
+                        }
+                        realm.create(rf_Appointment_Logs.self, value: dict, update: .all)
+                    }
+                }
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
     }
     
     func geoLocationApiCallSync()
@@ -416,6 +475,22 @@ extension AppDelegate : CLLocationManagerDelegate
         }
         return entryTime
     }
+    func geoLocationExitTimeForAppointments(appointmentId:Int) -> String
+    {
+        var exitTime = ""
+        do
+        {
+            let realm = try Realm()
+            if let appointment = realm.objects(rf_GeoLocationData.self).filter("appointmentId == %d", (appointmentId)).first
+            {
+                exitTime = appointment.exitTime ?? ""
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return exitTime
+    }
     func geoLocationDataForSync() -> RealmSwift.Results<rf_GeoLocationData>
     {
         var geoLocationData : Results<rf_GeoLocationData>!
@@ -453,11 +528,11 @@ extension AppDelegate : CLLocationManagerDelegate
                                                trigger: trigger)
 
            // trying to add the notification request to notification center
-//        UNUserNotificationCenter.current().add(request) { error in
-//                    if let error = error {
-//                        print("Error adding notification: \(error.localizedDescription)")
-//                    }
-//                }
+        UNUserNotificationCenter.current().add(request) { error in
+                    if let error = error {
+                        print("Error adding notification: \(error.localizedDescription)")
+                    }
+                }
     }
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
@@ -465,7 +540,13 @@ extension AppDelegate : CLLocationManagerDelegate
         if region is CLCircularRegion {
             print("Did Enter geoLocation region")
             var parameters:[String:Any] = [:]
-            var entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
+            let entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
+            let appointment = self.getAppointmentData(appointmentId: Int(region.identifier) ?? 0)
+            let firstName = appointment?.applicant_first_name ?? ""
+            let lastName = appointment?.applicant_last_name ?? ""
+            let name = lastName == ""  ? firstName : firstName + " " + lastName
+            let date = appointment?.appointment_datetime ?? ""
+            saveLogDetailsForAppointment(appointmentId: Int(region.identifier) ?? 0, logMessage: AppointmentLogMessages.geoLocationEntryRegion.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status:  "",payment_message: "")
             if entryTime == ""
             {
                 let entryTime = Date().dateToString()
@@ -537,6 +618,7 @@ extension AppDelegate : CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let monitoredRegions = manager.monitoredRegions
+        print("Updated location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
 
         for region in monitoredRegions {
             if let circularRegion = region as? CLCircularRegion, circularRegion.contains(location.coordinate) {
@@ -545,6 +627,8 @@ extension AppDelegate : CLLocationManagerDelegate
                 print("Inside the area")
                 var parameters:[String:Any] = [:]
                 var entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
+                //var exiTime = geoLocationExitTimeForAppointments(appointmentId: Int(region.identifier)!)
+                var geoLocationValues:[String:Any] = [:]
                 if entryTime == ""
                 {
                     do
@@ -553,22 +637,31 @@ extension AppDelegate : CLLocationManagerDelegate
                         try realm.write{
                             let appointmentId = Int(region.identifier)
                             entryTime = Date().dateToString()
-                            let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                            geoLocationValues = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
                             realm.create(rf_GeoLocationData.self, value: geoLocationValues, update: .all)
                             let token = UserData.init().token!
                             parameters = ["appointment_id":Int(region.identifier) ?? 0, "arrival_date":entryTime,"departure_date": "","token":token]
+                            //let entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier)!)
+                            let appointment = self.getAppointmentData(appointmentId: Int(region.identifier) ?? 0)
+                            let firstName = appointment?.applicant_first_name ?? ""
+                            let lastName = appointment?.applicant_last_name ?? ""
+                            let name = lastName == ""  ? firstName : firstName + " " + lastName
+                            let date = appointment?.appointment_datetime ?? ""
+                            saveLogDetailsForAppointment(appointmentId: Int(region.identifier) ?? 0, logMessage: AppointmentLogMessages.geoLocationEntryRegion.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status:  "",payment_message: "")
                         }
                     }
                     catch{
                         print(RealmError.initialisationFailed)
                     }
+                    
+                    
                     geoLocationApiCall(parameter:parameters) {success in
                         if success!
                         {
-                            let appointmentId = Int(region.identifier)
-                            let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":"","syncStatus":false]
+                            //let appointmentId = Int(region.identifier)
+                            //let geoLocationValues:[String:Any] = ["appointmentId":appointmentId!, "entryTime": entryTime,"exitTime":exiTime,"syncStatus":true]
                             self.updatingGeolocationSyncValues(geoLocationValues: geoLocationValues)
-                           
+                            
                         }
                     }
                 }
@@ -576,6 +669,8 @@ extension AppDelegate : CLLocationManagerDelegate
                 {
                     return
                 }
+                
+
                 //handleUserWithinRegion(circularRegion)
                 break
             }

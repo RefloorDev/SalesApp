@@ -50,6 +50,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     var selectedAptResultReasonId:Int = Int()
     var appointmentResults = List<rf_master_appointments_results_demoedNotDemoed>()
     var appointDetailsResults:List<rf_appointment_result_reasons_results>!
+    var selectedResultId = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -309,6 +310,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         
         if sender.tag == 0
         {
+//            if aptResultDetailsLbl.text != "Select Result Details"
+//            {
+//                aptResultDetailsLbl.text = "Select Result Details"
+//                aptResultDetailsLbl.textColor = UIColor().colorFromHexString("A7B0BA")
+//            }
             var value:[String] = []
             for val in tempstatusList
             {
@@ -330,23 +336,36 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         }
         else
         {
-            var value:[String] = []
-            for val in aptResultList
+            if orderstatusLabel.text != "Select Result"
             {
-                value.append(val.reason ?? "Unknown")
-            }
-            
-            if(value.count != 0)
-            {
-                // self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag)
-                self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 1)
-                //  self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
+                var value:[String] = []
+                for val in aptResultList
+                {
+                    if val.applicable_result_ids?.count ?? 0 > 0
+                    {
+                        if val.applicable_result_ids?[0] == selectedResultId
+                        {
+                            value.append(val.reason ?? "Unknown")
+                        }
+                    }
+                }
                 
-                
+                if(value.count != 0)
+                {
+                    // self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, value, -1, delegate: self, tag: 1, cell: sender.tag)
+                    self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 1)
+                    //  self.DropDownDefaultfunction(sender, sender.bounds.width, value, -1, delegate: self, tag: 0)
+                    
+                    
+                }
+                else
+                {
+                    self.alert("Appointment Result Details not available", nil)
+                }
             }
             else
             {
-                self.alert("Appointment Result Details not available", nil)
+                self.alert("Please select result first to continue", nil)
             }
         }
         
@@ -931,9 +950,25 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
         if tag == 0
         {
-            self.orderstatusLabel.text = item
+            selectedResultId = index + 1
+            //self.orderstatusLabel.text = item
             self.orderstatusLabel.textColor = .white
+            if item != orderstatusLabel.text
+            {
+                self.orderstatusLabel.text = item
+                
+                if aptResultDetailsLbl.text != "Select Result Details"
+                {
+                    aptResultDetailsLbl.text = "Select Result Details"
+                    aptResultDetailsLbl.textColor = UIColor().colorFromHexString("A7B0BA")
+                }
+            }
+            else
+            {
+                self.orderstatusLabel.text = item
+            }
         }
+        
         else
         {
             let selectedAptResultReasonArray = appointDetailsResults.filter({$0.reason == item})

@@ -991,8 +991,8 @@ extension UIViewController:OrderStatusViewDelegate
         dropDown.dismissMode = .onTap
         dropDown.width = width + 15
         dropDown.dataSource = values
-        var stairArray = stairColour
-        var floorArray = floorColor
+        let stairArray = stairColour
+        let floorArray = floorColor
         let officeLocationId = AppDelegate.appoinmentslData.officeLocationId
        // var selectedArray = (stairColour != nil ? stairColour : floorColor)
         /*** IMPORTANT PART FOR CUSTOM CELLS ***/
@@ -2568,6 +2568,21 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
     }
+    
+    func syncStatusForAppointment(appointmentId:Int) -> Bool {
+        do{
+            let realm = try Realm()
+            let appointments = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND sync_status == %@",appointmentId, false)
+            if appointments.count > 0
+            {
+                return false
+            }
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return true
+    }
+    
     func deleteCustomRoomName(appointmentId:Int,roomId:String)
     {
         do{
@@ -2610,7 +2625,7 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             if deleteAll{
-                let appointments = realm.objects(rf_Appointment_Logs.self)
+                let appointments = realm.objects(rf_Appointment_Logs.self).filter("stop_sync == %@",false)
                 let appointmentLogData = realm.objects(rf_Appointment_Log_Data.self)
                 if appointments.count > 0{
                     try realm.write{
@@ -2628,22 +2643,31 @@ extension UIViewController:OrderStatusViewDelegate
                 }
                 
             }else{
-                let appointments = realm.objects(rf_Appointment_Logs.self).filter("appointment_id == %d",appointmentId)
-                let appointmentLog = realm.objects(rf_Appointment_Log_Data.self).filter("appointment_id == %d",appointmentId)
+                let appointments = realm.objects(rf_Appointment_Logs.self).filter("appointment_id == %d AND stop_sync == %@",appointmentId,false)
+                
                 if appointments.count == 1{
                     try realm.write{
                         if let appointment = appointments.first{
                             realm.delete(appointment)
                         }
                     }
-                }
-                if appointmentLog.count > 0{
-                    try realm.write{
-                        appointmentLog.forEach { log in
-                            realm.delete(log)
+                    let appointmentLog = realm.objects(rf_Appointment_Log_Data.self).filter("appointment_id == %d",appointmentId)
+                    if appointmentLog.count > 0{
+                        try realm.write{
+                            appointmentLog.forEach { log in
+                                realm.delete(log)
+                            }
                         }
                     }
                 }
+                else{
+                    self.alert("You cannot delete an appointment log which is in ‘Sync Stopped’ state.", nil)
+                }
+//                if appointments.count>0
+//                {
+//                    
+//                }
+                
                 
             }
         }catch{
@@ -2810,6 +2834,51 @@ extension UIViewController:OrderStatusViewDelegate
             print(RealmError.initialisationFailed.rawValue)
         }
         return appointmentLogs
+    }
+    
+    func setStopSyncValue(appointmentId:Int)
+    {
+        
+        do{
+            let realm = try Realm()
+            try realm.write{
+                let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointmentId )
+                var dict:[String:Any] = [:]
+                for apointments in appointmentRequest
+                {
+                    dict = ["id": apointments.id,
+                            "stop_sync" : true]
+                    realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+                }
+            }
+                
+            }
+        
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+    }
+    func setSyncNowValue(appointmentId:Int)
+    {
+        
+        do{
+            let realm = try Realm()
+            try realm.write{
+                let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d", appointmentId )
+                var dict:[String:Any] = [:]
+                for apointments in appointmentRequest
+                {
+                    dict = ["id": apointments.id,
+                            "stop_sync" : false]
+                    realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+                }
+            }
+                
+            }
+        
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
     }
     
     
@@ -3305,6 +3374,7 @@ extension UIViewController:OrderStatusViewDelegate
                     summaryList.colorUpCharge = room.selected_room_Upcharge
                     summaryList.colorUpChargePrice = room.selected_room_UpchargePrice
                     summaryList.room_perimeter = room.room_perimeter
+                    summaryList.deliveryOptions = room.delivery_option
                     //summaryList.miscellaneous_comments = room.miscellaneous_comments
                     summaryListArray.append(summaryList)
                 }
@@ -3356,7 +3426,7 @@ extension UIViewController:OrderStatusViewDelegate
     
     
     
-    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0, moldPrice: Double = 0.0){
+    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0, moldPrice: Double = 0.0,deliveryOptions:String = ""){
         let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         if let room = appointment.first?.rooms.filter("room_id == %d", roomID){
@@ -3367,7 +3437,7 @@ extension UIViewController:OrderStatusViewDelegate
                     if let id = room.first?.id{
                         if !isColor{
                             
-                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName, "selected_room_MoldingPrice": moldPrice]
+                            dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName, "selected_room_MoldingPrice": moldPrice,"delivery_option":deliveryOptions]
                             
                         }else{
                             dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge ,"selected_room_MoldingPrice": moldPrice]
@@ -3753,7 +3823,7 @@ extension UIViewController:OrderStatusViewDelegate
         }
         
         return AppointmentStatus.start
-    }
+    }//rf_Completed_Appointment_Request//rf_Completed_Appointment_Request
     func getCompletedAppointmentData() -> Results<rf_completed_appointment>!{
         var appointmentData : Results<rf_completed_appointment>!
         do{
@@ -3767,6 +3837,19 @@ extension UIViewController:OrderStatusViewDelegate
         return appointmentData
     }
     
+    func getCompletedAppointmentUrlParameterData() -> Results<rf_Completed_Appointment_Request>!{
+        var appointmentData : Results<rf_Completed_Appointment_Request>!
+        do{
+            let realm = try Realm()
+             let appointment = realm.objects(rf_Completed_Appointment_Request.self)
+                appointmentData = appointment
+            return appointmentData
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return appointmentData
+    }
+    //rf_Completed_Appointment_Request
     
     func createDBAppointmentRequest(requestTitle: RequestTitle, requestUrl: String, requestType: RequestType ,requestParameter: NSDictionary,imageName:String){
         let appointmentId = AppointmentData().appointment_id ?? 0
@@ -3874,6 +3957,28 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("sync_status == %@ AND reqest_title == %@",false,RequestTitle.GenerateContract.rawValue)
+            return appointmentRequestArray
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return appointmentRequestArray
+    }
+    func fetchGenerateContractFromAppointmentRequestForceSync(aptId:Int) -> RealmSwift.Results<rf_Completed_Appointment_Request>{
+        var appointmentRequestArray : Results<rf_Completed_Appointment_Request>!
+        do{
+            let realm = try Realm()
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("reqest_title == %@ AND appointment_id == %d",RequestTitle.GenerateContract.rawValue,aptId)
+            return appointmentRequestArray
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return appointmentRequestArray
+    }
+    func fetchi360FromAppointmentRequestForceSync(aptId:Int) -> RealmSwift.Results<rf_Completed_Appointment_Request>{
+        var appointmentRequestArray : Results<rf_Completed_Appointment_Request>!
+        do{
+            let realm = try Realm()
+            appointmentRequestArray = realm.objects(rf_Completed_Appointment_Request.self).filter("reqest_title == %@ AND appointment_id == %d",RequestTitle.InitiateSync.rawValue,aptId)
             return appointmentRequestArray
         }catch{
             print(RealmError.initialisationFailed.rawValue)
@@ -4423,6 +4528,7 @@ extension UIViewController:OrderStatusViewDelegate
                 let selectedColor = room.selected_room_color ?? ""
                 let isCustomRoom = room.is_custom_room
                 let mis_comments = room.miscellaneous_comments
+                let deliveryOptions = room.delivery_option
                 var roomColorId:Int = Int()
                 if room_name!.contains("STAIRS") && (room_area == "0" || room_area == nil)
                 {
@@ -4502,6 +4608,7 @@ extension UIViewController:OrderStatusViewDelegate
                 roomDict["moulding_type"] = moldingName
                 roomDict["material_id"] = roomColorId
                 roomDict["exclude_from_calculation"] = isRoomExcluded
+                roomDict["delivery_option"] = deliveryOptions
                 roomArray.append(roomDict)
             })
             

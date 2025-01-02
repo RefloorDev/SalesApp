@@ -27,4 +27,5 @@ pod 'Firebase/Messaging'
 pod 'JWTCodable'
 pod 'SwiftJWT'
 pod 'Firebase/Crashlytics'
+pod 'Zip'
 end

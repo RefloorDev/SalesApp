@@ -16,6 +16,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     static func initialization() -> SummeryListViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SummeryListViewController") as? SummeryListViewController
     }
+    @IBOutlet weak var applyAllSelectDeliveryTxtFld: UITextField!
     @IBOutlet weak var applyAllBtn: UIButton!
     @IBOutlet weak var applyAllSelectColorImageView: UIImageView!
     @IBOutlet weak var applyAllSelectMoldingTxtFld: UITextField!
@@ -60,6 +61,10 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var stairIndex = -1
     var roomIndex = -1
     var officeLocationId = AppDelegate.appoinmentslData.officeLocationId
+    var cellDefaultDelivery:String = String()
+    var applyDefaultDelivery:String = String()
+    var cellDeliveryOptions:[String] = []
+    var applyDeliveryOptions:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,6 +186,25 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         self.navigationController?.pushViewController(room, animated: true)
     }
     
+    @IBAction func applyAllDeliveryBtnAction(_ sender: UIButton) 
+    {
+        if applyAllSelectMoldingTxtFld.text == "Select Molding"
+        {
+            self.alert("Please select Molding first", nil)
+        }
+        else
+        {
+            applyDeliveryOptions = getMoldDeliveryOptions(for: applyAllSelectMoldingTxtFld.text! , isCell: false)
+            if applyDeliveryOptions.count > 0
+            {
+                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, applyDeliveryOptions, -1, delegate: self, tag: 6, cell: sender.tag)
+            }
+            else
+            {
+                self.alert("Delivery not available for this Molding type", nil)
+            }
+        }
+    }
     
     @IBAction func applyAllSelectMoldingdropBtnAction(_ sender: UIButton)
     {
@@ -213,11 +237,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     //                applyAllSelectedColour = rooms.color ?? ""
                     //                applyAllSelectedMaterialFileName = rooms.material_image_url ?? ""
                     //                applyAllColourUpCharge =  rooms.colorUpCharge ?? 0.0
-                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0)
+                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0,deliveryOptions: "")
                 }
                 else
                 {
-                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: rooms.color ?? "", colorImageUrl: rooms.material_image_url ?? "", colorUpCharge: rooms.colorUpCharge ?? 0.0, moldPrice: 0.0)
+                    self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: rooms.color ?? "", colorImageUrl: rooms.material_image_url ?? "", colorUpCharge: rooms.colorUpCharge ?? 0.0, moldPrice: 0.0,deliveryOptions: "")
                 }
                 
                 if applyAllSelectMoldingTxtFld.text != "" && applyAllSelectedMoldName != ""
@@ -232,7 +256,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             applyAllSelectedMoldName = rooms.moulding ?? ""
                             applyAllSelectedMoldPrice = rooms.mouldingPrice ?? 0.0
                         }
-                        self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: applyAllSelectedMoldName, moldPrice: applyAllSelectedMoldPrice)
+                        if applyDefaultDelivery != ""
+                        {
+                            self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: applyAllSelectedMoldName, moldPrice: applyAllSelectedMoldPrice,deliveryOptions: applyAllSelectDeliveryTxtFld.text!)
+                        }
+                        else
+                        {
+                            self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: applyAllSelectedMoldName, moldPrice: applyAllSelectedMoldPrice)
+                        }
                     }
                 }
             }
@@ -339,7 +370,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SummeryListNewTableViewCell") as! SummeryListNewTableViewCell
         //cell.selectColorNewBgView.frame.size.width = cell.colorLabel.frame.size.width
-        cell.colorLabel.setRightPaddingPoints(5)
+        cell.colorLabel.setRightPaddingPoints(7)
         if ((tableValues[indexPath.row].color ?? "") != "Select Color")
         {
             cell.outOfStockView.clearGradient()
@@ -392,6 +423,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
         cell.selectColor.addTarget(self, action: #selector(getColorPopUpFromTableViewButton(sender:)), for: .touchUpInside)
         cell.selectMolding.tag = indexPath.row
+        cell.deliveryBtn.tag = indexPath.row
         
         cell.areaLabel.text = "Area Measured: \((tableValues[indexPath.row].adjusted_area ?? 0).clean) Sq.Ft"
         cell.colorLabel.textColor = UIColor.white
@@ -421,6 +453,21 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             // cell.molding.borderWidth = 1
             cell.molding.textColor = UIColor.redColor
         }
+        if cell.deliveryTxtFld.text == "Select Delivery" && tableValues[indexPath.row].room_area != 0
+        {
+            cell.deliveryTxtFld.textColor = UIColor.redColor
+        }
+        if tableValues[indexPath.row].deliveryOptions == "" ||  tableValues[indexPath.row].deliveryOptions == nil
+        {
+            cell.deliveryTxtFld.text = "Select Delivery"
+            cell.deliveryTxtFld.textColor = UIColor.redColor
+        }
+        else
+        {
+            cell.deliveryTxtFld.text = tableValues[indexPath.row].deliveryOptions
+            cell.deliveryTxtFld.textColor = UIColor.white
+        }
+        
         if((tableValues[indexPath.row].stair_count ?? 0 ) > 0 || ((tableValues[indexPath.row].room_name ?? "").localizedCaseInsensitiveContains("stair")) && tableValues[indexPath.row].room_area == 0.0)
         {
             //MoldingTitleLbl.isHidden = true
@@ -432,6 +479,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             cell.moldingHeader.alpha = 0.3
             cell.selectMolding.alpha = 0.3
             cell.moldingBgView.alpha = 0.3
+            cell.deliveryBtn.isUserInteractionEnabled = false
+            cell.deliveryTxtFld.isUserInteractionEnabled = false
+            cell.deliveryView.alpha = 0.3
+            cell.deliveryTxtFld.alpha = 0.3
+            cell.deliveryLbl.alpha = 0.3
           //  cell.selectMolding.addTarget(self, action: #selector(moldingAlert(sender:)), for: .touchUpInside)
         }
         else
@@ -447,6 +499,12 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             cell.moldingBgView.alpha = 1
             cell.selectMolding.addTarget(self, action: #selector(moldingRoomAlert(sender:)), for: .touchUpInside)
             cell.selectMolding.addTarget(self, action: #selector(getmoldingPopUpFromTableViewButton(sender:)), for: .touchUpInside)
+            cell.deliveryBtn.isUserInteractionEnabled = true
+            cell.deliveryTxtFld.isUserInteractionEnabled = true
+            cell.deliveryView.alpha = 1
+            cell.deliveryTxtFld.alpha = 1
+            cell.deliveryLbl.alpha = 1
+            cell.deliveryBtn.addTarget(self, action: #selector(deliveryPopUpFromTableView(sender:)), for: .touchUpInside)
         }
         
         
@@ -568,6 +626,26 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
         self.tableView.reloadData()
     }
+    @objc func deliveryPopUpFromTableView(sender:UIButton)
+    {
+        if tableValues[sender.tag].moulding == ""
+        {
+            self.alert("Please select Molding first", nil)
+        }
+        else
+        {
+            cellDeliveryOptions = getMoldDeliveryOptions(for: tableValues[sender.tag].moulding! , isCell: true)
+            if cellDeliveryOptions.count > 0
+            {
+                self.DropDownDefaultfunctionForTableCell(sender, sender.bounds.width, cellDeliveryOptions, -1, delegate: self, tag: 5, cell: sender.tag)
+            }
+            else
+            {
+                //cellDeliveryOptions = getMoldDeliveryOptions(for: tableValues[sender.tag].moulding! , isCell: true)
+                self.alert("Delivery not available for this Molding type", nil)
+            }
+        }
+    }
     @objc func getColorPopUpFromTableViewButton(sender:UIButton)
     {
         var value:[String] = []
@@ -628,6 +706,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         moldingPriceValue = moldValue.compactMap({$0.unit_price})
         self.moldingPriceArray = moldingPriceValue
         self.moldingNamesArray = value
+        //let deliveryOptions = moldValue.compactMap({$0.deliveryOptions})
         
         //
 //        for val in tableValues[sender.tag].molding_Type ?? []
@@ -648,6 +727,30 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         
         
         
+    }
+    
+    func getMoldDeliveryOptions(for moldingName: String,isCell:Bool) -> [String] {
+        var deliveryOptionsArray: [String] = []
+        do {
+            let realm = try Realm()
+            
+            // Fetch the molding object with the specified molding_id
+            if let molding = realm.objects(rf_master_molding.self).filter("name == %@", moldingName).first {
+                // Access the delivery options and convert to an array
+                deliveryOptionsArray = Array(molding.deliveryOptions)
+                if isCell
+                {
+                    cellDefaultDelivery = molding.defaultDelivery ?? ""
+                }
+                else
+                {
+                    applyDefaultDelivery = molding.defaultDelivery ?? ""
+                }
+            }
+        } catch {
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return deliveryOptionsArray
     }
 //    @objc func moldingAlert(sender:UIButton)
 //    {
@@ -832,6 +935,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         let officeLocationId = AppDelegate.appoinmentslData.officeLocationId
         if(tag == 2)
         {
+            //cell molding
             //  let moudlings = ["VINYL WHITE","PRIMED WHITE","UNFINISHED","MATCHING"]
             //   updateMouldingApi(measurement_id: self.tableValues[cell].contract_measurement_id ?? 0, moulding_type: moudlings[index])
             
@@ -840,7 +944,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             let selectedMold = self.moldingNamesArray[index]
             let moldPrice = self.moldingPriceArray[index]
             let roomId = self.tableValues[cell].room_id ?? 0
-            self.updateRoomMoldOrColor(roomID: roomId, moldName: selectedMold, moldPrice: moldPrice)
+            cellDeliveryOptions = getMoldDeliveryOptions(for: item , isCell: true)
+            self.updateRoomMoldOrColor(roomID: roomId, moldName: selectedMold, moldPrice: moldPrice,deliveryOptions: cellDefaultDelivery)
             self.loadRefreshData()
             //
             
@@ -996,10 +1101,31 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             applyAllSelectMoldingTxtFld.text = item
             self.applyAllSelectedMoldName = self.moldingNamesArray[index]
             self.applyAllSelectedMoldPrice = self.moldingPriceArray[index]
+            applyDeliveryOptions = getMoldDeliveryOptions(for: item , isCell: false)
+            if applyDefaultDelivery == ""
+            {
+                applyAllSelectDeliveryTxtFld.text = "Select Delivery"
+            }
+            else
+            {
+                applyAllSelectDeliveryTxtFld.text = applyDefaultDelivery
+            }
+            
+            
 //            let selectedMold = self.moldingNamesArray[index]
 //            let moldPrice = self.moldingPriceArray[index]
         }
-        
+        else if tag == 5
+        {
+            let roomId = self.tableValues[cell].room_id ?? 0
+            self.updateRoomMoldOrColor(roomID: roomId, moldName: self.tableValues[cell].moulding!, moldPrice: self.tableValues[cell].mouldingPrice!,deliveryOptions: item)
+            //self.updateRoomMoldOrColor(roomID: roomId, moldName: ,deliveryOptions: cellDefaultDelivery)
+            self.loadRefreshData()
+        }
+        else if tag == 6
+        {
+            applyAllSelectDeliveryTxtFld.text = item
+        }
     }
     
     override func screenShotBarButtonAction(sender:UIButton)
