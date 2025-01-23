@@ -343,9 +343,12 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 {
                     if val.applicable_result_ids?.count ?? 0 > 0
                     {
-                        if val.applicable_result_ids?[0] == selectedResultId
+                        for resultIndex in 0...val.applicable_result_ids!.count - 1
                         {
-                            value.append(val.reason ?? "Unknown")
+                            if val.applicable_result_ids?[resultIndex] == selectedResultId
+                            {
+                                value.append(val.reason ?? "Unknown")
+                            }
                         }
                     }
                 }

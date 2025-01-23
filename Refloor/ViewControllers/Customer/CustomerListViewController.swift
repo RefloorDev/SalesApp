@@ -43,12 +43,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     //
     override func viewDidLoad() {
         super.viewDidLoad()
-//        let button = UIButton(type: .roundedRect)
-//        button.frame = CGRect(x: 200, y: 100, width: 100, height: 30)
-//        button.setTitle("Test Crash", for: [])
-//        button.addTarget(self, action: #selector(self.crashButtonTapped(_:)), for: .touchUpInside)
-//        self.view.addSubview(button)
-        //self.customerListTableView.isHidden = true
+
+        
+//        if let bundle = Bundle.allFrameworks.first(where: { $0.bundleIdentifier?.contains("RealmSwift") ?? false } ) {
+//            let version = bundle.object(forInfoDictionaryKey:"CFBundleShortVersionString") as? String
+//        }
+        
+        
+        
+        
         print(Realm.Configuration.defaultConfiguration.fileURL!)
         let masterData = self.getMasterDataFromDB()
        if masterData.contract_document_templates.first?.data == nil
@@ -562,31 +565,39 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     
     @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
         //Q3 changes
-        locationManager.delegate = self
-        
-        let authorizationStatus = CLLocationManager.authorizationStatus()
-              
-              if CLLocationManager.locationServicesEnabled() {
-                  switch authorizationStatus {
-                  case .notDetermined:
-                      // Request permission to use location services
-                      print("notDetermined: ", authorizationStatus)
-                      locationManager.requestWhenInUseAuthorization()
-                  case .restricted, .denied:
-                      // Location services are disabled, show a custom alert
-                      print("restricted and denied: ", authorizationStatus)
-                      showEnableLocationServicesAlert()
-                  case .authorizedWhenInUse, .authorizedAlways:
-                      // Location is enabled and authorized, proceed with your action
-                      print("authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
-                      performAppointmentAction(sender: sender)
-                  @unknown default:
-                      break
-                  }
-              } else {
-                  print("not authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
-                  showEnableLocationServicesAlert()
-              }
+        let masterData = getMasterDataFromDB()
+        if masterData.enableGeoLocation && restrictGeoLocation == 0
+        {
+            locationManager.delegate = self
+            
+            let authorizationStatus = CLLocationManager.authorizationStatus()
+            
+            if CLLocationManager.locationServicesEnabled() {
+                switch authorizationStatus {
+                case .notDetermined:
+                    // Request permission to use location services
+                    print("notDetermined: ", authorizationStatus)
+                    locationManager.requestWhenInUseAuthorization()
+                case .restricted, .denied:
+                    // Location services are disabled, show a custom alert
+                    print("restricted and denied: ", authorizationStatus)
+                    showEnableLocationServicesAlert()
+                case .authorizedWhenInUse, .authorizedAlways:
+                    // Location is enabled and authorized, proceed with your action
+                    print("authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
+                    performAppointmentAction(sender: sender)
+                @unknown default:
+                    break
+                }
+            } else {
+                print("not authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
+                showEnableLocationServicesAlert()
+            }
+        }
+        else
+        {
+            performAppointmentAction(sender: sender)
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
