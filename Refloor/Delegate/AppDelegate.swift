@@ -320,7 +320,7 @@ extension AppDelegate : CLLocationManagerDelegate
             let name = lastName == ""  ? firstName : firstName + " " + lastName
             let date = appointment?.appointment_datetime ?? ""
             let entryTime = geoLocationTimeForAppointments(appointmentId: Int(region.identifier) ?? 0)
-            saveLogDetailsForAppointment(appointmentId: Int(region.identifier) ?? 0, logMessage: AppointmentLogMessages.geoLocationExitRegion.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status:  "",payment_message: "")
+            
             do
             {
                 let realm = try Realm()
@@ -507,32 +507,32 @@ extension AppDelegate : CLLocationManagerDelegate
     }
     func handleEvent(forRegion region: CLRegion!,action: String) {
         // customize your notification content
-           let content = UNMutableNotificationContent()
-           content.title = "Refloor"
-        content.body = action
-        content.sound = UNNotificationSound.default
-
-           // when the notification will be triggered
-           var timeInSeconds: TimeInterval = 1 // 60s * 15 = 15min
-
-           // the actual trigger object
-           let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInSeconds,
-                                                           repeats: false)
-
-           // notification unique identifier, for this example, same as the region to avoid duplicate notifications
-           let identifier = region.identifier
-
-           // the notification request object
-           let request = UNNotificationRequest(identifier: identifier,
-                                               content: content,
-                                               trigger: trigger)
-
-           // trying to add the notification request to notification center
-        UNUserNotificationCenter.current().add(request) { error in
-                    if let error = error {
-                        print("Error adding notification: \(error.localizedDescription)")
-                    }
-                }
+//           let content = UNMutableNotificationContent()
+//           content.title = "Refloor"
+//        content.body = action
+//        content.sound = UNNotificationSound.default
+//
+//           // when the notification will be triggered
+//           var timeInSeconds: TimeInterval = 1 // 60s * 15 = 15min
+//
+//           // the actual trigger object
+//           let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInSeconds,
+//                                                           repeats: false)
+//
+//           // notification unique identifier, for this example, same as the region to avoid duplicate notifications
+//           let identifier = region.identifier
+//
+//           // the notification request object
+//           let request = UNNotificationRequest(identifier: identifier,
+//                                               content: content,
+//                                               trigger: trigger)
+//
+//           // trying to add the notification request to notification center
+//        UNUserNotificationCenter.current().add(request) { error in
+//                    if let error = error {
+//                        print("Error adding notification: \(error.localizedDescription)")
+//                    }
+//                }
     }
     // called when user Enters a monitored region
     func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
@@ -546,7 +546,7 @@ extension AppDelegate : CLLocationManagerDelegate
             let lastName = appointment?.applicant_last_name ?? ""
             let name = lastName == ""  ? firstName : firstName + " " + lastName
             let date = appointment?.appointment_datetime ?? ""
-            saveLogDetailsForAppointment(appointmentId: Int(region.identifier) ?? 0, logMessage: AppointmentLogMessages.geoLocationEntryRegion.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status:  "",payment_message: "")
+            
             if entryTime == ""
             {
                 let entryTime = Date().dateToString()
@@ -647,7 +647,7 @@ extension AppDelegate : CLLocationManagerDelegate
                             let lastName = appointment?.applicant_last_name ?? ""
                             let name = lastName == ""  ? firstName : firstName + " " + lastName
                             let date = appointment?.appointment_datetime ?? ""
-                            saveLogDetailsForAppointment(appointmentId: Int(region.identifier) ?? 0, logMessage: AppointmentLogMessages.geoLocationEntryRegion.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date,payment_status:  "",payment_message: "")
+                           
                         }
                     }
                     catch{
