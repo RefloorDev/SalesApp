@@ -748,7 +748,7 @@ extension BackgroundTaskService {
             if ifAnyApiFailed
             {
                 
-                self.startSyncProcess()
+                self.startManualSyncProcess()
                 
             }
             

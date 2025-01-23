@@ -212,7 +212,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
                 fetchDataBtn.isHidden = true
             }
             cell.appointmentStatusLabel.text = appStatus
-           if appointmentLogsArray[indexPath.row].paymentStatus == "Success" || appointmentLogsArray[indexPath.row].paymentStatus == "Not Done"
+           if appointmentLogsArray[indexPath.row].paymentStatus == "Success" || appointmentLogsArray[indexPath.row].paymentStatus == "Not Done" || appointmentLogsArray[indexPath.row].paymentStatus == "" 
             {
             cell.syncBtn.setBackgroundImage(UIImage(named: "syncSuccess"), for: .normal)
             cell.appointmentStatusLabel.textColor = UIColor().colorFromHexString("#72C36F")
@@ -1228,6 +1228,8 @@ extension ViewLogListViewController{
                     else
                     {
                         self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, nil)
+                        HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE,title: "")
+                        
                     }
                 }
             
@@ -1257,7 +1259,7 @@ extension ViewLogListViewController{
             }
             
         }
-        HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE,title: "")
+        //HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE,title: "")
         
         
     }

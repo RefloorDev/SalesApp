@@ -235,6 +235,7 @@ class UserData: NSObject
         self.user_id = UserDefaults.standard.integer(forKey: "User_ID")
         self.user_name = UserDefaults.standard.string(forKey: "User_Name")
         self.token = UserDefaults.standard.string(forKey: "User_Token")
+        self.restrict_geolocation = UserDefaults.standard.integer(forKey: "restrict_geolocation")
     }
     
 }
