@@ -2228,7 +2228,10 @@ class HttpClientManager: NSObject {
                         if(response?.result != nil)
                         {
                             completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
-                            self.showhideHUD(viewtype: .HIDE, title: "")
+                            if isOnlineCollectBtnPressed
+                            {
+                                self.showhideHUD(viewtype: .HIDE, title: "")
+                            }
                         }
                     }
                     else{

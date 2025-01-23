@@ -1432,7 +1432,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         let lastName = appointment?.applicant_last_name ?? ""
         let name = lastName == ""  ? firstName : firstName + " " + lastName
         let date = appointment?.appointment_datetime ?? ""
-        self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.appointmentLogStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
+       // self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.appointmentLogStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
         if isNetwork
         {
             HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
