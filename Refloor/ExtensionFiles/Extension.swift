@@ -1789,7 +1789,7 @@ extension UIViewController:OrderStatusViewDelegate
                 self.roomVOButtonTapped()
             }
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            self.alert( AppAlertMsg.NetWorkAlertMessage, [yes,no])
+            self.alert( "Please check your connection and try again", [yes,no])
         }
     }
     

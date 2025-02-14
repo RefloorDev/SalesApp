@@ -49,7 +49,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             }
             else
             {
-                self.internetAlert("No internet connection currently available. Please move to an area with a better internet connection and click Retry to proceed.", nil) {
+                self.internetAlert("Please check your connection and try again.", nil) {
                     self.dismiss(animated: true, completion: nil)
                     
                     let applicant = ApplicantFormViewControllerForm.initialization()!
@@ -230,7 +230,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         }
         else
         {
-            self.internetAlert("No internet connection currently available. Please move to an area with a better internet connection and click Retry to proceed.", nil) {
+            self.internetAlert("Please check your connection and try again.", nil) {
                 self.dismiss(animated: true, completion: nil)
                 
                 let applicant = ApplicantFormViewControllerForm.initialization()!
