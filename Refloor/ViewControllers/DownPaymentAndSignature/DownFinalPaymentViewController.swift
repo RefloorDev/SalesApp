@@ -53,6 +53,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
     var minSalePrice:Double = 0.0
+    var packagePlanName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -314,7 +315,8 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         return CGSize(width: 220, height: 69)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return paymentMethords.count
+        return 0
+//        return paymentMethords.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentMethorInDownPaymentCollectionViewCell", for: indexPath) as! PaymentMethorInDownPaymentCollectionViewCell
@@ -405,7 +407,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         summery.finalpayment = self.finalpayment
         summery.financePayment = self.financePayment
         summery.downpayment = downpayment
-        
+        summery.packagePlanName = downPaymentTitleLabel.text ?? ""
         // let adminFee = Double(self.adminFee)
         //   summery.adminFee = ((self.isAdmiFee) ? adminFee : 0) ?? 0
         
@@ -431,7 +433,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         if (finalpayment>0 && self.selectedPaymentMethord == -1)
         {
             self.UIUpdateForValueChange(isUpdateDownPayment: true)
-            return "Please select final payment method"
+//            return "Please select final payment method"
             
         }
         if(finalpayment == 0 && self.selectedPaymentMethord != -1)

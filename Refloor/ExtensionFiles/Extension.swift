@@ -1425,7 +1425,7 @@ extension UIViewController:OrderStatusViewDelegate
         btnnext.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
         navView.addSubview(btnnext)
         
-        let image = UIImageView(frame: CGRect(x:  UIScreen.main.bounds.width - 560, y: 40, width: 128, height: 45))
+        let image = UIImageView(frame: CGRect(x:  UIScreen.main.bounds.width - 730, y: 40, width: 128, height: 45))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -1441,6 +1441,17 @@ extension UIViewController:OrderStatusViewDelegate
             }
         }
         navView.addSubview(image)
+        
+        let roomVOButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 590, y: 40, width: 190, height: 45))
+        roomVOButton.setTitle("RoomVO", for: .normal)
+        roomVOButton.titleLabel?.font = UIFont.init(name: "Avenir-Heavy", size: 25)!
+        roomVOButton.setTitleColor(.white, for: .normal)
+        roomVOButton.backgroundColor = UIColor().colorFromHexString("#292562")
+        roomVOButton.borderWidth = 1
+        roomVOButton.borderColor = UIColor().colorFromHexString("#A7B0BA")
+        roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
+        navView.addSubview(roomVOButton)
+    
     }
     
     
@@ -1687,7 +1698,7 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(nameLabel)
         
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 310, y: 40, width: 126, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 509, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -1713,8 +1724,35 @@ extension UIViewController:OrderStatusViewDelegate
         takeScreenShot.setBackgroundImage(UIImage(named: "screenshot"), for: .normal)
         takeScreenShot.addTarget(self, action: #selector(screenShotBarButtonAction(sender:)), for: .touchUpInside)
         navView.addSubview(takeScreenShot)
+    
+        
+        let roomVOButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 373, y: 40, width: 190, height: 45))
+        roomVOButton.setTitle("RoomVO", for: .normal)
+        roomVOButton.titleLabel?.font = UIFont.init(name: "Avenir-Heavy", size: 25)!
+        roomVOButton.setTitleColor(.white, for: .normal)
+        roomVOButton.backgroundColor = UIColor().colorFromHexString("#292562")
+        roomVOButton.borderWidth = 1
+        roomVOButton.borderColor = UIColor().colorFromHexString("#A7B0BA")
+        roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
+        navView.addSubview(roomVOButton)
         
     }
+    
+    @objc func roomVOButtonTapped() {
+        print("RoomVO button tapped")
+        if HttpClientManager.SharedHM.connectedToNetwork() {
+           print("inside wed view")
+            let signature = RoomVOWebViewViewController.initialization()!
+            self.navigationController?.pushViewController(signature, animated: true)
+        } else {
+            let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                self.roomVOButtonTapped()
+            }
+            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            self.alert( AppAlertMsg.NetWorkAlertMessage, [yes,no])
+        }
+    }
+    
     func setNavigationPackageBarbackAndlogo(with name:String)
     {
         
@@ -1738,7 +1776,7 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(nameLabel)
         
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 295, y: 40, width: 126, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 489, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -1765,6 +1803,15 @@ extension UIViewController:OrderStatusViewDelegate
         takeScreenShot.addTarget(self, action: #selector(screenShotBarButtonAction(sender:)), for: .touchUpInside)
         navView.addSubview(takeScreenShot)
         
+        let roomVOButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 349, y: 40, width: 190, height: 45))
+        roomVOButton.setTitle("RoomVO", for: .normal)
+        roomVOButton.titleLabel?.font = UIFont.init(name: "Avenir-Heavy", size: 25)!
+        roomVOButton.setTitleColor(.white, for: .normal)
+        roomVOButton.backgroundColor = UIColor().colorFromHexString("#292562")
+        roomVOButton.borderWidth = 1
+        roomVOButton.borderColor = UIColor().colorFromHexString("#A7B0BA")
+        roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
+        navView.addSubview(roomVOButton)
     }
     
     func setNavigationBarbaclogoAndStatus(with name:String)
@@ -2085,7 +2132,7 @@ extension UIViewController:OrderStatusViewDelegate
         viewLogButton.addTarget(self, action: #selector(viewLogbuttonAction), for: .touchUpInside)
         navView.addSubview(viewLogButton)
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 407, y: 40, width: 128, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 598, y: 40, width: 128, height: 48))
         image.contentMode = .scaleAspectFit
         //image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = UIColor.clear
@@ -2107,6 +2154,16 @@ extension UIViewController:OrderStatusViewDelegate
         }
         
         navView.addSubview(image)
+        
+        let roomVOButton = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 459, y: 40, width: 190, height: 45))
+        roomVOButton.setTitle("RoomVO", for: .normal)
+        roomVOButton.titleLabel?.font = UIFont.init(name: "Avenir-Heavy", size: 25)!
+        roomVOButton.setTitleColor(.white, for: .normal)
+        roomVOButton.backgroundColor = UIColor().colorFromHexString("#292562")
+        roomVOButton.borderWidth = 1
+        roomVOButton.borderColor = UIColor().colorFromHexString("#A7B0BA")
+        roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
+        navView.addSubview(roomVOButton)
         
     }
     
@@ -2340,6 +2397,25 @@ extension UIViewController:OrderStatusViewDelegate
         }
         self.present(alert, animated: true, completion: nil)
     }
+    
+    func internetAlert(_ message: String, _ buttons: [UIAlertAction]?, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: AppDetails.APP_NAME, message: message, preferredStyle: .alert)
+
+        if let buttons = buttons, !buttons.isEmpty {
+            for button in buttons {
+                alert.addAction(button)
+            }
+        } else {
+            // Default OK button with action
+            let okAction = UIAlertAction(title: "OK", style: .cancel) { _ in
+                completion?() // Call completion when OK is pressed
+            }
+            alert.addAction(okAction)
+        }
+
+        self.present(alert, animated: true, completion: nil)
+    }
+
     
     //arb
     // Save image to file and saves its filename in DB
