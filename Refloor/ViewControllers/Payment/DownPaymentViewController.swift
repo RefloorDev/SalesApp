@@ -75,7 +75,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"//"password"//UserData.init().token ?? ""//
     override func viewDidLoad() {
         super.viewDidLoad()
-      
+        print("finalpayment : ", finalpayment, " financePayment : ", financePayment, " downPaymentValue : ", downPaymentValue, " totalAmount : ", totalAmount)
         //JWT<paymentOptionUser>(header)
         self.setNavigationBarbackAndlogo(with: "DOWN PAYMENT".uppercased())
         let payment1 = DownPaymentSelectionObj(paymentType: .Cash, lable: self.cashLabel, view: self.cashView, button: self.cashButton, tag: 10)
@@ -115,6 +115,42 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        
+        print("finalpayment : ", finalpayment, " financePayment : ", financePayment, " downPaymentValue : ", downPaymentValue, " totalAmount : ", totalAmount)
+        //JWT<paymentOptionUser>(header)
+        self.setNavigationBarbackAndlogo(with: "DOWN PAYMENT".uppercased())
+        let payment1 = DownPaymentSelectionObj(paymentType: .Cash, lable: self.cashLabel, view: self.cashView, button: self.cashButton, tag: 10)
+        downpaymentSelectionObjcet.append(payment1)
+        let payment2 = DownPaymentSelectionObj(paymentType: .CreditCard, lable: self.creditcardLabel, view: self.creditcardView, button: self.creditcardButton, tag: 11)
+        downpaymentSelectionObjcet.append(payment2)
+        let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
+        downpaymentSelectionObjcet.append(payment3)
+        let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+        downpaymentSelectionObjcet.append(payment4)
+        paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
+        self.sideTabSelectedWith(at: self.cashButton.tag)
+        
+        self.totalAreaLabel.text = "\(area) Sq.ft"
+        self.packegeLabel.text = packageName //"\(self.QuotationPaymentPlanValueDetails.package ?? "")"
+        self.financeAmountLabel.text = "$\(self.financePayment.toDoubleString)"
+        self.finalPaymentLabel.text = "$\(self.finalpayment.toDoubleString)"
+        self.downPaymentLabel.text = "$\(self.downPaymentValue.toDoubleString)"
+        self.totalAmountLabel.text = "$\(self.totalAmount.toDoubleString)"
+        
+        self.headingLabel.text = "Collect the down payment amount: $\(self.downPaymentValue.toDoubleString)"
+        
+        if let customer = AppDelegate.appoinmentslData
+        {
+            let customerNameFirstName = customer.applicant_first_name ?? ""
+            let customerNameMiddleName = customer.applicant_middle_name ?? ""
+            let customerNameLastName = customer.applicant_last_name ?? ""
+            customerName = customerNameFirstName + " " + customerNameMiddleName + " " + customerNameLastName
+            //
+            
+        }
     }
     
     @IBAction func sidetabButtonActions(_ sender: UIButton) {

@@ -1,16 +1,16 @@
 //
-//  DownFinalPaymentViewController.swift
+//  UpdateDownFinalPaymentViewController.swift
 //  Refloor
 //
-//  Created by sbek on 12/08/20.
-//  Copyright © 2020 oneteamus. All rights reserved.
+//  Created by Apple on 07/02/25.
+//  Copyright © 2025 oneteamus. All rights reserved.
 //
 
 import UIKit
 
-class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
-    static public func initialization() -> DownFinalPaymentViewController? {
-        return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "DownFinalPaymentViewController") as? DownFinalPaymentViewController
+class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
+    static public func initialization() -> UpdateDownFinalPaymentViewController? {
+        return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "UpdateDownFinalPaymentViewController") as? UpdateDownFinalPaymentViewController
     }
     
     //@IBOutlet weak var installationDate: UITextField!
@@ -53,7 +53,13 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
     var minSalePrice:Double = 0.0
+    var downPaymentValue:Double = 0.0
     var packagePlanName = ""
+    var roomData:[RoomDataValue]?
+    var floorShapeData:[FloorShapeDataValue]?
+    var floorLevelData:[FloorLevelDataValue]?
+    var appoinmentslData:AppoinmentDataValue!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -68,11 +74,14 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         paymentMethordCollectionView.dataSource = self
         let htmlString = paymentOptionDataValue?.Name
         let str = htmlString?.replacingOccurrences(of: "<[^>]+>", with: " ", options: .regularExpression, range: nil)
-        downPaymentTitleLabel.text = (self.paymentPlanValue?.plan_title ?? "") + " " + "(\(str ?? ""))"
+//        downPaymentTitleLabel.text = (self.paymentPlanValue?.plan_title ?? "") + " " + "(\(str ?? ""))"
+        downPaymentTitleLabel.text = packagePlanName
         
         finalPaymentTF.delegate = self
         downPaymentTF.delegate = self
-        
+        print("downPaymentValue : ", downPaymentValue, " finalpayment : ", finalpayment)
+        downPaymentTF.text = "\(downPaymentValue)"
+        finalPaymentTF.text = "\(finalpayment)"
         // downPayment = downOrFinal/2
         // finalpayment = downOrFinal/2
         downPayment = downOrFinal
@@ -315,8 +324,8 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         return CGSize(width: 220, height: 69)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
 //        return paymentMethords.count
+        return 0
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentMethorInDownPaymentCollectionViewCell", for: indexPath) as! PaymentMethorInDownPaymentCollectionViewCell
@@ -351,7 +360,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
             self.paymentMethordCollectionView.reloadData()
         }
     }
-    @IBAction func nextButtonAction(_ sender: Any) 
+    @IBAction func nextButtonAction(_ sender: Any)
     {
         let masterData = getMasterDataFromDB()
         let minAmount = masterData.min_downpayment_amount
@@ -387,40 +396,31 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         }
         
         UIUpdateForValueChange(isUpdateDownPayment:true)
-        summery.specialPriceId = specialPriceId
-        summery.excluded_amount_promotion = self.excluded_amount_promotion
-        summery.stairSpecialPriceId = stairsSpecialPriceId
-        summery.promotionCodeId = promotionCodeId
-        summery.downOrFinal = self.downOrFinal
-        summery.totalAmount = self.totalAmount
-        summery.paymentPlan = self.paymentPlan
-        summery.paymentPlanValue = self.paymentPlanValue
-        summery.paymentOptionDataValue = self.paymentOptionDataValue
-        summery.drowingImageID = self.drowingImageID
-        summery.savings = self.savings
-        summery.area = self.area
-        summery.stairPrice = self.stairPrice
-        summery.minSalePrice = self.minSalePrice
-        // summery.adminFeeStatus = self.isAdmiFee
-        //summery.installationDate=self.installationDate.text ?? ""
-        summery.downPaymentValue = self.downPayment
-        summery.finalpayment = self.finalpayment
-        summery.financePayment = self.financePayment
-        summery.downpayment = downpayment
-        summery.packagePlanName = downPaymentTitleLabel.text ?? ""
-        // let adminFee = Double(self.adminFee)
-        //   summery.adminFee = ((self.isAdmiFee) ? adminFee : 0) ?? 0
-        
-        summery.adminFee = Double(self.adminFee)
-        summery.selectedPaymentMethord = (self.selectedPaymentMethord != -1) ? self.paymentMethords[self.selectedPaymentMethord] : nil
-        summery.adjustmentValue = self.adjustmentValue
+        let details = UpdateCustomerDetailsOneViewController.initialization()!
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "DownFinalPayment"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //
-        self.navigationController?.pushViewController(summery, animated: true)
+        details.floorLevelData = AppDelegate.floorLevelData
+        details.floorShapeData = []
+        details.roomData = AppDelegate.roomData
+        details.appoinmentslData = AppDelegate.appoinmentslData
+        details.downOrFinal = self.downOrFinal
+        details.totalAmount = self.totalAmount
+        details.paymentPlan = self.paymentPlan
+        details.paymentPlanValue = self.paymentPlanValue
+        details.paymentOptionDataValue = self.paymentOptionDataValue
+        details.drowingImageID = self.drowingImageID
+        details.area = self.area
+        details.downPaymentValue = self.downPaymentValue
+        details.finalpayment = self.finalpayment
+        details.financePayment = self.financePayment
+//        details.selectedPaymentMethord = self.selectedPaymentMethord
+        details.downpayment = self.downpayment
+        print("finalpayment : ", finalpayment)
+        self.navigationController?.pushViewController(details, animated: true)
     }
     func validation() -> String
     {
@@ -429,6 +429,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         // {
         finalpayment = finalvalue ?? 0
         downPayment = downvalue ?? 0
+        downPaymentValue = downvalue ?? 0
         
         if (finalpayment>0 && self.selectedPaymentMethord == -1)
         {
@@ -459,6 +460,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         // {
         finalpayment = finalvalue ?? 0
         downPayment = downvalue ?? 0
+        downPaymentValue = downvalue ?? 0
         
         if (finalpayment>0 && self.selectedPaymentMethord == -1)
         {
@@ -534,14 +536,9 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
      */
     
 }
-class PaymentMethorInDownPaymentCollectionViewCell:UICollectionViewCell
-{
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var selectImageView: UIImageView!
-    
-}
 
-extension DownFinalPaymentViewController: ImagePickerDelegate {
+
+extension UpdateDownFinalPaymentViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?,imageName:String?)
     {

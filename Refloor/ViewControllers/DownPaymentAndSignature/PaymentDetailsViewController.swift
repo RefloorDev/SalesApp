@@ -31,6 +31,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             applicant.financePayment = self.financePayment
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = self.downpayment
+            applicant.packagePlanName = self.packagePlanName
             self.navigationController?.pushViewController(applicant, animated: true)
         }
     }
@@ -79,6 +80,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var promotionCodeId:Int = Int()
     var stairPrice:Double = Double()
     var minSalePrice:Double = 0.0
+    var packagePlanName = ""
     override func viewWillAppear(_ animated: Bool ){
         
         self.setNavigationBarbackAndlogo(with: "Payment Summary".uppercased())
@@ -307,6 +309,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.financePayment = self.financePayment
                 applicant.selectedPaymentMethord = self.selectedPaymentMethord
                 applicant.downpayment = self.downpayment
+                applicant.packagePlanName = self.packagePlanName
                 self.navigationController?.pushViewController(applicant, animated: true)
                 //let masterData = self.getMasterDataFromDB()
                 

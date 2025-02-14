@@ -112,7 +112,7 @@
 		<key>FirebaseCrashlytics.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>56</integer>
+			<integer>57</integer>
 		</dict>
 		<key>FirebaseFirestore.xcscheme</key>
 		<dict>
@@ -145,7 +145,7 @@
 		<key>FirebaseSessions.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>54</integer>
+			<integer>56</integer>
 		</dict>
 		<key>FirebaseSharedSwift.xcscheme</key>
 		<dict>
@@ -283,7 +283,7 @@
 		<key>PromisesSwift.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>55</integer>
+			<integer>54</integer>
 		</dict>
 		<key>Realm-realm_objc_privacy.xcscheme</key>
 		<dict>
@@ -340,6 +340,11 @@
 			<false/>
 			<key>orderHint</key>
 			<integer>52</integer>
+		</dict>
+		<key>Zip.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>55</integer>
 		</dict>
 		<key>abseil.xcscheme</key>
 		<dict>
