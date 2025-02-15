@@ -58,6 +58,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var adminFee:Double = 0
     // var adminFeeStatus:Int = 0
     var adminFeeStatus = false
+    var isPaymentByCash = false
     var installationDate = ""
     var coapplicantSkiip:Int = 0
     var fullLoan = ""
@@ -386,6 +387,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 details.downPaymentValue = self.downPaymentValue
                 details.finalpayment = self.finalpayment
                 details.financePayment = self.financePayment
+                details.isPaymentByCash = self.isPaymentByCash
         //        details.selectedPaymentMethord = self.selectedPaymentMethord
                 self.navigationController?.pushViewController(details, animated: true)
                 

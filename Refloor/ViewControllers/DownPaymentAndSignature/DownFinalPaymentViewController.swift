@@ -377,7 +377,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
             
             //  self.alert("You cant continue with out selecting finace option", nil)
             // self.alert("Please go back and select any finance option to proceed", nil)
-            
+            print("financePayment : ", financePayment)
             if(financePayment > 1)
             {
                 self.alert("Down and final payment amount lower than sales price. Please update the price and tap on Next button.", nil)
@@ -414,6 +414,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         summery.adminFee = Double(self.adminFee)
         summery.selectedPaymentMethord = (self.selectedPaymentMethord != -1) ? self.paymentMethords[self.selectedPaymentMethord] : nil
         summery.adjustmentValue = self.adjustmentValue
+        summery.isPaymentByCash = self.isPaymentByCash
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
