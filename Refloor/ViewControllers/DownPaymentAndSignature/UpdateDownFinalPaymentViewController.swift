@@ -386,7 +386,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
             
             //  self.alert("You cant continue with out selecting finace option", nil)
             // self.alert("Please go back and select any finance option to proceed", nil)
-            
+            print("financePayment : ", financePayment)
             if(financePayment > 1)
             {
                 self.alert("Down and final payment amount lower than sales price. Please update the price and tap on Next button.", nil)
@@ -396,6 +396,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         }
         
         UIUpdateForValueChange(isUpdateDownPayment:true)
+        self.validationDownpayment()
         let details = UpdateCustomerDetailsOneViewController.initialization()!
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
@@ -482,8 +483,8 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         return ""
         
         
-        
     }
+    
     override func screenShotBarButtonAction(sender:UIButton)
         {
             self.imagePicker = CaptureImage(presentationController: self, delegate: self)

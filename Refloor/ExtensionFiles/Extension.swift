@@ -1624,6 +1624,39 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(roomVOButton)
         
     }
+    
+    func setNavigationBarbackAndlogo3(with name:String)
+    {
+
+        var navView = UIView()
+        navView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height:  110))
+        navView.layer.masksToBounds = false
+        navView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+        self.view.addSubview(navView)
+        
+        let btnback = UIButton(frame: CGRect(x: 45, y: 40, width: 45, height: 45))
+        btnback.setBackgroundImage(UIImage(named: "backButton"), for: .normal)
+        btnback.addTarget(self, action: #selector(performSegueToReturnBack), for: .touchUpInside)
+        navView.addSubview(btnback)
+        
+        let nameLabel = UILabel(frame: CGRect(x: 110, y: 40, width: 600, height: 45))
+        nameLabel.text = name.uppercased()
+        nameLabel.textColor = .white
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.2
+        nameLabel.font = UIFont(name: "Avenir-Black", size: 35)
+        navView.addSubview(nameLabel)
+        
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 200, y: 40, width: 128, height: 48))
+        image.contentMode = .scaleAspectFit
+        if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
+            image.image = savedLogoImage
+        }else{
+            image.image = UIImage(named: "tabLogo")
+        }
+        navView.addSubview(image)
+    }
+    
    func schedulerSuccessNavBar()
     {
         var navView = UIView()

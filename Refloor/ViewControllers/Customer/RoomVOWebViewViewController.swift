@@ -21,7 +21,7 @@ class RoomVOWebViewViewController: UIViewController {
     override func viewDidLoad() {
         
          super.viewDidLoad()
-         setNavigationBarbackAndlogo2(with: "RoomVO")
+         setNavigationBarbackAndlogo3(with: "RoomVO")
 
         let configuration = WKWebViewConfiguration()
            configuration.allowsInlineMediaPlayback = true
