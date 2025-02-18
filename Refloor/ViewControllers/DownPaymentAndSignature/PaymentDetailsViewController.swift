@@ -273,6 +273,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
         }
         let data = ["selected_package_id":paymentPlanValue?.id ?? 0,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"discount":self.paymentPlanValue?.discount ?? 0,"payment_method":paymentmethord,"finance_option_id":paymentOptionDataValue?.id ?? 0,"additional_cost":self.paymentPlanValue?.additional_cost ?? 0,"msrp":mrp + self.stairPrice,"installation_date":self.installationDate,"photo_permission":adminStatusValue,"adjustment":adjustmentValue,"price":totalAmount,"down_payment_amount":downPaymentValue,"final_payment":finalpayment,"finance_amount":financePayment,"coapplicant_skip":coapplicantSkiip,"savings": savings,"special_price_id":specialPriceId,"stair_special_price_id":stairSpecialPriceId,"calc_based_on":"msrp","stair_calc_based_on":"msrp","promotion_code_id":promotionCodeId, "excluded_amount_promotion":self.excluded_amount_promotion,"min_sale_price": self.minSalePrice] as [String : Any]
         //arb
+        print("savePaymentDetailsToAppointmentDetail data : ", data)
         self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
         //
         //test
@@ -313,6 +314,12 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.selectedPaymentMethord = self.selectedPaymentMethord
                 applicant.downpayment = self.downpayment
                 applicant.packagePlanName = self.packagePlanName
+                applicant.installationDate = self.installationDate
+                applicant.adminFeeStatus = self.adminFeeStatus
+                applicant.coapplicantSkiip = self.coapplicantSkiip
+                applicant.minSalePrice = self.minSalePrice
+                applicant.savings = self.savings
+                applicant.promotionCodeId = self.promotionCodeId
                 self.navigationController?.pushViewController(applicant, animated: true)
                 //let masterData = self.getMasterDataFromDB()
                 
@@ -388,7 +395,13 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 details.finalpayment = self.finalpayment
                 details.financePayment = self.financePayment
                 details.isPaymentByCash = self.isPaymentByCash
-        //        details.selectedPaymentMethord = self.selectedPaymentMethord
+                details.selectedPaymentMethord1 = self.selectedPaymentMethord
+                details.installationDate = self.installationDate
+                details.adminFeeStatus = self.adminFeeStatus
+                details.coapplicantSkiip = self.coapplicantSkiip
+                details.minSalePrice = self.minSalePrice
+                details.savings = self.savings
+                details.promotionCodeId = self.promotionCodeId
                 self.navigationController?.pushViewController(details, animated: true)
                 
 //                let details = UpdateCustomerDetailsOneViewController.initialization()!

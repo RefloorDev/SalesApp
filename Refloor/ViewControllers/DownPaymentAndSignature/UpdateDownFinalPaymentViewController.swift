@@ -27,6 +27,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     var isPaymentByCash = false
     var paymentMethords:[PaymentType] = [.DebitCard,.CreditCard,.Cash,.Check]
     var selectedPaymentMethord = 0
+    var selectedPaymentMethord1:PaymentType?
     var downOrFinal:Double = 0
     var totalAmount:Double = 0
     var paymentPlan:PaymentPlanValue?
@@ -47,6 +48,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     var downpayment = DownPaymentViewController.initialization()!
     var summery = PaymentDetailsViewController.initialization()!
     var specialPriceId:Int = Int()
+    var stairSpecialPriceId:Int = Int()
     var stairsSpecialPriceId:Int = Int()
     var imagePicker: CaptureImage!
     var promotionCodeId:Int = Int()
@@ -59,6 +61,9 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     var floorShapeData:[FloorShapeDataValue]?
     var floorLevelData:[FloorLevelDataValue]?
     var appoinmentslData:AppoinmentDataValue!
+    var coapplicantSkiip:Int = 0
+    var installationDate = ""
+    var adminFeeStatus = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -360,6 +365,21 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
             self.paymentMethordCollectionView.reloadData()
         }
     }
+    
+    func getPaymentmethordString(payment:PaymentType) -> String
+    {
+        switch payment {
+        case .Cash:
+            return "cash"
+        case .DebitCard:
+            return "debit_card"
+        case .CreditCard:
+            return "credit_card"
+        case .Check:
+            return "check"
+        }
+    }
+    
     @IBAction func nextButtonAction(_ sender: Any)
     {
         let masterData = getMasterDataFromDB()
@@ -395,6 +415,39 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
             
         }
         
+        let costpersqft = (self.paymentPlanValue?.cost_per_sqft ?? 0)
+        let mrp = costpersqft * area
+        var paymentmethord = ""
+        var adminStatusValue:Int = 0
+        if self.adminFeeStatus
+        {
+            adminStatusValue=1
+        }
+        else
+        {
+            adminStatusValue=0
+        }
+        
+        if let pay = selectedPaymentMethord1
+        {
+            paymentmethord = self.getPaymentmethordString(payment: pay)
+        }
+        
+        if(totalAmount == financePayment)
+        {
+            paymentmethord = "finance"
+        }
+        //arb
+        if self.financePayment > 0{
+            paymentmethord = "finance"
+        }
+        //
+        if let customer = AppDelegate.appoinmentslData
+        {
+            coapplicantSkiip = customer.co_applicant_skipped ?? 0
+        }
+        
+        
         UIUpdateForValueChange(isUpdateDownPayment:true)
         self.validationDownpayment()
         let details = UpdateCustomerDetailsOneViewController.initialization()!
@@ -421,6 +474,12 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
 //        details.selectedPaymentMethord = self.selectedPaymentMethord
         details.downpayment = self.downpayment
         print("finalpayment : ", finalpayment)
+        
+        let data = ["selected_package_id":paymentPlanValue?.id ?? 0,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"discount":self.paymentPlanValue?.discount ?? 0,"payment_method":paymentmethord,"finance_option_id":paymentOptionDataValue?.id ?? 0,"additional_cost":self.paymentPlanValue?.additional_cost ?? 0,"msrp":mrp + self.stairPrice,"installation_date":self.installationDate,"photo_permission":adminStatusValue,"adjustment":adjustmentValue,"price":totalAmount,"down_payment_amount":downPaymentValue,"final_payment":finalpayment,"finance_amount":financePayment,"coapplicant_skip":coapplicantSkiip,"savings": savings,"special_price_id":specialPriceId,"stair_special_price_id":stairSpecialPriceId,"calc_based_on":"msrp","stair_calc_based_on":"msrp","promotion_code_id":promotionCodeId, "excluded_amount_promotion":self.excluded_amount_promotion,"min_sale_price": self.minSalePrice] as [String : Any]
+        //arb
+        print("savePaymentDetailsToAppointmentDetail data : ", data)
+        self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
+        
         self.navigationController?.pushViewController(details, animated: true)
     }
     func validation() -> String

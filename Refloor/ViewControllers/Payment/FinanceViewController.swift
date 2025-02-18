@@ -66,6 +66,12 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                     applicant.selectedPaymentMethord = self.selectedPaymentMethord
                     applicant.downpayment = self.downpayment
                     applicant.packagePlanName = self.packagePlanName
+                    applicant.installationDate = self.installationDate
+                    applicant.adminFeeStatus = self.adminFeeStatus
+                    applicant.coapplicantSkiip = self.coapplicantSkiip
+                    applicant.minSalePrice = self.minSalePrice
+                    applicant.savings = self.savings
+                    applicant.promotionCodeId = self.promotionCodeId
                     self.navigationController?.pushViewController(applicant, animated: true)
                 }
             }
@@ -86,6 +92,12 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = self.downpayment
             applicant.packagePlanName = self.packagePlanName
+            applicant.installationDate = self.installationDate
+            applicant.adminFeeStatus = self.adminFeeStatus
+            applicant.coapplicantSkiip = self.coapplicantSkiip
+            applicant.minSalePrice = self.minSalePrice
+            applicant.savings = self.savings
+            applicant.promotionCodeId = self.promotionCodeId
             self.navigationController?.pushViewController(applicant, animated: true)
         }
         
@@ -121,6 +133,13 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
     var packagePlanName = ""
+    var coapplicantSkiip:Int = 0
+    var installationDate = ""
+    var adminFeeStatus = false
+    var minSalePrice:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
+    
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
     }
@@ -215,6 +234,12 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         applicant.selectedPaymentMethord = self.selectedPaymentMethord
         applicant.downpayment = self.downpayment
         applicant.packagePlanName = self.packagePlanName
+        applicant.installationDate = self.installationDate
+        applicant.adminFeeStatus = self.adminFeeStatus
+        applicant.coapplicantSkiip = self.coapplicantSkiip
+        applicant.minSalePrice = self.minSalePrice
+        applicant.savings = self.savings
+        applicant.promotionCodeId = self.promotionCodeId
         self.navigationController?.pushViewController(applicant, animated: true)
     }
     @IBAction func proceedBtnAction(_ sender: UIButton)
@@ -247,6 +272,12 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 applicant.selectedPaymentMethord = self.selectedPaymentMethord
                 applicant.downpayment = self.downpayment
                 applicant.packagePlanName = self.packagePlanName
+                applicant.installationDate = self.installationDate
+                applicant.adminFeeStatus = self.adminFeeStatus
+                applicant.coapplicantSkiip = self.coapplicantSkiip
+                applicant.minSalePrice = self.minSalePrice
+                applicant.savings = self.savings
+                applicant.promotionCodeId = self.promotionCodeId
                 self.navigationController?.pushViewController(applicant, animated: true)
             }
         }
