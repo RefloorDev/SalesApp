@@ -100,6 +100,12 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     var packagePlanName = ""
     var adjustmentValue:Double = 0
     var roomName = ""
+    var coapplicantSkiip:Int = 0
+    var installationDate = ""
+    var adminFeeStatus = false
+    var minSalePrice:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
     
     var creditRequest = ["Individual Credit - relying on my income or assets as well as income or assets from other sources","Joint Credit - We intend to apply for joint credit"]
     var selectedReq = 0
@@ -411,7 +417,13 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         details.downPaymentValue = self.downPaymentValue
         details.finalpayment = self.finalpayment
         details.financePayment = self.financePayment
-//        details.selectedPaymentMethord = self.selectedPaymentMethord
+        details.selectedPaymentMethord1 = self.selectedPaymentMethord
+        details.installationDate = self.installationDate
+        details.adminFeeStatus = self.adminFeeStatus
+        details.coapplicantSkiip = self.coapplicantSkiip
+        details.minSalePrice = self.minSalePrice
+        details.savings = self.savings
+        details.promotionCodeId = self.promotionCodeId
         self.navigationController?.pushViewController(details, animated: true)
     }
     
