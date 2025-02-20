@@ -503,7 +503,6 @@ typedef void (^GTMSessionFetcherRetryResponse)(BOOL shouldRetry);
 typedef void (^GTMSessionFetcherRetryBlock)(BOOL suggestedWillRetry, NSError *_Nullable error,
                                             GTMSessionFetcherRetryResponse response);
 
-API_AVAILABLE(ios(10.0), macosx(10.12), tvos(10.0), watchos(6.0))
 typedef void (^GTMSessionFetcherMetricsCollectionBlock)(NSURLSessionTaskMetrics *metrics);
 
 typedef void (^GTMSessionFetcherTestResponse)(NSHTTPURLResponse *_Nullable response,
@@ -605,6 +604,13 @@ NSData *_Nullable GTMDataFromInputStream(NSInputStream *inputStream, NSError **o
 #endif
 
 // Completion handler passed to -[GTMFetcherDecoratorProtocol fetcherWillStart:completionHandler:].
+
+// TODO(https://github.com/google/gtm-session-fetcher/issues/398): Uncomment this when the next
+// major version bump happens, since this is an API breaking change for Swift clients.
+//
+// typedef void (^GTMFetcherDecoratorFetcherWillStartCompletionHandler)(NSURLRequest *_Nullable_result,
+//                                                                      NSError *_Nullable);
+
 typedef void (^GTMFetcherDecoratorFetcherWillStartCompletionHandler)(NSURLRequest *_Nullable,
                                                                      NSError *_Nullable);
 
@@ -867,6 +873,8 @@ __deprecated_msg("implement GTMSessionFetcherAuthorizer instead")
 // The fetcher encodes information used to resume a session in the session identifier.
 // This method, intended for internal use returns the encoded information.  The sessionUserInfo
 // dictionary is stored as identifier metadata.
+// NOTE: This type is a lie and could be an issue for Swift. The values for private keys (prefixed
+// with an underscore) aren't always strings; but changing the type is a breaking change.
 - (nullable NSDictionary<NSString *, NSString *> *)sessionIdentifierMetadata;
 
 #if TARGET_OS_IPHONE && !TARGET_OS_WATCH
@@ -1070,9 +1078,7 @@ __deprecated_msg("implement GTMSessionFetcherAuthorizer instead")
 // The optional block for collecting the metrics of the present session.
 //
 // This is called on the callback queue.
-@property(atomic, copy, nullable)
-    GTMSessionFetcherMetricsCollectionBlock metricsCollectionBlock API_AVAILABLE(
-        ios(10.0), macosx(10.12), tvos(10.0), watchos(6.0));
+@property(atomic, copy, nullable) GTMSessionFetcherMetricsCollectionBlock metricsCollectionBlock;
 
 // Retry intervals must be strictly less than maxRetryInterval, else
 // they will be limited to maxRetryInterval and no further retries will

@@ -141,7 +141,8 @@ static id<GTMUserAgentProvider> SharedStandardUserAgentProvider(void) {
             unusedSessionTimeout = _unusedSessionTimeout,
             userAgentProvider = _userAgentProvider,
             decoratorsPointerArray = _decoratorsPointerArray,
-            testBlock = _testBlock;
+            testBlock = _testBlock,
+            stopFetchingTriggersCompletionHandler = _stopFetchingTriggersCompletionHandler;
 // clang-format on
 
 #if GTM_BACKGROUND_TASK_FETCHING
@@ -218,9 +219,8 @@ static id<GTMUserAgentProvider> SharedStandardUserAgentProvider(void) {
   fetcher.retryBlock = self.retryBlock;
   fetcher.maxRetryInterval = self.maxRetryInterval;
   fetcher.minRetryInterval = self.minRetryInterval;
-  if (@available(iOS 10.0, *)) {
-    fetcher.metricsCollectionBlock = self.metricsCollectionBlock;
-  }
+  fetcher.metricsCollectionBlock = self.metricsCollectionBlock;
+  fetcher.stopFetchingTriggersCompletionHandler = self.stopFetchingTriggersCompletionHandler;
   fetcher.properties = self.properties;
   fetcher.service = self;
 
@@ -657,6 +657,8 @@ static id<GTMUserAgentProvider> SharedStandardUserAgentProvider(void) {
     [_runningFetchersByHost removeAllObjects];
   }
 
+  // Stop the delayed fetchers first so a delayed one doesn't get started when canceling
+  // a running one.
   for (NSArray *delayedForHost in delayedFetchersByHost) {
     for (GTMSessionFetcher *fetcher in delayedForHost) {
       [self stopFetcher:fetcher];
@@ -1331,8 +1333,7 @@ static id<GTMUserAgentProvider> SharedStandardUserAgentProvider(void) {
 
 - (void)URLSession:(NSURLSession *)session
                           task:(NSURLSessionTask *)task
-    didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics
-    API_AVAILABLE(ios(10.0), macosx(10.12), tvos(10.0), watchos(6.0)) {
+    didFinishCollectingMetrics:(NSURLSessionTaskMetrics *)metrics {
   id<NSURLSessionTaskDelegate> fetcher = [self fetcherForTask:task];
   [fetcher URLSession:session task:task didFinishCollectingMetrics:metrics];
 }

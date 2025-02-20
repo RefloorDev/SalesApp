@@ -35,16 +35,16 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Refloor app needs to access camera/gallery in order to upload room photos</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Refloor app needs to access camera/gallery in order to upload room photos</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Refloor requires access to your location in order to get appointment geolocation.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Refloor app needs to access device gallery in order to upload room images</string>
 	<key>UIApplicationSceneManifest</key>
