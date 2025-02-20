@@ -1539,7 +1539,7 @@
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7.0;
+				CURRENT_PROJECT_VERSION = 10.0;
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
@@ -1565,7 +1565,7 @@
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 7.0;
+				CURRENT_PROJECT_VERSION = 10.0;
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
