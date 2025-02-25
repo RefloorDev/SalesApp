@@ -27,6 +27,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     @IBOutlet weak var state_TF: UITextField!
     @IBOutlet weak var city_TF: UITextField!
     @IBOutlet weak var Street_Address_TF: UITextField!
+    @IBOutlet weak var bothPartiesPresentBtn: UIButton!
     @IBOutlet weak var customerEmail: UITextField!
     @IBOutlet weak var customerPhone: UITextField!
     @IBOutlet weak var customerContactNumberTF: UITextField!
@@ -47,6 +48,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     var appoinmentslData:AppoinmentDataValue!
     var isEditedtextField = false
     var GMSTag = 0
+    var isBothParties = 0
   
     
     var imagePicker: CaptureImage!
@@ -144,6 +146,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     }
     override func viewWillAppear(_ animated: Bool)
     {
+        isBothParties == 0 ? bothPartiesPresentBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesPresentBtn.setImage(UIImage(named: "checked"), for: .normal)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
@@ -190,8 +193,9 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         self.appoinmentslData.email = self.customerEmail.text ?? ""
         self.appoinmentslData.phone = self.customerContactNumberTF.text ?? ""
         self.appoinmentslData.applicant_last_name = self.customerLastName.text ?? ""
+        self.appoinmentslData.isBothParties = isBothParties
         //arb
-        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!]
+        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!,"isBothParties": isBothParties]
 
         self.updateAppointmentData(appointmentChangesDict: applicantOneDetails)
         let details = CustomerDetailsTowViewController.initialization()!
@@ -230,6 +234,21 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         
     }
     
+    @IBAction func BothPartiesPresentBtnAction(_ sender: UIButton)
+    {
+        if sender.tag == 0
+        {
+            sender.tag = 1
+        }
+        else
+        {
+            sender.tag = 0
+        }
+        isBothParties = sender.tag
+        sender.tag == 0 ? bothPartiesPresentBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesPresentBtn.setImage(UIImage(named: "checked"), for: .normal)
+        
+        
+    }
     func setPhoneNumberDelegate()
     {
         self.customerPhone.delegate = self

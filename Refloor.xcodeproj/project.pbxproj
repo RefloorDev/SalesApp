@@ -199,6 +199,9 @@
 		B0DE347B2B8DB6C800B01D4E /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = B0DE347A2B8DB6C800B01D4E /* test.xml */; };
 		B0E50CD12CE38CEA00A95D16 /* AppointmentSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E50CD02CE38CEA00A95D16 /* AppointmentSummaryViewController.swift */; };
 		B0E50CD32CE38CEF00A95D16 /* AppointmentPaymentSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E50CD22CE38CEF00A95D16 /* AppointmentPaymentSummaryViewController.swift */; };
+		B0F080ED2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F080EC2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift */; };
+		B0F080F12D6DEF9200782F20 /* CheckListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F080EF2D6DEF9200782F20 /* CheckListTableViewCell.swift */; };
+		B0F080F22D6DEF9200782F20 /* CheckListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0F080F02D6DEF9200782F20 /* CheckListTableViewCell.xib */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -413,6 +416,9 @@
 		B0DE347A2B8DB6C800B01D4E /* test.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test.xml; sourceTree = "<group>"; };
 		B0E50CD02CE38CEA00A95D16 /* AppointmentSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppointmentSummaryViewController.swift; path = TableViewCell/AppointmentSummaryViewController.swift; sourceTree = "<group>"; };
 		B0E50CD22CE38CEF00A95D16 /* AppointmentPaymentSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppointmentPaymentSummaryViewController.swift; path = TableViewCell/AppointmentPaymentSummaryViewController.swift; sourceTree = "<group>"; };
+		B0F080EC2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinanceOrderCheckListViewController.swift; sourceTree = "<group>"; };
+		B0F080EF2D6DEF9200782F20 /* CheckListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckListTableViewCell.swift; sourceTree = "<group>"; };
+		B0F080F02D6DEF9200782F20 /* CheckListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CheckListTableViewCell.xib; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -880,6 +886,7 @@
 		65EE61422484EA6000D95F12 /* Payment */ = {
 			isa = PBXGroup;
 			children = (
+				B0F080EE2D6DEF6300782F20 /* TableViewCells */,
 				650B1CDF254C2511005ED521 /* PopUp */,
 				65EE61482484EAEA00D95F12 /* CollectionViewCells */,
 				65BA840B249A3E31003F9A79 /* PaymentOptionsViewController.swift */,
@@ -891,6 +898,7 @@
 				B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */,
 				6581F9ED24AE280D008A2F01 /* WebViewViewController.swift */,
 				B09C93E72B75010800C8E408 /* FinanceViewController.swift */,
+				B0F080EC2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -1018,6 +1026,15 @@
 			path = CollectionViewCell;
 			sourceTree = "<group>";
 		};
+		B0F080EE2D6DEF6300782F20 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				B0F080EF2D6DEF9200782F20 /* CheckListTableViewCell.swift */,
+				B0F080F02D6DEF9200782F20 /* CheckListTableViewCell.xib */,
+			);
+			path = TableViewCells;
+			sourceTree = "<group>";
+		};
 		DD06FAFD2849DC49008AF42F /* PromoPopUpTableviewCells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1111,6 +1128,7 @@
 				65209461243CA31100B010CA /* SF-Pro-Text-SemiboldItalic.otf in Resources */,
 				65209455243CA31100B010CA /* SF-Pro-Display-BlackItalic.otf in Resources */,
 				653EA57D241F7B0A00EA684E /* LaunchScreen.storyboard in Resources */,
+				B0F080F22D6DEF9200782F20 /* CheckListTableViewCell.xib in Resources */,
 				6520944C243CA31100B010CA /* SF-Pro-Text-Light.otf in Resources */,
 				65209441243CA31100B010CA /* SFUIText-Bold.otf in Resources */,
 				6520944E243CA31100B010CA /* SF-Pro-Text-Regular.otf in Resources */,
@@ -1270,6 +1288,7 @@
 				DD3E89DA27881F6F007CA016 /* ViewLodDetailsViewController.swift in Sources */,
 				65BA840C249A3E31003F9A79 /* PaymentOptionsViewController.swift in Sources */,
 				657C72C624500BFF00F392F3 /* SubSqureToolView.swift in Sources */,
+				B0F080ED2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift in Sources */,
 				65F607CD24618C260094FF86 /* SelectionViewController.swift in Sources */,
 				DD525A5F2848D71E001645D6 /* PromoPopUpViewControllerNew.swift in Sources */,
 				B0BBFC692BAC1E43009E6287 /* SpalshScreenViewController.swift in Sources */,
@@ -1358,6 +1377,7 @@
 				B00B9D832C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift in Sources */,
 				65F34836244491DB00C61100 /* CustomView.swift in Sources */,
 				657AE2782477BFC100D205A1 /* CommentsCollectionViewCell.swift in Sources */,
+				B0F080F12D6DEF9200782F20 /* CheckListTableViewCell.swift in Sources */,
 				65094BC724F4DB9C00C9C879 /* ImportentAgreementViewController.swift in Sources */,
 				658D494D24AA21A90034DF69 /* PaymentTypeTableViewCell.swift in Sources */,
 				650512BD254051C80026B8FC /* CustomerDetailsTowViewController.swift in Sources */,
