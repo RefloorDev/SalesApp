@@ -528,6 +528,26 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         cell.tileImageView.loadImageFormWeb(URL(string: tableValue.summeryData?.material_image_url ?? ""))
         return cell
     }
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool 
+    {
+        var currentText = textView.text ?? ""
+        // Check for other text views and restrict characters
+        let restrictedCharacters = CharacterSet(charactersIn: "&$+/,:;=?@#<>")
+        
+        // Iterate over the Unicode.Scalar values in the replacement text
+        for scalar in text.unicodeScalars {
+            if restrictedCharacters.contains(scalar) {
+                return false // Block the character
+            }
+       // return true // Allow the character
+    }
+           let newLength = currentText.count + text.count - range.length
+           
+           // Restrict the total length to 40 characters
+           return newLength <= 1024
+                 
+    }
     @IBAction func textFieldEndEditing(_ sender: UITextField) {
         
         if let cell = tableView.cellForRow(at: [0,1]) as? SummeryDetailsSubDetailsTableViewCell
@@ -1096,3 +1116,7 @@ extension SummeryDetailsViewController: ImagePickerDelegate {
         
     }
 }
+
+
+   
+

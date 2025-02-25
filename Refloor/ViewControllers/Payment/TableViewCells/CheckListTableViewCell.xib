@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="ipad10_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="CheckListTableViewCell" rowHeight="85" id="KGk-i7-Jjw" customClass="CheckListTableViewCell" customModule="Refloor" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="884" height="85"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="884" height="85"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="erA-rV-1JJ">
+                        <rect key="frame" x="0.0" y="5" width="884" height="75"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Advance payment is verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lvh-20-Utd">
+                                <rect key="frame" x="72" y="21" width="308" height="33"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="33" id="dIa-HA-ti3"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="24"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Y0-Vk-MlX">
+                                <rect key="frame" x="20" y="21.5" width="32" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Kru-ob-vHe"/>
+                                    <constraint firstAttribute="width" constant="32" id="bIk-2I-UBT"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" image="notSelected"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f58-CN-QMt">
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="75"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="f58-CN-QMt" secondAttribute="bottom" id="0tx-0a-CLC"/>
+                            <constraint firstItem="f58-CN-QMt" firstAttribute="leading" secondItem="erA-rV-1JJ" secondAttribute="leading" id="7wH-JY-yBF"/>
+                            <constraint firstItem="5Y0-Vk-MlX" firstAttribute="centerY" secondItem="erA-rV-1JJ" secondAttribute="centerY" id="QCk-hp-tjM"/>
+                            <constraint firstItem="5Y0-Vk-MlX" firstAttribute="leading" secondItem="erA-rV-1JJ" secondAttribute="leading" constant="20" id="U7V-cw-uXr"/>
+                            <constraint firstAttribute="trailing" secondItem="f58-CN-QMt" secondAttribute="trailing" id="X9o-Dm-q0B"/>
+                            <constraint firstItem="lvh-20-Utd" firstAttribute="leading" secondItem="5Y0-Vk-MlX" secondAttribute="trailing" constant="20" id="XWx-8a-OVL"/>
+                            <constraint firstItem="lvh-20-Utd" firstAttribute="centerY" secondItem="5Y0-Vk-MlX" secondAttribute="centerY" id="g72-w1-zEN"/>
+                            <constraint firstItem="f58-CN-QMt" firstAttribute="top" secondItem="erA-rV-1JJ" secondAttribute="top" id="zAi-mi-eHp"/>
+                        </constraints>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                <real key="value" value="1"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                <color key="value" red="0.34484910959999998" green="0.39283764360000001" blue="0.44376060369999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="trailing" secondItem="erA-rV-1JJ" secondAttribute="trailing" id="7ol-ch-ea8"/>
+                    <constraint firstItem="erA-rV-1JJ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="Bhd-ef-jgF"/>
+                    <constraint firstAttribute="bottom" secondItem="erA-rV-1JJ" secondAttribute="bottom" constant="5" id="RtP-g5-2Wf"/>
+                    <constraint firstItem="erA-rV-1JJ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="cBg-NR-iWY"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <connections>
+                <outlet property="checkListBgBtn" destination="f58-CN-QMt" id="WFs-gb-t7h"/>
+                <outlet property="checkListBtn" destination="5Y0-Vk-MlX" id="1FL-eQ-dba"/>
+                <outlet property="checkListLbl" destination="lvh-20-Utd" id="zsb-Pn-6Zf"/>
+            </connections>
+            <point key="canvasLocation" x="18" y="-12"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="notSelected" width="32" height="32"/>
+    </resources>
+</document>

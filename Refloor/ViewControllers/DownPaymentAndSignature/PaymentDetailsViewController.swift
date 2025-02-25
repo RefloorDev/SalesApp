@@ -288,7 +288,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             if(self.financePayment != 0)
             {
                 
-                let applicant = FinanceViewController.initialization()!
+                let applicant = FinanceOrderCheckListViewController.initialization()!
                 applicant.downOrFinal = self.downOrFinal
                 applicant.totalAmount = self.totalAmount
                 applicant.paymentPlan = self.paymentPlan

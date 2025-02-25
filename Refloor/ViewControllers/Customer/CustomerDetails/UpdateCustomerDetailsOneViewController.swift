@@ -40,6 +40,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     @IBOutlet weak var customerPhoneNumbertopConstraint: NSLayoutConstraint!
     @IBOutlet weak var customerPhoneNumberbottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var bothPartiesBtn: UIButton!
     var roomData:[RoomDataValue]?
     var floorShapeData:[FloorShapeDataValue]?
     var floorLevelData:[FloorLevelDataValue]?
@@ -63,6 +64,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     var selectedPaymentMethord:PaymentType?
     var downpayment = DownPaymentViewController.initialization()!
     var co_Applicant_Skipped:Bool = Bool()
+    var isBothParties = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -155,8 +157,23 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         
         // Do any additional setup after loading the view.
     }
+    @IBAction func bothPartiesBtnAction(_ sender: UIButton)
+    {
+        
+            if sender.tag == 0
+            {
+                sender.tag = 1
+            }
+            else
+            {
+                sender.tag = 0
+            }
+            isBothParties = sender.tag
+            sender.tag == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
+    }
     override func viewWillAppear(_ animated: Bool)
     {
+        appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
@@ -203,8 +220,9 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         self.appoinmentslData.email = self.customerEmail.text ?? ""
         self.appoinmentslData.phone = self.customerContactNumberTF.text ?? ""
         self.appoinmentslData.applicant_last_name = self.customerLastName.text ?? ""
+        self.appoinmentslData.isBothParties = isBothParties
         //arb
-        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!]
+        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!,"isBothParties": isBothParties]
 
         self.updateAppointmentData(appointmentChangesDict: applicantOneDetails)
         let details = UpdateCustomerDetailsTowViewController.initialization()!
