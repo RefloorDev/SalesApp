@@ -31,6 +31,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             applicant.financePayment = self.financePayment
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = self.downpayment
+            applicant.packagePlanName = self.packagePlanName
             self.navigationController?.pushViewController(applicant, animated: true)
         }
     }
@@ -57,6 +58,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var adminFee:Double = 0
     // var adminFeeStatus:Int = 0
     var adminFeeStatus = false
+    var isPaymentByCash = false
     var installationDate = ""
     var coapplicantSkiip:Int = 0
     var fullLoan = ""
@@ -79,6 +81,9 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var promotionCodeId:Int = Int()
     var stairPrice:Double = Double()
     var minSalePrice:Double = 0.0
+    var packagePlanName = ""
+    var roomName = ""
+    
     override func viewWillAppear(_ animated: Bool ){
         
         self.setNavigationBarbackAndlogo(with: "Payment Summary".uppercased())
@@ -268,6 +273,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
         }
         let data = ["selected_package_id":paymentPlanValue?.id ?? 0,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"discount":self.paymentPlanValue?.discount ?? 0,"payment_method":paymentmethord,"finance_option_id":paymentOptionDataValue?.id ?? 0,"additional_cost":self.paymentPlanValue?.additional_cost ?? 0,"msrp":mrp + self.stairPrice,"installation_date":self.installationDate,"photo_permission":adminStatusValue,"adjustment":adjustmentValue,"price":totalAmount,"down_payment_amount":downPaymentValue,"final_payment":finalpayment,"finance_amount":financePayment,"coapplicant_skip":coapplicantSkiip,"savings": savings,"special_price_id":specialPriceId,"stair_special_price_id":stairSpecialPriceId,"calc_based_on":"msrp","stair_calc_based_on":"msrp","promotion_code_id":promotionCodeId, "excluded_amount_promotion":self.excluded_amount_promotion,"min_sale_price": self.minSalePrice] as [String : Any]
         //arb
+        print("savePaymentDetailsToAppointmentDetail data : ", data)
         self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
         //
         //test
@@ -307,6 +313,13 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.financePayment = self.financePayment
                 applicant.selectedPaymentMethord = self.selectedPaymentMethord
                 applicant.downpayment = self.downpayment
+                applicant.packagePlanName = self.packagePlanName
+                applicant.installationDate = self.installationDate
+                applicant.adminFeeStatus = self.adminFeeStatus
+                applicant.coapplicantSkiip = self.coapplicantSkiip
+                applicant.minSalePrice = self.minSalePrice
+                applicant.savings = self.savings
+                applicant.promotionCodeId = self.promotionCodeId
                 self.navigationController?.pushViewController(applicant, animated: true)
                 //let masterData = self.getMasterDataFromDB()
                 
@@ -360,36 +373,55 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
 //                self.navigationController?.pushViewController(signature, animated: true)
                 
                 //Q4 Cahnges
-                let details = UpdateCustomerDetailsOneViewController.initialization()!
+                print("inside UpdateCustomerDetailsOneViewController")
+                
+                let details = UpdateDownFinalPaymentViewController.initialization()!
                 details.floorLevelData = AppDelegate.floorLevelData
                 details.floorShapeData = []
                 details.roomData = AppDelegate.roomData
                 details.appoinmentslData = AppDelegate.appoinmentslData
-                
-        //        if co_Applicant_Skipped == true{
-        //            details.isCoAppSkiped = 1
-        //            }
-        //            else{
-        //                details.isCoAppSkiped = 0
-        //            }
-                details.downOrFinal = self.downOrFinal
+                details.packagePlanName = packagePlanName
+                details.downOrFinal = self.downPaymentValue
                 details.totalAmount = self.totalAmount
                 details.paymentPlan = self.paymentPlan
+                details.roomName = self.roomName
+                details.adjustmentValue = self.adjustmentValue
                 details.paymentPlanValue = self.paymentPlanValue
                 details.paymentOptionDataValue = self.paymentOptionDataValue
                 details.drowingImageID = self.drowingImageID
                 details.area = self.area
+                details.downpayment = self.downpayment
                 details.downPaymentValue = self.downPaymentValue
                 details.finalpayment = self.finalpayment
                 details.financePayment = self.financePayment
-                details.selectedPaymentMethord = self.selectedPaymentMethord
-                details.downpayment = self.downpayment
-        //            if let customer = AppDelegate.appoinmentslData
-        //            {
-        //                details.isCoAppSkiped = customer.co_applicant_skipped ?? 0
-        //            }
-                    
+                details.isPaymentByCash = self.isPaymentByCash
+                details.selectedPaymentMethord1 = self.selectedPaymentMethord
+                details.installationDate = self.installationDate
+                details.adminFeeStatus = self.adminFeeStatus
+                details.coapplicantSkiip = self.coapplicantSkiip
+                details.minSalePrice = self.minSalePrice
+                details.savings = self.savings
+                details.promotionCodeId = self.promotionCodeId
                 self.navigationController?.pushViewController(details, animated: true)
+                
+//                let details = UpdateCustomerDetailsOneViewController.initialization()!
+//                details.floorLevelData = AppDelegate.floorLevelData
+//                details.floorShapeData = []
+//                details.roomData = AppDelegate.roomData
+//                details.appoinmentslData = AppDelegate.appoinmentslData
+//                details.downOrFinal = self.downOrFinal
+//                details.totalAmount = self.totalAmount
+//                details.paymentPlan = self.paymentPlan
+//                details.paymentPlanValue = self.paymentPlanValue
+//                details.paymentOptionDataValue = self.paymentOptionDataValue
+//                details.drowingImageID = self.drowingImageID
+//                details.area = self.area
+//                details.downPaymentValue = self.downPaymentValue
+//                details.finalpayment = self.finalpayment
+//                details.financePayment = self.financePayment
+//                details.selectedPaymentMethord = self.selectedPaymentMethord
+//                details.downpayment = self.downpayment
+//                self.navigationController?.pushViewController(details, animated: true)
                 
             }
     }

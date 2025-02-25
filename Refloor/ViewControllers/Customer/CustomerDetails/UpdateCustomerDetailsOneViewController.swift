@@ -69,7 +69,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
-        
+        print("finalpayment : ", finalpayment, " financePayment : ", financePayment, " downPaymentValue : ", downPaymentValue, " totalAmount : ", totalAmount)
         if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 0{
             customerPhoneStackView.isHidden = true
             customerContactNumberStackView.isHidden = true
@@ -231,8 +231,6 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         details.roomData = self.roomData
         details.appoinmentslData = self.appoinmentslData
         details.isEditedtextField = isEditedtextField
-        
-        
         details.downOrFinal = self.downOrFinal
         details.totalAmount = self.totalAmount
         details.paymentPlan = self.paymentPlan
@@ -245,10 +243,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         details.financePayment = self.financePayment
         details.selectedPaymentMethord = self.selectedPaymentMethord
         details.downpayment = self.downpayment
-        
         self.navigationController?.pushViewController(details, animated: true)
-        
-        
     }
     
     func checkTextFieldEdited()

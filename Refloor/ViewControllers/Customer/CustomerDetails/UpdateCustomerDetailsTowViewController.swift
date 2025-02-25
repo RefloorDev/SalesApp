@@ -65,7 +65,7 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
-        print("inside heiyfgeyfughjfghj")
+        print("finalpayment : ", finalpayment, " financePayment : ", financePayment, " downPaymentValue : ", downPaymentValue, " totalAmount : ", totalAmount)
         if UserDefaults.standard.integer(forKey: "can_view_phone_number") == 0{
             customerPhoneStackView.isHidden = true
             customerContactNumberStackView.isHidden = true
