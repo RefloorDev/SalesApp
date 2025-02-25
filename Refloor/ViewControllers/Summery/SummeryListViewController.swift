@@ -107,6 +107,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             details.floorShapeData = []
             details.roomData = AppDelegate.roomData
             details.appoinmentslData = AppDelegate.appoinmentslData
+            details.isBothParties = AppDelegate.appoinmentslData.isBothParties ?? 0
             self.navigationController?.pushViewController(details, animated: true)
         }
     }

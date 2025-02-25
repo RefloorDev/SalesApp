@@ -71,6 +71,7 @@ class MasterData : Object, Mappable {
     var contract_document_templates = List<rf_contract_document_templates_results>()
     var appointment_result_reasons = List<rf_appointment_result_reasons_results>()
     var external_credentials = List<rf_extrenal_credential_results>()
+    var finance_order_checklist = List<FinanceOrderCheckList>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
@@ -104,6 +105,7 @@ class MasterData : Object, Mappable {
         transitionHeights <- (map["transition_heights"], ListTransform<rf_transitionHeights_results>())
         floorColourList <- (map["floor_colors_list"], ListTransform<rf_floorColour_results>())
         stairColourList <- (map["stair_colors_list"], ListTransform<rf_stairColour_results>())
+        finance_order_checklist <- (map["finance_checklist"], ListTransform<FinanceOrderCheckList>())
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
@@ -523,6 +525,25 @@ class rf_extrenal_credential_results: Object,Mappable
         entityKey <- map["entity_key"]
         apiKey <- map["api_key"]
         provider <- map["provider"]
+        
+    }
+}
+
+class FinanceOrderCheckList: Object,Mappable
+{
+    @objc dynamic var checkListId : Int = 0
+    @objc dynamic var checkListName : String?
+    @objc dynamic var checkListSequence : Int = 0
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        checkListId <- map["checklist_id"]
+        checkListName <- map["name"]
+        checkListSequence <- map["sequence"]
         
     }
 }
@@ -1215,6 +1236,7 @@ class rf_master_appointment : Object, Mappable {
     @objc dynamic var applicantAndIncomeData: String?
     @objc dynamic var recisionDate:String?
     @objc dynamic var officeLocationId = 0
+    @objc dynamic var isBothParties: Int = 0
     var externalEntityKey = List<rf_External_Entity_Key>()
    
     //var payment_options = List<rf_paymentOptionData>()
@@ -1508,6 +1530,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var recisionDate : String?
     @objc dynamic var sync_status = false
     @objc dynamic var officeLocationId = 0
+    @objc dynamic var isBothParties = 0
     
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -1557,6 +1580,7 @@ class rf_completed_appointment:Object{
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
         external_entity_keys = appointmentObj.externalEntityKey
+        isBothParties = appointmentObj.isBothParties
     }
 }
 

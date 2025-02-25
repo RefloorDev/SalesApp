@@ -179,6 +179,7 @@
 		B00B9D832C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00B9D7D2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift */; };
 		B00B9D842C999C1800B88469 /* TitleSummaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */; };
 		B00B9D852C999C1800B88469 /* RoomsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */; };
+		B00BD8552D5F34E0002F557B /* FinanceOrderCheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B00BD8542D5F34E0002F557B /* FinanceOrderCheckListViewController.swift */; };
 		B011B1D22B1DB77600C28459 /* VersatileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011B1D12B1DB77600C28459 /* VersatileViewController.swift */; };
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
 		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
@@ -192,6 +193,8 @@
 		B0BBFC6C2BAC1E43009E6287 /* JobTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC662BAC1E43009E6287 /* JobTypeCollectionViewCell.swift */; };
 		B0BBFC6D2BAC1E43009E6287 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC672BAC1E43009E6287 /* LoginViewController.swift */; };
 		B0BBFC6E2BAC1E43009E6287 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC682BAC1E43009E6287 /* NavigationController.swift */; };
+		B0BC99502D5F6AB6007B73A7 /* CheckListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0BC994F2D5F6AB6007B73A7 /* CheckListTableViewCell.xib */; };
+		B0BC99512D5F6AB6007B73A7 /* CheckListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BC994E2D5F6AB6007B73A7 /* CheckListTableViewCell.swift */; };
 		B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */; };
 		B0D395DB2A94A26A0020497B /* InstallerShedulerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */; };
 		B0D395DD2A94A29A0020497B /* InstallerSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */; };
@@ -199,6 +202,8 @@
 		B0DE347B2B8DB6C800B01D4E /* test.xml in Resources */ = {isa = PBXBuildFile; fileRef = B0DE347A2B8DB6C800B01D4E /* test.xml */; };
 		B0E50CD12CE38CEA00A95D16 /* AppointmentSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E50CD02CE38CEA00A95D16 /* AppointmentSummaryViewController.swift */; };
 		B0E50CD32CE38CEF00A95D16 /* AppointmentPaymentSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0E50CD22CE38CEF00A95D16 /* AppointmentPaymentSummaryViewController.swift */; };
+		B0FDD8C42D5DF81400AD6601 /* UpdateCustomerDetailsTowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FDD8C32D5DF81400AD6601 /* UpdateCustomerDetailsTowViewController.swift */; };
+		B0FDD8C62D5DF82200AD6601 /* UpdateCustomerDetailsOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0FDD8C52D5DF82200AD6601 /* UpdateCustomerDetailsOneViewController.swift */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -392,6 +397,7 @@
 		B00B9D7D2C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppointmentSummaryFirstRowTableViewCell.swift; path = AppointmentSummary/AppointmentSummaryFirstRowTableViewCell.swift; sourceTree = "<group>"; };
 		B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TitleSummaryTableViewCell.xib; path = AppointmentSummary/TitleSummaryTableViewCell.xib; sourceTree = "<group>"; };
 		B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RoomsTableViewCell.xib; path = AppointmentSummary/RoomsTableViewCell.xib; sourceTree = "<group>"; };
+		B00BD8542D5F34E0002F557B /* FinanceOrderCheckListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceOrderCheckListViewController.swift; sourceTree = "<group>"; };
 		B011B1D12B1DB77600C28459 /* VersatileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersatileViewController.swift; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
@@ -406,6 +412,8 @@
 		B0BBFC662BAC1E43009E6287 /* JobTypeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTypeCollectionViewCell.swift; sourceTree = "<group>"; };
 		B0BBFC672BAC1E43009E6287 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		B0BBFC682BAC1E43009E6287 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		B0BC994E2D5F6AB6007B73A7 /* CheckListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckListTableViewCell.swift; sourceTree = "<group>"; };
+		B0BC994F2D5F6AB6007B73A7 /* CheckListTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CheckListTableViewCell.xib; sourceTree = "<group>"; };
 		B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoomCommentPopUpViewController.swift; sourceTree = "<group>"; };
 		B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerShedulerViewController.swift; sourceTree = "<group>"; };
 		B0D395DC2A94A29A0020497B /* InstallerSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerSuccessViewController.swift; sourceTree = "<group>"; };
@@ -413,6 +421,8 @@
 		B0DE347A2B8DB6C800B01D4E /* test.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = test.xml; sourceTree = "<group>"; };
 		B0E50CD02CE38CEA00A95D16 /* AppointmentSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppointmentSummaryViewController.swift; path = TableViewCell/AppointmentSummaryViewController.swift; sourceTree = "<group>"; };
 		B0E50CD22CE38CEF00A95D16 /* AppointmentPaymentSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppointmentPaymentSummaryViewController.swift; path = TableViewCell/AppointmentPaymentSummaryViewController.swift; sourceTree = "<group>"; };
+		B0FDD8C32D5DF81400AD6601 /* UpdateCustomerDetailsTowViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateCustomerDetailsTowViewController.swift; sourceTree = "<group>"; };
+		B0FDD8C52D5DF82200AD6601 /* UpdateCustomerDetailsOneViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdateCustomerDetailsOneViewController.swift; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -880,6 +890,7 @@
 		65EE61422484EA6000D95F12 /* Payment */ = {
 			isa = PBXGroup;
 			children = (
+				B0BC994D2D5F690A007B73A7 /* TableViewCells */,
 				650B1CDF254C2511005ED521 /* PopUp */,
 				65EE61482484EAEA00D95F12 /* CollectionViewCells */,
 				65BA840B249A3E31003F9A79 /* PaymentOptionsViewController.swift */,
@@ -891,6 +902,7 @@
 				B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */,
 				6581F9ED24AE280D008A2F01 /* WebViewViewController.swift */,
 				B09C93E72B75010800C8E408 /* FinanceViewController.swift */,
+				B00BD8542D5F34E0002F557B /* FinanceOrderCheckListViewController.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -997,6 +1009,15 @@
 				B0BBFC662BAC1E43009E6287 /* JobTypeCollectionViewCell.swift */,
 			);
 			path = CollectionViewCells;
+			sourceTree = "<group>";
+		};
+		B0BC994D2D5F690A007B73A7 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				B0BC994E2D5F6AB6007B73A7 /* CheckListTableViewCell.swift */,
+				B0BC994F2D5F6AB6007B73A7 /* CheckListTableViewCell.xib */,
+			);
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 		B0D395D92A94A2490020497B /* InstallerSheduler */ = {
@@ -1111,6 +1132,7 @@
 				65209461243CA31100B010CA /* SF-Pro-Text-SemiboldItalic.otf in Resources */,
 				65209455243CA31100B010CA /* SF-Pro-Display-BlackItalic.otf in Resources */,
 				653EA57D241F7B0A00EA684E /* LaunchScreen.storyboard in Resources */,
+				B0BC99502D5F6AB6007B73A7 /* CheckListTableViewCell.xib in Resources */,
 				6520944C243CA31100B010CA /* SF-Pro-Text-Light.otf in Resources */,
 				65209441243CA31100B010CA /* SFUIText-Bold.otf in Resources */,
 				6520944E243CA31100B010CA /* SF-Pro-Text-Regular.otf in Resources */,
@@ -1271,6 +1293,7 @@
 				65BA840C249A3E31003F9A79 /* PaymentOptionsViewController.swift in Sources */,
 				657C72C624500BFF00F392F3 /* SubSqureToolView.swift in Sources */,
 				65F607CD24618C260094FF86 /* SelectionViewController.swift in Sources */,
+				B0BC99512D5F6AB6007B73A7 /* CheckListTableViewCell.swift in Sources */,
 				DD525A5F2848D71E001645D6 /* PromoPopUpViewControllerNew.swift in Sources */,
 				B0BBFC692BAC1E43009E6287 /* SpalshScreenViewController.swift in Sources */,
 				DDF18F46277B253100321FFE /* BackgroundTaskService.swift in Sources */,
@@ -1280,6 +1303,7 @@
 				B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */,
 				65CE7AD224EFEC77002F5D12 /* OtherIncomeViewController.swift in Sources */,
 				650B1CE1254C253C005ED521 /* PromoPopUpViewController.swift in Sources */,
+				B00BD8552D5F34E0002F557B /* FinanceOrderCheckListViewController.swift in Sources */,
 				65853E5F243DF39B002C6016 /* SelectARoomViewController.swift in Sources */,
 				B00B9D802C999C1800B88469 /* RoomsTableViewCell.swift in Sources */,
 				65C0F0BE245195FF00A8575B /* SubSqureView.swift in Sources */,
@@ -1315,6 +1339,7 @@
 				DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */,
 				B00B9D822C999C1800B88469 /* TitleSummaryTableViewCell.swift in Sources */,
 				65CB188224DBF23800A0BD39 /* AboutRoomHeaderTableViewCell.swift in Sources */,
+				B0FDD8C62D5DF82200AD6601 /* UpdateCustomerDetailsOneViewController.swift in Sources */,
 				65BA8410249A3EAA003F9A79 /* PaymentOptionsBottomCollectionViewCell.swift in Sources */,
 				65853E5B243DCEA1002C6016 /* FloorDetailsCollectionViewCell.swift in Sources */,
 				653EA56E241F7AFC00EA684E /* AppDelegate.swift in Sources */,
@@ -1330,6 +1355,7 @@
 				B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */,
 				654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */,
 				65209462243CA31100B010CA /* MyCell.swift in Sources */,
+				B0FDD8C42D5DF81400AD6601 /* UpdateCustomerDetailsTowViewController.swift in Sources */,
 				651E8ECE249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift in Sources */,
 				655FBC1B245814D500333759 /* ImageViewAndRemoveViewController.swift in Sources */,
 				1865C1D62D55CAD000A1C055 /* UpdateDownFinalPaymentViewController.swift in Sources */,
@@ -1548,6 +1574,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+
 				MARKETING_VERSION = 2.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1574,7 +1601,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.9.0;
+				MARKETING_VERSION = 2.9.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
