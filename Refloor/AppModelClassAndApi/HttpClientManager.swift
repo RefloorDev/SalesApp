@@ -2146,6 +2146,7 @@ class HttpClientManager: NSObject {
                                 let fields = realm.objects(rf_fields.self)
                                 let appointmentResultsReasons = realm.objects(rf_appointment_result_reasons_results.self)
                                 let external_credentials = realm.objects(rf_extrenal_credential_results.self)
+                                let financeOrderCheckList = realm.objects(FinanceOrderCheckList.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2170,6 +2171,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(fields)
                                     realm.delete(appointmentResultsReasons)
                                     realm.delete(external_credentials)
+                                    realm.delete(financeOrderCheckList)
                                 }
                             }catch{
                                 print(RealmError.writeFailed.rawValue)

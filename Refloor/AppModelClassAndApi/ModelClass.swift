@@ -466,7 +466,7 @@ class AppoinmentDataValue:Object,Mappable
     var recisionDate : String?
     var officeLocationId:Int?
     var externalEntityKey = RealmSwift.List<rf_External_Entity_Key>()
-    
+    var isBothParties: Int?
     var appointmentStatus:AppointmentStatus!
     
     required convenience init?(map: ObjectMapper.Map) {

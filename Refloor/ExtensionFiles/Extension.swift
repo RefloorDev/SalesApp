@@ -3691,6 +3691,24 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
+    func financeOderCheckListArray() -> RealmSwift.List<FinanceOrderCheckList>
+    {
+        var externalCredentialArray = RealmSwift.List<FinanceOrderCheckList>()
+        do
+        {
+            let realm = try Realm()
+            let masterData = realm.objects(MasterData.self)
+            if let credentialArray = masterData.first?.finance_order_checklist
+            {
+                externalCredentialArray = credentialArray
+            }
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return externalCredentialArray
+    }
+    
     func saveContractDataOfAppointment(appointmentId:Int, contractData: NSDictionary) {
         let appointmentId = AppointmentData().appointment_id ?? 0
         do{
@@ -4879,6 +4897,7 @@ extension UIViewController:OrderStatusViewDelegate
             let co_applicant_state = appointment?.co_applicant_state
             let co_applicant_zip = appointment?.co_applicant_zip
             let co_applicant_phone = appointment?.co_applicant_phone
+            let bothParties = appointment?.isBothParties
             //customerDetailsDict["mobile"] = mobile
             customerDetailsDict["street2"] = street2
             customerDetailsDict["street"] = street
@@ -4912,6 +4931,7 @@ extension UIViewController:OrderStatusViewDelegate
             customerDetailsDict["co_applicant_zip"] = co_applicant_zip
             customerDetailsDict["co_applicant_phone"] = co_applicant_phone
             customerDetailsDict["appointment_result"] = "Sold"
+            customerDetailsDict["both_parties_present"] = bothParties
             
             let (date,timeZone) = Date().getCompletedDateStringAndTimeZone()
             customerDetailsDict["completed_date"] = date
