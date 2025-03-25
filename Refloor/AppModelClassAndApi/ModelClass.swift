@@ -1711,6 +1711,22 @@ class InstallerDatesSubmit: Mappable
     }
 }
 
+class ManualArrivalDate: Mappable
+{
+    var result:String?
+    var message:String?
+    var overrideJson:Int?
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        overrideJson <- map["override_json_result"]
+    }
+}
+
 // versatile api
 
 class VersatileModelClass: Codable

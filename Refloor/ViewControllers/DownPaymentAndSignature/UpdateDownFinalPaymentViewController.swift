@@ -450,7 +450,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         
         UIUpdateForValueChange(isUpdateDownPayment:true)
         self.validationDownpayment()
-        let details = UpdateCustomerDetailsOneViewController.initialization()!
+        let details = FinanceOrderCheckListViewController.initialization()!
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))

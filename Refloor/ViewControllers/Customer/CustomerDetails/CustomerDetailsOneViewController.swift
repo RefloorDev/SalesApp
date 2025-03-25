@@ -12,7 +12,21 @@ import GooglePlaces
 import PhotosUI
 import MobileCoreServices
 
-class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, DropDownDelegate {
+    func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
+        bothPartiesDropDownLbl.text = item
+        bothPartiesDropDownLbl.textColor = .white
+        if item == "Yes"
+        {
+            isBothParties = 1
+            
+        }
+        else
+        {
+            isBothParties = 0
+        }
+    }
+    
    
     
     static func initialization() -> CustomerDetailsOneViewController? {
@@ -27,7 +41,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     @IBOutlet weak var state_TF: UITextField!
     @IBOutlet weak var city_TF: UITextField!
     @IBOutlet weak var Street_Address_TF: UITextField!
-    @IBOutlet weak var bothPartiesPresentBtn: UIButton!
+    @IBOutlet weak var bothPartiesDropDownLbl: UILabel!
     @IBOutlet weak var customerEmail: UITextField!
     @IBOutlet weak var customerPhone: UITextField!
     @IBOutlet weak var customerContactNumberTF: UITextField!
@@ -48,7 +62,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     var appoinmentslData:AppoinmentDataValue!
     var isEditedtextField = false
     var GMSTag = 0
-    var isBothParties = 0
+    var isBothParties = -1
   
     
     var imagePicker: CaptureImage!
@@ -146,7 +160,41 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     }
     override func viewWillAppear(_ animated: Bool)
     {
-        isBothParties == 0 ? bothPartiesPresentBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesPresentBtn.setImage(UIImage(named: "checked"), for: .normal)
+        let appointment =  getCompletedAppointmentsFromDB(appointmentId:AppointmentData().appointment_id ?? 0).first
+        if appointment != nil
+        {
+            if appointment?.isBothParties == 0
+            {
+                isBothParties = 0
+                bothPartiesDropDownLbl.text = "No"
+            }
+//            else if isBothParties == -1
+//            {
+//                bothPartiesDropDownLbl.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                bothPartiesDropDownLbl.text = "Select"
+//            }
+            else
+            {
+                isBothParties = 1
+                bothPartiesDropDownLbl.text = "Yes"
+            }
+        }
+        else
+        {
+            if isBothParties == 0
+            {
+                bothPartiesDropDownLbl.text = "No"
+            }
+            else if isBothParties == -1
+            {
+                bothPartiesDropDownLbl.textColor = UIColor().colorFromHexString("#A7B0BA")
+                bothPartiesDropDownLbl.text = "Select"
+            }
+            else
+            {
+                bothPartiesDropDownLbl.text = "Yes"
+            }
+        }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
@@ -236,16 +284,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     
     @IBAction func BothPartiesPresentBtnAction(_ sender: UIButton)
     {
-        if sender.tag == 0
-        {
-            sender.tag = 1
-        }
-        else
-        {
-            sender.tag = 0
-        }
-        isBothParties = sender.tag
-        sender.tag == 0 ? bothPartiesPresentBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesPresentBtn.setImage(UIImage(named: "checked"), for: .normal)
+        self.DropDownDefaultfunction(sender, sender.bounds.width, ["Yes","No"], -1, delegate: self, tag: sender.tag)
         
         
     }
@@ -338,6 +377,10 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         if !customerEmail.text!.validateEmail()
         {
             return "Please enter a valid Email Address"
+        }
+        if bothPartiesDropDownLbl.text == "Select"
+        {
+            return "Please select Both Parties Present to proceed"
         }
         
         

@@ -36,6 +36,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SelectRoomCommentPopUpViewController") as? SelectRoomCommentPopUpViewController
     }
     
+    @IBOutlet weak var successSubMsgLbl: UILabel!
     @IBOutlet weak var stopSyncView: UIView!
     @IBOutlet weak var lendingBackTitle: UILabel!
     @IBOutlet weak var lendingSubTitle: UILabel!
@@ -46,8 +47,10 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     @IBOutlet weak var addBtn: UIButton!
     @IBOutlet weak var subTitleLbl: UILabel!
     @IBOutlet weak var TitleLbl: UILabel!
+    @IBOutlet weak var successfullView: UIView!
     @IBOutlet weak var roomNameTxtFld: UITextField!
     @IBOutlet weak var versatileBackView: UIView!
+    @IBOutlet weak var successMainHeading: UILabel!
     var delegate: AddCustomRoomProtocol?
     var versatile: versatileProtocol?
     var editDelegate:EditCustomRoomProtocol?
@@ -62,6 +65,11 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isHunterBack:Bool = Bool()
     var isHunter:Bool = Bool()
     var isStopSync:Bool = Bool()
+    var isSuccess:Bool = Bool()
+    var isSendReview = false
+    var isSuccessMsg = true
+    var isAppointmentStatus = false
+    var sendReviewFailedMsg:String = String()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,6 +85,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileView.isHidden = true
             versatileBackView.isHidden = true
             stopSyncView.isHidden = true
+            successfullView.isHidden = true
         }
         else if isVersatile
         {
@@ -87,6 +96,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             lendingPlatformTitle.text = "Versatile Credit"
             lendingSubTitle.text = lendingSubTitle.text! + "Versatile Credit?"
             stopSyncView.isHidden = true
+            successfullView.isHidden = true
         }
         else if isHunter
         {
@@ -97,6 +107,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             lendingPlatformTitle.text = "Credit Card Rate Lending"
             lendingSubTitle.text = lendingSubTitle.text! + "Credit Card Rate Lending?"
             stopSyncView.isHidden = true
+            successfullView.isHidden = true
         }
         else if isVersaileBack
         {
@@ -106,6 +117,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileBackView.isHidden = false
             lendingBackTitle.text = "Versatile Credit"
             stopSyncView.isHidden = true
+            successfullView.isHidden = true
         }
         else if isStopSync
         {
@@ -114,6 +126,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileView.isHidden = true
             versatileBackView.isHidden = true
             stopSyncView.isHidden = false
+            successfullView.isHidden = true
         }
         else if isHunterBack
         {
@@ -123,6 +136,38 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileBackView.isHidden = false
             lendingBackTitle.text = "Credit Card Rate Lending"
             stopSyncView.isHidden = true
+            successfullView.isHidden = true
+        }
+        else if isSuccess
+        {
+            deleteView.isHidden = true
+            addEditView.isHidden = true
+            versatileView.isHidden = true
+            versatileBackView.isHidden = true
+            stopSyncView.isHidden = true
+            successfullView.isHidden = false
+            if isSendReview
+            {
+                successSubMsgLbl.text = "The review link has been successfully sent."
+            }
+            else
+            {
+                successSubMsgLbl.text = "Your arrival time has been successfully logged."
+            }
+            if isSuccessMsg
+            {
+                successMainHeading.text = "Refloor"
+            }
+             if isAppointmentStatus
+            {
+                successMainHeading.text = "Appointment Verification"
+                successSubMsgLbl.text = sendReviewFailedMsg//"You are not the assigned salesperson for this appointment."
+            }
+            if !isSuccessMsg && !isAppointmentStatus
+            {
+                successMainHeading.text = "Refloor"
+                successSubMsgLbl.text = sendReviewFailedMsg
+            }
         }
         else
         {
@@ -131,6 +176,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             versatileView.isHidden = true
             versatileBackView.isHidden = true
             stopSyncView.isHidden = true
+            successfullView.isHidden = true
         }
         
         if isEdit == true
@@ -197,6 +243,10 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
            // Restrict the total length to 40 characters
            return newLength <= 40
                  
+    }
+    @IBAction func successfullOkBtnPressed(_ sender: UIButton) 
+    {
+        self.dismiss(animated: true)
     }
     
     @IBAction func stopSynBtnAction(_ sender: UIButton) 

@@ -52,6 +52,10 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
     var totalPrice:Double = Double()
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
+    var roomData:[RoomDataValue]?
+    var floorShapeData:[FloorShapeDataValue]?
+    var floorLevelData:[FloorLevelDataValue]?
+    var appoinmentslData:AppoinmentDataValue!
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -74,7 +78,7 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
 //        if allFalse
 //        {
             
-            let applicant = FinanceViewController.initialization()!
+            let applicant = UpdateCustomerDetailsOneViewController.initialization()!
             applicant.downOrFinal = self.downOrFinal
             applicant.totalAmount = self.totalAmount
             applicant.paymentPlan = self.paymentPlan
@@ -93,6 +97,10 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
             applicant.financePayment = self.financePayment
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = self.downpayment
+            applicant.floorLevelData = AppDelegate.floorLevelData
+            applicant.floorShapeData = []
+            applicant.roomData = AppDelegate.roomData
+            applicant.appoinmentslData = AppDelegate.appoinmentslData
             self.navigationController?.pushViewController(applicant, animated: true)
         }
    // }

@@ -12,7 +12,21 @@ import GooglePlaces
 import PhotosUI
 import MobileCoreServices
 
-class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, DropDownDelegate {
+    func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) 
+    {
+        bothPartiesDropDownLbl.text = item
+        if item == "Yes"
+        {
+            isBothParties = 1
+            
+        }
+        else
+        {
+            isBothParties = 0
+        }
+    }
+    
 
     static func initialization() -> UpdateCustomerDetailsOneViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "UpdateCustomerDetailsOneViewController") as? UpdateCustomerDetailsOneViewController
@@ -40,7 +54,8 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     @IBOutlet weak var customerPhoneNumbertopConstraint: NSLayoutConstraint!
     @IBOutlet weak var customerPhoneNumberbottomConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var bothPartiesBtn: UIButton!
+    @IBOutlet weak var bothPartiesDropDownLbl: UILabel!
+    
     var roomData:[RoomDataValue]?
     var floorShapeData:[FloorShapeDataValue]?
     var floorLevelData:[FloorLevelDataValue]?
@@ -65,6 +80,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     var downpayment = DownPaymentViewController.initialization()!
     var co_Applicant_Skipped:Bool = Bool()
     var isBothParties = 0
+    var adminFee:Double = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -160,20 +176,23 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     @IBAction func bothPartiesBtnAction(_ sender: UIButton)
     {
         
-            if sender.tag == 0
-            {
-                sender.tag = 1
-            }
-            else
-            {
-                sender.tag = 0
-            }
-            isBothParties = sender.tag
-            sender.tag == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
+        self.DropDownDefaultfunction(sender, sender.bounds.width, ["Yes","No"], -1, delegate: self, tag: sender.tag)
+        
+
     }
     override func viewWillAppear(_ animated: Bool)
     {
-        appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
+        //appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
+        if appoinmentslData.isBothParties == 0
+        {
+            isBothParties = 0
+            bothPartiesDropDownLbl.text = "No"
+        }
+        else
+        {
+            isBothParties = 1
+            bothPartiesDropDownLbl.text = "Yes"
+        }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     

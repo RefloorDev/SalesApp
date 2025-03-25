@@ -448,7 +448,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerListTableViewCell") as! CustomerListTableViewCell
-        
+        cell.arrivedBtn.tag = indexPath.row
+        //cell.arrivedBtn.addTarget(self, action: <#T##Selector#>, for: .touchUpInside)
             var name = ""
             if((appoinmentsList?[indexPath.row].applicant_first_name ?? "") != "")
             {
@@ -540,11 +541,13 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             }
             cell.locationImageView.isHidden = false
             cell.customerLocationLabel.text = address
+            cell.arrivedBtn.isHidden = false
         }
         else
         {
             cell.customerLocationLabel.text = ""
             cell.locationImageView.isHidden = true
+            cell.arrivedBtn.isHidden = true
         }
             cell.startButton.tag = indexPath.row
             //arb
@@ -562,9 +565,80 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
+    @IBAction func arrivedBtnAction(_ sender: UIButton) 
+    {
+        arrivedBtnPressed(aptId: appoinmentsList?[sender.tag].id ?? 0)
+  
+    }
+    
+    func arrivedBtnPressed(aptId:Int)
+    {
+        let (_,timezone) = Date().getCompletedDateStringAndTimeZone()
+        let parameter:[String:Any] = ["token":UserData.init().token ?? "","appointment_id": aptId,"manual_arrival_date":Date().dateToString(),"timezone":timezone]
+        HttpClientManager.SharedHM.manualArrivalDateAPi(parameter: parameter) { success, message in
+            if (success ?? "") == "Success"
+            {
+                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                selectRoomPopUp.isSuccess = true
+                selectRoomPopUp.isSuccessMsg = true
+                selectRoomPopUp.isSendReview = false
+                self.present(selectRoomPopUp, animated: true, completion: nil)
+            }
+            else if success == "Failed"
+            {
+                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                selectRoomPopUp.isSuccess = true
+                selectRoomPopUp.isSuccessMsg = false
+                selectRoomPopUp.sendReviewFailedMsg = message ?? ""
+                self.present(selectRoomPopUp, animated: true, completion: nil)
+            }
+            
+            else
+            {
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    
+                    self.arrivedBtnPressed(aptId: aptId)
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert(AppAlertMsg.serverNotReached, [yes,no])
+                
+            }
+        }
+    }
     
     @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
         //Q3 changes
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            let parameter:[String:Any] = ["appointment_id":  appoinmentsList?[sender.tag].id ?? 0]
+            HttpClientManager.SharedHM.appointmentStatusAPi(parameter: parameter) { success, message in
+                if (success ?? "") == "Success"
+                {
+                    self.appointmentStatus(buttonTag: sender.tag)
+                }
+                else if success == "Failed"
+                {
+                    HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
+                    let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                    selectRoomPopUp.isSuccess = true
+                    selectRoomPopUp.isAppointmentStatus = true
+                    selectRoomPopUp.sendReviewFailedMsg = message ?? ""
+                    self.present(selectRoomPopUp, animated: true, completion: nil)
+                    self.refreshAction()
+                   // self.alert(message ?? "", nil)
+                }
+                
+            }
+        }
+        else
+        {
+            appointmentStatus(buttonTag: sender.tag)
+        }
+    }
+    
+    func appointmentStatus(buttonTag:Int)
+    {
         let masterData = getMasterDataFromDB()
         if masterData.enableGeoLocation && restrictGeoLocation == 0
         {
@@ -585,7 +659,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 case .authorizedWhenInUse, .authorizedAlways:
                     // Location is enabled and authorized, proceed with your action
                     print("authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
-                    performAppointmentAction(sender: sender)
+                    performAppointmentAction(sender: buttonTag)
                 @unknown default:
                     break
                 }
@@ -596,7 +670,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         }
         else
         {
-            performAppointmentAction(sender: sender)
+            performAppointmentAction(sender: buttonTag)
         }
     }
     
@@ -606,13 +680,14 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                // Location access granted, proceed with your action
                // Assuming `startButtonActionFromCustomerList` was called by a button action
                if let sender = manager.delegate as? UIButton {
-                   performAppointmentAction(sender: sender)
+                   performAppointmentAction(sender: sender.tag)
                }
            }
        }
     
-    func performAppointmentAction(sender: UIButton) {
-        let appointmentDateTimeString = self.appoinmentsList?[sender.tag].appointment_datetime
+    func performAppointmentAction(sender: Int) {
+        HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
+        let appointmentDateTimeString = self.appoinmentsList?[sender].appointment_datetime
             let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)
             print("appointmentDateTime", appointmentDateTime)
 
@@ -635,15 +710,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 
                 // Q4_Change Confirmation Popup with Appointment date and time
                 let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
-                    self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
+                    self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
                     //
-                    if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
+                    if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
                         //            //print(getTodayWeekDay())
                         let details = CustomerDetailsOneViewController.initialization()!
-                        details.appoinmentslData = self.appoinmentsList![sender.tag]
-                        _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
+                        details.appoinmentslData = self.appoinmentsList![sender]
+                        _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
                         
-                        UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
+                        UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
                         // let details = InstallerShedulerViewController.initialization()!
                         self.navigationController?.pushViewController(details, animated: true)
                     }
@@ -651,21 +726,21 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 DispatchQueue.main.async
                 {
-                    if let convertedDateString = self.convertDateString(self.appoinmentsList![sender.tag].appointment_datetime ?? "") {
+                    if let convertedDateString = self.convertDateString(self.appoinmentsList![sender].appointment_datetime ?? "") {
                                     //   print("convertedDateString", convertedDateString)
                                       self.alert("Are you sure you want to proceed with this" + " " + "\(convertedDateString) appointment?", [yes,no])
                                   }
                 }
             } else {
-                self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender.tag].id ?? 0)
+                self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
                 //
-                if self.appoinmentsList?[sender.tag].appointmentStatus == AppointmentStatus.start{
+                if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
                     //            //print(getTodayWeekDay())
                     let details = CustomerDetailsOneViewController.initialization()!
-                    details.appoinmentslData = self.appoinmentsList![sender.tag]
-                    _ = AppointmentData(appointment_id: self.appoinmentsList![sender.tag].id ?? 0)
+                    details.appoinmentslData = self.appoinmentsList![sender]
+                    _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
                     
-                    UserDefaults.standard.set(self.appoinmentsList![sender.tag].recisionDate ?? "", forKey: "Recision_Date")
+                    UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
                     // let details = InstallerShedulerViewController.initialization()!
                     self.navigationController?.pushViewController(details, animated: true)
                 }

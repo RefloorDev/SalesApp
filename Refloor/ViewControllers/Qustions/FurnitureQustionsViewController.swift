@@ -237,7 +237,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         if qustionAnswer[sender.tag].code == "StairWidth"
                         {
                             if value2 < 3 { // Automatically set to 3 if value is less than
-
+                                
                                 self.alert("Stair width value must be at least 3.", nil)
                                 sender.text = String(qustionAnswer[sender.tag].answerOFQustion!.stairWidthDouble)
                                 return
@@ -275,6 +275,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                     }
                     qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
+//                    if area != 0.0
+//                    {
                     let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
                     let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
                     let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
@@ -286,73 +288,73 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         
                         if qustionAnswer[buildUpLevelingIndex!].answerOFQustion?.numberVaue ?? 0 > 0 || qustionAnswer[trueSelfLevelingIndex!].answerOFQustion?.numberVaue ?? 0 > 0
                         {
-                        if removeSurfaceAnswer != nil
-                        {
-                            if removeSurfaceAnswer == "Yes"
+                            if removeSurfaceAnswer != nil
                             {
-                                if let subSurfaceAnswer = qustionAnswer[subSurfaceIndex].answerOFQustion?.singleSelection?.value
+                                if removeSurfaceAnswer == "Yes"
                                 {
-                                    if subSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                    if let subSurfaceAnswer = qustionAnswer[subSurfaceIndex].answerOFQustion?.singleSelection?.value
                                     {
-                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
-                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                                tableView.reloadData()
-                                            } else {
-                                                print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                        if subSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                        {
+                                            if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                                print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                                if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                                                    qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                    tableView.reloadData()
+                                                } else {
+                                                    print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                                }
                                             }
                                         }
-                                    }
-                                    else if subSurfaceAnswer == "Plywood / OSB" || subSurfaceAnswer == "Particle Board" || subSurfaceAnswer == "Adhesive on Concrete / Gypsum" || subSurfaceAnswer == "Epoxy"
-                                    {
-                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
-                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                                tableView.reloadData()
-                                            } else {
-                                                print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                        else if subSurfaceAnswer == "Plywood / OSB" || subSurfaceAnswer == "Particle Board" || subSurfaceAnswer == "Adhesive on Concrete / Gypsum" || subSurfaceAnswer == "Epoxy"
+                                        {
+                                            if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                                print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                                if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                                                    qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                    tableView.reloadData()
+                                                } else {
+                                                    print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                            else
-                            {
-                                if let currentSurfaceAnswer = qustionAnswer[currentSurfaceIndex].answerOFQustion?.singleSelection?.value
+                                else
                                 {
-                                    if currentSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                    if let currentSurfaceAnswer = qustionAnswer[currentSurfaceIndex].answerOFQustion?.singleSelection?.value
                                     {
-                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
-                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                                tableView.reloadData()
-                                            } else {
-                                                print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                        if currentSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                        {
+                                            if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                                print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                                if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                                                    qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                    tableView.reloadData()
+                                                } else {
+                                                    print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                                }
                                             }
                                         }
-                                    }
-                                    else if currentSurfaceAnswer == "Ceramic Tile (backerboard)" || currentSurfaceAnswer == "Ceramic Tile (mud bed)" || currentSurfaceAnswer == "Epoxy" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Hardwood or Engineered Hardwood" || currentSurfaceAnswer == "Particle Board" || currentSurfaceAnswer == "Plywood / OSB" || currentSurfaceAnswer == "Adhesive Concrete/Cement/Gypsum"
-                                    {
-                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
-                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                                tableView.reloadData()
-                                            } else {
-                                                print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                        else if currentSurfaceAnswer == "Ceramic Tile (backerboard)" || currentSurfaceAnswer == "Ceramic Tile (mud bed)" || currentSurfaceAnswer == "Epoxy" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Hardwood or Engineered Hardwood" || currentSurfaceAnswer == "Particle Board" || currentSurfaceAnswer == "Plywood / OSB" || currentSurfaceAnswer == "Adhesive Concrete/Cement/Gypsum"
+                                        {
+                                            if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                                print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                                if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                                                    qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                    tableView.reloadData()
+                                                } else {
+                                                    print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                                }
                                             }
+                                            
+                                            
+                                            //  (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")
                                         }
-                                        
-                                        
-                                        //  (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")
                                     }
                                 }
                             }
                         }
-                    }
                         else
                         {
                             if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
@@ -366,6 +368,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             }
                         }
                     }
+              //  }
                     cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
                 }
                 else
@@ -534,6 +537,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             
             
             cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
+//            if area != 0.0
+//            {
             let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
             let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
             let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
@@ -592,25 +597,26 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                     }
                                 }
                             }
-                                else if currentSurfaceAnswer == "Ceramic Tile (backerboard)" || currentSurfaceAnswer == "Ceramic Tile (mud bed)" || currentSurfaceAnswer == "Epoxy" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Hardwood or Engineered Hardwood" || currentSurfaceAnswer == "Particle Board" || currentSurfaceAnswer == "Plywood / OSB" || currentSurfaceAnswer == "Adhesive Concrete/Cement/Gypsum"
-                                {
-                                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
-                                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                            tableView.reloadData()
-                                        } else {
-                                            print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
-                                        }
+                            else if currentSurfaceAnswer == "Ceramic Tile (backerboard)" || currentSurfaceAnswer == "Ceramic Tile (mud bed)" || currentSurfaceAnswer == "Epoxy" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Hardwood or Engineered Hardwood" || currentSurfaceAnswer == "Particle Board" || currentSurfaceAnswer == "Plywood / OSB" || currentSurfaceAnswer == "Adhesive Concrete/Cement/Gypsum"
+                            {
+                                if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                    print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                    if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                                        qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                        tableView.reloadData()
+                                    } else {
+                                        print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
                                     }
-
-                                    
-                                  //  (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")
                                 }
+                                
+                                
+                                //  (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")
                             }
+                        }
                     }
                 }
             }
+        //}
             if qustionAnswer[sender.tag].code == "miscellaneouscharge"
             {
                 self.tableView.reloadData()
@@ -635,8 +641,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             if ((qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) > 0)
             {
                 qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 1) - 1
-                
-                let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
+//                if area != 0.0
+//                {
+//                let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
                 let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
                 let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
                 let removeSurfaceAnswer = qustionAnswer[removeSurfaceIndex].answerOFQustion?.singleSelection?.value
@@ -647,73 +654,73 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     
                     if qustionAnswer[buildUpLevelingIndex!].answerOFQustion?.numberVaue ?? 0 > 0 || qustionAnswer[trueSelfLevelingIndex!].answerOFQustion?.numberVaue ?? 0 > 0
                     {
-                    if removeSurfaceAnswer != nil
-                    {
-                        if removeSurfaceAnswer == "Yes"
+                        if removeSurfaceAnswer != nil
                         {
-                            if let subSurfaceAnswer = qustionAnswer[subSurfaceIndex].answerOFQustion?.singleSelection?.value
+                            if removeSurfaceAnswer == "Yes"
                             {
-                                if subSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                if let subSurfaceAnswer = qustionAnswer[subSurfaceIndex].answerOFQustion?.singleSelection?.value
                                 {
-                                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
-                                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                            tableView.reloadData()
-                                        } else {
-                                            print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                    if subSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                    {
+                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                tableView.reloadData()
+                                            } else {
+                                                print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                            }
                                         }
                                     }
-                                }
-                                else if subSurfaceAnswer == "Plywood / OSB" || subSurfaceAnswer == "Particle Board" || subSurfaceAnswer == "Adhesive on Concrete / Gypsum" || subSurfaceAnswer == "Epoxy"
-                                {
-                                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
-                                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                            tableView.reloadData()
-                                        } else {
-                                            print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                    else if subSurfaceAnswer == "Plywood / OSB" || subSurfaceAnswer == "Particle Board" || subSurfaceAnswer == "Adhesive on Concrete / Gypsum" || subSurfaceAnswer == "Epoxy"
+                                    {
+                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                tableView.reloadData()
+                                            } else {
+                                                print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
-                            if let currentSurfaceAnswer = qustionAnswer[currentSurfaceIndex].answerOFQustion?.singleSelection?.value
+                            else
                             {
-                                if currentSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                if let currentSurfaceAnswer = qustionAnswer[currentSurfaceIndex].answerOFQustion?.singleSelection?.value
                                 {
-                                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
-                                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                            tableView.reloadData()
-                                        } else {
-                                            print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                    if currentSurfaceAnswer == "Concrete / Cement / Gypsum"
+                                    {
+                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
+                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                tableView.reloadData()
+                                            } else {
+                                                print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+                                            }
                                         }
                                     }
-                                }
-                                else if currentSurfaceAnswer == "Ceramic Tile (backerboard)" || currentSurfaceAnswer == "Ceramic Tile (mud bed)" || currentSurfaceAnswer == "Epoxy" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Hardwood or Engineered Hardwood" || currentSurfaceAnswer == "Particle Board" || currentSurfaceAnswer == "Plywood / OSB" || currentSurfaceAnswer == "Adhesive Concrete/Cement/Gypsum"
-                                {
-                                    if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
-                                        print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
-                                        if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
-                                            qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-                                            tableView.reloadData()
-                                        } else {
-                                            print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                    else if currentSurfaceAnswer == "Ceramic Tile (backerboard)" || currentSurfaceAnswer == "Ceramic Tile (mud bed)" || currentSurfaceAnswer == "Epoxy" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Glued Down Hard Surface" || currentSurfaceAnswer == "Hardwood or Engineered Hardwood" || currentSurfaceAnswer == "Particle Board" || currentSurfaceAnswer == "Plywood / OSB" || currentSurfaceAnswer == "Adhesive Concrete/Cement/Gypsum"
+                                    {
+                                        if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
+                                            print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
+                                            if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
+                                                qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                                tableView.reloadData()
+                                            } else {
+                                                print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+                                            }
                                         }
+                                        
+                                        
+                                        //  (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")
                                     }
-                                    
-                                    
-                                    //  (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum")
                                 }
                             }
                         }
                     }
-                }
                     else
                     {
                         if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
@@ -727,7 +734,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                     }
                 }
-                
+           // }
                 
                 cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
             }
