@@ -289,7 +289,8 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
       
         
-        
+//        let financeCheckList = FinanceOrderCheckListViewController.initialization()!
+//        self.navigationController?.pushViewController(financeCheckList, animated: true)
         
             if(self.financePayment != 0)
             {
@@ -320,57 +321,14 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.minSalePrice = self.minSalePrice
                 applicant.savings = self.savings
                 applicant.promotionCodeId = self.promotionCodeId
-                self.navigationController?.pushViewController(applicant, animated: true)
-                //let masterData = self.getMasterDataFromDB()
                 
-//                if HttpClientManager.SharedHM.connectedToNetwork() &&  masterData.versatileURL != nil || masterData.versatileURL == ""
-//                {
-//
-//                    let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
-//                    selectRoomPopUp.versatile = self
-//                    selectRoomPopUp.isVersatile = true
-//                    selectRoomPopUp.isdelete = false
-//                    self.present(selectRoomPopUp, animated: true, completion: nil)
-//
-//                }
-//                else
-//                {
-//                    let applicant = ApplicantFormViewControllerForm.initialization()!
-//                    applicant.downOrFinal = self.downOrFinal
-//                    applicant.totalAmount = self.totalAmount
-//                    applicant.paymentPlan = self.paymentPlan
-//                    applicant.paymentPlanValue = self.paymentPlanValue
-//                    applicant.paymentOptionDataValue = self.paymentOptionDataValue
-//                    applicant.drowingImageID = self.drowingImageID
-//                    applicant.area = self.area
-//                    applicant.downPaymentValue = self.downPaymentValue
-//                    applicant.finalpayment = self.finalpayment
-//                    applicant.financePayment = self.financePayment
-//                    applicant.selectedPaymentMethord = self.selectedPaymentMethord
-//                    applicant.downpayment = self.downpayment
-//                    self.navigationController?.pushViewController(applicant, animated: true)
+                self.navigationController?.pushViewController(applicant, animated: true)
+  
 //                }
             }
             else
             {
-//                let signature = SignatureSubmitViewController.initialization()!
-//                signature.downOrFinal = self.downOrFinal
-//                signature.totalAmount = self.totalAmount
-//                signature.paymentPlan = self.paymentPlan
-//                signature.paymentPlanValue = self.paymentPlanValue
-//                signature.paymentOptionDataValue = self.paymentOptionDataValue
-//                signature.drowingImageID = self.drowingImageID
-//                signature.area = self.area
-//                signature.downPaymentValue = self.downPaymentValue
-//                signature.finalpayment = self.finalpayment
-//                signature.financePayment = self.financePayment
-//                signature.selectedPaymentMethord = self.selectedPaymentMethord
-//                signature.downpayment = self.downpayment
-//                if let customer = AppDelegate.appoinmentslData
-//                {
-//                    signature.isCoAppSkiped = customer.co_applicant_skipped ?? 0
-//                }
-//                self.navigationController?.pushViewController(signature, animated: true)
+
                 
                 //Q4 Cahnges
                 print("inside UpdateCustomerDetailsOneViewController")
@@ -404,137 +362,10 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 details.promotionCodeId = self.promotionCodeId
                 self.navigationController?.pushViewController(details, animated: true)
                 
-//                let details = UpdateCustomerDetailsOneViewController.initialization()!
-//                details.floorLevelData = AppDelegate.floorLevelData
-//                details.floorShapeData = []
-//                details.roomData = AppDelegate.roomData
-//                details.appoinmentslData = AppDelegate.appoinmentslData
-//                details.downOrFinal = self.downOrFinal
-//                details.totalAmount = self.totalAmount
-//                details.paymentPlan = self.paymentPlan
-//                details.paymentPlanValue = self.paymentPlanValue
-//                details.paymentOptionDataValue = self.paymentOptionDataValue
-//                details.drowingImageID = self.drowingImageID
-//                details.area = self.area
-//                details.downPaymentValue = self.downPaymentValue
-//                details.finalpayment = self.finalpayment
-//                details.financePayment = self.financePayment
-//                details.selectedPaymentMethord = self.selectedPaymentMethord
-//                details.downpayment = self.downpayment
-//                self.navigationController?.pushViewController(details, animated: true)
-                
+
             }
     }
-//        HttpClientManager.SharedHM.CreateSalesQuotationAPi(parameter: parameter) { (result, message, valuse) in
-//            if(result == "Success" || result == "True")
-//            {
-//
-//                if let data = valuse?.values
-//                {
-//
-//                    if data.count != 0
-//                    {
-//                        if(data[0].QuotationPaymentPlanValueDetails ?? []).count != 0
-//                        {
-//
-//                            let paymentPlanValueDetails = data[0].QuotationPaymentPlanValueDetails![0]
-//                            let paymentOptionDataValueDetail = data[0].QuotationPaymentOptionDataValueDetail ?? []
-//                            let QuotationPaymentDetails =
-//                                data[0].QuotationPaymentMethodlDataValue ?? []
-//                            //                                let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
-//                            //   let downpayment = DownPaymentViewController.initialization()!
-//                            self.downpayment.QuotationPaymentPlanValueDetails = paymentPlanValueDetails
-//                            self.downpayment.QuotationPaymentOptionDataValueDetail = paymentOptionDataValueDetail
-//                            self.downpayment.QuotationPaymentMethodlDataValue = QuotationPaymentDetails
-//                            self.downpayment.orderID = valuse?.order_id ?? 0
-//
-//
-//
-//
-//                        }
-//
-//                    }
-//                    else
-//                    {
-//                        self.alert( message ?? "No record available", nil)
-//                    }
-//
-//                }
-//                else
-//                {
-//                    self.alert(message ?? "No record available", nil)
-//                }
-//                //
-//
-//            }
-//            else if ((result ?? "") == "AuthFailed" || ((result ?? "") == "authfailed"))
-//            {
-//
-//                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
-//
-//                    self.fourceLogOutbuttonAction()
-//                }
-//
-//                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes])
-//
-//            }
-//            else
-//            {
-//                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-//
-//                    self.createSalesQuotation()
-//                }
-//                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-//
-//                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
-//            }
-//        }
-        
-        
-    //}
-    
-//    func versatileCall()
-//    {
-//        let customer = AppDelegate.appoinmentslData!
-//        let primaryApplicantAddress:[String:Any] = ["addressLine1":customer.street!,"addressLine2":customer.street2!,"city":customer.city!,"state":customer.state!,"postalCode":customer.zip!]
-//        let jointApplicantAddress:[String:Any] = ["addressLine1":customer.co_applicant_address ?? "","addressLine2":customer.co_applicant_city ?? "","city":customer.co_applicant_city ?? "","state":customer.co_applicant_state  ?? "","postalCode":customer.co_applicant_zip ?? ""]
-//        let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "","dateOfBirth":"","email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":customer.mobile ?? "","workPhone":"","address":primaryApplicantAddress]
-//        let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "","dateOfBirth": "","email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":customer.co_applicant_secondary_phone ?? "","workPhone":"","address":jointApplicantAddress]
-//        let salesPerson = customer.sales_person?.split(separator: " ")
-//        let salesPersonFirstName = salesPerson?[0]
-//        let salesPersonLastName = salesPerson?[1]
-//        let salesPersonEmail = UserDefaults.standard.value(forKey: "salesPersonEmail") as! String
-//
-//        let prefillDictionary:[String:Any] = ["expectedPurchaseAmount":(totalAmount + adminFee) * 100,"downPaymentAmount" :downPaymentValue,"primaryApplicant":primaryApplicant,"jointApplicant":jointApplicant,"salesAssociate":"RCB","salesAssociateFirstName":salesPersonFirstName ?? "","salesAssociateLastName":salesPersonLastName ?? "","salesAssociateEmail":salesPersonEmail]
-//        let parameter:[String:Any] = ["prefill":prefillDictionary,"mode":"full","prequalificationId":"d0a88bb7-4fbd-43c6-9839-340e8c5308ff","applicationId":"861625fa-b505-4924-a933-e5dbf91efa20","returnUrl":"https://versatilecredit.com/landingpage", "externalCustomerId": customer.improveit_appointment_id ?? ""] //apli id 861625fa-b505-4924-a933-e5dbf91efa20, preid d0a88bb7-4fbd-43c6-9839-340e8c5308ff
-//
-//        HttpClientManager.SharedHM.versatileAPi(parameter: parameter) { success,url in
-//            if success == "redirect"
-//            {
-//                let versatile = VersatileViewController.initialization()!
-//                versatile.url = url ?? ""
-//                versatile.downOrFinal = self.downOrFinal
-//                versatile.totalAmount = self.totalAmount
-//                versatile.paymentPlan = self.paymentPlan
-//                versatile.paymentPlanValue = self.paymentPlanValue
-//                versatile.paymentOptionDataValue = self.paymentOptionDataValue
-//                versatile.drowingImageID = self.drowingImageID
-//                versatile.area = self.area
-//                versatile.downPaymentValue = self.downPaymentValue
-//                versatile.finalpayment = self.finalpayment
-//                versatile.financePayment = self.financePayment
-//                versatile.selectedPaymentMethord = self.selectedPaymentMethord
-//                versatile.downpayment = self.downpayment
-//                versatile.appointmentId = customer.id!
-//                if let customer = AppDelegate.appoinmentslData
-//                {
-//                    versatile.isCoAppSkiped = customer.co_applicant_skipped ?? 0
-//                }
-//                self.navigationController?.pushViewController(versatile, animated: true)
-//            }
-//        }
-//    }
-    
+
     @IBAction func nextButtonAction(_ sender: Any) {
         createSalesQuotation()
         
