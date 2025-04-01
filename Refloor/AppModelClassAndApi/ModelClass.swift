@@ -466,7 +466,7 @@ class AppoinmentDataValue:Object,Mappable
     var recisionDate : String?
     var officeLocationId:Int?
     var externalEntityKey = RealmSwift.List<rf_External_Entity_Key>()
-    
+    var isBothParties: Int?
     var appointmentStatus:AppointmentStatus!
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -1708,6 +1708,22 @@ class InstallerDatesSubmit: Mappable
     func mapping(map: ObjectMapper.Map) {
         result <- map["result"]
         message <- map["message"]
+    }
+}
+
+class ManualArrivalDate: Mappable
+{
+    var result:String?
+    var message:String?
+    var overrideJson:Int?
+    
+    required init?(map: ObjectMapper.Map){
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        result <- map["result"]
+        message <- map["message"]
+        overrideJson <- map["override_json_result"]
     }
 }
 

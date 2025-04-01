@@ -158,7 +158,20 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ViewLogTableViewCell", for: indexPath) as! ViewLogTableViewCell
         
-        
+        cell.sendReviewLinkBtn.tag = indexPath.row
+        cell.sendReviewLinkBtn.addTarget(self, action: #selector(sendReviewAction(sender: )), for: .touchUpInside)
+        let title = "Send Review Link"
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 22 // Set line spacing
+
+        let attributedString = NSAttributedString(
+            string: title,
+            attributes: [
+                .underlineStyle: NSUnderlineStyle.single.rawValue,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+        cell.sendReviewLinkBtn.setAttributedTitle(attributedString, for: .normal)
         
         cell.transactionMsgLbl.isHidden = true
         //cell.transactionMsgLblHeightConstraint.constant = 0
@@ -381,7 +394,46 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         self.alert("Are you sure you want to delete all logs?", [yes,no])
     }
-    
+    @objc func sendReviewAction(sender:UIButton)
+    {
+        let aptResult = getCompletedAppointmentsFromDB(appointmentId: appointmentLogsArray[sender.tag].appointment_id)
+        let aplPhone = aptResult.first?.applicant_phone ?? ""
+        sendReviewBtnTapped(aptId: appointmentLogsArray[sender.tag].appointment_id,applicantPhone: aplPhone)
+    }
+    func sendReviewBtnTapped(aptId:Int,applicantPhone:String)
+    {
+        let parameter:[String:Any] = ["appointment_id": aptId,"phone":applicantPhone]
+        HttpClientManager.SharedHM.sendReviewLinkAPi(parameter: parameter) { success, message in
+            if (success ?? "") == "Success"
+            {
+                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                selectRoomPopUp.isSuccess = true
+                selectRoomPopUp.isSendReview = true
+                selectRoomPopUp.isSuccessMsg = true
+                
+                self.present(selectRoomPopUp, animated: true, completion: nil)
+            }
+            else if success == "Failed"
+            {
+                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                selectRoomPopUp.isSuccess = true
+                selectRoomPopUp.sendReviewFailedMsg = message ?? ""
+                selectRoomPopUp.isSuccessMsg = false
+                self.present(selectRoomPopUp, animated: true, completion: nil)
+            }
+            
+            else{
+                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                    
+                    self.sendReviewBtnTapped(aptId: aptId,applicantPhone: applicantPhone)
+                }
+                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                
+                self.alert(AppAlertMsg.serverNotReached, [yes,no])
+                
+            }
+        }
+    }
     @objc func stopsyncButtonAction( sender: UIButton) {
         
         selectedIndex = sender.tag
@@ -1639,6 +1691,7 @@ extension ViewLogListViewController{
 }
 class ViewLogTableViewCell:UITableViewCell{
     @IBOutlet weak var transactionMsgLblHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var sendReviewLinkBtn: UIButton!
     @IBOutlet weak var transactionMsgLbl: UILabel!
     @IBOutlet weak var appointmentIdLabel: UILabel!
     @IBOutlet weak var appointmentLogsLabel: UILabel!

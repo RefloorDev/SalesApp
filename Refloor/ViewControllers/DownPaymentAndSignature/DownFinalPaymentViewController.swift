@@ -53,6 +53,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
     var minSalePrice:Double = 0.0
+    var packagePlanName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -314,7 +315,8 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         return CGSize(width: 220, height: 69)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return paymentMethords.count
+        return 0
+//        return paymentMethords.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentMethorInDownPaymentCollectionViewCell", for: indexPath) as! PaymentMethorInDownPaymentCollectionViewCell
@@ -375,7 +377,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
             
             //  self.alert("You cant continue with out selecting finace option", nil)
             // self.alert("Please go back and select any finance option to proceed", nil)
-            
+            print("financePayment : ", financePayment)
             if(financePayment > 1)
             {
                 self.alert("Down and final payment amount lower than sales price. Please update the price and tap on Next button.", nil)
@@ -405,13 +407,14 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         summery.finalpayment = self.finalpayment
         summery.financePayment = self.financePayment
         summery.downpayment = downpayment
-        
+        summery.packagePlanName = downPaymentTitleLabel.text ?? ""
         // let adminFee = Double(self.adminFee)
         //   summery.adminFee = ((self.isAdmiFee) ? adminFee : 0) ?? 0
         
         summery.adminFee = Double(self.adminFee)
         summery.selectedPaymentMethord = (self.selectedPaymentMethord != -1) ? self.paymentMethords[self.selectedPaymentMethord] : nil
         summery.adjustmentValue = self.adjustmentValue
+        summery.isPaymentByCash = self.isPaymentByCash
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
@@ -431,7 +434,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         if (finalpayment>0 && self.selectedPaymentMethord == -1)
         {
             self.UIUpdateForValueChange(isUpdateDownPayment: true)
-            return "Please select final payment method"
+//            return "Please select final payment method"
             
         }
         if(finalpayment == 0 && self.selectedPaymentMethord != -1)

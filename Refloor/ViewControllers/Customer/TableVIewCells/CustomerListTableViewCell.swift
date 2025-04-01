@@ -17,6 +17,7 @@ class CustomerListTableViewCell: UITableViewCell {
     @IBOutlet weak var cutomerphoneNumberLogoImageView: UIImageView!
     @IBOutlet weak var customerPhoneStackView: UIStackView!
     
+    @IBOutlet weak var arrivedBtn: UIButton!
     @IBOutlet weak var customerNameLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!
     

@@ -12,7 +12,21 @@ import GooglePlaces
 import PhotosUI
 import MobileCoreServices
 
-class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, DropDownDelegate {
+    func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) 
+    {
+        bothPartiesDropDownLbl.text = item
+        if item == "Yes"
+        {
+            isBothParties = 1
+            
+        }
+        else
+        {
+            isBothParties = 0
+        }
+    }
+    
 
     static func initialization() -> UpdateCustomerDetailsOneViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "UpdateCustomerDetailsOneViewController") as? UpdateCustomerDetailsOneViewController
@@ -40,6 +54,8 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     @IBOutlet weak var customerPhoneNumbertopConstraint: NSLayoutConstraint!
     @IBOutlet weak var customerPhoneNumberbottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var bothPartiesDropDownLbl: UILabel!
+    
     var roomData:[RoomDataValue]?
     var floorShapeData:[FloorShapeDataValue]?
     var floorLevelData:[FloorLevelDataValue]?
@@ -63,6 +79,8 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     var selectedPaymentMethord:PaymentType?
     var downpayment = DownPaymentViewController.initialization()!
     var co_Applicant_Skipped:Bool = Bool()
+    var isBothParties = 0
+    var adminFee:Double = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -155,8 +173,26 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         
         // Do any additional setup after loading the view.
     }
+    @IBAction func bothPartiesBtnAction(_ sender: UIButton)
+    {
+        
+        self.DropDownDefaultfunction(sender, sender.bounds.width, ["Yes","No"], -1, delegate: self, tag: sender.tag)
+        
+
+    }
     override func viewWillAppear(_ animated: Bool)
     {
+        //appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
+        if appoinmentslData.isBothParties == 0
+        {
+            isBothParties = 0
+            bothPartiesDropDownLbl.text = "No"
+        }
+        else
+        {
+            isBothParties = 1
+            bothPartiesDropDownLbl.text = "Yes"
+        }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
@@ -203,8 +239,9 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         self.appoinmentslData.email = self.customerEmail.text ?? ""
         self.appoinmentslData.phone = self.customerContactNumberTF.text ?? ""
         self.appoinmentslData.applicant_last_name = self.customerLastName.text ?? ""
+        self.appoinmentslData.isBothParties = isBothParties
         //arb
-        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!]
+        let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!,"isBothParties": isBothParties]
 
         self.updateAppointmentData(appointmentChangesDict: applicantOneDetails)
         let details = UpdateCustomerDetailsTowViewController.initialization()!

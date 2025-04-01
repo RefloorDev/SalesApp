@@ -49,20 +49,32 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             }
             else
             {
-                let applicant = ApplicantFormViewControllerForm.initialization()!
-                applicant.downOrFinal = self.downOrFinal
-                applicant.totalAmount = self.totalAmount
-                applicant.paymentPlan = self.paymentPlan
-                applicant.paymentPlanValue = self.paymentPlanValue
-                applicant.paymentOptionDataValue = self.paymentOptionDataValue
-                applicant.drowingImageID = self.drowingImageID
-                applicant.area = self.area
-                applicant.downPaymentValue = self.downPaymentValue
-                applicant.finalpayment = self.finalpayment
-                applicant.financePayment = self.financePayment
-                applicant.selectedPaymentMethord = self.selectedPaymentMethord
-                applicant.downpayment = self.downpayment
-                self.navigationController?.pushViewController(applicant, animated: true)            }
+                self.internetAlert("Please check your connection and try again.", nil) {
+                    self.dismiss(animated: true, completion: nil)
+                    
+                    let applicant = ApplicantFormViewControllerForm.initialization()!
+                    applicant.downOrFinal = self.downOrFinal
+                    applicant.totalAmount = self.totalAmount
+                    applicant.paymentPlan = self.paymentPlan
+                    applicant.paymentPlanValue = self.paymentPlanValue
+                    applicant.paymentOptionDataValue = self.paymentOptionDataValue
+                    applicant.drowingImageID = self.drowingImageID
+                    applicant.area = self.area
+                    applicant.downPaymentValue = self.downPaymentValue
+                    applicant.finalpayment = self.finalpayment
+                    applicant.financePayment = self.financePayment
+                    applicant.selectedPaymentMethord = self.selectedPaymentMethord
+                    applicant.downpayment = self.downpayment
+                    applicant.packagePlanName = self.packagePlanName
+                    applicant.installationDate = self.installationDate
+                    applicant.adminFeeStatus = self.adminFeeStatus
+                    applicant.coapplicantSkiip = self.coapplicantSkiip
+                    applicant.minSalePrice = self.minSalePrice
+                    applicant.savings = self.savings
+                    applicant.promotionCodeId = self.promotionCodeId
+                    self.navigationController?.pushViewController(applicant, animated: true)
+                }
+            }
         }
         else
         {
@@ -79,6 +91,13 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             applicant.financePayment = self.financePayment
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = self.downpayment
+            applicant.packagePlanName = self.packagePlanName
+            applicant.installationDate = self.installationDate
+            applicant.adminFeeStatus = self.adminFeeStatus
+            applicant.coapplicantSkiip = self.coapplicantSkiip
+            applicant.minSalePrice = self.minSalePrice
+            applicant.savings = self.savings
+            applicant.promotionCodeId = self.promotionCodeId
             self.navigationController?.pushViewController(applicant, animated: true)
         }
         
@@ -113,6 +132,13 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var totalPrice:Double = Double()
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
+    var packagePlanName = ""
+    var coapplicantSkiip:Int = 0
+    var installationDate = ""
+    var adminFeeStatus = false
+    var minSalePrice:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
     
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
@@ -207,6 +233,13 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         applicant.financePayment = self.financePayment
         applicant.selectedPaymentMethord = self.selectedPaymentMethord
         applicant.downpayment = self.downpayment
+        applicant.packagePlanName = self.packagePlanName
+        applicant.installationDate = self.installationDate
+        applicant.adminFeeStatus = self.adminFeeStatus
+        applicant.coapplicantSkiip = self.coapplicantSkiip
+        applicant.minSalePrice = self.minSalePrice
+        applicant.savings = self.savings
+        applicant.promotionCodeId = self.promotionCodeId
         self.navigationController?.pushViewController(applicant, animated: true)
     }
     @IBAction func proceedBtnAction(_ sender: UIButton)
@@ -222,20 +255,31 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         }
         else
         {
-            let applicant = ApplicantFormViewControllerForm.initialization()!
-            applicant.downOrFinal = self.downOrFinal
-            applicant.totalAmount = self.totalAmount
-            applicant.paymentPlan = self.paymentPlan
-            applicant.paymentPlanValue = self.paymentPlanValue
-            applicant.paymentOptionDataValue = self.paymentOptionDataValue
-            applicant.drowingImageID = self.drowingImageID
-            applicant.area = self.area
-            applicant.downPaymentValue = self.downPaymentValue
-            applicant.finalpayment = self.finalpayment
-            applicant.financePayment = self.financePayment
-            applicant.selectedPaymentMethord = self.selectedPaymentMethord
-            applicant.downpayment = self.downpayment
-            self.navigationController?.pushViewController(applicant, animated: true)
+            self.internetAlert("Please check your connection and try again.", nil) {
+                self.dismiss(animated: true, completion: nil)
+                
+                let applicant = ApplicantFormViewControllerForm.initialization()!
+                applicant.downOrFinal = self.downOrFinal
+                applicant.totalAmount = self.totalAmount
+                applicant.paymentPlan = self.paymentPlan
+                applicant.paymentPlanValue = self.paymentPlanValue
+                applicant.paymentOptionDataValue = self.paymentOptionDataValue
+                applicant.drowingImageID = self.drowingImageID
+                applicant.area = self.area
+                applicant.downPaymentValue = self.downPaymentValue
+                applicant.finalpayment = self.finalpayment
+                applicant.financePayment = self.financePayment
+                applicant.selectedPaymentMethord = self.selectedPaymentMethord
+                applicant.downpayment = self.downpayment
+                applicant.packagePlanName = self.packagePlanName
+                applicant.installationDate = self.installationDate
+                applicant.adminFeeStatus = self.adminFeeStatus
+                applicant.coapplicantSkiip = self.coapplicantSkiip
+                applicant.minSalePrice = self.minSalePrice
+                applicant.savings = self.savings
+                applicant.promotionCodeId = self.promotionCodeId
+                self.navigationController?.pushViewController(applicant, animated: true)
+            }
         }
     }
     

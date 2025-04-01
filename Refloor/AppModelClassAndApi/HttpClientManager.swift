@@ -2109,8 +2109,8 @@ class HttpClientManager: NSObject {
             self.showhideHUD(viewtype: .SHOW, title:"Fetching Master Data. Please wait till the sync process is completed.")
             
             let URL =  AppURL().get_master_data //"http://demo1010851.mockable.io/masterData" //
-            
-            let parameters = ["token":UserData.init().token ?? ""]
+            let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
+            let parameters = ["token":UserData.init().token!,"app_version":version]
             
             Alamofire.request(URL, method: .post, parameters: parameters).responseJSON { response in
                 switch response.result {
@@ -2146,6 +2146,7 @@ class HttpClientManager: NSObject {
                                 let fields = realm.objects(rf_fields.self)
                                 let appointmentResultsReasons = realm.objects(rf_appointment_result_reasons_results.self)
                                 let external_credentials = realm.objects(rf_extrenal_credential_results.self)
+                                let financeOrderCheckList = realm.objects(FinanceOrderCheckList.self)
                             
                                 try realm.write {
                                     realm.delete(results)
@@ -2170,6 +2171,7 @@ class HttpClientManager: NSObject {
                                     realm.delete(fields)
                                     realm.delete(appointmentResultsReasons)
                                     realm.delete(external_credentials)
+                                    realm.delete(financeOrderCheckList)
                                 }
                             }catch{
                                 print(RealmError.writeFailed.rawValue)
@@ -2584,6 +2586,121 @@ class HttpClientManager: NSObject {
                         
                         completion(response?.result,response?.message)
                             self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                               AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    // manual arrival date
+    
+    func manualArrivalDateAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().manualArrivalDate
+            self.showhideHUD(viewtype: .SHOW, title: "Submitting manual arrival date.")
+            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+                (response:DataResponse<ManualArrivalDate>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                               AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    // send review link
+    
+    func sendReviewLinkAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().sendReviewLink
+            let token = UserData().token
+            let headers = ["Authorization":"Bearer \(token!)"]
+            self.showhideHUD(viewtype: .SHOW, title: "Sending reviews. Please wait.")
+            Alamofire.request(URL, method: .post, parameters: parameter,headers: headers).responseObject {
+                (response:DataResponse<ManualArrivalDate>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            self.showhideHUD(viewtype: .HIDE, title: "")
+                    }
+                }
+                else{
+                    completion("false",AppAlertMsg.NetWorkAlertMessage ??
+                               AppAlertMsg.serverNotReached)
+                }
+            }
+           // completion("false", AppAlertMsg.serverNotReached)
+        }
+        else{
+            completion("false",AppAlertMsg.NetWorkAlertMessage)
+            
+        }
+    }
+    
+    // appointment status
+    
+    func appointmentStatusAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
+        
+        if self.connectedToNetwork() {
+            
+            
+            let URL = AppURL().appointmentStatus
+            let token = UserData().token
+            let headers = ["Authorization":"Bearer \(token!)"]
+            self.showhideHUD(viewtype: .SHOW, title: "Checking appointment status")
+            Alamofire.request(URL, method: .post, parameters: parameter,headers: headers).responseObject {
+                (response:DataResponse<ManualArrivalDate>) in
+                self.showhideHUD(viewtype: .HIDE)
+               // print(response.result.value.debugDescription)
+                print(response.result)
+                let response = response.result.value
+                
+                if response != nil{
+                    if(response?.result != nil)
+                    {
+                        
+                        completion(response?.result,response?.message)
+                            //self.showhideHUD(viewtype: .HIDE, title: "")
                     }
                 }
                 else{
