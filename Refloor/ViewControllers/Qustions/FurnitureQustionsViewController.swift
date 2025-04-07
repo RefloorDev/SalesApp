@@ -275,8 +275,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                     }
                     qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
-//                    if area != 0.0
-//                    {
+                    if area != 0.0
+                    {
                     let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
                     let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
                     let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
@@ -368,7 +368,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             }
                         }
                     }
-              //  }
+                }
                     cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0)"
                 }
                 else
@@ -537,8 +537,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             
             
             cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
-//            if area != 0.0
-//            {
+            if area != 0.0
+            {
             let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
             let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
             let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
@@ -616,7 +616,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     }
                 }
             }
-        //}
+        }
             if qustionAnswer[sender.tag].code == "miscellaneouscharge"
             {
                 self.tableView.reloadData()
@@ -641,9 +641,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             if ((qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) > 0)
             {
                 qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 1) - 1
-//                if area != 0.0
-//                {
-//                let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
+                if area != 0.0
+                {
+                let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
                 let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
                 let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
                 let removeSurfaceAnswer = qustionAnswer[removeSurfaceIndex].answerOFQustion?.singleSelection?.value
@@ -734,7 +734,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                     }
                 }
-           // }
+            }
                 
                 cell.numerical_Answer_Label.text = "\(qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? -1)"
             }

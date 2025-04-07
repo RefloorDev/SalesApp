@@ -32,33 +32,69 @@ class LineView: UIView {
     var touchmoved = false
     var starttouchBegan:CGPoint?
     var stoptouchBegan:CGPoint?
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
-            touchmoved=false
+            touchmoved = false
             let position = touch.location(in: self)
-            if(isClosed)
-            {
+
+            if isClosed {
                 return
             }
-            if(pointPath.count == 0)
-            {
-                startTouch = self.getLimitedPoint(at: position)
-                starttouchBegan = self.getLimitedPoint(at: position)
-                print("starttouchBegan",starttouchBegan)
+
+            if pointPath.isEmpty {
+                let limitedPoint = self.getLimitedPoint(at: position)  // No need for optional binding
+                startTouch = limitedPoint
+                starttouchBegan = limitedPoint
+                print("starttouchBegan:", starttouchBegan)
+            } else {
+                if let lastPoint = pointPath.last {
+                    let limitedPoint = self.getLimitedPoint(at: position) // No need for optional binding
+                    startTouch = lastPoint.point
+                    secondTouch = limitedPoint
+                    starttouchBegan = lastPoint.point
+                    stoptouchBegan = limitedPoint
+
+                    print("starttouchBegan:", starttouchBegan)
+                    print("stoptouchBegan:", stoptouchBegan)
+                } else {
+                    print("Error: pointPath.last returned nil")
+                    return
+                }
             }
-            else
-            {
-                startTouch = pointPath[pointPath.count - 1].point
-                secondTouch = self.getLimitedPoint(at: position)
-                starttouchBegan = pointPath[pointPath.count - 1].point
-                stoptouchBegan = self.getLimitedPoint(at: position)
-                print("starttouchBegan",starttouchBegan)
-                print("stoptouchBegan",stoptouchBegan)
-            }
+
             drowTempLine()
-            
         }
     }
+
+
+//    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        if let touch = touches.first {
+//            touchmoved=false
+//            let position = touch.location(in: self)
+//            if(isClosed)
+//            {
+//                return
+//            }
+//            if(pointPath.count == 0)
+//            {
+//                startTouch = self.getLimitedPoint(at: position)
+//                starttouchBegan = self.getLimitedPoint(at: position)
+//                print("starttouchBegan",starttouchBegan)
+//            }
+//            else
+//            {
+//                startTouch = pointPath[pointPath.count - 1].point
+//                secondTouch = self.getLimitedPoint(at: position)
+//                starttouchBegan = pointPath[pointPath.count - 1].point
+//                stoptouchBegan = self.getLimitedPoint(at: position)
+//                print("starttouchBegan",starttouchBegan)
+//                print("stoptouchBegan",stoptouchBegan)
+//            }
+//            drowTempLine()
+//            
+//        }
+//    }
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if(isClosed)
         {

@@ -1120,6 +1120,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         let classDisplayName = "ContractDocument"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         self.saveContractDataToDatabase()
+        
 
         //self.deleteAllAppointmentRequestForThisAppointmentId(appointmentId: appointmentId)
         // change customer data if applicant data is added
@@ -1154,7 +1155,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             {
                 customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
             }
-        
+        whetheToProceedToInstaller(customerAndRoomData: customerAndRoomData, iscustomerAndRoomSuccess: false, isNetwork: true, appointmentId: appointmentId)
         checkForInstallerOrNot(customerAndRoomData: customerAndRoomData, appointmentId: appointmentId)
         
         print(contactApiData)
