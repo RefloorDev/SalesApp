@@ -643,7 +643,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 1) - 1
 //                if area != 0.0
 //                {
-//                let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
+                let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
                 let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
                 let removeSurfaceIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })!
                 let removeSurfaceAnswer = qustionAnswer[removeSurfaceIndex].answerOFQustion?.singleSelection?.value
