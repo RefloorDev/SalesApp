@@ -380,7 +380,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         }
         if bothPartiesDropDownLbl.text == "Select"
         {
-            return "Please select Both Parties Present to proceed"
+            return "Please select All Homeowners Present to proceed"
         }
         
         
