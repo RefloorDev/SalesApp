@@ -1003,7 +1003,82 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             }
             else
             {
-               
+                
+                // Auto Answer logic playwood/gluedown
+                let masterData = getMasterDataFromDB()
+                if masterData.autoAnswerLogicList.count > 0
+                {
+                    let autoAnswerLogicListArray = masterData.autoAnswerLogicList
+                    if floorColorNamesArray[index].glueDown == 1
+                    {
+                        let roomName = tableValues[cell].room_name ?? ""
+                        let roomID = tableValues[cell].room_id ?? 0
+                        let summaryData = self.createSummaryData(roomID: roomID, roomName: roomName)
+                        let questionnaire = summaryData.questionaire
+                        if questionnaire!.count > 0
+                        {
+                            var excludedQuestions:[SummeryQustionsDetails] = []
+                            for excludedId in autoAnswerLogicListArray[0].questionLines[0].excludedQuestionId
+                            {
+                                excludedQuestions.append(contentsOf: (questionnaire?.filter({$0.question_id == excludedId}))!)
+                            }
+                            if excludedQuestions.count > 0
+                            {
+                                var answered = false
+                                for answers in excludedQuestions
+                                {
+                                    if answers.answers![0].answer != ""
+                                    {
+                                        if answered == true
+                                        {
+                                            answered = true
+                                        }
+                                        else
+                                        {
+                                            answered = true
+                                        }
+                                    }
+                                }
+                                if answered == false
+                                {
+                                    calculateAnswerForGlueDownPlywood(roomArea: tableValues[cell].adjusted_area!, calulationCode: autoAnswerLogicListArray[0].questionLines[0].code!,roomId:tableValues[cell].room_id!,roomName:tableValues[cell].room_name!,excludedId:autoAnswerLogicListArray[0].questionLines[0].questionId)
+                                }
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        let appointmentId = AppointmentData().appointment_id ?? 0
+                        let realm = try! Realm()
+                        if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, tableValues[cell].room_id!,appoinmentID).first {
+                            
+                            try! realm.write
+                            {
+                                if let existingAnswer = question.rf_AnswerOFQustion.first {
+                                    let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+                                    
+                                    let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
+                                    newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+
+                                    // Append it to rf_master_question
+                                    //question.rf_AnswerOFQustion.append(newAnswer)
+
+                                    //print("Created new answer object with plywood value: \(plywoodValueStr)")
+                                    var dict:[String:Any] = [:]
+                                    let questionUniqueIdentifier = question.questionIdUnique
+                                    let questionId = question.id
+                                    dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":tableValues[cell].room_id!,"room_name":tableValues[cell].room_name!]
+                                    print("---dict2------", dict, " question : ", question.question_name)
+                                    realm.create(rf_master_question.self, value: dict, update: .all)
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                
+                
                 let selectedColor = self.floorColorNamesArray[index].color ?? ""
                 var InOfficeLocation = false
                 for officeids in self.floorColorNamesArray[index].Office_location_ids
@@ -1041,6 +1116,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
 //                    self.loadRefreshData()
 //                }
+                
+                
+                
+                
+              
             }
             //
         }
@@ -1072,6 +1152,80 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
                 self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
                 self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                
+                // auto calculation for gluedown
+                let masterData = getMasterDataFromDB()
+                if masterData.autoAnswerLogicList.count > 0
+                {
+                    let autoAnswerLogicListArray = masterData.autoAnswerLogicList
+                    if floorColorNamesArray[index].glueDown == 1
+                    {
+                        let roomName = tableValues[cell].room_name ?? ""
+                        let roomID = tableValues[cell].room_id ?? 0
+                        let summaryData = self.createSummaryData(roomID: roomID, roomName: roomName)
+                        let questionnaire = summaryData.questionaire
+                        if questionnaire!.count > 0
+                        {
+                            var excludedQuestions:[SummeryQustionsDetails] = []
+                            for excludedId in autoAnswerLogicListArray[0].questionLines[0].excludedQuestionId
+                            {
+                                excludedQuestions.append(contentsOf: (questionnaire?.filter({$0.question_id == excludedId}))!)
+                            }
+                            if excludedQuestions.count > 0
+                            {
+                                var answered = false
+                                for answers in excludedQuestions
+                                {
+                                    if answers.answers![0].answer != ""
+                                    {
+                                        if answered == true
+                                        {
+                                            answered = true
+                                        }
+                                        else
+                                        {
+                                            answered = true
+                                        }
+                                    }
+                                }
+                                if answered == false
+                                {
+                                    calculateAnswerForGlueDownPlywood(roomArea: tableValues[cell].adjusted_area!, calulationCode: autoAnswerLogicListArray[0].questionLines[0].code!,roomId:tableValues[cell].room_id!,roomName:tableValues[cell].room_name!,excludedId:autoAnswerLogicListArray[0].questionLines[0].questionId)
+                                }
+                            }
+                            
+                        }
+                    }
+                    else
+                    {
+                        let appointmentId = AppointmentData().appointment_id ?? 0
+                        let realm = try! Realm()
+                        if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, tableValues[cell].room_id!,appoinmentID).first {
+                            
+                            try! realm.write
+                            {
+                                if let existingAnswer = question.rf_AnswerOFQustion.first {
+                                    let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+                                    
+                                    let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
+                                    newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                    
+                                    // Append it to rf_master_question
+                                    //question.rf_AnswerOFQustion.append(newAnswer)
+                                    
+                                    //print("Created new answer object with plywood value: \(plywoodValueStr)")
+                                    var dict:[String:Any] = [:]
+                                    let questionUniqueIdentifier = question.questionIdUnique
+                                    let questionId = question.id
+                                    dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":tableValues[cell].room_id!,"room_name":tableValues[cell].room_name!]
+                                    print("---dict2------", dict, " question : ", question.question_name)
+                                    realm.create(rf_master_question.self, value: dict, update: .all)
+                                }
+                            }
+                        }
+                    }
+                }
+                
             }
             
             
@@ -1128,6 +1282,100 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             applyAllSelectDeliveryTxtFld.text = item
         }
     }
+    
+    func calculateAnswerForGlueDownPlywood(roomArea: Double, calulationCode: String, roomId: Int, roomName: String,excludedId:Int) {
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        let realm = try! Realm()
+
+        var codeCurrentSurface = ""
+
+        // Extract surface from formula (e.g., "current_surface != 'Concrete / Cement / Gypsum'")
+        if let regex = try? NSRegularExpression(pattern: "current_surface != '([^']+)'", options: []) {
+            if let match = regex.firstMatch(in: calulationCode, options: [], range: NSRange(location: 0, length: calulationCode.utf16.count)),
+               let range = Range(match.range(at: 1), in: calulationCode) {
+                codeCurrentSurface = String(calulationCode[range])
+                print("Extracted surface condition from formula: \(codeCurrentSurface)")
+            }
+        }
+
+        // Check if current surface matches the exclusion rule
+        if let currentSurfaceQuestion = realm.objects(rf_master_question.self).filter("appointment_id == %d AND question_code == %@", appointmentId, "current_surface").first,
+           let existingSurfaceAnswer = currentSurfaceQuestion.rf_AnswerOFQustion.first {
+
+            if existingSurfaceAnswer.answer.contains(codeCurrentSurface) {
+                print("Current surface matches exclusion. Skipping plywood calculation.")
+                return
+            }
+        }
+
+        // Find the rf_master_question with id == 12
+        if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", excludedId, roomId,appointmentId).first {
+
+            try! realm.write {
+                let plywoodValue = roomArea / 32
+                
+                let plywoodValueStr = String(Int(plywoodValue.rounded()))
+
+                // Check if answer already exists for this question
+                if let existingAnswer = question.rf_AnswerOFQustion.first {
+                    if !existingAnswer.answer.contains(plywoodValueStr) {
+                        existingAnswer.answer.append(plywoodValueStr)
+                        let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+                        
+                        let answerDict = ["id":UUID().uuidString,"question_id":question.id,"appointment_id":question.appointment_id,"answer":[plywoodValueStr]]
+    //                    newAnswer.id = UUID().uuidString
+    //                    newAnswer.question_id = question.id
+    //                    newAnswer.appointment_id = question.appointment_id
+    //                    newAnswer.answer.append(plywoodValueStr)
+                        newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+
+                        // Append it to rf_master_question
+                        //question.rf_AnswerOFQustion.append(newAnswer)
+
+                        print("Created new answer object with plywood value: \(plywoodValueStr)")
+                        var dict:[String:Any] = [:]
+                        let questionUniqueIdentifier = question.questionIdUnique
+                        let questionId = question.id
+                        dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":roomId,"room_name":roomName]
+                        print("---dict2------", dict, " question : ", question.question_name)
+                        realm.create(rf_master_question.self, value: dict, update: .all)
+                        print("Appended new plywood value to existing answer: \(plywoodValueStr)")
+                    } else {
+                        print("Answer already contains the plywood value. Skipping.")
+                    }
+                } else {
+                    // Create and append new rf_AnswerForQuestion
+                    
+                    let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+                    
+                    let answerDict = ["id":UUID().uuidString,"question_id":question.id,"appointment_id":question.appointment_id,"answer":[plywoodValueStr]]
+//                    newAnswer.id = UUID().uuidString
+//                    newAnswer.question_id = question.id
+//                    newAnswer.appointment_id = question.appointment_id
+//                    newAnswer.answer.append(plywoodValueStr)
+                    newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+
+                    // Append it to rf_master_question
+                    //question.rf_AnswerOFQustion.append(newAnswer)
+
+                    print("Created new answer object with plywood value: \(plywoodValueStr)")
+                    var dict:[String:Any] = [:]
+                    let questionUniqueIdentifier = question.questionIdUnique
+                    let questionId = question.id
+                    dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":roomId,"room_name":roomName]
+                    print("---dict2------", dict, " question : ", question.question_name)
+                    realm.create(rf_master_question.self, value: dict, update: .all)
+                }
+            }
+
+            // Optional debug log
+            
+
+        } else {
+            print("rf_master_question with id 12 not found.")
+        }
+    }
+
     
     override func screenShotBarButtonAction(sender:UIButton)
         {

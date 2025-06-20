@@ -1053,7 +1053,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         {
                             let value = Int(answer.answers![0].answer ?? "") ?? 0
                             let val =  AnswerOFQustion(value)
-                            if answer.question_id == 9
+                            if answer.name == "StairWidth"//answer.question_id == 9
                             {
                                 let value = Double(answer.answers![0].answer ?? "") ?? 0.0
                                 let strairVal = AnswerOFQustion(value)
@@ -1061,7 +1061,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             }
                             val.qustionLineID = answer.contract_question_line_id ?? 0
                             val.answerID = answer.answers![0].id ?? 0
-                            if !( answer.question_id == 9)
+                            if !(answer.name == "StairWidth")//!( answer.question_id == 9)
                             {
                                 qustion.answerOFQustion = val
                             }
@@ -1136,6 +1136,17 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
               let selectedValue = item
               let questionCode = qustionAnswer[tag].code  // Assuming `code` holds the question code
                 print("Selected Value: \(selectedValue), Question Code: \(questionCode)")
+        
+        // auto calculation plywood
+         if questionCode == "CurrentCoveringType" && selectedValue == "Concrete / Cement / Gypsum"
+        {
+             if let plywoodIndex = qustionAnswer.firstIndex(where: { $0.code == "QuarterInchPlywood" })
+             {
+                 qustionAnswer[plywoodIndex].answerOFQustion!.numberVaue = 0
+             }
+         }
+        
+        
         //Q4 Changes Deepa
         
         if(delegate == nil)

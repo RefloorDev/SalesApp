@@ -124,9 +124,12 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         }
         isLoadedFirstTime = false
         //  checkBuildStatus()
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-      
         
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+            
+        }
         
     }
     
@@ -541,13 +544,13 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             }
             cell.locationImageView.isHidden = false
             cell.customerLocationLabel.text = address
-            cell.arrivedBtn.isHidden = false
+            //cell.arrivedBtn.isHidden = false
         }
         else
         {
             cell.customerLocationLabel.text = ""
             cell.locationImageView.isHidden = true
-            cell.arrivedBtn.isHidden = true
+            //cell.arrivedBtn.isHidden = true
         }
             cell.startButton.tag = indexPath.row
             //arb
@@ -565,39 +568,63 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-    @IBAction func arrivedBtnAction(_ sender: UIButton) 
-    {
-        arrivedBtnPressed(aptId: appoinmentsList?[sender.tag].id ?? 0)
-  
-    }
+//    @IBAction func arrivedBtnAction(_ sender: UIButton) 
+//    {
+//        arrivedBtnPressed(aptId: appoinmentsList?[sender.tag].id ?? 0)
+//    }
     
-    func arrivedBtnPressed(aptId:Int)
+    func arrivedBtnPressed(aptId:Int,appointmentList: [AppoinmentDataValue]?,sender:Int)
     {
         let (_,timezone) = Date().getCompletedDateStringAndTimeZone()
         let parameter:[String:Any] = ["token":UserData.init().token ?? "","appointment_id": aptId,"manual_arrival_date":Date().dateToString(),"timezone":timezone]
         HttpClientManager.SharedHM.manualArrivalDateAPi(parameter: parameter) { success, message in
             if (success ?? "") == "Success"
             {
-                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
-                selectRoomPopUp.isSuccess = true
-                selectRoomPopUp.isSuccessMsg = true
-                selectRoomPopUp.isSendReview = false
-                self.present(selectRoomPopUp, animated: true, completion: nil)
+//                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+//                selectRoomPopUp.isSuccess = true
+//                selectRoomPopUp.isSuccessMsg = true
+//                selectRoomPopUp.isSendReview = false
+//                self.present(selectRoomPopUp, animated: true, completion: nil)
+                self.createAppointResultDemoedNotDemoedDB(appointmentId:aptId ?? 0)
+                //
+                    if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
+                        //            //print(getTodayWeekDay())
+                        let details = CustomerDetailsOneViewController.initialization()!
+                        details.appoinmentslData = self.appoinmentsList![sender]
+                        _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
+                        
+                        UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
+                        // let details = InstallerShedulerViewController.initialization()!
+                        self.navigationController?.pushViewController(details, animated: true)
+                    }
             }
             else if success == "Failed"
             {
-                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
-                selectRoomPopUp.isSuccess = true
-                selectRoomPopUp.isSuccessMsg = false
-                selectRoomPopUp.sendReviewFailedMsg = message ?? ""
-                self.present(selectRoomPopUp, animated: true, completion: nil)
+//                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+//                selectRoomPopUp.isSuccess = true
+//                selectRoomPopUp.isSuccessMsg = false
+//                selectRoomPopUp.sendReviewFailedMsg = message ?? ""
+//                self.present(selectRoomPopUp, animated: true, completion: nil)
+                
+                self.createAppointResultDemoedNotDemoedDB(appointmentId:aptId ?? 0)
+                //
+                    if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
+                        //            //print(getTodayWeekDay())
+                        let details = CustomerDetailsOneViewController.initialization()!
+                        details.appoinmentslData = self.appoinmentsList![sender]
+                        _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
+                        
+                        UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
+                        // let details = InstallerShedulerViewController.initialization()!
+                        self.navigationController?.pushViewController(details, animated: true)
+                    }
             }
             
             else
             {
                 let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
                     
-                    self.arrivedBtnPressed(aptId: aptId)
+                    self.arrivedBtnPressed(aptId: aptId,appointmentList: appointmentList, sender: sender)
                 }
                 let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 
@@ -608,6 +635,13 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     }
     
     @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
+        
+        
+//        let installer = DestinationMotivationViewController.initialization()!
+////        installer.name = name
+////        installer.parametersAdditionalComments = parametersAdditionalComments
+//        self.navigationController?.pushViewController(installer, animated: true)
+
         //Q3 changes
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
@@ -710,17 +744,26 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 
                 // Q4_Change Confirmation Popup with Appointment date and time
                 let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
-                    self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
+                    if HttpClientManager.SharedHM.connectedToNetwork()
+                    {
+                        self.arrivedBtnPressed(aptId: self.appoinmentsList?[sender].id ?? 0, appointmentList: self.appoinmentsList, sender: sender)
+                    }
+                    else
+                    {
+                        let manualDateSting = Date().dateToString()
+                        UserDefaults.standard.set(manualDateSting, forKey: "manual_appointment_date")
+                        self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
                     //
-                    if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
-                        //            //print(getTodayWeekDay())
-                        let details = CustomerDetailsOneViewController.initialization()!
-                        details.appoinmentslData = self.appoinmentsList![sender]
-                        _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
-                        
-                        UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
-                        // let details = InstallerShedulerViewController.initialization()!
-                        self.navigationController?.pushViewController(details, animated: true)
+                        if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
+                            //            //print(getTodayWeekDay())
+                            let details = CustomerDetailsOneViewController.initialization()!
+                            details.appoinmentslData = self.appoinmentsList![sender]
+                            _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
+                            
+                            UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
+                            // let details = InstallerShedulerViewController.initialization()!
+                            self.navigationController?.pushViewController(details, animated: true)
+                        }
                     }
                 }
                 let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

@@ -64,6 +64,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     var coapplicantSkiip:Int = 0
     var installationDate = ""
     var adminFeeStatus = false
+    //var stairPrice:Double = Double()
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -72,11 +72,14 @@ class MasterData : Object, Mappable {
     var appointment_result_reasons = List<rf_appointment_result_reasons_results>()
     var external_credentials = List<rf_extrenal_credential_results>()
     var finance_order_checklist = List<FinanceOrderCheckList>()
+    var destination_selection_list = List<rf_destination_list>()
+    var autoAnswerLogicList = List<rf_autoAnswerLogicList>()
     @objc dynamic var min_sale_price : Double = 1500.0
     @objc dynamic var max_no_transitions: Int = 4
     @objc dynamic var resitionDate : String?
     @objc dynamic var max_stair_width : Double = 0.0
     @objc dynamic var min_downpayment_amount = 0.0
+    @objc dynamic var destinationSelectionConsentMesage:String?
 //    @objc dynamic var versatileURL:String?
 //    @objc dynamic var versatileApiKey:String?
 //    @objc dynamic var versatileEntityKey:String?
@@ -106,11 +109,14 @@ class MasterData : Object, Mappable {
         floorColourList <- (map["floor_colors_list"], ListTransform<rf_floorColour_results>())
         stairColourList <- (map["stair_colors_list"], ListTransform<rf_stairColour_results>())
         finance_order_checklist <- (map["finance_checklist"], ListTransform<FinanceOrderCheckList>())
+        destination_selection_list <- (map["destination_selection_list"], ListTransform<rf_destination_list>())
+        autoAnswerLogicList <- (map["auto_answer_logic_list"], ListTransform<rf_autoAnswerLogicList>())
         min_sale_price <- map["min_sale_price"]
         max_no_transitions <- map["max_no_transitions"]
         resitionDate <- map ["recision_date"]
         max_stair_width <- map ["max_stair_width"]
         min_downpayment_amount <- map ["min_down_payment_amount"]
+        destinationSelectionConsentMesage <- map ["destination_selection_consent_message"]
 //        versatileURL <- map ["versatile_url"]
 //        versatileApiKey <- map ["versatile_api_key"]
 //        versatileEntityKey <- map ["versatile_entity_key"]
@@ -452,6 +458,7 @@ class rf_floorColour_results : Object,Mappable {
     @objc dynamic var color_upcharge: Double = 0.0
     @objc dynamic var in_stock : Int = 0
     @objc dynamic var specialOrder: Int = 0
+    @objc dynamic var glueDown: Int = 0
     var Office_location_ids = List<Int>()
     @objc dynamic var last_updated_date : String?
     
@@ -468,6 +475,7 @@ class rf_floorColour_results : Object,Mappable {
         color_upcharge <- map["color_up_charge_price"]
         in_stock <- map["in_stock"]
         specialOrder <- map["special_order"]
+        glueDown <- map["glue_down"]
         if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
                     let realmList = List<Int>()
                     realmList.append(objectsIn: officeLocationIdsArray)
@@ -545,6 +553,72 @@ class FinanceOrderCheckList: Object,Mappable
         checkListName <- map["name"]
         checkListSequence <- map["sequence"]
         
+    }
+}
+// Auto Anser Logic List
+
+class rf_autoAnswerLogicList:Object,Mappable
+{
+    @objc dynamic var logicType:String?
+    var questionLines = List<rf_question_lines>()
+    
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        logicType <- map["logic_type"]
+        questionLines <- (map["question_lines"], ListTransform<rf_question_lines>())
+        
+        
+    }
+    
+    
+}
+
+class rf_question_lines: Object, Mappable
+{
+    @objc dynamic var questionId:Int = 0
+    @objc dynamic var code:String?
+    var excludedQuestionId = List<Int>()
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        questionId <- map["question_id"]
+        code <- map["code"]
+        //excludedQuestionId <- map["excluded_question_ids"]
+        
+        if let excludedQuestionIdsArray = map["excluded_question_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: excludedQuestionIdsArray)
+                    self.excludedQuestionId = realmList
+                }
+    }
+    
+}
+// destination selection list
+
+class rf_destination_list: Object, Mappable
+{
+    @objc dynamic var destinationId = 0
+    @objc dynamic var name:String?
+    @objc dynamic var terms_conditions:String?
+    
+    required convenience init?(map: ObjectMapper.Map) {
+        self.init()
+    }
+    
+    func mapping(map: ObjectMapper.Map) {
+        
+        destinationId <- map["destination_id"]
+        name <- map["name"]
+        terms_conditions <- map["terms_and_conditions"]
     }
 }
 
@@ -1187,6 +1261,8 @@ class rf_master_appointment_results : Object, Mappable {
     }
 }
 
+
+
 class rf_master_appointment : Object, Mappable {
     @objc dynamic var id = 0
     @objc dynamic var name : String?
@@ -1236,6 +1312,7 @@ class rf_master_appointment : Object, Mappable {
     @objc dynamic var applicantAndIncomeData: String?
     @objc dynamic var recisionDate:String?
     @objc dynamic var officeLocationId = 0
+    @objc dynamic var enableDestinationSelection = 0
     var externalEntityKey = List<rf_External_Entity_Key>()
    
     //var payment_options = List<rf_paymentOptionData>()
@@ -1281,6 +1358,7 @@ class rf_master_appointment : Object, Mappable {
         partner_longitude = appointmentObj["appointment_date"] as? Double ?? 0.0
         recisionDate = appointmentObj["recision_date"] as? String ?? ""
         officeLocationId = appointmentObj["office_location_id"] as? Int ?? 0
+        enableDestinationSelection = appointmentObj["enable_destination_selection"] as? Int ?? 0
         externalEntityKey = appointmentObj["external_entity_keys"] as? List<rf_External_Entity_Key> ?? List<rf_External_Entity_Key>()
     }
     
@@ -1328,6 +1406,7 @@ class rf_master_appointment : Object, Mappable {
         self.recisionDate = appointmentData.recisionDate
          self.officeLocationId = appointmentData.officeLocationId ?? 0
          self.externalEntityKey = appointmentData.externalEntityKey
+         self.enableDestinationSelection = appointmentData.enableDestinationSelection ?? 0
     }
     
     init(appointmentObj:rf_completed_appointment) {
@@ -1364,6 +1443,7 @@ class rf_master_appointment : Object, Mappable {
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
         externalEntityKey = appointmentObj.external_entity_keys
+        enableDestinationSelection = appointmentObj.enableDestinationSelection
         
         
     }
@@ -1413,6 +1493,7 @@ class rf_master_appointment : Object, Mappable {
         partner_longitude <- map["partner_longitude"]
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
+        enableDestinationSelection <- map["enable_destination_selection"]
         externalEntityKey <- (map["external_entity_keys"], ListTransform<rf_External_Entity_Key>())
             // payment_options <- (map["payment_options"], ListTransform<rf_paymentOptionData>())
     }
@@ -1530,6 +1611,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var sync_status = false
     @objc dynamic var officeLocationId = 0
     @objc dynamic var isBothParties = 0
+    @objc dynamic var enableDestinationSelection = 0
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()

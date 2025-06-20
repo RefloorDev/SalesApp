@@ -276,6 +276,10 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
             
             else
             {
+                let appointmentId = AppointmentData().appointment_id ?? 0
+                let currentClassName = String(describing: type(of: self))
+                let classDisplayName = "InstallerScheduler"
+                self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
                 let installerPopUp = InstallerPopUpViewController.initialization()!
                 installerPopUp.installationId = installationId
                 installerPopUp.saleOrderId = saleOrderId

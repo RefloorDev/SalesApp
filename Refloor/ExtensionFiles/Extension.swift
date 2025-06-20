@@ -1686,6 +1686,31 @@ extension UIViewController:OrderStatusViewDelegate
         
     }
     
+    func destinationNavBar(with name:String)
+    {
+        var navView = UIView()
+        navView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height:  110))
+        navView.layer.masksToBounds = false
+        navView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+        self.view.addSubview(navView)
+        
+        let nameLabel = UILabel(frame: CGRect(x: 70, y: 40, width: 600, height: 45))
+        nameLabel.text = name.uppercased()
+        nameLabel.textColor = .white
+        nameLabel.adjustsFontSizeToFitWidth = true
+        nameLabel.minimumScaleFactor = 0.2
+        nameLabel.font = UIFont(name: "Avenir-Black", size: 35)
+        navView.addSubview(nameLabel)
+        
+        let skipbutn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 230, y: 40, width: 165, height: 54))
+        skipbutn.addTarget(self, action: #selector(insallerSkipBtnAction(sender: )), for: .touchUpInside)
+        skipbutn.backgroundColor = UIColor().colorFromHexString("#A7B0BA")
+        skipbutn.setTitle("Skip", for: .normal)
+        skipbutn.setTitleColor(UIColor().colorFromHexString("#2D343D"), for: .normal)
+        skipbutn.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 24)
+        navView.addSubview(skipbutn)
+    }
+    
     
     func shedulerInstallerNavBar(with name:String,submitText:String)
     {
@@ -4932,7 +4957,7 @@ extension UIViewController:OrderStatusViewDelegate
             customerDetailsDict["co_applicant_phone"] = co_applicant_phone
             customerDetailsDict["appointment_result"] = "Sold"
             customerDetailsDict["both_parties_present"] = bothParties
-            
+            customerDetailsDict["manual_appointment_date"] = UserDefaults.standard.value(forKey: "manual_appointment_date")
             let (date,timeZone) = Date().getCompletedDateStringAndTimeZone()
             customerDetailsDict["completed_date"] = date
             customerDetailsDict["timezone"] = timeZone
@@ -6088,6 +6113,12 @@ extension Date{
     {
         let formatter2 = DateFormatter()
         formatter2.dateFormat = "MM/dd/yyyy"//"yyyy-dd-MM"
+        return formatter2.string(from: self)
+    }
+    func DateFromStringForServerSTopSync() -> String
+    {
+        let formatter2 = DateFormatter()
+        formatter2.dateFormat = "MMddyyyy"//"yyyy-dd-MM"
         return formatter2.string(from: self)
     }
     func SignatureDate() -> String

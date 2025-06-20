@@ -112,6 +112,8 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     var totalPrice:Double = Double()
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
+    var stairPrice:Double = Double()
+    var excluded_amount_promotion:Double = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()

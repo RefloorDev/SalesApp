@@ -281,13 +281,22 @@ extension BackgroundTaskService {
                 else{
                     let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND reqest_title == %@ AND image_name == %@", appointmentId, requestTitle.rawValue, imageName)
                     var dict:[String:Any] = [:]
-                    if appointmentRequest.count == 1{
-                        if let appointmentRequestObj = appointmentRequest.first{
-                            dict = ["id": appointmentRequestObj.id,
+                    if appointmentRequest.count > 0{
+                        //                        if let appointmentRequestObj = appointmentRequest.first{
+                        //                            dict = ["id": appointmentRequestObj.id,
+                        //                                    "sync_status" : true]
+                        for obj in appointmentRequest
+                        {
+                            
+                            //                            if let appointmentRequestObj = obj{
+                            dict = ["id": obj.id,
                                     "sync_status" : true]
+                            
                             realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
                         }
                     }
+                        
+                    
                 }
             }
         }catch{

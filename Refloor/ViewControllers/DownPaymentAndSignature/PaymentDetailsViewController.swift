@@ -321,6 +321,8 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.minSalePrice = self.minSalePrice
                 applicant.savings = self.savings
                 applicant.promotionCodeId = self.promotionCodeId
+                applicant.stairPrice = self.stairPrice
+                applicant.excluded_amount_promotion = self.excluded_amount_promotion
                 
                 self.navigationController?.pushViewController(applicant, animated: true)
   
@@ -360,6 +362,8 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 details.minSalePrice = self.minSalePrice
                 details.savings = self.savings
                 details.promotionCodeId = self.promotionCodeId
+                details.stairPrice = self.stairPrice
+                details.excluded_amount_promotion = excluded_amount_promotion
                 self.navigationController?.pushViewController(details, animated: true)
                 
 
