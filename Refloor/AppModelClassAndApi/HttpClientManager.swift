@@ -2142,6 +2142,8 @@ class HttpClientManager: NSObject {
                                 let stairColourList = realm.objects(rf_stairColour_results.self)
                                 let ruleList = realm.objects(rf_ruleList_results.self)
                                 let contract_document = realm.objects(rf_contract_document_templates_results.self)
+                                let destination_Selection_List = realm.objects(rf_destination_list.self)
+                                let autoAnswerLogicList = realm.objects(rf_autoAnswerLogicList.self)
                                                                // var tempcontract_document:rf_contract_document_templates_results!
                                 let fields = realm.objects(rf_fields.self)
                                 let appointmentResultsReasons = realm.objects(rf_appointment_result_reasons_results.self)
@@ -2172,6 +2174,8 @@ class HttpClientManager: NSObject {
                                     realm.delete(appointmentResultsReasons)
                                     realm.delete(external_credentials)
                                     realm.delete(financeOrderCheckList)
+                                    realm.delete(destination_Selection_List)
+                                    realm.delete(autoAnswerLogicList)
                                 }
                             }catch{
                                 print(RealmError.writeFailed.rawValue)

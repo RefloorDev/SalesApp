@@ -36,6 +36,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SelectRoomCommentPopUpViewController") as? SelectRoomCommentPopUpViewController
     }
     
+    @IBOutlet weak var passwordTxtFld: UITextField!
     @IBOutlet weak var successSubMsgLbl: UILabel!
     @IBOutlet weak var stopSyncView: UIView!
     @IBOutlet weak var lendingBackTitle: UILabel!
@@ -70,12 +71,16 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isSuccessMsg = true
     var isAppointmentStatus = false
     var sendReviewFailedMsg:String = String()
+    var isPasswordVisble = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 100
         self.roomNameTxtFld.autocapitalizationType = UITextAutocapitalizationType.allCharacters;
         roomNameTxtFld.delegate = self
+        passwordTxtFld.delegate = self
+        passwordTxtFld.placeholder = "Password"
+        passwordTxtFld.isSecureTextEntry = false
         roomNameTxtFld.setLeftPaddingPoints(15)
         roomNameTxtFld.setRightPaddingPoints(15)
         if isdelete
@@ -196,11 +201,22 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         // Do any additional setup after loading the view.
     }
     
-//    func textFieldDidEndEditing(_ textField: UITextField)
-//    {
-//
-//
-//    }
+    func textFieldDidBeginEditing(_ textField: UITextField)
+    {
+
+        if textField == passwordTxtFld
+        {
+            passwordTxtFld.text = ""
+            passwordTxtFld.isSecureTextEntry = true
+        }
+    }
+    @IBAction func passwordShowAction(_ sender: UIButton)
+    {
+        isPasswordVisble = !isPasswordVisble
+        self.passwordTxtFld.isSecureTextEntry = !isPasswordVisble
+    }
+    
+
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
     {
 //        do
@@ -222,26 +238,33 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
 //        }
 //        return true
         
-        //Q3 changes
-        let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
-        if range.location == 0 && string == " "
-        {
-            return false
-        }
+//        if textField == passwordTxtFld
+//        {
+//            
+//        }
+//        else
+//        {
+            //Q3 changes
+            let ACCEPTABLE_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_ "
+            if range.location == 0 && string == " "
+            {
+                return false
+            }
             let cs = NSCharacterSet(charactersIn: ACCEPTABLE_CHARACTERS).inverted
             let filtered = string.components(separatedBy: cs).joined(separator: "")
-
-//            return (string == filtered)
-        if string != filtered {
-               return false
-           }
-           
-           // Calculate the new length of the text
-           let currentText = textField.text ?? ""
-           let newLength = currentText.count + string.count - range.length
-           
-           // Restrict the total length to 40 characters
-           return newLength <= 40
+            
+            //            return (string == filtered)
+            if string != filtered {
+                return false
+            }
+            
+            // Calculate the new length of the text
+            let currentText = textField.text ?? ""
+            let newLength = currentText.count + string.count - range.length
+            
+            // Restrict the total length to 40 characters
+                                                              return newLength <= 40
+        //}
                  
     }
     @IBAction func successfullOkBtnPressed(_ sender: UIButton) 
@@ -251,8 +274,28 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     
     @IBAction func stopSynBtnAction(_ sender: UIButton) 
     {
-        self.dismiss(animated: true) {
-            self.versatileBack?.whetherToProceedBack()
+        let date = Date()
+        let currentDate = date.DateFromStringForServerSTopSync()
+        if currentDate == passwordTxtFld.text
+        {
+            self.dismiss(animated: true) {
+                self.versatileBack?.whetherToProceedBack()
+            }
+        }
+        else
+        {
+            if passwordTxtFld.text == "Password" || passwordTxtFld.text == ""
+            {
+                self.alert("Please enter a valid password to disable sync",nil)
+                passwordTxtFld.text = "Password"
+                passwordTxtFld.isSecureTextEntry = false
+            }
+            else
+            {
+                self.alert("Incorrect Password", nil)
+                passwordTxtFld.text = "Password"
+                passwordTxtFld.isSecureTextEntry = false
+            }
         }
     }
     @IBAction func stopSyncCancelBtnAction(_ sender: UIButton) 

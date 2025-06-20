@@ -464,10 +464,13 @@ class AppoinmentDataValue:Object,Mappable
     var partner_longitude : Double?
     var is_room_measurement_exist : Bool?
     var recisionDate : String?
+    var manual_appointment_date: String?
     var officeLocationId:Int?
     var externalEntityKey = RealmSwift.List<rf_External_Entity_Key>()
     var isBothParties: Int?
+    var enableDestinationSelection: Int?
     var appointmentStatus:AppointmentStatus!
+    
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -522,6 +525,7 @@ class AppoinmentDataValue:Object,Mappable
         self.recisionDate = listOfAppointment.recisionDate
         self.officeLocationId = listOfAppointment.officeLocationId
         self.externalEntityKey = listOfAppointment.externalEntityKey
+        self.enableDestinationSelection = listOfAppointment.enableDestinationSelection
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -568,6 +572,7 @@ class AppoinmentDataValue:Object,Mappable
         co_applicant_secondary_phone <- map["co_applicant_secondary_phone"]
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
+        enableDestinationSelection <- map["enable_destination_selection"]
         externalEntityKey <- (map["external_entity_keys"],ListTransform<rf_External_Entity_Key>())
         
     }

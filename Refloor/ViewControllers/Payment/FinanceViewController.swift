@@ -139,6 +139,8 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var minSalePrice:Double = 0.0
     var savings:Double = 0
     var promotionCodeId:Int = Int()
+    var stairPrice:Double = Double()
+    var excluded_amount_promotion:Double = 0.0
     
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
@@ -240,6 +242,8 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         applicant.minSalePrice = self.minSalePrice
         applicant.savings = self.savings
         applicant.promotionCodeId = self.promotionCodeId
+        applicant.stairPrice = stairPrice
+        applicant.excluded_amount_promotion = excluded_amount_promotion
         self.navigationController?.pushViewController(applicant, animated: true)
     }
     @IBAction func proceedBtnAction(_ sender: UIButton)

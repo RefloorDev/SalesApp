@@ -106,6 +106,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     var minSalePrice:Double = 0.0
     var savings:Double = 0
     var promotionCodeId:Int = Int()
+    var stairPrice:Double = Double()
+    var excluded_amount_promotion:Double = 0.0
     
     var creditRequest = ["Individual Credit - relying on my income or assets as well as income or assets from other sources","Joint Credit - We intend to apply for joint credit"]
     var selectedReq = 0
@@ -424,6 +426,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
         details.minSalePrice = self.minSalePrice
         details.savings = self.savings
         details.promotionCodeId = self.promotionCodeId
+        details.stairPrice = self.stairPrice
+        details.excluded_amount_promotion = self.excluded_amount_promotion
         self.navigationController?.pushViewController(details, animated: true)
     }
     
@@ -531,6 +535,8 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = downpayment
             applicant.isCoAppSkiped = 1
+//            applicant.stairPrice = stairPrice
+//            applicant.excluded_amount_promotion = excluded_amount_promotion
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))

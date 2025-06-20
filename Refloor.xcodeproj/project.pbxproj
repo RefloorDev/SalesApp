@@ -180,6 +180,7 @@
 		B00B9D842C999C1800B88469 /* TitleSummaryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */; };
 		B00B9D852C999C1800B88469 /* RoomsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */; };
 		B011B1D22B1DB77600C28459 /* VersatileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B011B1D12B1DB77600C28459 /* VersatileViewController.swift */; };
+		B02F7C7D2DF81A8A001784FC /* DestinationMotivationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B02F7C7C2DF81A8A001784FC /* DestinationMotivationViewController.swift */; };
 		B0718CCC2AB2DBF900FBCF1A /* DynamicContractViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */; };
 		B080865B2AD7B2CF00800758 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */; };
 		B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0994AD82908EAC900E42200 /* CancellationPolicyViewController.swift */; };
@@ -396,6 +397,7 @@
 		B00B9D7E2C999C1800B88469 /* TitleSummaryTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TitleSummaryTableViewCell.xib; path = AppointmentSummary/TitleSummaryTableViewCell.xib; sourceTree = "<group>"; };
 		B00B9D7F2C999C1800B88469 /* RoomsTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = RoomsTableViewCell.xib; path = AppointmentSummary/RoomsTableViewCell.xib; sourceTree = "<group>"; };
 		B011B1D12B1DB77600C28459 /* VersatileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersatileViewController.swift; sourceTree = "<group>"; };
+		B02F7C7C2DF81A8A001784FC /* DestinationMotivationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationMotivationViewController.swift; sourceTree = "<group>"; };
 		B04B016728E2F19B00B59E33 /* Refloor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Refloor.entitlements; sourceTree = "<group>"; };
 		B0718CCB2AB2DBF800FBCF1A /* DynamicContractViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DynamicContractViewController.swift; sourceTree = "<group>"; };
 		B080865A2AD7B2CF00800758 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -899,6 +901,7 @@
 				6581F9ED24AE280D008A2F01 /* WebViewViewController.swift */,
 				B09C93E72B75010800C8E408 /* FinanceViewController.swift */,
 				B0F080EC2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift */,
+				B02F7C7C2DF81A8A001784FC /* DestinationMotivationViewController.swift */,
 			);
 			path = Payment;
 			sourceTree = "<group>";
@@ -1202,9 +1205,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1219,9 +1226,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Refloor/Pods-Refloor-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1346,6 +1357,7 @@
 				6520942D243CA31100B010CA /* CAXSVProgressHUD.swift in Sources */,
 				65A32484247CFA450050A42F /* SummeryDetailsViewController.swift in Sources */,
 				1843E0942D54903600F502F6 /* UpdateCustomerDetailsTowViewController.swift in Sources */,
+				B02F7C7D2DF81A8A001784FC /* DestinationMotivationViewController.swift in Sources */,
 				B0994AD92908EAC900E42200 /* CancellationPolicyViewController.swift in Sources */,
 				654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */,
 				65209462243CA31100B010CA /* MyCell.swift in Sources */,
@@ -1563,12 +1575,12 @@
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1589,12 +1601,12 @@
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.0.0;
+				MARKETING_VERSION = 3.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
