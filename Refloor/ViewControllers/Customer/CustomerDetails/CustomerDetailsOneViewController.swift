@@ -11,7 +11,7 @@ import GoogleMaps
 import GooglePlaces
 import PhotosUI
 import MobileCoreServices
-
+@MainActor
 class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, DropDownDelegate {
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
         bothPartiesDropDownLbl.text = item
@@ -380,7 +380,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         }
         if bothPartiesDropDownLbl.text == "Select"
         {
-            return "Please select Both Parties Present to proceed"
+            return "Please select all homeowners present to proceed"
         }
         
         

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout  {
     
     static public func initialization() -> SignatureSubmitViewController? {

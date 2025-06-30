@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, AddCustomRoomProtocol, EditCustomRoomProtocol, deleteCustomRoomProtocol {
     func deleteRoomName(roomId: Int) {
         print("delete")

@@ -15,7 +15,7 @@ import CommonCrypto
 protocol OrderStatusViewDelegate {
     func OrderStatusViewDelegateResult()
 }
-
+@MainActor
 class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDelegate
 {
     

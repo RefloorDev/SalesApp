@@ -8,7 +8,7 @@
 
 import UIKit
 
-
+@MainActor
 class PaymentDetailsViewController: UIViewController, versatileProtocol{
     func whetherToProceed(isConfirmBtnPressed: Bool) {
         print(isConfirmBtnPressed)
@@ -67,6 +67,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var downPaymentValue:Double = 0
     var finalpayment:Double = 0
     var adjustmentValue:Double = 0
+    var roomName = ""
     var financePayment:Double = 0
     var paymentPlanValue:PaymentPlanValue?
     var paymentOptionDataValue:PaymentOptionDataValue?
@@ -82,7 +83,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var stairPrice:Double = Double()
     var minSalePrice:Double = 0.0
     var packagePlanName = ""
-    var roomName = ""
+    
     
     override func viewWillAppear(_ animated: Bool ){
         
@@ -324,6 +325,14 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
                 applicant.stairPrice = self.stairPrice
                 applicant.excluded_amount_promotion = self.excluded_amount_promotion
                 
+                applicant.savings = self.savings
+                applicant.promotionCodeId = self.promotionCodeId
+                applicant.adminFeeStatus = self.adminFeeStatus
+                applicant.coapplicantSkiip = self.coapplicantSkiip
+                applicant.minSalePrice = self.minSalePrice
+                applicant.roomName = self.roomName
+                applicant.adjustmentValue = self.adjustmentValue
+                applicant.packagePlanName = packagePlanName
                 self.navigationController?.pushViewController(applicant, animated: true)
   
 //                }

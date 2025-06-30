@@ -15,30 +15,35 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         SceneDelegate.timer.invalidate()
         let appointment_Id = appointmentLogsArray[selectedIndex].appointment_id
 //        let allAppointmentsAvailable = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d" , appointment_Id)
-        stop_syncAppointmentArray.append(appointment_Id)
-        let realm = try! Realm()
-
-        try! realm.write{
-            appointmentLogsArray[selectedIndex].stop_sync = true
-        }
-        setStopSyncValue(appointmentId: appointment_Id)
-        viewLogTableView.reloadData()
-       
-//        BackgroundTaskService.shared.cancelAllTaskRequests()
-//        BackgroundTaskService.shared.startSyncProcess()
-        let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
-        if(appointmentRequestArray.count != 0)
-        {
-            if(!SceneDelegate.timer.isValid)
-            {
-                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-                    
-                    print("TIMER WAKEUP Appointment")
-                    BackgroundTaskService.shared.startSyncProcess()
-                })
-            }
+        DispatchQueue.main.async { [self] in
+            stop_syncAppointmentArray.append(appointment_Id)
+            let realm = try! Realm()
             
-            BackgroundTaskService.shared.enterBackground()
+            try! realm.write{
+                self.appointmentLogsArray[selectedIndex].stop_sync = true
+            }
+            setStopSyncValue(appointmentId: appointment_Id)
+            
+            
+            self.viewLogTableView.reloadData()
+            
+            
+            //        BackgroundTaskService.shared.cancelAllTaskRequests()
+            //        BackgroundTaskService.shared.startSyncProcess()
+            let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+            if(appointmentRequestArray.count != 0)
+            {
+                if(!SceneDelegate.timer.isValid)
+                {
+                    SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+                        
+                        print("TIMER WAKEUP Appointment")
+                        BackgroundTaskService.shared.startSyncProcess()
+                    })
+                }
+                
+                BackgroundTaskService.shared.enterBackground()
+            }
         }
     }
     
@@ -71,7 +76,10 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         setNavigationBarbackAndlogo2(with: "LOGS")
         appointmentLogsArray = self.getAppointmentLogsFromDB().filter("appBaseUrl == %@", BASE_URL)
         if appointmentLogsArray.count > 0{
-            viewLogTableView.reloadData()
+            DispatchQueue.main.async {
+                self.viewLogTableView.reloadData()
+            }
+            
         }
         if self.fetchAppointmentRequest().count > 0{
             syncAllButton.isHidden = false
@@ -93,7 +101,10 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     override func viewWillAppear(_ animated: Bool) {
         UIApplication.shared.applicationIconBadgeNumber = 0
         intAppointment = Int(appointmentId) ?? 0
-        viewLogTableView.reloadData()
+        DispatchQueue.main.async {
+            self.viewLogTableView.reloadData()
+        }
+        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         
     }
@@ -338,6 +349,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     // MARK: - DELETE LOGS
     @IBAction func deleteAllLogsAction(_ sender: UIButton) {
         let yes = UIAlertAction(title: "Delete", style:.default) { (_) in
+            DispatchQueue.main.async{
             for appointments in self.appointmentLogsArray
             {
                 if self.syncStatusForAppointment(appointmentId: appointments.appointment_id) == true
@@ -369,7 +381,7 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
             
             //self.appointmentLogsArray = self.getAppointmentLogsFromDB()
             
-            DispatchQueue.main.async{
+           
                 
                 
                 if self.appointmentLogsArray.count == 0
@@ -404,45 +416,50 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     {
         let parameter:[String:Any] = ["appointment_id": aptId,"phone":applicantPhone]
         HttpClientManager.SharedHM.sendReviewLinkAPi(parameter: parameter) { success, message in
-            if (success ?? "") == "Success"
-            {
-                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
-                selectRoomPopUp.isSuccess = true
-                selectRoomPopUp.isSendReview = true
-                selectRoomPopUp.isSuccessMsg = true
-                
-                self.present(selectRoomPopUp, animated: true, completion: nil)
-            }
-            else if success == "Failed"
-            {
-                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
-                selectRoomPopUp.isSuccess = true
-                selectRoomPopUp.sendReviewFailedMsg = message ?? ""
-                selectRoomPopUp.isSuccessMsg = false
-                self.present(selectRoomPopUp, animated: true, completion: nil)
-            }
-            
-            else{
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+            DispatchQueue.main.async {
+                if (success ?? "") == "Success"
+                {
+                    let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                    selectRoomPopUp.isSuccess = true
+                    selectRoomPopUp.isSendReview = true
+                    selectRoomPopUp.isSuccessMsg = true
                     
-                    self.sendReviewBtnTapped(aptId: aptId,applicantPhone: applicantPhone)
+                    self.present(selectRoomPopUp, animated: true, completion: nil)
                 }
-                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                else if success == "Failed"
+                {
+                    let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                    selectRoomPopUp.isSuccess = true
+                    selectRoomPopUp.sendReviewFailedMsg = message ?? ""
+                    selectRoomPopUp.isSuccessMsg = false
+                    self.present(selectRoomPopUp, animated: true, completion: nil)
+                }
                 
-                self.alert(AppAlertMsg.serverNotReached, [yes,no])
-                
+                else{
+                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                        
+                        self.sendReviewBtnTapped(aptId: aptId,applicantPhone: applicantPhone)
+                    }
+                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    self.alert(AppAlertMsg.serverNotReached, [yes,no])
+                    
+                }
             }
         }
     }
     @objc func stopsyncButtonAction( sender: UIButton) {
         
         selectedIndex = sender.tag
-        let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
-        selectRoomPopUp.versatileBack = self
-        selectRoomPopUp.isEdit = false
-        selectRoomPopUp.isVersatile = false
-        selectRoomPopUp.isStopSync = true
-        self.present(selectRoomPopUp, animated: true, completion: nil)
+        DispatchQueue.main.async
+        {
+            let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+            selectRoomPopUp.versatileBack = self
+            selectRoomPopUp.isEdit = false
+            selectRoomPopUp.isVersatile = false
+            selectRoomPopUp.isStopSync = true
+            self.present(selectRoomPopUp, animated: true, completion: nil)
+        }
        
         
     }
@@ -457,26 +474,28 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
             }
             
         }
-        let realm = try! Realm()
-
-        try! realm.write{
-            appointmentLogsArray[selectedIndex].stop_sync = false
-        }
-        viewLogTableView.reloadData()
-        setSyncNowValue(appointmentId: appointment_Id)
-        let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
-        if(appointmentRequestArray.count != 0)
-        {
-            if(!SceneDelegate.timer.isValid)
-            {
-                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-                    
-                    print("TIMER WAKEUP Appointment")
-                    BackgroundTaskService.shared.startSyncProcess()
-                })
-            }
+        DispatchQueue.main.async { [self] in
+            let realm = try! Realm()
             
-            BackgroundTaskService.shared.enterBackground()
+            try! realm.write{
+                self.appointmentLogsArray[selectedIndex].stop_sync = false
+            }
+            viewLogTableView.reloadData()
+            setSyncNowValue(appointmentId: appointment_Id)
+            let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+            if(appointmentRequestArray.count != 0)
+            {
+                if(!SceneDelegate.timer.isValid)
+                {
+                    SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
+                        
+                        print("TIMER WAKEUP Appointment")
+                        BackgroundTaskService.shared.startSyncProcess()
+                    })
+                }
+                
+                BackgroundTaskService.shared.enterBackground()
+            }
         }
        
 //        BackgroundTaskService.shared.cancelAllTaskRequests()
@@ -495,23 +514,24 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         {
             self.showhideHUD(viewtype: .HIDE)
             
-        }
-        appointmentLogsArray = self.getAppointmentLogsFromDB()
-        self.viewLogTableView.reloadData()
-        if self.fetchAppointmentRequest().count > 0{
-            syncAllButton.isHidden = false
-        }else{
-            syncAllButton.isHidden = true
-        }
-        if appointmentLogsArray.count > 0{ //log present
-            noLogLabel.isHidden = true
-            viewLogTableView.isHidden = false
-        }else{
-            deleteAllButton.isHidden = true
-            uploadLogButton.isHidden = true
-            noLogLabel.isHidden = false
-            viewLogTableView.isHidden = true
-            swipeDeleteTextButton.isHidden = true
+            
+            self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+            self.viewLogTableView.reloadData()
+            if self.fetchAppointmentRequest().count > 0{
+                self.syncAllButton.isHidden = false
+            }else{
+                self.syncAllButton.isHidden = true
+            }
+            if self.appointmentLogsArray.count > 0{ //log present
+                self.noLogLabel.isHidden = true
+                self.viewLogTableView.isHidden = false
+            }else{
+                self.deleteAllButton.isHidden = true
+                self.uploadLogButton.isHidden = true
+                self.noLogLabel.isHidden = false
+                self.viewLogTableView.isHidden = true
+                self.swipeDeleteTextButton.isHidden = true
+            }
         }
     }
     // MARK: - SYNC ALL APPOINTMENTS
@@ -547,7 +567,9 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
                 self.syncAllAction(sender)
             }
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-            self.alert(AppAlertMsg.serverNotReached, [yes,no])
+            DispatchQueue.main.async {
+                self.alert(AppAlertMsg.serverNotReached, [yes,no])
+            }
         }
     }
     
@@ -555,12 +577,14 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
     @IBAction func uploadLogAction(_ sender: UIButton) {
         isFetchData = true
         self.fetchDataBtn.isHidden = false
-        let yes = UIAlertAction(title: "Upload", style:.default) { (_) in
-            
-            self.uploadLog()
+        DispatchQueue.main.async {
+            let yes = UIAlertAction(title: "Upload", style:.default) { (_) in
+                
+                self.uploadLog()
+            }
+            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            self.alert("Are you sure you want to upload all log files?", [yes,no])
         }
-        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        self.alert("Are you sure you want to upload all log files?", [yes,no])
     }
     
     
@@ -568,12 +592,12 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
         
         for appointments in self.appointmentLogsArray
         {
-//            if self.syncStatusForAppointment(appointmentId: appointments.appointment_id)
-//            {
-                let appointmentLogs = self.getAppointmentLogDetailsFromDB().filter({$0.appointment_id == appointments.appointment_id})
-                if appointmentLogs.count > 0
-                {
-                    
+            //            if self.syncStatusForAppointment(appointmentId: appointments.appointment_id)
+            //            {
+            let appointmentLogs = self.getAppointmentLogDetailsFromDB().filter({$0.appointment_id == appointments.appointment_id})
+            if appointmentLogs.count > 0
+            {
+                
                 
                 var appointmentLogsArray:[[String:Any]] = []
                 appointmentLogs.forEach { appointmentLog in
@@ -587,60 +611,64 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
                 
                 let paramsDict:[String:Any] = ["token":UserData.init().token ?? "", "data":appointmentLogsArray]
                 HttpClientManager.SharedHM.uploadLogsToServer(parameter: paramsDict) { result, message in
-                    if (result ?? "") == "Success"
-                    {
-                        let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
-                            //self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
-                            self.appointmentLogsArray = self.getAppointmentLogsFromDB()
-                            self.viewLogTableView.reloadData()
-                            DispatchQueue.main.async{
-                                
-                                
-                                if appointmentLogsArray.count == 0
-                                {
-                                    self.viewLogTableView.isHidden = true
-                                    self.noLogLabel.isHidden = false
-                                    self.deleteAllButton.isHidden = true
-                                    self.uploadLogButton.isHidden = true
-                                    self.swipeDeleteTextButton.isHidden = true
-                                    self.syncAllButton.isHidden = true
+                    DispatchQueue.main.async {
+                        if (result ?? "") == "Success"
+                        {
+                            let ok = UIAlertAction(title: "OK", style: .cancel) { (_) in
+                                //self.deleteAppointmentLog(appointmentId: appointments.appointment_id, deleteAll: false)
+                                self.appointmentLogsArray = self.getAppointmentLogsFromDB()
+                                self.viewLogTableView.reloadData()
+                                DispatchQueue.main.async{
+                                    
+                                    
+                                    if appointmentLogsArray.count == 0
+                                    {
+                                        self.viewLogTableView.isHidden = true
+                                        self.noLogLabel.isHidden = false
+                                        self.deleteAllButton.isHidden = true
+                                        self.uploadLogButton.isHidden = true
+                                        self.swipeDeleteTextButton.isHidden = true
+                                        self.syncAllButton.isHidden = true
+                                    }
+                                    else
+                                    {
+                                        self.viewLogTableView.isHidden = false
+                                        self.viewLogTableView.reloadData()
+                                        self.noLogLabel.isHidden = true
+                                        self.deleteAllButton.isHidden = false
+                                        self.uploadLogButton.isHidden = false
+                                        self.swipeDeleteTextButton.isHidden = false
+                                        self.syncAllButton.isHidden = true
+                                    }
+                                    
+                                    if self.appStatus == "Sync Completed" && self.viewLogTableView.isHidden == true
+                                    {
+                                        self.fetchDataBtn.isHidden = true
+                                    }
+                                    else
+                                    {
+                                        self.fetchDataBtn.isHidden = false
+                                    }
+                                    //self.viewLogTableView.reloadData()
+                                    
                                 }
-                                else
-                                {
-                                    self.viewLogTableView.isHidden = false
-                                    self.viewLogTableView.reloadData()
-                                    self.noLogLabel.isHidden = true
-                                    self.deleteAllButton.isHidden = false
-                                    self.uploadLogButton.isHidden = false
-                                    self.swipeDeleteTextButton.isHidden = false
-                                    self.syncAllButton.isHidden = false
+                            }
+                            self.alert(message ?? AppAlertMsg.serverNotReached, [ok])
+                        }
+                        
+                        else
+                        {
+                            DispatchQueue.main.async {
+                                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                                    
+                                    self.uploadLog()
+                                    
                                 }
+                                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                                 
-                                if self.appStatus == "Sync Completed" && self.viewLogTableView.isHidden == true
-                                {
-                                    self.fetchDataBtn.isHidden = true
-                                }
-                                else
-                                {
-                                    self.fetchDataBtn.isHidden = false
-                                }
-                                //self.viewLogTableView.reloadData()
-                                
+                                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                             }
                         }
-                        self.alert(message ?? AppAlertMsg.serverNotReached, [ok])
-                    }
-                    
-                    else
-                    {
-                        let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                            
-                            self.uploadLog()
-                            
-                        }
-                        let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                        
-                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                     }
                 }
             }
@@ -650,21 +678,22 @@ class ViewLogListViewController: UIViewController,UITableViewDataSource,UITableV
                     self.appointmentLogsArray = self.getAppointmentLogsFromDB()
                     self.viewLogTableView.reloadData()
                 }
-          //  }
-//            else
-//            {
-//                if appointments.stop_sync == true
-//                {
-//                    self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
-//                }
-//            }
+                //  }
+                //            else
+                //            {
+                //                if appointments.stop_sync == true
+                //                {
+                //                    self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
+                //                }
+                //            }
+            }
+            // }
+            //        else
+            //        {
+            //            self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
+            //        }
         }
-       // }
-//        else
-//        {
-//            self.alert("Unable to upload logs for appointments with stopped syncing. Please resume syncing to proceed.", nil)
-//        }
-    }
+    
 }
 
 

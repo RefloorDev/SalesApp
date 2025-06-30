@@ -13,7 +13,7 @@ protocol backToCreditApplicationProtocol
 {
     func backToCreditApplication(isVersatile:Bool)
 }
-
+@MainActor
 class VersatileViewController: UIViewController, ImagePickerDelegate, versatileBackprotocol,CreditApplicationProtocol
 {
    
@@ -86,6 +86,16 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     var isVersatile = false
     var isHunter = false
     var creditApplicationDelegate:CreditApplicationProtocol?
+    var stairPrice:Double = Double()
+    var excluded_amount_promotion:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
+    var adjustmentValue:Double = 0
+    var roomName = ""
+    var adminFeeStatus = false
+    var coapplicantSkiip:Int = 0
+    var minSalePrice:Double = 0.0
+    var packagePlanName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         if isVersatile
@@ -245,10 +255,22 @@ extension VersatileViewController:WKNavigationDelegate
                             versatileSuccess.approvedAmount = String(data?.approvedAmount ?? 0.0 )
                             versatileSuccess.status = data?.status ?? ""
                             versatileSuccess.successMsg = success!
+                            versatileSuccess.stairPrice = self.stairPrice
+                            versatileSuccess.excluded_amount_promotion = self.excluded_amount_promotion
+                            
+                            
                             if let customer = AppDelegate.appoinmentslData
                             {
                                 versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
                             }
+                            versatileSuccess.savings = self.savings
+                            versatileSuccess.promotionCodeId = self.promotionCodeId
+                            versatileSuccess.adminFeeStatus = self.adminFeeStatus
+                            versatileSuccess.coapplicantSkiip = self.coapplicantSkiip
+                            versatileSuccess.minSalePrice = self.minSalePrice
+                            versatileSuccess.roomName = self.roomName
+                            versatileSuccess.adjustmentValue = self.adjustmentValue
+                            versatileSuccess.packagePlanName = self.packagePlanName
                             self.navigationController?.pushViewController(versatileSuccess, animated: true)
                         }
                         
@@ -292,13 +314,22 @@ extension VersatileViewController:WKNavigationDelegate
                                 versatileSuccess.loanProvider = data?.provider ?? ""
                                 versatileSuccess.refernceNumber = data?.providerRefrence ?? ""
                                 versatileSuccess.approvedAmount = String(data?.approvedAmount ?? 0.0 )
-                                
+                                versatileSuccess.stairPrice = self.stairPrice
+                                versatileSuccess.excluded_amount_promotion = self.excluded_amount_promotion
                                 versatileSuccess.status = data?.status ?? ""
                                 versatileSuccess.successMsg = success!
                                 if let customer = AppDelegate.appoinmentslData
                                 {
                                     versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
                                 }
+                                versatileSuccess.savings = self.savings
+                                versatileSuccess.promotionCodeId = self.promotionCodeId
+                                versatileSuccess.adminFeeStatus = self.adminFeeStatus
+                                versatileSuccess.coapplicantSkiip = self.coapplicantSkiip
+                                versatileSuccess.minSalePrice = self.minSalePrice
+                                versatileSuccess.roomName = self.roomName
+                                versatileSuccess.adjustmentValue = self.adjustmentValue
+                                versatileSuccess.packagePlanName = self.packagePlanName
                                 self.navigationController?.pushViewController(versatileSuccess, animated: true)
                             }
                         }

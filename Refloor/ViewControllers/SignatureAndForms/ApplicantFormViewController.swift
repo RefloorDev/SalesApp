@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import GoogleMaps
 import GooglePlaces
+@MainActor
 class ApplicantFormViewController: UIViewController,DropDownDelegate,AddressSelectPlaceEntryDelegate,UITextFieldDelegate,GMSMapViewDelegate{
     
     static public func initialization() -> ApplicantFormViewController? {

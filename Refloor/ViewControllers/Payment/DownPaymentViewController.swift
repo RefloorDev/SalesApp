@@ -367,11 +367,16 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             if HttpClientManager.SharedHM.connectedToNetwork()
             {
-                self.alert(onlinemsg, [yes,no])
+                DispatchQueue.main.async {
+                    self.alert(onlinemsg, [yes,no])
+                }
+                
             }
             else
             {
-                self.alert(offlinemsg, [yes,no])
+                DispatchQueue.main.async {
+                    self.alert(offlinemsg, [yes,no])
+                }
             }
         }
         else

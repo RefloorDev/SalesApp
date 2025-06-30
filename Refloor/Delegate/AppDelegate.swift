@@ -28,112 +28,118 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     var notificationCenter: UNUserNotificationCenter?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-//        for family in UIFont.familyNames {
-//                        print("family:", family)
-//                        for font in UIFont.fontNames(forFamilyName: family) {
-//                            print("font:", font)
-//                        }
-//                    }
-        
-//        let initialViewController = LoginViewController()
-//            
-//            // Embed it inside a UINavigationController
-//            let navigationController = UINavigationController(rootViewController: initialViewController)
-//            
-//            // Set the rootViewController to the navigation controller
-//            window?.rootViewController = navigationController
-//            window?.makeKeyAndVisible()
-        let config = Realm.Configuration(
-            // Set the new schema version. This must be greater than the previously used
-            // version (if you've never set a schema version before, the version is 0).
-            schemaVersion:  23,//7, // production 12
+    //        for family in UIFont.familyNames {
+    //                        print("family:", family)
+    //                        for font in UIFont.fontNames(forFamilyName: family) {
+    //                            print("font:", font)
+    //                        }
+    //                    }
+            
+    //        let initialViewController = LoginViewController()
+    //
+    //            // Embed it inside a UINavigationController
+    //            let navigationController = UINavigationController(rootViewController: initialViewController)
+    //
+    //            // Set the rootViewController to the navigation controller
+    //            window?.rootViewController = navigationController
+    //            window?.makeKeyAndVisible()
+            let config = Realm.Configuration(
+                // Set the new schema version. This must be greater than the previously used
+                // version (if you've never set a schema version before, the version is 0).
+                schemaVersion:  23,//7, // production 12
 
-            // Set the block which will be called automatically when opening a Realm with
-            // a schema version lower than the one set above
-            migrationBlock: { migration, oldSchemaVersion in
-                // We haven’t migrated anything yet, so oldSchemaVersion == 0
-        })
-        Realm.Configuration.defaultConfiguration = config
-        IQKeyboardManager.shared.enable = true
-        if UserDefaults.standard.string(forKey: "BASE_URL") ?? "" == ""
-        {
-            BASE_URL = AppURL().LIVE_BASE_URL //Live url
-            UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
-        }
-        else
-        {
-            BASE_URL = UserDefaults.standard.string(forKey: "BASE_URL") ?? ""
-        }
-        //IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow
-        GMSServices.provideAPIKey(AppDetails.GOOGLE_MAP_KEY)
-        GMSPlacesClient.provideAPIKey(AppDetails.GOOGLE_MAP_KEY)
-        // Override point for customization after application launch.
-        ImageSaveToDirectory.SharedImage.CreateFolderInDocumentDirectory()
-        BackgroundTaskService.shared.registerBackgroundTaks()
-        FirebaseApp.configure()
-        Messaging.messaging().delegate = self
-        
-        if #available(iOS 10.0, *) {
-                  self.notificationCenter = UNUserNotificationCenter.current()
-                   // For iOS 10 display notification (sent via APNS)
-            self.notificationCenter!.delegate = self
-                   
-                   let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
-                   self.notificationCenter!.requestAuthorization(
-                       options: authOptions,
-                       completionHandler: {_, _ in })
-               }
-               else
-               {
-                   let settings: UIUserNotificationSettings =
-                       UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
-                   application.registerUserNotificationSettings(settings)
-               }
-               application.applicationIconBadgeNumber=0
-               application.registerForRemoteNotifications()
-        AppDelegate.locationManager = CLLocationManager()
-        AppDelegate.locationManager?.delegate = self
-        let status = CLLocationManager.authorizationStatus()
-               if status == .notDetermined {
-                   // Request "When In Use" first
-                   AppDelegate.locationManager?.requestWhenInUseAuthorization()
-               } else if status == .authorizedWhenInUse {
-                   // If already authorized for "When In Use," request "Always"
-                   AppDelegate.locationManager?.requestAlwaysAuthorization()
-               }
-//        else if status == .denied
-//        {
-//            showLocationPermissionDeniedAlert()
-//        }
-
-        AppDelegate.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
-//        AppDelegate.locationManager?.requestWhenInUseAuthorization()
-//        AppDelegate.locationManager?.requestAlwaysAuthorization()
-        //locationManager?.activityType = .automotiveNavigation
-        //locationManager?.allowsBackgroundLocationUpdates = true
-        if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined, .restricted, .denied:
-                print("No access")
-                AppDelegate.locationManager?.requestAlwaysAuthorization()
-                //promptToChangeLocationSettings()
-            case .authorizedAlways, .authorizedWhenInUse:
-                print("Access")
-            @unknown default:
-                    break
-                
+                // Set the block which will be called automatically when opening a Realm with
+                // a schema version lower than the one set above
+                migrationBlock: { migration, oldSchemaVersion in
+                    // We haven't migrated anything yet, so oldSchemaVersion == 0
+            })
+            Realm.Configuration.defaultConfiguration = config
+            IQKeyboardManager.shared.enable = true
+            if UserDefaults.standard.string(forKey: "BASE_URL") ?? "" == ""
+            {
+                BASE_URL = AppURL().LIVE_BASE_URL //Live url
+                UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
             }
-        } else {
-            print("Location services are not enabled")
+            else
+            {
+                BASE_URL = UserDefaults.standard.string(forKey: "BASE_URL") ?? ""
+            }
+            //IQKeyboardManager.shared.previousNextDisplayMode = .alwaysShow
+            GMSServices.provideAPIKey(AppDetails.GOOGLE_MAP_KEY)
+            GMSPlacesClient.provideAPIKey(AppDetails.GOOGLE_MAP_KEY)
+            // Override point for customization after application launch.
+            ImageSaveToDirectory.SharedImage.CreateFolderInDocumentDirectory()
+            BackgroundTaskService.shared.registerBackgroundTaks()
+            FirebaseApp.configure()
+            Messaging.messaging().delegate = self
+            
+            if #available(iOS 10.0, *) {
+                      self.notificationCenter = UNUserNotificationCenter.current()
+                       // For iOS 10 display notification (sent via APNS)
+                self.notificationCenter!.delegate = self
+                       
+                       let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
+                       self.notificationCenter!.requestAuthorization(
+                           options: authOptions,
+                           completionHandler: {_, _ in })
+                   }
+                   else
+                   {
+                       let settings: UIUserNotificationSettings =
+                           UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
+                       application.registerUserNotificationSettings(settings)
+                   }
+                   application.applicationIconBadgeNumber=0
+                   application.registerForRemoteNotifications()
+            
+            // Initialize location manager (unchanged)
+            AppDelegate.locationManager = CLLocationManager()
+            AppDelegate.locationManager?.delegate = self
+            
+            // Configure location manager (unchanged)
+            AppDelegate.locationManager?.desiredAccuracy = kCLLocationAccuracyHundredMeters
+    //        AppDelegate.locationManager?.requestWhenInUseAuthorization()
+    //        AppDelegate.locationManager?.requestAlwaysAuthorization()
+            //locationManager?.activityType = .automotiveNavigation
+            //locationManager?.allowsBackgroundLocationUpdates = true
+            
+            // Non-blocking location services check
+            DispatchQueue.global(qos: .userInitiated).async {
+                if CLLocationManager.locationServicesEnabled() {
+                    let status = CLLocationManager.authorizationStatus()
+                    DispatchQueue.main.async {
+                        switch status {
+                        case .notDetermined:
+                            // Request appropriate authorization based on available descriptions
+                            if Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription") != nil {
+                                AppDelegate.locationManager?.requestAlwaysAuthorization()
+                            } else if Bundle.main.object(forInfoDictionaryKey: "NSLocationWhenInUseUsageDescription") != nil {
+                                AppDelegate.locationManager?.requestWhenInUseAuthorization()
+                            }
+                            
+                        case .authorizedAlways, .authorizedWhenInUse:
+                            print("Location access granted")
+                            AppDelegate.locationManager?.startUpdatingLocation()
+                            
+                        case .restricted, .denied:
+                            print("Location access denied or restricted")
+                            // Don't request authorization here - wait for user to enable in Settings
+                            
+                        @unknown default:
+                            break
+                        }
+                    }
+                } else {
+                    print("Location services are not enabled")
+                }
+            }
+
+            geoLocationApiCallSync()
+    //            }
+            
+
+            return true
         }
-
-        AppDelegate.locationManager?.startUpdatingLocation()
-        geoLocationApiCallSync()
-//            }
-        
-
-        return true
-    }
    
     
     

@@ -11,7 +11,7 @@ import PDFKit
 import RealmSwift
 import JWTCodable
 
-
+@MainActor
 class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UITextFieldDelegate, ContractCommentProtocol{
     
     
@@ -1116,79 +1116,89 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
     func validationOkayProceedWithContract(){
         
         let appointmentId = AppointmentData().appointment_id ?? 0
-        let currentClassName = String(describing: type(of: self))
-        let classDisplayName = "ContractDocument"
-        self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-        self.saveContractDataToDatabase()
-        
-        //self.deleteAllAppointmentRequestForThisAppointmentId(appointmentId: appointmentId)
-        // change customer data if applicant data is added
-        let contactApiData = self.createContractParameters()
-        if let applicantDataDict = contactApiData as? [String:Any]
+        let appointment = self.getAppointmentData(appointmentId: appointmentId)
+        if appointment?.enableDestinationSelection == 1
         {
-            if  let applicant = applicantDataDict["application_info_secret"] as? String{
-                if applicant == ""
-                {
-                    
-                }
-                else
-                {
-                    var applicantData:[String:Any] = [:]
-                    let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
-                    applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
-                    self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
-                }
-            }
-            //            if  let applicant = applicantDataDict["applicationInfo"] as? [String:Any]
-            //            {
-            //                self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicant)
-            //            }
-        }
-        //1.
-        
-        var customerAndRoomData = self.createFinalParameterForCustomerApiCall()
-        for (key,value) in contactApiData{
-            customerAndRoomData[key] = value
-        }
-        if payment_TrasnsactionDict != [:]
-        {
-            customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
-        }
-        if HttpClientManager.SharedHM.connectedToNetwork()
-        {
-            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
-            
-            
-            let imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
-            //            var lastImageDict = imagesArray[imagesArray.count-1]
-            //            lastImageDict["data_completed"] = 1
-            //            imagesArray[imagesArray.count-1] = lastImageDict
-            //            print(imagesArray)
-            for imageDict in imagesArray{
-                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
-            }
-            //4.
-            let appoint_id = String(AppointmentData().appointment_id ?? 0)
-            var contract_plumbing_option_1 = 0
-            var contract_plumbing_option_2 = 0
-            if self.contractDataStatus!.contract_plumbing_option_status == 0{
-                contract_plumbing_option_1 = 1
-            }else if self.contractDataStatus!.contract_plumbing_option_status == 1{
-                contract_plumbing_option_2 = 1
-            }
+            let installer = DestinationMotivationViewController.initialization()!
+            installer.isCardVerified = isCardVerified
+            installer.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+            let appoint_id = AppointmentData().appointment_id ?? 0
             let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-            let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
-            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "")
+            let parametersComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison] as [String : Any]
+//            installer.name = name
+          installer.parametersAdditionalComments = parametersComments
+            self.navigationController?.pushViewController(installer, animated: true)
+        }
+        else
+        {
             
-            let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
-            let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
-        
-    }
-        
-        checkForInstallerOrNot(customerAndRoomData: customerAndRoomData, appointmentId: appointmentId)
-        
-        print(contactApiData)
+            //self.deleteAllAppointmentRequestForThisAppointmentId(appointmentId: appointmentId)
+            // change customer data if applicant data is added
+            let contactApiData = self.createContractParameters()
+            if let applicantDataDict = contactApiData as? [String:Any]
+            {
+                if  let applicant = applicantDataDict["application_info_secret"] as? String{
+                    if applicant == ""
+                    {
+                        
+                    }
+                    else
+                    {
+                        var applicantData:[String:Any] = [:]
+                        let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+                        applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+                    }
+                }
+                
+            }
+            
+            
+            var customerAndRoomData = self.createFinalParameterForCustomerApiCall()
+            for (key,value) in contactApiData
+            {
+                customerAndRoomData[key] = value
+            }
+            if payment_TrasnsactionDict != [:]
+            {
+                customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
+            }
+            if HttpClientManager.SharedHM.connectedToNetwork()
+            {
+                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                
+                
+                let imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
+                //            var lastImageDict = imagesArray[imagesArray.count-1]
+                //            lastImageDict["data_completed"] = 1
+                //            imagesArray[imagesArray.count-1] = lastImageDict
+                //            print(imagesArray)
+                for imageDict in imagesArray{
+                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
+                }
+                //4.
+                let appoint_id = String(AppointmentData().appointment_id ?? 0)
+                var contract_plumbing_option_1 = 0
+                var contract_plumbing_option_2 = 0
+                if self.contractDataStatus!.contract_plumbing_option_status == 0{
+                    contract_plumbing_option_1 = 1
+                }else if self.contractDataStatus!.contract_plumbing_option_status == 1{
+                    contract_plumbing_option_2 = 1
+                }
+                let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
+                let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
+                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "")
+                
+                let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
+                let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+                
+            }
+            
+            checkForInstallerOrNot(customerAndRoomData: customerAndRoomData, appointmentId: appointmentId)
+            
+            print(contactApiData)
+        }
     
         
     }
@@ -1479,16 +1489,20 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         }else if self.contractDataStatus!.contract_plumbing_option_status == 1{
             contract_plumbing_option_2 = 1
         }
-        let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-        let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
-        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "")
-        
-        let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
-        let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+        let appointment = self.getAppointmentData(appointmentId: appointmentId)
+        if appointment?.enableDestinationSelection != 1
+        {
+            let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
+            let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
+            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: requestPara as NSDictionary, imageName: "")
+            
+            let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
+            let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+        }
         
         //log entry
-        let appointment = self.getAppointmentData(appointmentId: appointmentId)
+        
         let firstName = appointment?.applicant_first_name ?? ""
         let lastName = appointment?.applicant_last_name ?? ""
         let name = lastName == ""  ? firstName : firstName + " " + lastName
@@ -1515,6 +1529,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             let installer = DestinationMotivationViewController.initialization()!
             installer.name = name
             installer.parametersAdditionalComments = parametersAdditionalComments
+            installer.isCardVerified = self.isCardVerified
             self.navigationController?.pushViewController(installer, animated: true)
         }
         else

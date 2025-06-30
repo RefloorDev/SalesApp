@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, UITextFieldDelegate {
     static public func initialization() -> DownFinalPaymentViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "DownFinalPaymentViewController") as? DownFinalPaymentViewController

@@ -10,7 +10,7 @@ import UIKit
 protocol SignSignatureDelegate {
     func SignSignatureDidGetImage(with image:UIImage)
 }
-
+@MainActor
 class SignViewController: UIViewController {
     static public func initialization() -> SignViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "SignViewController") as? SignViewController

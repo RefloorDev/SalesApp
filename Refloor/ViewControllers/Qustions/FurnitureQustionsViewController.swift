@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,DropDownDelegate,MultySelectionDelegate,UITextViewDelegate {
     
     
@@ -1138,11 +1138,14 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 print("Selected Value: \(selectedValue), Question Code: \(questionCode)")
         
         // auto calculation plywood
-         if questionCode == "CurrentCoveringType" && selectedValue == "Concrete / Cement / Gypsum"
+        if (questionCode == "CurrentCoveringType" || questionCode == "ExistingSubSurface") && selectedValue.contains("Concrete")
         {
              if let plywoodIndex = qustionAnswer.firstIndex(where: { $0.code == "QuarterInchPlywood" })
              {
-                 qustionAnswer[plywoodIndex].answerOFQustion!.numberVaue = 0
+                 if qustionAnswer[plywoodIndex].answerOFQustion != nil
+                 {
+                     qustionAnswer[plywoodIndex].answerOFQustion!.numberVaue = 0
+                 }
              }
          }
         

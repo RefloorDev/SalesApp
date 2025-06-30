@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class FinanceViewController: UIViewController, versatileProtocol, CreditApplicationProtocol, ImagePickerDelegate{
     func didSelect(image: UIImage?, imageName: String?) {
         guard let image = image
@@ -141,6 +141,9 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var promotionCodeId:Int = Int()
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
+    var adjustmentValue:Double = 0
+    var roomName = ""
+    
     
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
@@ -363,6 +366,17 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 versatile.financePayment = self.financePayment
                 versatile.selectedPaymentMethord = self.selectedPaymentMethord
                 versatile.downpayment = self.downpayment
+                versatile.stairPrice = self.stairPrice
+                versatile.excluded_amount_promotion = self.excluded_amount_promotion
+                
+                versatile.savings = self.savings
+                versatile.promotionCodeId = self.promotionCodeId
+                versatile.adminFeeStatus = self.adminFeeStatus
+                versatile.coapplicantSkiip = self.coapplicantSkiip
+                versatile.minSalePrice = self.minSalePrice
+                versatile.roomName = self.roomName
+                versatile.adjustmentValue = self.adjustmentValue
+                versatile.packagePlanName = self.packagePlanName
                 if let customer = AppDelegate.appoinmentslData
                 {
                     versatile.isCoAppSkiped = customer.co_applicant_skipped ?? 0
@@ -400,6 +414,16 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 {
                     versatile.isCoAppSkiped = customer.co_applicant_skipped ?? 0
                 }
+                versatile.stairPrice = self.stairPrice
+                versatile.excluded_amount_promotion = self.excluded_amount_promotion
+                versatile.savings = self.savings
+                versatile.promotionCodeId = self.promotionCodeId
+                versatile.adminFeeStatus = self.adminFeeStatus
+                versatile.coapplicantSkiip = self.coapplicantSkiip
+                versatile.minSalePrice = self.minSalePrice
+                versatile.roomName = self.roomName
+                versatile.adjustmentValue = self.adjustmentValue
+                versatile.packagePlanName = self.packagePlanName
                 self.navigationController?.pushViewController(versatile, animated: true)
             }
         }

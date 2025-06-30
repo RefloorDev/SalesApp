@@ -11,7 +11,7 @@ import GoogleMaps
 import GooglePlaces
 import PhotosUI
 import MobileCoreServices
-
+@MainActor
 class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, DropDownDelegate {
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) 
     {

@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineViewDelegate,DropDownDelegate,UITextFieldDelegate {
     
     

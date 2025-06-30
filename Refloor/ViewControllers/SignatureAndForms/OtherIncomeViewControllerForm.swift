@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+@MainActor
 class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFieldDelegate {
     static public func initialization() -> OtherIncomeViewControllerForm? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "OtherIncomeViewControllerForm") as? OtherIncomeViewControllerForm

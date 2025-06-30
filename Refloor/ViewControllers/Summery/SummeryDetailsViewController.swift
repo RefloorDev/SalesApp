@@ -14,6 +14,7 @@ protocol SummeryEditDelegate {
     func SummeryEditDelegateInQustionariesEditingDone(summaryData:SummeryDetailsData)
     func SummeryEditDelegateInTilesEditingDone()
 }
+@MainActor
 class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextViewDelegate,SummeryEditDelegate,ExternalCollectionViewDelegateForTableView {
     
     
