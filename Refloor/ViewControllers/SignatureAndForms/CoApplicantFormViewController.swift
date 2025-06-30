@@ -9,6 +9,7 @@
 import UIKit
 import GoogleMaps
 import GooglePlaces
+@MainActor
 class CoApplicantFormViewController: UIViewController,DropDownDelegate,UITextFieldDelegate
 {
     static public func initialization() -> CoApplicantFormViewController? {

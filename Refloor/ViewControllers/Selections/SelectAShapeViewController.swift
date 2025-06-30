@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class SelectAShapeViewController : UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     
     static func initialization() -> SelectAShapeViewController? {

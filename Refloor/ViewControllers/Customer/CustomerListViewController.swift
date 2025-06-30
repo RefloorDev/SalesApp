@@ -179,7 +179,9 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
                     
                     print("TIMER WAKEUP Appointment")
-                    BackgroundTaskService.shared.startSyncProcess()
+                    DispatchQueue.main.async {
+                            BackgroundTaskService.shared.startSyncProcess()
+                        }
                 })
             }
             
@@ -216,67 +218,69 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func forceSync()
     {
         HttpClientManager.SharedHM.forceSyncAPi() { success, message, userData in
-            if success == "Success"
-            {
-                if userData?.forceSyncEnabled == 0
+            DispatchQueue.main.async {
+                if success == "Success"
                 {
-                    self.strtBgSync()
-                }
-                else
-                {
-                    for aptId in userData!.appointments!
+                    if userData?.forceSyncEnabled == 0
                     {
-                        switch aptId.last_api
-                        {
-                        //case "/api/create_order_and_update_measurements_encoded":
-//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.CustomerAndRoom)
-//                            
-//                        case "/api/upload_images":
-//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.ImageUpload)
-//                        case "/api/generate_contract_document":
-//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.GenerateContract)
-//                        case "/api/initiate_sync_to_i360_json":
-//                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.InitiateSync)
-                        default:
-                            break
-                        }
+                        self.strtBgSync()
                     }
-                    self.strtBgSync()
-                }
-                
-                
-                
-                
-                
-            }
-        
-            else if success == "false"
-            {
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                    self.forceSync()
-                }
-                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                
-                self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
-            }
-            else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
-            {
-                
-                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    else
+                    {
+                        for aptId in userData!.appointments!
+                        {
+                            switch aptId.last_api
+                            {
+                                //case "/api/create_order_and_update_measurements_encoded":
+                                //                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.CustomerAndRoom)
+                                //
+                                //                        case "/api/upload_images":
+                                //                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.ImageUpload)
+                                //                        case "/api/generate_contract_document":
+                                //                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.GenerateContract)
+                                //                        case "/api/initiate_sync_to_i360_json":
+                                //                            BackgroundTaskService.shared.updateForceSynDB(aptId: aptId.appointment_id!, requestTitle: RequestTitle.InitiateSync)
+                            default:
+                                break
+                            }
+                        }
+                        self.strtBgSync()
+                    }
                     
-                    self.fourceLogOutbuttonAction()
+                    
+                    
+                    
+                    
                 }
                 
-                self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
-                
-            }
-            else{
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                    self.forceSync()
+                else if success == "false"
+                {
+                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                        self.forceSync()
+                    }
+                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    self.alert(AppAlertMsg.NetWorkAlertMessage, [yes,no])
                 }
-                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                
-                self.alert(message ?? AppAlertMsg.NetWorkAlertMessage, [yes,no])
+                else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
+                {
+                    
+                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                        
+                        self.fourceLogOutbuttonAction()
+                    }
+                    
+                    self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                    
+                }
+                else{
+                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                        self.forceSync()
+                    }
+                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    self.alert(message ?? AppAlertMsg.NetWorkAlertMessage, [yes,no])
+                }
             }
         }
     }
@@ -328,26 +332,34 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //        }
 //        startGeoLocation(appointments: appoinmentsList!)
     }
-    
-    @objc  func updateAppointmentOffline()
-    {
-        
-        self.tempappoinmentsList = self.getRefreshedAppointmentsFromDB()
-        self.appoinmentsList = self.getRefreshedAppointmentsFromDB()
-        self.showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()
-        if(self.appoinmentsList ?? []).count != 0
-        {
-            
+    @objc func updateAppointmentOffline() {
+        DispatchQueue.main.async { // ✅ Wrap all UI updates
+            self.tempappoinmentsList = self.getRefreshedAppointmentsFromDB()
+            self.appoinmentsList = self.getRefreshedAppointmentsFromDB()
+            self.showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()
             self.customerListTableView.reloadData()
-            self.noAppoinmentLabel.isHidden = true
+            self.noAppoinmentLabel.isHidden = (self.appoinmentsList ?? []).count != 0
         }
-        else
-        {
-            self.customerListTableView.reloadData()
-            self.noAppoinmentLabel.isHidden = false
-        }
-        
     }
+//    @objc  func updateAppointmentOffline()
+//    {
+//        
+//        self.tempappoinmentsList = self.getRefreshedAppointmentsFromDB()
+//        self.appoinmentsList = self.getRefreshedAppointmentsFromDB()
+//        self.showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()
+//        if(self.appoinmentsList ?? []).count != 0
+//        {
+//            
+//            self.customerListTableView.reloadData()
+//            self.noAppoinmentLabel.isHidden = true
+//        }
+//        else
+//        {
+//            self.customerListTableView.reloadData()
+//            self.noAppoinmentLabel.isHidden = false
+//        }
+//        
+//    }
     
     
     @IBAction func didValueChangedSearch(_ sender: UITextField)
@@ -389,52 +401,53 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     {
         
         HttpClientManager.SharedHM.AppinmentListApi { (result, message, value) in
-            if (result ?? "") == "Success"
-            {
-                self.theApiValue = value
-                if( self.theApiValue != nil)
+            DispatchQueue.main.async {
+                if (result ?? "") == "Success"
+                {
+                    self.theApiValue = value
+                    if( self.theApiValue != nil)
+                    {
+                        
+                        self.tempappoinmentsList = self.getRefreshedAppointmentsFromDB()
+                        self.appoinmentsList = self.getRefreshedAppointmentsFromDB()
+                        self.showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()
+                    }
+                    
+                }
+                else if ((result ?? "") == "AuthFailed" || ((result ?? "") == "authfailed"))
                 {
                     
-                    self.tempappoinmentsList = self.getRefreshedAppointmentsFromDB()
-                    self.appoinmentsList = self.getRefreshedAppointmentsFromDB()
-                    self.showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()
-                }
-                
-            }
-            else if ((result ?? "") == "AuthFailed" || ((result ?? "") == "authfailed"))
-            {
-                
-                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                        
+                        self.fourceLogOutbuttonAction()
+                    }
                     
-                    self.fourceLogOutbuttonAction()
-                }
-                
-                self.alert((message ?? value?.message) ?? AppAlertMsg.serverNotReached, [yes])
-                
-            }
-            else
-            {
-                // self.alert(message ?? AppAlertMsg.serverNotReached , nil)
-                let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                    
-                    self.appoinmentLisApiCall()
+                    self.alert((message ?? value?.message) ?? AppAlertMsg.serverNotReached, [yes])
                     
                 }
-                let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                
-                self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                else
+                {
+                    // self.alert(message ?? AppAlertMsg.serverNotReached , nil)
+                    let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                        
+                        self.appoinmentLisApiCall()
+                        
+                    }
+                    let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                    
+                    self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                }
+                if(self.appoinmentsList ?? []).count != 0
+                {
+                    self.customerListTableView.reloadData()
+                    self.noAppoinmentLabel.isHidden = true
+                }
+                else
+                {
+                    self.customerListTableView.reloadData()
+                    self.noAppoinmentLabel.isHidden = false
+                }
             }
-            if(self.appoinmentsList ?? []).count != 0
-            {
-                self.customerListTableView.reloadData()
-                self.noAppoinmentLabel.isHidden = true
-            }
-            else
-            {
-                self.customerListTableView.reloadData()
-                self.noAppoinmentLabel.isHidden = false
-            }
-            
         }
     }
  
@@ -641,8 +654,12 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 ////        installer.name = name
 ////        installer.parametersAdditionalComments = parametersAdditionalComments
 //        self.navigationController?.pushViewController(installer, animated: true)
+        let manualDateSting = Date().dateToString()
+        UserDefaults.standard.set(manualDateSting, forKey: "manual_appointment_date")
 
         //Q3 changes
+//        let manualArrivalDate = Date().dateToString()
+//        UserDefaults.standard.set(manualArrivalDate, forKey: "manualArrivalDate")
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
             let parameter:[String:Any] = ["appointment_id":  appoinmentsList?[sender.tag].id ?? 0]
@@ -671,53 +688,75 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         }
     }
     
-    func appointmentStatus(buttonTag:Int)
-    {
+    func appointmentStatus(buttonTag: Int) {
         let masterData = getMasterDataFromDB()
-        if masterData.enableGeoLocation && restrictGeoLocation == 0
-        {
-            locationManager.delegate = self
-            
-            let authorizationStatus = CLLocationManager.authorizationStatus()
-            
-            if CLLocationManager.locationServicesEnabled() {
-                switch authorizationStatus {
-                case .notDetermined:
-                    // Request permission to use location services
-                    print("notDetermined: ", authorizationStatus)
-                    locationManager.requestWhenInUseAuthorization()
-                case .restricted, .denied:
-                    // Location services are disabled, show a custom alert
-                    print("restricted and denied: ", authorizationStatus)
-                    showEnableLocationServicesAlert()
-                case .authorizedWhenInUse, .authorizedAlways:
-                    // Location is enabled and authorized, proceed with your action
-                    print("authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
-                    performAppointmentAction(sender: buttonTag)
-                @unknown default:
-                    break
-                }
-            } else {
-                print("not authorizedWhenInUse and authorizedAlways: ", authorizationStatus)
-                showEnableLocationServicesAlert()
-            }
-        }
-        else
-        {
+        
+        // Skip location check if geo-location is disabled or restricted
+        guard masterData.enableGeoLocation && restrictGeoLocation == 0 else {
             performAppointmentAction(sender: buttonTag)
+            return
+        }
+        
+        locationManager.delegate = self
+        
+        // First check if location services are enabled at system level
+        guard CLLocationManager.locationServicesEnabled() else {
+            DispatchQueue.main.async {
+                self.showEnableLocationServicesAlert()
+            }
+            return
+        }
+        
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        
+        switch authorizationStatus {
+        case .notDetermined:
+            // Request appropriate authorization based on available permissions
+            print("Location status: notDetermined")
+            if Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription") != nil {
+                locationManager.requestAlwaysAuthorization()
+            } else {
+                locationManager.requestWhenInUseAuthorization()
+            }
+            
+        case .restricted, .denied:
+            // Show alert to enable in Settings
+            print("Location status: restricted/denied")
+            DispatchQueue.main.async {
+                self.showEnableLocationServicesAlert()
+            }
+            
+        case .authorizedWhenInUse:
+            // Check if we can upgrade to Always authorization
+            print("Location status: authorizedWhenInUse")
+            if Bundle.main.object(forInfoDictionaryKey: "NSLocationAlwaysAndWhenInUseUsageDescription") != nil {
+                locationManager.requestAlwaysAuthorization()
+            }
+            performAppointmentAction(sender: buttonTag)
+            
+        case .authorizedAlways:
+            // Full location access available
+            print("Location status: authorizedAlways")
+            performAppointmentAction(sender: buttonTag)
+            
+        @unknown default:
+            print("Location status: unknown authorization status")
+            break
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         print("inside locationManager")
-           if status == .authorizedWhenInUse || status == .authorizedAlways {
-               // Location access granted, proceed with your action
-               // Assuming `startButtonActionFromCustomerList` was called by a button action
-               if let sender = manager.delegate as? UIButton {
-                   performAppointmentAction(sender: sender.tag)
-               }
-           }
-       }
+        DispatchQueue.main.async {
+            if status == .authorizedWhenInUse || status == .authorizedAlways {
+                // Location access granted, proceed with your action
+                // Assuming `startButtonActionFromCustomerList` was called by a button action
+                if let sender = manager.delegate as? UIButton {
+                    self.performAppointmentAction(sender: sender.tag)
+                }
+            }
+        }
+    }
     
     func performAppointmentAction(sender: Int) {
         HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
@@ -750,8 +789,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                     }
                     else
                     {
-                        let manualDateSting = Date().dateToString()
-                        UserDefaults.standard.set(manualDateSting, forKey: "manual_appointment_date")
+                        
                         self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
                     //
                         if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{

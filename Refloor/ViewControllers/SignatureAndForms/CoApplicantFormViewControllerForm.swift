@@ -10,6 +10,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import RealmSwift
+@MainActor
 class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITextFieldDelegate
 {
     static public func initialization() -> CoApplicantFormViewControllerForm? {

@@ -1048,10 +1048,14 @@ extension UIViewController:OrderStatusViewDelegate
                         {
                             cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                         }
-                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 1)
+                         if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 1)
                         {
                             cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                         }
+//                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 0)
+//                        {
+//                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                        }
                         else
                         {
                             cell.optionLabel.textColor = UIColor.black
@@ -4957,7 +4961,7 @@ extension UIViewController:OrderStatusViewDelegate
             customerDetailsDict["co_applicant_phone"] = co_applicant_phone
             customerDetailsDict["appointment_result"] = "Sold"
             customerDetailsDict["both_parties_present"] = bothParties
-            customerDetailsDict["manual_appointment_date"] = UserDefaults.standard.value(forKey: "manual_appointment_date")
+            customerDetailsDict["manual_arrival_date"] = UserDefaults.standard.value(forKey: "manual_appointment_date")
             let (date,timeZone) = Date().getCompletedDateStringAndTimeZone()
             customerDetailsDict["completed_date"] = date
             customerDetailsDict["timezone"] = timeZone

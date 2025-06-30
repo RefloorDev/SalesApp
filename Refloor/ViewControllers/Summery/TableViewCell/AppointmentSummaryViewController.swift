@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class AppointmentSummaryViewController: UIViewController, ImagePickerDelegate 
 {
     

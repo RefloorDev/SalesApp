@@ -11,6 +11,7 @@ import MapKit
 import GoogleMaps
 import GooglePlaces
 import RealmSwift
+@MainActor
 class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,AddressSelectPlaceEntryDelegate,UITextFieldDelegate,GMSMapViewDelegate{
     
     static public func initialization() -> ApplicantFormViewControllerForm? {

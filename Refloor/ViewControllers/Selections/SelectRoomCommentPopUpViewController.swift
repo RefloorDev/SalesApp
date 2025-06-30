@@ -29,7 +29,7 @@ protocol versatileBackprotocol
 {
     func whetherToProceedBack()
 }
-
+@MainActor
 class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate {
     
     static func initialization() -> SelectRoomCommentPopUpViewController? {

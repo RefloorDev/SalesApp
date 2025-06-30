@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class SelectAFloorViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout {
     
     static func initialization() -> SelectAFloorViewController? {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class CancellationPolicyViewController: UIViewController, ImagePickerDelegate {
     func didSelect(image: UIImage?, imageName: String?) {
         guard let image = image

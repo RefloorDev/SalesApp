@@ -8,7 +8,7 @@
 
 import UIKit
 import WebKit
-
+@MainActor
 class RoomVOWebViewViewController: UIViewController {
 
     static func initialization() -> RoomVOWebViewViewController? {

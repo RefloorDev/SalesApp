@@ -12,7 +12,7 @@ protocol CreditApplicationProtocol
 {
     func creditApplicationCall(isVersatile:Bool)
 }
-
+@MainActor
 class InstallerSuccessViewController: UIViewController {
     
     @IBOutlet weak var installerSubheadingBottomConstraint: NSLayoutConstraint!
@@ -71,6 +71,16 @@ class InstallerSuccessViewController: UIViewController {
     var isCoAppSkiped = 0
     var timer: Timer?
     var time = 0
+    var stairPrice:Double = Double()
+    var excluded_amount_promotion:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
+    var adjustmentValue:Double = 0
+    var roomName = ""
+    var adminFeeStatus = false
+    var coapplicantSkiip:Int = 0
+    var minSalePrice:Double = 0.0
+    var packagePlanName = ""
     
     static func initialization() -> InstallerSuccessViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "InstallerSuccessViewController") as? InstallerSuccessViewController
@@ -310,6 +320,18 @@ class InstallerSuccessViewController: UIViewController {
         applicant.financePayment = self.financePayment
         applicant.selectedPaymentMethord = self.selectedPaymentMethord
         applicant.downpayment = self.downpayment
+        applicant.savings = self.savings
+        applicant.promotionCodeId = self.promotionCodeId
+        applicant.stairPrice = self.stairPrice
+        applicant.excluded_amount_promotion = self.excluded_amount_promotion
+        applicant.savings = self.savings
+        applicant.promotionCodeId = self.promotionCodeId
+        applicant.adminFeeStatus = self.adminFeeStatus
+        applicant.coapplicantSkiip = self.coapplicantSkiip
+        applicant.minSalePrice = self.minSalePrice
+        applicant.roomName = self.roomName
+        applicant.adjustmentValue = self.adjustmentValue
+        applicant.packagePlanName = self.packagePlanName
         self.navigationController?.pushViewController(applicant, animated: true)
     }
     @IBAction func goToAptBtn(_ sender: UIButton)
@@ -385,24 +407,62 @@ class InstallerSuccessViewController: UIViewController {
     
     @IBAction func thankYouBtnPressed(_ sender: UIButton)
     {
-        let signature = SignatureSubmitViewController.initialization()!
-        signature.downOrFinal = self.downOrFinal
-        signature.totalAmount = self.totalAmount
-        signature.paymentPlan = self.paymentPlan
-        signature.paymentPlanValue = self.paymentPlanValue
-        signature.paymentOptionDataValue = self.paymentOptionDataValue
-        signature.drowingImageID = self.drowingImageID
-        signature.area = self.area
-        signature.downPaymentValue = self.downPaymentValue
-        signature.finalpayment = self.finalpayment
-        signature.financePayment = self.financePayment
-        signature.selectedPaymentMethord = self.selectedPaymentMethord
-        signature.downpayment = self.downpayment
-        if let customer = AppDelegate.appoinmentslData
-        {
-            signature.isCoAppSkiped = customer.co_applicant_skipped ?? 0
-        }
-        self.navigationController?.pushViewController(signature, animated: true)
+        let details = UpdateDownFinalPaymentViewController.initialization()!
+//        signature.downOrFinal = self.downOrFinal
+//        signature.totalAmount = self.totalAmount
+//        signature.paymentPlan = self.paymentPlan
+//        signature.paymentPlanValue = self.paymentPlanValue
+//        signature.paymentOptionDataValue = self.paymentOptionDataValue
+//        signature.drowingImageID = self.drowingImageID
+//        signature.area = self.area
+//        signature.downPaymentValue = self.downPaymentValue
+//        signature.finalpayment = self.finalpayment
+//        signature.financePayment = self.financePayment
+//        signature.selectedPaymentMethord1 = self.selectedPaymentMethord
+//        signature.downpayment = self.downpayment
+//        if let customer = AppDelegate.appoinmentslData
+//        {
+//            signature.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+//        }
+        
+        
+        
+        details.floorLevelData = AppDelegate.floorLevelData
+        details.floorShapeData = []
+        details.roomData = AppDelegate.roomData
+        details.appoinmentslData = AppDelegate.appoinmentslData
+        details.packagePlanName = packagePlanName
+        details.downOrFinal = self.downPaymentValue
+        details.totalAmount = self.totalAmount
+        details.paymentPlan = self.paymentPlan
+        details.roomName = self.roomName
+        details.adjustmentValue = self.adjustmentValue
+        details.paymentPlanValue = self.paymentPlanValue
+        details.paymentOptionDataValue = self.paymentOptionDataValue
+        details.drowingImageID = self.drowingImageID
+        details.area = self.area
+        details.downpayment = self.downpayment
+        details.downPaymentValue = self.downPaymentValue
+        details.finalpayment = self.finalpayment
+        details.financePayment = self.financePayment
+        details.selectedPaymentMethord1 = self.selectedPaymentMethord
+        details.installationDate = self.installationDate
+        details.adminFeeStatus = self.adminFeeStatus
+        details.coapplicantSkiip = self.coapplicantSkiip
+        details.minSalePrice = self.minSalePrice
+        details.savings = self.savings
+        details.promotionCodeId = self.promotionCodeId
+        details.stairPrice = self.stairPrice
+        details.excluded_amount_promotion = self.excluded_amount_promotion
+        details.savings = self.savings
+        details.promotionCodeId = self.promotionCodeId
+        details.adminFeeStatus = self.adminFeeStatus
+        details.coapplicantSkiip = self.coapplicantSkiip
+        details.minSalePrice = self.minSalePrice
+        details.roomName = self.roomName
+        details.adjustmentValue = self.adjustmentValue
+        details.packagePlanName = self.packagePlanName
+        self.navigationController?.pushViewController(details, animated: true)
     }
         
     

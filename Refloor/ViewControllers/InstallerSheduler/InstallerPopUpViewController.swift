@@ -17,7 +17,7 @@ protocol alreadySelectedProtocol
 {
     func alreadySelected()
 }
-
+@MainActor
 class InstallerPopUpViewController: UIViewController {
     
     static func initialization() -> InstallerPopUpViewController? {

@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class SummeryListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,DropDownForTableViewCellDelegate {
     
     
@@ -1290,20 +1290,80 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         var codeCurrentSurface = ""
 
         // Extract surface from formula (e.g., "current_surface != 'Concrete / Cement / Gypsum'")
-        if let regex = try? NSRegularExpression(pattern: "current_surface != '([^']+)'", options: []) {
-            if let match = regex.firstMatch(in: calulationCode, options: [], range: NSRange(location: 0, length: calulationCode.utf16.count)),
-               let range = Range(match.range(at: 1), in: calulationCode) {
-                codeCurrentSurface = String(calulationCode[range])
-                print("Extracted surface condition from formula: \(codeCurrentSurface)")
+        let condition = calulationCode//#"room_area / 32 if !actual_surface.lowercased().contains("concrete")"#
+        //let pattern = #"contains\\\(\\?"([^"]+)"\\?\)"#
+
+        let pattern = "contains\\(\\\\\"([^\\\\\"]+)"
+
+        do {
+            let regex = try NSRegularExpression(pattern: pattern)
+            if let match = regex.firstMatch(in: calulationCode, range: NSRange(calulationCode.startIndex..., in: calulationCode)) {
+                // Extract the first capture group (the word in quotes)
+                let wordRange = match.range(at: 1)
+                if let swiftRange = Range(wordRange, in: calulationCode) {
+                    let word = String(calulationCode[swiftRange])
+                    codeCurrentSurface = word
+                    print("Extracted word: \(word)") // Output: "concrete"
+                }
+            } else {
+                print("No match found")
             }
+        } catch {
+            print("Regex error: \(error)")
         }
 
+
         // Check if current surface matches the exclusion rule
-        if let currentSurfaceQuestion = realm.objects(rf_master_question.self).filter("appointment_id == %d AND question_code == %@", appointmentId, "current_surface").first,
+        
+        var removeExisting = false
+        if let removeCoveringType = realm.objects(rf_master_question.self)
+            .filter("appointment_id == %d AND question_code == %@", appointmentId, "RemoveCurrentCovering").first,
+           let removeCurrentTypeAnswer = removeCoveringType.rf_AnswerOFQustion.first {
+            removeExisting = removeCurrentTypeAnswer.answer.contains("Yes")
+        }
+        
+        let currentSurfaceQuestionCode = removeExisting ? "ExistingSubSurface" : "CurrentCoveringType"
+//        guard let currentSurfaceQuestion = realm.objects(rf_master_question.self)
+//            .filter("appointment_id == %d AND question_code == %@", appointmentId, currentSurfaceQuestionCode).first else {
+//            // Handle error - question not found
+//            return
+//        }
+        
+        
+        
+        if let currentSurfaceQuestion = realm.objects(rf_master_question.self).filter("appointment_id == %d AND question_code == %@", appointmentId, currentSurfaceQuestionCode).first,
            let existingSurfaceAnswer = currentSurfaceQuestion.rf_AnswerOFQustion.first {
 
-            if existingSurfaceAnswer.answer.contains(codeCurrentSurface) {
+            if existingSurfaceAnswer.answer.contains(where: {
+                $0.lowercased().contains(codeCurrentSurface.lowercased())
+            }) {
+                print("Current surface '\(existingSurfaceAnswer.answer)' contains '\(codeCurrentSurface)'. Skipping plywood calculation.")
                 print("Current surface matches exclusion. Skipping plywood calculation.")
+                let appointmentId = AppointmentData().appointment_id ?? 0
+                let realm = try! Realm()
+                if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", excludedId, roomId,appoinmentID).first {
+                    
+                    try! realm.write
+                    {
+                        if let existingAnswer = question.rf_AnswerOFQustion.first {
+                            let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+                            
+                            let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
+                            newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                            
+                            // Append it to rf_master_question
+                            //question.rf_AnswerOFQustion.append(newAnswer)
+                            
+                            //print("Created new answer object with plywood value: \(plywoodValueStr)")
+                            var dict:[String:Any] = [:]
+                            let questionUniqueIdentifier = question.questionIdUnique
+                            let questionId = question.id
+                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":roomId,"room_name":roomName]
+                            print("---dict2------", dict, " question : ", question.question_name)
+                            realm.create(rf_master_question.self, value: dict, update: .all)
+                        }
+                    }
+                }
                 return
             }
         }
@@ -1312,9 +1372,19 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", excludedId, roomId,appointmentId).first {
 
             try! realm.write {
+                var plywoodValueStr:String = String()
                 let plywoodValue = roomArea / 32
-                
-                let plywoodValueStr = String(Int(plywoodValue.rounded()))
+                //let progressValue = modf(plywoodValue / 100)
+                if plywoodValue == floor(plywoodValue)
+                {
+                    plywoodValueStr = String(Int(plywoodValue) )
+                }
+                else
+                {
+                    plywoodValueStr = String(Int(plywoodValue) + 1)
+                }
+//                let countProgress = (progressValue.0 * 100.0)
+//                 plywoodValueStr = String(Int(plywoodValue) + 1)
 
                 // Check if answer already exists for this question
                 if let existingAnswer = question.rf_AnswerOFQustion.first {

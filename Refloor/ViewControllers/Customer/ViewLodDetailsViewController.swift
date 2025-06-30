@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class ViewLodDetailsViewController: UIViewController,UITableViewDataSource,UITableViewDelegate{
     static func initialization() -> ViewLodDetailsViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ViewLodDetailsViewController") as? ViewLodDetailsViewController

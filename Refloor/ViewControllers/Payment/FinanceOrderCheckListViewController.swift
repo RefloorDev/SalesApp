@@ -8,7 +8,7 @@
 
 import UIKit
 import RealmSwift
-
+@MainActor
 class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate {
     func didSelect(image: UIImage?, imageName: String?) {
         guard let image = image

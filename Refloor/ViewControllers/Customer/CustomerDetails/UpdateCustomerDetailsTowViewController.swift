@@ -10,7 +10,7 @@ import UIKit
 import GoogleMaps
 import GooglePlaces
 import RealmSwift
-
+@MainActor
 class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDelegate {
     
     static func initialization() -> UpdateCustomerDetailsTowViewController? {

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class AppointmentPaymentSummaryViewController: UIViewController {
     
     static func initialization() -> AppointmentPaymentSummaryViewController? {

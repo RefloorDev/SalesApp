@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+@MainActor
 class InstallerShedulerViewController: UIViewController,installerConfirmProtocol,UICollectionViewDelegateFlowLayout {
     func installerConfirm()
     {
@@ -96,7 +96,10 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                     let installer = InstallerSuccessViewController.initialization()!
                     installer.installationDate = self.installationDate
                     installer.customerName = self.name
-                    self.navigationController?.pushViewController(installer, animated: true)
+                    DispatchQueue.main.async {
+                        self.navigationController?.pushViewController(installer, animated: true)
+                    }
+                    
                     
                     
                 }
@@ -106,7 +109,9 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                     installerPopUp.installationId = self.installationId
                     installerPopUp.saleOrderId = self.saleOrderId
                     //installerPopUp.installerConfirm = self
-                    self.present(installerPopUp, animated: true, completion: nil)
+                    DispatchQueue.main.async {
+                        self.present(installerPopUp, animated: true, completion: nil)
+                    }
                 }
                 else if success == "false"
                 {
@@ -181,11 +186,14 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                 {
                     self.saleOrderId = saleOrderId ?? 0
                     self.availableDatesdata = availableDates!
-                    if self.availableDatesdata.count > 0
+                    DispatchQueue.main.async
                     {
-                        self.shedulerInstallerNavBar(with: "SCHEDULE INSTALLATION",submitText: "Submit")
+                        if self.availableDatesdata.count > 0
+                        {
+                            self.shedulerInstallerNavBar(with: "SCHEDULE INSTALLATION",submitText: "Submit")
+                        }
+                        self.installerCollectionView.reloadData()
                     }
-                    self.installerCollectionView.reloadData()
                 }
                 else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
                 {
@@ -238,8 +246,10 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         {
             currentIndex = 0
         }
-       
-            installerCollectionView.reloadData()
+        DispatchQueue.main.async
+        {
+            self.installerCollectionView.reloadData()
+        }
     }
     @IBAction func installerRightBtnAction(_ sender: UIButton)
     {
@@ -253,13 +263,28 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         else
         {
             currentIndex += 5
-            installerCollectionView.reloadData()
+            DispatchQueue.main.async
+            {
+                self.installerCollectionView.reloadData()
+            }
+            //installerCollectionView.reloadData()
         }
     }
     
     override func insallerSkipBtnAction(sender: UIButton)
     {
-        self.navigationController?.popToRootViewController(animated: true)
+        DispatchQueue.main.async
+        {
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        let currentClassName = String(describing: type(of: self))
+        let classDisplayName = "InstallerScheduler"
+        self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+        let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
+        let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+        
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     override func insallerSubmitBtnAction(sender: UIButton)
     {
@@ -280,14 +305,25 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                 let currentClassName = String(describing: type(of: self))
                 let classDisplayName = "InstallerScheduler"
                 self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-                let installerPopUp = InstallerPopUpViewController.initialization()!
-                installerPopUp.installationId = installationId
-                installerPopUp.saleOrderId = saleOrderId
-                installerPopUp.installerConfirm = self
-                self.present(installerPopUp, animated: true, completion: nil)
+                let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
+                let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+                DispatchQueue.main.async
+                {
+                    let installerPopUp = InstallerPopUpViewController.initialization()!
+                    installerPopUp.installationId = self.installationId
+                    installerPopUp.saleOrderId = self.saleOrderId
+                    installerPopUp.installerConfirm = self
+                    self.present(installerPopUp, animated: true, completion: nil)
+                }
             }
         }
 
+    }
+    
+    func createAppointmentsRequestDataToDatabase(title:RequestTitle,url:String,requestType:RequestType,requestParams:NSDictionary,imageName:String){
+        
+        self.createAppointmentRequest(requestTitle: title, requestUrl: url, requestType: requestType, requestParameter: requestParams, imageName: imageName)
     }
     
 }
@@ -345,7 +381,10 @@ extension InstallerShedulerViewController: UICollectionViewDelegate, UICollectio
         selectedIndex = indexPath.row
                 installationId = availableDatesdata[indexPath.row + currentIndex].installationId ?? 0
                 installationDate = availableDatesdata[indexPath.row + currentIndex].startDate?.installerDate(installationDate: availableDatesdata[indexPath.row].startDate!) ?? ""
-        self.installerCollectionView.reloadData()
+        DispatchQueue.main.async {
+            self.installerCollectionView.reloadData()
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
