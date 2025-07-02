@@ -1019,20 +1019,42 @@ extension UIViewController:OrderStatusViewDelegate
                                 InOfficeLocation = true
                             }
                         }
-                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == false && stairArray![index].in_stock == 0)
+//                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == false && stairArray![index].in_stock == 0)
+//                        {
+//                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                            
+//                        }
+//                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == true && stairArray![index].in_stock == 1)
+//                        {
+//                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                        }
+                        
+                        
+                        if stairArray![index].in_stock == 0
                         {
-                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                            
-                        }
-                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == true && stairArray![index].in_stock == 1)
-                        {
-                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                            if stairArray![index].specialOrder == 1
+                            {
+                                if InOfficeLocation
+                                {
+                                    cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                                }
+                            }
+                            else
+                            {
+                                cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                            }
                         }
                         else//if  stairArray![index].specialOrder == 1
                         {
                             cell.optionLabel.textColor = UIColor.black
                             
                         }
+                        
+                        
+                        
+                        
+                        
+                        
                     }
                     else if floorArray != nil
                     {
@@ -1044,18 +1066,36 @@ extension UIViewController:OrderStatusViewDelegate
                                 InOfficeLocation = true
                             }
                         }
-                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == false && floorArray![index].in_stock == 0)
-                        {
-                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                        }
-                         if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 1)
-                        {
-                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                        }
+//                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == false && floorArray![index].in_stock == 0)
+//                        {
+//                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                        }
+//                         if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 1)
+//                        {
+//                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                        }
 //                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == true && floorArray![index].in_stock == 0)
 //                        {
 //                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
 //                        }
+                        
+                        if floorArray![index].in_stock == 0
+                        {
+                            if floorArray![index].specialOrder == 1
+                            {
+                                if InOfficeLocation
+                                {
+                                    cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                                }
+                            }
+                            else
+                            {
+                                cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+                            }
+                        }
+                        
+                        
+                        
                         else
                         {
                             cell.optionLabel.textColor = UIColor.black
@@ -3620,7 +3660,7 @@ extension UIViewController:OrderStatusViewDelegate
     
     
     
-    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0, moldPrice: Double = 0.0,deliveryOptions:String = ""){
+    func updateRoomMoldOrColor(roomID:Int, moldName: String,isColor:Bool = false, colorName: String = "", colorImageUrl: String = "", colorUpCharge: Double = 0.0, moldPrice: Double = 0.0,deliveryOptions:String = "",isGlueDown:Bool = false){
         let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
         if let room = appointment.first?.rooms.filter("room_id == %d", roomID){
@@ -3634,7 +3674,7 @@ extension UIViewController:OrderStatusViewDelegate
                             dict = ["id":id, "room_id":roomID, "selected_room_molding":moldName, "selected_room_MoldingPrice": moldPrice,"delivery_option":deliveryOptions]
                             
                         }else{
-                            dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge ,"selected_room_MoldingPrice": moldPrice]
+                            dict = ["id":id,"room_id":roomID,"selected_room_color":colorName,"material_image_url":colorImageUrl, "selected_room_Upcharge": colorUpCharge ,"selected_room_MoldingPrice": moldPrice,"selected_room_glueDown": isGlueDown]
                         }
                     }
                     realm.create(rf_completed_room.self, value: dict, update: .all)
@@ -4472,6 +4512,7 @@ extension UIViewController:OrderStatusViewDelegate
             summaryData.comments = room?.first?.room_summary_comment ?? ""
             summaryData.striked = (room?.first?.room_strike_status ?? false) ? "1" : "0"
             summaryData.miscellaneous_comments = room?.first?.miscellaneous_comments ?? ""
+            summaryData.isGlueDown = room?.first?.selected_room_glueDown
             var room_Attachments:[AttachmentDataValue] = []
             if let roomAttachments = room?.first?.room_attachments
             {

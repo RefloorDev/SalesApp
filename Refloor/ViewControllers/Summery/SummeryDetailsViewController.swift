@@ -318,6 +318,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             furnitureQustions.delegate = self
             furnitureQustions.summaryQustions = self.summaryData.questionaire ?? []
             furnitureQustions.miscelleneous_Comments = self.miscellaneous_coments
+            furnitureQustions.isGlueDown = self.summaryData.isGlueDown ?? false
             self.deleteDiscountArrayFromDb()
             self.navigationController?.pushViewController(furnitureQustions, animated: true)
         }

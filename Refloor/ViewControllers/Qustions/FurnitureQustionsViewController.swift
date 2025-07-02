@@ -33,6 +33,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var isMiscellaneousTxtView = false
     var perimeter = 0.0
     var miscelleneous_Comments = "Enter your comments about Miscellaneous Charge"
+    var isGlueDown:Bool = Bool()
+    var quarterPlywoodAnswer = 0
     @IBOutlet weak var perimeterHeightConsrtraint: NSLayoutConstraint!
     @IBOutlet weak var areaheightConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
@@ -1138,16 +1140,6 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 print("Selected Value: \(selectedValue), Question Code: \(questionCode)")
         
         // auto calculation plywood
-        if (questionCode == "CurrentCoveringType" || questionCode == "ExistingSubSurface") && selectedValue.contains("Concrete")
-        {
-             if let plywoodIndex = qustionAnswer.firstIndex(where: { $0.code == "QuarterInchPlywood" })
-             {
-                 if qustionAnswer[plywoodIndex].answerOFQustion != nil
-                 {
-                     qustionAnswer[plywoodIndex].answerOFQustion!.numberVaue = 0
-                 }
-             }
-         }
         
         
         //Q4 Changes Deepa
@@ -1428,11 +1420,157 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                     }
                 }
             }
+        
+        
+        if isGlueDown &&  (questionCode == "CurrentCoveringType" ||  questionCode == "ExistingSubSurface" || questionCode == "RemoveCurrentCovering")
+        {
+            let masterData = getMasterDataFromDB()
+            if masterData.autoAnswerLogicList.count > 0
+            {
+                let autoAnswerLogicListArray = masterData.autoAnswerLogicList
+//                for excludedId in autoAnswerLogicListArray[0].questionLines[0].questionId
+//                {
+//                    
+//                }
+                var quarterPlywoodIndex = qustionAnswer.firstIndex(where: { $0.code == "QuarterInchPlywood" })
+                //quarterPlywoodIndex = Int(quarterPlywoodIndex!)
+                var halfPlywoodIndex = qustionAnswer.firstIndex(where: { $0.code == "PlywoodHalfInchSheets" })
+                //halfPlywoodIndex = Int(halfPlywoodIndex!)
+                var threeQuarterPlywwodIndex = qustionAnswer.firstIndex(where: { $0.code == "ThreeQuarterInchPlywood" })
+                //threeQuarterPlywwodIndex = Int(threeQuarterPlywwodIndex!)
+                let currentCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "CurrentCoveringType" })
+                let existingCurrentCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "ExistingSubSurface" })
+                let removeCoveringIndex = qustionAnswer.firstIndex(where: { $0.code == "RemoveCurrentCovering" })
+                var currentCoveringAnswer:String = String()
+                var existingSubSurfaceAnswer:String = String()
+                var removeCurrentCoveringAnswer:String = String()
+                var canProceedToAnswer = false
+                if qustionAnswer[quarterPlywoodIndex!].answerOFQustion == nil && qustionAnswer[halfPlywoodIndex!].answerOFQustion == nil && qustionAnswer[threeQuarterPlywwodIndex!].answerOFQustion == nil
+                {
+                    
+                    canProceedToAnswer = true
+                    //qustionAnswer[plywoodIndex].answerOFQustion!.numberVaue = 0
+                }
+                else if qustionAnswer[quarterPlywoodIndex!].answerOFQustion != nil
+                {
+                    quarterPlywoodAnswer = qustionAnswer[quarterPlywoodIndex!].answerOFQustion!.numberVaue ?? 0
+                    canProceedToAnswer = true
+                }
+                if qustionAnswer[currentCoveringIndex!].answerOFQustion != nil
+                {
+                    currentCoveringAnswer = (qustionAnswer[currentCoveringIndex!].answerOFQustion?.singleSelection?.value)!
+                }
+                if qustionAnswer[existingCurrentCoveringIndex!].answerOFQustion != nil
+                {
+                    existingSubSurfaceAnswer = (qustionAnswer[existingCurrentCoveringIndex!].answerOFQustion?.singleSelection?.value)!
+                }
+                if qustionAnswer[removeCoveringIndex!].answerOFQustion != nil
+                {
+                    removeCurrentCoveringAnswer = (qustionAnswer[removeCoveringIndex!].answerOFQustion?.singleSelection?.value)!
+                }
+                 
+//                 existingSubSurfaceAnswer = (questionCode == "ExistingSubSurface" ? item : existingSubSurfaceAnswer )
+//                 removeCurrentCoveringAnswer = (questionCode == "RemoveCurrentCovering" ? item : removeCurrentCoveringAnswer )
+                if canProceedToAnswer && ((currentCoveringAnswer != "" || existingSubSurfaceAnswer != "") && removeCurrentCoveringAnswer != "")
+                {
+//
+                    
+                    
+                    let formula = autoAnswerLogicListArray[0].questionLines[0].code ?? ""//"room_area / 32 if !actual_surface.lowercased().contains(\"concrete\")"
+                    let variables: [String: Any] = [
+                        "room_area": self.area ,//tableValues[cell].adjusted_area!,
+                        "current_surface": currentCoveringAnswer,
+                        "sub_surface": existingSubSurfaceAnswer,
+                        "remove_current_surface": removeCurrentCoveringAnswer
+                    ]
+                    
+                    if let result = applyFormula(formula, variables: variables) {
+                        print("Result: \(result)")
+                        let plywoodValue = result
+                        if plywoodValue == floor(plywoodValue)
+                        {
+                            if qustionAnswer[quarterPlywoodIndex!].answerOFQustion != nil
+                            {
+                                qustionAnswer[quarterPlywoodIndex!].answerOFQustion!.numberVaue = Int(plywoodValue)
+                            }
+                            else
+                            {
+                                qustionAnswer[quarterPlywoodIndex!].answerOFQustion = AnswerOFQustion(Int(plywoodValue))
+                            }
+                            
+                        }
+                        else
+                        {
+                            if qustionAnswer[quarterPlywoodIndex!].answerOFQustion != nil
+                            {
+                                qustionAnswer[quarterPlywoodIndex!].answerOFQustion!.numberVaue = Int(plywoodValue) + 1
+                            }
+                            else
+                            {
+                                qustionAnswer[quarterPlywoodIndex!].answerOFQustion = AnswerOFQustion(Int(plywoodValue) + 1)
+                            }
+                        }
+                    }
+                    else {
+                        print("Condition not met or invalid formula")
+                        qustionAnswer[quarterPlywoodIndex!].answerOFQustion = AnswerOFQustion(0)
+                        //qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  (qustionAnswer[sender.tag].answerOFQustion!.numberVaue ?? 0) + 1
+                        //self.tableView.reloadData()
+                    }
+                    let quarterPlywoodIndexInt = Int(quarterPlywoodIndex!)
+                    self.tableView.reloadRows(at: [[quarterPlywoodIndexInt,(quarterPlywoodIndexInt + 1)]], with: .automatic)
+                }
+                
+            }
+            
+        }
+
             
         
         
         self.tableView.reloadRows(at: [[0,(tag + 1)]], with: .automatic)
     }
+    
+    func applyFormula(_ formula: String, variables: [String: Any]) -> Double? {
+        // 1. Prepare variables
+        var evaluatedVariables = variables
+        
+        // Handle actual_surface derivation
+        if let remove = variables["remove_current_surface"] as? String {
+            evaluatedVariables["actual_surface"] = (remove.uppercased() == "YES")
+                ? variables["sub_surface"]
+                : variables["current_surface"]
+        }
+        
+        // 2. Check if we should skip calculation (if contains "concrete")
+        if let surface = evaluatedVariables["actual_surface"] as? String,
+           surface == "" ||  // This checks it's not empty
+           surface.lowercased().contains("concrete") {
+            return nil // Skip calculation
+        }
+        
+        // 3. Extract the calculation part (before " if ")
+        let calculationPart = formula.components(separatedBy: " if ").first?.trimmingCharacters(in: .whitespaces) ?? formula
+        
+        // 4. Perform the calculation
+        return evaluateSimpleMathExpression(calculationPart, variables: evaluatedVariables)
+    }
+
+    private func evaluateSimpleMathExpression(_ expression: String, variables: [String: Any]) -> Double? {
+        // Replace variable names with their values
+        var replacedExpression = expression
+        for (key, value) in variables {
+            if let number = value as? NSNumber {
+                replacedExpression = replacedExpression.replacingOccurrences(of: key, with: "\(number.doubleValue)")
+            }
+        }
+        
+        // Use NSExpression just for simple math
+        let expr = NSExpression(format: replacedExpression)
+        return expr.expressionValue(with: nil, context: nil) as? Double
+    }
+    
+    
     
     func MultySelectionSelectedAction(_ items: [QuoteLabelData], _ tag: Int) {
         if(delegate == nil)
