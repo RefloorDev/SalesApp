@@ -316,6 +316,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
         let firstName = appointment?.applicant_first_name ?? ""
         let lastName = appointment?.applicant_last_name ?? ""
         let name = lastName == ""  ? firstName : firstName + " " + lastName
+        self.name = name
         let date = appointment?.appointment_datetime ?? ""
         var parameterToPass:[String:Any] = [:]
         let decodeOption:[String:Bool] = ["verify_signature":false]

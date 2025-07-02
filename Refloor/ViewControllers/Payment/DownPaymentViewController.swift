@@ -356,13 +356,17 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         
         if paymentType == .Cash
         {
-            self.goNextPageForPAyButtonAction()
+            DispatchQueue.main.async {
+                self.goNextPageForPAyButtonAction()
+            }
         }
         else if paymentType == .DebitCard || paymentType == .CreditCard
         {
             let yes = UIAlertAction(title: "Continue", style:.default) { (_) in
                 
-                self.goNextPageForPAyButtonAction()
+                DispatchQueue.main.async {
+                    self.goNextPageForPAyButtonAction()
+                }
             }
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             if HttpClientManager.SharedHM.connectedToNetwork()
@@ -870,9 +874,13 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                         print("Upload speed: \(speed) Mbps")
                         networkMessage = String(format: "%.2f", speed)
                         networkMessage += "Mbps"
-                        self.networkProceedToPayment(networkMessage: networkMessage)
-                                            }
-                }
+                        //DispatchQueue.main.async {
+                            
+                            
+                            self.networkProceedToPayment(networkMessage: networkMessage)
+                        }
+                    }
+                
             }
                 else
                 {
@@ -953,6 +961,9 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             //parameter["token"] = UserData.init().token ?? ""
             
             HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: true) { success, message,payment_status,payment_message,transactionId,cardType  in
+                DispatchQueue.main.async
+                {
+                
                 if(success ?? "") == "Success" || (success == "Failed" && transactionId != "Invalid"){
                     print("success")
                     let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
@@ -998,7 +1009,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 {
                     //self.alert(message ?? "", nil)
                     let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                        
+                  
                         self.goNextPageForPAyButtonAction()
                         
                     }
@@ -1006,6 +1017,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                     
                     self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
                 }
+            }
             }
         }
 
@@ -1015,55 +1027,61 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     {
         if self.paymentType == .Cash
         {
-            let cancel = AppointmentSummaryViewController.initialization()!
-            //web.downPayment = self.DownPaymentcalucaltion().downPayment
-            //web.balance  = self.DownPaymentcalucaltion().balance
-            cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
-            cancel.total = self.totalAmount
-            cancel.balance = self.totalAmount - self.downPaymentValue
-            cancel.paymentType = "cash"
-            cancel.isCardVerified = false
-            cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            cancel.area = getTotalAdjustedAreaForAllRooms()
-            cancel.totalPrice = totalAmount
-            cancel.finalPayment = self.finalpayment
-            cancel.financeAmount = self.financePayment
-            self.navigationController?.pushViewController(cancel, animated: true)
+            DispatchQueue.main.async {
+                let cancel = AppointmentSummaryViewController.initialization()!
+                //web.downPayment = self.DownPaymentcalucaltion().downPayment
+                //web.balance  = self.DownPaymentcalucaltion().balance
+                cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
+                cancel.total = self.totalAmount
+                cancel.balance = self.totalAmount - self.downPaymentValue
+                cancel.paymentType = "cash"
+                cancel.isCardVerified = false
+                cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+                cancel.area = self.getTotalAdjustedAreaForAllRooms()
+                cancel.totalPrice = self.totalAmount
+                cancel.finalPayment = self.finalpayment
+                cancel.financeAmount = self.financePayment
+                self.navigationController?.pushViewController(cancel, animated: true)
+            }
         }
         else if self.paymentType == .Check
         {
-            let cancel = AppointmentSummaryViewController.initialization()!
-            //web.downPayment = self.DownPaymentcalucaltion().downPayment
-            //web.balance  = self.DownPaymentcalucaltion().balance
-            cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
-            cancel.total = self.totalAmount
-            cancel.balance = self.totalAmount - self.downPaymentValue
-            cancel.paymentType = "check"
-            cancel.isCardVerified = false
-            cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            cancel.area = getTotalAdjustedAreaForAllRooms()
-            cancel.totalPrice = totalAmount
-            cancel.finalPayment = self.finalpayment
-            cancel.financeAmount = self.financePayment
-            self.navigationController?.pushViewController(cancel, animated: true)
+            DispatchQueue.main.async {
+                let cancel = AppointmentSummaryViewController.initialization()!
+                //web.downPayment = self.DownPaymentcalucaltion().downPayment
+                //web.balance  = self.DownPaymentcalucaltion().balance
+                cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
+                cancel.total = self.totalAmount
+                cancel.balance = self.totalAmount - self.downPaymentValue
+                cancel.paymentType = "check"
+                cancel.isCardVerified = false
+                cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+                cancel.area = self.getTotalAdjustedAreaForAllRooms()
+                cancel.totalPrice = self.totalAmount
+                cancel.finalPayment = self.finalpayment
+                cancel.financeAmount = self.financePayment
+                self.navigationController?.pushViewController(cancel, animated: true)
+            }
             
         }
         else
         {
-            let cancel = AppointmentSummaryViewController.initialization()!
-            //web.downPayment = self.DownPaymentcalucaltion().downPayment
-            //web.balance  = self.DownPaymentcalucaltion().balance
-            cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
-            cancel.total = self.totalAmount
-            cancel.balance = self.totalAmount - self.downPaymentValue
-            cancel.paymentType = "card"
-            cancel.isCardVerified = self.isCardVerifiedSuccessfully
-            cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            cancel.area = getTotalAdjustedAreaForAllRooms()
-            cancel.totalPrice = totalAmount
-            cancel.finalPayment = self.finalpayment
-            cancel.financeAmount = self.financePayment
-            self.navigationController?.pushViewController(cancel, animated: true)
+            DispatchQueue.main.async {
+                let cancel = AppointmentSummaryViewController.initialization()!
+                //web.downPayment = self.DownPaymentcalucaltion().downPayment
+                //web.balance  = self.DownPaymentcalucaltion().balance
+                cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
+                cancel.total = self.totalAmount
+                cancel.balance = self.totalAmount - self.downPaymentValue
+                cancel.paymentType = "card"
+                cancel.isCardVerified = self.isCardVerifiedSuccessfully
+                cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+                cancel.area = self.getTotalAdjustedAreaForAllRooms()
+                cancel.totalPrice = self.totalAmount
+                cancel.finalPayment = self.finalpayment
+                cancel.financeAmount = self.financePayment
+                self.navigationController?.pushViewController(cancel, animated: true)
+            }
         }
     }
     func getCardDetails()

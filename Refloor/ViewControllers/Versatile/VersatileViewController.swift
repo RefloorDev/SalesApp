@@ -13,7 +13,7 @@ protocol backToCreditApplicationProtocol
 {
     func backToCreditApplication(isVersatile:Bool)
 }
-@MainActor
+
 class VersatileViewController: UIViewController, ImagePickerDelegate, versatileBackprotocol,CreditApplicationProtocol
 {
    
@@ -231,74 +231,13 @@ extension VersatileViewController:WKNavigationDelegate
                     {
                         let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"versatile","improveit_appointment_id":AppDelegate.appoinmentslData.improveit_appointment_id ?? ""]
                         HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
-                        success, message, data in
-                        
-                        if success == "Success" || success == "Failed"
-                        {
-                            let versatileSuccess = InstallerSuccessViewController.initialization()!
-                            versatileSuccess.creditApplication = self
-                            versatileSuccess.isVersatile = true
-                            versatileSuccess.downOrFinal = self.downOrFinal
-                            versatileSuccess.totalAmount = self.totalAmount
-                            versatileSuccess.paymentPlan = self.paymentPlan
-                            versatileSuccess.paymentPlanValue = self.paymentPlanValue
-                            versatileSuccess.paymentOptionDataValue = self.paymentOptionDataValue
-                            versatileSuccess.drowingImageID = self.drowingImageID
-                            versatileSuccess.area = self.area
-                            versatileSuccess.downPaymentValue = self.downPaymentValue
-                            versatileSuccess.finalpayment = self.finalpayment
-                            versatileSuccess.financePayment = self.financePayment
-                            versatileSuccess.selectedPaymentMethord = self.selectedPaymentMethord
-                            versatileSuccess.downpayment = self.downpayment
-                            versatileSuccess.loanProvider = data?.provider ?? ""
-                            versatileSuccess.refernceNumber = data?.providerRefrence ?? ""
-                            versatileSuccess.approvedAmount = String(data?.approvedAmount ?? 0.0 )
-                            versatileSuccess.status = data?.status ?? ""
-                            versatileSuccess.successMsg = success!
-                            versatileSuccess.stairPrice = self.stairPrice
-                            versatileSuccess.excluded_amount_promotion = self.excluded_amount_promotion
-                            
-                            
-                            if let customer = AppDelegate.appoinmentslData
-                            {
-                                versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
-                            }
-                            versatileSuccess.savings = self.savings
-                            versatileSuccess.promotionCodeId = self.promotionCodeId
-                            versatileSuccess.adminFeeStatus = self.adminFeeStatus
-                            versatileSuccess.coapplicantSkiip = self.coapplicantSkiip
-                            versatileSuccess.minSalePrice = self.minSalePrice
-                            versatileSuccess.roomName = self.roomName
-                            versatileSuccess.adjustmentValue = self.adjustmentValue
-                            versatileSuccess.packagePlanName = self.packagePlanName
-                            self.navigationController?.pushViewController(versatileSuccess, animated: true)
-                        }
-                        
-                        
-                    }
-                }
-                    else if isHunter
-                    {
-                        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"hunter","improveit_appointment_id":AppDelegate.appoinmentslData.improveit_appointment_id ?? ""]
-                        HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
-                        success, message, data in
-                        
-                        if success == "Success" || success == "Failed"
-                            {
-                            if success == "Failed" && message == "Credit application is not existing"
-                            {
-                                let yes = UIAlertAction(title: "OK", style:.default) { (_) in
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                                self.alert(message ?? "", [yes])
-                                
-                                //self.alert(message!, nil)
-                            }
-                            else
+                            success, message, data in
+                            DispatchQueue.main.async {
+                            if success == "Success" || success == "Failed"
                             {
                                 let versatileSuccess = InstallerSuccessViewController.initialization()!
-                                versatileSuccess.isHunter = true
                                 versatileSuccess.creditApplication = self
+                                versatileSuccess.isVersatile = true
                                 versatileSuccess.downOrFinal = self.downOrFinal
                                 versatileSuccess.totalAmount = self.totalAmount
                                 versatileSuccess.paymentPlan = self.paymentPlan
@@ -314,10 +253,12 @@ extension VersatileViewController:WKNavigationDelegate
                                 versatileSuccess.loanProvider = data?.provider ?? ""
                                 versatileSuccess.refernceNumber = data?.providerRefrence ?? ""
                                 versatileSuccess.approvedAmount = String(data?.approvedAmount ?? 0.0 )
-                                versatileSuccess.stairPrice = self.stairPrice
-                                versatileSuccess.excluded_amount_promotion = self.excluded_amount_promotion
                                 versatileSuccess.status = data?.status ?? ""
                                 versatileSuccess.successMsg = success!
+                                versatileSuccess.stairPrice = self.stairPrice
+                                versatileSuccess.excluded_amount_promotion = self.excluded_amount_promotion
+                                
+                                
                                 if let customer = AppDelegate.appoinmentslData
                                 {
                                     versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
@@ -331,6 +272,66 @@ extension VersatileViewController:WKNavigationDelegate
                                 versatileSuccess.adjustmentValue = self.adjustmentValue
                                 versatileSuccess.packagePlanName = self.packagePlanName
                                 self.navigationController?.pushViewController(versatileSuccess, animated: true)
+                            }
+                            
+                        }
+                    }
+                }
+                    else if isHunter
+                    {
+                        let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"hunter","improveit_appointment_id":AppDelegate.appoinmentslData.improveit_appointment_id ?? ""]
+                        HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
+                            success, message, data in
+                            DispatchQueue.main.async {
+                            if success == "Success" || success == "Failed"
+                            {
+                                if success == "Failed" && message == "Credit application is not existing"
+                                {
+                                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                                        self.navigationController?.popViewController(animated: true)
+                                    }
+                                    self.alert(message ?? "", [yes])
+                                    
+                                    //self.alert(message!, nil)
+                                }
+                                else
+                                {
+                                    let versatileSuccess = InstallerSuccessViewController.initialization()!
+                                    versatileSuccess.isHunter = true
+                                    versatileSuccess.creditApplication = self
+                                    versatileSuccess.downOrFinal = self.downOrFinal
+                                    versatileSuccess.totalAmount = self.totalAmount
+                                    versatileSuccess.paymentPlan = self.paymentPlan
+                                    versatileSuccess.paymentPlanValue = self.paymentPlanValue
+                                    versatileSuccess.paymentOptionDataValue = self.paymentOptionDataValue
+                                    versatileSuccess.drowingImageID = self.drowingImageID
+                                    versatileSuccess.area = self.area
+                                    versatileSuccess.downPaymentValue = self.downPaymentValue
+                                    versatileSuccess.finalpayment = self.finalpayment
+                                    versatileSuccess.financePayment = self.financePayment
+                                    versatileSuccess.selectedPaymentMethord = self.selectedPaymentMethord
+                                    versatileSuccess.downpayment = self.downpayment
+                                    versatileSuccess.loanProvider = data?.provider ?? ""
+                                    versatileSuccess.refernceNumber = data?.providerRefrence ?? ""
+                                    versatileSuccess.approvedAmount = String(data?.approvedAmount ?? 0.0 )
+                                    versatileSuccess.stairPrice = self.stairPrice
+                                    versatileSuccess.excluded_amount_promotion = self.excluded_amount_promotion
+                                    versatileSuccess.status = data?.status ?? ""
+                                    versatileSuccess.successMsg = success!
+                                    if let customer = AppDelegate.appoinmentslData
+                                    {
+                                        versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+                                    }
+                                    versatileSuccess.savings = self.savings
+                                    versatileSuccess.promotionCodeId = self.promotionCodeId
+                                    versatileSuccess.adminFeeStatus = self.adminFeeStatus
+                                    versatileSuccess.coapplicantSkiip = self.coapplicantSkiip
+                                    versatileSuccess.minSalePrice = self.minSalePrice
+                                    versatileSuccess.roomName = self.roomName
+                                    versatileSuccess.adjustmentValue = self.adjustmentValue
+                                    versatileSuccess.packagePlanName = self.packagePlanName
+                                    self.navigationController?.pushViewController(versatileSuccess, animated: true)
+                                }
                             }
                         }
                         

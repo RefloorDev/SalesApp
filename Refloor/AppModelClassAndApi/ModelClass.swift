@@ -1036,6 +1036,7 @@ class SummeryDetailsData:NSObject, Mappable
     var attachments:[AttachmentDataValue]?
     var attachment_comments:String?
     var miscellaneous_comments:String?
+    var isGlueDown:Bool?
     var drawing_attachment:[AttachmentDataValue]?
     var transition:[SummeryTransitionDetails]?
     var questionaire:[SummeryQustionsDetails]?
@@ -1057,6 +1058,7 @@ class SummeryDetailsData:NSObject, Mappable
         striked <- map["striked"]
         transition <- map["transition"]
         questionaire <- map["questionaire"]
+        isGlueDown <- map["selected_room_glueDown"]
         drawing_attachment <- map["drawing_attachment"]
         material_comments <- map["material_comments"]
         superscript_symbol <- map["superscript_symbol"]

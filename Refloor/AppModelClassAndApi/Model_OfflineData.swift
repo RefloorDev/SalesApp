@@ -1699,6 +1699,7 @@ class rf_completed_room: Object{
     @objc dynamic var selected_room_UpchargePrice: Double = 0.0
     @objc dynamic var selected_room_molding: String?
     @objc dynamic var selected_room_MoldingPrice: Double = 0.0
+    @objc dynamic var selected_room_glueDown: Bool = false
     @objc dynamic var delivery_option:String?
     @objc dynamic var room_strike_status: Bool = false
     @objc dynamic var extraPrice: Double = 0.0
