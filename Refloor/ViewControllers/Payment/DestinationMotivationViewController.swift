@@ -266,19 +266,97 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
 //        }
         else
         {
+            offlineParameterCreation()
+//            let appoint_id = String(AppointmentData().appointment_id ?? 0)
+//            self.parametersAdditionalComments["destination_selection_id"] = self.destinationSelectionId
+//            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: self.parametersAdditionalComments as NSDictionary, imageName: "")
+//            
+//            let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
+//            let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+//            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+//            DispatchQueue.main.async
+//            {
+//                
+//                self.navigationController?.popToRootViewController(animated: true)
+//            }
+        }
+    }
+    func offlineParameterCreation()
+    {
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        if !isCardVerified
+        {
             
-            let appoint_id = String(AppointmentData().appointment_id ?? 0)
-            self.parametersAdditionalComments["destination_selection_id"] = self.destinationSelectionId
-            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: self.parametersAdditionalComments as NSDictionary, imageName: "")
-            
-            let requestParaInitiateSync:[String:Any] = ["appointment_id":appoint_id,"screen_logs":self.getScreenCompletionArrayToSend()]
-            let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
-            DispatchQueue.main.async
+            let contactApiData = self.createContractParameters()
+            if let applicantDataDict = contactApiData as? [String:Any]
             {
+                if  let applicant = applicantDataDict["application_info_secret"] as? String{
+                    if applicant == ""
+                    {
+                        
+                    }
+                    else
+                    {
+                        var applicantData:[String:Any] = [:]
+                        let customerFullDict = JWTDecoder.shared.decodeDict(jwtToken: applicant)
+                        applicantData = (customerFullDict["payload"] as? [String:Any] ?? [:])
+                        self.saveToCustomerDetailsOnceUpdatedInApplicantForm(appointmentId: appointmentId, customerDetailsDict: applicantData)
+                    }
+                }
                 
-                self.navigationController?.popToRootViewController(animated: true)
             }
+            
+            
+            var customerAndRoomData = self.createFinalParameterForCustomerOfflineApiCall()
+            for (key,value) in contactApiData
+            {
+                customerAndRoomData[key] = value
+            }
+            if payment_TrasnsactionDict != [:]
+            {
+                customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
+            }
+            
+            
+            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+        }
+        
+        
+        let imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
+        //            var lastImageDict = imagesArray[imagesArray.count-1]
+        //            lastImageDict["data_completed"] = 1
+        //            imagesArray[imagesArray.count-1] = lastImageDict
+        //            print(imagesArray)
+        for imageDict in imagesArray{
+            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
+        }
+        //4.
+//        let appoint_id = String(AppointmentData().appointment_id ?? 0)
+//        var contract_plumbing_option_1 = 0
+//        var contract_plumbing_option_2 = 0
+//        if self.contractDataStatus!.contract_plumbing_option_status == 0{
+//            contract_plumbing_option_1 = 1
+//        }else if self.contractDataStatus!.contract_plumbing_option_status == 1{
+//            contract_plumbing_option_2 = 1
+//        }
+//        let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
+//        let requestPara:[String:Any] = ["appointment_id":appoint_id,"contract_plumbing_option_1":contract_plumbing_option_1, "contract_plumbing_option_2" : contract_plumbing_option_2,"recision_date" : recison,"send_physical_document": self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments, "flexible_installation": self.FlexInstall ? 1: 0]
+        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.GenerateContract, url: AppURL().syncGenerateContractDocumentInServer, requestType: RequestType.post, requestParams: parametersAdditionalComments as NSDictionary, imageName: "")
+        
+        let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
+        let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+        let appointment = self.getAppointmentData(appointmentId: appointmentId)
+        let firstName = appointment?.applicant_first_name ?? ""
+        let lastName = appointment?.applicant_last_name ?? ""
+        let name = lastName == ""  ? firstName : firstName + " " + lastName
+        let date = appointment?.appointment_datetime ?? ""
+        self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.appointmentLogStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
+
+        
+        DispatchQueue.main.async
+        {
+            self.navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -421,6 +499,20 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
     func createQuestionAnswerForAllRoomsParameter() -> [[String:Any]]{
         return self.getQuestionAnswerArrayForApiCall()
     }
+    func createFinalParameterForCustomerOfflineApiCall() -> [String:Any]{
+        var customerDict: [String:Any] = [:]
+        customerDict["appointment_id"] = AppointmentData().appointment_id ?? 0
+        customerDict["data_completed"] = 0
+        var customerData = createCustomerParameter()
+        //        customerData["additional_comments"] = self.comments
+        //        customerData["send_physical_document"] = self.sendPhysicalDocument ? 1 : 0
+        customerDict["customer"] = customerData
+        customerDict["rooms"] = createRoomParameters()
+        customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
+        customerDict["operation_mode"] = "offline"
+        customerDict["app_version"] = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        return customerDict
+    }
     
     // MARK: - CONTRACT PARAMETERS
     //contract
@@ -510,7 +602,8 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
         
         else
         {
-            self.navigationController?.popToRootViewController(animated: true)
+            offlineParameterCreation()
+           // self.navigationController?.popToRootViewController(animated: true)
         }
     }
     

@@ -12,6 +12,7 @@ import CryptoKit
 import CommonCrypto
 import PayCardsRecognizer
 var packageName = ""
+@MainActor
 class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate, UITextFieldDelegate {
     
     
