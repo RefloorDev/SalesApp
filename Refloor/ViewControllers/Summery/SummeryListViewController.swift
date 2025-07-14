@@ -1146,6 +1146,18 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                            installer.isOutOfstock = true
                            self.present(installer, animated: true, completion: nil)
                        }
+                        else
+                            
+                        {
+                            stairIndex = index
+                            let selectedColor = self.stairColourNamesArray[index].color ?? ""
+                            let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
+                            let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
+                            //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+                            let roomId = self.tableValues[cell].room_id ?? 0
+                            self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
+                            self.loadRefreshData()
+                        }
                     }
                     else
                     {
@@ -1354,6 +1366,26 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                            installer.isOutOfstock = true
                            self.present(installer, animated: true, completion: nil)
                        }
+                        else
+                        {
+                            roomIndex = index
+                            let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
+                            let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
+                            let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                            //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+                            let roomId = self.tableValues[cell].room_id ?? 0
+                            var isGlueDown = false
+                            if self.floorColorNamesArray[index].glueDown == 0
+                            {
+                                isGlueDown = false
+                            }
+                            else
+                            {
+                                isGlueDown = true
+                            }
+                            self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0,isGlueDown:isGlueDown)
+                            self.loadRefreshData()
+                        }
                     }
                     else
                     {
@@ -1402,7 +1434,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 
                 
                 
-                
+               
               
             }
             //
@@ -1434,6 +1466,18 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                            installer.isOutOfstock = true
                            self.present(installer, animated: true, completion: nil)
                        }
+                        else
+                        {
+                            roomIndex = index
+                            applyAllBtn.isUserInteractionEnabled = true
+                            applyAllBtn.setTitleColor(.white, for: .normal)
+                            applyAllSelectColorTxtFld.text = item
+                            let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                            applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
+                            self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
+                            self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
+                            self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+                        }
                     }
                     else
                     {
