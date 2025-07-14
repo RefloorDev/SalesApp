@@ -230,7 +230,14 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             let feildType = self.fieldArray.filter({$0.field_type == "initial"})
             //url = URL(string: contractUpdateDocArray[1].document_url ?? "")
             contractdata = contractUpdateDocArray[1].data
-            addAnnotationsWithoutCoApplicant()
+            if contractdata != nil
+            {
+                addAnnotationsWithoutCoApplicant()
+            }
+            else
+            {
+                self.alert("Contract not found",nil)
+            }
             
         }
         
@@ -267,6 +274,11 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                     self.checkboxArray.removeAll()
                     for i in 0...self.fieldArray.count-1{
                         self.page = self.pdfView.document?.page(at: self.fieldArray[i].page-1)
+                        if self.page == nil
+                        {
+                            self.alert("Contract Not found", nil)
+                            return
+                        }
                         self.pageRect=self.page.bounds(for: .trimBox)
                         self.pageheight=self.pageRect.size.height
                         self.pagewidth=self.pageRect.size.width
