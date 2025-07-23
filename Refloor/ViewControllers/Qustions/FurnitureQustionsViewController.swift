@@ -276,7 +276,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             self.tableView.reloadData()
                         }
                     }
-                    qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
+                    if value2 >= 0
+                    {
+                        qustionAnswer[sender.tag].answerOFQustion!.numberVaue =  value2
+                    }
+                    else
+                    {
+                        qustionAnswer[sender.tag].answerOFQustion!.numberVaue = 0
+                        self.alert("Please enter a value of 0 or greater than 0", nil)
+                    }
                     if area != 0.0
                     {
                     let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
@@ -802,15 +810,15 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         
-        let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
-        if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
-        {
-            return qustionAnswer.count + 2
-        }
-        else
-        {
+//        let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
+//        if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+//        {
+//            return qustionAnswer.count + 2
+//        }
+//        else
+//        {
             return qustionAnswer.count + 1
-        }
+        //}
         
         
     }
@@ -1637,17 +1645,17 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 return "You must select a primer type"
 
             }
-             if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
-            {
-                if miscelleneous_Comments == "Enter your comments about Miscellaneous Charge"
-                {
-                   return "You must enter comments about miscellaneous charge"
-                }
-//                 else
-//                 {
-//                    self.miscelleneous_Comments =
+//             if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
+//            {
+//                if miscelleneous_Comments == "Enter your comments about Miscellaneous Charge"
+//                {
+//                   return "You must enter comments about miscellaneous charge"
 //                }
-            }
+////                 else
+////                 {
+////                    self.miscelleneous_Comments =
+////                }
+//            }
             
             
             //                    guard (self.qustionAnswer[0].answerOFQustion?.multySelection?.count ?? 0) > 0 else {

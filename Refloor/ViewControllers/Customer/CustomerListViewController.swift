@@ -130,6 +130,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
             
         }
+        self.customerListTableView.reloadData()
         
     }
     
@@ -323,6 +324,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         //BackendApiSyncCall()
        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: true)
+    
 //        let masterData = self.getMasterDataFromDB()
 //        let restrictGeoLocation = UserDefaults.standard.value(forKey: "restrict_geolocation") as! Int
 //        if masterData.enableGeoLocation && restrictGeoLocation == 0
@@ -457,6 +459,73 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         HttpClientManager.SharedHM.BackendApiSyncCallDirect()
     }
     
+    func convertToFullDate(from timeString: String) -> Date? {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM hh:mm a yyyy"
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+
+        // Assume current year if not included in input
+        let currentYear = Calendar.current.component(.year, from: Date())
+        let fullString = "\(timeString) \(currentYear)"
+
+        return formatter.date(from: fullString)
+    }
+
+    
+    // Checking whether the system date is less than 90
+    
+
+//    func isTimeWithinLimit(dateString: String, timeLimit: Double) -> Bool {
+//        let formatter = DateFormatter()
+//        formatter.locale = Locale(identifier: "en_US_POSIX")
+//
+//        let currentDate = Date()
+//        let calendar = Calendar.current
+//        let currentYear = calendar.component(.year, from: currentDate)
+//        
+//        var fullDateString = dateString
+//        var targetDate: Date?
+//
+//        if dateString.contains(":") && dateString.contains("AM") || dateString.contains("PM") {
+//            if dateString.contains(" ") {
+//                // Possibly contains day and month
+//                formatter.dateFormat = "dd MMM hh:mm a yyyy"
+//                fullDateString += " \(currentYear)"
+//            } else {
+//                // Time only, assume today
+//                formatter.dateFormat = "hh:mm a dd MMM yyyy"
+//                let day = calendar.component(.day, from: currentDate)
+//                let month = calendar.component(.month, from: currentDate)
+//                let monthSymbol = formatter.shortMonthSymbols[month - 1]
+//                fullDateString = "\(dateString) \(day) \(monthSymbol) \(currentYear)"
+//            }
+//            targetDate = formatter.date(from: fullDateString)
+//        }
+//        
+//        guard let target = targetDate else {
+//            print("Could not parse date string: \(fullDateString)")
+//            return false
+//        }
+//
+//        let differenceInMinutes = abs(target.timeIntervalSince(currentDate) / 60.0)
+//        return differenceInMinutes <= timeLimit
+//    }
+
+    
+    func isPastAndWithinLimit(from pastDate: Date, to currentDate: Date, limitInMinutes: Double) -> Bool {
+        let differenceInSeconds = currentDate.timeIntervalSince(pastDate)
+        if !(differenceInSeconds > 0)
+        {
+            return true
+        }
+        return differenceInSeconds > 0 && differenceInSeconds <= limitInMinutes * 60
+    }
+
+
+    
+    
+    
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return (appoinmentsList ?? []).count
@@ -464,6 +533,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomerListTableViewCell") as! CustomerListTableViewCell
+        let masterData = getMasterDataFromDB()
         cell.arrivedBtn.tag = indexPath.row
         //cell.arrivedBtn.addTarget(self, action: <#T##Selector#>, for: .touchUpInside)
             var name = ""
@@ -480,6 +550,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             
             // cell.timeLabel.text = Date().TimeOnlyForCustomerList(datestr: appoinmentsList?[indexPath.row].appointment_date ?? "")
             cell.timeLabel.text =  appoinmentsList?[indexPath.row].appointment_datetime ?? ""
+        let appointmentDate = convertToFullDate(from: appoinmentsList?[indexPath.row].appointment_datetime ?? "")!
             
             
             
@@ -499,72 +570,127 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         if indexPath.row == 0
         {
             if locationManager.monitoredRegions.count >= 20 // check current monitored region Apple allowed only 20 at time
-                {
+            {
                 locationManager.stopMonitoring(for: locationManager.monitoredRegions.first!) // if have to add new one then need to remove older then 20 else it will not add new one
-                 }
-            let masterData = getMasterDataFromDB()
+            }
+            
             if masterData.enableGeoLocation && restrictGeoLocation == 0
             {
                 //startGeoLocation(appointments: appoinmentsList!)
                 self.geoFencing(latitude: appoinmentsList?[indexPath.row].partner_latitude ?? 0.0, longtitude: appoinmentsList?[indexPath.row].partner_longitude ?? 0.0,appointmentId: appoinmentsList?[indexPath.row].id ?? 0)
                 
             }
-           // self.geoFencing(latitude: appoinmentsList?[indexPath.row].partner_latitude ?? 0.0, longtitude: appoinmentsList?[indexPath.row].partner_longitude ?? 0.0,appointmentId: appoinmentsList?[indexPath.row].id ?? 0)
-            var address = ""
-            if let street = appoinmentsList?[indexPath.row].street2
+        }
+        let TimeLimit = Double(masterData.addressVisibleTimeLimit)
+        let CurrentDate = Date()
+        let isItTime = isPastAndWithinLimit(from: CurrentDate, to: appointmentDate, limitInMinutes: TimeLimit)//isTimeWithinLimit(dateString: appoinmentsList?[indexPath.row].appointment_datetime ?? "", timeLimit: TimeLimit)
+        if !isItTime || indexPath.row != 0
             {
-                address = street
-            }
-            if let street2 = appoinmentsList?[indexPath.row].street
-            {
-                if street2 != ""
+                var address = ""
+                if let city = appoinmentsList?[indexPath.row].city
                 {
-                    address = (address == "") ? street2 : (address + ", " + street2)
+                    if city != ""
+                    {
+                        address = (address == "") ? city : (address + ", " + city)
+                    }
                 }
-            }
-            if let city = appoinmentsList?[indexPath.row].city
-            {
-                if city != ""
+                if let state = appoinmentsList?[indexPath.row].state_code
                 {
-                    address = (address == "") ? city : (address + ", " + city)
+                    if state != ""
+                    {
+                        address = (address == "") ? state : (address + ", " + state)
+                    }
                 }
+                cell.customerLocationLabel.text = address
+                cell.customerNameLabel.isHidden = true
+                cell.customerLogo.isHidden = true
+                cell.locationImageView.isHidden = false
+                cell.locationImageTopConstraint.constant = -40
             }
-            if let state = appoinmentsList?[indexPath.row].state_code
+            
+            // self.geoFencing(latitude: appoinmentsList?[indexPath.row].partner_latitude ?? 0.0, longtitude: appoinmentsList?[indexPath.row].partner_longitude ?? 0.0,appointmentId: appoinmentsList?[indexPath.row].id ?? 0)
+            else
             {
-                if state != ""
+                if !isItTime
                 {
-                    address = (address == "") ? state : (address + ", " + state)
-                }
-            }
-            if let zip = appoinmentsList?[indexPath.row].zip
-            {
-                if zip != ""
-                {
-                    address = (address == "") ? zip : (address + " " + zip)
+                    var address = ""
+                    if let city = appoinmentsList?[indexPath.row].city
+                    {
+                        if city != ""
+                        {
+                            address = (address == "") ? city : (address + ", " + city)
+                        }
+                    }
+                    if let state = appoinmentsList?[indexPath.row].state_code
+                    {
+                        if state != ""
+                        {
+                            address = (address == "") ? state : (address + ", " + state)
+                        }
+                    }
                 }
                 else
                 {
-                    address = (address + " " + "48083")
+                    cell.locationImageTopConstraint.constant = 40
+                    cell.customerLogo.isHidden = false
+                    cell.customerNameLabel.isHidden = false
+                    var address = ""
+                    if let street = appoinmentsList?[indexPath.row].street2
+                    {
+                        address = street
+                    }
+                    if let street2 = appoinmentsList?[indexPath.row].street
+                    {
+                        if street2 != ""
+                        {
+                            address = (address == "") ? street2 : (address + ", " + street2)
+                        }
+                    }
+                    if let city = appoinmentsList?[indexPath.row].city
+                    {
+                        if city != ""
+                        {
+                            address = (address == "") ? city : (address + ", " + city)
+                        }
+                    }
+                    if let state = appoinmentsList?[indexPath.row].state_code
+                    {
+                        if state != ""
+                        {
+                            address = (address == "") ? state : (address + ", " + state)
+                        }
+                    }
+                    if let zip = appoinmentsList?[indexPath.row].zip
+                    {
+                        if zip != ""
+                        {
+                            address = (address == "") ? zip : (address + " " + zip)
+                        }
+                        else
+                        {
+                            address = (address + " " + "48083")
+                        }
+                    }
+                    else
+                    {
+                        address = (address + " " + "48083")
+                    }
+                    if address == ""
+                    {
+                        address = "N/A"
+                    }
+                    cell.locationImageView.isHidden = false
+                    cell.customerLocationLabel.text = address
                 }
-            }
-            else
-            {
-                address = (address + " " + "48083")
-            }
-            if address == ""
-            {
-                address = "N/A"
-            }
-            cell.locationImageView.isHidden = false
-            cell.customerLocationLabel.text = address
+        }
             //cell.arrivedBtn.isHidden = false
-        }
-        else
-        {
-            cell.customerLocationLabel.text = ""
-            cell.locationImageView.isHidden = true
-            //cell.arrivedBtn.isHidden = true
-        }
+//        }
+//        else
+//        {
+//            cell.customerLocationLabel.text = ""
+//            cell.locationImageView.isHidden = true
+//            //cell.arrivedBtn.isHidden = true
+//        }
             cell.startButton.tag = indexPath.row
             //arb
             if self.appoinmentsList?[indexPath.row].appointmentStatus == AppointmentStatus.sync{

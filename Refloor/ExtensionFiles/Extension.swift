@@ -4846,7 +4846,7 @@ extension UIViewController:OrderStatusViewDelegate
                 roomDict["room_area_image"] = room_area_image
                 roomDict["room_adjusted_area"] = room_adjusted_area
                 roomDict["room_perimeter"] = room_perimeter
-                roomDict["misc_charge_comments"] = mis_comments
+                //roomDict["misc_charge_comments"] = mis_comments
 //                roomDict["transition1_name"] = transition1_name
 //                roomDict["transition1_width"] = transition1_width
 //                roomDict["transition2_name"] = transition2_name
@@ -5710,18 +5710,45 @@ extension String
         return attributedString
     }
     
-    var html2AttributedString: NSAttributedString?
-    {
-        do {
-            return try NSAttributedString(data: data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!,
-                                          options: [.documentType: NSAttributedString.DocumentType.html,
-                                                    .characterEncoding: String.Encoding.utf8.rawValue],
-                                          documentAttributes: nil)
-        } catch {
-            print("error: ", error)
-            return nil
+//    var html2AttributedString: NSAttributedString?
+//    {
+//        do {
+//            return try NSAttributedString(data: data(using: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!,
+//                                          options: [.documentType: NSAttributedString.DocumentType.html,
+//                                                    .characterEncoding: String.Encoding.utf8.rawValue],
+//                                          documentAttributes: nil)
+//        } catch {
+//            print("error: ", error)
+//            return nil
+//        }
+//    }
+   
+
+        var html2AttributedString: NSAttributedString? {
+            guard let data = self.data(using: .utf8) else {
+                print("⚠️ Could not convert to UTF-8 data: \(self)")
+                return nil
+            }
+
+            do {
+                return try NSAttributedString(
+                    data: data,
+                    options: [
+                        .documentType: NSAttributedString.DocumentType.html,
+                        .characterEncoding: String.Encoding.utf8.rawValue
+                    ],
+                    documentAttributes: nil
+                )
+            } catch {
+                print("❌ Failed to convert HTML to attributed string:\n\(self)\nError: \(error)")
+                return nil
+            }
         }
-    }
+    
+
+    
+    
+    
     var html2String: String {
         return html2AttributedString?.string ?? ""
     }
