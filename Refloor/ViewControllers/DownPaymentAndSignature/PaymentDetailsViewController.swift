@@ -65,7 +65,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var loanPayment:Double = 0
     var paymentPlan:PaymentPlanValue?
     var downPaymentValue:Double = 0
-    var finalpayment:Double = 0
+    var finalpayment:Double = 0.00
     var adjustmentValue:Double = 0
     var roomName = ""
     var financePayment:Double = 0
@@ -91,8 +91,14 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         // adminFeeLabelTitle.isHidden = true
         // adminFeeLabel.isHidden = true
-        
-        downPayment.text = "$\(downPaymentValue.clean)"
+        if downPaymentValue == 0
+        {
+            downPayment.text = "$0.00"
+        }
+        else
+        {
+            downPayment.text = "$\(downPaymentValue.clean)"
+        }
         
         totelPrice.text = "$\((totalAmount + adminFee ).clean)"
         pakageName.text = paymentPlanValue?.plan_title ?? "Unknown"
@@ -137,7 +143,7 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
         }
         else
         {
-            self.financeTypeHeading.text = "Payment Method (\(paymentOptionDataValue?.Name ?? ""))"
+            //self.financeTypeHeading.text = "Payment Method (\(paymentOptionDataValue?.Name ?? ""))"
             loanPayment =  self.financePayment
             //            if (adminFee>0)
             //            {
@@ -145,11 +151,18 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             loanPayment = loanPayment + adminFee
             //
             financeAmount.text = "$\((financePayment).toDoubleString)"
-            finalPayment.text = "$\(finalpayment.clean)"
+            if finalpayment == 0
+            {
+                finalPayment.text = "$0.00"
+            }
+            else
+            {
+                finalPayment.text = "$\(finalpayment.clean)"
+            }
             if(financePayment == 0)
             {    finalpayment = finalpayment + adminFee
                 finalPayment.text =  "$\((finalpayment).clean)"
-                totalFinanceAmount.isHidden = true
+                //totalFinanceAmount.isHidden = true
                 
             }
             else
@@ -161,12 +174,12 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             
             if(Balance_DueDt > 0)
             {
-                self.financeTypeHeading.text = "Payment Amount (\(paymentOptionDataValue?.Name?.withoutHtml ?? ""))"
+                //self.financeTypeHeading.text = "Payment Amount (\(paymentOptionDataValue?.Name?.withoutHtml ?? ""))"
                 let stringFormmatting = self.financeTypeHeading.text
                 let usingreplacingOccurrences = stringFormmatting!.replacingOccurrences(of: "\n",with: " ")
-                self.financeTypeHeading.text = usingreplacingOccurrences
+                //self.financeTypeHeading.text = usingreplacingOccurrences
                 let today = Date()
-                let Balance_DueDt = Double(self.paymentOptionDataValue?.Balance_Due__c ?? "0") ?? 0
+                let Balance_DueDt = Double(self.paymentOptionDataValue?.Balance_Due__c ?? "0.00") ?? 0
                 let modifiedDate = Calendar.current.date(byAdding: .day, value: Int(Balance_DueDt), to: today)!
                 self.totalFinanceAmount.text =  "Balance Due On: " + modifiedDate.DateFromStringMonthDate()
                 
@@ -174,14 +187,14 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             else
             {
                 //self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).toDoubleString)"
-                if self.paymentOptionDataValue?.Secondary_Payment_Factor__c != "0"
-                {
-                    self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).rounded().clean) - $\((self.financePayment * (Double(self.paymentOptionDataValue?.Secondary_Payment_Factor__c ?? "0") ?? 0)).rounded().clean)"
-                }
-                else
-                {
-                    self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).rounded().clean)"
-                }
+//                if self.paymentOptionDataValue?.Secondary_Payment_Factor__c != "0"
+//                {
+//                    self.totalFinanceAmount.text = "$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).rounded().clean) - $\((self.financePayment * (Double(self.paymentOptionDataValue?.Secondary_Payment_Factor__c ?? "0") ?? 0)).rounded().clean)"
+//                }
+//                else
+//                {
+                    self.totalFinanceAmount.text = self.paymentOptionDataValue?.Name//"$\((self.financePayment * (Double(self.paymentOptionDataValue?.Payment_Factor__c ?? "0") ?? 0)).rounded().clean)"
+               // }
             }
             
             

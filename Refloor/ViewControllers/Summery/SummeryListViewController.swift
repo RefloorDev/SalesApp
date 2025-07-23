@@ -698,6 +698,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             let roomId = self.tableValues[editActionsForRowAt.row].room_id ?? 0
             self.deleteRoom(roomID:roomId)
             self.deleteDiscountArrayFromDb()
+            let appointmentId = AppointmentData().appointment_id ?? 0
+            self.deleteCustomRoomName(appointmentId: appointmentId, roomId: String(roomId))
             self.loadRefreshData()
         }
         edit.backgroundColor = UIColor().colorFromHexString("#A7B0BA")

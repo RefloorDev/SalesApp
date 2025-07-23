@@ -1555,10 +1555,13 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     //discount_exclude_amount = (paymentPlanValueDetails[indexPath.row].discount_exclude_amount ?? 0)
                     IsEligibleForDiscounts=1
                     cell.adjustmentValue.text = "$\((adjestmentValue.rounded() + monthly).clean)"
-                    savingsArrayDouble.remove(at: indexPath.row)
-                    savingsArrayDouble.insert((adjestmentValue + monthly), at: indexPath.row)
-                    savingsArray.remove(at: indexPath.row)
-                    savingsArray.insert(cell.adjustmentValue.text ?? "", at: indexPath.row)
+                    if indexPath.row <= savingsArray.count - 1
+                    {
+                        savingsArrayDouble.remove(at: indexPath.row)
+                        savingsArrayDouble.insert((adjestmentValue + monthly), at: indexPath.row)
+                        savingsArray.remove(at: indexPath.row)
+                        savingsArray.insert(cell.adjustmentValue.text ?? "", at: indexPath.row)
+                    }
                     prize = mrp - (adjestmentValue.rounded() + monthly)
                     actualSalePrice = mrp - monthly
                     if(prize < self.minimumFee)
@@ -1570,9 +1573,11 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                     //var prize = saleprice.rounded()
                     cell.prizeLabel.text = "$\(prize.rounded().clean)"
-                    salePriceDouble.remove(at: indexPath.row)
-                    salePriceDouble.insert(prize, at: indexPath.row)
-                   
+                    if indexPath.row <= salePriceDouble.count - 1
+                    {
+                        salePriceDouble.remove(at: indexPath.row)
+                        salePriceDouble.insert(prize, at: indexPath.row)
+                    }
                     //arb
                     if self.adjestmentValue > 0{
                         self.discountBtn.borderColor = UIColor.placeHolderColor
@@ -1628,15 +1633,19 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 //                cell.borderWidth = 0
                 
             }
-            if savingsArray[indexPath.row] == "$0"
+            if indexPath.row <= savingsArray.count - 1
             {
-                cell.savingsLblHeightConstraint.constant = 0
-                cell.savingsValueHeightConstraint.constant = 0
-            }
-            else
-            {
-                cell.savingsLblHeightConstraint.constant = 30
-                cell.savingsValueHeightConstraint.constant = 30
+                if savingsArray[indexPath.row] == "$0"
+                {
+                    cell.savingsLblHeightConstraint.constant = 0
+                    cell.savingsValueHeightConstraint.constant = 0
+                }
+                
+                else
+                {
+                    cell.savingsLblHeightConstraint.constant = 30
+                    cell.savingsValueHeightConstraint.constant = 30
+                }
             }
             print("1 year price",cell.mrpLabel.text)
             print("sale price",cell.prizeLabel.text)
@@ -1647,11 +1656,12 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             //cell.mrpLabel.text = self.minimumFee +
             return cell
             
+            
         }
         else
         {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PaymentOptionsBottomCollectionViewCell", for: indexPath) as! PaymentOptionsBottomCollectionViewCell
-            //let paymentRestrictionArray = paymentOptionDataValueDetail.filter({$0.isHidden == false})
+            //let paymentRestrictionArray = paymentOptionData ValueDetail.filter({$0.isHidden == false})
             print("------appointmentDate------", appointmentDate)
 
 //            let appointmentDateString = "2022-02-16"
@@ -1693,7 +1703,17 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 
                 cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
                 
-                cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                //cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                cell.paymentDescription.text = paymentOptionDataValueDetail[indexPath.row].Description__c ?? ""
+//                 let parsed = rawHTML.html2String
+//                
+//                    cell.paymentDescription.text = parsed
+//                }
+//                else{
+//                    cell.paymentDescription.text = rawHTML
+//                }
+                
+
                 if(paymentOptionDataValueDetail[indexPath.row].Name == "Cash" && paymentOptionDataValueDetail[indexPath.row].isHidden == false)
                 {
                     
@@ -1730,7 +1750,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                         }
                         
                     }
-                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    //cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                        
                     
                     
                     // cell.subTitle.text = "Down Payment:" + "$\((self.emiAmount * DownDouble).toRoundeString)" + "\n\nAt Completion:" + " $\((self.emiAmount * FinalDouble).toRoundeString)"
@@ -1755,7 +1776,16 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     
                     
                     
-                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+//                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    cell.paymentDescription.text = paymentOptionDataValueDetail[indexPath.row].Description__c ?? ""
+//                    let parsed = rawHTML.html2String
+//                    
+//                        cell.paymentDescription.text = parsed
+//                    }
+//                    else{
+//                        cell.paymentDescription.text = rawHTML
+//                    }
+                    
                     
                     print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
                     print("Amount:\(self.emiAmount)")
@@ -1795,7 +1825,16 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     
                     cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing:paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
                     
-                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    //cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    cell.paymentDescription.text = paymentOptionDataValueDetail[indexPath.row].Description__c ?? ""
+//                    let parsed = rawHTML.html2String
+//                    //{
+//                        cell.paymentDescription.text = parsed
+//                    }
+//                    else{
+//                        cell.paymentDescription.text = rawHTML
+//                    }
+                    
                     
                     print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
                     print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")
@@ -1827,7 +1866,16 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                     }
                     cell.subTitle.text = (paymentOptionDataValueDetail[indexPath.row].Payment_Info__c ?? "") + "\n" + "\n \(String(describing: paymentOptionDataValueDetail[indexPath.row].down_payment_message ?? ""))"
                     
-                    cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    //cell.paymentDescription.text = (paymentOptionDataValueDetail[indexPath.row].Description__c ?? "").html2String
+                    cell.paymentDescription.text = paymentOptionDataValueDetail[indexPath.row].Description__c ?? ""
+//                    let parsed = rawHTML.html2String
+//                    //{
+//                        cell.paymentDescription.text = parsed
+//                    }
+//                    else{
+//                        cell.paymentDescription.text = rawHTML
+//                    }
+                    
                     
                     print("Title:\(paymentOptionDataValueDetail[indexPath.row].Name ?? "")")
                     print("Amount:", "$\((self.emiAmount * Payment_Factor).toDoubleString)")

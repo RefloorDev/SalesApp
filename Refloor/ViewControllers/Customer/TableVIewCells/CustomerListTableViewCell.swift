@@ -10,6 +10,7 @@ import UIKit
 
 class CustomerListTableViewCell: UITableViewCell {
     
+    @IBOutlet weak var locationImageTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var locationImageView: UIImageView!
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var customerLocationLabel: UILabel!
@@ -17,6 +18,7 @@ class CustomerListTableViewCell: UITableViewCell {
     @IBOutlet weak var cutomerphoneNumberLogoImageView: UIImageView!
     @IBOutlet weak var customerPhoneStackView: UIStackView!
     
+    @IBOutlet weak var customerLogo: UIImageView!
     @IBOutlet weak var arrivedBtn: UIButton!
     @IBOutlet weak var customerNameLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!

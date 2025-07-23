@@ -80,6 +80,7 @@ class MasterData : Object, Mappable {
     @objc dynamic var max_stair_width : Double = 0.0
     @objc dynamic var min_downpayment_amount = 0.0
     @objc dynamic var destinationSelectionConsentMesage:String?
+    @objc dynamic var addressVisibleTimeLimit:Int = 0
 //    @objc dynamic var versatileURL:String?
 //    @objc dynamic var versatileApiKey:String?
 //    @objc dynamic var versatileEntityKey:String?
@@ -116,6 +117,7 @@ class MasterData : Object, Mappable {
         resitionDate <- map ["recision_date"]
         max_stair_width <- map ["max_stair_width"]
         min_downpayment_amount <- map ["min_down_payment_amount"]
+        addressVisibleTimeLimit <- map["address_visible_time_limit"]
         destinationSelectionConsentMesage <- map ["destination_selection_consent_message"]
 //        versatileURL <- map ["versatile_url"]
 //        versatileApiKey <- map ["versatile_api_key"]
