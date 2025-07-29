@@ -987,7 +987,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
         downpatmet.adminFee = 0
-        if selectedPlan != 2
+        if self.paymentPlanValueDetails[self.selectedPlan].plan_title != "Smart Choice"//selectedPlan != 2
         {
             deleteDiscountArrayFromDb()
             discountArray.removeAll()

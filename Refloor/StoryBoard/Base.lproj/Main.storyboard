@@ -477,7 +477,6 @@
                 <navigationController storyboardIdentifier="NavigationController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="8bl-oh-tWs" customClass="NavigationController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleAspectFill" insetsLayoutMarginsFromSafeArea="NO" id="KZa-H9-HDb">
-                        <rect key="frame" x="0.0" y="24" width="820" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -5870,7 +5869,7 @@
             <objects>
                 <viewController storyboardIdentifier="PaymentOptionsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="p01-kO-6A3" customClass="PaymentOptionsViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JcJ-wo-IrP">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="900"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G7g-nU-9zi">
@@ -6973,7 +6972,7 @@ We do not skip this step with any customer.</string>
             <objects>
                 <viewController id="jic-Xp-DVg" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="hcy-MQ-qUl">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="haH-h1-uBY">
@@ -12682,7 +12681,7 @@ Cgo
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance Due On Installment" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aOE-R2-YBQ">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Balance Due Upon Installation" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aOE-R2-YBQ">
                                                         <rect key="frame" x="40" y="394" width="375" height="39"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="375" id="Lyx-bw-EmV"/>
@@ -13623,7 +13622,7 @@ Cgo
             <objects>
                 <viewController storyboardIdentifier="ApplicantFormViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="d5H-aD-0Dh" customClass="ApplicantFormViewController00" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zWm-5K-FCG">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="sjP-EO-1LO">
@@ -15491,7 +15490,7 @@ Cgo
             <objects>
                 <viewController storyboardIdentifier="OtherIncomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lWK-UB-l4U" customClass="OtherIncomeViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e8K-xd-MwH">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="4000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="dil-zi-pr8">
@@ -17986,7 +17985,7 @@ Cgo
             <objects>
                 <viewController storyboardIdentifier="CoApplicantFormViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="af7-wB-hwd" customClass="CoApplicantFormViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="cZV-ZY-cQ6">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="nlE-Ps-vrn">
@@ -21595,7 +21594,7 @@ Cgo
             <objects>
                 <viewController storyboardIdentifier="ApplicantFormViewControllerForm" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nZi-I5-0xe" customClass="ApplicantFormViewControllerForm" customModule="Refloor" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="o2t-hN-TOI">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="rtG-j3-Bjf">
@@ -23168,7 +23167,7 @@ Cgo
             <objects>
                 <viewController storyboardIdentifier="CoApplicantFormViewControllerForm" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Mzb-V8-3gI" customClass="CoApplicantFormViewControllerForm" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1Gt-oA-2dM">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2800"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="wXi-u3-Spb">
@@ -24639,7 +24638,7 @@ Cgo
             <objects>
                 <viewController storyboardIdentifier="OtherIncomeViewControllerForm" useStoryboardIdentifierAsRestorationIdentifier="YES" id="nYP-qW-C6z" customClass="OtherIncomeViewControllerForm" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ANC-RU-RFO">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="4000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="YY0-ML-gsg">
@@ -27865,10 +27864,10 @@ Cgo
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MDP-6U-FS1">
-                                <rect key="frame" x="87" y="114" width="1192" height="926"/>
+                                <rect key="frame" x="87" y="114" width="646" height="926"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Appointment Results" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZJv-r5-AhU">
-                                        <rect key="frame" x="20" y="46" width="1152" height="37"/>
+                                        <rect key="frame" x="20" y="46" width="606" height="37"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="37" id="pii-bn-K7A"/>
                                         </constraints>
@@ -27877,10 +27876,10 @@ Cgo
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rJO-lO-EEa">
-                                        <rect key="frame" x="0.0" y="125" width="1192" height="677"/>
+                                        <rect key="frame" x="0.0" y="125" width="646" height="677"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mm8-mt-wdc" userLabel="View4">
-                                                <rect key="frame" x="8" y="0.0" width="1192" height="550"/>
+                                                <rect key="frame" x="8" y="0.0" width="646" height="550"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Select Result*" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FI5-oT-Q10">
                                                         <rect key="frame" x="30" y="0.0" width="523" height="33"/>
@@ -27970,10 +27969,10 @@ Cgo
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hlg-ID-I0S" userLabel="View2">
-                                                        <rect key="frame" x="584" y="33" width="558" height="60"/>
+                                                        <rect key="frame" x="584" y="33" width="12" height="60"/>
                                                         <subviews>
                                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Result Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TWQ-VX-GUu">
-                                                                <rect key="frame" x="20" y="0.0" width="538" height="60"/>
+                                                                <rect key="frame" x="20" y="0.0" width="202.5" height="60"/>
                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="height" constant="60" id="A33-eS-MmU"/>
@@ -27995,7 +27994,7 @@ Cgo
                                                                 </connections>
                                                             </button>
                                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="dropDown" translatesAutoresizingMaskIntoConstraints="NO" id="tSv-N5-TLp">
-                                                                <rect key="frame" x="505" y="20" width="20" height="20"/>
+                                                                <rect key="frame" x="-41" y="20" width="20" height="20"/>
                                                                 <constraints>
                                                                     <constraint firstAttribute="width" constant="20" id="0eW-ua-bR3"/>
                                                                     <constraint firstAttribute="height" constant="20" id="F7a-2R-6oV"/>
@@ -28055,7 +28054,7 @@ Cgo
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="Enter here" translatesAutoresizingMaskIntoConstraints="NO" id="KwN-EN-eGT">
-                                                        <rect key="frame" x="30" y="154" width="1112" height="77"/>
+                                                        <rect key="frame" x="30" y="154" width="566" height="77"/>
                                                         <color key="backgroundColor" red="0.34484910959999998" green="0.39283764360000001" blue="0.44376060369999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="77" id="QLb-gD-yT7"/>
@@ -28082,7 +28081,7 @@ Cgo
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Enter here" translatesAutoresizingMaskIntoConstraints="NO" id="OXY-LQ-mmZ">
-                                                        <rect key="frame" x="30" y="292" width="1112" height="77"/>
+                                                        <rect key="frame" x="30" y="292" width="566" height="77"/>
                                                         <color key="backgroundColor" red="0.34484910959999998" green="0.39283764360000001" blue="0.44376060369999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="77" id="WKz-fx-04c"/>
@@ -28109,7 +28108,7 @@ Cgo
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DUC-CP-zGY">
-                                                        <rect key="frame" x="30" y="154" width="1112" height="77"/>
+                                                        <rect key="frame" x="30" y="154" width="566" height="77"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="77" id="YNK-9g-evQ"/>
@@ -28129,7 +28128,7 @@ Cgo
                                                         </connections>
                                                     </button>
                                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-Op-gKy">
-                                                        <rect key="frame" x="30" y="292" width="1112" height="77"/>
+                                                        <rect key="frame" x="30" y="292" width="566" height="77"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="77" id="PsY-fR-YEv"/>
@@ -28146,7 +28145,7 @@ Cgo
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oyd-2c-TfS">
-                                                        <rect key="frame" x="30" y="430" width="1112" height="77"/>
+                                                        <rect key="frame" x="30" y="430" width="566" height="77"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="77" id="Cy9-oo-gBA"/>
@@ -28157,7 +28156,7 @@ Cgo
                                                         </connections>
                                                     </button>
                                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" text="Enter here" translatesAutoresizingMaskIntoConstraints="NO" id="nz1-yK-Kae">
-                                                        <rect key="frame" x="30" y="430" width="1112" height="77"/>
+                                                        <rect key="frame" x="30" y="430" width="566" height="77"/>
                                                         <color key="backgroundColor" red="0.34484910959999998" green="0.39283764360000001" blue="0.44376060369999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="77" id="CKJ-0t-drk"/>
@@ -28268,10 +28267,10 @@ Cgo
                                         </constraints>
                                     </scrollView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="X39-MU-fwT">
-                                        <rect key="frame" x="40" y="825" width="1112" height="60"/>
+                                        <rect key="frame" x="40" y="825" width="566" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ZI-Rd-JpY">
-                                                <rect key="frame" x="0.0" y="0.0" width="546" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="273" height="60"/>
                                                 <color key="backgroundColor" red="0.16080889109999999" green="0.1895155311" blue="0.22631764409999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="6mG-MM-DIb"/>
@@ -28285,7 +28284,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fZZ-8L-xvY">
-                                                <rect key="frame" x="566" y="0.0" width="546" height="60"/>
+                                                <rect key="frame" x="293" y="0.0" width="273" height="60"/>
                                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="s0c-GZ-dI9"/>
@@ -28312,7 +28311,7 @@ Cgo
                                         </constraints>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QoW-K7-QjM">
-                                        <rect key="frame" x="40" y="101" width="1112" height="1"/>
+                                        <rect key="frame" x="40" y="101" width="566" height="1"/>
                                         <color key="backgroundColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="ei2-Kv-D1b"/>
@@ -30218,7 +30217,7 @@ Do you want to proceed to </string>
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="UD3-Ff-yrF" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="j6D-lh-bbb">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="p43-Ny-bl4">
@@ -30473,14 +30472,14 @@ Do you want to proceed to </string>
             <objects>
                 <viewController storyboardIdentifier="WebViewViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="FU3-jd-2IS" customClass="WebViewViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uUq-mf-BMu">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="10550"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SqH-q8-x6o">
-                                <rect key="frame" x="0.0" y="100" width="1024" height="10400"/>
+                                <rect key="frame" x="0.0" y="100" width="1024" height="10000"/>
                                 <subviews>
                                     <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N15-6q-pLh" userLabel="Content">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="15051.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="10000"/>
                                         <subviews>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="contractRefloorIcon" translatesAutoresizingMaskIntoConstraints="NO" id="oqV-qH-fPO">
                                                 <rect key="frame" x="30" y="45" width="247" height="100"/>
@@ -39298,7 +39297,7 @@ Cg
             <objects>
                 <viewController storyboardIdentifier="UpdateDownFinalPaymentViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="miL-Ug-c99" customClass="UpdateDownFinalPaymentViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XpM-5C-jR1">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1000"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="KJh-U4-bzO">
@@ -39565,7 +39564,7 @@ Cg
             <objects>
                 <viewController storyboardIdentifier="CustomerDetailsOneViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="dfL-hI-Q0e" customClass="CustomerDetailsOneViewController" customModule="Refloor" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Py1-IZ-b68">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="820" height="1180"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" translatesAutoresizingMaskIntoConstraints="NO" id="HKE-Ba-1kX">
@@ -41962,13 +41961,13 @@ Cg
         <image name="uncheck" width="30" height="30"/>
         <image name="undo" width="64" height="64"/>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
