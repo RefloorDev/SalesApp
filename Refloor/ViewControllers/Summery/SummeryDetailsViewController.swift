@@ -959,7 +959,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 let param:[String:Any] = ["question_id":question.id ,"answer":value]
                 return param
             }
-            else if question.id == 9
+            else if question.question_code == "StairWidth"
             {
                 let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
                 return param

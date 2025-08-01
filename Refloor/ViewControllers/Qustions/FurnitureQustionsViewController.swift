@@ -126,7 +126,31 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         } else {
             print("setDefaultAnswerForToiletQuestion2")
         }
+        setPatchlevellingMandatoryAnswer()
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    func setPatchlevellingMandatoryAnswer()
+    {
+        let patchLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftPatchLeveling"})
+        let removeCurrentCovering = qustionAnswer.first(where: { $0.code == "RemoveCurrentCovering"})
+        let existingSubSurface = qustionAnswer.first(where: {$0.code == "ExistingSubSurface"})
+        let currentSurface = qustionAnswer.first(where: {$0.code == "CurrentCoveringType"})
+        let removeCurrentCoveringAnswer = removeCurrentCovering?.answerOFQustion?.singleSelection?.value
+        let currentSurfaceAnswer = currentSurface?.answerOFQustion?.singleSelection?.value
+        let existingSubSurfaceAnswer = existingSubSurface?.answerOFQustion?.singleSelection?.value
+        if removeCurrentCoveringAnswer != nil && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+        {
+            if removeCurrentCoveringAnswer == "Yes" && ((existingSubSurfaceAnswer?.contains("Concrete")) != nil)
+            {
+                qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+            }
+            else if removeCurrentCoveringAnswer == "No" && ((currentSurfaceAnswer?.contains("Concrete")) != nil)
+            {
+                qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+            }
+            
+        }
     }
     
     
@@ -191,6 +215,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["applicableCurrentSurface"] = question.applicableCurrentSurface
                         dict["setDefaultAnswer"] = question.setDefaultAnswer
                         dict["calculate_order_wise"] = question.calculate_order_wise
+                        dict["mandatory_for_current_surface_concrete"] = question.mandatory_for_current_surface_concrete
                         dict["applicableRooms"] = List<rf_AnswerapplicableRooms>()
                         dict["rf_AnswerOFQustion"] = List<rf_AnswerOFQustion>()
                         realm.create(rf_master_question.self, value: dict, update: .all)
@@ -1165,6 +1190,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
         let buildUpLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftBuildUpLeveling"})
         let trueSelfLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftTrueSelfLeveling"})
+        let patchLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftPatchLeveling"})
         //Q4 Changes Deepa Start
               if questionCode == "CurrentCoveringType" {
                   if selectedValue == "Carpet" || selectedValue == "Floating Floor (LVP or Laminate)" {
@@ -1205,12 +1231,20 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                               print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
                               if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Porous" }) {
                                   qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                  //qustionAnswer[patchLevelingIndex!].mandatory_answer = true //QuestionsMeasurementData(mandatory: true)
                                   tableView.reloadData()
                               } else {
                                   print("No 'Porous' option found in quote_label for 'PrimerType' question.")
+//                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+//                                  tableView.reloadData()
                               }
                           }
                       }
+//                      else
+//                      {
+//                          qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+//                          tableView.reloadData()
+//                      }
                       
                       if (removeCurrentCoveringAnswer == "No" && (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum") && ((qustionAnswer[buildUpLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0 || (qustionAnswer[trueSelfLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0)) {
                           
@@ -1218,12 +1252,20 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                               print("Found RemoveCurrentCovering at index: \(primerTypeIndex)")
                               if let yesAnswer = qustionAnswer[primerTypeIndex].quote_label?.first(where: { $0.value == "Non-Porous" }) {
                                   qustionAnswer[primerTypeIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                                  //qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
                                   tableView.reloadData()
                               } else {
                                   print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
+//                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+//                                  tableView.reloadData()
                               }
                           }
                       }
+//                      else
+//                      {
+//                          qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+//                          tableView.reloadData()
+//                      }
                       
 //                      if (selectedValue == "Concrete / Cement / Gypsum") {
 //                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
@@ -1240,6 +1282,19 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
 //                              }
 //                          }
 //                      }
+                      
+                      
+                      if removeCurrentCoveringAnswer == "No" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+                      {
+                          if selectedValue.contains("Concrete")
+                          {
+                              qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                          }
+                          else{
+                              qustionAnswer[patchLevelingIndex!].mandatory_answer = false
+                          }
+                      }
+
                   }
               }
         //Q4 Changes Deepa
@@ -1286,6 +1341,16 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                             qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
                             tableView.reloadData()
                         }
+                    }
+                }
+                if removeCurrentCoveringAnswer == "Yes" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+                {
+                    if selectedValue.contains("Concrete")
+                    {
+                        qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                    }
+                    else{
+                        qustionAnswer[patchLevelingIndex!].mandatory_answer = false
                     }
                 }
             }
@@ -1607,6 +1672,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             let TrueSelfLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftTrueSelfLeveling" }) ?? 0
             let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
             let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
+            let patchLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftPatchLeveling"})
             let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
@@ -1644,6 +1710,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 //Q4_Change Primer Type Mandatory dropdown
                 return "You must select a primer type"
 
+            }
+            else if (question.mandatory_answer == true) && question.code == "SqftPatchLeveling" && !((self.qustionAnswer[patchLevelingIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
+            {
+                let questionNumber = value + 1
+                return "Please answer question number \(questionNumber)"
             }
 //             if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
 //            {

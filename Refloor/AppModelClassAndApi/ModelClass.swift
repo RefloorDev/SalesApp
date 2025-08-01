@@ -615,6 +615,7 @@ class QuestionsMeasurementData: Mappable
     var setDefaultAnswer : Bool?
     var applicableCurrentSurface : String?
     var calculate_order_wise:Bool?
+    var mandatory_for_current_surface_concrete:Bool?
     var aaplicableRoom : [ApplicableRoom]?
     var quote_label :[QuoteLabelData]?
     var answerOFQustion:AnswerOFQustion?
@@ -624,6 +625,10 @@ class QuestionsMeasurementData: Mappable
     init(){
         
     }
+//    init(_ mandatory:Bool)
+//    {
+//        self.mandatory_answer = mandatory
+//    }
     
     init(masterQuestions:rf_master_question){
         self.id = masterQuestions.id
@@ -645,6 +650,7 @@ class QuestionsMeasurementData: Mappable
         self.amount = masterQuestions.amount
         self.setDefaultAnswer = masterQuestions.setDefaultAnswer
         self.calculate_order_wise = masterQuestions.calculate_order_wise
+        self.mandatory_for_current_surface_concrete = masterQuestions.mandatory_for_current_surface_concrete
         self.applicableCurrentSurface = masterQuestions.applicableCurrentSurface
         
         var applicableRoomdetails :[ApplicableRoom] = []
@@ -684,6 +690,7 @@ class QuestionsMeasurementData: Mappable
         quote_label <- map["quote_label"]
         aaplicableRoom <- map["applicable_rooms"]
         calculate_order_wise <- map["calculate_order_wise"]
+        mandatory_for_current_surface_concrete <- map["mandatory_for_current_surface_concrete"]
         setDefaultAnswer <- map["set_default_answer"]
         applicableCurrentSurface <- map["applicable_current_surface"]
         

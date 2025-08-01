@@ -297,6 +297,7 @@ class rf_master_question :Object, Mappable {
     @objc dynamic  var setDefaultAnswer : Bool = false
     @objc dynamic var applicableCurrentSurface : String?
     @objc dynamic var calculate_order_wise:Bool = false
+    @objc dynamic var mandatory_for_current_surface_concrete:Bool = false
     var quote_label = List<rf_master_question_detail>()
     var rf_AnswerOFQustion = List<rf_AnswerForQuestion>()
     var applicableRooms = List<rf_AnswerapplicableRooms>()
@@ -345,6 +346,7 @@ class rf_master_question :Object, Mappable {
         setDefaultAnswer <- map["set_default_answer"]
         applicableCurrentSurface <- map["applicable_current_surface"]
         calculate_order_wise <- map["calculate_order_wise"]
+        mandatory_for_current_surface_concrete <- map["mandatory_for_current_surface_concrete"]
         applicableRooms <- (map["applicable_rooms"], ListTransform<rf_AnswerapplicableRooms>())
         //not from api
         rf_AnswerOFQustion <- map["rf_AnswerOFQustion"]
