@@ -4740,6 +4740,53 @@ extension UIViewController:OrderStatusViewDelegate
         return roomArea
     }
     
+    func getStairWidthAndCount(roomId:Int) -> (Double,Double){
+        var stairWidth: Double = 0.0
+        var stairCount:Double = 0.0
+        do{
+            _ = try Realm()
+            let appointmentId = AppointmentData().appointment_id ?? 0
+            let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
+            let room = appointment.first?.rooms.filter("room_id == %d", roomId)
+          
+            stairWidth = Double(room?.first?.stairWidth ?? "") ?? 0.0
+            stairCount = Double(room?.first?.stairCount ?? "") ?? 0.0
+        }catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return (stairWidth,stairCount)
+    }
+    
+    func getCoverRisersAnswer(roomId:Int) -> String
+    {
+        var coverRisersAnswer:String = ""
+        var questionCode = "StairCoverRisers"
+        do
+        {
+            _ = try Realm()
+            let appointmentId = AppointmentData().appointment_id ?? 0
+            let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId)
+            let room = appointment.first?.rooms.filter("room_id == %d", roomId)
+            if  let coverRisersAnswerCal = room?.first?.questionnaires.filter("question_code == %@ ",questionCode)
+            {
+                if let answer = coverRisersAnswerCal.first?.rf_AnswerOFQustion
+                {
+                    coverRisersAnswer = (answer.first?.answer.first)!
+                }
+             }
+            
+                
+            
+        }
+        catch{
+            print(RealmError.initialisationFailed.rawValue)
+        }
+        return coverRisersAnswer
+    }
+    
+    
+    
+    
     func getTotalAdjustedAreaForAllRooms() -> Double{
         var roomArea: Double = 0.0
         do{
