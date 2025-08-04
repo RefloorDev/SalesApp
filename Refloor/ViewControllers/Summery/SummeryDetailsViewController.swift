@@ -1022,8 +1022,24 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             if let answer = answerData{
                 if answer == "Yes"{
                     let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
-                    let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
-                    extra_price = net_room_area * currentSurfaceAnswerScore
+                    if room_area != 0
+                    {
+                        let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
+                        extra_price = net_room_area * currentSurfaceAnswerScore
+                    }
+                    else
+                    {
+                        let coverRisersAnswer = self.getCoverRisersAnswer(roomId: roomID)
+                        let (stairWidth,stairCount) = self.getStairWidthAndCount(roomId: roomID)
+                        if coverRisersAnswer == "Yes"
+                        {
+                            extra_price = stairWidth * stairCount * 2.25
+                        }
+                        else
+                        {
+                            extra_price = stairWidth * stairCount * 1.25
+                        }
+                    }
                 }
             }
         }else{

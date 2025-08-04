@@ -1394,36 +1394,6 @@
             endingLineNumber = "1588"
             landmarkName = "DropDownDidSelectedAction(_:_:_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "6F314A1A-3AD0-48E6-887B-D7A81D329037 - ab2d5e26e6a3253a"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1589"
-                  endingLineNumber = "1589">
-               </Location>
-               <Location
-                  uuid = "6F314A1A-3AD0-48E6-887B-D7A81D329037 - ab2d5e26e6a324d5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1588"
-                  endingLineNumber = "1588">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1504,36 +1474,6 @@
             endingLineNumber = "1304"
             landmarkName = "DropDownDidSelectedAction(_:_:_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "19E97ED2-6982-42AB-B2C8-94D0130E8577 - 84c91c3e982bcb3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #9 @Swift.MainActor @Sendable () -&gt; () in Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1304"
-                  endingLineNumber = "1304">
-               </Location>
-               <Location
-                  uuid = "19E97ED2-6982-42AB-B2C8-94D0130E8577 - 840a5139fdc46f6c"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Refloor.QuestionsMeasurementData) -&gt; Swift.Bool in closure #9 @Swift.MainActor @Sendable () -&gt; () in Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1304"
-                  endingLineNumber = "1304">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1992,36 +1932,6 @@
             endingLineNumber = "1266"
             landmarkName = "DropDownDidSelectedAction(_:_:_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "338D0090-F288-4768-8552-90CBC2158699 - d31ba65dbc9c321"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #8 @Swift.MainActor @Sendable () -&gt; () in Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1285"
-                  endingLineNumber = "1285">
-               </Location>
-               <Location
-                  uuid = "338D0090-F288-4768-8552-90CBC2158699 - d31ba65dbc9c0e3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #8 @Swift.MainActor @Sendable () -&gt; () in Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1287"
-                  endingLineNumber = "1287">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2054,36 +1964,6 @@
             endingLineNumber = "1716"
             landmarkName = "validation()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "A0770157-407E-4582-BB72-D528092EDE5F - 2d0030285d3fd752"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.validation() -&gt; Swift.String"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1735"
-                  endingLineNumber = "1735">
-               </Location>
-               <Location
-                  uuid = "A0770157-407E-4582-BB72-D528092EDE5F - 2d0030285d3fd5ef"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.validation() -&gt; Swift.String"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1716"
-                  endingLineNumber = "1716">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -2116,36 +1996,6 @@
             endingLineNumber = "1346"
             landmarkName = "DropDownDidSelectedAction(_:_:_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "26AF7045-4F3E-417D-9092-24208888BE0E - 84c91c3e982c12e"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #9 @Swift.MainActor @Sendable () -&gt; () in Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1347"
-                  endingLineNumber = "1347">
-               </Location>
-               <Location
-                  uuid = "26AF7045-4F3E-417D-9092-24208888BE0E - 84c91c3e982c14d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #9 @Swift.MainActor @Sendable () -&gt; () in Refloor.FurnitureQustionsViewController.DropDownDidSelectedAction(Swift.Int, Swift.String, Swift.Int) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/bincyca/Desktop/Projects/Refloor%203.2.3_July/SalesApp%202/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1346"
-                  endingLineNumber = "1346">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy

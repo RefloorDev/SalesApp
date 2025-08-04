@@ -139,8 +139,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         let removeCurrentCoveringAnswer = removeCurrentCovering?.answerOFQustion?.singleSelection?.value
         let currentSurfaceAnswer = currentSurface?.answerOFQustion?.singleSelection?.value
         let existingSubSurfaceAnswer = existingSubSurface?.answerOFQustion?.singleSelection?.value
-        if removeCurrentCoveringAnswer != nil && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+        if area != 0
         {
+        if removeCurrentCoveringAnswer != nil && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+            {
             if removeCurrentCoveringAnswer == "Yes" && ((existingSubSurfaceAnswer?.contains("Concrete")) != nil)
             {
                 qustionAnswer[patchLevelingIndex!].mandatory_answer = true
@@ -149,6 +151,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             {
                 qustionAnswer[patchLevelingIndex!].mandatory_answer = true
             }
+        }
             
         }
     }
@@ -1235,16 +1238,16 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                   tableView.reloadData()
                               } else {
                                   print("No 'Porous' option found in quote_label for 'PrimerType' question.")
-//                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
-//                                  tableView.reloadData()
+                                  //                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+                                  //                                  tableView.reloadData()
                               }
                           }
                       }
-//                      else
-//                      {
-//                          qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
-//                          tableView.reloadData()
-//                      }
+                      //                      else
+                      //                      {
+                      //                          qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+                      //                          tableView.reloadData()
+                      //                      }
                       
                       if (removeCurrentCoveringAnswer == "No" && (selectedValue == "Ceramic Tile (backerboard)" || currentCoveringTypeAnswer == "Ceramic Tile (mud bed)" || selectedValue == "Epoxy" || selectedValue == "Glued Down Hard Surface" || selectedValue == "Hardwood or Engineered Hardwood" || selectedValue == "Particle Board" || selectedValue == "Plywood / OSB" || selectedValue == "Adhesive Concrete/Cement/Gypsum") && ((qustionAnswer[buildUpLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0 || (qustionAnswer[trueSelfLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0)) {
                           
@@ -1256,34 +1259,35 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                                   tableView.reloadData()
                               } else {
                                   print("No 'Non-Porous' option found in quote_label for 'PrimerType' question.")
-//                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
-//                                  tableView.reloadData()
+                                  //                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+                                  //                                  tableView.reloadData()
                               }
                           }
                       }
-//                      else
-//                      {
-//                          qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
-//                          tableView.reloadData()
-//                      }
+                      //                      else
+                      //                      {
+                      //                          qustionAnswer[patchLevelingIndex!].mandatory_answer = true//QuestionsMeasurementData(true)
+                      //                          tableView.reloadData()
+                      //                      }
                       
-//                      if (selectedValue == "Concrete / Cement / Gypsum") {
-//                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
-//                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
-//                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-//                                  tableView.reloadData()
-//                              }
-//                          }
-//                      } else {
-//                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
-//                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
-//                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
-//                                  tableView.reloadData()
-//                              }
-//                          }
-//                      }
+                      //                      if (selectedValue == "Concrete / Cement / Gypsum") {
+                      //                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                      //                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "Yes" }) {
+                      //                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                      //                                  tableView.reloadData()
+                      //                              }
+                      //                          }
+                      //                      } else {
+                      //                          if let vaporBarrierBoolIndex = qustionAnswer.firstIndex(where: { $0.code == "VaporBarrierBool" }) {
+                      //                              if let yesAnswer = qustionAnswer[vaporBarrierBoolIndex].quote_label?.first(where: { $0.value == "No" }) {
+                      //                                  qustionAnswer[vaporBarrierBoolIndex].answerOFQustion = AnswerOFQustion(yesAnswer)
+                      //                                  tableView.reloadData()
+                      //                              }
+                      //                          }
+                      //                      }
                       
-                      
+                      if area != 0
+                      {
                       if removeCurrentCoveringAnswer == "No" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
                       {
                           if selectedValue.contains("Concrete")
@@ -1294,6 +1298,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                               qustionAnswer[patchLevelingIndex!].mandatory_answer = false
                           }
                       }
+                  }
 
                   }
               }
@@ -1343,6 +1348,8 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                     }
                 }
+                if area != 0
+                {
                 if removeCurrentCoveringAnswer == "Yes" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
                 {
                     if selectedValue.contains("Concrete")
@@ -1353,6 +1360,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         qustionAnswer[patchLevelingIndex!].mandatory_answer = false
                     }
                 }
+            }
             }
         }
         
