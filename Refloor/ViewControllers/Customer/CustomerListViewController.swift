@@ -584,7 +584,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         let TimeLimit = Double(masterData.addressVisibleTimeLimit)
         let CurrentDate = Date()
         let isItTime = isPastAndWithinLimit(from: CurrentDate, to: appointmentDate, limitInMinutes: TimeLimit)//isTimeWithinLimit(dateString: appoinmentsList?[indexPath.row].appointment_datetime ?? "", timeLimit: TimeLimit)
-        if !isItTime || indexPath.row != 0
+        if indexPath.row == 0
+        {
+            cell.startButton.isHidden = false
+        }
+        else
+        {
+            cell.startButton.isHidden = true
+        }
+        if !isItTime //|| indexPath.row != 0
             {
                 var address = ""
                 if let city = appoinmentsList?[indexPath.row].city
