@@ -29,6 +29,7 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     @IBOutlet weak var customerPhone: UITextField!
     @IBOutlet weak var customerPhoneStackView: UIStackView!
     @IBOutlet weak var customerContactNumberTF: UITextField!
+    @IBOutlet weak var skipBtn: UIButton!
     @IBOutlet weak var customerContactNumberStackView: UIStackView!
     
     @IBOutlet weak var customerContactNumberHeightConstraint: NSLayoutConstraint!
@@ -61,6 +62,7 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     var selectedPaymentMethord:PaymentType?
     var downpayment = DownPaymentViewController.initialization()!
     var co_Applicant_Skipped:Bool = Bool()
+    var data:[String:Any] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -129,7 +131,16 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
         self.checkTextFieldEdited()
         self.zipTF.keyboardType = .asciiCapableNumberPad
          self.zipTF.delegate = self
+        self.state_TF.delegate = self
+        self.city_TF.delegate = self
+        self.Street_Address_TF.delegate = self
+        self.customerContactNumberTF.delegate = self
+        self.customerEmail.delegate = self
+        self.customerLastName.delegate = self
+        self.customerMiddleName.delegate = self
+        self.customerFirstName.delegate = self
         setPhoneNumberDelegate()
+        skipEnabledOrDisabled()
         //         self.customerAddressTF.isUserInteractionEnabled = false
         //         self.customerContactNumberTF.isUserInteractionEnabled = false
         //         self.customerSpouseNameTF.isUserInteractionEnabled = false
@@ -236,6 +247,22 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
         }
     }
     
+    
+    func skipEnabledOrDisabled()
+    {
+        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != "" || self.customerPhone.text != "" || self.customerContactNumberTF.text != ""
+        {
+            skipBtn.isHidden = true
+        }
+        else
+        {
+            skipBtn.isHidden = false
+        }
+    }
+    
+    
+    
+    
     @IBAction func submitAndTransforButtonAction(sender: UIButton)
     {
         if(isSkippbuttonCalled != 0)
@@ -334,6 +361,10 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
             }catch{
                 print(RealmError.initialisationFailed)
             }
+        
+        self.data["coapplicant_skip"] = 0
+        print("savePaymentDetailsToAppointmentDetail data : ", self.data)
+        self.savePaymentDetailsToAppointmentDetail(data: self.data as NSDictionary)
       //  }
         //
         
@@ -541,6 +572,9 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
         }
         
         isEditedtextField = false
+        self.data["coapplicant_skip"] = 1
+        print("savePaymentDetailsToAppointmentDetail data : ", self.data)
+        self.savePaymentDetailsToAppointmentDetail(data: self.data as NSDictionary)
     }
     
     
@@ -573,7 +607,7 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     {
         
         isEditedtextField=true
-        
+        skipEnabledOrDisabled()
     }
     
     @IBAction func addressDidBigen(_ sender: UITextField) {

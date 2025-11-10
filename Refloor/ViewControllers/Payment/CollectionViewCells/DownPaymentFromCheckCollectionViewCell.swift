@@ -21,6 +21,10 @@ class DownPaymentFromCheckCollectionViewCell: UICollectionViewCell,UICollectionV
     @IBOutlet weak var routingNumberTF: UITextField!
     @IBOutlet weak var payButton: UIButton!
     
+    @IBOutlet weak var cameraButton: UIButton!
+    var routingNumber:String = String()
+    var accountNumber:String = String()
+    var checkNumber:String = String()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -29,9 +33,9 @@ class DownPaymentFromCheckCollectionViewCell: UICollectionViewCell,UICollectionV
     }
     func collectionViewConfigruation(collectionViewData:[String],delegate:ExternalCollectionViewDelegateForTableView?)
     {
-        self.accountNumberTF.text = ""
-        self.checkNumberTF.text = ""
-        self.routingNumberTF.text = ""
+        self.accountNumberTF.text = accountNumber.isEmpty ? nil : accountNumber
+            self.checkNumberTF.text = checkNumber.isEmpty ? nil : checkNumber
+            self.routingNumberTF.text = routingNumber.isEmpty ? nil : routingNumber
         self.selectedItem = 0
         self.persentage = collectionViewData
         self.delegate = delegate

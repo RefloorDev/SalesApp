@@ -31,6 +31,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var customerPhoneStackView: UIStackView!
     @IBOutlet weak var customerContactNumberTF: UITextField!
     @IBOutlet weak var customerContactNumberStackView: UIStackView!
+    @IBOutlet weak var skipBtn: UIButton!
     
     @IBOutlet weak var customerContactNumberHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var customerContactNumbertopConstraint: NSLayoutConstraint!
@@ -77,7 +78,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
             
         }
         //
-
+        
         // AppDelegate.appoinmentslData.id = appoinmentslData.id
         AppDelegate.appoinmentslData = self.appoinmentslData
         self.setNavigationBarbackAndlogo(with: "Customer 2 Details")
@@ -114,8 +115,17 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
         
         self.checkTextFieldEdited()
         self.zipTF.keyboardType = .asciiCapableNumberPad
-         self.zipTF.delegate = self
+        self.zipTF.delegate = self
+        self.state_TF.delegate = self
+        self.city_TF.delegate = self
+        self.Street_Address_TF.delegate = self
+        self.customerContactNumberTF.delegate = self
+        self.customerEmail.delegate = self
+        self.customerLastName.delegate = self
+        self.customerMiddleName.delegate = self
+        self.customerFirstName.delegate = self
         setPhoneNumberDelegate()
+        skipEnabledOrDisabled()
         //         self.customerAddressTF.isUserInteractionEnabled = false
         //         self.customerContactNumberTF.isUserInteractionEnabled = false
         //         self.customerSpouseNameTF.isUserInteractionEnabled = false
@@ -126,8 +136,20 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         
-         isSkippbuttonCalled = 0
+        isSkippbuttonCalled = 0
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    func skipEnabledOrDisabled()
+    {
+        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != "" || self.customerPhone.text != "" || self.customerContactNumberTF.text != ""
+        {
+            skipBtn.isHidden = true
+        }
+        else
+        {
+            skipBtn.isHidden = false
+        }
     }
     
     @IBAction func submitAndTransforButtonAction(sender: UIButton)
@@ -422,6 +444,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     {
         
         isEditedtextField=true
+        skipEnabledOrDisabled()
         
     }
     
@@ -496,6 +519,8 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
                 }
                 return true
     }
+    
+    
     
     
     

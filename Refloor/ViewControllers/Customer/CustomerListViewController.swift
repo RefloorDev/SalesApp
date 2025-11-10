@@ -67,6 +67,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateAppointmentOffline), name: Notification.Name("UpdateAppointments"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(unAuthorizedLogout), name: Notification.Name("UnAuthorizedLogout"), object: nil)
         
         isLoadedFirstTime = true
         customerNameSearchTF.attributedPlaceholder =  NSAttributedString(string: "Customer Name",
@@ -167,7 +168,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         print("started monitoring")
     }
     
-    override func viewDidAppear(_ animated: Bool) 
+    override func viewDidAppear(_ animated: Bool)
     {
         
    
@@ -330,7 +331,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //        if masterData.enableGeoLocation && restrictGeoLocation == 0
 //        {
 //            startGeoLocation(appointments: appoinmentsList!)
-//            
+//
 //        }
 //        startGeoLocation(appointments: appoinmentsList!)
     }
@@ -343,15 +344,20 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             self.noAppoinmentLabel.isHidden = (self.appoinmentsList ?? []).count != 0
         }
     }
+    
+    @objc func unAuthorizedLogout()
+    {
+        self.navigationController?.popViewController(animated: true)
+    }
 //    @objc  func updateAppointmentOffline()
 //    {
-//        
+//
 //        self.tempappoinmentsList = self.getRefreshedAppointmentsFromDB()
 //        self.appoinmentsList = self.getRefreshedAppointmentsFromDB()
 //        self.showMasterDataAppointmentsBasedOnCompletedAppointmentRequestFromDatabase()
 //        if(self.appoinmentsList ?? []).count != 0
 //        {
-//            
+//
 //            self.customerListTableView.reloadData()
 //            self.noAppoinmentLabel.isHidden = true
 //        }
@@ -360,7 +366,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //            self.customerListTableView.reloadData()
 //            self.noAppoinmentLabel.isHidden = false
 //        }
-//        
+//
 //    }
     
     
@@ -402,7 +408,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func appoinmentLisApiCall()
     {
         
-        HttpClientManager.SharedHM.AppinmentListApi { (result, message, value) in
+        HttpClientManager.SharedHM.AppinmentListApi { (result, message, value,forceLogout) in
             DispatchQueue.main.async {
                 if (result ?? "") == "Success"
                 {
@@ -419,6 +425,16 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 else if ((result ?? "") == "AuthFailed" || ((result ?? "") == "authfailed"))
                 {
                     
+                    let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                        
+                        self.fourceLogOutbuttonAction()
+                    }
+                    
+                    self.alert((message ?? value?.message) ?? AppAlertMsg.serverNotReached, [yes])
+                    
+                }
+                else if result == "Failed" && forceLogout == 1
+                {
                     let yes = UIAlertAction(title: "OK", style:.default) { (_) in
                         
                         self.fourceLogOutbuttonAction()
@@ -482,7 +498,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //        let currentDate = Date()
 //        let calendar = Calendar.current
 //        let currentYear = calendar.component(.year, from: currentDate)
-//        
+//
 //        var fullDateString = dateString
 //        var targetDate: Date?
 //
@@ -501,7 +517,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //            }
 //            targetDate = formatter.date(from: fullDateString)
 //        }
-//        
+//
 //        guard let target = targetDate else {
 //            print("Could not parse date string: \(fullDateString)")
 //            return false
@@ -584,7 +600,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         let TimeLimit = Double(masterData.addressVisibleTimeLimit)
         let CurrentDate = Date()
         let isItTime = isPastAndWithinLimit(from: CurrentDate, to: appointmentDate, limitInMinutes: TimeLimit)//isTimeWithinLimit(dateString: appoinmentsList?[indexPath.row].appointment_datetime ?? "", timeLimit: TimeLimit)
-        if !isItTime || indexPath.row != 0
+//        if indexPath.row == 0
+//        {
+//            cell.startButton.isHidden = false
+//        }
+//        else
+//        {
+//            cell.startButton.isHidden = true
+//        }
+        if !isItTime //|| indexPath.row != 0
             {
                 var address = ""
                 if let city = appoinmentsList?[indexPath.row].city
@@ -707,7 +731,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UITableView.automaticDimension
     }
-//    @IBAction func arrivedBtnAction(_ sender: UIButton) 
+//    @IBAction func arrivedBtnAction(_ sender: UIButton)
 //    {
 //        arrivedBtnPressed(aptId: appoinmentsList?[sender.tag].id ?? 0)
 //    }
@@ -1124,7 +1148,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 ////            // self.handleEvent(forRegion: region)
 ////        }
 ////    }
-//    
+//
 //    // called when user Enters a monitored region
 //    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
 //        alert("Entered region", nil)
@@ -1150,7 +1174,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
 //        print("The monitored regions are: \(manager.monitoredRegions)")
 //    }
-//    
+//
 //    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
 //           if status == .authorizedWhenInUse {
 //               locationManager?.requestLocation()

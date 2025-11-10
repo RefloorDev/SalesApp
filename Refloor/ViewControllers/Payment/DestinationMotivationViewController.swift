@@ -556,6 +556,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
         let classDisplayName = "DestinationMotivation"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //saveDataForApiCall()
+        self.destinationSelectionId = 0
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
             DispatchQueue.main.async

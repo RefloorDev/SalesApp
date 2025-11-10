@@ -480,7 +480,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         //arb
         print("savePaymentDetailsToAppointmentDetail data : ", data)
         self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
-        
+        details.data = data
         self.navigationController?.pushViewController(details, animated: true)
     }
     func validation() -> String

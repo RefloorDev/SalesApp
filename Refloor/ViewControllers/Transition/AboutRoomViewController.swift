@@ -402,7 +402,8 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
     
     
     
-    func openCameraToPickImage(){
+    func openCameraToPickImage()
+    {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes =  [kUTTypeImage as String]//UIImagePickerController.availableMediaTypes(for: .camera)!

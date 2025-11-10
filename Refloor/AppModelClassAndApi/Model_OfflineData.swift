@@ -137,6 +137,7 @@ class Appointments : Object,Mappable {
     @objc dynamic var result : String?
     var appointments = List<rf_master_appointment>()
     @objc dynamic var message : String?
+    @objc dynamic var forceLogout : Int = 0
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -152,6 +153,7 @@ class Appointments : Object,Mappable {
         result <- map["result"]
         appointments <- (map["appointments"], ListTransform<rf_master_appointment>())
         message <- map["message"]
+        forceLogout <- map["force_logout"]
     }
 }
 

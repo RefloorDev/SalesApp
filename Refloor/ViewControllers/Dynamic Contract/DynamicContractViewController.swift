@@ -1125,9 +1125,13 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             self.saveContractDataOfAppointment(appointmentId: appointmentId, contractData: contractDataDict)
         }
     }
-    func validationOkayProceedWithContract(){
-        
+    func validationOkayProceedWithContract()
+    {
         let appointmentId = AppointmentData().appointment_id ?? 0
+                let currentClassName = String(describing: type(of: self))
+                let classDisplayName = "ContractDocument"
+                self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+        //let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment = self.getAppointmentData(appointmentId: appointmentId)
         if appointment?.enableDestinationSelection == 1
         {
@@ -1177,7 +1181,10 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             }
             if HttpClientManager.SharedHM.connectedToNetwork()
             {
-                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                if !isCardVerified
+                {
+                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                }
                 
                 
                 let imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
@@ -1590,7 +1597,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         customerDict["customer"] = customerData
         customerDict["rooms"] = createRoomParameters()
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
-        customerDict["operation_mode"] = "offline"
+        customerDict["operation_mode"] = HttpClientManager.SharedHM.connectedToNetwork() ? "online" : "offline"
         customerDict["app_version"] = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         return customerDict
     }

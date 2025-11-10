@@ -81,6 +81,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     var co_Applicant_Skipped:Bool = Bool()
     var isBothParties = 0
     var adminFee:Double = 0
+    var data:[String:Any] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -264,6 +265,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         details.financePayment = self.financePayment
         details.selectedPaymentMethord = self.selectedPaymentMethord
         details.downpayment = self.downpayment
+        details.data = data
         
         self.navigationController?.pushViewController(details, animated: true)
         

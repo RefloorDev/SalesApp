@@ -56,6 +56,7 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
     var floorShapeData:[FloorShapeDataValue]?
     var floorLevelData:[FloorLevelDataValue]?
     var appoinmentslData:AppoinmentDataValue!
+    var data:[String:Any] = [:]
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -101,6 +102,7 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
             applicant.floorShapeData = []
             applicant.roomData = AppDelegate.roomData
             applicant.appoinmentslData = AppDelegate.appoinmentslData
+            applicant.data = data
             self.navigationController?.pushViewController(applicant, animated: true)
         }
    // }

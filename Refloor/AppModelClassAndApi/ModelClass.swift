@@ -2369,11 +2369,12 @@ class PaymentOption: NSObject{
     var check_number: String? = ""
     var check_routing_number: String? = ""
     var check_account_number: String? = ""
+    var pay_later:Int = 0
     
     override init(){
         
     }
-    var dictionary: [String: String?] {
+    var dictionary: [String: Any?] {
         return ["payment_method":payment_method,
                 "card_number":card_number,
                 "expiry_date":expiry_date,
@@ -2381,7 +2382,8 @@ class PaymentOption: NSObject{
                 "card_pinorcvv":card_pinorcvv,
                 "check_number":check_number,
                 "check_routing_number":check_routing_number,
-                "check_account_number":check_account_number
+                "check_account_number":check_account_number,
+                "pay_later":pay_later
                ]
     }
     var nsDictionary: NSDictionary {
@@ -2859,6 +2861,7 @@ struct paymentMethodDetailsSecret:Codable
     var cardPinOrCvv:String?
     var paymentMethod:String?
     var checkNumber:String?
+    var pay_later:Int?
     enum CodingKeys: String, CodingKey
     {
         case cardNumber = "card_number"
@@ -2869,6 +2872,7 @@ struct paymentMethodDetailsSecret:Codable
         case cardPinOrCvv = "card_pinorcvv"
         case paymentMethod = "payment_method"
         case checkNumber = "check_number"
+        case pay_later = "pay_later"
     }
 }
 struct RoomsDetails:Codable

@@ -1033,11 +1033,11 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                         let (stairWidth,stairCount) = self.getStairWidthAndCount(roomId: roomID)
                         if coverRisersAnswer == "Yes"
                         {
-                            extra_price = stairWidth * stairCount * 2.25
+                            extra_price = (stairWidth * stairCount * 2.25) * currentSurfaceAnswerScore
                         }
                         else
                         {
-                            extra_price = stairWidth * stairCount * 1.25
+                            extra_price = (stairWidth * stairCount * 1.25 ) * currentSurfaceAnswerScore
                         }
                     }
                 }

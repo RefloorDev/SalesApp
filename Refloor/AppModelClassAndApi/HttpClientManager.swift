@@ -183,7 +183,8 @@ class HttpClientManager: NSObject {
                         
                     }
                 }
-                else{
+                else
+                {
                     completion("false", AppAlertMsg.serverNotReached,nil)
                 }
             }
@@ -207,15 +208,16 @@ class HttpClientManager: NSObject {
         }
         return masterData
     }
-    func AppinmentListApi(completion:@escaping (_ success: String?, _ object: String?,_ user_details : Appointments? ) -> ()){
+    func AppinmentListApi(completion:@escaping (_ success: String?, _ object: String?,_ user_details : Appointments? ,_ forceLogout: Int?) -> ()){
         print(Realm.Configuration.defaultConfiguration.fileURL)
         if self.connectedToNetwork()
         {
             self.showhideHUD(viewtype: .SHOW, title:"New appointments are being updated. Please wait...")
             
             let URL = AppURL().SalesScheduleList
+            let version = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!)
             
-            let parameters = ["token":UserData.init().token ?? ""]
+            let parameters = ["token":UserData.init().token ?? "","app_version":version]
             
             Alamofire.request(URL, method: .post, parameters: parameters).responseJSON { response in
                 
@@ -255,7 +257,7 @@ class HttpClientManager: NSObject {
                                     
 //                                    let appointment = Appointments(masterAppointment:responseData.appointments)
 //                                    realm.add(appointment)
-                                    completion(responseData.result,responseData.message ,responseData)
+                                    completion(responseData.result,responseData.message ,responseData, responseData.forceLogout)
                                     return
                                 }
                             }catch{
@@ -267,12 +269,12 @@ class HttpClientManager: NSObject {
                     
                 case .failure(let error):
                     print(error.localizedDescription)
-                    completion("false", AppAlertMsg.serverNotReached,nil)
+                    completion("false", AppAlertMsg.serverNotReached,nil, 0)
                 }
             }
         }
         else{
-            completion("false", AppAlertMsg.NetWorkAlertMessage,nil)
+            completion("false", AppAlertMsg.NetWorkAlertMessage,nil, 0)
             
         }
     }
@@ -2237,6 +2239,7 @@ class HttpClientManager: NSObject {
                             if isOnlineCollectBtnPressed
                             {
                                 self.showhideHUD(viewtype: .HIDE, title: "")
+                                
                             }
                         }
                     }
