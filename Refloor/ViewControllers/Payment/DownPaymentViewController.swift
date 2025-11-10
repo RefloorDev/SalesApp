@@ -11,9 +11,22 @@ import JWTCodable
 import CryptoKit
 import CommonCrypto
 import PayCardsRecognizer
+import Vision
+import VisionKit
+import WeScan
+import AVFoundation
 var packageName = ""
 @MainActor
-class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate, UITextFieldDelegate {
+class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,ExternalCollectionViewDelegateForTableView,PayCardsRecognizerDelegate, UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,VNDocumentCameraViewControllerDelegate,ImageScannerControllerDelegate{
+    func imageScannerControllerDidCancel(_ scanner: WeScan.ImageScannerController)
+    {
+        scanner.dismiss(animated: true)
+    }
+    
+    func imageScannerController(_ scanner: WeScan.ImageScannerController, didFailWithError error: any Error) {
+        print(error)
+    }
+    
     
     
     
@@ -70,12 +83,25 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     var imagePicker: CaptureImage!
     var roomData:RoomDataValue!
     var area = 0.0
+    var  cameraImagePicker = UIImagePickerController()
+    var popOver:UIPopoverController?
+    var ocrCameraImage:UIImage?
     //let header = JWTHeader(alg: .hs256)
     let header = JWTHeader(typ: "JWT", alg: .hs256)
     var payment_TrasnsactionDict:[String:String] = [:]
+    var isPayltr = false
+    var isOCR = false
+    var routingNumber:String = String()
+    var accountNumber:String = String()
+    var checkNumber:String = String()
+    var accountHolderName: String = String()
+    var cardNumber: String = String()
+    var cardExpiry:String = String()
+    var cardPin:String = String()
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"//"password"//UserData.init().token ?? ""//
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         print("finalpayment : ", finalpayment, " financePayment : ", financePayment, " downPaymentValue : ", downPaymentValue, " totalAmount : ", totalAmount)
         //JWT<paymentOptionUser>(header)
         self.setNavigationBarbackAndlogo(with: "DOWN PAYMENT".uppercased())
@@ -92,7 +118,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
-        
+        cameraImagePicker.delegate = self
         self.totalAreaLabel.text = "\(area) Sq.ft"
         self.packegeLabel.text = packageName //"\(self.QuotationPaymentPlanValueDetails.package ?? "")"
         self.financeAmountLabel.text = "$\(self.financePayment.toDoubleString)"
@@ -116,10 +142,26 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     override func viewWillAppear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.collectDownPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
         
         print("finalpayment : ", finalpayment, " financePayment : ", financePayment, " downPaymentValue : ", downPaymentValue, " totalAmount : ", totalAmount)
         //JWT<paymentOptionUser>(header)
         self.setNavigationBarbackAndlogo(with: "DOWN PAYMENT".uppercased())
+        if isOCR
+        {
+            return
+        }
         let payment1 = DownPaymentSelectionObj(paymentType: .Cash, lable: self.cashLabel, view: self.cashView, button: self.cashButton, tag: 10)
         downpaymentSelectionObjcet.append(payment1)
         let payment2 = DownPaymentSelectionObj(paymentType: .CreditCard, lable: self.creditcardLabel, view: self.creditcardView, button: self.creditcardButton, tag: 11)
@@ -189,16 +231,20 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
+    {
         return 1
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat
+    {
         return 0
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat
+    {
         return 0
     }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
+    {
         return CGSize(width: collectionView.bounds.width, height: 700)
     }
     
@@ -216,6 +262,9 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         
         if(paymentType == .Cash)
         {
+            routingNumber = ""
+            accountNumber = ""
+            checkNumber = ""
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DownPaymentFromCashCollectionViewCell", for: indexPath) as! DownPaymentFromCashCollectionViewCell
             //  cell.totalLabel.text = "Total Price: $\(self.totalAmount.toDoubleString)"
@@ -236,16 +285,40 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         }
         else if(paymentType == .DebitCard || paymentType == .CreditCard)
         {
+            routingNumber = ""
+            accountNumber = ""
+            checkNumber = ""
             
             
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DownPaymentFromCardCollectionViewCell", for: indexPath) as! DownPaymentFromCardCollectionViewCell
+            cell.cardNumber = ""
+            cell.cardExpiry = ""
+            cell.cardPin = ""
+            cell.payltrBtn.addTarget(self, action: #selector(payLtrBtn(sender:)), for: .touchUpInside)
             if paymentType == .DebitCard
             {
                 cell.totalLabel.text = "Add Debit Card Details"
+                cell.payltrStackView.isHidden = true
+                //cell.payBtnTopConstraint.constant = 0
+                
             }
             else
             {
+                cell.cardNumber = self.cardNumber
+                cell.cardExpiry = self.cardExpiry
+                cell.cardPin = self.cardPin
                 cell.totalLabel.text = "Add Credit Card Details"
+                cell.payltrStackView.isHidden = true
+                //cell.payBtnTopConstraint.constant = 0
+                if isPayltr
+                {
+                    cell.payRadioBtn.setImage(UIImage(named: "selectedRound"), for: .normal)
+                    
+                }
+                else
+                {
+                    cell.payRadioBtn.setImage(UIImage(named: ""), for: .normal)
+                }
             }
             //cell.totalLabel.text =  "Down Payment: $\(self.downPaymentValue.toDoubleString)"
             cell.selectedItem = self.selectedPersecntage
@@ -253,13 +326,13 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
             cell.cardScanButton.addTarget(self, action:  #selector(cardScanner), for: .touchUpInside)
             cell.accountHolderNameTF.setPlaceHolderWithColor(placeholder: "Name", colour: .placeHolderColor)
-            cell.cardNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            
             cell.cardNumberTF.keyboardType = .numberPad
-            //cell.cardNumberTF.delegate = self
+            cell.cardNumberTF.delegate = self
             cell.cardPinTF.keyboardType = .numberPad
-            //cell.cardPinTF.delegate = self
-            cell.cardExperyDateTF.setPlaceHolderWithColor(placeholder: "01/30", colour: .placeHolderColor)
-            //cell.cardExperyDateTF.delegate = self
+            cell.cardPinTF.delegate = self
+            
+            cell.cardExperyDateTF.delegate = self
             cell.cardPinTF.isSecureTextEntry = true
             
             cell.cardPinTF.setPlaceHolderWithColor(placeholder: "0000", colour: .placeHolderColor)
@@ -267,10 +340,18 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             
             if(paymentType == .CreditCard)
             {
-                cell.cardPinTF.setPlaceHolderWithColor(placeholder: "000", colour: .placeHolderColor)
+                
             }
+            if cardNumber == "" || cardPin == "" || cardExpiry == ""
+            {
+                cell.cardNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+                cell.cardExperyDateTF.setPlaceHolderWithColor(placeholder: "01/30", colour: .placeHolderColor)
+                cell.cardPinTF.setPlaceHolderWithColor(placeholder: "000", colour: .placeHolderColor)
+                
+            }
+            
             cell.cardExperyDateTF.addTarget(self, action: #selector(datepickerSalection(_:)), for: .editingDidBegin)
-           
+            
             if(paymentType == .DebitCard)
             {
                 cell.cardScanButton.setTitle("DEBIT CARD SCAN", for: .normal)
@@ -296,24 +377,52 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.totalLabel.text = "Add Check Details"
             //cell.totalLabel.text = "Down Payment: $\(self.downPaymentValue.toDoubleString)"
             cell.selectedItem = self.selectedPersecntage
-            cell.checkNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
-            cell.checkNumberTF.delegate = self
-            cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
-            cell.accountNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            
+            
+            
             cell.accountNumberTF.delegate = self
-            cell.routingNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            
             cell.routingNumberTF.delegate = self
-            cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
-            cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
+            if routingNumber != "" || accountNumber != "" || checkNumber != ""
+            {
+                cell.routingNumberTF.text = routingNumber
+                
+                cell.accountNumberTF.text = accountNumber
+                
+                cell.checkNumberTF.text = checkNumber
+                cell.routingNumber = routingNumber
+                cell.accountNumber = accountNumber
+                cell.checkNumber = checkNumber
+                //cell.collectionView.reloadData()
+            }
+            else{
+                cell.checkNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+                cell.accountNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+                cell.routingNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+                cell.routingNumber = routingNumber
+                cell.accountNumber = accountNumber
+                cell.checkNumber = checkNumber
+            }
+            //cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
+            //cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
+            cell.cameraButton.addTarget(self, action: #selector(autoReadOCRForCheck), for: .touchUpInside)
             cell.payButton.setTitle("Collect", for: .normal)
             
-            
+            cell.checkNumberTF.delegate = self
+            cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
             
             
             
             return cell
         }
+    }
+    
+    @objc func payLtrBtn(sender:UIButton)
+    {
+        isPayltr = !isPayltr
+        self.paymentCollectionView.reloadData()
+        
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -335,6 +444,406 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         rec.delegate = self
         self.navigationController?.pushViewController(rec, animated: true)
     }
+        @objc func autoReadOCRForCheck()
+        {
+    
+    
+               // self.openScanner()
+//            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//                appDelegate.orientationLock = .landscape
+//            }
+    
+            // Force the device to rotate immediately
+            UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+    
+    
+            let scannerViewController = ImageScannerController()
+            scannerViewController.imageScannerDelegate = self
+            present(scannerViewController, animated: true)
+    
+    
+    
+        }
+    
+    
+//    @objc func autoReadOCRForCheck() {
+//        // Force landscape orientation
+//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//            appDelegate.orientationLock = .landscape
+//        }
+//        
+//        UIDevice.current.setValue(UIInterfaceOrientation.landscapeRight.rawValue, forKey: "orientation")
+//        
+//        // Use the custom landscape scanner
+//        let scannerViewController = imagesc()
+//        scannerViewController.imageScannerDelegate = self
+//        scannerViewController.modalPresentationStyle = .fullScreen
+//        
+//        present(scannerViewController, animated: true)
+//    }
+    
+//    private func configureCameraForLandscape(_ scanner: ImageScannerController)
+//    {// Find the camera view controller in the navigation stack
+//        if let cameraVC = scanner.viewControllers.first(where: { $0 is ScannerViewController }) {// Use reflection to access private properties
+//            let mirror = Mirror(reflecting: cameraVC)
+//            for child in mirror.children {if child.label == "previewLayer", let previewLayer = child.value as? AVCaptureVideoPreviewLayer {
+//                if let connection = previewLayer.connection, connection.isVideoOrientationSupported {                    connection.videoOrientation = .landscapeRight
+//                        print("Camera preview set to landscape right")}}}}}
+//    
+    
+    func openScanner() {
+           let scanner = VNDocumentCameraViewController()
+           scanner.delegate = self
+           present(scanner, animated: true, completion: nil)
+       }
+
+       func documentCameraViewController(_ controller: VNDocumentCameraViewController,
+                                         didFinishWith scan: VNDocumentCameraScan)
+    {
+           for pageIndex in 0..<scan.pageCount {
+               let img = scan.imageOfPage(at: pageIndex)
+               //let yes = UIAlertAction(title: "OK", style:.default) { (_) in
+                   
+                   
+                   controller.dismiss(animated: true)
+                   let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+                   selectRoomPopUp.isSuccess = true
+                   selectRoomPopUp.isOCR = true
+                   selectRoomPopUp.sendReviewFailedMsg = "We have filled in most of the details for you. Just take a moment to double-check with your check to make sure everything is accurate."//message ?? ""
+                   self.present(selectRoomPopUp, animated: true, completion: nil)
+             
+                   self.isOCR = true
+                  detectMICR(from: img)
+                   
+               }
+//               let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+//       
+//               self.alert("We have filled in most of the details for you. Just take a moment to double-check with your check to make sure everything is accurate.", [yes,no])
+               // 👉 Process this image to check if it's a check (OCR, MICR detection)
+              
+               
+           //}
+           
+           //sideTabSelectedWith(at: self.checkButton.tag)
+       }
+    
+    func openCameraToPickImage()
+    {
+        cameraImagePicker.allowsEditing = false
+        cameraImagePicker.sourceType = .camera
+        cameraImagePicker.mediaTypes =  UIImagePickerController.availableMediaTypes(for: .camera)!// [kUTTypeImage as String]//
+//        if UIDevice.current.userInterfaceIdiom == .pad
+//        {
+            //self.popOver = UIPopoverController(contentViewController: cameraImagePicker)
+           // if isRoomImage{
+                //self.popOver?.present(from: CGRect(x: self.view.frame.midX + 150, y: self.view.frame.midY - 300, width: 300, height: 300), in: self.view, permittedArrowDirections: .any, animated: true)
+//            }else{
+                //self.popOver?.present(from: CGRect(x: self.view.frame.midX + 150, y: self.view.frame.midY , width: 400, height: 400), in: self.view, permittedArrowDirections: .any, animated: true)
+//            }
+//        }
+//        else
+//        {
+            present(cameraImagePicker, animated: true, completion: {
+                self.cameraImagePicker.navigationBar.topItem?.rightBarButtonItem?.tintColor = .black
+                self.cameraImagePicker.navigationBar.topItem?.rightBarButtonItem?.isEnabled = true
+            })
+        //}
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any])
+    {
+        if let originalImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+            print("imageDone")
+            ocrCameraImage = originalImage
+        }
+        dismiss(animated: true, completion: nil)
+       // ocrReadingFromImage(pickedImage: ocrCameraImage!)
+        //processImage(image: ocrCameraImage!)
+        detectMICR(from: ocrCameraImage!)
+    }
+    
+    func ocrReadingFromImage(pickedImage:UIImage)
+    {
+//        // converting image into CGImage
+        let sampleCheckImage = UIImage(named: "sampleCheck")
+        guard let cgImage = sampleCheckImage?.cgImage else {return}
+        // creating request with cgImage
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        // Vision provides its text-recognition capabilities through
+        //VNRecognizeTextRequest, an image-based request type that finds and extracts text in images.
+        let request = VNRecognizeTextRequest { request, error in
+            guard error == nil else { return }
+
+            guard let results = request.results as? [VNRecognizedTextObservation] else { return }
+
+            let text = results.compactMap {
+                $0.topCandidates(1).first?.string
+            }.joined(separator: ", ")
+
+            print(text) // text we get from image
+            
+            let (routing_number, account_number, check_number) = self.extractCheckInfo(from: text)
+            print("Routing Number :\(routing_number)")
+            print("Account Number: \(account_number)")
+            print("Check Number: \(check_number)")
+            
+        }
+        request.recognitionLevel = .accurate
+        request.recognitionLanguages = ["en-US"]
+
+       // let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+
+        do {
+            try handler.perform([request])
+        } catch {
+            print("Vision request failed: \(error)")
+        }
+        
+        
+        
+        
+        
+        
+    }
+    
+    func imageScannerController(_ scanner: ImageScannerController, didFinishScanningWithResults results: ImageScannerResults) {
+        // The user successfully scanned an image, which is available in the ImageScannerResults
+        // You are responsible for dismissing the ImageScannerController
+        
+//        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+//            appDelegate.orientationLock = .all
+//        }
+//         
+//        // Restore back to your default orientation (e.g., portrait)
+//        UIDevice.current.setValue(UIInterfaceOrientation.portrait.rawValue, forKey: "orientation")
+        
+        
+        scanner.dismiss(animated: true)
+        let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
+        selectRoomPopUp.isSuccess = true
+        selectRoomPopUp.isOCR = true
+        selectRoomPopUp.sendReviewFailedMsg = "We have filled in most of the details for you. Just take a moment to double-check with your check to make sure everything is accurate."//message ?? ""
+        self.present(selectRoomPopUp, animated: true, completion: nil)
+  
+        self.isOCR = true
+        detectMICR(from: results.croppedScan.image)
+    }
+    
+    func detectMICR(from image: UIImage) {
+        //let sampleCheckImage = UIImage(named: "sampleCheck")
+        self.paymentType = .Check
+        guard let cgImage = image.cgImage else { return }
+     
+        let request = VNRecognizeTextRequest { request, error in
+            guard let observations = request.results as? [VNRecognizedTextObservation] else { return }
+     
+            var allLines: [String] = []
+            for observation in observations {
+                if let candidate = observation.topCandidates(1).first {
+                    allLines.append(candidate.string)
+                }
+            }
+     
+            print("All OCR Lines: \(allLines)")
+     
+            //if let micrLine = allLines.sorted(by: { $0.count > $1.count }).last {
+                let micr = self.extractMICRLine(from:allLines)
+                print("Routing: \(micr.routing ?? "N/A")")
+                print("Account: \(micr.account ?? "N/A")")
+                print("Check #: \(micr.checkNumber ?? "N/A")")
+            self.routingNumber = micr.routing ?? ""
+            self.accountNumber = micr.account ?? ""
+            self.checkNumber = micr.checkNumber ?? ""
+            //}
+        }
+     
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = false // MICR isn't real words
+        request.recognitionLanguages = ["en-US"]
+     
+        let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        try? handler.perform([request])
+        self.sideTabSelectedWith(at: self.checkButton.tag)
+//        self.paymentType = .Check
+//        self.paymentCollectionView.reloadData()
+    }
+    
+    func extractMICRLine(from lines: [String]) -> (routing: String?, account: String?, checkNumber: String?) {
+        let micrCandidates = lines.filter { $0.rangeOfCharacter(from: .decimalDigits) != nil }
+        let micrJoined = micrCandidates.joined(separator: " ")
+        let normalized = normalizeMICRText(micrCandidates.last ?? micrJoined)
+        
+        // Find all groups of digits
+        let regex = try! NSRegularExpression(pattern: #"\d+"#)
+        let matches = regex.matches(in: normalized, range: NSRange(normalized.startIndex..., in: normalized))
+        
+        var routing: String?
+        var account: String?
+        var check: String?
+        
+        for match in matches {
+            let number = (normalized as NSString).substring(with: match.range)
+            
+            switch number.count
+            {
+            case 9...12:
+                if routing == nil { routing = number }
+                else
+                {
+                    account = number
+                }
+            case 3...7:
+                if check == nil { check = number }
+                else
+                {
+                    account = number
+                }
+            case 4...12:
+                if account == nil //&& number.count != 9
+                { account = number }
+            default:
+                continue
+            }
+        }
+        
+        return (routing, account, check)
+    }
+    
+    func normalizeMICRText(_ text: String) -> String {
+        var cleaned = text
+        // Replace common Vision misreads for MICR symbols
+//        cleaned = cleaned.replacingOccurrences(of: "P", with: "")
+        cleaned = cleaned.replacingOccurrences(of: "1:", with: "")
+        cleaned = cleaned.replacingOccurrences(of: "ar", with: "1")
+        cleaned = cleaned.replacingOccurrences(of: "AR", with: "1")
+        // Remove everything that's not a digit or space
+        cleaned = cleaned.replacingOccurrences(of: "[^0-9 ]", with: "", options: .regularExpression)
+        return cleaned
+    }
+    
+    func preprocessImage(_ image: UIImage) -> UIImage {
+        let ciImage = CIImage(image: image)!
+        let filter = CIFilter(name: "CIColorControls")!
+        filter.setValue(ciImage, forKey: kCIInputImageKey)
+        filter.setValue(1.0, forKey: kCIInputContrastKey)
+        filter.setValue(0.0, forKey: kCIInputSaturationKey)
+     
+        let context = CIContext()
+        if let output = filter.outputImage,
+           let cgImage = context.createCGImage(output, from: output.extent) {
+            return UIImage(cgImage: cgImage)
+        }
+        return image
+    }
+    
+    
+    
+    func processImage(image: UIImage) {
+        let sampleCheckImage = UIImage(named: "sampleCheck")
+        let processImage = preprocessImage(sampleCheckImage!)
+        guard let cgImage = processImage.cgImage else { return }
+     
+        let request = VNRecognizeTextRequest { request, error in
+            guard let observations = request.results as? [VNRecognizedTextObservation], error == nil else {
+                print("Text recognition error: \(error?.localizedDescription ?? "Unknown error")")
+                return
+            }
+     
+            let recognizedText = observations.compactMap { observation in
+                // Get the top candidate for recognition
+                return observation.topCandidates(1).first?.string
+            }.joined(separator: "\n")
+     
+            // Now, you can apply post-processing, including filtering and regex
+            print("Raw recognized text:\n\(recognizedText)")
+     
+            // Filtering non-numeric characters (basic filtering, adjust as needed)
+            //let filteredText = recognizedText.components(separatedBy: CharacterSet.decimalDigits.inverted)
+                                          // .joined()
+            
+            let result = self.extractCheckInfo(from: recognizedText)
+            
+            let filteredText = recognizedText
+                .components(separatedBy: CharacterSet(charactersIn: "0123456789").inverted)
+                .filter { !$0.isEmpty && $0.count >= 5 }.joined()
+        
+     
+            // Regex for Account and Routing Numbers (Illustrative - requires refinement based on your checks)
+            // **Important:** MICR is highly country-specific. The regex for routing and account numbers can vary significantly.
+            // Consult banking regulations and MICR specifications for your region to create accurate regex patterns.
+     
+            // Example Regex (Illustrative - routing number pattern)
+            let routingNumberPattern = "\\b\\d{9}\\b" // 9 digits, surrounded by word boundaries
+            if let routingRange = filteredText.range(of: routingNumberPattern, options: .regularExpression) {
+                let routingNumber = String(filteredText[routingRange])
+                print("Detected Routing Number: \(routingNumber)")
+            }
+     
+            // Example Regex (Illustrative - account number pattern)
+            let accountNumberPattern = "\\b\\d{10,}\\b" // 10 or more digits, surrounded by word boundaries
+            if let accountRange = filteredText.range(of: accountNumberPattern, options: .regularExpression) {
+                let accountNumber = String(filteredText[accountRange])
+                print("Detected Account Number: \(accountNumber)")
+            }
+        }
+     
+        // You can customize the request:
+        request.recognitionLevel = .accurate // Prioritize accuracy
+        request.usesLanguageCorrection = false // Disable language correction for MICR
+        // request.recognitionLanguages = ["en-US"] //  Can provide some context
+     
+     
+        let requestHandler = VNImageRequestHandler(cgImage: cgImage, options: [:])
+        do {
+            try requestHandler.perform([request])
+        } catch {
+            print("Failed to perform text recognition: \(error)")
+        }
+    }
+    
+    func
+    extractCheckInfo(from text: String) -> (routing: String?, account: String?, check: String?) {
+        // 1. Extract all digit sequences, removing non-digit characters
+        let digitGroups = text
+            .components(separatedBy: CharacterSet(charactersIn: "0123456789").inverted)
+            .filter { !$0.isEmpty && $0.count >= 5 } // Likely to be routing/account/check
+
+        // 2. Iterate through sequences to find a 9-digit number (routing number candidate)
+        for i in 0..<digitGroups.count {
+            let group = digitGroups[i]
+            
+            if group.count >= 9 {
+                // Try to extract a routing number from the first 9 digits
+                let routing = String(group.prefix(9))
+                let remainder = String(group.dropFirst(9))
+                
+                var account: String? = nil
+                var check: String? = nil
+
+                // Try to use remainder as account number if it's long enough
+                if remainder.count >= 4 {
+                    account = remainder
+                } else if i + 1 < digitGroups.count {
+                    account = digitGroups[i + 1]
+                }
+
+                // Check number is likely the group after the account
+                if i + 2 < digitGroups.count {
+                    check = digitGroups[i + 2]
+                }
+
+                return (routing, account, check)
+            }
+        }// 24234567890, 4678904, ~87417
+
+        // Fallback if no 9+ digit group found
+        return (nil, nil, nil)
+    }
+
+
+    
+    
+    
     @objc func GoForJobCompleationValidation()
     {
         if paymentType == .Cash
@@ -459,6 +968,25 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             self.alert("Something went wrong", nil)
         }
     }
+    func textFieldDidEndEditing(_ textField: UITextField)
+    {
+        print("cntrl here")
+        if (paymentType == .CreditCard)
+        {
+            if textField.placeholder == "0000 0000 0000 0000"
+            {
+                self.cardNumber = textField.text ?? ""
+            }
+            if textField.placeholder == "01/30"
+            {
+                self.cardExpiry = textField.text ?? ""
+            }
+            if textField.placeholder == "000"
+            {
+                self.cardPin = textField.text ?? ""
+            }
+        }
+    }
     func validateForCard()
     {
         var name = ""
@@ -503,6 +1031,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                     //                    }
                     if CreditCardValidator(cardNumber).isValid {
                         
+                        
                         // Card number is valid
                     }
                     else
@@ -535,7 +1064,11 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                                 }
                                 
                                 pin = (cell.cardPinTF.text ?? "")
-                                downPaymentInputObject = DownPaymentInputObject(paymentType: paymentType, cardPaymentValue: CardPaymentValue(accountName: name, cardNumber: cardNumber, experyDate: experyDate, pinNumber: pin), checkValue: nil)
+                                downPaymentInputObject = DownPaymentInputObject(paymentType: paymentType, cardPaymentValue: CardPaymentValue(accountName: name, cardNumber: cardNumber, experyDate: experyDate, pinNumber: pin, isPayLtr: isPayltr), checkValue: nil)
+                                self.cardNumber = cardNumber
+                                self.cardExpiry = experyDate
+                                self.cardPin = pin
+                                
                                 self.GoForJobCompleation()
                                 
                             }
@@ -1111,7 +1644,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             //expirydate = expirydate?.expiryDateToString(date: expirydate ?? "")
             expirydate = expirydate?.replacingOccurrences(of: "/", with: "-")
           
-            let data:[String:Any] = ["card_number":downPaymentInputObject?.cardPaymentValue?.cardNumber ?? "","card_expiry":expirydate ?? "","card_holder_name":downPaymentInputObject?.cardPaymentValue?.accountName ?? "","cardpin":downPaymentInputObject?.cardPaymentValue?.pinNumber ?? "","check_number":downPaymentInputObject?.checkValue?.checkNumber ?? "","check_account_number":downPaymentInputObject?.checkValue?.accountNumber ?? "","check_routing_number":downPaymentInputObject?.checkValue?.routingNumber ?? ""]
+            let data:[String:Any] = ["card_number":downPaymentInputObject?.cardPaymentValue?.cardNumber ?? "","card_expiry":expirydate ?? "","card_holder_name":downPaymentInputObject?.cardPaymentValue?.accountName ?? "","cardpin":downPaymentInputObject?.cardPaymentValue?.pinNumber ?? "","check_number":downPaymentInputObject?.checkValue?.checkNumber ?? "","check_account_number":downPaymentInputObject?.checkValue?.accountNumber ?? "","check_routing_number":downPaymentInputObject?.checkValue?.routingNumber ?? "","pay_later": (downPaymentInputObject?.cardPaymentValue!.isPayLtr)! ? 1 : 0 ]
             let paymentOption =  self.getPaymentOptionAndValues(payment_method: "credit_card", paymentOptionDict:data)
 
             print(paymentOption)
@@ -1531,12 +2064,14 @@ class CardPaymentValue:NSObject
     var cardNumber:String
     var experyDate:String
     var pinNumber:String
-    init(accountName:String,cardNumber:String,experyDate:String,pinNumber:String)
+    var isPayLtr:Bool = false
+    init(accountName:String,cardNumber:String,experyDate:String,pinNumber:String,isPayLtr:Bool)
     {
         self.accountName = accountName
         self.cardNumber = cardNumber
         self.experyDate = experyDate
         self.pinNumber = pinNumber
+        self.isPayLtr = isPayLtr
     }
 }
 class CheckValue:NSObject

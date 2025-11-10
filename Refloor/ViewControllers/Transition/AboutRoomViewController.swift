@@ -48,6 +48,18 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
     
     override func viewWillAppear(_ animated: Bool) {
         //arb
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomImageUploading,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         let appointmentId = AppointmentData().appointment_id ?? 0
         let savedRoomImages = self.loadRoomImage(appointmentId: appointmentId, roomId: roomID)
@@ -402,7 +414,8 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
     
     
     
-    func openCameraToPickImage(){
+    func openCameraToPickImage()
+    {
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .camera
         imagePicker.mediaTypes =  [kUTTypeImage as String]//UIImagePickerController.availableMediaTypes(for: .camera)!

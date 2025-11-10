@@ -70,9 +70,11 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isSendReview = false
     var isSuccessMsg = true
     var isAppointmentStatus = false
+    var isOCR = false
     var sendReviewFailedMsg:String = String()
     var isPasswordVisble = false
 
+    @IBOutlet weak var successViewHeightConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
         super.viewDidLoad()
         IQKeyboardManager.shared.keyboardDistanceFromTextField = 100
@@ -167,6 +169,12 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             {
                 successMainHeading.text = "Appointment Verification"
                 successSubMsgLbl.text = sendReviewFailedMsg//"You are not the assigned salesperson for this appointment."
+            }
+            if isOCR
+            {
+                successMainHeading.text = "Alert"
+                successSubMsgLbl.text = sendReviewFailedMsg
+                successViewHeightConstraint.constant = 270
             }
             if !isSuccessMsg && !isAppointmentStatus
             {

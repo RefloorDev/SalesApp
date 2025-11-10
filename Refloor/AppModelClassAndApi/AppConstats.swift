@@ -204,6 +204,46 @@ struct AppURL
     let manualArrivalDate = BASE_URL + "v1/update_manual_arrival_date"
     let sendReviewLink = BASE_URL + "v1/send_review_link"
     let appointmentStatus = BASE_URL + "v1/get_appointment_current_status"
+    let liveScreenLogs = BASE_URL + "v1/update_live_screen_log"
+}
+
+
+struct ScreenNames
+{
+    static let customer1 = "Customer1"
+    static let customer2 = "Customer2"
+    static let updateCustomer1 = "Update Customer1"
+    static let updateCustomer2 = "Update Customer2"
+    static let roomSelection = "RoomSelection"
+    static let roomDrawing = "RoomDrawing"
+    static let roomImageUploading = "RoomImageUploading"
+    static let roomQuestionnaire = "RoomQuestionnaire"
+    static let roomMeasurementSummary = "RoomMeasurementSummary"
+    static let measurementist = "MeasurementList"
+    static let paymentOption = "PaymentOption"
+    static let downFinaPayment = "DownFinalPayment"
+    static let paymentSummary = "PaymentSummary"
+    static let financeOption = "FinanceOption"
+    static let updateDownFinal = "UpdateDownFinalPayment"
+    static let signature = "Signature"
+    static let scopeOfWork = "ScopeOfWork"
+    static let cancellationPolicy = "CancellationPolicy"
+    static let contractDocumnet = "ContractDocument"
+    static let destinationMotivation = "DestinationMotivation"
+    static let installationScheduler = "InstallerScheduler"
+    static let applicantForm = "ApplicantInformation"
+    static let coApplicantForm = "CoApplicantInformation"
+    static let otherIncome = "OtherIncomeObligation"
+    static let financeCheckList = "FinanceCheckList"
+    static let appointmentSummary = "AppointmentSummary"
+    static let collectDownPayment = "CollectDownPayment"
+    static let appointmentResult = "AppointmentResult"
+    static let appointmentList = "AppointmentList"
+    static let roomVO = "RoomVO"
+    static let logDetails = "LogDetails"
+    
+    
+    
 }
 
 

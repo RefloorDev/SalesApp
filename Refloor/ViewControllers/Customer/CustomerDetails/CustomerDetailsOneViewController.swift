@@ -160,6 +160,25 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     }
     override func viewWillAppear(_ animated: Bool)
     {
+        
+        /*appointment_id:77680
+        screen_name:GeoLocation
+        screen_entry_date:2025-10-30 12:00:45
+        network_strength: 12Mbps
+         */
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
+        
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:AppointmentData().appointment_id ?? 0).first
         if appointment != nil
         {

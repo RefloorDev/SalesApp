@@ -191,7 +191,7 @@
 		B0BBFC6A2BAC1E43009E6287 /* SpalashScreenNewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC632BAC1E43009E6287 /* SpalashScreenNewViewController.swift */; };
 		B0BBFC6B2BAC1E43009E6287 /* ForgotPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC642BAC1E43009E6287 /* ForgotPasswordViewController.swift */; };
 		B0BBFC6C2BAC1E43009E6287 /* JobTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC662BAC1E43009E6287 /* JobTypeCollectionViewCell.swift */; };
-		B0BBFC6D2BAC1E43009E6287 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC672BAC1E43009E6287 /* LoginViewController.swift */; };
+		B0BBFC6D2BAC1E43009E6287 /*                                                                                                                                                                                            .swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC672BAC1E43009E6287 /*                                                                                                                                                                                            .swift */; };
 		B0BBFC6E2BAC1E43009E6287 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0BBFC682BAC1E43009E6287 /* NavigationController.swift */; };
 		B0CF6E8E2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */; };
 		B0D395DB2A94A26A0020497B /* InstallerShedulerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */; };
@@ -409,7 +409,7 @@
 		B0BBFC632BAC1E43009E6287 /* SpalashScreenNewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpalashScreenNewViewController.swift; sourceTree = "<group>"; };
 		B0BBFC642BAC1E43009E6287 /* ForgotPasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPasswordViewController.swift; sourceTree = "<group>"; };
 		B0BBFC662BAC1E43009E6287 /* JobTypeCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JobTypeCollectionViewCell.swift; sourceTree = "<group>"; };
-		B0BBFC672BAC1E43009E6287 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		B0BBFC672BAC1E43009E6287 /*                                                                                                                                                                                            .swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "                                                                                                                                                                                           .swift"; sourceTree = "<group>"; };
 		B0BBFC682BAC1E43009E6287 /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		B0CF6E8D2A8CA7660053E6A8 /* SelectRoomCommentPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectRoomCommentPopUpViewController.swift; sourceTree = "<group>"; };
 		B0D395DA2A94A26A0020497B /* InstallerShedulerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallerShedulerViewController.swift; sourceTree = "<group>"; };
@@ -996,7 +996,7 @@
 				B0BBFC632BAC1E43009E6287 /* SpalashScreenNewViewController.swift */,
 				B0BBFC642BAC1E43009E6287 /* ForgotPasswordViewController.swift */,
 				B0BBFC652BAC1E43009E6287 /* CollectionViewCells */,
-				B0BBFC672BAC1E43009E6287 /* LoginViewController.swift */,
+				B0BBFC672BAC1E43009E6287 /*                                                                                                                                                                                            .swift */,
 				B0BBFC682BAC1E43009E6287 /* NavigationController.swift */,
 			);
 			path = LoginSection;
@@ -1411,7 +1411,7 @@
 				65CB187B24DBE04A00A0BD39 /* AboutRoomViewController.swift in Sources */,
 				65BA840E249A3E8C003F9A79 /* PamentOptionsTopCollectionViewCell.swift in Sources */,
 				65A3248F247CFB180050A42F /* SummeryDetailsQustionsTableViewCell.swift in Sources */,
-				B0BBFC6D2BAC1E43009E6287 /* LoginViewController.swift in Sources */,
+				B0BBFC6D2BAC1E43009E6287 /*                                                                                                                                                                                            .swift in Sources */,
 				65CE7AD024EFCEAC002F5D12 /* CoApplicantFormViewController.swift in Sources */,
 				65F607CB24618B640094FF86 /* SelectionTableViewCell.swift in Sources */,
 				DD3E89D827881F4E007CA016 /* ViewLogListViewController.swift in Sources */,
@@ -1570,11 +1570,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
+				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
@@ -1582,11 +1580,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.3;
+				MARKETING_VERSION = 3.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorDevelopment2023;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};
@@ -1599,11 +1596,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1.0;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = F8JN2G36QM;
+				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
@@ -1611,11 +1606,10 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.2.3;
+				MARKETING_VERSION = 3.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = RefloorDevelopment2023;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 2;
 			};

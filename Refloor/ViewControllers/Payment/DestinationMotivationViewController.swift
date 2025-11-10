@@ -114,6 +114,18 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.destinationMotivation,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
     }
     
     func calculateLabelHeight(text: String, font: UIFont, width: CGFloat) -> CGFloat {
@@ -556,6 +568,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
         let classDisplayName = "DestinationMotivation"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //saveDataForApiCall()
+        self.destinationSelectionId = 0
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
             DispatchQueue.main.async

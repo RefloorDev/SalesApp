@@ -25,16 +25,19 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     }
     func creditApplicationCall(isVersatile: Bool)
     {
+        
         if isVersatile
         {
             self.isVersatile = false
             self.isHunter = true
+            //appointmetslData?.finance_provider = "hunter"
             
         }
         else
         {
             self.isHunter = false
             self.isVersatile = true
+            //appointmetslData?.finance_provider = "versatile"
         }
         financeProvider()
     }
@@ -101,7 +104,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             self.navigationController?.pushViewController(applicant, animated: true)
         }
         
-            
+             
         
     }
     
@@ -145,6 +148,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var roomName = ""
     
     
+    
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
     }
@@ -154,6 +158,23 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
 
         self.setNavigationBarbackAndlogo(with: "FINANCE PROVIDER".uppercased())
         externalCredentialsArray = externalCredentialsValue()
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     override func screenShotBarButtonAction(sender:UIButton)
         {

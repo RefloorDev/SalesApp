@@ -120,6 +120,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     
     override func viewWillAppear(_ animated: Bool)
     {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomQuestionnaire,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
         if(delegate == nil) {
             print("setDefaultAnswerForToiletQuestion1")
             setDefaultAnswerForToiletQuestion()
@@ -143,13 +155,17 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         {
         if removeCurrentCoveringAnswer != nil && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
             {
-            if removeCurrentCoveringAnswer == "Yes" && ((existingSubSurfaceAnswer?.contains("Concrete")) != nil)
+            if removeCurrentCoveringAnswer == "Yes" && ((existingSubSurfaceAnswer?.contains("Concrete")) == true)
             {
                 qustionAnswer[patchLevelingIndex!].mandatory_answer = true
             }
-            else if removeCurrentCoveringAnswer == "No" && ((currentSurfaceAnswer?.contains("Concrete")) != nil)
+            else if removeCurrentCoveringAnswer == "No" && ((currentSurfaceAnswer?.contains("Concrete")) == true)
             {
                 qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+            }
+            else
+            {
+                qustionAnswer[patchLevelingIndex!].mandatory_answer = false
             }
         }
             
@@ -1226,8 +1242,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                           }
                       }
                   }
+              
+
                   
-                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
+                  DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [self] in
                       if (removeCurrentCoveringAnswer == "No" && selectedValue == "Concrete / Cement / Gypsum" && ((qustionAnswer[buildUpLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0 || (qustionAnswer[trueSelfLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0)) {
                           
                           if let primerTypeIndex = qustionAnswer.firstIndex(where: { $0.code == "PrimerType" }) {
@@ -1288,19 +1306,24 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                       
                       if area != 0
                       {
-                      if removeCurrentCoveringAnswer == "No" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
-                      {
-                          if selectedValue.contains("Concrete")
+                          if removeCurrentCoveringAnswer == "No" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
                           {
-                              qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                              if selectedValue.contains("Concrete")
+                              {
+                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                              }
+                              else
+                              {
+                                  qustionAnswer[patchLevelingIndex!].mandatory_answer = false
+                              }
                           }
                           else{
                               qustionAnswer[patchLevelingIndex!].mandatory_answer = false
                           }
                       }
+                      
                   }
-
-                  }
+                
               }
         //Q4 Changes Deepa
         
@@ -1348,21 +1371,27 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         }
                     }
                 }
-                if area != 0
-                {
-                if removeCurrentCoveringAnswer == "Yes" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
-                {
-                    if selectedValue.contains("Concrete")
-                    {
-                        qustionAnswer[patchLevelingIndex!].mandatory_answer = true
-                    }
-                    else{
-                        qustionAnswer[patchLevelingIndex!].mandatory_answer = false
-                    }
-                }
-            }
+              
             }
         }
+        
+        if questionCode == "ExistingSubSurface"
+        {
+            if area != 0
+            {
+            if removeCurrentCoveringAnswer == "Yes" && qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+            {
+                if selectedValue.contains("Concrete")
+                {
+                    qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                }
+                else{
+                    qustionAnswer[patchLevelingIndex!].mandatory_answer = false
+                }
+            }
+        }
+        }
+            
         
         if questionCode == "RemoveCurrentCovering" {
             if (selectedValue == "Yes" && existingSubSurfaceAnswer == "Concrete / Cement / Gypsum" && ((qustionAnswer[buildUpLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0 || (qustionAnswer[trueSelfLevelingIndex ?? 0].answerOFQustion?.numberVaue) ?? 0 > 0)) {
@@ -1433,6 +1462,31 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
 //                    }
 //                }
 //            }
+            let existingSubSurface = qustionAnswer.first(where: {$0.code == "ExistingSubSurface"})
+            let currentSurface = qustionAnswer.first(where: {$0.code == "CurrentCoveringType"})
+            let removeCurrentCoveringAnswer = selectedValue//removeCurrentCovering?.answerOFQustion?.singleSelection?.value
+            let currentSurfaceAnswer = currentSurface?.answerOFQustion?.singleSelection?.value
+            let existingSubSurfaceAnswer = existingSubSurface?.answerOFQustion?.singleSelection?.value
+            if area != 0
+            {
+            if  qustionAnswer[patchLevelingIndex!].mandatory_for_current_surface_concrete == true
+                {
+                if removeCurrentCoveringAnswer == "Yes" && ((existingSubSurfaceAnswer?.contains("Concrete")) == true)
+                {
+                    qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                }
+                else if removeCurrentCoveringAnswer == "No" && ((currentSurfaceAnswer?.contains("Concrete")) == true)
+                {
+                    qustionAnswer[patchLevelingIndex!].mandatory_answer = true
+                }
+                else
+                {
+                    qustionAnswer[patchLevelingIndex!].mandatory_answer = false
+                }
+            }
+                
+            }
+            
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
@@ -1697,6 +1751,13 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             
             print("mandatory value : ", "\(question.mandatory_answer == true)", ", NUMVAL: ", ((self.qustionAnswer[StairCount].answerOFQustion?.numberVaue ?? 0) > 0), ", STRWDT: ", "\((self.qustionAnswer[StairCount].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0)", "textvalue : ", "\((self.qustionAnswer[StairCount].answerOFQustion?.textValue?.count ?? 0) > 0)")
             
+            if (question.mandatory_answer == true) && question.code == "SqftPatchLeveling" && !((self.qustionAnswer[patchLevelingIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
+            {
+                let questionNumber = value + 1
+                return "Patch Leveling Is Required When Installing On A Concrete Surface"//"Please answer question number \(questionNumber)"
+            }
+            else
+            
             if ((question.mandatory_answer == true) &&  !((((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || (self.qustionAnswer[value].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.singleSelection) != nil) ||
                                                             ((self.qustionAnswer[value].answerOFQustion?.multySelection?.count ?? 0) > 0)))
@@ -1719,11 +1780,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 return "You must select a primer type"
 
             }
-            else if (question.mandatory_answer == true) && question.code == "SqftPatchLeveling" && !((self.qustionAnswer[patchLevelingIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
-            {
-                let questionNumber = value + 1
-                return "Please answer question number \(questionNumber)"
-            }
+             
 //             if (self.qustionAnswer[miscellaneousCharge].answerOFQustion?.numberVaue ?? 0 ) > 0
 //            {
 //                if miscelleneous_Comments == "Enter your comments about Miscellaneous Charge"
@@ -2025,10 +2082,32 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         if question.question_code == "RemoveCurrentCovering"{
             if let answer = answerData{
                 if answer == "Yes"{
+//                    let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
+//                    let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
+//                    extra_price = net_room_area * currentSurfaceAnswerScore
+//                    print("extra_price : ", extra_price,  " currentSurfaceAnswerScore : ", currentSurfaceAnswerScore)
+                    
                     let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
-                    let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
-                    extra_price = net_room_area * currentSurfaceAnswerScore
-                    print("extra_price : ", extra_price,  " currentSurfaceAnswerScore : ", currentSurfaceAnswerScore)
+                    if room_area != 0
+                    {
+                        let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
+                        extra_price = net_room_area * currentSurfaceAnswerScore
+                    }
+                    else
+                    {
+                        let coverRisersAnswer = self.getCoverRisersAnswer(roomId: roomID)
+                        let (stairWidth,stairCount) = self.getStairWidthAndCount(roomId: roomID)
+                        if coverRisersAnswer == "Yes"
+                        {
+                            extra_price = stairWidth * stairCount * 2.25
+                        }
+                        else
+                        {
+                            extra_price = stairWidth * stairCount * 1.25
+                        }
+                    }
+                    
+                    
                 }
             }
         }else{

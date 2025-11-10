@@ -329,6 +329,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>WeScan.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Zip.xcscheme</key>
 		<dict>
 			<key>isShown</key>

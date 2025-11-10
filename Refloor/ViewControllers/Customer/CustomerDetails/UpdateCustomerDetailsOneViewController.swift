@@ -81,6 +81,8 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     var co_Applicant_Skipped:Bool = Bool()
     var isBothParties = 0
     var adminFee:Double = 0
+    var data:[String:Any] = [:]
+    var dropDownString = ["Yes","No"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -176,22 +178,44 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     @IBAction func bothPartiesBtnAction(_ sender: UIButton)
     {
         
-        self.DropDownDefaultfunction(sender, sender.bounds.width, ["Yes","No"], -1, delegate: self, tag: sender.tag)
+        self.DropDownDefaultfunction(sender, sender.bounds.width, dropDownString, -1, delegate: self, tag: sender.tag)
         
 
     }
     override func viewWillAppear(_ animated: Bool)
     {
         //appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
-        if appoinmentslData.isBothParties == 0
-        {
-            isBothParties = 0
-            bothPartiesDropDownLbl.text = "No"
-        }
-        else
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
+        if appoinmentslData.co_applicant_skipped == 0
         {
             isBothParties = 1
             bothPartiesDropDownLbl.text = "Yes"
+            dropDownString = ["Yes"]
+        }
+        
+        else//if appoinmentslData.co_applicant_skipped == 0
+        {
+            if appoinmentslData.isBothParties == 0
+            {
+                isBothParties = 0
+                bothPartiesDropDownLbl.text = "No"
+            }
+            else
+            {
+                isBothParties = 1
+                bothPartiesDropDownLbl.text = "Yes"
+            }
         }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
@@ -264,6 +288,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         details.financePayment = self.financePayment
         details.selectedPaymentMethord = self.selectedPaymentMethord
         details.downpayment = self.downpayment
+        details.data = data
         
         self.navigationController?.pushViewController(details, animated: true)
         

@@ -119,6 +119,18 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateDownFinal,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         self.validationDownpayment()
         print(self.summery.downPaymentValue)
@@ -455,7 +467,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
-        let classDisplayName = "DownFinalPayment"
+        let classDisplayName = "UpdateDownFinalPayment"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //
         details.floorLevelData = AppDelegate.floorLevelData
@@ -480,7 +492,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         //arb
         print("savePaymentDetailsToAppointmentDetail data : ", data)
         self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
-        
+        details.data = data
         self.navigationController?.pushViewController(details, animated: true)
     }
     func validation() -> String

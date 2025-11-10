@@ -247,7 +247,7 @@ class LoginViewController: UIViewController {
                 }
                 //self.navigationController?.pushViewController(ApplicantFormViewControllerForm.initialization()!, animated: true)
             }
-            else if ((result ?? "") == "Failed" || ((result ?? "") == "afailed"))
+            else if ((result ?? "") == "Failed" || ((result ?? "") == "failed"))
             {
                 self.alert(message ?? AppAlertMsg.INVALID_BOTH, nil)
             }

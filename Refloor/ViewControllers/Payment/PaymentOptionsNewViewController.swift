@@ -126,6 +126,18 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var vapurBarrierValue:Double = 0.0
     override func viewWillAppear(_ animated: Bool)
     {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     

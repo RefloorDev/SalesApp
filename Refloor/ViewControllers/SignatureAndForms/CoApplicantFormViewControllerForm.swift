@@ -96,6 +96,16 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     var totalPrice:Double = Double()
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
+    var stairPrice:Double = Double()
+    var minSalePrice:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
+    var excluded_amount_promotion:Double = 0.0
+    var installationDate = ""
+    var packagePlanName = ""
+    var adminFeeStatus = false
+    var adjustmentValue:Double = 0
+    var roomName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Co-Applicant Information".uppercased())
@@ -200,6 +210,18 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.coApplicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
     }
     
     @IBAction func passwordVisbleBatton(_ sender: UIButton) {
@@ -517,6 +539,18 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         applicant.financePayment = self.financePayment
         applicant.selectedPaymentMethord = self.selectedPaymentMethord
         applicant.downpayment = downpayment
+        applicant.stairPrice = stairPrice
+        applicant.excluded_amount_promotion = excluded_amount_promotion
+        applicant.minSalePrice = self.minSalePrice
+        applicant.savings = self.savings
+        applicant.promotionCodeId = self.promotionCodeId
+        applicant.paymentPlan = self.paymentPlan
+        applicant.roomName = self.roomName
+        applicant.adjustmentValue = self.adjustmentValue
+        applicant.packagePlanName = packagePlanName
+        applicant.downOrFinal = self.downPaymentValue
+        applicant.installationDate = self.installationDate
+        applicant.adminFeeStatus = self.adminFeeStatus
         //satheesh new credit form update
         if((firstName.text!.removeUnvantedcharactoes() != "") && (lastName.text!.removeUnvantedcharactoes() != ""))
         {
@@ -577,6 +611,18 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         applicant.selectedPaymentMethord = self.selectedPaymentMethord
         applicant.downpayment = downpayment
         applicant.isCoAppSkiped = 1
+        applicant.stairPrice = stairPrice
+        applicant.excluded_amount_promotion = excluded_amount_promotion
+        applicant.minSalePrice = self.minSalePrice
+        applicant.savings = self.savings
+        applicant.promotionCodeId = self.promotionCodeId
+        applicant.paymentPlan = self.paymentPlan
+        applicant.roomName = self.roomName
+        applicant.adjustmentValue = self.adjustmentValue
+        applicant.packagePlanName = packagePlanName
+        applicant.downOrFinal = self.downPaymentValue
+        applicant.installationDate = self.installationDate
+        applicant.adminFeeStatus = self.adminFeeStatus
         self.navigationController?.pushViewController(applicant, animated: true)
         
         

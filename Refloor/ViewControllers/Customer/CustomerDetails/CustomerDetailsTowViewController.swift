@@ -31,6 +31,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var customerPhoneStackView: UIStackView!
     @IBOutlet weak var customerContactNumberTF: UITextField!
     @IBOutlet weak var customerContactNumberStackView: UIStackView!
+    @IBOutlet weak var skipBtn: UIButton!
     
     @IBOutlet weak var customerContactNumberHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var customerContactNumbertopConstraint: NSLayoutConstraint!
@@ -77,7 +78,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
             
         }
         //
-
+        
         // AppDelegate.appoinmentslData.id = appoinmentslData.id
         AppDelegate.appoinmentslData = self.appoinmentslData
         self.setNavigationBarbackAndlogo(with: "Customer 2 Details")
@@ -114,8 +115,17 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
         
         self.checkTextFieldEdited()
         self.zipTF.keyboardType = .asciiCapableNumberPad
-         self.zipTF.delegate = self
+        self.zipTF.delegate = self
+        self.state_TF.delegate = self
+        self.city_TF.delegate = self
+        self.Street_Address_TF.delegate = self
+        self.customerContactNumberTF.delegate = self
+        self.customerEmail.delegate = self
+        self.customerLastName.delegate = self
+        self.customerMiddleName.delegate = self
+        self.customerFirstName.delegate = self
         setPhoneNumberDelegate()
+        skipEnabledOrDisabled()
         //         self.customerAddressTF.isUserInteractionEnabled = false
         //         self.customerContactNumberTF.isUserInteractionEnabled = false
         //         self.customerSpouseNameTF.isUserInteractionEnabled = false
@@ -124,14 +134,39 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
         // Do any additional setup after loading the view.
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-         isSkippbuttonCalled = 0
+    override func viewWillAppear(_ animated: Bool)
+    {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
+        isSkippbuttonCalled = 0
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    func skipEnabledOrDisabled()
+    {
+        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != "" || self.customerPhone.text != "" || self.customerContactNumberTF.text != ""
+        {
+            skipBtn.isHidden = true
+        }
+        else
+        {
+            skipBtn.isHidden = false
+        }
     }
     
     @IBAction func submitAndTransforButtonAction(sender: UIButton)
     {
+
         if(isSkippbuttonCalled != 0)
         {
             sender.tag = isSkippbuttonCalled
@@ -287,6 +322,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     @IBAction func skipButtonAction(sender: UIButton)
     {
        // isSkippbuttonCalled = true
+        
         if(sender.tag != 1)
         {
             if(validation() != "")
@@ -422,6 +458,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     {
         
         isEditedtextField=true
+        skipEnabledOrDisabled()
         
     }
     
@@ -496,6 +533,8 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
                 }
                 return true
     }
+    
+    
     
     
     

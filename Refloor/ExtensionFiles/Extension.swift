@@ -732,7 +732,8 @@ extension UIViewController:OrderStatusViewDelegate
                 
                 let yes = UIAlertAction(title: "OK", style:.default) { (_) in
                     
-                    self.fourceLogOutbuttonAction()
+                    self.fourceLogOutbuttonAction(result: success ?? "")
+                    
                 }
                 
                 self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
@@ -2199,17 +2200,30 @@ extension UIViewController:OrderStatusViewDelegate
     }
    
     
-    @objc func fourceLogOutbuttonAction()
+    @objc func fourceLogOutbuttonAction(result:String = "")
     {
-        UserData.setLogedInVal(false)
-        //    UserData.setLogedInVal(false)
-        //        let isoDate = "1970-04-14T10:44:00+0000"
-        //        let dateFormatter = DateFormatter()
-        //        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
-        //        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        //        let date = dateFormatter.date(from:isoDate)!
-        //        UserData.setLogedInDate(loginDate:date as NSDate)
-        self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
+        if result == "AuthFailed"
+        {
+            UserData.setLogedInVal(false)
+            
+            self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
+        }
+        else if self.determineIfAnyPendingAppointmentsToSink(){
+            let ok = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+            self.alert("There are pending appointments to be synced. Please wait till the syncing process is completed in order to logout from Refloor app. ", [ok])
+        }
+        else
+        {
+            UserData.setLogedInVal(false)
+            //    UserData.setLogedInVal(false)
+            //        let isoDate = "1970-04-14T10:44:00+0000"
+            //        let dateFormatter = DateFormatter()
+            //        dateFormatter.locale = Locale(identifier: "en_US_POSIX") // set locale to reliable US_POSIX
+            //        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+            //        let date = dateFormatter.date(from:isoDate)!
+            //        UserData.setLogedInDate(loginDate:date as NSDate)
+            self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
+        }
         
         
     }
@@ -2732,6 +2746,7 @@ extension UIViewController:OrderStatusViewDelegate
             paymentOption.check_number =  ""
             paymentOption.check_routing_number =  ""
             paymentOption.check_account_number = ""
+            paymentOption.pay_later = paymentOptionDict["pay_later"] as? Int ?? 0
         case "debit_card":
             paymentOption.payment_method = "debit_card"
             paymentOption.card_number = paymentOptionDict["card_number"] as? String ?? ""
@@ -3767,7 +3782,7 @@ extension UIViewController:OrderStatusViewDelegate
         {
             let realm = try Realm()
             let masterData = realm.objects(MasterData.self)
-            if let credentialArray = masterData.first?.finance_order_checklist
+            if let credentialArray = masterData.first?.finance_order_checklist//.filter({$0.applicableFinanceProvider == "all"})
             {
                 externalCredentialArray = credentialArray
             }
@@ -4259,7 +4274,8 @@ extension UIViewController:OrderStatusViewDelegate
                     let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND reqest_title == %@", appointmentId, requestTitle.rawValue)
                     var dict:[String:Any] = [:]
                     if appointmentRequest.count == 1{
-                        if let appointmentRequestObj = appointmentRequest.first{
+                        if let appointmentRequestObj = appointmentRequest.first
+                        {
                             dict = ["id": appointmentRequestObj.id,
                                     "sync_status" : true]
                             realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
@@ -4270,7 +4286,8 @@ extension UIViewController:OrderStatusViewDelegate
                     let appointmentRequest = realm.objects(rf_Completed_Appointment_Request.self).filter("appointment_id == %d AND reqest_title == %@ AND image_name == %@", appointmentId, requestTitle.rawValue, imageName)
                     var dict:[String:Any] = [:]
                     if appointmentRequest.count == 1{
-                        if let appointmentRequestObj = appointmentRequest.first{
+                        if let appointmentRequestObj = appointmentRequest.first
+                        {
                             dict = ["id": appointmentRequestObj.id,
                                     "sync_status" : true]
                             realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
