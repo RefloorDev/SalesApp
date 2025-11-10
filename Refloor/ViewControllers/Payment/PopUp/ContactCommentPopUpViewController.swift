@@ -32,9 +32,9 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
         commentsTextView.text = placeholderText
         commentsTextView.textColor = placeholderColor
         commentsTextView.contentInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-        sendPhysicalBtn.isHidden = true
-        sendPhysicalStackView.isHidden = true
-        sendPhysicalStackViewHeightCnstr.constant = 0
+        //sendPhysicalBtn.isHidden = true
+        //sendPhysicalStackView.isHidden = false
+       // sendPhysicalStackViewHeightCnstr.constant = 0
     }
     
     @IBAction func dismissOnBackgroundTap(_ sender: UIControl) {

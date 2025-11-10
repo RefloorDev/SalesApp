@@ -81,6 +81,7 @@ class InstallerSuccessViewController: UIViewController {
     var coapplicantSkiip:Int = 0
     var minSalePrice:Double = 0.0
     var packagePlanName = ""
+    let appointmetslData = AppDelegate.appoinmentslData
     
     static func initialization() -> InstallerSuccessViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "InstallerSuccessViewController") as? InstallerSuccessViewController
@@ -284,6 +285,8 @@ class InstallerSuccessViewController: UIViewController {
             installationDateLbl.text = installationDate
         }
         
+        appointmetslData?.finance_provider = loanProvider
+        
     }
     
     
@@ -308,6 +311,8 @@ class InstallerSuccessViewController: UIViewController {
     @IBAction func goToCreditAplBtnPressed(_ sender: UIButton)
     {
         let applicant = ApplicantFormViewControllerForm.initialization()!
+        let appointmetslData = AppDelegate.appoinmentslData
+        //appointmetslData?.finance_provider = ""
         applicant.downOrFinal = self.downOrFinal
         applicant.totalAmount = self.totalAmount
         applicant.paymentPlan = self.paymentPlan

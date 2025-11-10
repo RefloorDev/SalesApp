@@ -13,6 +13,10 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
     private var previousTextFieldContent: String?
     private var previousSelection: UITextRange?
     
+    @IBOutlet weak var payRadioBtn: UIButton!
+    @IBOutlet weak var payltrBtn: UIButton!
+    @IBOutlet weak var payBtnTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var payltrStackView: UIStackView!
     @IBOutlet weak var totalLabel: UILabel!
     @IBOutlet weak var accountHolderNameTF: UITextField!
     @IBOutlet weak var cardNumberTF: UITextField!
@@ -28,6 +32,10 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
     var selectedItem = 0
     var isPasswordVisble = true
     var delegate:ExternalCollectionViewDelegateForTableView?
+    var accountHolderName: String = String()
+    var cardNumber: String = String()
+    var cardExpiry:String = String()
+    var cardPin:String = String()
     @IBOutlet weak var cardScanButton: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -39,10 +47,10 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
     }
     func collectionViewConfigruation(collectionViewData:[String],delegate:ExternalCollectionViewDelegateForTableView?)
     {
-        self.accountHolderNameTF.text = ""
-        self.cardNumberTF.text = ""
-        self.cardExperyDateTF.text = ""
-        self.cardPinTF.text = ""
+        self.accountHolderNameTF.text = accountHolderName//""
+        self.cardNumberTF.text = cardNumber//""
+        self.cardExperyDateTF.text = cardExpiry//""
+        self.cardPinTF.text = cardPin//""
         self.selectedItem = 0
         self.persentage = collectionViewData
         self.delegate = delegate

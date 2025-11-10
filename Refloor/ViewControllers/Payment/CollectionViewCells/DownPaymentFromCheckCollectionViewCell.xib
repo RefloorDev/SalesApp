@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -74,9 +74,20 @@
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SMh-zO-272">
+                                        <rect key="frame" x="287" y="7" width="42" height="42"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="42" id="OXJ-nl-W5I"/>
+                                            <constraint firstAttribute="width" constant="42" id="u28-c3-E1M"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="ScanCheck"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
+                                    <constraint firstItem="SMh-zO-272" firstAttribute="centerY" secondItem="2Op-IP-1Vq" secondAttribute="centerY" id="BnK-5G-2PO"/>
+                                    <constraint firstItem="2Op-IP-1Vq" firstAttribute="trailing" secondItem="SMh-zO-272" secondAttribute="trailing" constant="15" id="C0S-oF-gLI"/>
                                     <constraint firstAttribute="bottom" secondItem="2Op-IP-1Vq" secondAttribute="bottom" constant="5" id="JXv-8x-jHP"/>
                                     <constraint firstItem="2Op-IP-1Vq" firstAttribute="leading" secondItem="FI6-JJ-eYn" secondAttribute="leading" constant="10" id="RV9-hu-d3E"/>
                                     <constraint firstItem="2Op-IP-1Vq" firstAttribute="top" secondItem="FI6-JJ-eYn" secondAttribute="top" constant="5" id="Tj3-gt-4CN"/>
@@ -199,6 +210,7 @@
             </constraints>
             <connections>
                 <outlet property="accountNumberTF" destination="vTH-bj-0yf" id="fMt-MZ-zbU"/>
+                <outlet property="cameraButton" destination="SMh-zO-272" id="IgA-Hy-Ric"/>
                 <outlet property="checkNumberTF" destination="2Op-IP-1Vq" id="YYX-24-f61"/>
                 <outlet property="collectionView" destination="Abp-Eg-EkR" id="3Xn-Wk-7lJ"/>
                 <outlet property="payButton" destination="v8N-nt-MgY" id="MIM-zo-ejX"/>
@@ -208,4 +220,7 @@
             <point key="canvasLocation" x="125" y="102"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="ScanCheck" width="42" height="42"/>
+    </resources>
 </document>

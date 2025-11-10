@@ -878,6 +878,11 @@ extension BackgroundTaskService {
                     let paymentFailureParam = self.transactionInfoAppendingOnData(parameter: parameter, transactionId: transactionId ?? "", cardType: cardType ?? "")
                     completion(false)
                 }
+                else if success == "AuthFailed"
+                {
+                    
+                    NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
+                }
                     
                 else{
                     //Writing Logs
@@ -998,7 +1003,12 @@ extension BackgroundTaskService {
                         completion(true)
                     }
                     completion(false)
-                }else{
+                }
+                else if success == "AuthFailed"
+                {
+                    NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
+                }
+                else{
                     self.addImageFailLogs(appointmentId: appoint_id, errorMessage: "Error image upload not complete")
                     completion(false)
                 }
@@ -1034,7 +1044,12 @@ extension BackgroundTaskService {
                     self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.GenerateContract,paymentStatus: "",paymentMessage: "")
                     self.deleteSyncCompletedAppointmentFromAppointmentDB(appointmentId: appointmentId)
                     completion(true)
-                }else{
+                }
+                else if success == "AuthFailed"
+                {
+                    NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
+                }
+                else{
                     self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date)
                     completion(false)
                 }
@@ -1064,6 +1079,10 @@ extension BackgroundTaskService {
                     if (UIApplication.getTopViewController() as? ViewLogListViewController) != nil {
                         NotificationCenter.default.post(name: Notification.Name("UpdateLogView"), object: nil)
                     }
+                }
+                else if success == "AuthFailed"
+                {
+                    NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
                 }
             }
         }

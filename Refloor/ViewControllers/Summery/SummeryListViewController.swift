@@ -94,6 +94,18 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.measurementist,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     override func performSegueToReturnBack() {
@@ -479,6 +491,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 //
                 let paymentOptions = PaymentOptionsNewViewController.initialization()!
                 paymentOptions.area = self.area
+                
+                
+                for rooms in tableValues
+                {
+                    let summaryData = self.createSummaryData(roomID: rooms.room_id ?? 0, roomName: rooms.room_name ?? "")
+                    let questionAnswer = setQuestion(summaryData: summaryData)
+                    submitApiCall(roomID: rooms.room_id ?? 0, qustionAnswer: questionAnswer, roomName: rooms.room_name ?? "")
+                }
                
                 //arb
                 let (totalUpchargeForAllRooms,extraCostConsideringQuestions, extraCostToExclude,totalStairCount, extraPromoCostExcluded) = self.calculateFloorColorUpchargeAndExtraCost(rooms: self.tableValues)
@@ -502,6 +522,200 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             }
         }
     }
+//    func  submitApiCall()
+//    {
+//        // set value of answerOFQuestion in db
+//        let appointmentId = AppointmentData().appointment_id ?? 0
+//        for rooms in tableValues
+//        {
+//            let questionsForAppointment = getQuestionsForAppointment(appointmentId: appointmentId, roomId: rooms.room_id ?? 0)
+//        var extraCost:Double = 0.0
+//        var extraCostExclude:Double = 0.0
+//        var extrapromoToexclude:Double = 0.0
+//        for i in 0..<questionsForAppointment.count{
+//            let questionsArray = List<rf_AnswerForQuestion>()
+//            let question = questionsForAppointment[i]
+//            let qustionAnswer = setQuestion()
+//            let questionAnswerForQuestionIdArr = self.qustionAnswer.filter({$0.id == question.id})
+//            if questionAnswerForQuestionIdArr.count == 1{
+//                let questionAnswerForQuestionId = questionAnswerForQuestionIdArr.first!
+//                if let answerOFQustion = questionAnswerForQuestionId.answerOFQustion{
+//                    let rf_answerOfQstn = chooseAnswerBasedOnQuestionType(question: question, answer: answerOFQustion)
+//                    questionsArray.append(rf_AnswerForQuestion(qstnAnsDict: rf_answerOfQstn))
+//                    do{
+//                        let realm = try Realm()
+//                        try realm.write{
+//                            var dict:[String:Any] = [:]
+//                            let questionUniqueIdentifier = question.questionIdUnique
+//                            let questionId = question.id
+//                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+//                            print("---dict2------", dict, " question : ", question.question_name)
+//                            realm.create(rf_master_question.self, value: dict, update: .all)
+//                            questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
+//                            
+//                            let additionalCost = self.calculateExtraPrice(question: question, answerOfQuestion: questionsArray)
+//                            print("------additionalCost1 : ", additionalCost, " question1 : ", question.question_code)
+//                            if question.exclude_from_discount{
+//                                extraCostExclude = extraCostExclude + additionalCost
+//                                print("------additionalCost_extraCostExclude1 : ", extraCostExclude)
+//                            }
+//                            if question.exclude_from_promotion
+//                            {
+//                                extrapromoToexclude = extrapromoToexclude + additionalCost
+//                                print("------additionalCost_extrapromoToexclude : ", extrapromoToexclude)
+//                            }
+//                            extraCost = extraCost + additionalCost
+//                            print("------additionalCost_extraCost1 : ", extraCost)
+//                        }
+//                    }catch{
+//                        print(RealmError.initialisationFailed)
+//                    }
+//                }
+//            }
+//            
+//            
+//        }
+//        
+//        print("additionalCost for room", extraCost)
+//        self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
+//        //save extra cost of selected room to appointment
+//        self.saveExtraCostToCompletedAppointment(roomId: self.roomID, extraCost: extraCost)
+//        //save extra cost to exclude
+//        self.saveExtraCostExcludeToCompletedAppointment(roomId: self.roomID, extraCostExclude: extraCostExclude,extraPromoPriceToExclude: extrapromoToexclude)
+//        //to save stair count and width to appointment room details
+//        if roomName.localizedCaseInsensitiveContains("stair"){
+//            self.saveStairDetailsToCompletedAppointment(roomId: self.roomID)
+//        }
+//    }
+//    }
+    
+//    func setQuestion(summaryData:SummeryDetailsData) -> [QuestionsMeasurementData]
+//    {
+//        let appointmentId = AppointmentData().appointment_id ?? 0
+//        var questionsList = RealmSwift.List<rf_master_question>()
+//        let roomID = summaryData.room_id ?? 0
+//        questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
+//        var qustionAnswer: [QuestionsMeasurementData] = []
+//        questionsList.forEach{ question in
+//            if /*!roomName.localizedCaseInsensitiveContains("stair")*/  summaryData.room_area != 0 {
+//                if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
+//                    qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+//                }
+//            }else{
+//                if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "stairs"){
+//                    qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+//                }
+//            }
+//           
+//        }
+//        
+//        self.qustionAnswer = qustionAnswer
+//        foreditingFunctions()
+//    }
+    
+    
+    
+    
+    func setQuestion(summaryData:SummeryDetailsData) -> [QuestionsMeasurementData]
+    {
+        
+        var qustionAnswerArray:[QuestionsMeasurementData] = []
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        var questionsList = RealmSwift.List<rf_master_question>()
+        let roomID = summaryData.room_id ?? 0
+        questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
+        var qustionAnswer: [QuestionsMeasurementData] = []
+        questionsList.forEach{ question in
+            if /*!roomName.localizedCaseInsensitiveContains("stair")*/  summaryData.room_area != 0 {
+                if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
+                    qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+                }
+            }else{
+                if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "stairs"){
+                    qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+                }
+            }
+           
+        }
+        
+        qustionAnswerArray = qustionAnswer
+        let questionAnswer = foreditingFunctions(qustionAnswer: qustionAnswerArray, summaryData: summaryData)
+        return questionAnswer
+    }
+    
+    func foreditingFunctions(qustionAnswer:[QuestionsMeasurementData],summaryData:SummeryDetailsData) -> [QuestionsMeasurementData]
+    {
+        for qustion in qustionAnswer
+        {
+            for answer in summaryData.questionaire ?? []
+            {
+                if qustion.id == answer.question_id
+                {
+                    if(answer.question_type == "numerical_box")
+                    {
+                        if (answer.answers ?? []).count == 1
+                        {
+                            let value = Int(answer.answers![0].answer ?? "") ?? 0
+                            let val =  AnswerOFQustion(value)
+                            if answer.question_id == 9
+                            {
+                                let value = Double(answer.answers![0].answer ?? "") ?? 0.0
+                                let strairVal = AnswerOFQustion(value)
+                                qustion.answerOFQustion = strairVal
+                            }
+                            val.qustionLineID = answer.contract_question_line_id ?? 0
+                            val.answerID = answer.answers![0].id ?? 0
+                            
+                            
+                            if !( answer.question_id == 9)
+                            {
+                                qustion.answerOFQustion = val
+                            }
+                        }
+                    }
+                    else if(answer.question_type == "textbox")
+                    {
+                        if (answer.answers ?? []).count == 1
+                        {
+                            let value = answer.answers![0].answer ?? ""
+                            let val =  AnswerOFQustion(value)
+                            val.qustionLineID = answer.contract_question_line_id ?? 0
+                            val.answerID = answer.answers![0].id ?? 0
+                            qustion.answerOFQustion = val
+                        }
+                    }
+                    else if(answer.question_type == "simple_choice")
+                    {
+                        if (answer.answers ?? []).count == 1
+                        {
+                            let value = QuoteLabelData(question_id: answer.answers![0].id ?? 0, value: answer.answers![0].answer ?? "")
+                            let val =  AnswerOFQustion(value)
+                            val.qustionLineID = answer.contract_question_line_id ?? 0
+                            val.answerID = answer.answers![0].id ?? 0
+                            qustion.answerOFQustion = val
+                        }
+                    }
+                    else
+                    {
+                        var values:[QuoteLabelData] = []
+                        for ans in answer.answers ?? []
+                        {
+                            let value = QuoteLabelData(question_id: ans.id ?? 0, value: ans.answer ?? "")
+                            values.append(value)
+                        }
+                        let val =  AnswerOFQustion(values)
+                        val.answerID = answer.answers![0].id ?? 0
+                        val.qustionLineID = answer.contract_question_line_id ?? 0
+                        qustion.answerOFQustion = val
+                    }
+                }
+            }
+        }
+        return qustionAnswer
+        print(qustionAnswer)
+    }
+    
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
@@ -972,6 +1186,221 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
     }
     
+    
+    func  submitApiCall(roomID:Int,qustionAnswer:[QuestionsMeasurementData],roomName:String)
+    {
+        // set value of answerOFQuestion in db
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        
+        let questionsForAppointment = getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
+        var extraCost:Double = 0.0
+        var extraCostExclude:Double = 0.0
+        var extrapromoToexclude:Double = 0.0
+        var stair_Count:String = ""
+        var currentSurfaceAnswerScore = 0.0
+        for i in 0..<questionsForAppointment.count{
+            let questionsArray = List<rf_AnswerForQuestion>()
+            let question = questionsForAppointment[i]
+            let questionAnswerForQuestionIdArr = qustionAnswer.filter({$0.id == question.id})
+            
+            if questionAnswerForQuestionIdArr.count == 1{
+                let questionAnswerForQuestionId = questionAnswerForQuestionIdArr.first!
+                if let answerOFQustion = questionAnswerForQuestionId.answerOFQustion{
+                    let rf_answerOfQstn = chooseAnswerBasedOnQuestionType(question: question, answer: answerOFQustion)
+                    questionsArray.append(rf_AnswerForQuestion(qstnAnsDict: rf_answerOfQstn))
+                    do{
+                        let realm = try Realm()
+                        try realm.write{
+                            var dict:[String:Any] = [:]
+                            let questionUniqueIdentifier = question.questionIdUnique
+                            let questionId = question.id
+                            dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":questionsArray,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+                            print("---dict2------", dict, " question : ", question.question_name)
+                            realm.create(rf_master_question.self, value: dict, update: .all)
+                            questionsForAppointment[i].rf_AnswerOFQustion = questionsArray
+                            
+                            if question.question_code == "StairCount" {
+                                stair_Count = questionsArray.first?.answer.first ?? ""
+                            }
+                            if question.question_code == "CurrentCoveringType"
+                            {
+                                //extra_price = 0.0
+                                currentSurfaceAnswerScore = question.quote_label.filter({$0.value == questionsArray.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+                                //return currentSurfaceAnswerScore//satheesh
+                            }
+//                            else
+//                            {
+//                                currentSurfaceAnswerScore = 0.0
+//                            }
+                            let additionalCost = self.calculateExtraPrice(question: question, answerOfQuestion: questionsArray, roomID: roomID,stair_Count: stair_Count,currentSurfaceAnswerScore: currentSurfaceAnswerScore)
+                            print("------additionalCost1 : ", additionalCost, " question1 : ", question.question_code)
+                            if question.exclude_from_discount{
+                                extraCostExclude = extraCostExclude + additionalCost
+                                print("------additionalCost_extraCostExclude1 : ", extraCostExclude)
+                            }
+                            if question.exclude_from_promotion
+                            {
+                                extrapromoToexclude = extrapromoToexclude + additionalCost
+                                print("------additionalCost_extrapromoToexclude : ", extrapromoToexclude)
+                            }
+                            extraCost = extraCost + additionalCost
+                            print("------additionalCost_extraCost1 : ", extraCost)
+                        }
+                    }catch{
+                        print(RealmError.initialisationFailed)
+                    }
+                }
+            }
+            
+            
+        }
+        
+        print("additionalCost for room", extraCost)
+        self.saveQuestionAndAnswerToCompletedAppointment(roomId: roomID, questionAndAnswer: questionsForAppointment)
+        //save extra cost of selected room to appointment
+        self.saveExtraCostToCompletedAppointment(roomId: roomID, extraCost: extraCost)
+        //save extra cost to exclude
+        self.saveExtraCostExcludeToCompletedAppointment(roomId: roomID, extraCostExclude: extraCostExclude,extraPromoPriceToExclude: extrapromoToexclude)
+        //to save stair count and width to appointment room details
+        if roomName.localizedCaseInsensitiveContains("stair"){
+            self.saveStairDetailsToCompletedAppointment(roomId: roomID)
+        }
+    }
+    
+    func calculateExtraPrice(question:rf_master_question,answerOfQuestion:List<rf_AnswerForQuestion>,roomID: Int,stair_Count:String = "",currentSurfaceAnswerScore:Double = 0.0) -> Double{
+        var extra_price :Double = 0.0
+        var amount :Double = 0.0
+        var amountIncluded :Double = 0.0
+        var simpleChoiceTypeCheck :Bool = false
+        var answer_score :Double = 0.0
+//        var stair_Count = ""
+//        var currentSurfaceAnswerScore = 0.0
+        //var roomID = 0
+        
+//        if question.question_code == "StairCount" {
+//            stair_Count = answerOfQuestion.first?.answer.first ?? ""
+//        }
+        
+        let answerData1 = answerOfQuestion.first?.answer.first
+        if question.question_code == "StairCoverRisers" {
+            if let answer = answerData1 {
+                if answer.contains("White Risers") {
+                    do {
+                        answer_score = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+                        return (Double(stair_Count) ?? 0.0) * answer_score
+                    } catch {
+                        return 0
+                    }
+                }
+            }
+        }
+        
+        if question.question_code == "CurrentCoveringType"{
+            extra_price = 0.0
+           // currentSurfaceAnswerScore = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+            return 0.0//currentSurfaceAnswerScore//satheesh
+        }
+        amount = question.amount
+        amountIncluded = Double(question.amount_included)
+        let answerData = answerOfQuestion.first?.answer.first
+        if question.question_code == "RemoveCurrentCovering"{
+            if let answer = answerData{
+                if answer == "Yes"{
+                    let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
+                    if room_area != 0
+                    {
+                        let net_room_area = room_area - amountIncluded > 0 ? room_area - amountIncluded : 0
+                        extra_price = net_room_area * currentSurfaceAnswerScore
+                    }
+                    else
+                    {
+                        let coverRisersAnswer = self.getCoverRisersAnswer(roomId: roomID)
+                        let (stairWidth,stairCount) = self.getStairWidthAndCount(roomId: roomID)
+                        if coverRisersAnswer == "Yes"
+                        {
+                            extra_price = (stairWidth * stairCount * 2.25) * currentSurfaceAnswerScore
+                        }
+                        else
+                        {
+                            extra_price = (stairWidth * stairCount * 1.25 ) * currentSurfaceAnswerScore
+                        }
+                    }
+                }
+            }
+        }else{
+            if question.question_type == "simple_choice"{
+                if let answer = answerData{
+                    if answer == "No" || answer == ""{
+                        extra_price = 0.0
+                        return extra_price//satheesh
+                    }else{
+                        if amount == 0{
+                            let answerScore = question.quote_label.filter({$0.value == answerOfQuestion.first?.answer.first ?? ""}).first?.answer_score ?? 0.0
+                            amount = answerScore
+                            simpleChoiceTypeCheck = true
+                        }
+                        else if(amount != 0 && answer != "")
+                        {
+                            simpleChoiceTypeCheck = true
+                        }
+                    }
+                    
+                }
+            }
+            
+            switch question.calculation_type ?? "" {
+            case "fixed":
+                if let answer = answerData{
+                    let answer = (Double(answer) ?? 0.0)
+                    if(answer == 0 && !simpleChoiceTypeCheck)
+                    {
+                        extra_price = amount * answer
+                    }
+                    else{
+                        extra_price = amount
+                        
+                    }
+                }
+            case "unit":
+                if let answer = answerData{
+                    if question.question_type == "simple_choice" && answer == "Yes" && question.calculate_order_wise == false{
+                        extra_price = amount
+                    }
+                    else if question.question_type == "numerical_box"
+                    {
+                        extra_price = (Double(answer) ?? 0.0) * amount
+                    }
+                }
+            case "sqft":
+                if question.question_type == "simple_choice"{
+                    let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
+                    let net_room_area = (room_area - amountIncluded) > 0 ? room_area - amountIncluded : 0
+                    extra_price = net_room_area * amount
+                }else{
+                    if question.multiply_with_area{
+                        let room_area = self.getTotalAdjustedAreaForRoom(roomId: roomID)
+                        let net_room_area = (room_area - amountIncluded) > 0 ? room_area - amountIncluded : 0
+                        if let answer = answerData{
+                            extra_price = net_room_area * amount * (Double(answer) ?? 0.0)
+                        }
+                    }else{
+                        if let answer = Double(answerData ?? "0.0"){
+                            let net_answer_data = (answer - amountIncluded) > 0 ? answer - amountIncluded : 0
+                            extra_price = net_answer_data * amount
+                        }
+                    }
+                }
+            default:
+                break
+            }
+            
+        }
+        return extra_price
+    }
+    
+    
+    
+    
     func summertListApi()
     {
         HttpClientManager.SharedHM.RoomSummeryListApi(appoinmentID) { (result, message, value) in
@@ -1021,6 +1450,47 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             }
         }
         
+    }
+    
+    
+    func chooseAnswerBasedOnQuestionType(question:rf_master_question,answer:AnswerOFQustion) -> [String:Any]{
+        let questionType = question.question_type
+        switch questionType {
+        case "simple_choice":
+            let value = [(answer.singleSelection?.value ?? "")]
+            let param:[String:Any] = ["question_id":question.id ,"answer":value]
+            return param
+        case "numerical_box":
+            let value = ["\(answer.numberVaue ?? 0)"]
+            if((answer.numberVaue ?? 0) != 0)
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":value]
+                return param
+            }
+            else if question.id == 9
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":[String(answer.stairWidthDouble)]]
+                return param
+            }
+        case "textbox":
+            let value = [(answer.textValue ?? "")]
+            if((answer.textValue ?? "") == "")
+            {
+                let param:[String:Any] = ["question_id":question.id ,"answer":value]
+                return param
+            }
+        case "multiple_choice":
+            var value:[String] = []
+            for ans in answer.multySelection ?? []
+            {
+                value.append(ans.value ?? "")
+            }
+            let param:[String:Any] = ["question_id":question.id ,"answer":value]
+            return param
+        default:
+            return [:]
+        }
+        return [:]
     }
     func summeryDetailsDataApiCall(_ masuremetID:Int)
     {

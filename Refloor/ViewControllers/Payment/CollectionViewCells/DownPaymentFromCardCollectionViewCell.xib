@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -198,7 +198,7 @@
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ygA-nD-bH9">
-                                <rect key="frame" x="20" y="419" width="354" height="56"/>
+                                <rect key="frame" x="20" y="431" width="354" height="56"/>
                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="0bX-sN-Qhr"/>
@@ -216,20 +216,60 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <stackView hidden="YES" opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="bwb-xa-kvf">
+                                <rect key="frame" x="20" y="399" width="174" height="32"/>
+                                <subviews>
+                                    <button opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tjY-Fh-Vfy">
+                                        <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="87S-AE-OG7"/>
+                                            <constraint firstAttribute="height" constant="32" id="NlD-CK-J1f"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" backgroundImage="notSelected"/>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pay later" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1JD-rB-BT8">
+                                        <rect key="frame" x="42" y="0.0" width="132" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="32" id="iTK-Iy-7IU"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Vup-6a-tW4"/>
+                                    <constraint firstItem="1JD-rB-BT8" firstAttribute="leading" secondItem="tjY-Fh-Vfy" secondAttribute="trailing" constant="10" id="jlw-Vl-YGe"/>
+                                    <constraint firstAttribute="trailing" secondItem="1JD-rB-BT8" secondAttribute="trailing" id="mmM-At-3k2"/>
+                                    <constraint firstItem="1JD-rB-BT8" firstAttribute="top" secondItem="bwb-xa-kvf" secondAttribute="top" id="r1h-fZ-26k"/>
+                                </constraints>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CKh-V7-nOf">
+                                <rect key="frame" x="20" y="399" width="174" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="vxb-pD-ksT"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="GQL-to-Iws" firstAttribute="top" secondItem="1x2-0a-E1d" secondAttribute="top" constant="20" id="3Zw-79-o5q"/>
+                            <constraint firstItem="CKh-V7-nOf" firstAttribute="trailing" secondItem="bwb-xa-kvf" secondAttribute="trailing" id="3rC-9q-VWH"/>
                             <constraint firstItem="o0F-lJ-kVS" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="55I-XM-Mck"/>
                             <constraint firstItem="HVx-n5-VqO" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="5XE-f0-MDZ"/>
                             <constraint firstItem="wBK-VF-WIF" firstAttribute="width" secondItem="1x2-0a-E1d" secondAttribute="width" multiplier="1:2" constant="-30" id="8ts-uT-VKh"/>
+                            <constraint firstItem="bwb-xa-kvf" firstAttribute="top" secondItem="wBK-VF-WIF" secondAttribute="bottom" constant="20" id="9e8-4Z-3zp"/>
                             <constraint firstItem="wBK-VF-WIF" firstAttribute="top" secondItem="JSU-Jj-JOS" secondAttribute="bottom" constant="10" id="DKh-m6-aIj"/>
                             <constraint firstItem="o0F-lJ-kVS" firstAttribute="top" secondItem="Kve-Xb-wGD" secondAttribute="bottom" constant="10" id="EdD-Or-8HJ"/>
-                            <constraint firstItem="ygA-nD-bH9" firstAttribute="top" secondItem="wBK-VF-WIF" secondAttribute="bottom" constant="40" id="Fpm-Ja-L3X"/>
+                            <constraint firstItem="ygA-nD-bH9" firstAttribute="top" secondItem="bwb-xa-kvf" secondAttribute="bottom" id="Fpm-Ja-L3X"/>
+                            <constraint firstAttribute="trailing" secondItem="bwb-xa-kvf" secondAttribute="trailing" constant="200" id="Hg2-rA-IEU"/>
                             <constraint firstAttribute="trailing" secondItem="Yeo-gL-Wng" secondAttribute="trailing" constant="20" id="Hle-k8-RSw"/>
                             <constraint firstItem="DYv-re-6Rr" firstAttribute="top" secondItem="RJ8-54-ZcI" secondAttribute="bottom" constant="10" id="KEu-43-bjq"/>
                             <constraint firstItem="JSU-Jj-JOS" firstAttribute="top" secondItem="o0F-lJ-kVS" secondAttribute="bottom" constant="30" id="PSQ-89-9dV"/>
                             <constraint firstItem="DYv-re-6Rr" firstAttribute="leading" secondItem="wBK-VF-WIF" secondAttribute="trailing" constant="10" id="R4O-C8-lYb"/>
+                            <constraint firstItem="bwb-xa-kvf" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="Tyg-Ay-gJA"/>
                             <constraint firstItem="q70-bu-2j2" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="V6Y-KS-JrQ"/>
                             <constraint firstItem="Yeo-gL-Wng" firstAttribute="top" secondItem="q70-bu-2j2" secondAttribute="bottom" constant="10" id="Y7t-vZ-iVA"/>
                             <constraint firstItem="ygA-nD-bH9" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="ZXB-FA-OBv"/>
@@ -239,11 +279,13 @@
                             <constraint firstAttribute="trailing" secondItem="HVx-n5-VqO" secondAttribute="trailing" constant="20" id="f8I-I1-mUm"/>
                             <constraint firstAttribute="trailing" secondItem="ygA-nD-bH9" secondAttribute="trailing" constant="20" id="guM-P2-wT1"/>
                             <constraint firstItem="GQL-to-Iws" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="imv-Yn-kcQ"/>
+                            <constraint firstItem="CKh-V7-nOf" firstAttribute="leading" secondItem="bwb-xa-kvf" secondAttribute="leading" id="jEC-uK-Dvj"/>
                             <constraint firstItem="N1w-jm-zYH" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="jNV-2o-8Ry"/>
                             <constraint firstItem="DYv-re-6Rr" firstAttribute="centerY" secondItem="Hcj-vE-R5h" secondAttribute="centerY" id="lym-xV-oDt"/>
                             <constraint firstAttribute="trailing" secondItem="o0F-lJ-kVS" secondAttribute="trailing" constant="20" id="m0K-ot-XMB"/>
                             <constraint firstItem="JSU-Jj-JOS" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="nbP-Hr-Zdh"/>
                             <constraint firstItem="q70-bu-2j2" firstAttribute="top" secondItem="GQL-to-Iws" secondAttribute="bottom" constant="20" id="qWh-C7-dOj"/>
+                            <constraint firstItem="CKh-V7-nOf" firstAttribute="top" secondItem="bwb-xa-kvf" secondAttribute="top" id="rsV-0s-vEa"/>
                             <constraint firstItem="Kve-Xb-wGD" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="tMj-JP-ECu"/>
                             <constraint firstItem="HVx-n5-VqO" firstAttribute="top" secondItem="N1w-jm-zYH" secondAttribute="bottom" constant="-80" id="uw6-tS-5GX"/>
                             <constraint firstItem="Kve-Xb-wGD" firstAttribute="top" secondItem="Yeo-gL-Wng" secondAttribute="bottom" constant="20" id="x6Y-S7-eeT"/>
@@ -270,13 +312,18 @@
                 <outlet property="cardPinTF" destination="EmY-91-pN1" id="sjT-Oz-YTf"/>
                 <outlet property="cardScanButton" destination="HVx-n5-VqO" id="za6-QD-gE6"/>
                 <outlet property="collectionView" destination="N1w-jm-zYH" id="W1Y-Bt-73h"/>
+                <outlet property="payBtnTopConstraint" destination="Fpm-Ja-L3X" id="XwH-R4-Igx"/>
                 <outlet property="payButton" destination="ygA-nD-bH9" id="w9M-4c-Mks"/>
+                <outlet property="payRadioBtn" destination="tjY-Fh-Vfy" id="03i-8s-9DN"/>
+                <outlet property="payltrBtn" destination="CKh-V7-nOf" id="aYg-NU-3Lu"/>
+                <outlet property="payltrStackView" destination="bwb-xa-kvf" id="fzH-zO-hgD"/>
                 <outlet property="totalLabel" destination="GQL-to-Iws" id="lqk-3i-Yv7"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="105.80357142857143"/>
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="notSelected" width="32" height="32"/>
         <image name="passwordeyeOpen" width="33" height="26"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

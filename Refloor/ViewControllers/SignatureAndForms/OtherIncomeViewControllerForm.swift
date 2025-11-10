@@ -114,8 +114,15 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     var finalPayment:Double = Double()
     var financeAmount:Double = Double()
     var stairPrice:Double = Double()
+    var minSalePrice:Double = 0.0
+    var savings:Double = 0
+    var promotionCodeId:Int = Int()
     var excluded_amount_promotion:Double = 0.0
-    
+    var installationDate = ""
+    var packagePlanName = ""
+    var adminFeeStatus = false
+    var adjustmentValue:Double = 0
+    var roomName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.otherIncomeSegment.selectedSegmentIndex = 1
@@ -258,6 +265,18 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.otherIncome,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
     }
     
     @objc func termsandconditionsAction()
@@ -439,7 +458,9 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
         //let parameter:[String:Any] = ["token": UserData.init().token ?? "","data":self.getParameterForRefloorLocalAppsteamOdooServer()]
         let parameter:[String:Any] = ["data":self.getParameterForRefloorLocalAppsteamOdooServer()]
         self.saveApplicantAndIncomeDataToAppointmentDetail(data: (parameter as NSDictionary))
-        let signature = SignatureSubmitViewController.initialization()!
+        let signature = UpdateDownFinalPaymentViewController.initialization()!
+        signature.floorLevelData = AppDelegate.floorLevelData
+        signature.floorShapeData = []
         signature.downOrFinal = self.downOrFinal
         signature.totalAmount = self.totalAmount
         signature.paymentPlan = self.paymentPlan
@@ -450,13 +471,55 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
         signature.downPaymentValue = self.downPaymentValue
         signature.finalpayment = self.finalpayment
         signature.financePayment = self.financePayment
-        signature.selectedPaymentMethord = self.selectedPaymentMethord
+        signature.selectedPaymentMethord1 = self.selectedPaymentMethord
         signature.downpayment = self.downpayment
-        signature.isCoAppSkiped = self.isCoAppSkiped
+        signature.roomData = AppDelegate.roomData
+        signature.packagePlanName = packagePlanName
+        signature.downOrFinal = self.downPaymentValue
+        signature.installationDate = self.installationDate
+        signature.adminFeeStatus = self.adminFeeStatus
+        signature.coapplicantSkiip = self.isCoAppSkiped
+        signature.minSalePrice = self.minSalePrice
+        signature.savings = self.savings
+        signature.promotionCodeId = self.promotionCodeId
+        signature.stairPrice = self.stairPrice
+        signature.excluded_amount_promotion = self.excluded_amount_promotion
+        signature.roomName = self.roomName
+        signature.adjustmentValue = self.adjustmentValue
         //arb
         let appointmentId = AppointmentData().appointment_id ?? 0
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "OtherIncomeObligation"
+        
+        /*
+         details.floorLevelData = AppDelegate.floorLevelData
+         details.floorShapeData = []
+         details.roomData = AppDelegate.roomData
+         details.appoinmentslData = AppDelegate.appoinmentslData
+         details.packagePlanName = packagePlanName
+         details.downOrFinal = self.downPaymentValue
+         details.totalAmount = self.totalAmount
+         details.paymentPlan = self.paymentPlan
+         details.roomName = self.roomName
+         details.adjustmentValue = self.adjustmentValue
+         details.paymentPlanValue = self.paymentPlanValue
+         details.paymentOptionDataValue = self.paymentOptionDataValue
+         details.drowingImageID = self.drowingImageID
+         details.area = self.area
+         details.downpayment = self.downpayment
+         details.downPaymentValue = self.downPaymentValue
+         details.finalpayment = self.finalpayment
+         details.financePayment = self.financePayment
+         details.selectedPaymentMethord1 = self.selectedPaymentMethord
+         details.installationDate = self.installationDate
+         details.adminFeeStatus = self.adminFeeStatus
+         details.coapplicantSkiip = self.coapplicantSkiip
+         details.minSalePrice = self.minSalePrice
+         details.savings = self.savings
+         details.promotionCodeId = self.promotionCodeId
+         details.stairPrice = self.stairPrice
+         details.excluded_amount_promotion = self.excluded_amount_promotion
+         */
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //
         self.navigationController?.pushViewController(signature, animated: true)

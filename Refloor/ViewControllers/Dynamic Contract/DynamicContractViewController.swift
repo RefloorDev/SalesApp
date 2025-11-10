@@ -98,6 +98,21 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         self.contractDataStatus = ContractData.init(contract_owner_reviewed_status: 0, contract_transition: 0, contract_molding_status: 0, contract_molding_none_status: 0, contract_molding_waterproof_status: 0, contract_molding_unfinished_status: 0, contract_molding_CovedBaseboard_status: 0,contract_risk_free_status: 0, contract_lifetime_guarantee_status: 0, contract_lead_safe_status: 0, contract_deposit_status: 0, contract_final_payment_status: 0, contract_time_of_performance_status: 0, contract_notices_to_owners_status: 0, contract_notices_of_cancellation: 0, contract_scheduling_status: 0, contract_motion_status: 0, contract_floor_protection_status: 0, contract_plumbing_status: 0, contract_plumbing_option_status: -1, contract_additional_other_cost_status: 0, contract_additional_other_subfloor_status: 0, contract_additional_other_leveling_status: 0, contract_additional_other_screwdown_status: 0, contract_additional_other_hardwood_removal_status: 0, contract_additional_other_door_removal_status: 0, contract_additional_other_bifold_removal_status: 0, contract_floor_protection: 0, contract_right_to_cure_status: 0, contract_owner_responsibility_status: 0, electronicsAuthorization1Status: 0, electronicsAuthorization2Status: 0,electronicsAuthorization3Status: 0)
         NotificationCenter.default.addObserver(self, selector: #selector(annotationHit(_:)), name: NSNotification.Name.PDFViewAnnotationHit, object: pdfView)
     }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.contractDocumnet,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
+    }
     @objc override func doregenerateBack()
     {
         self.navigationController?.popViewController(animated: true)
@@ -1125,9 +1140,13 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             self.saveContractDataOfAppointment(appointmentId: appointmentId, contractData: contractDataDict)
         }
     }
-    func validationOkayProceedWithContract(){
-        
+    func validationOkayProceedWithContract()
+    {
         let appointmentId = AppointmentData().appointment_id ?? 0
+                let currentClassName = String(describing: type(of: self))
+                let classDisplayName = "ContractDocument"
+                self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+        //let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment = self.getAppointmentData(appointmentId: appointmentId)
         if appointment?.enableDestinationSelection == 1
         {
@@ -1177,7 +1196,10 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             }
             if HttpClientManager.SharedHM.connectedToNetwork()
             {
-                self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                if !isCardVerified
+                {
+                    self.createAppointmentsRequestDataToDatabase(title: RequestTitle.CustomerAndRoom, url: AppURL().syncCustomerAndRoomInfo, requestType: RequestType.post, requestParams: customerAndRoomData as NSDictionary, imageName: "")
+                }
                 
                 
                 let imagesArray = self.allImagesUnderAppointment().filter({$0["image_name"] as! String != ""})
@@ -1590,7 +1612,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         customerDict["customer"] = customerData
         customerDict["rooms"] = createRoomParameters()
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
-        customerDict["operation_mode"] = "offline"
+        customerDict["operation_mode"] = HttpClientManager.SharedHM.connectedToNetwork() ? "online" : "offline"
         customerDict["app_version"] = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         return customerDict
     }

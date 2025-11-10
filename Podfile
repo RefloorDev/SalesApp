@@ -28,4 +28,5 @@ pod 'JWTCodable'
 pod 'SwiftJWT'
 pod 'Firebase/Crashlytics'
 pod 'Zip'
+pod 'WeScan', '>= 0.9'
 end

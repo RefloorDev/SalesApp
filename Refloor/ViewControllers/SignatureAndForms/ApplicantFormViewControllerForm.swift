@@ -226,6 +226,18 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+                
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.applicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
     }
     
     
@@ -536,8 +548,19 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = downpayment
             applicant.isCoAppSkiped = 1
-//            applicant.stairPrice = stairPrice
-//            applicant.excluded_amount_promotion = excluded_amount_promotion
+            applicant.stairPrice = stairPrice
+            applicant.excluded_amount_promotion = excluded_amount_promotion
+            applicant.minSalePrice = self.minSalePrice
+            applicant.savings = self.savings
+            applicant.promotionCodeId = self.promotionCodeId
+            applicant.paymentPlan = self.paymentPlan
+            applicant.roomName = self.roomName
+            applicant.adjustmentValue = self.adjustmentValue
+            applicant.packagePlanName = packagePlanName
+            applicant.downOrFinal = self.downPaymentValue
+            applicant.installationDate = self.installationDate
+            applicant.adminFeeStatus = self.adminFeeStatus
+            
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
             let currentClassName = String(describing: type(of: self))
@@ -565,6 +588,18 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
             applicant.financePayment = self.financePayment
             applicant.selectedPaymentMethord = self.selectedPaymentMethord
             applicant.downpayment = downpayment
+            applicant.stairPrice = stairPrice
+            applicant.excluded_amount_promotion = excluded_amount_promotion
+            applicant.minSalePrice = self.minSalePrice
+            applicant.savings = self.savings
+            applicant.promotionCodeId = self.promotionCodeId
+            applicant.paymentPlan = self.paymentPlan
+            applicant.roomName = self.roomName
+            applicant.adjustmentValue = self.adjustmentValue
+            applicant.packagePlanName = packagePlanName
+            applicant.downOrFinal = self.downPaymentValue
+            applicant.installationDate = self.installationDate
+            applicant.adminFeeStatus = self.adminFeeStatus
             //arb
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment = AppDelegate.appoinmentslData

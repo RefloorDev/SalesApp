@@ -45,6 +45,7 @@ class ImageViewAndRemoveViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool)
     {
+        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     

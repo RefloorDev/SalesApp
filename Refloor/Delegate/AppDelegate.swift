@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     public static var appoinmentslData:AppoinmentDataValue!
     public static var locationManager: CLLocationManager?
     var notificationCenter: UNUserNotificationCenter?
+    //var orientationLock = UIInterfaceOrientationMask.all
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
     //        for family in UIFont.familyNames {
@@ -46,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let config = Realm.Configuration(
                 // Set the new schema version. This must be greater than the previously used
                 // version (if you've never set a schema version before, the version is 0).
-                schemaVersion:  26,//7, // production 12
+                schemaVersion:  28,//7, // production 12
 
                 // Set the block which will be called automatically when opening a Realm with
                 // a schema version lower than the one set above
@@ -135,11 +136,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
 
             geoLocationApiCallSync()
+        
+        
+        
+        
+         
+        
     //            }
             
 
             return true
         }
+    
+//    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+//        return orientationLock
+//    }
    
     
     
