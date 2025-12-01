@@ -11,6 +11,7 @@ import GoogleMaps
 import GooglePlaces
 import PhotosUI
 import MobileCoreServices
+import RealmSwift
 @MainActor
 class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, DropDownDelegate {
     func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
@@ -19,11 +20,12 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         if item == "Yes"
         {
             isBothParties = 1
-            
+            self.appoinmentslData.isBothParties = 1
         }
         else
         {
             isBothParties = 0
+            self.appoinmentslData.isBothParties = 0
         }
     }
     
@@ -63,6 +65,7 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     var isEditedtextField = false
     var GMSTag = 0
     var isBothParties = -1
+    
   
     
     var imagePicker: CaptureImage!
@@ -158,14 +161,10 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         
         // Do any additional setup after loading the view.
     }
-    override func viewWillAppear(_ animated: Bool)
+    
+    
+    override func viewDidAppear(_ animated: Bool)
     {
-        
-        /*appointment_id:77680
-        screen_name:GeoLocation
-        screen_entry_date:2025-10-30 12:00:45
-        network_strength: 12Mbps
-         */
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -174,11 +173,35 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
+    }
+    override func viewWillAppear(_ animated: Bool)
+    {
         
+        /*appointment_id:77680
+        screen_name:GeoLocation
+        screen_entry_date:2025-10-30 12:00:45
+        network_strength: 12Mbps
+         */
+    
+        
+
+////            else if isBothParties == -1
+////            {
+////                bothPartiesDropDownLbl.textColor = UIColor().colorFromHexString("#A7B0BA")
+////                bothPartiesDropDownLbl.text = "Select"
+////            }
+//            else
+//            {
+//                isBothParties = 1
+//                bothPartiesDropDownLbl.text = "Yes"
+//            }
+//        }
+//        else
+//        {
         let appointment =  getCompletedAppointmentsFromDB(appointmentId:AppointmentData().appointment_id ?? 0).first
         if appointment != nil
         {
@@ -187,11 +210,11 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
                 isBothParties = 0
                 bothPartiesDropDownLbl.text = "No"
             }
-//            else if isBothParties == -1
-//            {
-//                bothPartiesDropDownLbl.textColor = UIColor().colorFromHexString("#A7B0BA")
-//                bothPartiesDropDownLbl.text = "Select"
-//            }
+            else if appointment?.isBothParties == -1
+            {
+                bothPartiesDropDownLbl.textColor = UIColor().colorFromHexString("#A7B0BA")
+                bothPartiesDropDownLbl.text = "Select"
+            }
             else
             {
                 isBothParties = 1
@@ -200,20 +223,41 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         }
         else
         {
-            if isBothParties == 0
-            {
-                bothPartiesDropDownLbl.text = "No"
-            }
-            else if isBothParties == -1
+            if self.appoinmentslData.isBothParties == -1
             {
                 bothPartiesDropDownLbl.textColor = UIColor().colorFromHexString("#A7B0BA")
                 bothPartiesDropDownLbl.text = "Select"
             }
-            else
+            else if self.appoinmentslData.isBothParties == 1
             {
                 bothPartiesDropDownLbl.text = "Yes"
             }
+            else
+            {
+                bothPartiesDropDownLbl.text = "No"
+            }
         }
+        
+        
+//            if isBothParties == 0
+//            {
+//                bothPartiesDropDownLbl.text = "No"
+//            }
+//            else
+//            else
+//            {
+//               
+//            }
+//        }
+//        
+//        if bothPartiesDropDownLbl.text == "Yes"
+//        {
+//            AppDelegate.appoinmentslData.isBothParties = 1
+//        }
+//        else
+//        {
+//            AppDelegate.appoinmentslData.isBothParties = 0
+//        }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
     
@@ -265,6 +309,24 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         let applicantOneDetails:[String:Any] = ["id":appointmentId,"mobile":self.appoinmentslData.mobile!,"customer_name":self.appoinmentslData.customer_name!,"street":self.appoinmentslData.street!,"state":self.appoinmentslData.state!,"state_code":self.appoinmentslData.state_code!,"city":self.appoinmentslData.city!,"zip":self.appoinmentslData.zip!,"applicant_first_name":self.appoinmentslData.applicant_first_name!,"applicant_middle_name":self.appoinmentslData.applicant_middle_name!,"email":self.appoinmentslData.email!,"phone":self.appoinmentslData.phone!,"applicant_last_name":self.appoinmentslData.applicant_last_name!,"isBothParties": isBothParties]
 
         self.updateAppointmentData(appointmentChangesDict: applicantOneDetails)
+        let appointmentInProcess = rf_completed_appointment(appointmentObj: rf_master_appointment(appointmentData: self.appoinmentslData))
+        do{
+            let realm = try Realm()
+            try realm.write{
+                let appointmentId = AppointmentData().appointment_id
+                let appointment =  realm.object(ofType: rf_completed_appointment.self, forPrimaryKey: appointmentId)
+                var dict:[String:Any] = [:]
+                if let rooms = appointment?.rooms{
+                    appointmentInProcess.rooms = rooms
+                    dict = ["appointment_id":appointmentId ?? 0,"rooms": rooms,"isBothParties":isBothParties]
+                    realm.create(rf_completed_appointment.self, value: dict, update: .all)
+                }
+            }
+            
+        }
+        catch{
+            print(RealmError.initialisationFailed)
+        }
         let details = CustomerDetailsTowViewController.initialization()!
         details.floorLevelData = self.floorLevelData
         details.floorShapeData = self.floorShapeData

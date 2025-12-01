@@ -207,7 +207,7 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
 //    {
 //        <#code#>
 //    }
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         var networkMessage = ""
@@ -218,8 +218,8 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.coApplicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.coApplicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
     }
@@ -501,6 +501,7 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         var dateOfBirth = self.dateofbirth.text ?? ""
         var licenseIssueDate = self.lisenceissueDate.text ?? ""
         var licenseExpdate = self.lisenceExpDate.text ?? ""
+    
         // Adding Date Of Birth format to Server format
         if licenseIssueDate != ""
         {
@@ -573,6 +574,7 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         appointment?.co_applicant_state = self.stateZipCode.text ?? ""
         appointment?.co_applicant_address = self.address.text ?? ""
         appointment?.co_applicant_skipped = 0
+        appointment?.isHomeOwnersPrsent = true
         let currentClassName = String(describing: type(of: self))
         let classDisplayName = "CoApplicantInformation"
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())

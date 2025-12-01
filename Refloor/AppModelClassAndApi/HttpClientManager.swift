@@ -2739,7 +2739,7 @@ class HttpClientManager: NSObject {
             self.showhideHUD(viewtype: .SHOW, title: "Checking appointment status")
             Alamofire.request(URL, method: .post, parameters: parameter,headers: headers).responseObject {
                 (response:DataResponse<ManualArrivalDate>) in
-                self.showhideHUD(viewtype: .HIDE)
+                //self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
                 print(response.result)
                 let response = response.result.value

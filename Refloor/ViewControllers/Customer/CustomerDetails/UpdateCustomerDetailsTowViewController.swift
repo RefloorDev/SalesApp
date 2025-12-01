@@ -157,11 +157,8 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-         isSkippbuttonCalled = 0
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        update()
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -170,10 +167,29 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        
+         isSkippbuttonCalled = 0
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        update()
+//        var networkMessage = ""
+//        let speedTest = NetworkSpeedTest()
+//        speedTest.testUploadSpeed { speed in
+//            print("Upload speed: \(speed) Mbps")
+//            networkMessage = String(format: "%.2f", speed)
+//            networkMessage += "Mbps"
+//            //DispatchQueue.main.async {
+//                
+//            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+//            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+//            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+//            }
     }
     
    func update() {
@@ -262,7 +278,7 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     
     func skipEnabledOrDisabled()
     {
-        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != "" || self.customerPhone.text != "" || self.customerContactNumberTF.text != ""
+        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != "" ||  self.customerContactNumberTF.text != ""
         {
             skipBtn.isHidden = true
         }

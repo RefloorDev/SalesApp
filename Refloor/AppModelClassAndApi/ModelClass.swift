@@ -467,10 +467,11 @@ class AppoinmentDataValue:Object,Mappable
     var manual_appointment_date: String?
     var officeLocationId:Int?
     var externalEntityKey = RealmSwift.List<rf_External_Entity_Key>()
-    var isBothParties: Int?
+    var isBothParties: Int = -1
     var enableDestinationSelection: Int?
     var appointmentStatus:AppointmentStatus!
     var finance_provider:String?
+    var isHomeOwnersPrsent:Bool?
     
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -1861,6 +1862,7 @@ class CreditApplicationStatusDetails: Codable
     var providerRefrence:String?
     var status:String?
     var approvedAmount:Double?
+    var co_applicant_exists: Int?
     required init?(map: ObjectMapper.Map){
     }
     
@@ -1872,6 +1874,7 @@ class CreditApplicationStatusDetails: Codable
         case providerRefrence = "provider_reference"
         case status = "status"
         case approvedAmount = "approved_amount"
+        case co_applicant_exists = "co_applicant_exists"
        
        
     }
@@ -1882,7 +1885,7 @@ class CreditApplicationStatusDetails: Codable
         providerRefrence = try values.decodeIfPresent(String.self, forKey: .providerRefrence)
         status = try values.decodeIfPresent(String.self, forKey: .status)
         approvedAmount = try values.decodeIfPresent(Double.self, forKey: .approvedAmount)
-       
+        co_applicant_exists = try values.decodeIfPresent(Int.self, forKey: .co_applicant_exists)
         
     }
 }

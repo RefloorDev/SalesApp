@@ -68,7 +68,7 @@ class InstallerSuccessViewController: UIViewController {
     var refernceNumber:String = String()
     var approvedAmount:String = String()
     var successMsg:String = String()
-    var isCoAppSkiped = 0
+    var isCoAppSkiped:Int = Int()
     var timer: Timer?
     var time = 0
     var stairPrice:Double = Double()
@@ -93,7 +93,9 @@ class InstallerSuccessViewController: UIViewController {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         print("inside InstallerSuccessViewController")
+        appointmetslData?.co_applicant_skipped = isCoAppSkiped
         schedulerSuccessNavBar()
+        coapplicantSkiip = isCoAppSkiped
         if isHunter
         {
             installerViewHeightConstraint.constant = 0

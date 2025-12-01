@@ -46,8 +46,8 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        //arb
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -56,10 +56,15 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomImageUploading,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomImageUploading,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        //arb
+   
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         let appointmentId = AppointmentData().appointment_id ?? 0
         let savedRoomImages = self.loadRoomImage(appointmentId: appointmentId, roomId: roomID)

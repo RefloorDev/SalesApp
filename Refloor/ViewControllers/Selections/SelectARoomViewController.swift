@@ -141,7 +141,9 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
         
 
     }
-    override func viewWillAppear(_ animated: Bool) {
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -150,10 +152,13 @@ class SelectARoomViewController :UIViewController,UICollectionViewDelegate,UICol
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomSelection,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomSelection,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
+    }
+    override func viewWillAppear(_ animated: Bool) {
+      
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         roomData.removeAll()

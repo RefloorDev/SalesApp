@@ -123,6 +123,7 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     var adminFeeStatus = false
     var adjustmentValue:Double = 0
     var roomName = ""
+    let appointmetslData = AppDelegate.appoinmentslData
     override func viewDidLoad() {
         super.viewDidLoad()
         self.otherIncomeSegment.selectedSegmentIndex = 1
@@ -262,7 +263,7 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
         setPhoneNumberDelegate()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         var networkMessage = ""
@@ -273,8 +274,8 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.otherIncome,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.otherIncome,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
     }
@@ -450,6 +451,7 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
         //arb
         //
         var dateOfSignature = Date().SignatureDate()
+        appointmetslData?.finance_provider = "refloor"
         dateOfSignature = dateOfSignature.replacingOccurrences(of: "/", with: "-")
         let otherIncome = OtherIncomeData(sourceOfOtherIncome: self.sourceOfIncome.text == "Select" ? "" : self.sourceOfIncome.text ?? "", amountMonthly: Int(Double(self.monthlypaymentAmount.text ?? "") ?? 0), nearestRelative: self.nearestReletive.text ?? "", relationship: self.relationship.text ?? "", addressRelationship: "", addressRelationshipStreet: "", addressRelationshipStreet2: "", addressRelationshipCity: "", addressRelationshipState: "", addressRelationshipZip: "", phoneNumberRelationhip:  self.phoneNumber.text ?? "", propertyDetails: self.mortgage.text ?? "", applicant_mortgage_company: self.lenderFirstName.text ?? "", additional_monthly_income: (Double(self.additionalIncomeSource.text ?? "0.0") ?? 0.0) , lenderAddressStreet: "", lenderAddressStreet2: "", lenderAddressCity: "", lenderAddressState: "", lenderAddressZip: "", lenderPhone: "", originalPurchasePrice: Double(self.orginalPurchasePrice.text ?? "0.0") ?? 0.0, originalMortageAmount:(Double(self.orginalMortagageAmount.text ?? "0.0") ?? 0.0) , monthlyMortagePayment: (Double(self.monthlyMortgageAmount.text ?? "0.0") ?? 0.0), dateAquired: "", presentBalance: (Double(self.presentBalance.text ?? "0.0") ?? 0.0), presentValueOfHome: (Double(self.presentValueOfHome.text ?? "0.0") ?? 0.0), secondMortage: self.secondMortgage.titleForSegment(at:                                 self.secondMortgage.selectedSegmentIndex) ?? "", lenderNameOrPhone: self.lenderDetails.text ?? "", originalAmount:(Double(self.orginalAmount.text ?? "0.0") ?? 0.0), presentBalanceSecondMortage: (Double(self.presentBalanceAmount.text ?? "0.0") ?? 0.0), monthlyPayment: (Double(self.monthlypaymentAmount.text ?? "0.0") ?? 0.0), otherObligations: "0", totalMonthlyPayments: 0, checkingAccountNo: self.checkingAccountNumber.text ?? "", nameOfBank: self.nameOfBank.text ?? "", bankPhoneNumber: "", insuranceCompany: "", agent: "", insurancePhoneNo: "", coverage: "", typeOfCreditRequested: self.applicantData.type_of_credit_requested ?? "", additional_income: self.otherIncomeSegment.titleForSegment(at: self.otherIncomeSegment.selectedSegmentIndex) ?? "", second_mortage:  self.secondMortgage.titleForSegment(at: self.secondMortgage.selectedSegmentIndex) ?? "", lender_name_or_phone: self.lenderDetails.text ?? "", checking_account_no: self.checkingAccountNumber.text ?? "", checking_routing_no: self.checkingRoutingNumber.text ?? "", name_of_bank: self.nameOfBank.text ?? "", applicant_signature_date: dateOfSignature, co_applicant_signature_date: dateOfSignature, hunterMessageStatus: huntertearmStatus, present_balance: (Double(self.presentBalance.text ?? "0.0") ?? 0.0), present_value_of_home: (Double(self.presentValueOfHome.text ?? "0.0") ?? 0.0), original_amount: (Double(self.orginalAmount.text ?? "0.0") ?? 0.0), present_balance_second_mortage: self.secondMortgage.titleForSegment(at: self.secondMortgage.selectedSegmentIndex) ?? "", monthly_payment: (Double(self.monthlypaymentAmount.text ?? "0.0") ?? 0.0), lenderName: self.lenderDetails.text ?? "")
         let rf_OtherIncomeInfo = rf_OtherIncomeData(otherIncomeData: otherIncome)

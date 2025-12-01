@@ -84,7 +84,7 @@ class RoomVOWebViewViewController: UIViewController {
          loadWebPage("https://www.roomvo.com/my/refloor/")
      }
      
-     override func viewWillAppear(_ animated: Bool) {
+     override func viewDidAppear(_ animated: Bool) {
          checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
          var networkMessage = ""
          let speedTest = NetworkSpeedTest()
@@ -94,8 +94,8 @@ class RoomVOWebViewViewController: UIViewController {
              networkMessage += "Mbps"
              //DispatchQueue.main.async {
              
-             
-             let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomVO,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+             let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+             let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomVO,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
              HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
          }
      }

@@ -61,17 +61,65 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
     {
         super.viewDidLoad()
         checkListArray = financeOderCheckListArray()
-//        var filteredcheckListArray = checkListArray.filter({$0.applicableFinanceProvider == "" || $0.applicableFinanceProvider == self.appoinmentslData.finance_provider ?? ""})
-//        let newList = List<FinanceOrderCheckList>()
-//        newList.append(objectsIn: Array(filteredcheckListArray))
-//        checkListArray = newList
+        // if applicable type is all
+        let finalCheckListArray = List<FinanceOrderCheckList>()
+
+        // 1. Base list: add "all" always
+//        let baseList = checkListArray.filter { $0.applicableType == "all" }
+//        finalCheckListArray.append(objectsIn: baseList)
+//
+//        // 2. If provider is EMPTY → add "non_finance"
+//        if (self.appoinmentslData.finance_provider ?? "").isEmpty {
+//            let nonFinanceList = checkListArray.filter { $0.applicableType == "non_finance" }
+//            finalCheckListArray.append(objectsIn: nonFinanceList)
+//        }
+//
+//        // 3. If provider is NOT EMPTY → add finance provider items
+       let provider = self.appoinmentslData.finance_provider
+//           !provider.isEmpty
+//        {
+//            let financeFiltered = checkListArray.filter {
+//                $0.applicableFinanceProvider.contains(provider)
+//            }
+//            finalCheckListArray.append(objectsIn: financeFiltered)
+//        }
+        
+        
+        
+        // Loop in original order
+        for item in checkListArray {
+
+            // Case 1: Include all
+            if item.applicableType == "all" {
+                finalCheckListArray.append(item)
+                continue
+            }
+
+            // Case 2: Provider is empty → include non_finance
+            if (provider ?? "").isEmpty, item.applicableType == "non_finance" {
+                finalCheckListArray.append(item)
+                continue
+            }
+
+            // Case 3: Provider exists → include finance provider items
+            if !(provider ?? "").isEmpty,
+               item.applicableFinanceProvider.contains(provider!) {
+                finalCheckListArray.append(item)
+                continue
+            }
+        }
+
+        // Assign final array
+        checkListArray = finalCheckListArray
+        
+        
         self.setNavigationBarbackAndlogo(with: "Closing Checklist".uppercased())
         financeOrderTableView.register(UINib(nibName: "CheckListTableViewCell", bundle: nil), forCellReuseIdentifier: "CheckListTableViewCell")
         checkListArrayBool = Array(repeating: false, count: checkListArray.count)
         nextBtn.borderWidth = 0
         nextBtn.borderColor = .clear
     }
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
@@ -81,8 +129,8 @@ class FinanceOrderCheckListViewController: UIViewController,ImagePickerDelegate 
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeCheckList,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeCheckList,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
@@ -151,6 +199,10 @@ extension FinanceOrderCheckListViewController : UITableViewDelegate,UITableViewD
             cell.checkListBtn.setImage(UIImage(named: "notSelected"), for: .normal)
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
     }
     
     @objc func checkListBtnTapped(sender:UIButton)

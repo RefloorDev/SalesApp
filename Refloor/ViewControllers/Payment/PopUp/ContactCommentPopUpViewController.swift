@@ -8,10 +8,10 @@
 
 import UIKit
 protocol ContractCommentProtocol{
-    func sendAddedComments(comment: String, sendHardCopy: Bool, sendFlexInstall : Bool)
+    func sendAddedComments(comment: String, sendHardCopy: Bool, sendFlexInstall : Bool, HomeOwnersPresent: Int)
 }
 
-class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
+class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate, DropDownDelegate {
     static func initialization() -> ContactCommentPopUpViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "ContactCommentPopUpViewController") as? ContactCommentPopUpViewController
     }
@@ -20,12 +20,16 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
     var delegate: ContractCommentProtocol?
     let placeholderColor = UIColor.lightGray
     let placeholderText = "Enter Here"
+    @IBOutlet weak var homeOwnersLbl: UILabel!
     @IBOutlet weak var commentsTextView: UITextView!
     @IBOutlet weak var sendPhysicalDocumentCheckboxButton: UIButton!
     @IBOutlet weak var sendPhysicalStackViewHeightCnstr: NSLayoutConstraint!
     @IBOutlet weak var flexibleInstallCheckBoxBtn: UIButton!
     var isSendHardCopy = false
     var isFlexibleInstall = false
+    var dropDownString = ["Yes","No"]
+    var appoinmentslData:AppoinmentDataValue!
+    var isBothPartes = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +39,24 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
         //sendPhysicalBtn.isHidden = true
         //sendPhysicalStackView.isHidden = false
        // sendPhysicalStackViewHeightCnstr.constant = 0
+        
+        if appoinmentslData.isHomeOwnersPrsent ?? false
+        {
+            dropDownString = ["Yes"]
+            isBothPartes = 1
+            homeOwnersLbl.text = "Yes"
+        }
+        else
+        {
+            if appoinmentslData.isBothParties == 1
+            {
+                homeOwnersLbl.text = "Yes"
+            }
+            else
+            {
+                homeOwnersLbl.text = "No"
+            }
+        }
     }
     
     @IBAction func dismissOnBackgroundTap(_ sender: UIControl) {
@@ -66,20 +88,28 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
     }
     
     @IBAction func cancelAction(_ sender: UIButton) {
-        delegate?.sendAddedComments(comment: "", sendHardCopy: isSendHardCopy, sendFlexInstall: isFlexibleInstall)
+        delegate?.sendAddedComments(comment: "", sendHardCopy: isSendHardCopy, sendFlexInstall: isFlexibleInstall, HomeOwnersPresent: 0)
         self.dismiss(animated: true)
     }
     
     @IBAction func saveAction(_ sender: UIButton) {
+        if homeOwnersLbl.text == "Yes"
+        {
+            isBothPartes = 1
+        }
+        else
+        {
+            isBothPartes = 0
+        }
         if let comment = commentsTextView.text{
             if comment.trimmingCharacters(in: .whitespaces).count > 0 && comment != placeholderText{
                 self.dismiss(animated: true) {
-                    self.delegate?.sendAddedComments(comment: comment, sendHardCopy: self.isSendHardCopy, sendFlexInstall: self.isFlexibleInstall)
+                    self.delegate?.sendAddedComments(comment: comment, sendHardCopy: self.isSendHardCopy, sendFlexInstall: self.isFlexibleInstall, HomeOwnersPresent: self.isBothPartes)
                 }
                 
             } else{
                 self.dismiss(animated: true){
-                    self.delegate?.sendAddedComments(comment: "",sendHardCopy: self.isSendHardCopy, sendFlexInstall: self.isFlexibleInstall)
+                    self.delegate?.sendAddedComments(comment: "",sendHardCopy: self.isSendHardCopy, sendFlexInstall: self.isFlexibleInstall, HomeOwnersPresent: self.isBothPartes)
                 }
 //                let okBtn = UIAlertAction(title: "OK", style: .cancel)
 //                self.alert("Please enter comment", [okBtn])
@@ -87,6 +117,19 @@ class ContactCommentPopUpViewController: UIViewController,UITextViewDelegate {
             
         }
     }
+    @IBAction func AllHomeOwnersBtnAction(_ sender: UIButton)
+    {
+        self.DropDownDefaultfunction(sender, sender.bounds.width, dropDownString, -1, delegate: self, tag: sender.tag)
+    }
+    
+    func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int)
+    {
+        
+        
+        homeOwnersLbl.text = item
+        
+    }
+    
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == placeholderColor {
