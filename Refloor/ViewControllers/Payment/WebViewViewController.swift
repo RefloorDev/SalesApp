@@ -970,7 +970,7 @@ class WebViewViewController: UIViewController,WKNavigationDelegate,WKUIDelegate,
         }
     }
     
-    func sendAddedComments(comment: String, sendHardCopy: Bool,sendFlexInstall:Bool){
+    func sendAddedComments(comment: String, sendHardCopy: Bool,sendFlexInstall:Bool,HomeOwnersPresent: Int){
         print("COMMENT : \(comment)")
         self.comments = comment
         self.sendPhysicalDocument = sendHardCopy

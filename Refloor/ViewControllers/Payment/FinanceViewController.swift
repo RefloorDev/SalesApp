@@ -160,7 +160,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         externalCredentialsArray = externalCredentialsValue()
     }
     
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
@@ -170,8 +170,8 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
@@ -318,9 +318,10 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         let jointApplicantAddress:[String:Any] = ["addressLine1":customer.co_applicant_address ?? "","addressLine2":customer.co_applicant_city ?? "","city":customer.co_applicant_city ?? "","state":customer.co_applicant_state  ?? "","postalCode":customer.co_applicant_zip ?? ""]
         let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "","dateOfBirth":(isHunter ? nil : ""),"email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":((isHunter && customer.mobile == "") ? customer.phone: customer.mobile ?? ""),"workPhone":"","address":primaryApplicantAddress]
         let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "","dateOfBirth": (isHunter ? nil : ""),"email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":((isHunter && customer.co_applicant_phone == "") ? customer.co_applicant_secondary_phone: customer.co_applicant_phone ?? ""),"workPhone":"","address":jointApplicantAddress]
-        let salesPerson = customer.sales_person?.split(separator: " ")
-        let salesPersonFirstName = salesPerson?[0]
-        let salesPersonLastName = salesPerson?[1]
+        let salesPerson = customer.sales_person?.split(separator: " ").map { String($0) }
+        let salesPersonFirstName = salesPerson?.first
+        let salesPersonLastName = salesPerson?.count ?? 0 > 1 ? salesPerson?[1] : nil
+ 
         let salesPersonEmail = UserDefaults.standard.value(forKey: "salesPersonEmail") as! String
         var versatileTotalPrice:Double = 0.0
         if isVersatile

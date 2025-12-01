@@ -76,7 +76,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         self.deleteCoApplicantSignatureAndInitialsFromAppointmentDetail()
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         var networkMessage = ""
@@ -87,8 +87,8 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.signature,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.signature,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
     }

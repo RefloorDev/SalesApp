@@ -33,8 +33,10 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     let placeholderColor = UIColor().colorFromHexString("#A7B0BA")
     let header = JWTHeader(typ: "JWT", alg: .hs256)
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+    var dropDownString = ["Yes","No"]
     @IBOutlet weak var orderstatusLabel: UILabel!
     
+    @IBOutlet weak var homeOwnersLbl: UILabel!
     @IBOutlet weak var aptResultDetailsLbl: UILabel!
     @IBOutlet weak var aptResultScrollView: UIScrollView!
     @IBOutlet weak var whtnextButton: UIButton!
@@ -63,10 +65,28 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         whthpndTextView.textColor = placeholderColor 
         priceQuotedTextView.text = "Enter here"
         priceQuotedTextView.textColor = placeholderColor
+        if appoinmentslData?.isHomeOwnersPrsent ?? false
+        {
+            dropDownString = ["Yes"]
+            homeOwnersLbl.text = "Yes"
+            homeOwnersLbl.textColor = .white
+        }
+        else
+        {
+            homeOwnersLbl.textColor = .white
+            if appoinmentslData.isBothParties == 1
+            {
+                homeOwnersLbl.text = "Yes"
+            }
+            else
+            {
+                homeOwnersLbl.text = "No"
+            }
+        }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -75,10 +95,15 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.appointmentResult,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.appointmentResult,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        
         if orderstatusLabel.text=="Select Result" || aptResultDetailsLbl.text == "Select Result Details"{
             whthpndTextView.isUserInteractionEnabled=false
             whatsnewTextView.isUserInteractionEnabled=false
@@ -318,6 +343,10 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         }
     }
     
+    @IBAction func allHomeOwnersBtnClicked(_ sender: UIButton)
+    {
+        self.DropDownDefaultfunction(sender, sender.bounds.width, dropDownString, -1, delegate: self, tag: 2)
+    }
     @IBAction func dropDownButtonAction(_ sender: UIButton) {
         
         if sender.tag == 0
@@ -395,6 +424,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     
     @IBAction func saveButtonACtion(_ sender: Any)
     {
+        //
         if  self.orderstatusLabel.text == "Select Result"
         {
             self.alert("Please select appointment result", nil)
@@ -896,6 +926,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         customerDict["whats_next_notes"] = self.whatsnewTextView.text ?? ""
         customerDict["last_price_quoted_value"] = Double(priceTextWithoutSymbol ?? "")
         customerDict["resulting_reason_id"] = self.selectedAptResultReasonId
+        customerDict["both_parties_present"] = self.homeOwnersLbl.text == "Yes" ? 1 : 0
         return customerDict
     }
     
@@ -982,6 +1013,11 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             {
                 self.orderstatusLabel.text = item
             }
+        }
+        else if tag == 2
+        {
+              homeOwnersLbl.text = item
+            homeOwnersLbl.textColor = .white
         }
         
         else

@@ -85,7 +85,9 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
     var packagePlanName = ""
     
     
-    override func viewWillAppear(_ animated: Bool ){
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -94,10 +96,14 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
                 
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentSummary,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentSummary,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
+    }
+    override func viewWillAppear(_ animated: Bool ){
+       
         self.setNavigationBarbackAndlogo(with: "Payment Summary".uppercased())
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         // adminFeeLabelTitle.isHidden = true

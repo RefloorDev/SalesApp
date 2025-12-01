@@ -807,22 +807,34 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //        self.navigationController?.pushViewController(installer, animated: true)
         let manualDateSting = Date().dateToString()
         UserDefaults.standard.set(manualDateSting, forKey: "manual_appointment_date")
-        DispatchQueue.main.async {
+        let tag = sender.tag   // ✅ capture on main thread
+        let appointmentID = self.appoinmentsList?[tag].id ?? 0
+        let screenEntryTime = Date().getSyncDateAsString()
+        let screenName = ScreenNames.appointmentList
+        let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
             
-            var networkMessage = ""
+            // Capture the screen entry time immediately
+            
+        if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            
             let speedTest = NetworkSpeedTest()
             speedTest.testUploadSpeed { speed in
-                print("Upload speed: \(speed) Mbps")
-                networkMessage = String(format: "%.2f", speed)
-                networkMessage += "Mbps"
-                //DispatchQueue.main.async {
                 
+                let networkMessage = String(format: "%.2fMbps", speed)
                 
-                let parameters:[String:Any] = ["appointment_id": self.appoinmentsList?[sender.tag].id ?? 0,"screen_name":ScreenNames.appointmentList,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+                let parameters: [String: Any] = [
+                    "appointment_id": appointmentID,
+                    "screen_name": screenName,
+                    "screen_entry_date": screenEntryTime,   // <- fixed
+                    "network_strength": networkMessage,
+                    "timezone":timeZone
+                ]
+                
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
-
+        
         //Q3 changes
 //        let manualArrivalDate = Date().dateToString()
 //        UserDefaults.standard.set(manualArrivalDate, forKey: "manualArrivalDate")
@@ -925,7 +937,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     }
     
     func performAppointmentAction(sender: Int) {
-        HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
+        //HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
         let appointmentDateTimeString = self.appoinmentsList?[sender].appointment_datetime
             let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)
             print("appointmentDateTime", appointmentDateTime)
@@ -973,6 +985,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                 DispatchQueue.main.async
                 {
+                    HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
                     if let convertedDateString = self.convertDateString(self.appoinmentsList![sender].appointment_datetime ?? "") {
                                     //   print("convertedDateString", convertedDateString)
                                       self.alert("Are you sure you want to proceed with this" + " " + "\(convertedDateString) appointment?", [yes,no])

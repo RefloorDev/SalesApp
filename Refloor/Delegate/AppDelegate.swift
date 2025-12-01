@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let config = Realm.Configuration(
                 // Set the new schema version. This must be greater than the previously used
                 // version (if you've never set a schema version before, the version is 0).
-                schemaVersion:  28,//7, // production 12
+                schemaVersion:  29,//7, // production 12
 
                 // Set the block which will be called automatically when opening a Realm with
                 // a schema version lower than the one set above
@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             if UserDefaults.standard.string(forKey: "BASE_URL") ?? "" == ""
             {
                 BASE_URL = AppURL().LIVE_BASE_URL //Live url
-                UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+                 
             }
             else
             {

@@ -2035,6 +2035,7 @@ extension UIViewController:OrderStatusViewDelegate
         order.delegate = self
         let currentClassName = String(describing: type(of: self))
         order.appointmentResults = self.getAppointmentResultToShow(className: currentClassName, isNextBtn: false)
+        order.appoinmentslData = AppDelegate.appoinmentslData
         self.present(order, animated: true, completion: nil)
         //}
         //        else
@@ -2346,18 +2347,18 @@ extension UIViewController:OrderStatusViewDelegate
     }
     func setClearNavigationBar(){
         //removeBackButton
-        let btnback = UIButton()
-        btnback.setBackgroundImage(UIImage(), for: .normal)
-        
-        let barBtnback = UIBarButtonItem(customView: btnback)
-        self.navigationItem.leftBarButtonItem = barBtnback
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.isTranslucent = true
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.backgroundColor = UIColor.clear
-        self.setStatusBarBackgroundColor(color: UIColor.clear)
-        navigationController?.navigationBar.barTintColor = UIColor.clear
-        self.navigationController?.additionalSafeAreaInsets.top = 20
+//        let btnback = UIButton()
+//        btnback.setBackgroundImage(UIImage(), for: .normal)
+//        
+//        let barBtnback = UIBarButtonItem(customView: btnback)
+//        self.navigationItem.leftBarButtonItem = barBtnback
+//        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//        self.navigationController?.navigationBar.isTranslucent = true
+//        self.navigationController?.navigationBar.shadowImage = UIImage()
+//        self.navigationController?.navigationBar.backgroundColor = UIColor.clear
+//        self.setStatusBarBackgroundColor(color: UIColor.clear)
+//        navigationController?.navigationBar.barTintColor = UIColor.clear
+//        self.navigationController?.additionalSafeAreaInsets.top = 20
         
     }
     func setClearNavigationBarWithBlueBack()
@@ -4999,6 +5000,7 @@ extension UIViewController:OrderStatusViewDelegate
             _ = try Realm()
             let appointmentId = AppointmentData().appointment_id ?? 0
             let appointment =  getCompletedAppointmentsFromDB(appointmentId:appointmentId).first
+            let appointmentlsData = AppDelegate.appoinmentslData
            // let mobile = appointment?.applicant_phone
             let street2 = appointment?.applicant_street2
             let street = appointment?.applicant_street
@@ -5031,7 +5033,22 @@ extension UIViewController:OrderStatusViewDelegate
             let co_applicant_state = appointment?.co_applicant_state
             let co_applicant_zip = appointment?.co_applicant_zip
             let co_applicant_phone = appointment?.co_applicant_phone
-            let bothParties = appointment?.isBothParties
+            var bothParties = appointment?.isBothParties
+            if appointmentlsData?.isHomeOwnersPrsent ?? false
+            {
+                bothParties = 1
+            }
+            else
+            {
+                if appointmentlsData?.isBothParties == 1
+                {
+                    bothParties = 1
+                }
+                else
+                {
+                    bothParties = 0
+                }
+            }
             //customerDetailsDict["mobile"] = mobile
             customerDetailsDict["street2"] = street2
             customerDetailsDict["street"] = street
@@ -6129,6 +6146,7 @@ extension Date{
     func getSyncDateAsString() -> String{
         let formatter1 = DateFormatter()
         formatter1.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        //formatter1.timeZone = TimeZone(identifier: "UTC")
         return formatter1.string(from: self)
     }
     func getMasterDataSyncDateAsString() -> String{

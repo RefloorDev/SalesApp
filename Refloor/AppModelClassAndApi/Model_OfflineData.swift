@@ -548,7 +548,8 @@ class FinanceOrderCheckList: Object,Mappable
     @objc dynamic var checkListId : Int = 0
     @objc dynamic var checkListName : String?
     @objc dynamic var checkListSequence : Int = 0
-    @objc dynamic var applicableFinanceProvider: String?
+    @objc dynamic var applicableType: String?
+    var applicableFinanceProvider = List<String>()
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -559,7 +560,12 @@ class FinanceOrderCheckList: Object,Mappable
         checkListId <- map["checklist_id"]
         checkListName <- map["name"]
         checkListSequence <- map["sequence"]
-        applicableFinanceProvider <- map["applicable_finance_provider"]
+        if let defaultDeliveryArray = map["applicable_finance_providers"].currentValue as? [String] {
+                    let realmList = List<String>()
+                    realmList.append(objectsIn: defaultDeliveryArray)
+                    self.applicableFinanceProvider = realmList
+                }
+        applicableType <- map["applicable_type"]
         
     }
 }
@@ -1618,7 +1624,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var recisionDate : String?
     @objc dynamic var sync_status = false
     @objc dynamic var officeLocationId = 0
-    @objc dynamic var isBothParties = 0
+    @objc dynamic var isBothParties = -1
     @objc dynamic var enableDestinationSelection = 0
     
     required convenience init?(map: ObjectMapper.Map) {

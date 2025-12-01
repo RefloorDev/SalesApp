@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad10_9rounded" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,11 +20,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="erA-rV-1JJ">
                         <rect key="frame" x="0.0" y="5" width="884" height="75"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Advance payment is verified" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lvh-20-Utd">
-                                <rect key="frame" x="72" y="21" width="308" height="33"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="33" id="dIa-HA-ti3"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Advance payment is verified" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lvh-20-Utd">
+                                <rect key="frame" x="72" y="21" width="792" height="33"/>
                                 <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="24"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
@@ -52,6 +49,9 @@
                             <constraint firstAttribute="trailing" secondItem="f58-CN-QMt" secondAttribute="trailing" id="X9o-Dm-q0B"/>
                             <constraint firstItem="lvh-20-Utd" firstAttribute="leading" secondItem="5Y0-Vk-MlX" secondAttribute="trailing" constant="20" id="XWx-8a-OVL"/>
                             <constraint firstItem="lvh-20-Utd" firstAttribute="centerY" secondItem="5Y0-Vk-MlX" secondAttribute="centerY" id="g72-w1-zEN"/>
+                            <constraint firstItem="lvh-20-Utd" firstAttribute="top" secondItem="erA-rV-1JJ" secondAttribute="top" constant="21" id="h6B-fH-pxw"/>
+                            <constraint firstAttribute="trailing" secondItem="lvh-20-Utd" secondAttribute="trailing" constant="20" id="hed-2v-heg"/>
+                            <constraint firstAttribute="bottom" secondItem="lvh-20-Utd" secondAttribute="bottom" constant="21" id="pwW-4Z-F2L"/>
                             <constraint firstItem="f58-CN-QMt" firstAttribute="top" secondItem="erA-rV-1JJ" secondAttribute="top" id="zAi-mi-eHp"/>
                         </constraints>
                         <userDefinedRuntimeAttributes>

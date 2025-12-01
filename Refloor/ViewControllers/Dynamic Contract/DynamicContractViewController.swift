@@ -33,6 +33,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
     var isloadCompleted = false
     var comments = ""
     var sendPhysicalDocument: Bool = false
+    var isBothParties: Int = Int()
     var FlexInstall : Bool = false
     var isCardVerified:Bool = Bool()
     let header = JWTHeader(typ: "JWT", alg: .hs256)
@@ -98,7 +99,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
         self.contractDataStatus = ContractData.init(contract_owner_reviewed_status: 0, contract_transition: 0, contract_molding_status: 0, contract_molding_none_status: 0, contract_molding_waterproof_status: 0, contract_molding_unfinished_status: 0, contract_molding_CovedBaseboard_status: 0,contract_risk_free_status: 0, contract_lifetime_guarantee_status: 0, contract_lead_safe_status: 0, contract_deposit_status: 0, contract_final_payment_status: 0, contract_time_of_performance_status: 0, contract_notices_to_owners_status: 0, contract_notices_of_cancellation: 0, contract_scheduling_status: 0, contract_motion_status: 0, contract_floor_protection_status: 0, contract_plumbing_status: 0, contract_plumbing_option_status: -1, contract_additional_other_cost_status: 0, contract_additional_other_subfloor_status: 0, contract_additional_other_leveling_status: 0, contract_additional_other_screwdown_status: 0, contract_additional_other_hardwood_removal_status: 0, contract_additional_other_door_removal_status: 0, contract_additional_other_bifold_removal_status: 0, contract_floor_protection: 0, contract_right_to_cure_status: 0, contract_owner_responsibility_status: 0, electronicsAuthorization1Status: 0, electronicsAuthorization2Status: 0,electronicsAuthorization3Status: 0)
         NotificationCenter.default.addObserver(self, selector: #selector(annotationHit(_:)), name: NSNotification.Name.PDFViewAnnotationHit, object: pdfView)
     }
-    override func viewWillAppear(_ animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
@@ -108,8 +109,8 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.contractDocumnet,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.contractDocumnet,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
     }
@@ -921,6 +922,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
     }else{
             let comment = ContactCommentPopUpViewController.initialization()!
             comment.delegate = self
+        comment.appoinmentslData = AppDelegate.appoinmentslData
             self.present(comment, animated: true, completion: nil)
         }
         
@@ -1126,17 +1128,20 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
     }
     
     
-    func sendAddedComments(comment: String, sendHardCopy: Bool,sendFlexInstall:Bool){
+    func sendAddedComments(comment: String, sendHardCopy: Bool,sendFlexInstall:Bool, HomeOwnersPresent: Int){
         print("COMMENT : \(comment)")
         self.comments = comment
         self.sendPhysicalDocument = sendHardCopy
+        self.isBothParties = HomeOwnersPresent
         self.FlexInstall = sendFlexInstall
+        AppDelegate.appoinmentslData.isBothParties = HomeOwnersPresent
         validationOkayProceedWithContract()
     }
     func saveContractDataToDatabase(){
         let appointmentId = AppointmentData().appointment_id ?? 0
         self.contractDataStatus = ContractData.init(contract_owner_reviewed_status: 1, contract_transition: 1, contract_molding_status: 1, contract_molding_none_status:  self.contractDataStatus?.contract_molding_none_status ?? 0, contract_molding_waterproof_status: self.contractDataStatus?.contract_molding_waterproof_status ?? 0, contract_molding_unfinished_status: self.contractDataStatus?.contract_molding_unfinished_status ?? 0, contract_molding_CovedBaseboard_status:  self.contractDataStatus?.contract_molding_CovedBaseboard_status ?? 0,contract_risk_free_status: 1, contract_lifetime_guarantee_status: 1, contract_lead_safe_status: 1, contract_deposit_status: 1, contract_final_payment_status: 1, contract_time_of_performance_status: 1, contract_notices_to_owners_status: 1, contract_notices_of_cancellation: 1, contract_scheduling_status: 1, contract_motion_status: 1, contract_floor_protection_status: 1, contract_plumbing_status: 1, contract_plumbing_option_status:  self.contractDataStatus?.contract_plumbing_option_status ?? 0, contract_additional_other_cost_status: 1, contract_additional_other_subfloor_status: 1, contract_additional_other_leveling_status: 1, contract_additional_other_screwdown_status: 1, contract_additional_other_hardwood_removal_status: 1, contract_additional_other_door_removal_status: 1, contract_additional_other_bifold_removal_status: 1, contract_floor_protection: 1, contract_right_to_cure_status: 1, contract_owner_responsibility_status: 1, electronicsAuthorization1Status: 1, electronicsAuthorization2Status: 1,electronicsAuthorization3Status: 1)
-        if let contractDataDict = self.contractDataStatus?.nsDictionary{
+        if let contractDataDict = self.contractDataStatus?.nsDictionary
+        {
             self.saveContractDataOfAppointment(appointmentId: appointmentId, contractData: contractDataDict)
         }
     }
@@ -1428,7 +1433,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             var parametersAdditionalComments:[String:Any] = [:]
             let appoint_id = AppointmentData().appointment_id ?? 0
             let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-            parametersAdditionalComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison,"network_strength":networkMessage]
+            parametersAdditionalComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison,"network_strength":networkMessage,"both_parties_present":self.isBothParties]
             
             HttpClientManager.SharedHM.additionalCommentsAPi(parameter: parametersAdditionalComments) { success, usermessage in
                 if(success ?? "") == "Success"

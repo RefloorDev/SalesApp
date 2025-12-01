@@ -126,6 +126,13 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+     
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -134,13 +141,11 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomDrawing,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomDrawing,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
-    
     override func resetButtonAction() {
         let yes = UIAlertAction(title: "Yes", style: .default) { (_) in
             self.resetAllThing()

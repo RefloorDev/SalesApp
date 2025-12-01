@@ -126,6 +126,12 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var vapurBarrierValue:Double = 0.0
     override func viewWillAppear(_ animated: Bool)
     {
+   
+        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -134,13 +140,11 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-        checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -907,6 +911,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             }
             
             downpatmet.isPaymentByCash = true
+            let appointment = AppDelegate.appoinmentslData
+            appointment?.isHomeOwnersPrsent = false
         }
         downpatmet.totalAmount = self.amountTotel
         if area == 0.0

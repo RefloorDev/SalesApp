@@ -182,9 +182,9 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
         
 
     }
-    override func viewWillAppear(_ animated: Bool)
+    
+    override func viewDidAppear(_ animated: Bool)
     {
-        //appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
         speedTest.testUploadSpeed { speed in
@@ -193,11 +193,16 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-        if appoinmentslData.co_applicant_skipped == 0
+    }
+    override func viewWillAppear(_ animated: Bool)
+    {
+        //appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
+        
+        if appoinmentslData.isHomeOwnersPrsent ?? false
         {
             isBothParties = 1
             bothPartiesDropDownLbl.text = "Yes"

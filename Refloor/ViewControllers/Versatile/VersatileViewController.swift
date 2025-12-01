@@ -96,6 +96,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     var coapplicantSkiip:Int = 0
     var minSalePrice:Double = 0.0
     var packagePlanName = ""
+    let appointmetslData = AppDelegate.appoinmentslData
     override func viewDidLoad() {
         super.viewDidLoad()
         if isVersatile
@@ -130,6 +131,23 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     override func viewWillAppear(_ animated: Bool)
     {
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        var networkMessage = ""
+        var screenName = isVersatile ? ScreenNames.versatileScreen : ScreenNames.hunterScreen
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
     }
     
     private func sendRequest(urlString: String)
@@ -232,7 +250,9 @@ extension VersatileViewController:WKNavigationDelegate
                         let parameter : [String:Any] = ["appointment_id":appointmentId,"loan_type":"versatile","improveit_appointment_id":AppDelegate.appoinmentslData.improveit_appointment_id ?? ""]
                         HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
                             success, message, data in
+                           
                             DispatchQueue.main.async {
+                                print("Loan Provider details:",data)
                             if success == "Success" || success == "Failed"
                             {
                                 let versatileSuccess = InstallerSuccessViewController.initialization()!
@@ -261,7 +281,11 @@ extension VersatileViewController:WKNavigationDelegate
                                 
                                 if let customer = AppDelegate.appoinmentslData
                                 {
-                                    versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+                                    versatileSuccess.isCoAppSkiped = data?.co_applicant_exists == 1 ? 0 : 1//customer.co_applicant_skipped ?? 0
+                                    if data?.co_applicant_exists == 1
+                                    {
+                                        customer.isHomeOwnersPrsent = true
+                                    }
                                 }
                                 versatileSuccess.savings = self.savings
                                 versatileSuccess.promotionCodeId = self.promotionCodeId
@@ -283,6 +307,8 @@ extension VersatileViewController:WKNavigationDelegate
                         HttpClientManager.SharedHM.versatileStatusAPi(parameter: parameter) {
                             success, message, data in
                             DispatchQueue.main.async {
+                                print("Loan Provider details:",data!)
+                                
                             if success == "Success" || success == "Failed"
                             {
                                 if success == "Failed" && message == "Credit application is not existing"
@@ -297,6 +323,7 @@ extension VersatileViewController:WKNavigationDelegate
                                 else
                                 {
                                     let versatileSuccess = InstallerSuccessViewController.initialization()!
+                                    self.appointmetslData?.co_applicant_skipped = data?.co_applicant_exists == 1 ? 0 : 1
                                     versatileSuccess.isHunter = true
                                     versatileSuccess.creditApplication = self
                                     versatileSuccess.downOrFinal = self.downOrFinal
@@ -320,12 +347,16 @@ extension VersatileViewController:WKNavigationDelegate
                                     versatileSuccess.successMsg = success!
                                     if let customer = AppDelegate.appoinmentslData
                                     {
-                                        versatileSuccess.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+                                        versatileSuccess.isCoAppSkiped = data?.co_applicant_exists == 1 ? 0 : 1
+                                        if data?.co_applicant_exists == 1
+                                        {
+                                            customer.isHomeOwnersPrsent = true
+                                        }
                                     }
                                     versatileSuccess.savings = self.savings
                                     versatileSuccess.promotionCodeId = self.promotionCodeId
                                     versatileSuccess.adminFeeStatus = self.adminFeeStatus
-                                    versatileSuccess.coapplicantSkiip = self.coapplicantSkiip
+                                    versatileSuccess.coapplicantSkiip = self.appointmetslData?.co_applicant_skipped ?? 0//self.coapplicantSkiip
                                     versatileSuccess.minSalePrice = self.minSalePrice
                                     versatileSuccess.roomName = self.roomName
                                     versatileSuccess.adjustmentValue = self.adjustmentValue

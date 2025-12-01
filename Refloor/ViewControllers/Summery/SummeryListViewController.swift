@@ -92,7 +92,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         
         // Do any additional setup after loading the view.
     }
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         var networkMessage = ""
         let speedTest = NetworkSpeedTest()
@@ -102,11 +102,12 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
                 
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.measurementist,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.measurementist,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
+        loadRefreshData()
     }
     override func performSegueToReturnBack() {
         if (isFromStatus)
@@ -125,11 +126,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
     }
     
-    override func viewDidAppear(_ animated: Bool) 
-    {
-        loadRefreshData()
-        //summertListApi()
-    }
+    
     
     func loadRefreshData(){
         tableValues = self.getRoomsSummary(appointmentId: AppointmentData().appointment_id ?? 0)

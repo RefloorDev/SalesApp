@@ -35,7 +35,7 @@ class ViewLodDetailsViewController: UIViewController,UITableViewDataSource,UITab
             appointmentStatusLabel.textColor = UIColor().colorFromHexString("#72C36F")
         }
     }
-    override func viewWillAppear(_ animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         var networkMessage = ""
@@ -46,8 +46,8 @@ class ViewLodDetailsViewController: UIViewController,UITableViewDataSource,UITab
             networkMessage += "Mbps"
             //DispatchQueue.main.async {
             
-            
-            let parameters:[String:Any] = ["appointment_id": Int(self.selectedAppointmentId) ?? 0,"screen_name":ScreenNames.logDetails,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": Int(self.selectedAppointmentId) ?? 0,"screen_name":ScreenNames.logDetails,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
             HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
         }
     }

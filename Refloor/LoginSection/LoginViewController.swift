@@ -35,6 +35,7 @@ class LoginViewController: UIViewController {
                      longPressGestureRecognizer.minimumPressDuration = 6.0 // Duration for the long press
         tapGesatureView.addGestureRecognizer(longPressGestureRecognizer)
         BASE_URL = AppURL().LIVE_BASE_URL
+        UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
         self.setClearNavigationBar()
        
         //this will be triggered when all images from the master data is successfully downloaded and saved to DB

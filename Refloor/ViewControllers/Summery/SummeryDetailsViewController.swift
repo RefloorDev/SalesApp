@@ -48,18 +48,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         setRoomImagesArray()
     }
     override func viewWillAppear(_ animated: Bool) {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
-                
-                
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomMeasurementSummary,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-            }
+     
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.roomID = self.summaryData.room_id ?? 0
         self.roomName = self.summaryData.room_name ?? ""
@@ -69,6 +58,22 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         self.tableReaload()
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool)
+    {
+        var networkMessage = ""
+        let speedTest = NetworkSpeedTest()
+        speedTest.testUploadSpeed { speed in
+            print("Upload speed: \(speed) Mbps")
+            networkMessage = String(format: "%.2f", speed)
+            networkMessage += "Mbps"
+            //DispatchQueue.main.async {
+                
+            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomMeasurementSummary,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+            }
     }
     
     func setRoomImagesArray(){
