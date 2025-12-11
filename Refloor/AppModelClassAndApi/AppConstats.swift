@@ -18,7 +18,7 @@ struct AppURL
     //App Details
    
     //offline Deve//2445
-    // var BASE_URL = "http://server.oneteamus.com:2445/api/"
+    // var BASE_URL = "http://server.oneteamus.com:2445/api/" 
 
     //Offline live//2446
      //let BASE_URL = "http://server.oneteamus.com:2445/api/"

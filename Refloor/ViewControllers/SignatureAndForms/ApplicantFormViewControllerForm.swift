@@ -109,10 +109,11 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     var promotionCodeId:Int = Int()
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
-    
     var creditRequest = ["Individual Credit - relying on my income or assets as well as income or assets from other sources","Joint Credit - We intend to apply for joint credit"]
     var selectedReq = 0
     var imagePicker: CaptureImage!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Applicant Information".uppercased())
@@ -226,19 +227,25 @@ class ApplicantFormViewControllerForm: UIViewController,DropDownDelegate,Address
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        
+        logScreenEvent(screen: ScreenNames.applicantForm) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.applicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.applicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
+    
     
     
     func setPhoneNumberDelegate()

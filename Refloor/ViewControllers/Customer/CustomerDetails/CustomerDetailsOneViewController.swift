@@ -65,10 +65,9 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     var isEditedtextField = false
     var GMSTag = 0
     var isBothParties = -1
-    
-  
-    
     var imagePicker: CaptureImage!
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -165,19 +164,23 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.customer1) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     override func viewWillAppear(_ animated: Bool)
     {
         
@@ -455,9 +458,12 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
                 return "Please enter a valid Phone Number"
             }
         }
-        if !customerEmail.text!.validateEmail()
+        if customerEmail.text != ""
         {
-            return "Please enter a valid Email Address"
+            if !customerEmail.text!.validateEmail()
+            {
+                return "Please enter a valid Email Address"
+            }
         }
         if bothPartiesDropDownLbl.text == "Select"
         {
@@ -473,7 +479,23 @@ class CustomerDetailsOneViewController:  UIViewController,UITextFieldDelegate,UI
         
         isEditedtextField=true
         
+        
     }
+//    func textFieldDidEndEditing(_ textField: UITextField)
+//    {
+//        if textField == customerEmail
+//        {
+//           if textField.text?.validateEmail() == true
+//            {
+//               return
+//           }
+//            else
+//            {
+//                self.alert("Please enter a valid Email Address", nil)
+//                customerEmail.text = ""
+//            }
+//        }
+//    }
     
     func submitApi(_ parameter:[String:Any])
     {

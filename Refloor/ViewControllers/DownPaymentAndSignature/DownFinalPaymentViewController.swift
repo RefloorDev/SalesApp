@@ -54,6 +54,9 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     var excluded_amount_promotion:Double = 0.0
     var minSalePrice:Double = 0.0
     var packagePlanName = ""
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Down and Final Payment".uppercased())
@@ -106,19 +109,23 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.downFinaPayment) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.downFinaPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.downFinaPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     override func viewWillAppear(_ animated: Bool) {
      
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)

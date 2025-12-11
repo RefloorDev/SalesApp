@@ -64,6 +64,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     var coapplicantSkiip:Int = 0
     var installationDate = ""
     var adminFeeStatus = false
+
     //var stairPrice:Double = Double()
     
     override func viewDidLoad() {
@@ -121,19 +122,23 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.updateDownFinal) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateDownFinal,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateDownFinal,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     override func viewWillAppear(_ animated: Bool) {
      
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)

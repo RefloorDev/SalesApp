@@ -124,6 +124,8 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     var adjustmentValue:Double = 0
     var roomName = ""
     let appointmetslData = AppDelegate.appoinmentslData
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.otherIncomeSegment.selectedSegmentIndex = 1
@@ -266,19 +268,23 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.otherIncome) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.otherIncome,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.otherIncome,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     
     @objc func termsandconditionsAction()
     {

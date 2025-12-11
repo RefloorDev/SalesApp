@@ -67,6 +67,9 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     var cellDeliveryOptions:[String] = []
     var applyDeliveryOptions:[String] = []
     
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         floorColorNamesArray = getFloorColorList()
@@ -79,7 +82,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 self.navigationController?.viewControllers = [firstViewController,self]
                 
             }
-        
+            
         }
         else
         {
@@ -93,22 +96,27 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         // Do any additional setup after loading the view.
     }
     override func viewDidAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.measurementist) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.measurementist,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-            }
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.measurementist,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+        }
+        
+        }
+        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         loadRefreshData()
     }
+
+    
     override func performSegueToReturnBack() {
         if (isFromStatus)
         {

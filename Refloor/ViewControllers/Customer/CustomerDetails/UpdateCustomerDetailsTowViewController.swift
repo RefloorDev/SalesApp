@@ -64,6 +64,8 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     var co_Applicant_Skipped:Bool = Bool()
     var data:[String:Any] = [:]
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
@@ -159,37 +161,29 @@ class UpdateCustomerDetailsTowViewController:  UIViewController,UITextFieldDeleg
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.updateCustomer2) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         
          isSkippbuttonCalled = 0
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
         update()
-//        var networkMessage = ""
-//        let speedTest = NetworkSpeedTest()
-//        speedTest.testUploadSpeed { speed in
-//            print("Upload speed: \(speed) Mbps")
-//            networkMessage = String(format: "%.2f", speed)
-//            networkMessage += "Mbps"
-//            //DispatchQueue.main.async {
-//                
-//            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-//            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-//            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-//            }
     }
     
    func update() {

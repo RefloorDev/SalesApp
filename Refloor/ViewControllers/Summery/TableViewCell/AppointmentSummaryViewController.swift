@@ -28,6 +28,8 @@ class AppointmentSummaryViewController: UIViewController, ImagePickerDelegate
     var financeAmount:Double = Double()
     var adjustedArea = 0.0
     @IBOutlet weak var summaryTableView: UITableView!
+    
+    
     func didSelect(image: UIImage?, imageName: String?)
     {
         guard let image = image
@@ -50,11 +52,11 @@ class AppointmentSummaryViewController: UIViewController, ImagePickerDelegate
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "AppointmentSummaryViewController") as? AppointmentSummaryViewController
     }
     
-   
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.setNavigationBarbackAndlogo(with: "Summary".uppercased())
         summaryTableView.register(UINib(nibName: "AppointmentSummaryFirstRowTableViewCell", bundle: nil), forCellReuseIdentifier: "AppointmentSummaryFirstRowTableViewCell")
         //RoomsTableViewCell
@@ -64,37 +66,42 @@ class AppointmentSummaryViewController: UIViewController, ImagePickerDelegate
         
         
         let tableValues = self.getRoomsSummary(appointmentId: AppointmentData().appointment_id ?? 0)
-         for tableRooms in tableValues
+        for tableRooms in tableValues
         {
-             if tableRooms.striked == "false"
-             {
-                 includedRooms.append(tableRooms)
-                 //self.adjustedArea += tableRooms.adjusted_area ?? 0.0
-             }
-             else
-             {
-                 excludedRooms.append(tableRooms)
-             }
-         }
+            if tableRooms.striked == "false"
+            {
+                includedRooms.append(tableRooms)
+                //self.adjustedArea += tableRooms.adjusted_area ?? 0.0
+            }
+            else
+            {
+                excludedRooms.append(tableRooms)
+            }
+        }
         
     }
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.scopeOfWork) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.scopeOfWork,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-            }
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.scopeOfWork,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+        }
+        
+        }
+        
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
+    
     
     override func screenShotBarButtonAction(sender:UIButton)
         {

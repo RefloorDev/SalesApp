@@ -104,7 +104,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             self.navigationController?.pushViewController(applicant, animated: true)
         }
         
-             
+        
         
     }
     
@@ -152,30 +152,36 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     static func initialization() -> FinanceViewController? {
         return UIStoryboard(name:"Main", bundle: nil).instantiateViewController(withIdentifier: "FinanceViewController") as? FinanceViewController
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         self.setNavigationBarbackAndlogo(with: "FINANCE PROVIDER".uppercased())
         externalCredentialsArray = externalCredentialsValue()
     }
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.financeOption) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-            }
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+        }
+        
+        }
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
     }
+   
+
+    
     override func screenShotBarButtonAction(sender:UIButton)
         {
             self.imagePicker = CaptureImage(presentationController: self, delegate: self)
@@ -341,7 +347,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         
         if isHunter //https://hunterfinancedev.oneteamus.com/refloor-request
         {
-            let hunterArray = externalCredentialsArray.filter({$0.provider == "hunter"})
+            let hunterArray = Array(externalCredentialsArray.filter({$0.provider == "hunter"}))
             if hunterArray.count > 0
             {
                 hunterCall(parameter: parameter, customer: customer, url: (hunterArray.first?.url)!, apiKey: (hunterArray.first?.apiKey)!, entityKey: (hunterArray.first?.entityKey)!)
@@ -350,7 +356,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         }
         else
         {
-            let versatileArray = externalCredentialsArray.filter({$0.provider == "versatile"})
+            let versatileArray = Array(externalCredentialsArray.filter({$0.provider == "versatile"}))
             if customer.externalEntityKey.count > 0
             {
                 versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: customer.externalEntityKey[0].entityKey ?? "")

@@ -106,6 +106,10 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
     var adminFeeStatus = false
     var adjustmentValue:Double = 0
     var roomName = ""
+    
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbackAndlogo(with: "Co-Applicant Information".uppercased())
@@ -203,26 +207,28 @@ class CoApplicantFormViewControllerForm: UIViewController,DropDownDelegate,UITex
         
         // Do any additional setup after loading the view.
     }
-//    override func performSegueToReturnBack()
-//    {
-//        <#code#>
-//    }
-    override func viewDidAppear(_ animated: Bool) {
+
+    override func viewDidAppear(_ animated: Bool)
+    {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.coApplicantForm) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.coApplicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.coApplicantForm,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     
     @IBAction func passwordVisbleBatton(_ sender: UIButton) {
         isPasswordVisble = !isPasswordVisble
