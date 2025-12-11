@@ -97,6 +97,10 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     var minSalePrice:Double = 0.0
     var packagePlanName = ""
     let appointmetslData = AppDelegate.appoinmentslData
+   
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if isVersatile
@@ -135,20 +139,24 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        var screenName = isVersatile ? ScreenNames.versatileScreen : ScreenNames.hunterScreen
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: isVersatile ? ScreenNames.versatileScreen : ScreenNames.hunterScreen) {
+            var networkMessage = ""
+            let screenName = isVersatile ? ScreenNames.versatileScreen : ScreenNames.hunterScreen
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+     
     
     private func sendRequest(urlString: String)
     {

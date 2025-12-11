@@ -629,7 +629,20 @@ extension UIView {
 
 extension UIViewController:OrderStatusViewDelegate
 {
+    private static var lastLogged: [String: Date] = [:]
+        private static let threshold: TimeInterval = 2
 
+        func logScreenEvent(screen: String, event: () -> Void) {
+            let now = Date()
+
+            if let last = UIViewController.lastLogged[screen],
+               now.timeIntervalSince(last) < UIViewController.threshold {
+                return
+            }
+
+            UIViewController.lastLogged[screen] = now
+            event()
+        }
     // Location from address for geoLocation
     
     func getCoordinatesFromAddress(address: String, completion: @escaping ((Double, Double)?) -> Void) {
@@ -5015,7 +5028,7 @@ extension UIViewController:OrderStatusViewDelegate
             let country = appointment?.applicant_country
             let country_code = appointment?.applicant_country_code
             let phone = appointment?.applicant_phone
-            let email = appointment?.applicant_email
+            let email = appointmentlsData?.email
             let sales_person = appointment?.sales_person
             let salesperson_id = appointment?.salesperson_id
             let partner_latitude = appointment?.partner_latitude
@@ -5026,7 +5039,7 @@ extension UIViewController:OrderStatusViewDelegate
             let co_applicant_first_name = appointment?.co_applicant_first_name
             let co_applicant_middle_name = appointment?.co_applicant_middle_name
             let co_applicant_last_name = appointment?.co_applicant_last_name
-            let co_applicant_email = appointment?.co_applicant_email
+            let co_applicant_email = appointmentlsData?.co_applicant_email
             let co_applicant_secondary_phone = appointment?.co_applicant_secondary_phone
             let co_applicant_address = appointment?.co_applicant_address
             let co_applicant_city = appointment?.co_applicant_city

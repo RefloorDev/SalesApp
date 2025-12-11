@@ -50,6 +50,8 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     var isSkippbuttonCalled:Int = 0
     var imagePicker: CaptureImage!
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
@@ -136,19 +138,23 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.customer2) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.customer2,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     
     override func viewWillAppear(_ animated: Bool)
     {
@@ -159,7 +165,7 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
     
     func skipEnabledOrDisabled()
     {
-        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != "" || self.customerPhone.text != "" || self.customerContactNumberTF.text != ""
+        if self.customerFirstName.text != "" || self.customerMiddleName.text != "" || self.customerLastName.text != "" || self.customerEmail.text != "" || self.zipTF.text != "" || self.Street_Address_TF.text != "" || self.city_TF.text != "" || self.state_TF.text != ""  || self.customerContactNumberTF.text != ""
         {
             skipBtn.isHidden = true
         }
@@ -539,6 +545,21 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
                 return true
     }
     
+//    func textFieldDidEndEditing(_ textField: UITextField)
+//    {
+//        if textField == customerEmail
+//        {
+//           if textField.text?.validateEmail() == true
+//            {
+//               return
+//           }
+//            else
+//            {
+//                self.alert("Please enter a valid Email Address", nil)
+//                customerEmail.text = ""
+//            }
+//        }
+//    }
     
     
     
@@ -557,11 +578,15 @@ class CustomerDetailsTowViewController: UIViewController,UITextFieldDelegate {
             if !(customerContactNumberTF.text?.validatePhone() ?? false)
             {
                 return "Please enter a valid Phone Number"
+            
             }
         }
-        if !customerEmail.text!.validateEmail()
+        if customerEmail.text != ""
         {
-            return "Please enter a valid Email Address"
+            if !customerEmail.text!.validateEmail()
+            {
+                return "Please enter a valid Email Address"
+            }
         }
         
         

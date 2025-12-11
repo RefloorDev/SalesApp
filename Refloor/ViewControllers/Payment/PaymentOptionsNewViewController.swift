@@ -124,6 +124,9 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var restrictedPromo:[[Int:String]] = [[:]]
     var restrictedDiscount:[[Int:String]] = [[:]]
     var vapurBarrierValue:Double = 0.0
+    
+    
+    
     override func viewWillAppear(_ animated: Bool)
     {
    
@@ -132,19 +135,23 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.paymentOption) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -887,7 +894,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     
     @IBAction func nextButtonAction(_ sender: UIButton)
     {
-        
+        AppDelegate.appoinmentslData.finance_provider = ""
         
         if(self.selectedPlan<0)
         {

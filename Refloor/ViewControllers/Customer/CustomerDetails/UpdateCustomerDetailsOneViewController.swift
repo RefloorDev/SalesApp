@@ -84,6 +84,7 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     var data:[String:Any] = [:]
     var dropDownString = ["Yes","No"]
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //arb
@@ -185,19 +186,24 @@ class UpdateCustomerDetailsOneViewController:  UIViewController,UITextFieldDeleg
     
     override func viewDidAppear(_ animated: Bool)
     {
-        var networkMessage = ""
-        let speedTest = NetworkSpeedTest()
-        speedTest.testUploadSpeed { speed in
-            print("Upload speed: \(speed) Mbps")
-            networkMessage = String(format: "%.2f", speed)
-            networkMessage += "Mbps"
-            //DispatchQueue.main.async {
+        logScreenEvent(screen: ScreenNames.updateCustomer1) {
+            var networkMessage = ""
+            let speedTest = NetworkSpeedTest()
+            speedTest.testUploadSpeed { speed in
+                print("Upload speed: \(speed) Mbps")
+                networkMessage = String(format: "%.2f", speed)
+                networkMessage += "Mbps"
+                //DispatchQueue.main.async {
                 
-            let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-            let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-            HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.updateCustomer1,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
-    }
+        }
+            
+        }
+    
+    
     override func viewWillAppear(_ animated: Bool)
     {
         //appoinmentslData.isBothParties == 0 ? bothPartiesBtn.setImage(UIImage(named: "uncheck"), for: .normal) : bothPartiesBtn.setImage(UIImage(named: "checked"), for: .normal)
