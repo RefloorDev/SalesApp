@@ -2506,7 +2506,7 @@ class HttpClientManager: NSObject {
         
         if self.connectedToNetwork() {
             
-            
+            print(parameter)
             let URL = AppURL().additionalComments
             self.showhideHUD(viewtype: .SHOW, title: "Creating Sale Order")
             Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
@@ -2890,7 +2890,7 @@ class HttpClientManager: NSObject {
                             //print response.result
                             let value = response.result.value
                             let result = Mapper<OfflineAttachment>().map(JSONObject: value)
-                            self.showhideHUD(viewtype: .HIDE, title: "i")
+                            self.showhideHUD(viewtype: .HIDE, title: "")
                             completion(result?.result,result?.message)
                             
                         }

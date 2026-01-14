@@ -221,7 +221,7 @@ class LoginViewController: UIViewController {
         HttpClientManager.SharedHM.Authentication(usernae: emailTF.text ?? "", password: passwordTF.text ?? "") { (result, message, value) in
             if (result ?? "") == "Success"
             {
-                
+               
                 //salesPersonEmail
                 UserDefaults.standard.set(self.emailTF.text, forKey: "salesPersonEmail")
                 let user = UserData.init(userID: value?[0].user_id ?? 0, userName: value?[0].user_name ?? "", token: value?[0].token ?? "",restrict_geolocation: value?[0].restrict_geolocation ?? 0)
@@ -240,6 +240,11 @@ class LoginViewController: UIViewController {
                         self.downloadImage(from: url, companylogoString : company_logo_url)
                     }
                 }
+//                let debugData = self.getDebugAptDataToUpload()
+//                if (debugData?.count)! > 0
+//                {
+//                    self.debugDataUpload()
+//                }
                 
                 if  ((self.determineIfAnyPendingAppointmentsToSink() == false) || (UserData.isLogedIn() != true)){
                     self.emailTF.text = self.emailTF.text
@@ -282,6 +287,113 @@ class LoginViewController: UIViewController {
 //        }
 //        UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
 //    }
+    
+    func debugDataUpload()
+    {
+        let debugData = getDebugAptDataToUpload()
+        var logsArray: [[String: Any]] = []
+        guard let debugData = debugData, !debugData.isEmpty else {
+            print("ℹ️ No debug logs found")
+            return
+        }
+        let groupedLogs = Dictionary(grouping: debugData) { $0.appointment_id }
+        
+        for (appointmentId, logs) in groupedLogs {
+
+            var logsArray: [[String: Any]] = []
+
+            for log in logs {
+                logsArray.append([
+                    "AppointmentId": log.appointment_id,
+                    "Log": log.log ?? "",
+                    "ApiStatus": log.apiStatus ?? "",
+                    "ApiMessage": log.apiMessage ?? ""
+                ])
+            }
+
+            let payload: [String: Any] = [
+                "AppointmentId": appointmentId,
+                "Logs": logsArray,
+                "TotalLogs": logsArray.count
+            ]
+
+            let zipURL = createAppointmentZip(
+                appointmentID: String(appointmentId),
+                data: payload,
+                imagePaths: []
+            )
+
+            HttpClientManager.SharedHM.CompressFileOfAppointment(
+                appointmentId: String(appointmentId),
+                fileURL: zipURL
+            ) { success, message in
+
+                if success == "Success" {
+                    print("✅ Uploaded logs for appointment \(appointmentId)")
+                    self.deleteAllDebugLogs()
+                    self.getMasterData()
+                } else {
+                    print("❌ Upload failed for appointment \(appointmentId): \(message ?? "")")
+                    self.getMasterData()
+                }
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        let groupedLogs = Dictionary(grouping: debugData!) { $0.appointment_id }
+//        if (debugData?.count)! > 0
+//        {
+//            for (appointmentId, logs, apiStatus, apiMessage) in groupedLogs
+//            {
+//                let data:[String:Any] = ["AppointmentId": appointmentId,"Log":logs ?? "","ApiStatus":apiStatus ,"ApiMessage":apiMessage]
+//                logsArray.append(data)
+//            }
+//                let url = createAppointmentZip(appointmentID: String(appointments.appointment_id), data: data, imagePaths: [])
+//                HttpClientManager.SharedHM.CompressFileOfAppointment(appointmentId: String(appointments.appointment_id), fileURL: url) { success, message in
+//                    if(success ?? "") == "Success"
+//                    {
+//                        self.alert(message ?? "Debug log uploaded successfully", nil)
+//                        self.deleteAllDebugLogs()
+//                    }
+//                    else
+//                    {
+//                        self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, nil)
+//                        //HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE,title: "")
+//                        
+//                    }
+//                
+//            }
+//        }
+//        else
+//        {
+//           deleteAllDebugLogs()
+//        }
+    }
+    
+    func deleteAllDebugLogs()
+    {
+        do {
+            let realm = try Realm()
+
+            let allLogs = realm.objects(rf_Debug_Appointment_Log.self)
+
+            try realm.write {
+                realm.delete(allLogs)
+            }
+
+            print("✅ Deleted all rf_Debug_Appointment_Log records")
+
+        } catch {
+            print("❌ Realm delete failed: \(error.localizedDescription)")
+        }
+    }
     
     @IBAction func stagingAction(_ sender: UIButton) {
         let text = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String

@@ -86,20 +86,20 @@ class RoomVOWebViewViewController: UIViewController {
      
      override func viewDidAppear(_ animated: Bool) {
          checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-         logScreenEvent(screen: ScreenNames.roomVO) {
-             var networkMessage = ""
-             let speedTest = NetworkSpeedTest()
-             speedTest.testUploadSpeed { speed in
-                 print("Upload speed: \(speed) Mbps")
-                 networkMessage = String(format: "%.2f", speed)
-                 networkMessage += "Mbps"
-                 //DispatchQueue.main.async {
-                 
-                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                 let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomVO,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-             }
-         }
+//         logScreenEvent(screen: ScreenNames.roomVO) {
+//             var networkMessage = ""
+//             let speedTest = NetworkSpeedTest()
+//             speedTest.testUploadSpeed { speed in
+//                 print("Upload speed: \(speed) Mbps")
+//                 networkMessage = String(format: "%.2f", speed)
+//                 networkMessage += "Mbps"
+//                 //DispatchQueue.main.async {
+//                 
+//                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+//                 let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomVO,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+//                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+//             }
+//         }
              
          }
      

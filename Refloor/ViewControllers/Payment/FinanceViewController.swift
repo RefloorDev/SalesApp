@@ -109,9 +109,9 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     }
     
     
+    @IBOutlet weak var financeProviderTblView: UITableView!
     @IBOutlet weak var proceedBtn: UIButton!
-    @IBOutlet weak var versatileBtnImage: UIImageView!
-    @IBOutlet weak var versatileStackView: UIStackView!
+    
     @IBOutlet weak var hunterBtnImage: UIImageView!
     @IBOutlet weak var hunterStackView: UIStackView!
     @IBOutlet weak var skipBtnLeadingConstraint: NSLayoutConstraint!
@@ -146,6 +146,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var excluded_amount_promotion:Double = 0.0
     var adjustmentValue:Double = 0
     var roomName = ""
+    var matchedExternalCredentials: [rf_extrenal_credential_results] = []
     
     
     
@@ -158,6 +159,16 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         
         self.setNavigationBarbackAndlogo(with: "FINANCE PROVIDER".uppercased())
         externalCredentialsArray = externalCredentialsValue()
+        
+        let officeLocation = AppDelegate.appoinmentslData.officeLocationId
+        
+        for providers in externalCredentialsArray
+        {
+            if providers.applicableFinanceProvider.contains(officeLocation ?? 0)
+            {
+                matchedExternalCredentials.append(providers)
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool)
@@ -194,29 +205,29 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         isHunter = !isHunter
         isVersatile = false
         proceedBtn.isHidden = false
-        if isHunter
-        {
-            hunterStackView.backgroundColor = UIColor().colorFromHexString("#292562")
-            hunterStackView.borderWidth = 2
-            hunterStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
-            hunterBtnImage.image = UIImage(named: "selectedRound")
-            
-            versatileStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
-            versatileStackView.borderWidth = 1
-            versatileStackView.borderColor = UIColor().colorFromHexString("#586471")
-            //notSelected
-            versatileBtnImage.image = UIImage(named: "notSelected")
-            skipBtnLeadingConstraint.constant = 346
-        }
-        else
-        {
-            hunterStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
-            hunterStackView.borderWidth = 1
-            hunterStackView.borderColor = UIColor().colorFromHexString("#586471")
-            hunterBtnImage.image = UIImage(named: "notSelected")
-            proceedBtn.isHidden = true
-            skipBtnLeadingConstraint.constant = 70
-        }
+//        if isHunter
+//        {
+//            hunterStackView.backgroundColor = UIColor().colorFromHexString("#292562")
+//            hunterStackView.borderWidth = 2
+//            hunterStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
+//            hunterBtnImage.image = UIImage(named: "selectedRound")
+//            
+//            versatileStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+//            versatileStackView.borderWidth = 1
+//            versatileStackView.borderColor = UIColor().colorFromHexString("#586471")
+//            //notSelected
+//            versatileBtnImage.image = UIImage(named: "notSelected")
+//            skipBtnLeadingConstraint.constant = 346
+//        }
+//        else
+//        {
+//            hunterStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+//            hunterStackView.borderWidth = 1
+//            hunterStackView.borderColor = UIColor().colorFromHexString("#586471")
+//            hunterBtnImage.image = UIImage(named: "notSelected")
+//            proceedBtn.isHidden = true
+//            skipBtnLeadingConstraint.constant = 70
+//        }
     }
     
     @IBAction func versatileBtnAction(_ sender: UIButton)
@@ -225,29 +236,30 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         isVersatile = !isVersatile
         isHunter = false
         proceedBtn.isHidden = false
-        if isVersatile
-        {
-            
-                versatileStackView.backgroundColor = UIColor().colorFromHexString("#292562")
-            versatileStackView.borderWidth = 2
-            versatileStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
-            versatileBtnImage.image = UIImage(named: "selectedRound")
-            
-            hunterStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
-            hunterStackView.borderWidth = 1
-            hunterStackView.borderColor = UIColor().colorFromHexString("#586471")
-            hunterBtnImage.image = UIImage(named: "notSelected")
-            skipBtnLeadingConstraint.constant = 346
-            }
-            else
-            {
-                versatileStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
-                versatileStackView.borderWidth = 1
-                versatileStackView.borderColor = UIColor().colorFromHexString("#586471")
-                //notSelected
-                versatileBtnImage.image = UIImage(named: "notSelected")
-                proceedBtn.isHidden = true
-                skipBtnLeadingConstraint.constant = 70            }
+//        if isVersatile
+//        {
+//            
+//                versatileStackView.backgroundColor = UIColor().colorFromHexString("#292562")
+//            versatileStackView.borderWidth = 2
+//            versatileStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
+//            versatileBtnImage.image = UIImage(named: "selectedRound")
+//            
+//            hunterStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+//            hunterStackView.borderWidth = 1
+//            hunterStackView.borderColor = UIColor().colorFromHexString("#586471")
+//            hunterBtnImage.image = UIImage(named: "notSelected")
+//            skipBtnLeadingConstraint.constant = 346
+//            }
+//            else
+//        {
+//                versatileStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+//                versatileStackView.borderWidth = 1
+//                versatileStackView.borderColor = UIColor().colorFromHexString("#586471")
+//                //notSelected
+//                versatileBtnImage.image = UIImage(named: "notSelected")
+//                proceedBtn.isHidden = true
+//                skipBtnLeadingConstraint.constant = 70
+//            }
     }
     
     @IBAction func skipBtnAction(_ sender: UIButton)
@@ -278,7 +290,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     }
     @IBAction func proceedBtnAction(_ sender: UIButton)
     {
-        if HttpClientManager.SharedHM.connectedToNetwork() && externalCredentialsArray.count > 0
+        if HttpClientManager.SharedHM.connectedToNetwork() && matchedExternalCredentials.count > 0
         {
             let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
             selectRoomPopUp.versatile = self
@@ -347,7 +359,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         
         if isHunter //https://hunterfinancedev.oneteamus.com/refloor-request
         {
-            let hunterArray = Array(externalCredentialsArray.filter({$0.provider == "hunter"}))
+            let hunterArray = Array(matchedExternalCredentials.filter({$0.provider == "hunter"}))
             if hunterArray.count > 0
             {
                 hunterCall(parameter: parameter, customer: customer, url: (hunterArray.first?.url)!, apiKey: (hunterArray.first?.apiKey)!, entityKey: (hunterArray.first?.entityKey)!)
@@ -356,7 +368,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         }
         else
         {
-            let versatileArray = Array(externalCredentialsArray.filter({$0.provider == "versatile"}))
+            let versatileArray = Array(matchedExternalCredentials.filter({$0.provider == "versatile"}))
             if customer.externalEntityKey.count > 0
             {
                 versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: customer.externalEntityKey[0].entityKey ?? "")
@@ -455,5 +467,76 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 self.navigationController?.pushViewController(versatile, animated: true)
             }
         }
+    }
+}
+
+extension FinanceViewController:UITableViewDelegate,UITableViewDataSource
+{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        return matchedExternalCredentials.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceProviderTableViewCell") as! FinanceProviderTableViewCell
+        cell.versatileStackView.backgroundColor = UIColor().colorFromHexString("#2D343D")
+        cell.versatileStackView.borderWidth = 1
+        cell.versatileStackView.borderColor = UIColor().colorFromHexString("#586471")
+        //notSelected
+        cell.versatileBtnImage.image = UIImage(named: "notSelected")
+        if matchedExternalCredentials[indexPath.row].provider == "versatile"
+        {
+            cell.versatileTitle.text = "Versatile Credit"
+            cell.versatileLogo.image = UIImage(named: "Lending")
+            cell.versatileBtnImage.image = UIImage(named: "notSelected")
+            if isVersatile
+            {
+                cell.versatileStackView.backgroundColor = UIColor().colorFromHexString("#292562")
+                cell.versatileStackView.borderWidth = 2
+                cell.versatileStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
+                cell.versatileBtnImage.image = UIImage(named: "selectedRound")
+                //proceedBtn.isHidden = false
+            }
+
+        }
+        if matchedExternalCredentials[indexPath.row].provider == "hunter"
+        {
+            cell.versatileTitle.text = "Credit Card Rate Lending"
+            cell.versatileLogo.image = UIImage(named: "Hunter")
+            cell.versatileBtnImage.image = UIImage(named: "notSelected")
+            if isHunter
+            {
+                cell.versatileStackView.backgroundColor = UIColor().colorFromHexString("#292562")
+                cell.versatileStackView.borderWidth = 2
+                cell.versatileStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
+                cell.versatileBtnImage.image = UIImage(named: "selectedRound")
+                //proceedBtn.isHidden = false
+                
+                
+            }
+
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
+        //let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceProviderTableViewCell") as! FinanceProviderTableViewCell
+        proceedBtn.isHidden =  false
+        skipBtnLeadingConstraint.constant = 346
+        //selectedIndexPath = indexPath
+        if matchedExternalCredentials[indexPath.row].provider == "versatile"
+        {
+            self.isVersatile = true
+            self.isHunter = false
+        }
+        else
+        {
+            self.isVersatile = false
+            self.isHunter = true
+        }
+        self.financeProviderTblView.reloadData()
+
     }
 }

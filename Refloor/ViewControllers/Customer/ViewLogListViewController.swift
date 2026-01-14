@@ -1352,79 +1352,79 @@ extension ViewLogListViewController{
     }
     
     
-    func createAppointmentZip(appointmentID: String, data: [String: Any], imagePaths: [String]) -> URL? {
-        let fileManager = FileManager.default
-        
-        // Step 1: Create a folder named after the appointment ID
-        let folderURL = fileManager.temporaryDirectory.appendingPathComponent(appointmentID)
-        do {
-            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
-        } catch {
-            print("Error creating folder: \(error)")
-            return nil
-        }
-        
-        // Step 2: Write room data to a text file
-        let dataFileURL = folderURL.appendingPathComponent("data.txt")
-        let dataText = data.map { "\($0): \($1)" }.joined(separator: "\n")
-        do {
-            try dataText.write(to: dataFileURL, atomically: true, encoding: .utf8)
-        } catch {
-            print("Error writing data to file: \(error)")
-            return nil
-        }
-        
-        // Step 3: Copy images to the folder
-        for imagePath in imagePaths {
-            let imageFileName = (imagePath as NSString).lastPathComponent
-            let destinationURL = folderURL.appendingPathComponent(imageFileName)
-            do {
-                try fileManager.copyItem(atPath: imagePath, toPath: destinationURL.path)
-            } catch {
-                print("Error copying image: \(error)")
-            }
-        }
-        
-        let refloorOfflineAssetURL = folderURL.appendingPathComponent("Refloor_Offline_Asset")
-            if fileManager.fileExists(atPath: refloorOfflineAssetURL.path) {
-                do {
-                    try fileManager.removeItem(at: refloorOfflineAssetURL)
-                    print("Removed existing 'Refloor_Offline_Asset' folder.")
-                } catch {
-                    print("Error removing 'Refloor_Offline_Asset' folder: \(error)")
-                    //return .fa(error)
-                }
-            }
-        
-        // Step 5: Copy the folder to "On My iPad" section
-        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            print("Error accessing 'On My iPad' section.")
-           // return .failure(NSError(domain: "FileManagerError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to access 'On My iPad' section"]))
-            return nil
-        }
-        let destinationFolderURL = documentsURL.appendingPathComponent(appointmentID)
-        
-        do {
-            if fileManager.fileExists(atPath: destinationFolderURL.path) {
-                try fileManager.removeItem(at: destinationFolderURL)
-            }
-            try fileManager.copyItem(at: folderURL, to: destinationFolderURL)
-            print("Folder copied to 'On My iPad' section.")
-        } catch {
-            print("Error copying folder to 'On My iPad': \(error)")
-            //return .failure(error)
-        }
-        
-        // Step 4: Create a zip file
-        let zipFilePath = fileManager.temporaryDirectory.appendingPathComponent("\(appointmentID).zip")
-        do {
-            try Zip.zipFiles(paths: [folderURL], zipFilePath: zipFilePath, password: nil, progress: nil)
-            return zipFilePath
-        } catch {
-            print("Error zipping folder: \(error)")
-            return nil
-        }
-    }
+//    func createAppointmentZip(appointmentID: String, data: [String: Any], imagePaths: [String]) -> URL? {
+//        let fileManager = FileManager.default
+//        
+//        // Step 1: Create a folder named after the appointment ID
+//        let folderURL = fileManager.temporaryDirectory.appendingPathComponent(appointmentID)
+//        do {
+//            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+//        } catch {
+//            print("Error creating folder: \(error)")
+//            return nil
+//        }
+//        
+//        // Step 2: Write room data to a text file
+//        let dataFileURL = folderURL.appendingPathComponent("data.txt")
+//        let dataText = data.map { "\($0): \($1)" }.joined(separator: "\n")
+//        do {
+//            try dataText.write(to: dataFileURL, atomically: true, encoding: .utf8)
+//        } catch {
+//            print("Error writing data to file: \(error)")
+//            return nil
+//        }
+//        
+//        // Step 3: Copy images to the folder
+//        for imagePath in imagePaths {
+//            let imageFileName = (imagePath as NSString).lastPathComponent
+//            let destinationURL = folderURL.appendingPathComponent(imageFileName)
+//            do {
+//                try fileManager.copyItem(atPath: imagePath, toPath: destinationURL.path)
+//            } catch {
+//                print("Error copying image: \(error)")
+//            }
+//        }
+//        
+//        let refloorOfflineAssetURL = folderURL.appendingPathComponent("Refloor_Offline_Asset")
+//            if fileManager.fileExists(atPath: refloorOfflineAssetURL.path) {
+//                do {
+//                    try fileManager.removeItem(at: refloorOfflineAssetURL)
+//                    print("Removed existing 'Refloor_Offline_Asset' folder.")
+//                } catch {
+//                    print("Error removing 'Refloor_Offline_Asset' folder: \(error)")
+//                    //return .fa(error)
+//                }
+//            }
+//        
+//        // Step 5: Copy the folder to "On My iPad" section
+//        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+//            print("Error accessing 'On My iPad' section.")
+//           // return .failure(NSError(domain: "FileManagerError", code: 1, userInfo: [NSLocalizedDescriptionKey: "Unable to access 'On My iPad' section"]))
+//            return nil
+//        }
+//        let destinationFolderURL = documentsURL.appendingPathComponent(appointmentID)
+//        
+//        do {
+//            if fileManager.fileExists(atPath: destinationFolderURL.path) {
+//                try fileManager.removeItem(at: destinationFolderURL)
+//            }
+//            try fileManager.copyItem(at: folderURL, to: destinationFolderURL)
+//            print("Folder copied to 'On My iPad' section.")
+//        } catch {
+//            print("Error copying folder to 'On My iPad': \(error)")
+//            //return .failure(error)
+//        }
+//        
+//        // Step 4: Create a zip file
+//        let zipFilePath = fileManager.temporaryDirectory.appendingPathComponent("\(appointmentID).zip")
+//        do {
+//            try Zip.zipFiles(paths: [folderURL], zipFilePath: zipFilePath, password: nil, progress: nil)
+//            return zipFilePath
+//        } catch {
+//            print("Error zipping folder: \(error)")
+//            return nil
+//        }
+//    }
 
     func otherIncome(otherIncomedata:rf_OtherIncomeData) -> [String:Any]
     {
