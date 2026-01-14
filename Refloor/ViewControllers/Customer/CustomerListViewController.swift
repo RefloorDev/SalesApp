@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 import SwiftUI
 import CoreLocation
+import FirebaseCrashlytics
 
 
 class CustomerListViewController: UIViewController,UITableViewDelegate,UITableViewDataSource, UIDocumentPickerDelegate, CLLocationManagerDelegate {
@@ -740,8 +741,33 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     func arrivedBtnPressed(aptId:Int,appointmentList: [AppoinmentDataValue]?,sender:Int)
     {
         let (_,timezone) = Date().getCompletedDateStringAndTimeZone()
+        //var log:String = String()
         let parameter:[String:Any] = ["token":UserData.init().token ?? "","appointment_id": aptId,"manual_arrival_date":Date().dateToString(),"timezone":timezone]
         HttpClientManager.SharedHM.manualArrivalDateAPi(parameter: parameter) { success, message in
+//            Crashlytics.crashlytics().log("Manual Arrival API Called")
+//            log = "Manual Arrival API Called"
+//            Crashlytics.crashlytics().setCustomValue(aptId, forKey: "appointment_id")
+//            //Crashlytics.crashlytics().setCustomValue(tag, forKey: "button_tag")
+//            Crashlytics.crashlytics().setCustomValue(success ?? "nil", forKey: "success_value")
+//            Crashlytics.crashlytics().setCustomValue(message ?? "nil", forKey: "message")
+//            
+//            
+//            do
+//            {
+//                let realm = try! Realm()
+//                //let userData = realm.objects(rf_Debug_Appointment_Log.self)
+//                
+//                
+//                let object = (rf_Debug_Appointment_Log(appointmentId: aptId, log:log, apiStatus: success ?? "",apiMessage: message ?? ""))
+//                
+//                try realm.write {
+//                        realm.add(object)
+//                    }
+//            }
+//            catch
+//            {
+//                print("❌ Failed to write to Realm: \(error.localizedDescription)")
+//            }
             if (success ?? "") == "Success"
             {
 //                let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
@@ -812,6 +838,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         let screenEntryTime = Date().getSyncDateAsString()
         let screenName = ScreenNames.appointmentList
         let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+        var log:String = String()
             
             // Capture the screen entry time immediately
             
@@ -832,6 +859,29 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 ]
                 
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+//                Crashlytics.crashlytics().log("Appointment live sync API called")
+//                log = "Start Button Pressed and Appointment live sync API called"
+//                Crashlytics.crashlytics().setCustomValue(appointmentID, forKey: "appointment_id")
+//                Crashlytics.crashlytics().setCustomValue(tag, forKey: "button_tag")
+//                
+//                
+//                
+//                do
+//                {
+//                    let realm = try! Realm()
+//                    let userData = realm.objects(rf_Debug_Appointment_Log.self)
+//                    
+//                    
+//                    let object = (rf_Debug_Appointment_Log(appointmentId: appointmentID, log: log,apiStatus: "",apiMessage: ""))
+//                    
+//                    try realm.write {
+//                        realm.add(object)
+//                        }
+//                }
+//                catch
+//                {
+//                    print("❌ Failed to write to Realm: \(error.localizedDescription)")
+//                }
             }
         }
         
@@ -840,11 +890,37 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //        UserDefaults.standard.set(manualArrivalDate, forKey: "manualArrivalDate")
         if HttpClientManager.SharedHM.connectedToNetwork()
         {
-            let parameter:[String:Any] = ["appointment_id":  appoinmentsList?[sender.tag].id ?? 0]
+//            Crashlytics.crashlytics().log("Appointment Status API Calling")
+//            log = "Appointment Status API Calling"
+//            Crashlytics.crashlytics().setCustomValue(appointmentID, forKey: "appointment_id")
+            let parameter:[String:Any] = ["appointment_id":  appointmentID]
             HttpClientManager.SharedHM.appointmentStatusAPi(parameter: parameter) { success, message in
+//                Crashlytics.crashlytics().log("Appointment Status API Called")
+//                Crashlytics.crashlytics().setCustomValue(appointmentID, forKey: "appointment_id")
+//                Crashlytics.crashlytics().setCustomValue(tag, forKey: "button_tag")
+//                Crashlytics.crashlytics().setCustomValue(success ?? "nil", forKey: "success_value")
+//                Crashlytics.crashlytics().setCustomValue(message ?? "nil", forKey: "message")
+//                
+//                
+//                do
+//                {
+//                    let realm = try! Realm()
+//                    //let userData = realm.objects(rf_Debug_Appointment_Log.self)
+//                    
+//                    
+//                    let object = (rf_Debug_Appointment_Log(appointmentId: appointmentID, log: log, apiStatus: success ?? "", apiMessage: message ?? ""))
+//                    
+//                    try realm.write {
+//                            realm.add(object)
+//                        }
+//                }
+//                catch
+//                {
+//                    print("❌ Failed to write to Realm: \(error.localizedDescription)")
+//                }
                 if (success ?? "") == "Success"
                 {
-                    self.appointmentStatus(buttonTag: sender.tag)
+                    self.appointmentStatus(buttonTag: tag)
                 }
                 else if success == "Failed"
                 {
@@ -862,15 +938,33 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         }
         else
         {
-            appointmentStatus(buttonTag: sender.tag)
+            appointmentStatus(buttonTag: tag)
         }
     }
+    
+//    func logCrashContext(
+//        _ description: String,
+//        file: String = #file,
+//        function: String = #function,
+//        line: Int = #line
+//    ) {
+////        DispatchQueue.global(qos: .background).async {
+////            print("""
+////        🚨 CRASH CONTEXT
+////        Description: \(description)
+////        File: \(file)
+////        Function: \(function)
+////        Line: \(line)
+////        """)
+////        }
+//    }
     
     func appointmentStatus(buttonTag: Int) {
         let masterData = getMasterDataFromDB()
         
         // Skip location check if geo-location is disabled or restricted
-        guard masterData.enableGeoLocation && restrictGeoLocation == 0 else {
+        guard masterData.enableGeoLocation && restrictGeoLocation == 0 else
+        {
             performAppointmentAction(sender: buttonTag)
             return
         }
@@ -961,6 +1055,22 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 
                 // Q4_Change Confirmation Popup with Appointment date and time
                 let yes = UIAlertAction(title: "Yes", style:.default) { (_) in
+                    do
+                    {
+                        let realm = try! Realm()
+                        //let userData = realm.objects(rf_Debug_Appointment_Log.self)
+                        
+                        let aptId = self.appoinmentsList?[sender].id ?? 0
+                        let object = (rf_Debug_Appointment_Log(appointmentId: aptId, log: "Redirecting to Customer 1", apiStatus:  "", apiMessage:  ""))
+                        
+                        try realm.write {
+                                realm.add(object)
+                            }
+                    }
+                    catch
+                    {
+                        print("❌ Failed to write to Realm: \(error.localizedDescription)")
+                    }
                     if HttpClientManager.SharedHM.connectedToNetwork()
                     {
                         self.arrivedBtnPressed(aptId: self.appoinmentsList?[sender].id ?? 0, appointmentList: self.appoinmentsList, sender: sender)

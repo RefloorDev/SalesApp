@@ -38,20 +38,20 @@ class ViewLodDetailsViewController: UIViewController,UITableViewDataSource,UITab
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         checkWhetherToAutoLogoutOrNot(isRefreshBtnPressed: false)
-        logScreenEvent(screen: ScreenNames.logDetails) {
-            var networkMessage = ""
-            let speedTest = NetworkSpeedTest()
-            speedTest.testUploadSpeed { speed in
-                print("Upload speed: \(speed) Mbps")
-                networkMessage = String(format: "%.2f", speed)
-                networkMessage += "Mbps"
-                //DispatchQueue.main.async {
-                
-                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": Int(self.selectedAppointmentId) ?? 0,"screen_name":ScreenNames.logDetails,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
-                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
-            }
-        }
+//        logScreenEvent(screen: ScreenNames.logDetails) {
+//            var networkMessage = ""
+//            let speedTest = NetworkSpeedTest()
+//            speedTest.testUploadSpeed { speed in
+//                print("Upload speed: \(speed) Mbps")
+//                networkMessage = String(format: "%.2f", speed)
+//                networkMessage += "Mbps"
+//                //DispatchQueue.main.async {
+//                
+//                let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
+//                let parameters:[String:Any] = ["appointment_id": Int(self.selectedAppointmentId) ?? 0,"screen_name":ScreenNames.logDetails,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+//                HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
+//            }
+//        }
             
         }
     

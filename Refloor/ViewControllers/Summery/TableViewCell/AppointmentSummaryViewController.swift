@@ -311,7 +311,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         if paymentType == "cash"
         {
-            let web = CancellationPolicyViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -324,7 +324,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         else if self.paymentType == "check"
         {
-            let web = CancellationPolicyViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             //web.downPayment = self.DownPaymentcalucaltion().downPayment
             //web.balance  = self.DownPaymentcalucaltion().balance
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
@@ -338,7 +338,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         else if paymentType == "card"
         {
-            let web = CancellationPolicyViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             web.downPayment = downPayment //self.downpayment.DownPaymentcalucaltion().downPayment
             web.total = total
             web.balance = balance
@@ -349,7 +349,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         }
         else
         {
-            let web = CancellationPolicyViewController.initialization()!
+            let web = DynamicContractViewController.initialization()!
             web.document=document
             web.orderID=orderID
             web.downPayment = downPayment

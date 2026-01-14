@@ -528,6 +528,7 @@ class rf_extrenal_credential_results: Object,Mappable
     @objc dynamic var entityKey : String?
     @objc dynamic var apiKey : String?
     @objc dynamic var provider : String?
+    var applicableFinanceProvider = List<Int>()
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -539,6 +540,11 @@ class rf_extrenal_credential_results: Object,Mappable
         entityKey <- map["entity_key"]
         apiKey <- map["api_key"]
         provider <- map["provider"]
+        if let defaultDeliveryArray = map["available_office_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: defaultDeliveryArray)
+                    self.applicableFinanceProvider = realmList
+                }
         
     }
 }
@@ -1674,6 +1680,32 @@ class rf_completed_appointment:Object{
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
         external_entity_keys = appointmentObj.externalEntityKey
+    }
+}
+class rf_Debug_Appointment_Log:Object
+{
+    @objc dynamic var id: String = UUID().uuidString
+    @objc dynamic var appointment_id:Int = 0
+    @objc dynamic var log:String?
+    @objc dynamic var apiStatus:String?
+    @objc dynamic var apiMessage:String?
+    
+    
+    override static func primaryKey() -> String?
+    {
+        return "id"
+    }
+    required override init() {
+            super.init()
+        }
+    convenience init(appointmentId:Int,log:String,apiStatus:String,apiMessage:String)
+    {
+        self.init()
+        self.appointment_id = appointmentId
+        self.log = log
+        self.apiStatus = apiStatus
+        self.apiMessage = apiMessage
+        
     }
 }
 

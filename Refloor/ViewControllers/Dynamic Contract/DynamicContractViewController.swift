@@ -1165,7 +1165,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             installer.payment_TrasnsactionDict = self.payment_TrasnsactionDict
             let appoint_id = AppointmentData().appointment_id ?? 0
             let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-            let parametersComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison] as [String : Any]
+            let parametersComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison,"both_parties_present":self.isBothParties] as [String : Any]
 //            installer.name = name
           installer.parametersAdditionalComments = parametersComments
             self.navigationController?.pushViewController(installer, animated: true)

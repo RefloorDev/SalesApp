@@ -47,7 +47,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let config = Realm.Configuration(
                 // Set the new schema version. This must be greater than the previously used
                 // version (if you've never set a schema version before, the version is 0).
-                schemaVersion:  29,//7, // production 12
+                schemaVersion:  32,//7, // production 12
 
                 // Set the block which will be called automatically when opening a Realm with
                 // a schema version lower than the one set above
@@ -635,7 +635,7 @@ extension AppDelegate : CLLocationManagerDelegate
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         let monitoredRegions = manager.monitoredRegions
-        print("Updated location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
+        //print("Updated location: \(location.coordinate.latitude), \(location.coordinate.longitude)")
 
         for region in monitoredRegions {
             if let circularRegion = region as? CLCircularRegion, circularRegion.contains(location.coordinate) {
