@@ -568,7 +568,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             
             // cell.timeLabel.text = Date().TimeOnlyForCustomerList(datestr: appoinmentsList?[indexPath.row].appointment_date ?? "")
             cell.timeLabel.text =  appoinmentsList?[indexPath.row].appointment_datetime ?? ""
-        let appointmentDate = convertToFullDate(from: appoinmentsList?[indexPath.row].appointment_datetime ?? "")!
+        let appointmentDate = convertToFullDate(from: appoinmentsList?[indexPath.row].appointment_datetime ?? "") ?? Date()
             
             
             

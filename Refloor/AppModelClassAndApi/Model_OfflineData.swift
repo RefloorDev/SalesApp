@@ -465,7 +465,8 @@ class rf_floorColour_results : Object,Mappable {
     @objc dynamic var in_stock : Int = 0
     @objc dynamic var specialOrder: Int = 0
     @objc dynamic var glueDown: Int = 0
-    var Office_location_ids = List<Int>()
+    var  Office_location_ids = List<Int>()
+    var special_order_location_ids = List<Int>()
     @objc dynamic var last_updated_date : String?
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -481,11 +482,16 @@ class rf_floorColour_results : Object,Mappable {
         color_upcharge <- map["color_up_charge_price"]
         in_stock <- map["in_stock"]
         specialOrder <- map["special_order"]
-        glueDown <- map["glue_down"]
+        glueDown <- map["glue_down"]//
         if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
                     let realmList = List<Int>()
                     realmList.append(objectsIn: officeLocationIdsArray)
                     self.Office_location_ids = realmList
+                }
+        if let specialOrderArray = map["special_order_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: specialOrderArray)
+                    self.special_order_location_ids = realmList
                 }
 //        Office_location_ids <- map["office_location_ids"]
 //        Office_location_ids <- (map["office_location_ids"], ListTransform<Int>())
@@ -524,6 +530,7 @@ class rf_appointment_result_reasons_results: Object,Mappable
 
 class rf_extrenal_credential_results: Object,Mappable
 {
+    @objc dynamic var ext_credential_id: Int = 0
     @objc dynamic var url : String?
     @objc dynamic var entityKey : String?
     @objc dynamic var apiKey : String?
@@ -535,7 +542,7 @@ class rf_extrenal_credential_results: Object,Mappable
     }
     
     func mapping(map: ObjectMapper.Map) {
-        
+        ext_credential_id <- map["ext_credential_id"]
         url <- map["url"]
         entityKey <- map["entity_key"]
         apiKey <- map["api_key"]
@@ -920,6 +927,7 @@ class rf_stairColour_results : Object,Mappable {
     @objc dynamic var in_stock : Int = 0
     @objc dynamic var specialOrder: Int = 0
     var Office_location_ids = List<Int>()
+    var special_order_location_ids = List<Int>()
     @objc dynamic var last_updated_date : String?
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -939,6 +947,12 @@ class rf_stairColour_results : Object,Mappable {
                     let realmList = List<Int>()
                     realmList.append(objectsIn: officeLocationIdsArray)
                     self.Office_location_ids = realmList
+                }
+        
+        if let specialOderIdArray = map["special_order_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: specialOderIdArray)
+                    self.special_order_location_ids = realmList
                 }
     }
     
@@ -1038,6 +1052,7 @@ class rf_master_product_package :Object, Mappable {
     @objc dynamic var stair_Msrp :Double = 0.0
     @objc dynamic var last_updated_date : String?
     @objc dynamic var stairProductId: Int = 0
+    var Office_location_ids = List<Int>()
     
     required convenience init?(map: ObjectMapper.Map) {
         self.init()
@@ -1064,6 +1079,11 @@ class rf_master_product_package :Object, Mappable {
         stair_Msrp <- map["stair_msrp"]
         last_updated_date <- map["last_updated_date"]
         stairProductId <- map["stair_product_id"]
+        if let officeLocationIdsArray = map["office_location_ids"].currentValue as? [Int] {
+                    let realmList = List<Int>()
+                    realmList.append(objectsIn: officeLocationIdsArray)
+                    self.Office_location_ids = realmList
+                }
     }
     
 }
@@ -1725,7 +1745,8 @@ class rf_External_Entity_Key: Object, Mappable
     }
 }
 
-class rf_completed_room: Object{
+class rf_completed_room: Object
+{
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var room_id: Int = 0
     @objc dynamic var is_custom_room: Int = 0

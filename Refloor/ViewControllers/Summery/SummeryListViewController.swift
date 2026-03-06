@@ -1596,12 +1596,20 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             if tableValues[cell].room_name!.contains("STAIRS") && tableValues[cell].room_area == 0.0
             {
                 
-                var InOfficeLocation = false
+                var isSpecialOrder = false
+                var isMarketOutOfStock = false
                 for officeids in self.stairColourNamesArray[index].Office_location_ids
                 {
                     if officeids == officeLocationId
                     {
-                        InOfficeLocation = true
+                        isSpecialOrder = true
+                    }
+                }
+                for marketIds in self.stairColourNamesArray[index].Office_location_ids
+                {
+                    if marketIds == officeLocationId
+                    {
+                        isMarketOutOfStock = true
                     }
                 }
 //                if self.stairColourNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */&& InOfficeLocation == true
@@ -1613,11 +1621,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 ////                    return
 //                }
                 
-                if self.stairColourNamesArray[index].in_stock == 0
-                {
-                    if self.stairColourNamesArray[index].specialOrder == 1
-                    {
-                       if InOfficeLocation
+//                if self.stairColourNamesArray[index].in_stock == 0
+//                {
+//                    if self.stairColourNamesArray[index].specialOrder == 1
+//                    {
+                       if isSpecialOrder && isMarketOutOfStock || isMarketOutOfStock && !isSpecialOrder
                         {
                            let installer = AppointmentPaymentSummaryViewController.initialization()!
                            installer.isOutOfstock = true
@@ -1634,27 +1642,28 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             let roomId = self.tableValues[cell].room_id ?? 0
                             self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
                             self.loadRefreshData()
+                            AppDelegate.appoinmentslData.isSpecialOrder = true
                         }
-                    }
-                    else
-                    {
-                        let installer = AppointmentPaymentSummaryViewController.initialization()!
-                        installer.isOutOfstock = true
-                        self.present(installer, animated: true, completion: nil)
-                    }
-                }
-                
-                else //(self.stairColourNamesArray[index].specialOrder == 0 && InOfficeLocation == false) || (self.stairColourNamesArray[index].specialOrder == 1)
-                {
-                    stairIndex = index
-                    let selectedColor = self.stairColourNamesArray[index].color ?? ""
-                    let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
-                    let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
-                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
-                    let roomId = self.tableValues[cell].room_id ?? 0
-                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
-                    self.loadRefreshData()
-                }
+//                    }
+//                    else
+//                    {
+//                        let installer = AppointmentPaymentSummaryViewController.initialization()!
+//                        installer.isOutOfstock = true
+//                        self.present(installer, animated: true, completion: nil)
+//                    }
+//                }
+//                
+//                else //(self.stairColourNamesArray[index].specialOrder == 0 && InOfficeLocation == false) || (self.stairColourNamesArray[index].specialOrder == 1)
+//                {
+//                    stairIndex = index
+//                    let selectedColor = self.stairColourNamesArray[index].color ?? ""
+//                    let selectedColorUpCharge = self.stairColourNamesArray[index].color_upcharge
+//                    let selectedMaterialFileName = self.getStairImageName(atIndex: index + 1)
+//                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+//                    let roomId = self.tableValues[cell].room_id ?? 0
+//                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
+//                    self.loadRefreshData()
+//                }
 //                if (self.stairColourNamesArray[index].specialOrder == 1) //&& InOfficeLocation == false
 //                {
 //                    stairIndex = index
@@ -1825,19 +1834,27 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 
                 
                 let selectedColor = self.floorColorNamesArray[index].color ?? ""
-                var InOfficeLocation = false
-                for officeids in self.floorColorNamesArray[index].Office_location_ids
+                var isSpecialOrder = false
+                var isMarketOutOfStock = false
+                for officeids in self.floorColorNamesArray[index].special_order_location_ids
                 {
                     if officeids == officeLocationId
                     {
-                        InOfficeLocation = true
+                        isSpecialOrder = true
                     }
                 }
-                if self.floorColorNamesArray[index].in_stock == 0
+                for marketIds in self.floorColorNamesArray[index].Office_location_ids
                 {
-                    if self.floorColorNamesArray[index].specialOrder == 1
+                    if marketIds == officeLocationId
                     {
-                       if InOfficeLocation
+                        isMarketOutOfStock = true
+                    }
+                }
+//                if self.floorColorNamesArray[index].in_stock == 0
+//                {
+//                    if self.floorColorNamesArray[index].specialOrder == 1
+//                    {
+                       if isSpecialOrder && isMarketOutOfStock || isMarketOutOfStock && !isSpecialOrder
                         {
                            let installer = AppointmentPaymentSummaryViewController.initialization()!
                            installer.isOutOfstock = true
@@ -1862,14 +1879,15 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             }
                             self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0,isGlueDown:isGlueDown)
                             self.loadRefreshData()
-                        }
-                    }
-                    else
-                    {
-                        let installer = AppointmentPaymentSummaryViewController.initialization()!
-                        installer.isOutOfstock = true
-                        self.present(installer, animated: true, completion: nil)
-                    }
+                            AppDelegate.appoinmentslData.isSpecialOrder = true
+//                        }
+//                    }
+//                    else
+//                    {
+//                        let installer = AppointmentPaymentSummaryViewController.initialization()!
+//                        installer.isOutOfstock = true
+//                        self.present(installer, animated: true, completion: nil)
+//                    }
                 }
 //                if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
 //                {
@@ -1877,26 +1895,26 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //                    installer.isOutOfstock = true
 //                    self.present(installer, animated: true, completion: nil)
 //                }
-                else //if (self.floorColorNamesArray[index].specialOrder == 0 && InOfficeLocation == false) || self.floorColorNamesArray[index].specialOrder == 1
-                {
-                    roomIndex = index
-                    let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
-                    let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
-                    let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
-                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
-                    let roomId = self.tableValues[cell].room_id ?? 0
-                    var isGlueDown = false
-                    if self.floorColorNamesArray[index].glueDown == 0
-                    {
-                        isGlueDown = false
-                    }
-                    else
-                    {
-                        isGlueDown = true
-                    }
-                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0,isGlueDown:isGlueDown)
-                    self.loadRefreshData()
-                }
+//                else //if (self.floorColorNamesArray[index].specialOrder == 0 && InOfficeLocation == false) || self.floorColorNamesArray[index].specialOrder == 1
+//                {
+//                    roomIndex = index
+//                    let NotOfficeLocation = self.floorColorNamesArray[index].Office_location_ids.filter({$0 == officeLocationId})
+//                    let selectedColorUpCharge = self.floorColorNamesArray[index].color_upcharge
+//                    let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+//                    //let materialImageUrl = imageUrlInFile(byName: selectedMaterialFileName)
+//                    let roomId = self.tableValues[cell].room_id ?? 0
+//                    var isGlueDown = false
+//                    if self.floorColorNamesArray[index].glueDown == 0
+//                    {
+//                        isGlueDown = false
+//                    }
+//                    else
+//                    {
+//                        isGlueDown = true
+//                    }
+//                    self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0,isGlueDown:isGlueDown)
+//                    self.loadRefreshData()
+//                }
 //                else if (self.floorColorNamesArray[index].specialOrder == 1) //&& InOfficeLocation == false
 //                {
 //                    roomIndex = index
@@ -1919,12 +1937,20 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         else if tag == 3
         {
             roomIndex = index
-            var InOfficeLocation = false
+            var isSpecialOrder = false
+            var isMarketOutOfStock = false
             for officeids in self.floorColorNamesArray[index].Office_location_ids
             {
                 if officeids == officeLocationId
                 {
-                    InOfficeLocation = true
+                    isSpecialOrder = true
+                }
+            }
+            for marketIds in self.floorColorNamesArray[index].Office_location_ids
+            {
+                if marketIds == officeLocationId
+                {
+                    isMarketOutOfStock = true
                 }
             }
            // if self.floorColorNamesArray[index].specialOrder == 0 /*&& self.stairColourNamesArray[index].in_stock == 0 */ && InOfficeLocation == true
@@ -1933,11 +1959,11 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //                installer.isOutOfstock = true
 //                self.present(installer, animated: true, completion: nil)
 //            }
-                if self.floorColorNamesArray[index].in_stock == 0
-                {
-                    if self.floorColorNamesArray[index].specialOrder == 1
-                    {
-                       if InOfficeLocation
+//                if self.floorColorNamesArray[index].in_stock == 0
+//                {
+//                    if self.floorColorNamesArray[index].specialOrder == 1
+//                    {
+                       if isSpecialOrder && isMarketOutOfStock || isMarketOutOfStock && !isSpecialOrder
                         {
                            let installer = AppointmentPaymentSummaryViewController.initialization()!
                            installer.isOutOfstock = true
@@ -1954,30 +1980,31 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
                             self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
                             self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
-                        }
-                    }
-                    else
-                    {
-                        let installer = AppointmentPaymentSummaryViewController.initialization()!
-                        installer.isOutOfstock = true
-                        self.present(installer, animated: true, completion: nil)
-                    }
+                            AppDelegate.appoinmentslData.isSpecialOrder = true
+//                        }
+//                    }
+//                    else
+//                    {
+//                        let installer = AppointmentPaymentSummaryViewController.initialization()!
+//                        installer.isOutOfstock = true
+//                        self.present(installer, animated: true, completion: nil)
+//                    }
                 }
-            else //if (self.floorColorNamesArray[index].specialOrder == 0  && InOfficeLocation == false) || (self.floorColorNamesArray[index].specialOrder == 1)
-            {
-                roomIndex = index
-                applyAllBtn.isUserInteractionEnabled = true
-                applyAllBtn.setTitleColor(.white, for: .normal)
-                applyAllSelectColorTxtFld.text = item
-                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
-                applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
-                self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
-                self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
-                self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
-                
-               
-                
-            }
+//            else //if (self.floorColorNamesArray[index].specialOrder == 0  && InOfficeLocation == false) || (self.floorColorNamesArray[index].specialOrder == 1)
+//            {
+//                roomIndex = index
+//                applyAllBtn.isUserInteractionEnabled = true
+//                applyAllBtn.setTitleColor(.white, for: .normal)
+//                applyAllSelectColorTxtFld.text = item
+//                let selectedMaterialFileName = self.getFllorImageName(atIndex: index)
+//                applyAllSelectColorImageView.image =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: selectedMaterialFileName)
+//                self.applyAllSelectedColour = self.floorColorNamesArray[index].color ?? ""
+//                self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
+//                self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
+//                
+//               
+//                
+//            }
             
             
 //            if (self.floorColorNamesArray[index].specialOrder == 1) && InOfficeLocation == false

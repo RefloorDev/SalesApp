@@ -193,6 +193,7 @@ class UserData: NSObject
     var user_name :String?
     var token: String?
     var restrict_geolocation: Int?
+    
     public static func isLogedIn() -> Bool
     {
         return UserDefaults.standard.bool(forKey: "User_isLogedIn")
@@ -213,6 +214,7 @@ class UserData: NSObject
         UserDefaults.standard.set(loginDate, forKey: "User_isLogedInDate")
     }
     
+    
     public static func getLoggedInDate() -> NSDate
     {
         let date = UserDefaults.standard.object(forKey: "User_isLogedInDate") as! Date
@@ -226,16 +228,19 @@ class UserData: NSObject
         self.user_name = userName
         self.token = token
         self.restrict_geolocation = restrict_geolocation
+        
         UserDefaults.standard.set(userID, forKey: "User_ID")
         UserDefaults.standard.set(userName, forKey: "User_Name")
         UserDefaults.standard.set(token, forKey: "User_Token")
         UserDefaults.standard.set(restrict_geolocation, forKey: "restrict_geolocation")
+        
     }
     override init() {
         self.user_id = UserDefaults.standard.integer(forKey: "User_ID")
         self.user_name = UserDefaults.standard.string(forKey: "User_Name")
         self.token = UserDefaults.standard.string(forKey: "User_Token")
         self.restrict_geolocation = UserDefaults.standard.integer(forKey: "restrict_geolocation")
+        
     }
     
 }
@@ -249,6 +254,7 @@ class UserLoginDataValue: Mappable
     var can_view_phone_number : Int?
     var company_logo_url : String?
     var restrict_geolocation: Int?
+    var qrCodeReferral:String?
     
     required init?(map: ObjectMapper.Map)
     {
@@ -261,6 +267,7 @@ class UserLoginDataValue: Mappable
         can_view_phone_number <- map["can_view_phone_number"]
         company_logo_url <- map["company_logo_url"]
         restrict_geolocation <- map["restrict_geolocation"]
+        qrCodeReferral <- map["referral_qr_code_url"]
         
     }
 }
@@ -472,6 +479,8 @@ class AppoinmentDataValue:Object,Mappable
     var appointmentStatus:AppointmentStatus!
     var finance_provider:String?
     var isHomeOwnersPrsent:Bool?
+    var isSpecialOrder:Bool?
+    var FinanceProviderId:Int?
     
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -1371,6 +1380,7 @@ class PaymentPlanValue: Mappable
     var stair_cost: Double?
     var stair_msrp: Double?
     var stairProductId: Int?
+    var officeLocationIds: [Int]?
     required init?(map: ObjectMapper.Map){
     }
 //    init(costPerSqft:Double)
@@ -1403,6 +1413,7 @@ class PaymentPlanValue: Mappable
         self.stair_cost = paymentPlan.stair_cost
         self.stair_msrp = paymentPlan.stair_Msrp
         self.stairProductId = paymentPlan.stairProductId
+        self.officeLocationIds = Array(paymentPlan.Office_location_ids)
     }
     
     func mapping(map: ObjectMapper.Map) {

@@ -1280,15 +1280,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                         self.proceedWithNetworkStrength(networkMessage: networkMessage, customerAndRoomData: customerAndRoomData, appointmentId: appointmentId, isNetwork: isNetwork)
                     }
                 }
-                
-
                 }
-
-                
-                
-                
-            
-            
         }
         else
         {
@@ -1432,8 +1424,6 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
     {
         DispatchQueue.main.async {
         HttpClientManager.SharedHM.showhideHUD(viewtype: .SHOW , title: "Creating Sale Order")
-        
-            
             var iscustomerAndRoomSuccess = iscustomerAndRoomSuccess
             var parametersAdditionalComments:[String:Any] = [:]
             let appoint_id = AppointmentData().appointment_id ?? 0
@@ -1450,7 +1440,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                     }
                     
                     
-                    self.alert(message ?? "", [yes])
+                    self.alert(message, [yes])
                 }
                 
                 else if success == "Failed"
@@ -1462,7 +1452,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                     }
                     let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                     
-                    self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                    self.alert((message), [yes,no])
                 }
                 else if success == "false"
                 {
@@ -1473,7 +1463,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                     }
                     let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
                     
-                    self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                    self.alert((message), [yes,no])
                 }
                 
                 else if ((success ?? "") == "AuthFailed" || ((success ?? "") == "authfailed"))
@@ -1484,7 +1474,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                         self.fourceLogOutbuttonAction()
                     }
                     
-                    self.alert((message) ?? AppAlertMsg.serverNotReached, [yes])
+                    self.alert((message), [yes])
                     
                 }
                 else

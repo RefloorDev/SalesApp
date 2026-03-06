@@ -1074,7 +1074,8 @@ extension UIViewController:OrderStatusViewDelegate
         
     };
     
-    func DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -2,stairColour:Results<rf_stairColour_results>? = nil, floorColor:Results<rf_floorColour_results>? = nil,isColour:Bool = false)
+    func
+    DropDownDefaultfunctionForTableCell(_ view:UIView,_ width:CGFloat,_ values:[String], _ selectedIntex:Int,delegate:DropDownForTableViewCellDelegate?,tag:Int,cell:Int,selectedIndex:Int = -2,stairColour:Results<rf_stairColour_results>? = nil, floorColor:Results<rf_floorColour_results>? = nil,isColour:Bool = false)
     {
         let dropDown = DropDown()
         let appearance = DropDown.appearance()
@@ -1103,12 +1104,20 @@ extension UIViewController:OrderStatusViewDelegate
                     }
                     else if stairArray != nil
                     {
-                        var InOfficeLocation = false
-                        for officeids in stairArray![index].Office_location_ids
+                        var isSpecialOrder = false
+                        var isMarketSegmentOutOfStock = false
+                        for officeids in stairArray![index].special_order_location_ids
                         {
                             if officeids == officeLocationId
                             {
-                                InOfficeLocation = true
+                                isSpecialOrder = true
+                            }
+                        }
+                        for marketIds in stairArray![index].Office_location_ids
+                        {
+                            if marketIds == officeLocationId
+                            {
+                                isMarketSegmentOutOfStock = true
                             }
                         }
 //                        if (stairArray![index].specialOrder == 0  && InOfficeLocation == false && stairArray![index].in_stock == 0)
@@ -1122,26 +1131,33 @@ extension UIViewController:OrderStatusViewDelegate
 //                        }
                         
                         
-                        if stairArray![index].in_stock == 0
+//                        if stairArray![index].in_stock == 0
+//                        {
+//                            if stairArray![index].specialOrder == 1
+//                            {
+//                                if InOfficeLocation
+//                                {
+//                                    cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                                }
+//                            }
+//                            else
+//                            {
+//                                cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                            }
+//                        }
+//                        else//if  stairArray![index].specialOrder == 1
+//                        {
+//                            cell.optionLabel.textColor = UIColor.black
+//                            
+//                        }
+                        if isSpecialOrder && isMarketSegmentOutOfStock || isMarketSegmentOutOfStock && !isSpecialOrder
                         {
-                            if stairArray![index].specialOrder == 1
-                            {
-                                if InOfficeLocation
-                                {
-                                    cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                                }
-                            }
-                            else
-                            {
-                                cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                            }
+                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                         }
-                        else//if  stairArray![index].specialOrder == 1
+                        else
                         {
                             cell.optionLabel.textColor = UIColor.black
-                            
                         }
-                        
                         
                         
                         
@@ -1150,12 +1166,20 @@ extension UIViewController:OrderStatusViewDelegate
                     }
                     else if floorArray != nil
                     {
-                        var InOfficeLocation = false
-                        for officeids in floorArray![index].Office_location_ids
+                        var isSpecialOrder = false
+                        var isMarketSegmentOutOfStock = false
+                        for officeids in floorArray![index].special_order_location_ids
                         {
                             if officeids == officeLocationId
                             {
-                                InOfficeLocation = true
+                                isSpecialOrder = true
+                            }
+                        }
+                        for marketIds in floorArray![index].Office_location_ids
+                        {
+                            if marketIds == officeLocationId
+                            {
+                                isMarketSegmentOutOfStock = true
                             }
                         }
 //                        if (floorArray![index].specialOrder == 0 && InOfficeLocation == false && floorArray![index].in_stock == 0)
@@ -1171,23 +1195,32 @@ extension UIViewController:OrderStatusViewDelegate
 //                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
 //                        }
                         
-                        if floorArray![index].in_stock == 0
+//                        if floorArray![index].in_stock == 0
+//                        {
+//                            if floorArray![index].specialOrder == 1
+//                            {
+//                                if InOfficeLocation
+//                                {
+//                                    cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                                }
+//                            }
+//                            else
+//                            {
+//                                cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+//                            }
+//                        }
+//                        
+//                        
+//                        
+//                        else
+//                        {
+//                            cell.optionLabel.textColor = UIColor.black
+//                        }
+                        
+                        if isSpecialOrder && isMarketSegmentOutOfStock || isMarketSegmentOutOfStock && !isSpecialOrder
                         {
-                            if floorArray![index].specialOrder == 1
-                            {
-                                if InOfficeLocation
-                                {
-                                    cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                                }
-                            }
-                            else
-                            {
-                                cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-                            }
+                            cell.optionLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
                         }
-                        
-                        
-                        
                         else
                         {
                             cell.optionLabel.textColor = UIColor.black
@@ -1204,7 +1237,9 @@ extension UIViewController:OrderStatusViewDelegate
                     {
                         
                         cell.optionLabel.textColor = UIColor.black
-                    }else{
+                    }
+                    else
+                    {
                         
                         cell.optionLabel.textColor = UIColor.gray
                     }
@@ -1345,6 +1380,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
         
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 600, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+//        qrCodeButtn.tintColor = .white
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
+        
     }
     @objc func resetButtonAction()
     {
@@ -1395,6 +1444,52 @@ extension UIViewController:OrderStatusViewDelegate
                         let pdfImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
                         UIGraphicsEndImageContext()
                         self?.saveImage(imageName: "logoImage.png", image: pdfImage)
+                    }
+                    
+                }
+            }
+        }
+    }
+    
+    func downloadQRImage(from url: URL,QRCodeReferralString:String) {
+        print("Download Started")
+        getData(from: url) { data, response, error in
+            guard let data = data, error == nil else { return }
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download Finished")
+            // always update the UI from the main thread
+            DispatchQueue.main.async() { [weak self] in
+            
+                if let image = UIImage(data: data){
+//                    let imageData:NSData = image.jpegData(compressionQuality: 0.5)! as NSData
+//                  if  let imageCompression = UIImage(data: imageData as Data)
+//                    {
+//                if let imageData = NSData(base64Encoded: companylogoString, options: [])
+//                {
+//                    let image = UIImage(data: imageData as Data)
+                    self?.saveImage(imageName: "QRCode.png", image: image)
+                 // }
+                }
+            else{
+                    if let data = try? Data.init(contentsOf: url){
+                        let pdfData = data as CFData
+                        let provider:CGDataProvider = CGDataProvider(data: pdfData)!
+                        let pdfDoc:CGPDFDocument = CGPDFDocument(provider)!
+                        let pdfPage:CGPDFPage = pdfDoc.page(at: 1)!
+                        var pageRect:CGRect = pdfPage.getBoxRect(.mediaBox)
+                        pageRect.size = CGSize(width:pageRect.size.width, height:pageRect.size.height)
+                        print("\(pageRect.width) by \(pageRect.height)")
+                        UIGraphicsBeginImageContext(pageRect.size)
+                        let context:CGContext = UIGraphicsGetCurrentContext()!
+                        context.saveGState()
+                        context.translateBy(x: 0.0, y: pageRect.size.height)
+                        context.scaleBy(x: 1.0, y: -1.0)
+                        context.concatenate(pdfPage.getDrawingTransform(.mediaBox, rect: pageRect, rotate: 0, preserveAspectRatio: true))
+                        context.drawPDFPage(pdfPage)
+                        context.restoreGState()
+                        let pdfImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+                        UIGraphicsEndImageContext()
+                        self?.saveImage(imageName: "QRCode.png", image: pdfImage)
                     }
                     
                 }
@@ -1573,7 +1668,7 @@ extension UIViewController:OrderStatusViewDelegate
         btnnext.addTarget(self, action: #selector(nextAction), for: .touchUpInside)
         navView.addSubview(btnnext)
         
-        let image = UIImageView(frame: CGRect(x:  UIScreen.main.bounds.width - 580, y: 40, width: 128, height: 45))
+        let image = UIImageView(frame: CGRect(x:  UIScreen.main.bounds.width - 680, y: 40, width: 128, height: 45))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -1601,6 +1696,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.imageView?.contentMode = .center
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
+        
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 510, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+//        qrCodeButtn.tintColor = .white
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
     }
     
     
@@ -1738,7 +1847,7 @@ extension UIViewController:OrderStatusViewDelegate
         nameLabel.font = UIFont(name: "Avenir-Black", size: 35)
         navView.addSubview(nameLabel)
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 220, y: 40, width: 128, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 300, y: 40, width: 128, height: 48))
         image.contentMode = .scaleAspectFit
         if let savedLogoImage =  ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:"logoImage"){
             image.image = savedLogoImage
@@ -1758,6 +1867,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.imageView?.contentMode = .center
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
+        
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 150, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+        //qrCodeButtn.tintColor = .clear
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.clear.cgColor//UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
         
     }
     
@@ -1894,6 +2017,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
         
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 538, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+//        qrCodeButtn.tintColor = .white
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
+        
     }
     
     @objc func insallerSubmitBtnAction(sender:UIButton)
@@ -1931,7 +2068,7 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(nameLabel)
         
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 369, y: 40, width: 126, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 469, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -1970,6 +2107,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
         
+        
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 300, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+//        qrCodeButtn.tintColor = .white
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
     }
     
     @objc func roomVOButtonTapped() {
@@ -1985,6 +2136,12 @@ extension UIViewController:OrderStatusViewDelegate
             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             self.alert( "Please check your connection and try again", [yes,no])
         }
+    }
+    
+    @objc func QRCodeBtnTapped()
+    {
+        let qrCodeScanner = QRCodeScannerViewController.initialization()!
+        self.navigationController?.pushViewController(qrCodeScanner, animated: true)
     }
     
     func setNavigationPackageBarbackAndlogo(with name:String)
@@ -2010,7 +2167,7 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(nameLabel)
         
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 349, y: 40, width: 126, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 449, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -2048,6 +2205,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.imageView?.contentMode = .center
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
+        
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 279, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+//        qrCodeButtn.tintColor = .white
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
     }
     
     func setNavigationBarbaclogoAndStatus(with name:String)
@@ -2073,7 +2244,7 @@ extension UIViewController:OrderStatusViewDelegate
         navView.addSubview(nameLabel)
         
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 455, y: 40, width: 126, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 555, y: 40, width: 126, height: 48))
         image.contentMode = .scaleAspectFit
         if BASE_URL == "https://odoostage.myx.ac/api/"
         {
@@ -2116,6 +2287,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.imageView?.contentMode = .center
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
+        
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 385, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+//        qrCodeButtn.tintColor = .white
+//        qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
         
     }
     @objc func OrderstatusBarButtonAction()
@@ -2241,6 +2426,7 @@ extension UIViewController:OrderStatusViewDelegate
                                 //UserDefaults.standard.set(false, forKey: "isAutoLogout")
                                 BASE_URL = ""
                                 UserDefaults.standard.set(BASE_URL, forKey: "BASE_URL")
+                                UserDefaults.standard.removeObject(forKey: "SavedQRCodeImage")
                                 //self.deleteAllAppointments()
                                 self.navigationController?.pushViewController(LoginViewController.initialization()!, animated: true)
                                 
@@ -2395,7 +2581,7 @@ extension UIViewController:OrderStatusViewDelegate
         viewLogButton.addTarget(self, action: #selector(viewLogbuttonAction), for: .touchUpInside)
         navView.addSubview(viewLogButton)
         
-        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 468, y: 40, width: 128, height: 48))
+        let image = UIImageView(frame: CGRect(x: UIScreen.main.bounds.width - 568, y: 40, width: 128, height: 48))
         image.contentMode = .scaleAspectFit
         //image.translatesAutoresizingMaskIntoConstraints = false
         image.backgroundColor = UIColor.clear
@@ -2429,6 +2615,20 @@ extension UIViewController:OrderStatusViewDelegate
         roomVOButton.imageView?.contentMode = .center
         roomVOButton.addTarget(self, action: #selector(roomVOButtonTapped), for: .touchUpInside)
         navView.addSubview(roomVOButton)
+        
+        //QRCode
+        
+        let qrCodeButtn = UIButton(frame: CGRect(x: UIScreen.main.bounds.width - 393, y: 40, width: 52, height: 52))
+        qrCodeButtn.setBackgroundImage(UIImage(named: "QRCode"), for: .normal)
+        //qrCodeButtn.tintColor = .white
+        //qrCodeButtn.backgroundColor = UIColor().colorFromHexString("#292562")
+        qrCodeButtn.layer.cornerRadius = roomVOButton.frame.size.width / 2 // Make it a circle
+        qrCodeButtn.layer.borderWidth = 1 // Set border width
+        qrCodeButtn.layer.borderColor = UIColor.white.cgColor // Set border color
+        qrCodeButtn.clipsToBounds = true
+        qrCodeButtn.imageView?.contentMode = .center
+        qrCodeButtn.addTarget(self, action: #selector(QRCodeBtnTapped), for: .touchUpInside)
+        navView.addSubview(qrCodeButtn)
     }
     
     func setStatusBarBackgroundColor(color: UIColor) {
@@ -4251,19 +4451,42 @@ extension UIViewController:OrderStatusViewDelegate
         let appointmentId = AppointmentData().appointment_id ?? 0
         do{
             let realm = try Realm()
-            try realm.write{
-                
-             let dict:[String:Any] = [ "appointment_id": appointmentId,
-                                      "reqest_title": requestTitle.rawValue,
-                                      "request_url": requestUrl,
-                                      "request_parameter" : requestParameter.JsonString(),
-                                      "request_type" : requestType.rawValue,
-                                      "sync_status" : false,
-                                      "image_name": imageName]
-                print("Dictionary to be created/updated in Realm: \(dict)")
-                print("Dictionary to be created/updated in Realm1: \(rf_Completed_Appointment_Request.self)")
-                realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
+            var resultExistingObject : Results<rf_Completed_Appointment_Request>
+            var existingObject: rf_Completed_Appointment_Request!
+            
+            if requestTitle.rawValue != "Sales_Images"
+            {
+                 resultExistingObject = realm.objects(rf_Completed_Appointment_Request.self)
+                    .filter("appointment_id == %@ AND reqest_title == %@", appointmentId, requestTitle.rawValue)
+                    //.first
+                if resultExistingObject.count > 0
+                {
+                    return
+                }
+                existingObject = resultExistingObject.first
+               if existingObject?.sync_status == true
+                   {
+                   return
+               }
             }
+            
+             
+            let requestId = existingObject?.id ?? UUID().uuidString
+                try realm.write{
+                    
+                    let dict:[String:Any] = [ "id": requestId,
+                                              "appointment_id": appointmentId,
+                                              "reqest_title": requestTitle.rawValue,
+                                              "request_url": requestUrl,
+                                              "request_parameter" : requestParameter.JsonString(),
+                                              "request_type" : requestType.rawValue,
+                                              "sync_status" : false,
+                                              "image_name": imageName]
+                    print("Dictionary to be created/updated in Realm: \(dict)")
+                    print("Dictionary to be created/updated in Realm1: \(rf_Completed_Appointment_Request.self)")
+                    realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .modified )
+                }
+            
         }catch{
             print(RealmError.initialisationFailed.rawValue)
         }
@@ -4443,6 +4666,7 @@ extension UIViewController:OrderStatusViewDelegate
                     disArray.append(disDict)
                 }
                 dictionary["discount_history_line"] = disArray
+                dictionary["finance_provider_id"] = AppDelegate.appoinmentslData.FinanceProviderId
                 return dictionary
             }
         }catch{
