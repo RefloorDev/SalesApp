@@ -33,6 +33,10 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             //appointmetslData?.finance_provider = "hunter"
             
         }
+        if isOneAndFund
+        {
+            self.isOneAndFund = false
+        }
         else
         {
             self.isHunter = false
@@ -118,6 +122,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     var imagePicker: CaptureImage!
     var isHunter = false
     var isVersatile = false
+    var isOneAndFund = false
     var downOrFinal:Double = 0
     var totalAmount:Double = 0
     var paymentPlan:PaymentPlanValue?
@@ -286,6 +291,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         applicant.promotionCodeId = self.promotionCodeId
         applicant.stairPrice = stairPrice
         applicant.excluded_amount_promotion = excluded_amount_promotion
+        AppDelegate.appoinmentslData.FinanceProviderId = 0
         self.navigationController?.pushViewController(applicant, animated: true)
     }
     @IBAction func proceedBtnAction(_ sender: UIButton)
@@ -334,8 +340,8 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         let customer = AppDelegate.appoinmentslData!
         let primaryApplicantAddress:[String:Any] = ["addressLine1":customer.street!,"addressLine2":customer.street2!,"city":customer.city!,"state":customer.state!,"postalCode":customer.zip!]
         let jointApplicantAddress:[String:Any] = ["addressLine1":customer.co_applicant_address ?? "","addressLine2":customer.co_applicant_city ?? "","city":customer.co_applicant_city ?? "","state":customer.co_applicant_state  ?? "","postalCode":customer.co_applicant_zip ?? ""]
-        let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "","dateOfBirth":(isHunter ? nil : ""),"email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":((isHunter && customer.mobile == "") ? customer.phone: customer.mobile ?? ""),"workPhone":"","address":primaryApplicantAddress]
-        let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "","dateOfBirth": (isHunter ? nil : ""),"email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":((isHunter && customer.co_applicant_phone == "") ? customer.co_applicant_secondary_phone: customer.co_applicant_phone ?? ""),"workPhone":"","address":jointApplicantAddress]
+        let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "",/*"dateOfBirth":(isHunter ? nil : ""),*/"email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":((isHunter && customer.mobile == "") ? customer.phone: customer.mobile ?? ""),"workPhone":"","address":primaryApplicantAddress]
+        let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "",/*/"dateOfBirth": (isHunter ? nil : ""),*/"email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":((isHunter && customer.co_applicant_phone == "") ? customer.co_applicant_secondary_phone: customer.co_applicant_phone ?? ""),"workPhone":"","address":jointApplicantAddress]
         let salesPerson = customer.sales_person?.split(separator: " ").map { String($0) }
         let salesPersonFirstName = salesPerson?.first
         let salesPersonLastName = salesPerson?.count ?? 0 > 1 ? salesPerson?[1] : nil
@@ -366,7 +372,15 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             }
             
         }
-        else
+        if isOneAndFund
+        {
+            let oneAndFundArray = Array(matchedExternalCredentials.filter({$0.provider == "one_and_fund"}))
+            if oneAndFundArray.count > 0
+            {
+                oneAndFundCall(parameter: parameter, customer: customer, url: (oneAndFundArray.first?.url)!, apiKey: (oneAndFundArray.first?.apiKey)!, entityKey: (oneAndFundArray.first?.entityKey)!)
+            }
+        }
+        else if isVersatile
         {
             let versatileArray = Array(matchedExternalCredentials.filter({$0.provider == "versatile"}))
             if customer.externalEntityKey.count > 0
@@ -424,6 +438,53 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 self.navigationController?.pushViewController(versatile, animated: true)
             }
         }
+    }
+    
+    
+    func oneAndFundCall(parameter:[String:Any], customer:AppoinmentDataValue,url:String,apiKey:String,entityKey:String)
+    {
+//        HttpClientManager.SharedHM.hunterAPi(url: url, apiKey: apiKey, entityKey: entityKey,parameter: parameter) { success,url in
+//            if success == "redirect"
+//            {
+                let versatile = VersatileViewController.initialization()!
+                versatile.creditApplicationDelegate = self
+                versatile.url = url //?? ""
+                versatile.downOrFinal = self.downOrFinal
+                versatile.totalAmount = self.totalAmount
+                versatile.paymentPlan = self.paymentPlan
+                versatile.paymentPlanValue = self.paymentPlanValue
+                versatile.paymentOptionDataValue = self.paymentOptionDataValue
+                versatile.drowingImageID = self.drowingImageID
+                versatile.area = self.area
+                versatile.downPaymentValue = self.downPaymentValue
+                versatile.finalpayment = self.finalpayment
+                versatile.financePayment = self.financePayment
+                versatile.selectedPaymentMethord = self.selectedPaymentMethord
+                versatile.downpayment = self.downpayment
+                versatile.appointmentId = customer.id!
+                versatile.isHunter = true
+                versatile.finalpayment = self.finalpayment
+                versatile.financePayment = self.financePayment
+                versatile.selectedPaymentMethord = self.selectedPaymentMethord
+                versatile.downpayment = self.downpayment
+                versatile.stairPrice = self.stairPrice
+                versatile.excluded_amount_promotion = self.excluded_amount_promotion
+                
+                versatile.savings = self.savings
+                versatile.promotionCodeId = self.promotionCodeId
+                versatile.adminFeeStatus = self.adminFeeStatus
+                versatile.coapplicantSkiip = self.coapplicantSkiip
+                versatile.minSalePrice = self.minSalePrice
+                versatile.roomName = self.roomName
+                versatile.adjustmentValue = self.adjustmentValue
+                versatile.packagePlanName = self.packagePlanName
+                if let customer = AppDelegate.appoinmentslData
+                {
+                    versatile.isCoAppSkiped = customer.co_applicant_skipped ?? 0
+                }
+                self.navigationController?.pushViewController(versatile, animated: true)
+            //}
+       // }
     }
     
     func versatileCall(parameter:[String:Any], customer:AppoinmentDataValue,url:String,apiKey:String,entityKey:String)
@@ -517,6 +578,22 @@ extension FinanceViewController:UITableViewDelegate,UITableViewDataSource
             }
 
         }
+        else if matchedExternalCredentials[indexPath.row].provider == "one_and_fund"
+        {
+            cell.versatileTitle.text = "One And Fund"
+            cell.versatileLogo.image = UIImage(named: "Hunter")
+            cell.versatileBtnImage.image = UIImage(named: "notSelected")
+            if isOneAndFund
+            {
+                cell.versatileStackView.backgroundColor = UIColor().colorFromHexString("#292562")
+                cell.versatileStackView.borderWidth = 2
+                cell.versatileStackView.borderColor = UIColor().colorFromHexString("#D29B3C")
+                cell.versatileBtnImage.image = UIImage(named: "selectedRound")
+                //proceedBtn.isHidden = false
+                
+                
+            }
+        }
         return cell
     }
     
@@ -525,16 +602,26 @@ extension FinanceViewController:UITableViewDelegate,UITableViewDataSource
         //let cell = tableView.dequeueReusableCell(withIdentifier: "FinanceProviderTableViewCell") as! FinanceProviderTableViewCell
         proceedBtn.isHidden =  false
         skipBtnLeadingConstraint.constant = 346
+        AppDelegate.appoinmentslData.FinanceProviderId = self.matchedExternalCredentials[indexPath.row].ext_credential_id
         //selectedIndexPath = indexPath
         if matchedExternalCredentials[indexPath.row].provider == "versatile"
         {
             self.isVersatile = true
             self.isHunter = false
+            self.isOneAndFund = false
+            //AppDelegate.appoinmentslData.FinanceProviderId = self.matchedExternalCredentials[indexPath.row].ext_credential_id
+        }
+        else if matchedExternalCredentials[indexPath.row].provider == "one_and_fund"
+        {
+            self.isVersatile = false
+            self.isHunter = false
+            self.isOneAndFund = true
         }
         else
         {
             self.isVersatile = false
             self.isHunter = true
+            self.isOneAndFund = false
         }
         self.financeProviderTblView.reloadData()
 

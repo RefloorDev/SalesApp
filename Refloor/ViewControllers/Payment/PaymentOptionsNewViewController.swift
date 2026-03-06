@@ -213,7 +213,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             stairsspecialPriceId = 0
         }
         productPaymentMethod = masterData.payment_options
-        let paymentPlans = masterData.product_plans
+        let paymentPlans = masterData.product_plans.filter({$0.Office_location_ids.contains(self.appointmentOfficeLocationId)})
         let discountCoupons = masterData.discount_coupons
         for paymentPlan in paymentPlans{
             self.paymentPlanValueDetails.append( PaymentPlanValue(paymentPlan: paymentPlan))
@@ -1327,6 +1327,20 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
 
                     return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
             }
+        }
+        else if collectionView == planCollectionView && paymentPlanValueDetails.count < 4
+        {
+            let CellWidth = 290
+            let CellCount = paymentPlanValueDetails.count
+            print("filteredData : ", paymentPlanValueDetails.count)
+//                let CellCount = paymentOptionDataValueDetail.count
+            let totalCellWidth = CellWidth * CellCount
+                let totalSpacingWidth = 20 * (CellCount - 1)
+
+            let leftInset = max(0, (collectionView.bounds.width - CGFloat(totalCellWidth + totalSpacingWidth)) / 2.0)
+                let rightInset = leftInset
+
+                return UIEdgeInsets(top: 0, left: leftInset, bottom: 0, right: rightInset)
         }
 
         return UIEdgeInsets()

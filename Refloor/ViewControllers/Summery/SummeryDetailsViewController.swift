@@ -455,7 +455,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         }
         let ara = Double(tableValue.summeryData?.room_area ?? 0)
         
-        cell.areaLabel.text = "Mearsured Area: \(ara.rounded(.awayFromZero).clean) sq.ft"
+        cell.areaLabel.text = "Measured Area: \(ara.rounded(.awayFromZero).clean) sq.ft"
         let a = Double(tableValue.summeryData?.adjusted_area ?? 0)
         
         

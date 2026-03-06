@@ -240,6 +240,25 @@ class LoginViewController: UIViewController {
                         self.downloadImage(from: url, companylogoString : company_logo_url)
                     }
                 }
+                if let qrCodeReferral_url = value?[0].qrCodeReferral{
+                    //                    if let url = URL(string: qrCodeReferral_url){
+                    //                        self.downloadQRImage(from: url, QRCodeReferralString : qrCodeReferral_url)
+                    //                    }
+                    if value?[0].qrCodeReferral != ""
+                    {
+                        self.downloadQRImage(from: URL(string: qrCodeReferral_url)! ) { image in
+                            guard let qrImage = image else { return }
+                            
+                            if let imageData = image?.pngData() {   // PNG is perfect for QR codes
+                                UserDefaults.standard.set(imageData, forKey: "SavedQRCodeImage")
+                                UserDefaults.standard.synchronize()
+                            }
+                            
+                            //print("Saved as:", savedName ?? "failed")
+                        }
+                        
+                    }
+                }
 //                let debugData = self.getDebugAptDataToUpload()
 //                if (debugData?.count)! > 0
 //                {
@@ -274,6 +293,30 @@ class LoginViewController: UIViewController {
             }
         }
     }
+    
+    
+    func downloadQRImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
+           let task = URLSession.shared.dataTask(with: url) { data, response, error in
+               if let error = error {
+                   print("Error downloading image: \(error)")
+                   completion(nil)
+                   return
+               }
+               
+               guard let data = data, let image = UIImage(data: data) else {
+                   print("Failed to convert data to UIImage")
+                   completion(nil)
+                   return
+               }
+               
+               DispatchQueue.main.async {
+                   completion(image)
+               }
+           }
+           task.resume()
+       }
+    
+    
     
 //    @IBAction func trainingAction(_ sender: UIButton) {
 //        if sender.isSelected{
