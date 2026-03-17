@@ -37,9 +37,9 @@ class QRCodeScannerViewController: UIViewController {
         if let imageData = UserDefaults.standard.data(forKey: "SavedQRCodeImage"),
            let qrImage = UIImage(data: imageData) {
             qrCodeImageView.image = qrImage
-            titleLbl.text = "READY TO REFER?"
+            titleLbl.text = "SCAN TO DOWNLOAD REFLOOR+"
             titleLbl.textColor = .white//UIColor().colorFromHexString("#A7B0BA")
-            descriptionLbl.text = "Scan this code to link your recommendation directly to our sales team.\n Quick, easy, and tracks your referral status in real-time."
+            descriptionLbl.text = "Start earning $300 for every referral!\n It’s fast, easy, and tracks your cash in real time"
             qrCodeImageView.contentMode = .scaleAspectFit
         }
         else

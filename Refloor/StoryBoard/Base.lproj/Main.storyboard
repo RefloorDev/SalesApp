@@ -15032,7 +15032,7 @@ Cgo
                                                         <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jfx-QP-raF">
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jfx-QP-raF">
                                                         <rect key="frame" x="10" y="40" width="964" height="52"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8yb-7K-2dD">
@@ -22692,7 +22692,7 @@ Cgo
                                                         <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gzo-VA-d6L">
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gzo-VA-d6L">
                                                         <rect key="frame" x="10" y="40" width="949" height="52"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qni-4f-jWU">
@@ -23176,7 +23176,7 @@ Cgo
                                 <rect key="frame" x="0.0" y="120" width="1024" height="2630"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="smp-dq-vLX">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1692"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2231"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JLo-aj-vlm">
                                                 <rect key="frame" x="35" y="130" width="954" height="100"/>
@@ -24335,7 +24335,7 @@ Cgo
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NhI-Wj-AXV">
-                                                <rect key="frame" x="35" y="1422" width="954" height="100"/>
+                                                <rect key="frame" x="35" y="1961" width="954" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sex" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dB-Rf-Z7G">
                                                         <rect key="frame" x="10" y="0.0" width="39.5" height="35"/>
@@ -24448,7 +24448,7 @@ Cgo
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lJT-5a-Lab">
-                                                <rect key="frame" x="50" y="1572" width="924" height="70"/>
+                                                <rect key="frame" x="50" y="2111" width="924" height="70"/>
                                                 <color key="backgroundColor" red="0.1616491377" green="0.14324414730000001" blue="0.3782793283" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="JY7-sR-UPK"/>
@@ -24508,7 +24508,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hfc-tR-S5F">
-                                                <rect key="frame" x="30" y="1391" width="964" height="1"/>
+                                                <rect key="frame" x="30" y="1391" width="964" height="540"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="L2j-gy-uEy"/>
@@ -37883,6 +37883,7 @@ Cg
                         <outlet property="downPaymentLbl" destination="iqA-nM-eAJ" id="E3d-gI-Q85"/>
                         <outlet property="finalPaymentLbl" destination="EhD-Id-c1J" id="ShF-S3-4Ud"/>
                         <outlet property="financeAmountLbl" destination="urP-VL-V4Z" id="cCD-LZ-t6t"/>
+                        <outlet property="outOfStockLbl" destination="cYH-ys-ZNH" id="2VJ-h5-9fS"/>
                         <outlet property="outOfStockView" destination="MDQ-Kn-rSM" id="oCx-Ij-p8d"/>
                         <outlet property="paymentView" destination="C2o-ee-6PK" id="NlP-Bj-3G5"/>
                         <outlet property="totalPriceLbl" destination="zNl-Lv-QEh" id="NGN-uY-4qD"/>
@@ -42156,13 +42157,13 @@ Quick, easy, and tracks your referral status in real-time.</string>
         <image name="uncheck" width="30" height="30"/>
         <image name="undo" width="64" height="64"/>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

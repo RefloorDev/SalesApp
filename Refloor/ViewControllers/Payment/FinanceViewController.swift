@@ -302,6 +302,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             selectRoomPopUp.versatile = self
             selectRoomPopUp.isVersatile = self.isVersatile
             selectRoomPopUp.isHunter = self.isHunter
+            selectRoomPopUp.isOneAndFund = self.isOneAndFund
             selectRoomPopUp.isdelete = false
             self.present(selectRoomPopUp, animated: true, completion: nil)
         }
@@ -377,7 +378,8 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
             let oneAndFundArray = Array(matchedExternalCredentials.filter({$0.provider == "one_and_fund"}))
             if oneAndFundArray.count > 0
             {
-                oneAndFundCall(parameter: parameter, customer: customer, url: (oneAndFundArray.first?.url)!, apiKey: (oneAndFundArray.first?.apiKey)!, entityKey: (oneAndFundArray.first?.entityKey)!)
+                let url = (oneAndFundArray.first?.url)! //"https://1look.1andfund.com"
+                oneAndFundCall( url: url)
             }
         }
         else if isVersatile
@@ -441,7 +443,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     }
     
     
-    func oneAndFundCall(parameter:[String:Any], customer:AppoinmentDataValue,url:String,apiKey:String,entityKey:String)
+    func oneAndFundCall(url:String)
     {
 //        HttpClientManager.SharedHM.hunterAPi(url: url, apiKey: apiKey, entityKey: entityKey,parameter: parameter) { success,url in
 //            if success == "redirect"
@@ -461,8 +463,8 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 versatile.financePayment = self.financePayment
                 versatile.selectedPaymentMethord = self.selectedPaymentMethord
                 versatile.downpayment = self.downpayment
-                versatile.appointmentId = customer.id!
-                versatile.isHunter = true
+                //versatile.appointmentId = customer.id!
+                versatile.isOneAndFunnd = true
                 versatile.finalpayment = self.finalpayment
                 versatile.financePayment = self.financePayment
                 versatile.selectedPaymentMethord = self.selectedPaymentMethord
@@ -581,7 +583,7 @@ extension FinanceViewController:UITableViewDelegate,UITableViewDataSource
         else if matchedExternalCredentials[indexPath.row].provider == "one_and_fund"
         {
             cell.versatileTitle.text = "One And Fund"
-            cell.versatileLogo.image = UIImage(named: "Hunter")
+            cell.versatileLogo.image = UIImage(named: "OneAndFund")
             cell.versatileBtnImage.image = UIImage(named: "notSelected")
             if isOneAndFund
             {

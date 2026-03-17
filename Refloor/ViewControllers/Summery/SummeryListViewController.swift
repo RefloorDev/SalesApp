@@ -385,31 +385,31 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         }
                         else
                         {
-                            let appointmentId = AppointmentData().appointment_id ?? 0
-                            let realm = try! Realm()
-                            if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, rooms.room_id!,appoinmentID).first {
-                                
-                                try! realm.write
-                                {
-                                    if let existingAnswer = question.rf_AnswerOFQustion.first {
-                                        let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
-                                        
-                                        let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
-                                        newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
-                                        
-                                        // Append it to rf_master_question
-                                        //question.rf_AnswerOFQustion.append(newAnswer)
-                                        
-                                        //print("Created new answer object with plywood value: \(plywoodValueStr)")
-                                        var dict:[String:Any] = [:]
-                                        let questionUniqueIdentifier = question.questionIdUnique
-                                        let questionId = question.id
-                                        dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":rooms.room_id!,"room_name":rooms.room_name!]
-                                        print("---dict2------", dict, " question : ", question.question_name)
-                                        realm.create(rf_master_question.self, value: dict, update: .all)
-                                    }
-                                }
-                            }
+//                            let appointmentId = AppointmentData().appointment_id ?? 0
+//                            let realm = try! Realm()
+//                            if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, rooms.room_id!,appoinmentID).first {
+//                                
+//                                try! realm.write
+//                                {
+//                                    if let existingAnswer = question.rf_AnswerOFQustion.first {
+//                                        let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+//                                        
+//                                        let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
+//                                        newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+//                                        
+//                                        // Append it to rf_master_question
+//                                        //question.rf_AnswerOFQustion.append(newAnswer)
+//                                        
+//                                        //print("Created new answer object with plywood value: \(plywoodValueStr)")
+//                                        var dict:[String:Any] = [:]
+//                                        let questionUniqueIdentifier = question.questionIdUnique
+//                                        let questionId = question.id
+//                                        dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":rooms.room_id!,"room_name":rooms.room_name!]
+//                                        print("---dict2------", dict, " question : ", question.question_name)
+//                                        realm.create(rf_master_question.self, value: dict, update: .all)
+//                                    }
+//                                }
+//                            }
                         }
                     }
                     self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0,deliveryOptions: "",isGlueDown: isGlueDown)
@@ -1598,7 +1598,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 
                 var isSpecialOrder = false
                 var isMarketOutOfStock = false
-                for officeids in self.stairColourNamesArray[index].Office_location_ids
+                for officeids in self.stairColourNamesArray[index].special_order_location_ids
                 {
                     if officeids == officeLocationId
                     {
@@ -1629,6 +1629,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         {
                            let installer = AppointmentPaymentSummaryViewController.initialization()!
                            installer.isOutOfstock = true
+                           installer.isSpecialOrder = false
                            self.present(installer, animated: true, completion: nil)
                        }
                         else
@@ -1643,6 +1644,13 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0)
                             self.loadRefreshData()
                             AppDelegate.appoinmentslData.isSpecialOrder = true
+                            if isSpecialOrder && !isMarketOutOfStock
+                            {
+                                let installer = AppointmentPaymentSummaryViewController.initialization()!
+                                installer.isOutOfstock = true
+                                installer.isSpecialOrder = true
+                                self.present(installer, animated: true, completion: nil)
+                            }
                         }
 //                    }
 //                    else
@@ -1803,31 +1811,31 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     }
                     else
                     {
-                        let appointmentId = AppointmentData().appointment_id ?? 0
-                        let realm = try! Realm()
-                        if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, tableValues[cell].room_id!,appoinmentID).first {
-                            
-                            try! realm.write
-                            {
-                                if let existingAnswer = question.rf_AnswerOFQustion.first {
-                                    let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
-                                    
-                                    let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
-                                    newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
-
-                                    // Append it to rf_master_question
-                                    //question.rf_AnswerOFQustion.append(newAnswer)
-
-                                    //print("Created new answer object with plywood value: \(plywoodValueStr)")
-                                    var dict:[String:Any] = [:]
-                                    let questionUniqueIdentifier = question.questionIdUnique
-                                    let questionId = question.id
-                                    dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":tableValues[cell].room_id!,"room_name":tableValues[cell].room_name!]
-                                    print("---dict2------", dict, " question : ", question.question_name)
-                                    realm.create(rf_master_question.self, value: dict, update: .all)
-                                }
-                            }
-                        }
+//                        let appointmentId = AppointmentData().appointment_id ?? 0
+//                        let realm = try! Realm()
+//                        if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, tableValues[cell].room_id!,appoinmentID).first {
+//                            
+//                            try! realm.write
+//                            {
+//                                if let existingAnswer = question.rf_AnswerOFQustion.first {
+//                                    let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
+//                                    
+//                                    let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
+//                                    newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+//
+//                                    // Append it to rf_master_question
+//                                    //question.rf_AnswerOFQustion.append(newAnswer)
+//
+//                                    //print("Created new answer object with plywood value: \(plywoodValueStr)")
+//                                    var dict:[String:Any] = [:]
+//                                    let questionUniqueIdentifier = question.questionIdUnique
+//                                    let questionId = question.id
+//                                    dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":tableValues[cell].room_id!,"room_name":tableValues[cell].room_name!]
+//                                    print("---dict2------", dict, " question : ", question.question_name)
+//                                    realm.create(rf_master_question.self, value: dict, update: .all)
+//                                }
+//                            }
+//                        }
                     }
                     
                 }
@@ -1858,6 +1866,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         {
                            let installer = AppointmentPaymentSummaryViewController.initialization()!
                            installer.isOutOfstock = true
+                           installer.isSpecialOrder = false
                            self.present(installer, animated: true, completion: nil)
                        }
                         else
@@ -1880,6 +1889,13 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             self.updateRoomMoldOrColor(roomID: roomId, moldName: "", isColor: true, colorName: selectedColor, colorImageUrl: selectedMaterialFileName, colorUpCharge: selectedColorUpCharge, moldPrice: 0.0,isGlueDown:isGlueDown)
                             self.loadRefreshData()
                             AppDelegate.appoinmentslData.isSpecialOrder = true
+                            if isSpecialOrder && !isMarketOutOfStock
+                            {
+                                let installer = AppointmentPaymentSummaryViewController.initialization()!
+                                installer.isOutOfstock = true
+                                installer.isSpecialOrder = true
+                                self.present(installer, animated: true, completion: nil)
+                            }
 //                        }
 //                    }
 //                    else
@@ -1939,7 +1955,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
             roomIndex = index
             var isSpecialOrder = false
             var isMarketOutOfStock = false
-            for officeids in self.floorColorNamesArray[index].Office_location_ids
+            for officeids in self.floorColorNamesArray[index].special_order_location_ids
             {
                 if officeids == officeLocationId
                 {
@@ -1967,6 +1983,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         {
                            let installer = AppointmentPaymentSummaryViewController.initialization()!
                            installer.isOutOfstock = true
+                           installer.isSpecialOrder = false
                            self.present(installer, animated: true, completion: nil)
                        }
                         else
@@ -1981,6 +1998,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             self.applyAllColourUpCharge = self.floorColorNamesArray[index].color_upcharge
                             self.applyAllSelectedMaterialFileName = self.getFllorImageName(atIndex: index)
                             AppDelegate.appoinmentslData.isSpecialOrder = true
+                            if isSpecialOrder && !isMarketOutOfStock
+                            {
+                                let installer = AppointmentPaymentSummaryViewController.initialization()!
+                                installer.isOutOfstock = true
+                                installer.isSpecialOrder = true
+                                self.present(installer, animated: true, completion: nil)
+                            }
+                            
 //                        }
 //                    }
 //                    else
