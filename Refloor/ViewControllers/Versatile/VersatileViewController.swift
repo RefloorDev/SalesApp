@@ -85,6 +85,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     var imagePicker: CaptureImage!
     var isVersatile = false
     var isHunter = false
+    var isOneAndFunnd = false
     var creditApplicationDelegate:CreditApplicationProtocol?
     var stairPrice:Double = Double()
     var excluded_amount_promotion:Double = 0.0
@@ -106,6 +107,10 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
         if isVersatile
         {
             self.setNavigationBarbackAndlogo(with: "Versatile Credit")
+        }
+        else if isOneAndFunnd
+        {
+            self.setNavigationBarbackAndlogo(with: "One And Fund")
         }
         else
         {
@@ -129,6 +134,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
         selectRoomPopUp.isVersatile = false
         selectRoomPopUp.isVersaileBack = isVersatile
         selectRoomPopUp.isHunterBack = isHunter
+        selectRoomPopUp.isOneAndFundBack = isOneAndFunnd
         selectRoomPopUp.isdelete = false
         self.present(selectRoomPopUp, animated: true, completion: nil)
     }

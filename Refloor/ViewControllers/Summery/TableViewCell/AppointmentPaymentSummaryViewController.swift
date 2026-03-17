@@ -20,6 +20,7 @@ class AppointmentPaymentSummaryViewController: UIViewController {
     var financeAmount:Double = Double()
     var downPayment:Double = 0
     var isOutOfstock = false
+    var isSpecialOrder = false
 
     @IBOutlet weak var paymentView: UIView!
     @IBOutlet weak var outOfStockView: UIView!
@@ -27,6 +28,7 @@ class AppointmentPaymentSummaryViewController: UIViewController {
     @IBOutlet weak var financeAmountLbl: UILabel!
     @IBOutlet weak var finalPaymentLbl: UILabel!
     @IBOutlet weak var totalPriceLblSummary: UILabel!
+    @IBOutlet weak var outOfStockLbl: UILabel!
     @IBOutlet weak var totalPriceLbl: UILabel!
     override func viewDidLoad() 
     {
@@ -35,6 +37,14 @@ class AppointmentPaymentSummaryViewController: UIViewController {
         {
             outOfStockView.isHidden = false
             paymentView.isHidden = true
+            if isSpecialOrder
+            {
+                outOfStockLbl.text = "Choosing this color will result in a 2-week delay in installation scheduling."
+            }
+            else
+            {
+                outOfStockLbl.text = "The selected item is out of stock"
+            }
         }
         else
         {

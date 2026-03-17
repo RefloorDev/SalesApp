@@ -65,6 +65,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isVersaileBack:Bool = Bool()
     var isHunterBack:Bool = Bool()
     var isHunter:Bool = Bool()
+    var isOneAndFund:Bool = Bool()
     var isStopSync:Bool = Bool()
     var isSuccess:Bool = Bool()
     var isSendReview = false
@@ -73,6 +74,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
     var isOCR = false
     var sendReviewFailedMsg:String = String()
     var isPasswordVisble = false
+    var isOneAndFundBack:Bool = Bool()
 
     @IBOutlet weak var successViewHeightConstraint: NSLayoutConstraint!
     override func viewDidLoad() {
@@ -116,6 +118,17 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             stopSyncView.isHidden = true
             successfullView.isHidden = true
         }
+        else if isOneAndFund
+        {
+            versatileView.isHidden = false
+            deleteView.isHidden = true
+            addEditView.isHidden = true
+            versatileBackView.isHidden = true
+            lendingPlatformTitle.text = "One And Fund"
+            lendingSubTitle.text = lendingSubTitle.text! + "One And Fund?"
+            stopSyncView.isHidden = true
+            successfullView.isHidden = true
+        }
         else if isVersaileBack
         {
             versatileView.isHidden = true
@@ -126,6 +139,7 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             stopSyncView.isHidden = true
             successfullView.isHidden = true
         }
+        
         else if isStopSync
         {
             deleteView.isHidden = true
@@ -142,6 +156,16 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
             addEditView.isHidden = true
             versatileBackView.isHidden = false
             lendingBackTitle.text = "Credit Card Rate Lending"
+            stopSyncView.isHidden = true
+            successfullView.isHidden = true
+        }
+        else if isOneAndFundBack
+        {
+            versatileView.isHidden = true
+            deleteView.isHidden = true
+            addEditView.isHidden = true
+            versatileBackView.isHidden = false
+            lendingBackTitle.text = "One and Fund"
             stopSyncView.isHidden = true
             successfullView.isHidden = true
         }
