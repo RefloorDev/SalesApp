@@ -174,6 +174,11 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 matchedExternalCredentials.append(providers)
             }
         }
+        
+        if matchedExternalCredentials.count == 0
+        {
+            self.alert("No finance provider is available for the selected market segment", nil)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool)

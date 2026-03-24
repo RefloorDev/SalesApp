@@ -2082,7 +2082,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
         }
         else if tag == 6
         {
-            applyAllSelectDeliveryTxtFld.text = item
+            applyAllSelectDeliveryTxtFld.text = item 
         }
     }
     
