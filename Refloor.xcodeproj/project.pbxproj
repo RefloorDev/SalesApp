@@ -221,8 +221,6 @@
 		DDF18F46277B253100321FFE /* BackgroundTaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDF18F45277B253100321FFE /* BackgroundTaskService.swift */; };
 		FA12D8D82F2C8E05002F7CD8 /* QRCodeScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12D8D72F2C8E05002F7CD8 /* QRCodeScannerViewController.swift */; };
 		FAC204C22F1651EE006EB946 /* FinanceProviderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC204C12F1651EE006EB946 /* FinanceProviderTableViewCell.swift */; };
-		FAC7B4872F459AEB00F17773 /* ACHCheckCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FAC7B4862F459AEB00F17773 /* ACHCheckCollectionViewCell.xib */; };
-		FAC7B4882F459AEB00F17773 /* ACHCheckCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC7B4852F459AEB00F17773 /* ACHCheckCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -445,8 +443,6 @@
 		DDF18F45277B253100321FFE /* BackgroundTaskService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTaskService.swift; sourceTree = "<group>"; };
 		FA12D8D72F2C8E05002F7CD8 /* QRCodeScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeScannerViewController.swift; sourceTree = "<group>"; };
 		FAC204C12F1651EE006EB946 /* FinanceProviderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinanceProviderTableViewCell.swift; sourceTree = "<group>"; };
-		FAC7B4852F459AEB00F17773 /* ACHCheckCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACHCheckCollectionViewCell.swift; sourceTree = "<group>"; };
-		FAC7B4862F459AEB00F17773 /* ACHCheckCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ACHCheckCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -932,8 +928,6 @@
 				658D494824AA1C7D0034DF69 /* JobCompleationCollectionViewCell.xib */,
 				658D494B24AA21A90034DF69 /* PaymentTypeTableViewCell.swift */,
 				658D494C24AA21A90034DF69 /* PaymentTypeTableViewCell.xib */,
-				FAC7B4852F459AEB00F17773 /* ACHCheckCollectionViewCell.swift */,
-				FAC7B4862F459AEB00F17773 /* ACHCheckCollectionViewCell.xib */,
 			);
 			path = CollectionViewCells;
 			sourceTree = "<group>";
@@ -1163,7 +1157,6 @@
 				65209444243CA31100B010CA /* SF-Pro-Display-Regular.otf in Resources */,
 				6520944B243CA31100B010CA /* SFUIText-Medium.otf in Resources */,
 				65209458243CA31100B010CA /* SF-Pro-Text-RegularItalic.otf in Resources */,
-				FAC7B4872F459AEB00F17773 /* ACHCheckCollectionViewCell.xib in Resources */,
 				6520944A243CA31100B010CA /* SFUIText-Regular.otf in Resources */,
 				B00B9D812C999C1800B88469 /* AppointmentSummaryFirstRowTableViewCell.xib in Resources */,
 				DD0F8332284DCDC500F0A1D6 /* DiscountTableViewCell.xib in Resources */,
@@ -1442,7 +1435,6 @@
 				18B683F925820871001E445E /* OrderStatusViewController.swift in Sources */,
 				B0BBFC6C2BAC1E43009E6287 /* JobTypeCollectionViewCell.swift in Sources */,
 				B0BBFC6A2BAC1E43009E6287 /* SpalashScreenNewViewController.swift in Sources */,
-				FAC7B4882F459AEB00F17773 /* ACHCheckCollectionViewCell.swift in Sources */,
 				655C43A22456B4FB00D5CA2C /* TransactionViewController.swift in Sources */,
 				18EE84072658487000FB5859 /* ApplicantFormViewControllerForm.swift in Sources */,
 				65CB187B24DBE04A00A0BD39 /* AboutRoomViewController.swift in Sources */,

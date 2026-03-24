@@ -218,6 +218,10 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         for paymentPlan in paymentPlans{
             self.paymentPlanValueDetails.append( PaymentPlanValue(paymentPlan: paymentPlan))
         }
+        if self.paymentPlanValueDetails.count == 0
+        {
+            self.alert("No package is available for the selected market segment", nil)
+        }
         for paymentMethod in productPaymentMethod{
             self.paymentRestrictionDataValueDetail.append(PaymentOptionDataValue(paymentOption: paymentMethod))
         }
