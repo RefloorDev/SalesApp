@@ -400,9 +400,11 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
             return "credit_card"
         case .Check:
             return "check"
+        case .ACH:
+            return "ach"
         }
     }
-    
+
     @IBAction func nextButtonAction(_ sender: Any)
     {
         let masterData = getMasterDataFromDB()

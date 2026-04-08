@@ -30,6 +30,8 @@
 		651708AA246AC274001CBF76 /* CustomeShapeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651708A9246AC274001CBF76 /* CustomeShapeViewController.swift */; };
 		651E8ECE249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E8ECC249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift */; };
 		651E8ECF249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 651E8ECD249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib */; };
+		BB12345800000000000ACH03 /* DownPaymentFromACHCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */; };
+		BB12345900000000000ACH04 /* DownPaymentFromACHCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */; };
 		651E8ED1249CCE460049D754 /* DownPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E8ED0249CCE460049D754 /* DownPaymentViewController.swift */; };
 		6520942B243CA31100B010CA /* CAXSVProgressHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = 652093EC243CA31000B010CA /* CAXSVProgressHUD.xib */; };
 		6520942C243CA31100B010CA /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 652093ED243CA31000B010CA /* loading.gif */; };
@@ -247,6 +249,8 @@
 		651708A9246AC274001CBF76 /* CustomeShapeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeShapeViewController.swift; sourceTree = "<group>"; };
 		651E8ECC249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentFromCheckCollectionViewCell.swift; sourceTree = "<group>"; };
 		651E8ECD249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownPaymentFromCheckCollectionViewCell.xib; sourceTree = "<group>"; };
+		BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentFromACHCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownPaymentFromACHCollectionViewCell.xib; sourceTree = "<group>"; };
 		651E8ED0249CCE460049D754 /* DownPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentViewController.swift; sourceTree = "<group>"; };
 		652093EC243CA31000B010CA /* CAXSVProgressHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CAXSVProgressHUD.xib; sourceTree = "<group>"; };
 		652093ED243CA31000B010CA /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
@@ -918,6 +922,8 @@
 				65BFC3322488FFE10007064D /* DownPaymentFromCardCollectionViewCell.xib */,
 				651E8ECC249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift */,
 				651E8ECD249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib */,
+				BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */,
+				BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */,
 				65FADF0E248A1D3000B6CB55 /* DownPaymentFromCashCollectionViewCell.swift */,
 				65FADF0F248A1D3000B6CB55 /* DownPaymentFromCashCollectionViewCell.xib */,
 				65BA840D249A3E8C003F9A79 /* PamentOptionsTopCollectionViewCell.swift */,
@@ -1147,6 +1153,7 @@
 				65209432243CA31100B010CA /* Inter-UI-BlackItalic.otf in Resources */,
 				658D494A24AA1C7D0034DF69 /* JobCompleationCollectionViewCell.xib in Resources */,
 				651E8ECF249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib in Resources */,
+				BB12345900000000000ACH04 /* DownPaymentFromACHCollectionViewCell.xib in Resources */,
 				65FFF9342447079800E3534D /* L_Shape_CustomView_ToolBoxView.xib in Resources */,
 				6520943A243CA31100B010CA /* Inter-UI-Italic.otf in Resources */,
 				65209454243CA31100B010CA /* SF-Pro-Display-LightItalic.otf in Resources */,
@@ -1390,6 +1397,7 @@
 				654F229824E41EC900CCA1E4 /* PaymentDetailsViewController.swift in Sources */,
 				65209462243CA31100B010CA /* MyCell.swift in Sources */,
 				651E8ECE249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift in Sources */,
+				BB12345800000000000ACH03 /* DownPaymentFromACHCollectionViewCell.swift in Sources */,
 				655FBC1B245814D500333759 /* ImageViewAndRemoveViewController.swift in Sources */,
 				1865C1D62D55CAD000A1C055 /* UpdateDownFinalPaymentViewController.swift in Sources */,
 				DDAF8F302747849A004AAE86 /* NetworkClass.swift in Sources */,
@@ -1611,7 +1619,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.4;
+				MARKETING_VERSION = 3.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1637,7 +1645,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3.4;
+				MARKETING_VERSION = 3.3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
