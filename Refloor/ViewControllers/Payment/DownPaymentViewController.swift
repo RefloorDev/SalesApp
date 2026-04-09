@@ -461,7 +461,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.bankAccountNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
             cell.bankAccountNumberTF.keyboardType = .numberPad
             cell.bankAccountNumberTF.delegate = self
-            cell.bankRoutingNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.bankRoutingNumberTF.setPlaceHolderWithColor(placeholder: "000000000", colour: .placeHolderColor)
             cell.bankRoutingNumberTF.keyboardType = .numberPad
             cell.bankRoutingNumberTF.delegate = self
             cell.acctTypeLabel.text = selectedAcctTypeLabel
