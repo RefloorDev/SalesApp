@@ -28216,7 +28216,7 @@ Cgo
                                                             <action selector="whatnextButtonAction:" destination="Vpt-Kb-nJi" eventType="touchUpInside" id="1Ks-zX-hn7"/>
                                                         </connections>
                                                     </button>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Last Price Quoted *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mRf-ri-c66">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Lowest Price Quoted *" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mRf-ri-c66">
                                                         <rect key="frame" x="30" y="395" width="362" height="33"/>
                                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="24"/>
                                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -28255,7 +28255,7 @@ Cgo
                                                         </connections>
                                                     </textView>
                                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Required field" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fz4-Uh-95k">
-                                                        <rect key="frame" x="254" y="532" width="174" height="21"/>
+                                                        <rect key="frame" x="300" y="532" width="174" height="21"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="21" id="Q5k-2a-KUw"/>
                                                             <constraint firstAttribute="width" constant="174" id="f6o-Qv-Kzn"/>
@@ -28278,7 +28278,7 @@ Cgo
                                                     <constraint firstAttribute="trailing" secondItem="OXY-LQ-mmZ" secondAttribute="trailing" constant="50" id="3n2-tp-KK8"/>
                                                     <constraint firstItem="mRf-ri-c66" firstAttribute="leading" secondItem="mm8-mt-wdc" secondAttribute="leading" constant="30" id="4iO-O8-F5V"/>
                                                     <constraint firstItem="JtY-jX-Lva" firstAttribute="leading" secondItem="mm8-mt-wdc" secondAttribute="leading" constant="30" id="6iw-QJ-aix"/>
-                                                    <constraint firstItem="Fz4-Uh-95k" firstAttribute="leading" secondItem="mm8-mt-wdc" secondAttribute="leading" constant="254" id="6lz-lz-xAQ"/>
+                                                    <constraint firstItem="Fz4-Uh-95k" firstAttribute="leading" secondItem="mm8-mt-wdc" secondAttribute="leading" constant="300" id="6lz-lz-xAQ"/>
                                                     <constraint firstItem="FI5-oT-Q10" firstAttribute="top" secondItem="mm8-mt-wdc" secondAttribute="top" id="9LI-wL-z9x"/>
                                                     <constraint firstAttribute="bottom" secondItem="nz1-yK-Kae" secondAttribute="bottom" constant="10" id="9mn-BF-UNZ"/>
                                                     <constraint firstAttribute="trailing" secondItem="DUC-CP-zGY" secondAttribute="trailing" constant="50" id="AiN-qm-bui"/>
