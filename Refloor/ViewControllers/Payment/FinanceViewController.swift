@@ -343,8 +343,11 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
     
     func financeProvider()
     {
-        let customer = AppDelegate.appoinmentslData!
-        let primaryApplicantAddress:[String:Any] = ["addressLine1":customer.street!,"addressLine2":customer.street2!,"city":customer.city!,"state":customer.state!,"postalCode":customer.zip!]
+        guard let customer = AppDelegate.appoinmentslData else {
+            print("Customer data missing")
+            return
+        }
+        let primaryApplicantAddress:[String:Any] = ["addressLine1":customer.street ?? "","addressLine2":customer.street2 ?? "","city":customer.city ?? "","state":customer.state ?? "","postalCode":customer.zip ?? ""]
         let jointApplicantAddress:[String:Any] = ["addressLine1":customer.co_applicant_address ?? "","addressLine2":customer.co_applicant_city ?? "","city":customer.co_applicant_city ?? "","state":customer.co_applicant_state  ?? "","postalCode":customer.co_applicant_zip ?? ""]
         let primaryApplicant:[String:Any] = ["firstName":customer.applicant_first_name ?? "","middleInitial":customer.applicant_middle_name ?? "","lastName":customer.applicant_last_name ?? "",/*"dateOfBirth":(isHunter ? nil : ""),*/"email":customer.email ?? "","homePhone":customer.phone ?? "","mobilePhone":((isHunter && customer.mobile == "") ? customer.phone: customer.mobile ?? ""),"workPhone":"","address":primaryApplicantAddress]
         let jointApplicant:[String:Any] = ["firstName":customer.co_applicant_first_name ?? "","middleInitial":customer.co_applicant_middle_name ?? "","lastName":customer.co_applicant_last_name ?? "",/*/"dateOfBirth": (isHunter ? nil : ""),*/"email":customer.co_applicant_email ?? "","homePhone":customer.co_applicant_phone ?? "","mobilePhone":((isHunter && customer.co_applicant_phone == "") ? customer.co_applicant_secondary_phone: customer.co_applicant_phone ?? ""),"workPhone":"","address":jointApplicantAddress]
@@ -352,7 +355,10 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         let salesPersonFirstName = salesPerson?.first
         let salesPersonLastName = salesPerson?.count ?? 0 > 1 ? salesPerson?[1] : nil
  
-        let salesPersonEmail = UserDefaults.standard.value(forKey: "salesPersonEmail") as! String
+        guard let salesPersonEmail = UserDefaults.standard.string(forKey: "salesPersonEmail") else {
+            print("Missing sales person email")
+            return
+        }
         var versatileTotalPrice:Double = 0.0
         if isVersatile
         {
@@ -390,14 +396,21 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         else if isVersatile
         {
             let versatileArray = Array(matchedExternalCredentials.filter({$0.provider == "versatile"}))
-            if customer.externalEntityKey.count > 0
-            {
-                versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: customer.externalEntityKey[0].entityKey ?? "")
+            if let firstEntity = customer.externalEntityKey.first {
+                let entityKey = firstEntity.entityKey ?? ""
+                versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: entityKey)
             }
-            else
-            {
+            else {
                 self.alert("Versatile credit application feature is not available for your location", nil)
             }
+//            if customer.externalEntityKey.count > 0
+//            {
+//                versatileCall(parameter: parameter, customer: customer,url:(versatileArray.first?.url)!,apiKey: (versatileArray.first?.apiKey)!,entityKey: customer.externalEntityKey[0].entityKey ?? "")
+//            }
+//            else
+//            {
+//                
+//            }
         }
     }
     

@@ -1158,16 +1158,29 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                 self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
         //let appointmentId = AppointmentData().appointment_id ?? 0
         let appointment = self.getAppointmentData(appointmentId: appointmentId)
+        let appoint_id = AppointmentData().appointment_id ?? 0
+        let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
+        let parametersComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison,"both_parties_present":self.isBothParties] as [String : Any]
         if appointment?.enableDestinationSelection == 1
         {
             let installer = DestinationMotivationViewController.initialization()!
             installer.isCardVerified = isCardVerified
             installer.payment_TrasnsactionDict = self.payment_TrasnsactionDict
-            let appoint_id = AppointmentData().appointment_id ?? 0
-            let recison = UserDefaults.standard.value(forKey: "Recision_Date") as! String
-            let parametersComments = ["token": UserData.init().token ?? "" ,"appointment_id":appoint_id,"flexible_installation":self.FlexInstall ? 1: 0,"send_physical_document":self.sendPhysicalDocument ? 1 : 0,"additional_comments":self.comments,"recision_date":recison,"both_parties_present":self.isBothParties] as [String : Any]
+            
 //            installer.name = name
           installer.parametersAdditionalComments = parametersComments
+            self.navigationController?.pushViewController(installer, animated: true)
+        }
+        else if HttpClientManager.SharedHM.connectedToNetwork()
+        {
+            let firstName = appointment?.applicant_first_name ?? ""
+            let lastName = appointment?.applicant_last_name ?? ""
+            let name = lastName == ""  ? firstName : firstName + " " + lastName
+            let installer = InstallerShedulerViewController.initialization()!
+            installer.name = name
+            installer.isCardVerified = self.isCardVerified
+            installer.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+            installer.parametersAdditionalComments = parametersComments
             self.navigationController?.pushViewController(installer, animated: true)
         }
         else
