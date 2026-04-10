@@ -271,6 +271,8 @@ class PaymentDetailsViewController: UIViewController, versatileProtocol{
             return "credit_card"
         case .Check:
             return "check"
+        case .ACH:
+            return "ach"
         }
     }
     func createSalesQuotation()

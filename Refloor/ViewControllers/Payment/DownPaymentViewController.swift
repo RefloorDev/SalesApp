@@ -80,6 +80,9 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     var QuotationPaymentMethodlDataValue:[PaymentMethodDataValue] = []
     var customerName = ""
     var isCardVerifiedSuccessfully = false
+    // ACH / Check account type: "ECHK" = Checking, "ESAV" = Savings
+    var selectedAcctType: String = ""
+    var selectedAcctTypeLabel: String = "Select"
     var imagePicker: CaptureImage!
     var roomData:RoomDataValue!
     var area = 0.0
@@ -115,12 +118,19 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         downpaymentSelectionObjcet.append(payment2)
         let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
         downpaymentSelectionObjcet.append(payment3)
-        let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-        downpaymentSelectionObjcet.append(payment4)
+        if AppURL.isACHEnabled {
+            self.checkLabel.text = "ACH"
+            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+            downpaymentSelectionObjcet.append(payment4)
+        } else {
+            let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+            downpaymentSelectionObjcet.append(payment4)
+        }
         paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
         cameraImagePicker.delegate = self
         self.totalAreaLabel.text = "\(area) Sq.ft"
@@ -182,23 +192,30 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         downpaymentSelectionObjcet.append(payment2)
         let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
         downpaymentSelectionObjcet.append(payment3)
-        let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-        downpaymentSelectionObjcet.append(payment4)
+        if AppURL.isACHEnabled {
+            self.checkLabel.text = "ACH"
+            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+            downpaymentSelectionObjcet.append(payment4)
+        } else {
+            let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+            downpaymentSelectionObjcet.append(payment4)
+        }
         paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
-        
+
         self.totalAreaLabel.text = "\(area) Sq.ft"
         self.packegeLabel.text = packageName //"\(self.QuotationPaymentPlanValueDetails.package ?? "")"
         self.financeAmountLabel.text = "$\(self.financePayment.toDoubleString)"
         self.finalPaymentLabel.text = "$\(self.finalpayment.toDoubleString)"
         self.downPaymentLabel.text = "$\(self.downPaymentValue.toDoubleString)"
         self.totalAmountLabel.text = "$\(self.totalAmount.toDoubleString)"
-        
+
         self.headingLabel.text = "Collect the down payment amount: $\(self.downPaymentValue.toDoubleString)"
-        
+
         if let customer = AppDelegate.appoinmentslData
         {
             let customerNameFirstName = customer.applicant_first_name ?? ""
@@ -215,6 +232,11 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         self.headingLabel.text = "Collect the down payment amount: $\(self.downPaymentValue.toDoubleString)"
         persentageValue = 10
         downPaymentInputObject = nil
+        selectedAcctType = ""
+        selectedAcctTypeLabel = "Select"
+        cardNumber = ""
+        cardExpiry = ""
+        cardPin = ""
         self.sideTabSelectedWith(at: sender.tag)
     }
     
@@ -342,7 +364,6 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.accountHolderNameTF.setPlaceHolderWithColor(placeholder: "Name", colour: .placeHolderColor)
             
             cell.cardNumberTF.keyboardType = .numberPad
-            cell.cardNumberTF.delegate = self
             cell.cardPinTF.keyboardType = .numberPad
             cell.cardPinTF.delegate = self
             
@@ -383,26 +404,26 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             
             return cell
         }
-        else
+        else if paymentType == .Check
         {
-            
+
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DownPaymentFromCheckCollectionViewCell", for: indexPath) as! DownPaymentFromCheckCollectionViewCell
             // cell.totalLabel.text = "Total Price: $\(self.totalAmount.toDoubleString)"
             cell.totalLabel.text = "Add Check Details"
             //cell.totalLabel.text = "Down Payment: $\(self.downPaymentValue.toDoubleString)"
             cell.selectedItem = self.selectedPersecntage
-            
-            
-            
+
+
+
             cell.accountNumberTF.delegate = self
-            
+
             cell.routingNumberTF.delegate = self
             if routingNumber != "" || accountNumber != "" || checkNumber != ""
             {
                 cell.routingNumberTF.text = routingNumber
-                
+
                 cell.accountNumberTF.text = accountNumber
-                
+
                 cell.checkNumberTF.text = checkNumber
                 cell.routingNumber = routingNumber
                 cell.accountNumber = accountNumber
@@ -422,12 +443,31 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
             cell.cameraButton.addTarget(self, action: #selector(autoReadOCRForCheck), for: .touchUpInside)
             cell.payButton.setTitle("Collect", for: .normal)
-            
+
             cell.checkNumberTF.delegate = self
             cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
-            
-            
-            
+
+
+
+            return cell
+        }
+        else
+        {
+            // ACH cell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DownPaymentFromACHCollectionViewCell", for: indexPath) as! DownPaymentFromACHCollectionViewCell
+            cell.totalLabel.text = "Add ACH Details"
+            cell.selectedItem = self.selectedPersecntage
+            cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
+            cell.bankAccountNumberTF.setPlaceHolderWithColor(placeholder: "0000 0000 0000 0000", colour: .placeHolderColor)
+            cell.bankAccountNumberTF.keyboardType = .numberPad
+            cell.bankAccountNumberTF.delegate = self
+            cell.bankRoutingNumberTF.setPlaceHolderWithColor(placeholder: "000000000", colour: .placeHolderColor)
+            cell.bankRoutingNumberTF.keyboardType = .numberPad
+            cell.bankRoutingNumberTF.delegate = self
+            cell.acctTypeLabel.text = selectedAcctTypeLabel
+            cell.acctTypeButton.addTarget(self, action: #selector(showAcctTypeDropdown), for: .touchUpInside)
+            cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
+            cell.payButton.setTitle("Collect", for: .normal)
             return cell
         }
     }
@@ -448,7 +488,15 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         if string.rangeOfCharacter(from: Validation.specialCharString) != nil {
             return false
         }
-        
+
+        // Restrict routing number to 9 digits
+        if let cell = paymentCollectionView.cellForItem(at: [0, 0]) as? DownPaymentFromACHCollectionViewCell,
+           textField == cell.bankRoutingNumberTF {
+            let current = textField.text ?? ""
+            let newLength = current.count + string.count - range.length
+            return newLength <= 9
+        }
+
         return true
     }
     
@@ -868,6 +916,10 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         {
             validateForCard()
         }
+        else if paymentType == .ACH
+        {
+            validateForACH()
+        }
         else
         {
             validateForCheck()
@@ -898,13 +950,28 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 DispatchQueue.main.async {
                     self.alert(onlinemsg, [yes,no])
                 }
-                
+
             }
             else
             {
                 DispatchQueue.main.async {
                     self.alert(offlinemsg, [yes,no])
                 }
+            }
+        }
+        else if paymentType == .ACH
+        {
+            let yes = UIAlertAction(title: "Continue", style: .default) { (_) in
+                self.goNextPageForPAyButtonAction()
+            }
+            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            if HttpClientManager.SharedHM.connectedToNetwork()
+            {
+                self.alert(onlinemsg, [yes, no])
+            }
+            else
+            {
+                self.alert(offlinemsg, [yes, no])
             }
         }
         else
@@ -982,6 +1049,54 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             self.alert("Something went wrong", nil)
         }
     }
+
+    func validateForACH()
+    {
+        if selectedAcctType.isEmpty {
+            self.alert("Please select an account type", nil)
+            return
+        }
+        if let cell = paymentCollectionView.cellForItem(at: [0,0]) as? DownPaymentFromACHCollectionViewCell
+        {
+            let acct = cell.bankAccountNumberTF.text ?? ""
+            let routing = cell.bankRoutingNumberTF.text ?? ""
+            if acct.isEmpty
+            {
+                self.alert("Please enter bank account number", nil)
+                return
+            }
+            if Int(acct) == nil
+            {
+                self.alert("Please enter a valid bank account number", nil)
+                return
+            }
+            if routing.isEmpty
+            {
+                self.alert("Please enter routing number", nil)
+                return
+            }
+            if Int(routing) == nil
+            {
+                self.alert("Please enter a valid routing number", nil)
+                return
+            }
+            if routing.count != 9
+            {
+                self.alert("Routing number must be exactly 9 digits", nil)
+                return
+            }
+            downPaymentInputObject = DownPaymentInputObject(
+                paymentType: .ACH,
+                cardPaymentValue: nil,
+                checkValue: CheckValue(checkNumber: "", accountNumber: acct, routingNumber: routing))
+            GoForJobCompleation()
+        }
+        else
+        {
+            self.alert("Something went wrong", nil)
+        }
+    }
+
     func textFieldDidEndEditing(_ textField: UITextField)
     {
         print("cntrl here")
@@ -1407,7 +1522,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     
     @objc func goNextPageForPAyButtonAction()
     {
-        if paymentType == .CreditCard || paymentType == .DebitCard
+        if paymentType == .CreditCard || paymentType == .DebitCard || paymentType == .ACH
         {
             //let room_id = roomData.id
             //deleteRoomFromAppointment(appointmentId:AppointmentData().appointment_id ?? 0, roomId: self.roomData.id ?? 0)
@@ -1555,15 +1670,17 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 }
                 else
                 {
-                    //self.alert(message ?? "", nil)
                     let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
-                  
                         self.goNextPageForPAyButtonAction()
-                        
                     }
                     let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-                    
-                    self.alert((message ?? message) ?? AppAlertMsg.serverNotReached, [yes,no])
+                    let errorMsg: String
+                    if let pm = payment_message, !pm.isEmpty {
+                        errorMsg = pm
+                    } else {
+                        errorMsg = message ?? AppAlertMsg.serverNotReached
+                    }
+                    self.alert(errorMsg, [yes, no])
                 }
             }
             }
@@ -1697,16 +1814,27 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             //self.paymentTransactionCheckApi(isOnJobCompleation: true, balancePaymentMethord: balancePay)
             var expirydate = downPaymentInputObject?.cardPaymentValue?.experyDate
             expirydate = expirydate?.replacingOccurrences(of: "/", with: "-")
-            let data:[String:Any] = ["card_number":downPaymentInputObject?.cardPaymentValue?.cardNumber ?? "","card_expiry":expirydate ?? "","card_holder_name":downPaymentInputObject?.cardPaymentValue?.accountName ?? "","cardpin":downPaymentInputObject?.cardPaymentValue?.pinNumber ?? "","check_number":downPaymentInputObject?.checkValue?.checkNumber ?? "","check_account_number":downPaymentInputObject?.checkValue?.accountNumber ?? "","check_routing_number":downPaymentInputObject?.checkValue?.routingNumber ?? ""]
+            let data:[String:Any] = ["card_number":downPaymentInputObject?.cardPaymentValue?.cardNumber ?? "","card_expiry":expirydate ?? "","card_holder_name":downPaymentInputObject?.cardPaymentValue?.accountName ?? "","cardpin":downPaymentInputObject?.cardPaymentValue?.pinNumber ?? "","check_number":downPaymentInputObject?.checkValue?.checkNumber ?? "","check_account_number":downPaymentInputObject?.checkValue?.accountNumber ?? "","check_routing_number":downPaymentInputObject?.checkValue?.routingNumber ?? "","acct_type":selectedAcctType]
             let paymentOption =  self.getPaymentOptionAndValues(payment_method: "check", paymentOptionDict:data)
 
             print(paymentOption)
             self.savePaymentMethodTypeToAppointmentDetail(paymentType: paymentOption.nsDictionary)
-            
+
             //test
             // let paymentMethodData = self.getPaymentMethodTypeFromAppointmentDetail()
             //print(paymentMethodData)
             //
+        }
+        else if paymentType == .ACH
+        {
+            let data:[String:Any] = [
+                "bank_account_number": downPaymentInputObject?.checkValue?.accountNumber ?? "",
+                "bank_routing_number": downPaymentInputObject?.checkValue?.routingNumber ?? "",
+                "acct_type": selectedAcctType
+            ]
+            let paymentOption = self.getPaymentOptionAndValues(payment_method: "ach", paymentOptionDict: data)
+            print(paymentOption)
+            self.savePaymentMethodTypeToAppointmentDetail(paymentType: paymentOption.nsDictionary)
         }
     }
     
@@ -2118,6 +2246,39 @@ class DownPaymentSelectionObj:NSObject
         self.tag = tag
     }
 }
+// MARK: - Account Type Dropdown (shared by Check and ACH)
+extension DownPaymentViewController: DropDownDelegate {
+
+    @objc func showAcctTypeDropdown() {
+        var anchorButton: UIButton?
+        if paymentType == .Check,
+           let cell = paymentCollectionView.cellForItem(at: [0, 0]) as? DownPaymentFromCheckCollectionViewCell {
+            anchorButton = cell.acctTypeButton
+        } else if paymentType == .ACH,
+                  let cell = paymentCollectionView.cellForItem(at: [0, 0]) as? DownPaymentFromACHCollectionViewCell {
+            anchorButton = cell.acctTypeButton
+        }
+        guard let button = anchorButton else { return }
+        self.DropDownDefaultfunction(button, button.bounds.width, ["Checking", "Savings"], -1, delegate: self, tag: 99)
+    }
+
+    func DropDownDidSelectedAction(_ index: Int, _ item: String, _ tag: Int) {
+        if tag == 99 {
+            selectedAcctType = index == 0 ? "ECHK" : "ESAV"
+            selectedAcctTypeLabel = item
+            // Update only the button title — do NOT call reloadData() as it would
+            // re-run collectionViewConfigruation() and wipe the user's entered field values
+            if paymentType == .Check,
+               let cell = paymentCollectionView.cellForItem(at: [0, 0]) as? DownPaymentFromCheckCollectionViewCell {
+                cell.acctTypeButton.setTitle(item + " ▼", for: .normal)
+            } else if paymentType == .ACH,
+                      let cell = paymentCollectionView.cellForItem(at: [0, 0]) as? DownPaymentFromACHCollectionViewCell {
+                cell.acctTypeLabel.text = item
+            }
+        }
+    }
+}
+
 extension DownPaymentViewController: ImagePickerDelegate {
 
     func didSelect(image: UIImage?,imageName:String?)
@@ -2142,6 +2303,7 @@ enum PaymentType {
     case Check
     case DebitCard
     case CreditCard
+    case ACH
 }
 struct PaymentDetails: Codable
 {
