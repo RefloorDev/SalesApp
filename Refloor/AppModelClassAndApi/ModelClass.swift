@@ -2385,10 +2385,15 @@ class PaymentOption: NSObject{
     var check_number: String? = ""
     var check_routing_number: String? = ""
     var check_account_number: String? = ""
+    // ACH-specific fields
+    var bank_account_number: String? = ""
+    var bank_routing_number: String? = ""
+    // Shared by Check and ACH: "ECHK" (Checking) or "ESAV" (Savings)
+    var acct_type: String? = ""
     var pay_later:Int = 0
-    
+
     override init(){
-        
+
     }
     var dictionary: [String: Any?] {
         return ["payment_method":payment_method,
@@ -2399,6 +2404,9 @@ class PaymentOption: NSObject{
                 "check_number":check_number,
                 "check_routing_number":check_routing_number,
                 "check_account_number":check_account_number,
+                "bank_account_number":bank_account_number,
+                "bank_routing_number":bank_routing_number,
+                "acct_type":acct_type,
                 "pay_later":pay_later
                ]
     }
@@ -2878,6 +2886,9 @@ struct paymentMethodDetailsSecret:Codable
     var paymentMethod:String?
     var checkNumber:String?
     var pay_later:Int?
+    var bankAccountNumber:String?
+    var bankRoutingNumber:String?
+    var acctType:String?
     enum CodingKeys: String, CodingKey
     {
         case cardNumber = "card_number"
@@ -2889,6 +2900,9 @@ struct paymentMethodDetailsSecret:Codable
         case paymentMethod = "payment_method"
         case checkNumber = "check_number"
         case pay_later = "pay_later"
+        case bankAccountNumber = "bank_account_number"
+        case bankRoutingNumber = "bank_routing_number"
+        case acctType = "acct_type"
     }
 }
 struct RoomsDetails:Codable

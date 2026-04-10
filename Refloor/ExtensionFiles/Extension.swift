@@ -3057,6 +3057,21 @@ extension UIViewController:OrderStatusViewDelegate
             paymentOption.check_number = paymentOptionDict["check_number"] as? String ?? ""
             paymentOption.check_routing_number = paymentOptionDict["check_routing_number"] as? String ?? ""
             paymentOption.check_account_number = paymentOptionDict["check_account_number"] as? String ?? ""
+            paymentOption.bank_account_number = ""
+            paymentOption.bank_routing_number = ""
+            paymentOption.acct_type = paymentOptionDict["acct_type"] as? String ?? ""
+        case "ach":
+            paymentOption.payment_method = "ach"
+            paymentOption.card_number =  ""
+            paymentOption.expiry_date =  ""
+            paymentOption.card_name =  ""
+            paymentOption.card_pinorcvv =  ""
+            paymentOption.check_number =  ""
+            paymentOption.check_routing_number =  ""
+            paymentOption.check_account_number = ""
+            paymentOption.bank_account_number = paymentOptionDict["bank_account_number"] as? String ?? ""
+            paymentOption.bank_routing_number = paymentOptionDict["bank_routing_number"] as? String ?? ""
+            paymentOption.acct_type = paymentOptionDict["acct_type"] as? String ?? ""
         default:
             break
         }
