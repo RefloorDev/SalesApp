@@ -4432,6 +4432,22 @@ extension UIViewController:OrderStatusViewDelegate
         do{
             let realm = try Realm()
             try realm.write{
+                
+                if requestTitle.rawValue != "Sales_Images"
+                {
+                   let  resultExistingObject = realm.objects(rf_Completed_Appointment_Request.self)
+                        .filter("appointment_id == %@ AND reqest_title == %@", appointmentId, requestTitle.rawValue)
+                        //.first
+                    if resultExistingObject.count > 0
+                    {
+                        return
+                    }
+                    let existingObject = resultExistingObject.first
+                   if existingObject?.sync_status == true
+                       {
+                       return
+                   }
+                }
                 let dict:[String:Any] = [ "appointment_id": appointmentId,
                                           "reqest_title": requestTitle.rawValue,
                                           "request_url": requestUrl,
