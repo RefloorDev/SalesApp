@@ -132,7 +132,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomQuestionnaire,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomQuestionnaire,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -2110,11 +2110,11 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         let (stairWidth,stairCount) = self.getStairWidthAndCount(roomId: roomID)
                         if coverRisersAnswer == "Yes"
                         {
-                            extra_price = stairWidth * stairCount * 2.25
+                            extra_price = stairWidth * stairCount * 2.4
                         }
                         else
                         {
-                            extra_price = stairWidth * stairCount * 1.25
+                            extra_price = stairWidth * stairCount * 1.6
                         }
                     }
                     

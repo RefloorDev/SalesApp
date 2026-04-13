@@ -2814,9 +2814,9 @@ class HttpClientManager: NSObject {
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
             }else{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
             }
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)

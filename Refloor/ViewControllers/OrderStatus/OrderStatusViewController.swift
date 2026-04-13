@@ -98,7 +98,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.appointmentResult,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.appointmentResult,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -654,6 +654,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
+            params["CreatedDate"] = Date().getSyncDateAsString()
         HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
@@ -788,7 +789,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                     print("Upload speed: \(speed) Mbps")
                     networkMessage = String(format: "%.2f", speed)
                     networkMessage += "Mbps"
-                    let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appoint_id,"network_strength": networkMessage]
+                    let requestParams:[String:Any] = ["token" :UserData.init().token ?? "","appointment_id":appoint_id,"network_strength": networkMessage,"CreatedDate": Date().getSyncDateAsString()]
                     HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: requestParams) { success, message in
                     }
                 }
@@ -1153,7 +1154,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             print("Upload speed: \(speed) Mbps")
             networkMessage = String(format: "%.2f", speed)
             networkMessage += "Mbps"
-            let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString, "last_price_quoted_value": Double(priceQuotedString) ?? 0.0,"network_strength":networkMessage] as [String : Any]
+            let parameter =  ["token":UserData.init().token ?? "","result":status ,"appointment_id":AppDelegate.appoinmentslData.id ?? 0,"what_happened_notes":whatHappendSTring,"whats_next_notes":whatNextString, "last_price_quoted_value": Double(priceQuotedString) ?? 0.0,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()] as [String : Any]
             print("parameter_what_happened_notes1 : ", parameter)
             HttpClientManager.SharedHM.submitOrderStatustListApi(parameter: parameter) { (success, message) in
                 if(success ?? "").lowercased() == "success" || (success ?? "").lowercased() == "true"
