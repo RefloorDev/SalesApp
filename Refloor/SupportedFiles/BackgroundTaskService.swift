@@ -852,6 +852,7 @@ extension BackgroundTaskService {
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
+            params["CreatedDate"] = Date().getSyncDateAsString()
             HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
                 if(success ?? "") == "Success" {
                     //print(parameter.ke)
@@ -1036,6 +1037,7 @@ extension BackgroundTaskService {
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
+            params["CreatedDate"] = Date().getSyncDateAsString()
             HttpClientManager.SharedHM.generateContactAPi(parameter: params) { success, message in
                 
                 if(success ?? "") == "Success"{
@@ -1072,6 +1074,7 @@ extension BackgroundTaskService {
             networkMessage = String(format: "%.2f", speed)
             networkMessage += "Mbps"
             params["network_strength"] = networkMessage
+            params["CreatedDate"] = Date().getSyncDateAsString()
             HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
                 if(success ?? "") == "Success"{
                     print(message ?? "No msg")

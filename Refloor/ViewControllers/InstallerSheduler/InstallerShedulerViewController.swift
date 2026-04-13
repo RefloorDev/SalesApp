@@ -29,6 +29,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     var installationId:Int = Int()
     var installationDate:String = String()
     var name:String = String()
+    var isDestination = false
     //let count = 7
     var currentIndex = 0
     let itemsPerPage = 5
@@ -48,7 +49,15 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         installerLeftBtn.isHidden = true
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.shedulerInstallerNavBar(with: "SCHEDULE INSTALLATION",submitText: "Submit")
-        callingCustomerApi()
+         if isDestination
+        {
+             installerDatesApiCall()
+         }
+        else
+        {
+            callingCustomerApi()
+        }
+        //
         
         
     }
@@ -64,7 +73,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.installationScheduler,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.installationScheduler,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -109,7 +118,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     {
         DispatchQueue.main.async {
             
-            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": self.saleOrderId ,"installation_id": self.installationId,"network_strength":networkMessage]
+            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": self.saleOrderId ,"installation_id": self.installationId,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
             
             HttpClientManager.SharedHM.installerDatesSubmitAPi(parameter: parameter) { success, message in
                 if success == "Success"
@@ -283,6 +292,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                                 networkMessage = String(format: "%.2f", speed)
                                 networkMessage += "Mbps"
                                 self.parametersAdditionalComments["network_strength"] = networkMessage
+                                self.parametersAdditionalComments["CreatedDate"] = Date().getSyncDateAsString()
                                 self.additionalCommentsApiCall(networkMessage: networkMessage)
                             }
                         }
@@ -454,7 +464,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         let date = appointment?.appointment_datetime ?? ""
         var parameterToPass:[String:Any] = [:]
         let decodeOption:[String:Bool] = ["verify_signature":false]
-        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage]
+        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
         HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success"
             {
@@ -633,7 +643,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     {
         DispatchQueue.main.async {
             
-            let parameter : [String:Any] = ["token": UserData.init().token!, "appointment_id": AppDelegate.appoinmentslData.id!,"network_strength":networkMessage]
+            let parameter : [String:Any] = ["token": UserData.init().token!, "appointment_id": AppDelegate.appoinmentslData.id!,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
             
             HttpClientManager.SharedHM.installerDatesAPi(parameter: parameter) { success, message, availableDates, saleOrderId in
                 if success == "Success"

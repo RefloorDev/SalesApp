@@ -166,7 +166,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.collectDownPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.collectDownPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -1612,7 +1612,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             // params["network_strength"] = networkMessage
             
             
-            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter,"network_strength":networkMessage]
+            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
             // }
             // let paymentOptionUserDetails = paymentOptionUser(payment_Method: "cash", paymentDetails: userPaymentDetails)
             

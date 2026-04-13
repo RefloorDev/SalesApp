@@ -65,6 +65,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     }
 
     @IBOutlet weak var versatileWebView: WKWebView!
+    @IBOutlet weak var nxtBtn: UIButton!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var url:String = String()
@@ -111,6 +112,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
         else if isOneAndFunnd
         {
             self.setNavigationBarbackAndlogo(with: "One And Fund")
+            nxtBtn.isHidden = false
         }
         else
         {
@@ -127,6 +129,46 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
         // Do any additional setup after loading the view.
     }
     
+    @IBAction func nextbtnAction(_ sender: UIButton)
+    {
+        let details = UpdateDownFinalPaymentViewController.initialization()!
+        details.floorLevelData = AppDelegate.floorLevelData
+        details.floorShapeData = []
+        details.roomData = AppDelegate.roomData
+        details.appoinmentslData = AppDelegate.appoinmentslData
+        details.packagePlanName = packagePlanName
+        details.downOrFinal = self.downPaymentValue
+        details.totalAmount = self.totalAmount
+        details.paymentPlan = self.paymentPlan
+        details.roomName = self.roomName
+        details.adjustmentValue = self.adjustmentValue
+        details.paymentPlanValue = self.paymentPlanValue
+        details.paymentOptionDataValue = self.paymentOptionDataValue
+        details.drowingImageID = self.drowingImageID
+        details.area = self.area
+        details.downpayment = self.downpayment
+        details.downPaymentValue = self.downPaymentValue
+        details.finalpayment = self.finalpayment
+        details.financePayment = self.financePayment
+        details.selectedPaymentMethord1 = self.selectedPaymentMethord
+        //details.installationDate = self.installationDate
+        details.adminFeeStatus = self.adminFeeStatus
+        details.coapplicantSkiip = self.coapplicantSkiip
+        details.minSalePrice = self.minSalePrice
+        details.savings = self.savings
+        details.promotionCodeId = self.promotionCodeId
+        details.stairPrice = self.stairPrice
+        details.excluded_amount_promotion = self.excluded_amount_promotion
+        details.savings = self.savings
+        details.promotionCodeId = self.promotionCodeId
+        details.adminFeeStatus = self.adminFeeStatus
+        details.coapplicantSkiip = self.coapplicantSkiip
+        details.minSalePrice = self.minSalePrice
+        details.roomName = self.roomName
+        details.adjustmentValue = self.adjustmentValue
+        details.packagePlanName = self.packagePlanName
+        self.navigationController?.pushViewController(details, animated: true)
+    }
     override func performSegueToReturnBack()
     {
         let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
@@ -156,7 +198,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
