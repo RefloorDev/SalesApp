@@ -28,7 +28,7 @@ struct AppURL
     //let STAGE_BASE_URL = "http://34.48.50.165:7007/api/"//"https://odoostage.myx.ac/api/"
     let STAGE_BASE_URL = "https://odoostage.myx.ac/api/"
     //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
-   //let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
+//    let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
      let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446
@@ -153,8 +153,7 @@ struct AppURL
     //api for check payment
      let create_payment_transaction_check = BASE_URL + "create_payment_transaction_check"
 
-    //ACH mode: when true the Check tab is replaced by ACH (live payment via Cardpointe ACH)
-    static let isACHEnabled: Bool = true
+
 
     //api for uploading credit application details for applicant and co-applicant
      let create_credit_application = BASE_URL + "create_credit_application"

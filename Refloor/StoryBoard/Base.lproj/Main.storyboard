@@ -6537,6 +6537,43 @@
                                                     <constraint firstItem="h0w-RN-w89" firstAttribute="leading" secondItem="LDh-u1-ScI" secondAttribute="leading" id="sxC-zT-XOc"/>
                                                 </constraints>
                                             </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-5t-AbC">
+                                                <rect key="frame" x="0.0" y="224" width="200" height="56"/>
+                                                <subviews>
+                                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="check" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-5t-ImV">
+                                                        <rect key="frame" x="10" y="17.5" width="31" height="21"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="31" id="Chk-5t-Wdt"/>
+                                                            <constraint firstAttribute="height" constant="21" id="Chk-5t-Hgt"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-5t-Lbl">
+                                                        <rect key="frame" x="51" y="13.5" width="139" height="29"/>
+                                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="21"/>
+                                                        <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-5t-Btn">
+                                                        <rect key="frame" x="0.0" y="0.0" width="200" height="56"/>
+                                                        <connections>
+                                                            <action selector="sidetabButtonActions:" destination="1bH-DE-q4l" eventType="touchUpInside" id="Chk-5t-Act"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="Chk-5t-ImV" firstAttribute="leading" secondItem="Chk-5t-AbC" secondAttribute="leading" constant="10" id="Chk-5t-c1"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Chk-5t-Lbl" secondAttribute="trailing" constant="10" id="Chk-5t-c2"/>
+                                                    <constraint firstAttribute="bottom" secondItem="Chk-5t-Btn" secondAttribute="bottom" id="Chk-5t-c3"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Chk-5t-Btn" secondAttribute="trailing" id="Chk-5t-c4"/>
+                                                    <constraint firstItem="Chk-5t-Lbl" firstAttribute="centerY" secondItem="Chk-5t-ImV" secondAttribute="centerY" id="Chk-5t-c5"/>
+                                                    <constraint firstItem="Chk-5t-ImV" firstAttribute="centerY" secondItem="Chk-5t-AbC" secondAttribute="centerY" id="Chk-5t-c6"/>
+                                                    <constraint firstItem="Chk-5t-Btn" firstAttribute="top" secondItem="Chk-5t-AbC" secondAttribute="top" id="Chk-5t-c7"/>
+                                                    <constraint firstAttribute="height" constant="56" id="Chk-5t-c8"/>
+                                                    <constraint firstItem="Chk-5t-Lbl" firstAttribute="leading" secondItem="Chk-5t-ImV" secondAttribute="trailing" constant="10" id="Chk-5t-c9"/>
+                                                    <constraint firstItem="Chk-5t-Btn" firstAttribute="leading" secondItem="Chk-5t-AbC" secondAttribute="leading" id="Chk-5t-c10"/>
+                                                </constraints>
+                                            </view>
                                         </subviews>
                                         <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -6553,6 +6590,9 @@
                                             <constraint firstAttribute="trailing" secondItem="Noj-S3-SbW" secondAttribute="trailing" id="faK-YO-jUK"/>
                                             <constraint firstItem="kEH-li-gGl" firstAttribute="top" secondItem="qQ7-1Q-ubX" secondAttribute="bottom" id="ix2-OK-2X7"/>
                                             <constraint firstItem="LDh-u1-ScI" firstAttribute="top" secondItem="kEH-li-gGl" secondAttribute="bottom" id="z6S-7w-CEg"/>
+                                            <constraint firstItem="Chk-5t-AbC" firstAttribute="top" secondItem="LDh-u1-ScI" secondAttribute="bottom" id="Chk-5t-top"/>
+                                            <constraint firstItem="Chk-5t-AbC" firstAttribute="leading" secondItem="Ehu-0q-lWj" secondAttribute="leading" id="Chk-5t-led"/>
+                                            <constraint firstAttribute="trailing" secondItem="Chk-5t-AbC" secondAttribute="trailing" id="Chk-5t-trl"/>
                                         </constraints>
                                     </view>
                                     <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htv-W8-YAw">
@@ -6766,6 +6806,9 @@
                         <outlet property="checkButton" destination="h0w-RN-w89" id="95j-Fd-Y3B"/>
                         <outlet property="checkLabel" destination="NPV-uy-Krn" id="HKI-K1-BY0"/>
                         <outlet property="checkView" destination="LDh-u1-ScI" id="TTw-nT-AtG"/>
+                        <outlet property="checkTabButton" destination="Chk-5t-Btn" id="Chk-5t-ob"/>
+                        <outlet property="checkTabLabel" destination="Chk-5t-Lbl" id="Chk-5t-ol"/>
+                        <outlet property="checkTabView" destination="Chk-5t-AbC" id="Chk-5t-ov"/>
                         <outlet property="creditcardButton" destination="TVq-c5-T0d" id="puF-vQ-gMz"/>
                         <outlet property="creditcardLabel" destination="cgd-PD-pGn" id="KH0-ia-j6D"/>
                         <outlet property="creditcardView" destination="qQ7-1Q-ubX" id="Kr2-CN-l9B"/>
