@@ -82,6 +82,25 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     var transitionHeightvalue:[String] = []
     var transitionHeightId:Int = Int()
     
+    var wallTypeSegmentedControl: UISegmentedControl!
+    
+    @objc func wallTypeChanged(_ sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            drowingView?.currentWallType = .straight
+        } else if sender.selectedSegmentIndex == 1 {
+            drowingView?.currentWallType = .curved
+        } else {
+            drowingView?.currentWallType = .angled
+            promptForAngle { angle in
+                if let angle = angle {
+                    self.drowingView?.angledWallAngle = angle
+                } else {
+                    self.wallTypeSegmentedControl.selectedSegmentIndex = 0
+                    self.drowingView?.currentWallType = .straight
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -116,6 +135,27 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             self.drowingView.backgroundColor = .clear
             self.setgraphView(self.drowingContentView)
             self.drowingContentView.addSubview(self.drowingView)
+            
+            self.wallTypeSegmentedControl = UISegmentedControl(items: ["Straight Wall", "Curved Wall", "Angled Wall"])
+            self.wallTypeSegmentedControl.selectedSegmentIndex = 0
+            self.wallTypeSegmentedControl.backgroundColor = UIColor.darkGray
+            self.wallTypeSegmentedControl.selectedSegmentTintColor = UIColor.white
+            let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+            self.wallTypeSegmentedControl.setTitleTextAttributes(titleTextAttributes, for: .normal)
+            let selectedTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+            self.wallTypeSegmentedControl.setTitleTextAttributes(selectedTitleTextAttributes, for: .selected)
+            self.wallTypeSegmentedControl.addTarget(self, action: #selector(self.wallTypeChanged(_:)), for: .valueChanged)
+            
+            let segmentWidth: CGFloat = 360
+            let segmentHeight: CGFloat = 40
+            self.wallTypeSegmentedControl.frame = CGRect(
+                x: (self.drowingContentView.bounds.width - segmentWidth) / 2,
+                y: 20,
+                width: segmentWidth,
+                height: segmentHeight
+            )
+            self.drowingContentView.addSubview(self.wallTypeSegmentedControl)
+            
             self.scrollView.isHidden = true
             self.addViewHideORVisible(true)
             self.no_Squre_View_In_Tool()
@@ -145,7 +185,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomDrawing,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.roomDrawing,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -919,9 +959,34 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         else
         {
             self.tempAreaLabel.text = "Area: ?"
-            
         }
     }
+    
+    func promptForAngle(completion: @escaping (CGFloat?) -> Void) {
+        let alert = UIAlertController(title: "Angled Wall", message: "Enter the angle for this wall (in degrees):", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.keyboardType = .decimalPad
+            textField.placeholder = "e.g., 45"
+        }
+        
+        let okAction = UIAlertAction(title: "OK", style: .default) { [weak alert] _ in
+            if let text = alert?.textFields?.first?.text, let angle = Double(text) {
+                completion(CGFloat(angle))
+            } else {
+                completion(nil) // Invalid or empty input
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            completion(nil)
+        }
+        
+        alert.addAction(okAction)
+        alert.addAction(cancelAction)
+        
+        self.present(alert, animated: true, completion: nil)
+    }
+
     
     
     

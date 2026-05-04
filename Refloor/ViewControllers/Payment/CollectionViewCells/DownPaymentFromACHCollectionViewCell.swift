@@ -14,10 +14,13 @@ class DownPaymentFromACHCollectionViewCell: UICollectionViewCell, UICollectionVi
     @IBOutlet weak var acctTypeButton: UIButton!
     @IBOutlet weak var payButton: UIButton!
 
+    @IBOutlet weak var oCRCameraBtn: UIButton!
     var persentage: [String] = []
     var selectedTag = 0
     var selectedItem = 0
     var delegate: ExternalCollectionViewDelegateForTableView?
+    var routingNumber:String = String()
+    var accountNumber:String = String()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,8 +28,10 @@ class DownPaymentFromACHCollectionViewCell: UICollectionViewCell, UICollectionVi
     }
 
     func collectionViewConfigruation(collectionViewData: [String], delegate: ExternalCollectionViewDelegateForTableView?) {
-        self.bankAccountNumberTF.text = ""
-        self.bankRoutingNumberTF.text = ""
+        self.bankAccountNumberTF.text = accountNumber.isEmpty ? nil : accountNumber
+        self.bankRoutingNumberTF.text = routingNumber.isEmpty ? nil : routingNumber
+        
+            
         self.selectedItem = 0
         self.persentage = collectionViewData
         self.delegate = delegate

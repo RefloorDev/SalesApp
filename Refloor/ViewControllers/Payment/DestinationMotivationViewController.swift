@@ -125,7 +125,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.destinationMotivation,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.destinationMotivation,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -246,7 +246,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
                             networkMessage += "Mbps"
                             self.parametersAdditionalComments["network_strength"] = networkMessage
                             self.parametersAdditionalComments["destination_selection_id"] = self.destinationSelectionId
-                            self.parametersAdditionalComments["CreatedDate"] = Date().getSyncDateAsString()
+                            self.parametersAdditionalComments["create_date"] = Date().getSyncDateAsString()
                             self.additionalCommentsApiCall(networkMessage: networkMessage)
                         }
                     }
@@ -416,7 +416,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
         let date = appointment?.appointment_datetime ?? ""
         var parameterToPass:[String:Any] = [:]
         let decodeOption:[String:Bool] = ["verify_signature":false]
-        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
         HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success"
             {
@@ -609,7 +609,7 @@ class DestinationMotivationViewController: UIViewController, DropDownDelegate {
                                 networkMessage += "Mbps"
                                 self.parametersAdditionalComments["network_strength"] = networkMessage
                                 self.parametersAdditionalComments["destination_selection_id"] = self.destinationSelectionId
-                                self.parametersAdditionalComments["CreatedDate"] = Date().getSyncDateAsString()
+                                self.parametersAdditionalComments["create_date"] = Date().getSyncDateAsString()
                                 self.additionalCommentsApiCall(networkMessage: networkMessage)
                             }
                         }

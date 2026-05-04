@@ -855,7 +855,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                     "screen_name": screenName,
                     "screen_entry_date": screenEntryTime,   // <- fixed
                     "network_strength": networkMessage,
-                    "CreatedDate": Date().getSyncDateAsString(),
+                    "create_date": Date().getSyncDateAsString(),
                     "timezone":timeZone
                 ]
                 
