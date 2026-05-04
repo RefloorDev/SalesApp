@@ -193,7 +193,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.financeOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
         }
         
@@ -296,6 +296,7 @@ class FinanceViewController: UIViewController, versatileProtocol, CreditApplicat
         applicant.promotionCodeId = self.promotionCodeId
         applicant.stairPrice = stairPrice
         applicant.excluded_amount_promotion = excluded_amount_promotion
+        applicant.adjustmentValue = self.adjustmentValue
         AppDelegate.appoinmentslData.FinanceProviderId = 0
         self.navigationController?.pushViewController(applicant, animated: true)
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,14 +20,12 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ach-BG-View">
                         <rect key="frame" x="0.0" y="0.0" width="394" height="800"/>
                         <subviews>
-                            <!-- Title label -->
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add ACH Details" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ach-Title-Lbl">
-                                <rect key="frame" x="20" y="20" width="220" height="25"/>
+                                <rect key="frame" x="20" y="20" width="143.5" height="25"/>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="18"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <!-- Percentage selector collectionView (hidden) -->
                             <collectionView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="ach-CV">
                                 <rect key="frame" x="20" y="55" width="354" height="80"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -41,32 +39,41 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                             </collectionView>
-                            <!-- Bank Account Number label -->
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Bank Account Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AcctLbl">
-                                <rect key="frame" x="20" y="65" width="175" height="22"/>
+                                <rect key="frame" x="20" y="65" width="169" height="22"/>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                                 <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <!-- Bank Account Number text field container -->
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AcctView">
                                 <rect key="frame" x="20" y="97" width="354" height="56"/>
                                 <subviews>
-                                    <textField opaque="NO" borderStyle="none" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0000 0000 0000 0000" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AcctTF">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0000 0000 0000 0000" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AcctTF">
                                         <rect key="frame" x="10" y="5" width="334" height="46"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
+                                    <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Wb-2I-NVb">
+                                        <rect key="frame" x="297" y="7" width="42" height="42"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="42" id="HQZ-2A-lct"/>
+                                            <constraint firstAttribute="width" constant="42" id="fI9-rS-GP2"/>
+                                        </constraints>
+                                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                        <state key="normal" image="ScanCheck"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="ach-AcctView-Hgt"/>
-                                    <constraint firstItem="ach-AcctTF" firstAttribute="leading" secondItem="ach-AcctView" secondAttribute="leading" constant="10" id="ach-AcctTF-Lead"/>
-                                    <constraint firstAttribute="trailing" secondItem="ach-AcctTF" secondAttribute="trailing" constant="10" id="ach-AcctTF-Trail"/>
-                                    <constraint firstItem="ach-AcctTF" firstAttribute="top" secondItem="ach-AcctView" secondAttribute="top" constant="5" id="ach-AcctTF-Top"/>
+                                    <constraint firstItem="7Wb-2I-NVb" firstAttribute="centerY" secondItem="ach-AcctTF" secondAttribute="centerY" id="5hZ-yE-jV6"/>
+                                    <constraint firstAttribute="trailing" secondItem="7Wb-2I-NVb" secondAttribute="trailing" constant="15" id="TSe-fu-68T"/>
                                     <constraint firstAttribute="bottom" secondItem="ach-AcctTF" secondAttribute="bottom" constant="5" id="ach-AcctTF-Bot"/>
+                                    <constraint firstItem="ach-AcctTF" firstAttribute="leading" secondItem="ach-AcctView" secondAttribute="leading" constant="10" id="ach-AcctTF-Lead"/>
+                                    <constraint firstItem="ach-AcctTF" firstAttribute="top" secondItem="ach-AcctView" secondAttribute="top" constant="5" id="ach-AcctTF-Top"/>
+                                    <constraint firstAttribute="trailing" secondItem="ach-AcctTF" secondAttribute="trailing" constant="10" id="ach-AcctTF-Trail"/>
+                                    <constraint firstAttribute="height" constant="56" id="ach-AcctView-Hgt"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -77,18 +84,16 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <!-- Routing Number label -->
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Routing Number" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ach-RoutingLbl">
-                                <rect key="frame" x="20" y="183" width="130" height="22"/>
+                                <rect key="frame" x="20" y="173" width="125" height="22"/>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                                 <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <!-- Routing Number text field container -->
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ach-RoutingView">
-                                <rect key="frame" x="20" y="215" width="354" height="56"/>
+                                <rect key="frame" x="20" y="205" width="354" height="56"/>
                                 <subviews>
-                                    <textField opaque="NO" borderStyle="none" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0000 0000 0000 0000" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ach-RoutingTF">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="0000 0000 0000 0000" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ach-RoutingTF">
                                         <rect key="frame" x="10" y="5" width="334" height="46"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -98,11 +103,11 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="ach-RoutingView-Hgt"/>
-                                    <constraint firstItem="ach-RoutingTF" firstAttribute="leading" secondItem="ach-RoutingView" secondAttribute="leading" constant="10" id="ach-RoutingTF-Lead"/>
-                                    <constraint firstAttribute="trailing" secondItem="ach-RoutingTF" secondAttribute="trailing" constant="10" id="ach-RoutingTF-Trail"/>
-                                    <constraint firstItem="ach-RoutingTF" firstAttribute="top" secondItem="ach-RoutingView" secondAttribute="top" constant="5" id="ach-RoutingTF-Top"/>
                                     <constraint firstAttribute="bottom" secondItem="ach-RoutingTF" secondAttribute="bottom" constant="5" id="ach-RoutingTF-Bot"/>
+                                    <constraint firstItem="ach-RoutingTF" firstAttribute="leading" secondItem="ach-RoutingView" secondAttribute="leading" constant="10" id="ach-RoutingTF-Lead"/>
+                                    <constraint firstItem="ach-RoutingTF" firstAttribute="top" secondItem="ach-RoutingView" secondAttribute="top" constant="5" id="ach-RoutingTF-Top"/>
+                                    <constraint firstAttribute="trailing" secondItem="ach-RoutingTF" secondAttribute="trailing" constant="10" id="ach-RoutingTF-Trail"/>
+                                    <constraint firstAttribute="height" constant="56" id="ach-RoutingView-Hgt"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -113,53 +118,45 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <!-- Account Type label -->
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Type" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AT-Lbl">
-                                <rect key="frame" x="20" y="301" width="110" height="22"/>
+                                <rect key="frame" x="20" y="281" width="101.5" height="22"/>
                                 <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                                 <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <!-- Account Type dropdown container (matches "All Homeowners Present" pattern) -->
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AT-Container">
-                                <rect key="frame" x="20" y="333" width="354" height="56"/>
+                                <rect key="frame" x="20" y="313" width="354" height="56"/>
                                 <subviews>
-                                    <!-- Selected value label (left) -->
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AT-ValueLbl">
-                                        <rect key="frame" x="10" y="0.0" width="304" height="56"/>
+                                        <rect key="frame" x="10" y="0.0" width="299" height="56"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <!-- Dropdown arrow image (right) -->
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dropDown" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AT-Arrow">
                                         <rect key="frame" x="314" y="18" width="20" height="20"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="20" id="ach-AT-Arrow-W"/>
                                             <constraint firstAttribute="height" constant="20" id="ach-AT-Arrow-H"/>
+                                            <constraint firstAttribute="width" constant="20" id="ach-AT-Arrow-W"/>
                                         </constraints>
                                     </imageView>
-                                    <!-- Transparent full-size button overlay (tap target only) -->
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ach-AT-Btn">
                                         <rect key="frame" x="0.0" y="0.0" width="354" height="56"/>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="ach-AT-Container-Hgt"/>
-                                    <!-- Label: leading 10, top/bottom fill container -->
-                                    <constraint firstItem="ach-AT-ValueLbl" firstAttribute="leading" secondItem="ach-AT-Container" secondAttribute="leading" constant="10" id="ach-AT-ValLbl-Lead"/>
-                                    <constraint firstItem="ach-AT-ValueLbl" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="top" id="ach-AT-ValLbl-Top"/>
-                                    <constraint firstAttribute="bottom" secondItem="ach-AT-ValueLbl" secondAttribute="bottom" id="ach-AT-ValLbl-Bot"/>
-                                    <!-- Arrow image: trailing 20, vertically centered (top 18 in 56pt = center of 20pt icon) -->
                                     <constraint firstItem="ach-AT-Arrow" firstAttribute="leading" secondItem="ach-AT-ValueLbl" secondAttribute="trailing" constant="5" id="ach-AT-Arrow-Lead"/>
-                                    <constraint firstAttribute="trailing" secondItem="ach-AT-Arrow" secondAttribute="trailing" constant="20" id="ach-AT-Arrow-Trail"/>
                                     <constraint firstItem="ach-AT-Arrow" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="top" constant="18" id="ach-AT-Arrow-Top"/>
-                                    <!-- Button overlay: fill entire container -->
-                                    <constraint firstItem="ach-AT-Btn" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="top" id="ach-AT-Btn-Top"/>
+                                    <constraint firstAttribute="trailing" secondItem="ach-AT-Arrow" secondAttribute="trailing" constant="20" id="ach-AT-Arrow-Trail"/>
                                     <constraint firstAttribute="bottom" secondItem="ach-AT-Btn" secondAttribute="bottom" id="ach-AT-Btn-Bot"/>
                                     <constraint firstItem="ach-AT-Btn" firstAttribute="leading" secondItem="ach-AT-Container" secondAttribute="leading" id="ach-AT-Btn-Lead"/>
+                                    <constraint firstItem="ach-AT-Btn" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="top" id="ach-AT-Btn-Top"/>
                                     <constraint firstAttribute="trailing" secondItem="ach-AT-Btn" secondAttribute="trailing" id="ach-AT-Btn-Trail"/>
+                                    <constraint firstAttribute="height" constant="56" id="ach-AT-Container-Hgt"/>
+                                    <constraint firstAttribute="bottom" secondItem="ach-AT-ValueLbl" secondAttribute="bottom" id="ach-AT-ValLbl-Bot"/>
+                                    <constraint firstItem="ach-AT-ValueLbl" firstAttribute="leading" secondItem="ach-AT-Container" secondAttribute="leading" constant="10" id="ach-AT-ValLbl-Lead"/>
+                                    <constraint firstItem="ach-AT-ValueLbl" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="top" id="ach-AT-ValLbl-Top"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -170,9 +167,8 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <!-- Collect (pay) button -->
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ach-Pay-Btn">
-                                <rect key="frame" x="20" y="419" width="354" height="56"/>
+                                <rect key="frame" x="20" y="389" width="354" height="56"/>
                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="56" id="ach-Pay-Hgt"/>
@@ -193,61 +189,55 @@
                         </subviews>
                         <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <!-- Title label -->
-                            <constraint firstItem="ach-Title-Lbl" firstAttribute="top" secondItem="ach-BG-View" secondAttribute="top" constant="20" id="ach-Title-Top"/>
-                            <constraint firstItem="ach-Title-Lbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-Title-Lead"/>
-                            <!-- CollectionView (hidden percentage selector) -->
-                            <constraint firstItem="ach-CV" firstAttribute="top" secondItem="ach-Title-Lbl" secondAttribute="bottom" constant="10" id="ach-CV-Top"/>
-                            <constraint firstItem="ach-CV" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-CV-Lead"/>
-                            <constraint firstAttribute="trailing" secondItem="ach-CV" secondAttribute="trailing" constant="20" id="ach-CV-Trail"/>
-                            <!-- Bank Account Number label (anchored to title label) -->
-                            <constraint firstItem="ach-AcctLbl" firstAttribute="top" secondItem="ach-Title-Lbl" secondAttribute="bottom" constant="20" id="ach-AcctLbl-Top"/>
-                            <constraint firstItem="ach-AcctLbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AcctLbl-Lead"/>
-                            <!-- Bank Account Number view -->
-                            <constraint firstItem="ach-AcctView" firstAttribute="top" secondItem="ach-AcctLbl" secondAttribute="bottom" constant="10" id="ach-AcctView-Top"/>
-                            <constraint firstItem="ach-AcctView" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AcctView-Lead"/>
-                            <constraint firstAttribute="trailing" secondItem="ach-AcctView" secondAttribute="trailing" constant="20" id="ach-AcctView-Trail"/>
-                            <!-- Routing Number label -->
-                            <constraint firstItem="ach-RoutingLbl" firstAttribute="top" secondItem="ach-AcctView" secondAttribute="bottom" constant="20" id="ach-RoutingLbl-Top"/>
-                            <constraint firstItem="ach-RoutingLbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-RoutingLbl-Lead"/>
-                            <!-- Routing Number view -->
-                            <constraint firstItem="ach-RoutingView" firstAttribute="top" secondItem="ach-RoutingLbl" secondAttribute="bottom" constant="10" id="ach-RoutingView-Top"/>
-                            <constraint firstItem="ach-RoutingView" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-RoutingView-Lead"/>
-                            <constraint firstAttribute="trailing" secondItem="ach-RoutingView" secondAttribute="trailing" constant="20" id="ach-RoutingView-Trail"/>
-                            <!-- Account Type label -->
-                            <constraint firstItem="ach-AT-Lbl" firstAttribute="top" secondItem="ach-RoutingView" secondAttribute="bottom" constant="20" id="ach-AT-Lbl-Top"/>
-                            <constraint firstItem="ach-AT-Lbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AT-Lbl-Lead"/>
-                            <!-- Account Type dropdown container -->
-                            <constraint firstItem="ach-AT-Container" firstAttribute="top" secondItem="ach-AT-Lbl" secondAttribute="bottom" constant="10" id="ach-AT-Container-Top"/>
                             <constraint firstItem="ach-AT-Container" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AT-Container-Lead"/>
+                            <constraint firstItem="ach-AT-Container" firstAttribute="top" secondItem="ach-AT-Lbl" secondAttribute="bottom" constant="10" id="ach-AT-Container-Top"/>
                             <constraint firstAttribute="trailing" secondItem="ach-AT-Container" secondAttribute="trailing" constant="20" id="ach-AT-Container-Trail"/>
-                            <!-- Collect (pay) button -->
-                            <constraint firstItem="ach-Pay-Btn" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="bottom" constant="20" id="ach-Pay-Btn-Top"/>
+                            <constraint firstItem="ach-AT-Lbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AT-Lbl-Lead"/>
+                            <constraint firstItem="ach-AT-Lbl" firstAttribute="top" secondItem="ach-RoutingView" secondAttribute="bottom" constant="20" id="ach-AT-Lbl-Top"/>
+                            <constraint firstItem="ach-AcctLbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AcctLbl-Lead"/>
+                            <constraint firstItem="ach-AcctLbl" firstAttribute="top" secondItem="ach-Title-Lbl" secondAttribute="bottom" constant="20" id="ach-AcctLbl-Top"/>
+                            <constraint firstItem="ach-AcctView" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AcctView-Lead"/>
+                            <constraint firstItem="ach-AcctView" firstAttribute="top" secondItem="ach-AcctLbl" secondAttribute="bottom" constant="10" id="ach-AcctView-Top"/>
+                            <constraint firstAttribute="trailing" secondItem="ach-AcctView" secondAttribute="trailing" constant="20" id="ach-AcctView-Trail"/>
+                            <constraint firstItem="ach-CV" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-CV-Lead"/>
+                            <constraint firstItem="ach-CV" firstAttribute="top" secondItem="ach-Title-Lbl" secondAttribute="bottom" constant="10" id="ach-CV-Top"/>
+                            <constraint firstAttribute="trailing" secondItem="ach-CV" secondAttribute="trailing" constant="20" id="ach-CV-Trail"/>
                             <constraint firstItem="ach-Pay-Btn" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-Pay-Btn-Lead"/>
+                            <constraint firstItem="ach-Pay-Btn" firstAttribute="top" secondItem="ach-AT-Container" secondAttribute="bottom" constant="20" id="ach-Pay-Btn-Top"/>
                             <constraint firstAttribute="trailing" secondItem="ach-Pay-Btn" secondAttribute="trailing" constant="20" id="ach-Pay-Btn-Trail"/>
+                            <constraint firstItem="ach-RoutingLbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-RoutingLbl-Lead"/>
+                            <constraint firstItem="ach-RoutingLbl" firstAttribute="top" secondItem="ach-AcctView" secondAttribute="bottom" constant="20" id="ach-RoutingLbl-Top"/>
+                            <constraint firstItem="ach-RoutingView" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-RoutingView-Lead"/>
+                            <constraint firstItem="ach-RoutingView" firstAttribute="top" secondItem="ach-RoutingLbl" secondAttribute="bottom" constant="10" id="ach-RoutingView-Top"/>
+                            <constraint firstAttribute="trailing" secondItem="ach-RoutingView" secondAttribute="trailing" constant="20" id="ach-RoutingView-Trail"/>
+                            <constraint firstItem="ach-Title-Lbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-Title-Lead"/>
+                            <constraint firstItem="ach-Title-Lbl" firstAttribute="top" secondItem="ach-BG-View" secondAttribute="top" constant="20" id="ach-Title-Top"/>
                         </constraints>
                     </view>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ach-SafeArea"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="ach-BG-View" secondAttribute="bottom" id="ach-BGView-Bot"/>
+                <constraint firstItem="ach-BG-View" firstAttribute="leading" secondItem="ach-CV-Cell" secondAttribute="leading" id="ach-BGView-Lead"/>
                 <constraint firstItem="ach-BG-View" firstAttribute="top" secondItem="ach-CV-Cell" secondAttribute="top" id="ach-BGView-Top"/>
                 <constraint firstAttribute="trailing" secondItem="ach-BG-View" secondAttribute="trailing" id="ach-BGView-Trail"/>
-                <constraint firstItem="ach-BG-View" firstAttribute="leading" secondItem="ach-CV-Cell" secondAttribute="leading" id="ach-BGView-Lead"/>
-                <constraint firstAttribute="bottom" secondItem="ach-BG-View" secondAttribute="bottom" id="ach-BGView-Bot"/>
             </constraints>
             <connections>
-                <outlet property="totalLabel" destination="ach-Title-Lbl" id="ach-Out-Title"/>
-                <outlet property="collectionView" destination="ach-CV" id="ach-Out-CV"/>
+                <outlet property="acctTypeButton" destination="ach-AT-Btn" id="ach-Out-ATBtn"/>
+                <outlet property="acctTypeLabel" destination="ach-AT-ValueLbl" id="ach-Out-ATLbl"/>
                 <outlet property="bankAccountNumberTF" destination="ach-AcctTF" id="ach-Out-AcctTF"/>
                 <outlet property="bankRoutingNumberTF" destination="ach-RoutingTF" id="ach-Out-RoutingTF"/>
-                <outlet property="acctTypeLabel" destination="ach-AT-ValueLbl" id="ach-Out-ATLbl"/>
-                <outlet property="acctTypeButton" destination="ach-AT-Btn" id="ach-Out-ATBtn"/>
+                <outlet property="collectionView" destination="ach-CV" id="ach-Out-CV"/>
+                <outlet property="oCRCameraBtn" destination="7Wb-2I-NVb" id="e7I-gt-eue"/>
                 <outlet property="payButton" destination="ach-Pay-Btn" id="ach-Out-PayBtn"/>
+                <outlet property="totalLabel" destination="ach-Title-Lbl" id="ach-Out-Title"/>
             </connections>
+            <point key="canvasLocation" x="116" y="104"/>
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="dropDown" width="20" height="20"/>
+        <image name="ScanCheck" width="42" height="42"/>
+        <image name="dropDown" width="21" height="21"/>
     </resources>
 </document>

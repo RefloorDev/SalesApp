@@ -145,7 +145,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.paymentOption,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -1003,7 +1003,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             self.alert("Select a Payment Option", nil)
             return
         }
-        downpatmet.adjustmentValue = self.selectedPlan == 2 ? self.adjestmentValue : 0
+        //downpatmet.adjustmentValue = self.selectedPlan == 2 ? self.adjestmentValue : 0
+        downpatmet.adjustmentValue = self.IsEligibleForDiscounts == 1 ? self.adjestmentValue : 0
        // downpatmet.paymentPlan?.additional_cost = Double(additional_cost)
        downpatmet.paymentPlan?.additional_cost = additionalCost
         
@@ -1016,7 +1017,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         // downpatmet.downpayment = self.downpayment
         // downpatmet.adminFee = Double(self.adminFee) ?? 0
         downpatmet.adminFee = 0
-        if self.paymentPlanValueDetails[self.selectedPlan].plan_title != "Smart Choice"//selectedPlan != 2
+        //if self.paymentPlanValueDetails[self.selectedPlan].plan_title != "Smart Choice"//selectedPlan != 2
+        if IsEligibleForDiscounts == 0
         {
             deleteDiscountArrayFromDb()
             discountArray.removeAll()

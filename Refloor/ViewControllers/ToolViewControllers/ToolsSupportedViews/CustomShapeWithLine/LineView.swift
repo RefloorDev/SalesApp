@@ -11,7 +11,15 @@ protocol LineViewDelegate {
     func LineViewArea_PerimeterResult(area:CGFloat,Perimeter:Float)
     func LineViewTempAreaResult(area:CGFloat,isClosed:Bool,Perimeter:Float)
     func LineDrawingStarted()
+    func promptForAngle(completion: @escaping (CGFloat?) -> Void)
 }
+
+enum WallType: Int {
+    case straight = 0
+    case curved
+    case angled
+}
+
 class LineView: UIView {
     
     var shapeLayere:CAShapeLayer? = nil
@@ -32,16 +40,18 @@ class LineView: UIView {
     var touchmoved = false
     var starttouchBegan:CGPoint?
     var stoptouchBegan:CGPoint?
+    var currentWallType: WallType = .straight
+    var angledWallAngle: CGFloat? = nil
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first {
             touchmoved = false
             let position = touch.location(in: self)
-
+            
             if isClosed {
                 return
             }
-
+            
             if pointPath.isEmpty {
                 let limitedPoint = self.getLimitedPoint(at: position)  // No need for optional binding
                 startTouch = limitedPoint
@@ -51,10 +61,10 @@ class LineView: UIView {
                 if let lastPoint = pointPath.last {
                     let limitedPoint = self.getLimitedPoint(at: position) // No need for optional binding
                     startTouch = lastPoint.point
-                    secondTouch = limitedPoint
+                    secondTouch = applyWallConstraints(to: limitedPoint, relativeTo: startTouch)
                     starttouchBegan = lastPoint.point
-                    stoptouchBegan = limitedPoint
-
+                    stoptouchBegan = secondTouch
+                    
                     print("starttouchBegan:", starttouchBegan)
                     print("stoptouchBegan:", stoptouchBegan)
                 } else {
@@ -62,12 +72,12 @@ class LineView: UIView {
                     return
                 }
             }
-
+            
             drowTempLine()
         }
     }
-
-
+    
+    
 //    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        if let touch = touches.first {
 //            touchmoved=false
@@ -103,11 +113,32 @@ class LineView: UIView {
         touchmoved=true
         for touch in touches{
             let position = touch.location(in: self)
-            secondTouch = self.getLimitedPoint(at: position)
+            secondTouch = applyWallConstraints(to: self.getLimitedPoint(at: position), relativeTo: startTouch)
             drowTempLine()
             
         }
         
+    }
+    
+    func applyWallConstraints(to point: CGPoint, relativeTo start: CGPoint?) -> CGPoint {
+        let isFirstLine = pointPath.count <= 1
+        let isStraight = currentWallType == .straight || isFirstLine
+        if isStraight, let start = start {
+            let xDiff = abs(point.x - start.x)
+            let yDiff = abs(point.y - start.y)
+            if xDiff > yDiff {
+                return CGPoint(x: point.x, y: start.y)
+            } else {
+                return CGPoint(x: start.x, y: point.y)
+            }
+        } else if currentWallType == .angled, !isFirstLine, let angle = angledWallAngle, let start = start {
+            let dist = getdistanceofpoint(start, point)
+            let rad = angle * .pi / 180.0
+            let newX = start.x + dist * cos(rad)
+            let newY = start.y + dist * sin(rad)
+            return CGPoint(x: newX, y: newY)
+        }
+        return point
     }
     //     func getCurrentContext()
     //     {
@@ -121,56 +152,47 @@ class LineView: UIView {
             return
         }
         clearTempLine()
-        if pointPath.count == 0
-        {
-            let label1 = UILabel()
-            self.addSubview(label1)
-            self.pointPath.append(customPointObjcet(label: label1, point: startTouch!, lineValue: 0))
-            if(secondTouch != nil)
-            {
-                let label2 = UILabel()
-                self.addSubview(label2)
-                self.pointPath.append(customPointObjcet(label: label2, point: secondTouch!, lineValue: 0))
-                self.drowShape(false)
+        
+        guard let finalPoint = secondTouch else {
+            if pointPath.count == 0, let start = startTouch {
+                let label1 = UILabel()
+                self.addSubview(label1)
+                self.pointPath.append(customPointObjcet(label: label1, point: start, lineValue: 0, wallType: self.currentWallType))
             }
-        }
-        else
-        {
-            if(pointPath.count < 3)
-            {
-                
-                let label = UILabel()
-                self.addSubview(label)
-                self.pointPath.append(customPointObjcet(label: label, point: secondTouch!, lineValue: 0))
-                self.drowShape(false)
-            }
-            else
-            {
-                
-                
-                if getdistanceofpoint(self.pointPath[0 ].point, secondTouch!) < 30
-                {
-                    UIView.animate(withDuration: 0.3) {
-                        self.drowShape(true)
-                        self.isClosed = true
-                        self.layoutIfNeeded()
-                    }
-                    
-                }
-                else
-                {
-                    let label = UILabel()
-                    self.addSubview(label)
-                    self.pointPath.append(customPointObjcet(label: label, point: secondTouch!, lineValue: 0))
-                    UIView.animate(withDuration: 0.3) {
-                        self.drowShape(false)
-                        self.layoutIfNeeded()
-                    }
-                }
-            }
-            
+            return
         }
         
+        finalizeTouchesEnded(with: finalPoint)
+    }
+    
+    func finalizeTouchesEnded(with finalPoint: CGPoint) {
+        if pointPath.count == 0 {
+            let label1 = UILabel()
+            self.addSubview(label1)
+            self.pointPath.append(customPointObjcet(label: label1, point: startTouch!, lineValue: 0, wallType: self.currentWallType))
+            
+            let label2 = UILabel()
+            self.addSubview(label2)
+            self.pointPath.append(customPointObjcet(label: label2, point: finalPoint, lineValue: 0, wallType: self.currentWallType))
+            self.drowShape(false)
+        } else {
+            let label = UILabel()
+            self.addSubview(label)
+            self.pointPath.append(customPointObjcet(label: label, point: finalPoint, lineValue: 0, wallType: self.currentWallType))
+            
+            if pointPath.count >= 3 && getdistanceofpoint(self.pointPath[0].point, finalPoint) < 30 {
+                UIView.animate(withDuration: 0.3) {
+                    self.drowShape(true)
+                    self.isClosed = true
+                    self.layoutIfNeeded()
+                }
+            } else {
+                UIView.animate(withDuration: 0.3) {
+                    self.drowShape(false)
+                    self.layoutIfNeeded()
+                }
+            }
+        }
     }
     func roundTheValue(_ value:CGFloat) -> CGFloat
     {
@@ -252,6 +274,18 @@ class LineView: UIView {
                 path.addQuadCurve(to: curvpoints[0], controlPoint: curvpoints[1])
                 
                 point.lineValue = labelConfigration(point.label, getCenterPoint(pointPath[i - 1].point,point.point), distance:getdistanceofpoint(pointPath[i - 1].point,point.point))
+            }
+            else if point.wallType == .curved {
+                let p1 = pointPath[i - 1].point
+                let p2 = point.point
+                let mid = getCenterPoint(p1, p2)
+                let distance = getdistanceofpoint(p1, p2)
+                let angle = atan2(p2.y - p1.y, p2.x - p1.x)
+                let bulge = distance * 0.2
+                let controlPoint = CGPoint(x: mid.x + bulge * sin(angle), y: mid.y - bulge * cos(angle))
+                path.addQuadCurve(to: p2, controlPoint: controlPoint)
+                
+                point.lineValue = labelConfigration(point.label, getCenterPoint(pointPath[i - 1].point,point.point), distance:distance)
             }
             else if !(pointPath[i - 1].isCorved)
             {
@@ -735,11 +769,13 @@ class customPointObjcet:NSObject
     var lineValue:Float
     var isCorved:Bool
     var subView:UIView
-    init(label:UILabel, point:CGPoint,lineValue:Float) {
+    var wallType: WallType
+    init(label:UILabel, point:CGPoint,lineValue:Float, wallType: WallType = .straight) {
         self.label = label
         self.point = point
         self.lineValue = lineValue
         self.isCorved = false
+        self.wallType = wallType
         self.subView = UIView(frame: CGRect(origin: point, size: CGSize(width: 30, height: 30)))
         self.subView.backgroundColor = .clear
     }

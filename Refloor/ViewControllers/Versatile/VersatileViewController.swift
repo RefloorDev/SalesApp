@@ -189,7 +189,19 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
     {
         logScreenEvent(screen: isVersatile ? ScreenNames.versatileScreen : ScreenNames.hunterScreen) {
             var networkMessage = ""
-            let screenName = isVersatile ? ScreenNames.versatileScreen : ScreenNames.hunterScreen
+            var screenName = ""
+            if isVersatile
+            {
+                ScreenNames.versatileScreen
+            }
+            else if isHunter
+            {
+                ScreenNames.hunterScreen
+            }
+            else
+            {
+                ScreenNames.oneAndFund
+            }
             let speedTest = NetworkSpeedTest()
             speedTest.testUploadSpeed { speed in
                 print("Upload speed: \(speed) Mbps")
@@ -198,7 +210,7 @@ class VersatileViewController: UIViewController, ImagePickerDelegate, versatileB
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":screenName,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }

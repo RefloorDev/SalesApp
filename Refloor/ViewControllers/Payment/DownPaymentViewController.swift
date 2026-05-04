@@ -118,19 +118,19 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         downpaymentSelectionObjcet.append(payment2)
         let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
         downpaymentSelectionObjcet.append(payment3)
-        if AppURL.isACHEnabled {
-            self.checkLabel.text = "ACH"
-            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-            downpaymentSelectionObjcet.append(payment4)
-        } else {
+//        if AppURL.isACHEnabled {
+//            self.checkLabel.text = "ACH"
+//            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+//            downpaymentSelectionObjcet.append(payment4)
+//        } else {
             let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
             downpaymentSelectionObjcet.append(payment4)
-        }
+        //}
         paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
-        paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
+        //paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
         cameraImagePicker.delegate = self
         self.totalAreaLabel.text = "\(area) Sq.ft"
@@ -166,7 +166,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.collectDownPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.collectDownPayment,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -192,19 +192,19 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         downpaymentSelectionObjcet.append(payment2)
         let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
         downpaymentSelectionObjcet.append(payment3)
-        if AppURL.isACHEnabled {
-            self.checkLabel.text = "ACH"
-            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-            downpaymentSelectionObjcet.append(payment4)
-        } else {
+//        if AppURL.isACHEnabled {
+//            self.checkLabel.text = "ACH"
+//            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+//            downpaymentSelectionObjcet.append(payment4)
+//        } else {
             let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
             downpaymentSelectionObjcet.append(payment4)
-        }
+       // }
         paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
-        paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
+        //paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
 
         self.totalAreaLabel.text = "\(area) Sq.ft"
@@ -467,7 +467,20 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             cell.acctTypeLabel.text = selectedAcctTypeLabel
             cell.acctTypeButton.addTarget(self, action: #selector(showAcctTypeDropdown), for: .touchUpInside)
             cell.payButton.addTarget(self, action: #selector(GoForJobCompleationValidation), for: .touchUpInside)
+            cell.oCRCameraBtn.addTarget(self, action: #selector(autoReadOCRForCheck), for: .touchUpInside)
             cell.payButton.setTitle("Collect", for: .normal)
+            if routingNumber != "" || accountNumber != ""
+            {
+                cell.bankRoutingNumberTF.text = routingNumber
+
+                cell.bankAccountNumberTF.text = accountNumber
+
+                //cell.checkNumberTF.text = checkNumber
+                cell.routingNumber = routingNumber
+                cell.accountNumber = accountNumber
+                //cell.checkNumber = checkNumber
+                //cell.collectionView.reloadData()
+            }
             return cell
         }
     }
@@ -693,7 +706,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     
     func detectMICR(from image: UIImage) {
         //let sampleCheckImage = UIImage(named: "sampleCheck")
-        self.paymentType = .Check
+        self.paymentType = .ACH
         guard let cgImage = image.cgImage else { return }
      
         let request = VNRecognizeTextRequest { request, error in
@@ -1612,7 +1625,7 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
             // params["network_strength"] = networkMessage
             
             
-            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":parameter,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
             // }
             // let paymentOptionUserDetails = paymentOptionUser(payment_Method: "cash", paymentDetails: userPaymentDetails)
             

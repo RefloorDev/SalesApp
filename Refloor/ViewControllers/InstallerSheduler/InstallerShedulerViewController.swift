@@ -73,7 +73,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.installationScheduler,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.installationScheduler,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -118,7 +118,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     {
         DispatchQueue.main.async {
             
-            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": self.saleOrderId ,"installation_id": self.installationId,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+            let parameter : [String:Any] = ["token": UserData.init().token!, "sale_order_id": self.saleOrderId ,"installation_id": self.installationId,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
             
             HttpClientManager.SharedHM.installerDatesSubmitAPi(parameter: parameter) { success, message in
                 if success == "Success"
@@ -248,6 +248,10 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         let name = lastName == ""  ? firstName : firstName + " " + lastName
         let date = appointment?.appointment_datetime ?? ""
         self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.appointmentLogStarted.rawValue, time: Date().getSyncDateAsString(),name:name ,appointmentDate:date)
+        //let appointmentId = AppointmentData().appointment_id ?? 0
+        let currentClassName = String(describing: type(of: self))
+        let classDisplayName = "InstallerScheduler"
+        self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
 
         
         DispatchQueue.main.async
@@ -292,7 +296,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
                                 networkMessage = String(format: "%.2f", speed)
                                 networkMessage += "Mbps"
                                 self.parametersAdditionalComments["network_strength"] = networkMessage
-                                self.parametersAdditionalComments["CreatedDate"] = Date().getSyncDateAsString()
+                                self.parametersAdditionalComments["create_date"] = Date().getSyncDateAsString()
                                 self.additionalCommentsApiCall(networkMessage: networkMessage)
                             }
                         }
@@ -464,7 +468,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         let date = appointment?.appointment_datetime ?? ""
         var parameterToPass:[String:Any] = [:]
         let decodeOption:[String:Bool] = ["verify_signature":false]
-        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
         HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success"
             {
@@ -643,7 +647,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     {
         DispatchQueue.main.async {
             
-            let parameter : [String:Any] = ["token": UserData.init().token!, "appointment_id": AppDelegate.appoinmentslData.id!,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+            let parameter : [String:Any] = ["token": UserData.init().token!, "appointment_id": AppDelegate.appoinmentslData.id!,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
             
             HttpClientManager.SharedHM.installerDatesAPi(parameter: parameter) { success, message, availableDates, saleOrderId in
                 if success == "Success"
@@ -739,15 +743,16 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
     {
         DispatchQueue.main.async
         {
-        let appointmentId = AppointmentData().appointment_id ?? 0
-        let currentClassName = String(describing: type(of: self))
-        let classDisplayName = "InstallerScheduler"
-        self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
-        let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
-        let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
-        self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
-        
-            self.navigationController?.popToRootViewController(animated: true)
+            self.offlineParameterCreation()
+//            let appointmentId = AppointmentData().appointment_id ?? 0
+//            let currentClassName = String(describing: type(of: self))
+//            let classDisplayName = "InstallerScheduler"
+//            self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+//            let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
+//            let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
+//            self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
+//        
+//            self.navigationController?.popToRootViewController(animated: true)
         }
     }
     override func insallerSubmitBtnAction(sender: UIButton)

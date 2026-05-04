@@ -27,6 +27,39 @@ class BackgroundTaskService {
     var testResult = "TEST"
     var i = 1
     var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
+    private var inFlightAppointmentIds = Set<Int>()
+    private let isolationQueue = DispatchQueue(label: "com.refloor.syncIsolation")
+    //private let syncLock = NSLock()
+
+    /// Returns true and registers the ID if not already in-flight. Returns false if a call is already active for this appointment.
+//    func markInFlight(appointmentId: Int) -> Bool {
+//        syncLock.lock()
+//        defer { syncLock.unlock() }
+//        guard !inFlightAppointmentIds.contains(appointmentId) else { return false }
+//        inFlightAppointmentIds.insert(appointmentId)
+//        return true
+//    }
+//
+//    func clearInFlight(appointmentId: Int) {
+//        syncLock.lock()
+//        defer { syncLock.unlock() }
+//        inFlightAppointmentIds.remove(appointmentId)
+//    }
+    func markInFlight(appointmentId: Int) -> Bool {
+        return isolationQueue.sync {
+            if inFlightAppointmentIds.contains(appointmentId) {
+                return false
+            }
+            inFlightAppointmentIds.insert(appointmentId)
+            return true
+        }
+    }
+     
+    func clearInFlight(appointmentId: Int) {
+        isolationQueue.async {
+            self.inFlightAppointmentIds.remove(appointmentId)
+        }
+    }
     //var isCallingApi = false
     
     func enterBackground() {
@@ -563,36 +596,23 @@ extension BackgroundTaskService {
                 print("Date Before \(Date().toString())")
                 switch appointmentRequest.reqest_title {
                 case RequestTitle.CustomerAndRoom.rawValue:
-                    let (appointmentId, requestParams, _) =  self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                    //                       if !isCallingApi
-                    //                        {
-                    self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
-                        //                               self.isCallingApi = false
-                        if !ifSuccess{
+                    let (appointmentId, requestParams, _) = self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    guard self.markInFlight(appointmentId: appointmentId) else {
+                        print("⏳ Appointment \(appointmentId) already syncing — skipping duplicate call.")
+                        break
+                    }
+                    self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams) { ifSuccess in
+                        self.clearInFlight(appointmentId: appointmentId)
+                        if !ifSuccess {
                             print("Spinner Count:1")
                             ifAnyApiFailed = true
                             return
-                        }else{
+                        } else {
                             print("Spinner Count:2")
                             ifAnyApiFailed = false
                         }
                     }
-                    //}
-                    
                     break
-                    //                    case RequestTitle.ContactDetails.rawValue:
-                    //                        let (appointmentId, requestParams, _) =  self.createContractDetailsParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                    //                        self.syncContractData(appointmentId: appointmentId, parameter: requestParams){ ifSuccess in
-                    //                            if !ifSuccess{
-                    //                                print("Spinner Count:3")
-                    //                                ifAnyApiFailed = true
-                    //                                return
-                    //                            }else{
-                    //                                print("Spinner Count:4")
-                    //                                ifAnyApiFailed = false
-                    //                            }
-                    //                        }
-                    //                        break
                 case RequestTitle.ImageUpload.rawValue:
                     let requestParams =  self.createImageUploadParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                     self.syncImages(imageDict: requestParams){ ifSuccess in
@@ -646,9 +666,12 @@ extension BackgroundTaskService {
             
             if ifAnyApiFailed
             {
-                
-                self.startSyncProcess()
-                
+                // Retry after 30s delay to prevent recursive retry storm
+                DispatchQueue.global().asyncAfter(deadline: .now() + 30.0)
+                {
+                   // self.clearInFlight(appointmentId: appointmentId)
+                    self.startSyncProcess()
+                }
             }
             
         }
@@ -756,9 +779,10 @@ extension BackgroundTaskService {
             
             if ifAnyApiFailed
             {
-                
-                self.startManualSyncProcess()
-                
+                // Retry after 30s delay to prevent recursive retry storm
+                DispatchQueue.global().asyncAfter(deadline: .now() + 30.0) {
+                    self.startManualSyncProcess()
+                }
             }
             
         }
@@ -852,7 +876,7 @@ extension BackgroundTaskService {
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
-            params["CreatedDate"] = Date().getSyncDateAsString()
+            params["create_date"] = Date().getSyncDateAsString()
             HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
                 if(success ?? "") == "Success" {
                     //print(parameter.ke)
@@ -881,7 +905,7 @@ extension BackgroundTaskService {
                 }
                 else if success == "AuthFailed"
                 {
-                    
+                    completion(false)
                     NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
                 }
                     
@@ -1037,7 +1061,7 @@ extension BackgroundTaskService {
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
-            params["CreatedDate"] = Date().getSyncDateAsString()
+            params["create_date"] = Date().getSyncDateAsString()
             HttpClientManager.SharedHM.generateContactAPi(parameter: params) { success, message in
                 
                 if(success ?? "") == "Success"{
@@ -1074,7 +1098,7 @@ extension BackgroundTaskService {
             networkMessage = String(format: "%.2f", speed)
             networkMessage += "Mbps"
             params["network_strength"] = networkMessage
-            params["CreatedDate"] = Date().getSyncDateAsString()
+            params["create_date"] = Date().getSyncDateAsString()
             HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
                 if(success ?? "") == "Success"{
                     print(message ?? "No msg")

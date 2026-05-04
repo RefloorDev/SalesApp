@@ -25,6 +25,7 @@ class HttpClientManager: NSObject {
     //MARK: - API Keys
     
     let LoginAPIKeys: NSArray = ["emailAddress","phoneNumber","salesId","userId"]
+    private var syncSessionManager: Alamofire.SessionManager?
     
     //MARK:- Internet
     
@@ -2218,41 +2219,44 @@ class HttpClientManager: NSObject {
             }
             
             let URL = AppURL().syncCustomerAndRoomInfo
-            let manager = Alamofire.SessionManager.default
-            manager.session.configuration.timeoutIntervalForRequest = 1
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-                manager.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
-                    // print(response.result.value.debugDescription)
-                    //                if let error = response.result.error
-                    //                {
-                    //                    if error._code == NSURLErrorTimedOut
-                    //                    {
-                    //                        print("TimeOut")
-                    //                    }
-                    //                }
-                    let response = response.result.value
-                    if response != nil{
-                        if(response?.result != nil)
+            // Dedicated session — retained to prevent request cancellation
+            if self.syncSessionManager == nil {
+                let configuration = URLSessionConfiguration.default
+                configuration.timeoutIntervalForRequest = 120   // 2 minutes
+                configuration.timeoutIntervalForResource = 300  // 5 minutes total
+                self.syncSessionManager = Alamofire.SessionManager(configuration: configuration)
+            }
+            
+            self.syncSessionManager?.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
+                let responseValue = response.result.value
+                if responseValue != nil{
+                    if(responseValue?.result != nil)
+                    {
+                        completion(responseValue?.result,responseValue?.message,responseValue?.paymentStatus,responseValue?.paymentMessage,responseValue?.authorize_transaction_id, responseValue?.card_type)
+                        if isOnlineCollectBtnPressed
                         {
-                            completion(response?.result,response?.message,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
-                            if isOnlineCollectBtnPressed
-                            {
-                                self.showhideHUD(viewtype: .HIDE, title: "")
-                                
-                            }
+                            self.showhideHUD(viewtype: .HIDE, title: "")
                         }
                     }
-                    else{
-                        completion("false", AppAlertMsg.serverNotReached,response?.paymentStatus,response?.paymentMessage,response?.authorize_transaction_id, response?.card_type)
-                        self.showhideHUD(viewtype: .HIDE, title: "")
+                    else
+                    {
+                        // Handle malformed result (result field missing)
+                        completion("false", "Server returned malformed response", responseValue?.paymentStatus, responseValue?.paymentMessage, responseValue?.authorize_transaction_id, responseValue?.card_type)
+                        if isOnlineCollectBtnPressed { self.showhideHUD(viewtype: .HIDE, title: "") }
                     }
+                }
+                else{
+                    // Handle failure (response null)
+                    completion("false", AppAlertMsg.serverNotReached, nil, nil, nil, nil)
+                    self.showhideHUD(viewtype: .HIDE, title: "")
                 }
             }
         }
         else{
-            completion("false", AppAlertMsg.NetWorkAlertMessage,"","","","")
-            
+            // Handle no network
+            completion("false", AppAlertMsg.NetWorkAlertMessage, nil, nil, nil, nil)
+            if isOnlineCollectBtnPressed { self.showhideHUD(viewtype: .HIDE, title: "") }
         }
     }
     
@@ -2814,9 +2818,9 @@ class HttpClientManager: NSObject {
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
             }else{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage,"CreatedDate": Date().getSyncDateAsString()]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
             }
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)

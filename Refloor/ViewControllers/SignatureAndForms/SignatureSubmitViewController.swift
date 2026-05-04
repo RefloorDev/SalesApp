@@ -92,7 +92,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                 //DispatchQueue.main.async {
                 
                 let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
-                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.signature,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"CreatedDate": Date().getSyncDateAsString()]
+                let parameters:[String:Any] = ["appointment_id": AppointmentData().appointment_id ?? 0,"screen_name":ScreenNames.signature,"screen_entry_date":Date().getSyncDateAsString(),"network_strength":networkMessage,"timezone":timeZone,"create_date": Date().getSyncDateAsString()]
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
             }
         }
@@ -153,12 +153,12 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
             //
             if(self.downpayment.financePayment != 0)
             {
-//                self.getCreditFormPdf()
+                //                self.getCreditFormPdf()
                 if(self.downPaymentValue != 0)
                 {
                     self.navigationController?.pushViewController(self.downpayment, animated: true)
                 }
-                else
+                else if downOrFinal == 0.0
                 {
                     let cancel = AppointmentSummaryViewController.initialization()!
                    // web.document=value ?? ""
@@ -176,9 +176,24 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                         cancel.paymentType = "finance"
                     }
                     //
-                    self.navigationController?.pushViewController(self.downpayment, animated: true)
+                    self.navigationController?.pushViewController(cancel, animated: true)
                 }
             }
+//            else if self.downOrFinal == 0.0
+//            {
+//                let cancel = AppointmentSummaryViewController.initialization()!
+//               // web.document=value ?? ""
+//                cancel.orderID=self.downpayment.orderID
+//                cancel.downPayment = self.downPaymentValue //self.downpayment.DownPaymentcalucaltion().downPayment
+//                cancel.total = self.totalAmount
+//                cancel.balance = self.totalAmount - self.downPaymentValue
+//                cancel.finalPayment =  self.finalpayment
+//                cancel.financeAmount =  self.financePayment
+//                cancel.isCardVerified = false
+//                //cancel.payment_TrasnsactionDict = self.payment_TrasnsactionDict
+//                cancel.area = self.getTotalAdjustedAreaForAllRooms()
+//                self.navigationController?.pushViewController(cancel, animated: true)
+//            }
             else
             {
                 self.navigationController?.pushViewController(self.downpayment, animated: true)
