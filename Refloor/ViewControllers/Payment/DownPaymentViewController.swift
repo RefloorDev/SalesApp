@@ -56,6 +56,9 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     @IBOutlet weak var checkButton: UIButton!
     @IBOutlet weak var checkView: UIView!
     @IBOutlet weak var checkLabel: UILabel!
+    @IBOutlet weak var checkTabButton: UIButton!
+    @IBOutlet weak var checkTabView: UIView!
+    @IBOutlet weak var checkTabLabel: UILabel!
     @IBOutlet weak var paymentCollectionView: UICollectionView!
     var globalIsJobCompletion = true
     var globalPayBalanace = ""
@@ -118,19 +121,18 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         downpaymentSelectionObjcet.append(payment2)
         let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
         downpaymentSelectionObjcet.append(payment3)
-//        if AppURL.isACHEnabled {
-//            self.checkLabel.text = "ACH"
-//            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-//            downpaymentSelectionObjcet.append(payment4)
-//        } else {
-            let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-            downpaymentSelectionObjcet.append(payment4)
-        //}
+        // Tab 4 – ACH (always)
+        self.checkLabel.text = "ACH"
+        let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+        downpaymentSelectionObjcet.append(payment4)
+        // Tab 5 – Check (always)
+        let payment5 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkTabLabel, view: self.checkTabView, button: self.checkTabButton, tag: 14)
+        downpaymentSelectionObjcet.append(payment5)
         paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
-        //paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
         cameraImagePicker.delegate = self
         self.totalAreaLabel.text = "\(area) Sq.ft"
@@ -192,19 +194,18 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
         downpaymentSelectionObjcet.append(payment2)
         let payment3 = DownPaymentSelectionObj(paymentType: .DebitCard, lable: self.debitcardLabel, view: self.debitcardView, button: self.debitcardButton, tag: 12)
         downpaymentSelectionObjcet.append(payment3)
-//        if AppURL.isACHEnabled {
-//            self.checkLabel.text = "ACH"
-//            let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-//            downpaymentSelectionObjcet.append(payment4)
-//        } else {
-            let payment4 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
-            downpaymentSelectionObjcet.append(payment4)
-       // }
+        // Tab 4 – ACH (always)
+        self.checkLabel.text = "ACH"
+        let payment4 = DownPaymentSelectionObj(paymentType: .ACH, lable: self.checkLabel, view: self.checkView, button: self.checkButton, tag: 13)
+        downpaymentSelectionObjcet.append(payment4)
+        // Tab 5 – Check (always)
+        let payment5 = DownPaymentSelectionObj(paymentType: .Check, lable: self.checkTabLabel, view: self.checkTabView, button: self.checkTabButton, tag: 14)
+        downpaymentSelectionObjcet.append(payment5)
         paymentCollectionView.register(UINib(nibName: "JobCompleationCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "JobCompleationCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCashCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCashCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCardCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCardCollectionViewCell")
         paymentCollectionView.register(UINib(nibName: "DownPaymentFromCheckCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromCheckCollectionViewCell")
-        //paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
+        paymentCollectionView.register(UINib(nibName: "DownPaymentFromACHCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "DownPaymentFromACHCollectionViewCell")
         self.sideTabSelectedWith(at: self.cashButton.tag)
 
         self.totalAreaLabel.text = "\(area) Sq.ft"
@@ -706,7 +707,6 @@ class DownPaymentViewController: UIViewController,UICollectionViewDelegate,UICol
     
     func detectMICR(from image: UIImage) {
         //let sampleCheckImage = UIImage(named: "sampleCheck")
-        self.paymentType = .ACH
         guard let cgImage = image.cgImage else { return }
      
         let request = VNRecognizeTextRequest { request, error in
