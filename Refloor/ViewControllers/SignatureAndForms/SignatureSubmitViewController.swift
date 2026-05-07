@@ -158,7 +158,7 @@ class SignatureSubmitViewController: UIViewController,SignSignatureDelegate,UICo
                 {
                     self.navigationController?.pushViewController(self.downpayment, animated: true)
                 }
-                else if downOrFinal == 0.0
+                else if self.downPaymentValue == 0.0
                 {
                     let cancel = AppointmentSummaryViewController.initialization()!
                    // web.document=value ?? ""
