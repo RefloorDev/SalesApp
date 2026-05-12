@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -171,10 +172,36 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vf2-Tm-w0Y">
+                                <rect key="frame" x="334" y="12.5" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="40" id="BK3-B1-T3T"/>
+                                    <constraint firstAttribute="height" constant="40" id="ZwR-0K-487"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="document.viewfinder.fill" catalog="system" symbolScale="large"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="YKc-V6-Loe" firstAttribute="top" secondItem="134-4z-q7f" secondAttribute="bottom" constant="30" id="0aN-gt-8uh"/>
+                            <constraint firstItem="vf2-Tm-w0Y" firstAttribute="centerY" secondItem="fKM-bZ-o3E" secondAttribute="centerY" id="2Px-Zm-92N"/>
                             <constraint firstItem="YKc-V6-Loe" firstAttribute="leading" secondItem="7aS-hD-6ua" secondAttribute="leading" constant="20" id="8Sg-G4-M0h"/>
                             <constraint firstItem="v8N-nt-MgY" firstAttribute="top" secondItem="I9z-LM-f5o" secondAttribute="bottom" constant="40" id="A7B-zR-aDL"/>
                             <constraint firstItem="Abp-Eg-EkR" firstAttribute="top" secondItem="fKM-bZ-o3E" secondAttribute="bottom" constant="10" id="FKa-65-5Pn"/>
@@ -193,6 +220,7 @@
                             <constraint firstItem="fKM-bZ-o3E" firstAttribute="top" secondItem="7aS-hD-6ua" secondAttribute="top" constant="20" id="gTN-5s-vUV"/>
                             <constraint firstItem="ASh-cu-Go4" firstAttribute="top" secondItem="FI6-JJ-eYn" secondAttribute="bottom" constant="20" id="iKk-pM-nr6"/>
                             <constraint firstAttribute="trailing" secondItem="FI6-JJ-eYn" secondAttribute="trailing" constant="20" id="iUg-v4-mKb"/>
+                            <constraint firstAttribute="trailing" secondItem="vf2-Tm-w0Y" secondAttribute="trailing" constant="20" id="lyC-iH-Vvq"/>
                             <constraint firstItem="ASh-cu-Go4" firstAttribute="leading" secondItem="7aS-hD-6ua" secondAttribute="leading" constant="20" id="m4g-H2-K1Z"/>
                             <constraint firstItem="v8N-nt-MgY" firstAttribute="leading" secondItem="7aS-hD-6ua" secondAttribute="leading" constant="20" id="nnh-TX-Y6u"/>
                             <constraint firstAttribute="trailing" secondItem="I9z-LM-f5o" secondAttribute="trailing" constant="20" id="p01-Gt-cEw"/>
@@ -210,7 +238,7 @@
             </constraints>
             <connections>
                 <outlet property="accountNumberTF" destination="vTH-bj-0yf" id="fMt-MZ-zbU"/>
-                <outlet property="cameraButton" destination="SMh-zO-272" id="IgA-Hy-Ric"/>
+                <outlet property="cameraButton" destination="vf2-Tm-w0Y" id="pnu-WZ-7TV"/>
                 <outlet property="checkNumberTF" destination="2Op-IP-1Vq" id="YYX-24-f61"/>
                 <outlet property="collectionView" destination="Abp-Eg-EkR" id="3Xn-Wk-7lJ"/>
                 <outlet property="payButton" destination="v8N-nt-MgY" id="MIM-zo-ejX"/>
@@ -222,5 +250,6 @@
     </objects>
     <resources>
         <image name="ScanCheck" width="42" height="42"/>
+        <image name="document.viewfinder.fill" catalog="system" width="128" height="115"/>
     </resources>
 </document>
