@@ -30,6 +30,9 @@ class HttpClientManager: NSObject {
     //MARK:- Internet
     
     func connectedToNetwork() -> Bool {
+        
+        print("\n\n\n *** CONNECTED-TO-NETWORK *** \n\n\n")
+        
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
@@ -2548,10 +2551,15 @@ class HttpClientManager: NSObject {
     func liveScreenLogsAPi(parameter:Parameters)
     {
         
+        print("\n\n\n *** 11111. LIVE-SCREEN-LOGS-API *** \n\n\n")
+        
         if self.connectedToNetwork() {
             
             
             let URL = AppURL().liveScreenLogs
+            
+            print("***  1111.LIVE-SCREEN-LOGS-API URL = = = \(URL)")
+            print("\n\n **** 1111.LIVE-SCREEN-LOGS-API URL PARAMETERS = = = \(parameter) *****\n\n")
             //self.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
@@ -2560,6 +2568,8 @@ class HttpClientManager: NSObject {
                 //self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
                 print(response.result)
+                
+                print("\n\n\n *** 1111.LIVE-SCREEN-LOGS-API URL RESPONSE = \(response) *** \n\n\n")
                 let response = response.result.value
                 
                 if response != nil{
@@ -2734,10 +2744,20 @@ class HttpClientManager: NSObject {
     
     func appointmentStatusAPi(parameter:Parameters,completion:@escaping (_ success: String?, _ message: String? ) -> ()){
         
+        print("\n\n\n *** 2222.APPOINTMENT_STATUS_API *** \n\n\n")
+        
         if self.connectedToNetwork() {
             
             
             let URL = AppURL().appointmentStatus
+            
+            print("*** 2222.APPOINTMENT_STATUS_API * URL = = \(URL) ***")
+           
+            
+            print("*** 2222.APPOINTMENT_STATUS_API * PARAMETERS = = \(parameter) ***")
+            
+            
+            
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
             self.showhideHUD(viewtype: .SHOW, title: "Checking appointment status")
@@ -2745,7 +2765,7 @@ class HttpClientManager: NSObject {
                 (response:DataResponse<ManualArrivalDate>) in
                 //self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
-                print(response.result)
+                print("\n\n\n *** 2222.APPOINTMENT_STATUS_API * RESPONSE = = \(response.result) *** \n\n\n")
                 let response = response.result.value
                 
                 if response != nil{
@@ -3005,12 +3025,17 @@ class HttpClientManager: NSObject {
     func logoutApi(parameter:Parameters,completion:@escaping (_ success: String?, _ object: String? ) -> ()){
         
         
+        print("*** \n\n LOGOUT API CALLED \n\n ***")
+        print("*** \n\n LOGOUT API PARAMETER = \(parameter) \n\n ***")
+        
         if self.connectedToNetwork() {
             
             let URL = AppURL().logoutApi
             self.showhideHUD(viewtype: .SHOW, title: "Logging out. Please wait.")
             Alamofire.request(URL, method: .post, parameters: parameter,encoding: URLEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 self.showhideHUD(viewtype: .HIDE)
+                
+                print("*** \n\n LOGOUT API RESPONSE = \(response) \n\n ***")
                 
                 let response = response.result.value
                 
@@ -3035,6 +3060,9 @@ class HttpClientManager: NSObject {
 class NetworkSpeedTest {
 
     func testUploadSpeed(completion: @escaping (Double) -> Void) {
+        
+        print("\n\n\n *** TEST-UPLOAD-SPEED called *** \n\n\n")
+        
         // Generate data to upload (1 MB of data in this example)
         let dataSize = 1 * 1024 * 1024 // 1 MB
         let data = Data(repeating: 0, count: dataSize)
@@ -3047,6 +3075,8 @@ class NetworkSpeedTest {
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         
+        print("** URL = = \(url) **")
+        
         let task = URLSession.shared.uploadTask(with: request, from: data) { responseData, response, error in
             // End measuring time
             let endTime = Date()
@@ -3058,6 +3088,9 @@ class NetworkSpeedTest {
             let speed = Double(dataSize) * 8 / timeInterval / (1024 * 1024) // Mbps
             
             // Return the upload speed
+            
+            print("\n **** SPEED = = = \(speed) **** \n")
+            
             completion(speed)
         }
         

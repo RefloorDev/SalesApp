@@ -826,6 +826,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     
     @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
         
+        print("\n\n\n **** startButtonActionFromCustomerList *** \n\n\n")
+        print("\n\n\n **** sender = \(sender) *** \n\n\n")
         
 //        let installer = DestinationMotivationViewController.initialization()!
 ////        installer.name = name
@@ -858,6 +860,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                     "create_date": Date().getSyncDateAsString(),
                     "timezone":timeZone
                 ]
+                
                 
                 HttpClientManager.SharedHM.liveScreenLogsAPi(parameter: parameters)
 //                Crashlytics.crashlytics().log("Appointment live sync API called")
@@ -961,6 +964,9 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //    }
     
     func appointmentStatus(buttonTag: Int) {
+        
+        print("\n\n\n *** APPOINTMETN STATUS CALLED BUTTON TAG = \(buttonTag) *** \n\n\n")
+        
         let masterData = getMasterDataFromDB()
         
         // Skip location check if geo-location is disabled or restricted
@@ -1032,6 +1038,9 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     }
     
     func performAppointmentAction(sender: Int) {
+        
+        print("\n\n\n *** PERFORMANCE-APPOINTMENT-ACTION *** \n\n\n")
+        
         //HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
         let appointmentDateTimeString = self.appoinmentsList?[sender].appointment_datetime
             let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)

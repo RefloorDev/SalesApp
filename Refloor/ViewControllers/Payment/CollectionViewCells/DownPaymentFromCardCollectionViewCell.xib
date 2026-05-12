@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="ipad9_7" orientation="portrait" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -252,6 +253,31 @@
                                 </constraints>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDt-i8-JGU">
+                                <rect key="frame" x="334" y="12.5" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="SSu-W0-JFw"/>
+                                    <constraint firstAttribute="width" constant="40" id="lpR-vK-3GY"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="document.viewfinder.fill" catalog="system" symbolScale="large"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -277,6 +303,7 @@
                             <constraint firstItem="RJ8-54-ZcI" firstAttribute="leading" secondItem="DYv-re-6Rr" secondAttribute="leading" id="bBS-uO-4Lf"/>
                             <constraint firstItem="Yeo-gL-Wng" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="c5y-ff-FYX"/>
                             <constraint firstAttribute="trailing" secondItem="HVx-n5-VqO" secondAttribute="trailing" constant="20" id="f8I-I1-mUm"/>
+                            <constraint firstItem="MDt-i8-JGU" firstAttribute="centerY" secondItem="GQL-to-Iws" secondAttribute="centerY" id="fNy-1x-mX6"/>
                             <constraint firstAttribute="trailing" secondItem="ygA-nD-bH9" secondAttribute="trailing" constant="20" id="guM-P2-wT1"/>
                             <constraint firstItem="GQL-to-Iws" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="imv-Yn-kcQ"/>
                             <constraint firstItem="CKh-V7-nOf" firstAttribute="leading" secondItem="bwb-xa-kvf" secondAttribute="leading" id="jEC-uK-Dvj"/>
@@ -285,6 +312,7 @@
                             <constraint firstAttribute="trailing" secondItem="o0F-lJ-kVS" secondAttribute="trailing" constant="20" id="m0K-ot-XMB"/>
                             <constraint firstItem="JSU-Jj-JOS" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="nbP-Hr-Zdh"/>
                             <constraint firstItem="q70-bu-2j2" firstAttribute="top" secondItem="GQL-to-Iws" secondAttribute="bottom" constant="20" id="qWh-C7-dOj"/>
+                            <constraint firstAttribute="trailing" secondItem="MDt-i8-JGU" secondAttribute="trailing" constant="20" id="raO-XZ-9eT"/>
                             <constraint firstItem="CKh-V7-nOf" firstAttribute="top" secondItem="bwb-xa-kvf" secondAttribute="top" id="rsV-0s-vEa"/>
                             <constraint firstItem="Kve-Xb-wGD" firstAttribute="leading" secondItem="1x2-0a-E1d" secondAttribute="leading" constant="20" id="tMj-JP-ECu"/>
                             <constraint firstItem="HVx-n5-VqO" firstAttribute="top" secondItem="N1w-jm-zYH" secondAttribute="bottom" constant="-80" id="uw6-tS-5GX"/>
@@ -310,7 +338,7 @@
                 <outlet property="cardNumberTF" destination="6u0-Al-K0v" id="mU2-ll-btt"/>
                 <outlet property="cardPinLabel" destination="RJ8-54-ZcI" id="XL3-fL-yYd"/>
                 <outlet property="cardPinTF" destination="EmY-91-pN1" id="sjT-Oz-YTf"/>
-                <outlet property="cardScanButton" destination="HVx-n5-VqO" id="za6-QD-gE6"/>
+                <outlet property="cardScanButton" destination="MDt-i8-JGU" id="UQK-il-12p"/>
                 <outlet property="collectionView" destination="N1w-jm-zYH" id="W1Y-Bt-73h"/>
                 <outlet property="payBtnTopConstraint" destination="Fpm-Ja-L3X" id="XwH-R4-Igx"/>
                 <outlet property="payButton" destination="ygA-nD-bH9" id="w9M-4c-Mks"/>
@@ -323,6 +351,7 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="document.viewfinder.fill" catalog="system" width="128" height="115"/>
         <image name="notSelected" width="32" height="32"/>
         <image name="passwordeyeOpen" width="33" height="26"/>
         <systemColor name="systemBackgroundColor">

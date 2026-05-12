@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24504"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -186,9 +187,35 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fXq-jq-a3k">
+                                <rect key="frame" x="334" y="12.5" width="40" height="40"/>
+                                <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="G9h-Ep-3La"/>
+                                    <constraint firstAttribute="width" constant="40" id="fK0-K7-vE9"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal">
+                                    <imageReference key="image" image="document.viewfinder.fill" catalog="system" symbolScale="large"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="black"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColor">
+                                        <color key="value" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="fXq-jq-a3k" secondAttribute="trailing" constant="20" id="4ls-IC-SJz"/>
                             <constraint firstItem="ach-AT-Container" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-AT-Container-Lead"/>
                             <constraint firstItem="ach-AT-Container" firstAttribute="top" secondItem="ach-AT-Lbl" secondAttribute="bottom" constant="10" id="ach-AT-Container-Top"/>
                             <constraint firstAttribute="trailing" secondItem="ach-AT-Container" secondAttribute="trailing" constant="20" id="ach-AT-Container-Trail"/>
@@ -212,6 +239,7 @@
                             <constraint firstAttribute="trailing" secondItem="ach-RoutingView" secondAttribute="trailing" constant="20" id="ach-RoutingView-Trail"/>
                             <constraint firstItem="ach-Title-Lbl" firstAttribute="leading" secondItem="ach-BG-View" secondAttribute="leading" constant="20" id="ach-Title-Lead"/>
                             <constraint firstItem="ach-Title-Lbl" firstAttribute="top" secondItem="ach-BG-View" secondAttribute="top" constant="20" id="ach-Title-Top"/>
+                            <constraint firstItem="fXq-jq-a3k" firstAttribute="centerY" secondItem="ach-Title-Lbl" secondAttribute="centerY" id="nMp-RE-YyW"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -229,7 +257,7 @@
                 <outlet property="bankAccountNumberTF" destination="ach-AcctTF" id="ach-Out-AcctTF"/>
                 <outlet property="bankRoutingNumberTF" destination="ach-RoutingTF" id="ach-Out-RoutingTF"/>
                 <outlet property="collectionView" destination="ach-CV" id="ach-Out-CV"/>
-                <outlet property="oCRCameraBtn" destination="7Wb-2I-NVb" id="e7I-gt-eue"/>
+                <outlet property="oCRCameraBtn" destination="fXq-jq-a3k" id="6O4-HN-Mfl"/>
                 <outlet property="payButton" destination="ach-Pay-Btn" id="ach-Out-PayBtn"/>
                 <outlet property="totalLabel" destination="ach-Title-Lbl" id="ach-Out-Title"/>
             </connections>
@@ -238,6 +266,7 @@
     </objects>
     <resources>
         <image name="ScanCheck" width="42" height="42"/>
+        <image name="document.viewfinder.fill" catalog="system" width="128" height="115"/>
         <image name="dropDown" width="21" height="21"/>
     </resources>
 </document>
