@@ -269,7 +269,6 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
                 self.alert("No more than 8 anomaly images are allowed per room", nil)
             }
         }
-        
     }
     
     @IBAction func galleryUploadButton(_ sender: UIButton) {
@@ -296,27 +295,8 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
     }
     
     //arb
-    @objc func cameraUploadButtonAction( sender: UIButton) {
-        isRoomImage = sender.tag == 1 ? true : false
-        if isRoomImage{
-            if((uploadedImage.filter({$0.url?.contains("Attachment") ?? false})).count < 8)
-            {
-                self.openCameraToPickImage()
-            }
-            else
-            {
-                self.alert("No more than 8 images are allowed per room", nil)
-            }
-        }else{
-            if((uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})).count < 8)
-            {
-                self.openCameraToPickImage()
-            }
-            else
-            {
-                self.alert("No more than 8 anomaly images are allowed per room", nil)
-            }
-        }
+    @objc func cameraUploadButtonAction(sender: UIButton) {
+        validateImageLimitAndOpenCamera(senderTag: sender.tag)
     }
     
     @objc func galleryUploadButtonAction( sender: UIButton) {
@@ -355,40 +335,54 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         
     }
     
-    func externalCollectionViewDidSelectbutton2(index: Int,tag: Int) {
-        var uploadImageArray:[AttachmentDataValue] = []
-        if tag == 1{
+    func externalCollectionViewDidSelectbutton2(index: Int, tag: Int) {
+
+        var uploadImageArray: [AttachmentDataValue] = []
+
+        if tag == 1 {
             isRoomCollectionViewTapped = true
-            uploadImageArray = uploadedImage.filter({$0.url?.contains("Attachment") ?? false})
-        }else{
+            uploadImageArray = uploadedImage.filter {
+                $0.url?.contains("Attachment") ?? false
+            }
+        } else {
             isRoomCollectionViewTapped = false
-            uploadImageArray = uploadedImage.filter({$0.url?.contains("Anomaly") ?? false})
+            uploadImageArray = uploadedImage.filter {
+                $0.url?.contains("Anomaly") ?? false
+            }
         }
-        if uploadImageArray.count == index
-        {
-            let selectImageAlert = UIAlertController(title: AppDetails.APP_NAME, message: "Please select an image.", preferredStyle: .alert)
-            let cameraAct = UIAlertAction(title: "Camera", style: .default) { (_) in
-                self.openCameraToPickImage()
+
+        if uploadImageArray.count == index {
+
+            let selectImageAlert = UIAlertController(
+                title: AppDetails.APP_NAME,
+                message: "Please select an image.",
+                preferredStyle: .alert
+            )
+
+            let cameraAct = UIAlertAction(title: "Camera", style: .default) { [weak self] _ in
+                guard let self else { return }
+                self.validateImageLimitAndOpenCamera(senderTag: tag)
             }
-            let photoLibraryAct = UIAlertAction(title: "Photo Library", style: .default) { (_) in
-                self.openPhotoLibraryToPickImage()
+
+            let photoLibraryAct = UIAlertAction(title: "Photo Library", style: .default) { [weak self] _ in
+                self?.openPhotoLibraryToPickImage()
             }
-            let cancelAct = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
-                
-            }
+
+            let cancelAct = UIAlertAction(title: "Cancel", style: .cancel)
+
             selectImageAlert.addAction(cameraAct)
             selectImageAlert.addAction(photoLibraryAct)
             selectImageAlert.addAction(cancelAct)
-            
-            self.present(selectImageAlert, animated: true, completion: nil)
-        }
-        else
-        {
+
+            self.present(selectImageAlert, animated: true)
+
+        } else {
+
             let imagePresent = ImageViewAndRemoveViewController.initialization()!
             imagePresent.delegate = self
             imagePresent.position = index
             imagePresent.attachments = uploadImageArray
-            self.present(imagePresent, animated: true, completion: nil)
+            self.present(imagePresent, animated: true)
         }
     }
     
@@ -421,28 +415,80 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         
     }
     
+    private func validateImageLimitAndOpenCamera(senderTag: Int) {
+
+        isRoomImage = senderTag == 1
+
+        let urlKeyword = isRoomImage ? "Attachment" : "Anomaly"
+
+        let alertMessage = isRoomImage
+            ? "No more than 8 images are allowed per room"
+            : "No more than 8 anomaly images are allowed per room"
+
+        let currentImageCount = uploadedImage.filter {
+            $0.url?.contains(urlKeyword) ?? false
+        }.count
+
+        guard currentImageCount < 8 else {
+            self.alert(alertMessage, nil)
+            return
+        }
+
+        CameraPermissionManager.shared.checkCameraPermission(from: self) { [weak self] in
+            self?.openCameraToPickImage()
+        }
+    }
     
     
-    func openCameraToPickImage()
-    {
+    func openCameraToPickImage() {
+
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
+            self.alert("Camera is not available on this device", nil)
+            return
+        }
+
+        guard AVCaptureDevice.authorizationStatus(for: .video) == .authorized else {
+            CameraPermissionManager.shared.checkCameraPermission(from: self) { [weak self] in
+                self?.openCameraToPickImage()
+            }
+            return
+        }
+
         imagePicker.allowsEditing = false
         imagePicker.sourceType = .camera
-        imagePicker.mediaTypes =  [kUTTypeImage as String]//UIImagePickerController.availableMediaTypes(for: .camera)!
-        if UIDevice.current.userInterfaceIdiom == .pad
-        {
+        imagePicker.mediaTypes = [kUTTypeImage as String]
+
+        if UIDevice.current.userInterfaceIdiom == .pad {
+
             self.popOver = UIPopoverController(contentViewController: imagePicker)
-            if isRoomImage{
-                self.popOver?.present(from: CGRect(x: self.view.frame.midX + 150, y: self.view.frame.midY - 300, width: 300, height: 300), in: self.view, permittedArrowDirections: .any, animated: true)
-            }else{
-                self.popOver?.present(from: CGRect(x: self.view.frame.midX + 150, y: self.view.frame.midY , width: 300, height: 300), in: self.view, permittedArrowDirections: .any, animated: true)
+
+            let yPosition = isRoomImage
+                ? self.view.frame.midY - 300
+                : self.view.frame.midY
+
+            self.popOver?.present(
+                from: CGRect(
+                    x: self.view.frame.midX + 150,
+                    y: yPosition,
+                    width: 300,
+                    height: 300
+                ),
+                in: self.view,
+                permittedArrowDirections: .any,
+                animated: true
+            )
+
+        } else {
+
+            present(imagePicker, animated: true) {
+                self.imagePicker.navigationBar.topItem?
+                    .rightBarButtonItem?
+                    .tintColor = .black
+
+                self.imagePicker.navigationBar.topItem?
+                    .rightBarButtonItem?
+                    .isEnabled = true
             }
-        }
-        else
-        {
-            present(imagePicker, animated: true, completion: {
-                self.imagePicker.navigationBar.topItem?.rightBarButtonItem?.tintColor = .black
-                self.imagePicker.navigationBar.topItem?.rightBarButtonItem?.isEnabled = true
-            })
         }
     }
     

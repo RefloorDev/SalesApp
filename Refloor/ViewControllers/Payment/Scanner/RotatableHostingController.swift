@@ -1,20 +1,23 @@
-//
-//  RotatableHostingController.swift
-//  Refloor
-//
-//  Created by Looperex on 05/05/26.
-//  Copyright © 2026 oneteamus. All rights reserved.
-//
+
+
+
+// RotatableHostingController.swift
+// Refloor
 
 import SwiftUI
- 
+
+/// UIHostingController subclass that allows landscape rotation.
+/// Required because the default UIHostingController blocks rotation regardless
+/// of what the inner VCs declare.
+/// iPad plist only has landscape-left + landscape-right → use .landscape.
 final class RotatableHostingController<Content: View>: UIHostingController<Content> {
- 
+
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscape          // matches the iPad plist (left + right)
+        return .landscape
     }
- 
+
     override var shouldAutorotate: Bool {
-        return true
+        return false
     }
 }
+

@@ -21,7 +21,9 @@ import CommonCrypto
 
 class BackgroundTaskService {
     static public let shared = BackgroundTaskService()
-    private init() {}
+    private init() {
+        print("--- bgTaskService called ---")
+    }
     
     var timer = Timer()
     var testResult = "TEST"

@@ -3015,18 +3015,20 @@ class DictionaryDecoder {
 extension DownPaymentViewController {
 
     // MARK: - Credit Card / Debit Card Scan
-    // Wired in cellForItemAt via:
-    //   cell.cardScanButton.addTarget(self, action: #selector(cardScanner), for: .touchUpInside)
 
     @objc func cardScanner() {
+        CameraPermissionManager.shared.checkCameraPermission(from: self) { [weak self] in
+            self?.openCardScanner()
+        }
+    }
+
+    private func openCardScanner() {
 
         isOCR = true
 
-        // Force landscape
         if #available(iOS 16.0, *) {
             guard
-                let windowScene = UIApplication.shared.connectedScenes.first
-                    as? UIWindowScene
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             else { return }
 
             let preferences = UIWindowScene.GeometryPreferences.iOS(
@@ -3034,6 +3036,7 @@ extension DownPaymentViewController {
             )
 
             windowScene.requestGeometryUpdate(preferences)
+
         } else {
             UIDevice.current.setValue(
                 UIInterfaceOrientation.landscapeRight.rawValue,
@@ -3046,10 +3049,7 @@ extension DownPaymentViewController {
             guard let self else { return }
 
             self.isOCR = false
-
-            // Return back to portrait if needed
             self.rotateBackToPortrait()
-
             self.applyCardScanResult(cardData)
         }
 
@@ -3064,8 +3064,7 @@ extension DownPaymentViewController {
         if #available(iOS 16.0, *) {
 
             guard
-                let windowScene = UIApplication.shared.connectedScenes.first
-                    as? UIWindowScene
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             else { return }
 
             let preferences = UIWindowScene.GeometryPreferences.iOS(
@@ -3089,12 +3088,10 @@ extension DownPaymentViewController {
         guard !data.number.isEmpty || !data.name.isEmpty || !data.expiry.isEmpty
         else { return }
 
-        // Store on VC so values survive any future reloadData
         if !data.number.isEmpty { self.cardNumber = data.number }
         if !data.name.isEmpty { self.accountHolderName = data.name }
         if !data.expiry.isEmpty { self.cardExpiry = data.expiry }
 
-        // Paste directly into the live cell
         if let cell = paymentCollectionView.cellForItem(at: [0, 0])
             as? DownPaymentFromCardCollectionViewCell
         {
@@ -3105,21 +3102,21 @@ extension DownPaymentViewController {
     }
 
     // MARK: - ACH / Check Scan
-    // Wired in cellForItemAt via:
-    //   ACH   cell → cell.oCRCameraBtn.addTarget(self, action: #selector(autoReadOCRForCheck), ...)
-    //   Check cell → cell.cameraButton.addTarget(self, action: #selector(autoReadOCRForCheck), ...)
 
     @objc func autoReadOCRForCheck() {
+        CameraPermissionManager.shared.checkCameraPermission(from: self) { [weak self] in
+            self?.openChequeScanner()
+        }
+    }
 
-        // Prevents viewWillAppear from resetting the selected tab when the scanner dismisses.
+    private func openChequeScanner() {
+
         isOCR = true
 
-        // Force landscape before presenting scanner
         if #available(iOS 16.0, *) {
 
             guard
-                let windowScene = UIApplication.shared.connectedScenes.first
-                    as? UIWindowScene
+                let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
             else {
                 return
             }
@@ -3145,10 +3142,7 @@ extension DownPaymentViewController {
             guard let self else { return }
 
             self.isOCR = false
-
-            // Return back to portrait after dismiss
             self.rotateBackToPortrait()
-
             self.applyChequeOrACHScanResult(chequeData)
         }
 
@@ -3160,17 +3154,14 @@ extension DownPaymentViewController {
 
     private func applyChequeOrACHScanResult(_ data: ChequeData) {
         guard
-            !data.routing.isEmpty || !data.account.isEmpty
-                || !data.checkNumber.isEmpty
+            !data.routing.isEmpty || !data.account.isEmpty || !data.checkNumber.isEmpty
         else { return }
 
-        // Store on VC
         if !data.routing.isEmpty { self.routingNumber = data.routing }
         if !data.account.isEmpty { self.accountNumber = data.account }
         if !data.checkNumber.isEmpty { self.checkNumber = data.checkNumber }
 
         if paymentType == .ACH {
-            // outlet name confirmed: oCRCameraBtn, bankAccountNumberTF, bankRoutingNumberTF
             if let cell = paymentCollectionView.cellForItem(at: [0, 0])
                 as? DownPaymentFromACHCollectionViewCell
             {
@@ -3182,7 +3173,6 @@ extension DownPaymentViewController {
                 }
             }
         } else {
-            // Check cell: outlet names confirmed: cameraButton, accountNumberTF, routingNumberTF, checkNumberTF
             if let cell = paymentCollectionView.cellForItem(at: [0, 0])
                 as? DownPaymentFromCheckCollectionViewCell
             {

@@ -96,6 +96,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     @available(iOS 13.0, *)
     func sceneDidEnterBackground(_ scene: UIScene) {
+        
+        print("**** sceneDidEnterBackground ****")
+        
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
@@ -104,7 +107,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
         
         let appointmentRequestArray = BackgroundTaskService.shared.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
-        
+        print("== appointment array count = = ",appointmentRequestArray.count)
         if(appointmentRequestArray.count != 0)
         {
             if(!SceneDelegate.timer.isValid)

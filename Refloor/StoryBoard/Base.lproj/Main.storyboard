@@ -6543,8 +6543,8 @@
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="check" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-5t-ImV">
                                                         <rect key="frame" x="10" y="17.5" width="31" height="21"/>
                                                         <constraints>
-                                                            <constraint firstAttribute="width" constant="31" id="Chk-5t-Wdt"/>
                                                             <constraint firstAttribute="height" constant="21" id="Chk-5t-Hgt"/>
+                                                            <constraint firstAttribute="width" constant="31" id="Chk-5t-Wdt"/>
                                                         </constraints>
                                                     </imageView>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Check" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Chk-5t-Lbl">
@@ -6563,6 +6563,7 @@
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstItem="Chk-5t-ImV" firstAttribute="leading" secondItem="Chk-5t-AbC" secondAttribute="leading" constant="10" id="Chk-5t-c1"/>
+                                                    <constraint firstItem="Chk-5t-Btn" firstAttribute="leading" secondItem="Chk-5t-AbC" secondAttribute="leading" id="Chk-5t-c10"/>
                                                     <constraint firstAttribute="trailing" secondItem="Chk-5t-Lbl" secondAttribute="trailing" constant="10" id="Chk-5t-c2"/>
                                                     <constraint firstAttribute="bottom" secondItem="Chk-5t-Btn" secondAttribute="bottom" id="Chk-5t-c3"/>
                                                     <constraint firstAttribute="trailing" secondItem="Chk-5t-Btn" secondAttribute="trailing" id="Chk-5t-c4"/>
@@ -6571,7 +6572,6 @@
                                                     <constraint firstItem="Chk-5t-Btn" firstAttribute="top" secondItem="Chk-5t-AbC" secondAttribute="top" id="Chk-5t-c7"/>
                                                     <constraint firstAttribute="height" constant="56" id="Chk-5t-c8"/>
                                                     <constraint firstItem="Chk-5t-Lbl" firstAttribute="leading" secondItem="Chk-5t-ImV" secondAttribute="trailing" constant="10" id="Chk-5t-c9"/>
-                                                    <constraint firstItem="Chk-5t-Btn" firstAttribute="leading" secondItem="Chk-5t-AbC" secondAttribute="leading" id="Chk-5t-c10"/>
                                                 </constraints>
                                             </view>
                                         </subviews>
@@ -6584,15 +6584,15 @@
                                             <constraint firstItem="qQ7-1Q-ubX" firstAttribute="leading" secondItem="Ehu-0q-lWj" secondAttribute="leading" id="8ib-Q9-46J"/>
                                             <constraint firstAttribute="trailing" secondItem="LDh-u1-ScI" secondAttribute="trailing" id="Bd7-DB-Emh"/>
                                             <constraint firstItem="kEH-li-gGl" firstAttribute="leading" secondItem="Ehu-0q-lWj" secondAttribute="leading" id="Boh-7V-jho"/>
+                                            <constraint firstItem="Chk-5t-AbC" firstAttribute="leading" secondItem="Ehu-0q-lWj" secondAttribute="leading" id="Chk-5t-led"/>
+                                            <constraint firstItem="Chk-5t-AbC" firstAttribute="top" secondItem="LDh-u1-ScI" secondAttribute="bottom" id="Chk-5t-top"/>
+                                            <constraint firstAttribute="trailing" secondItem="Chk-5t-AbC" secondAttribute="trailing" id="Chk-5t-trl"/>
                                             <constraint firstItem="Noj-S3-SbW" firstAttribute="leading" secondItem="Ehu-0q-lWj" secondAttribute="leading" id="E4T-VE-uG3"/>
                                             <constraint firstAttribute="width" constant="200" id="M4f-Vw-gL0"/>
                                             <constraint firstAttribute="trailing" secondItem="kEH-li-gGl" secondAttribute="trailing" id="Zhn-ll-T6r"/>
                                             <constraint firstAttribute="trailing" secondItem="Noj-S3-SbW" secondAttribute="trailing" id="faK-YO-jUK"/>
                                             <constraint firstItem="kEH-li-gGl" firstAttribute="top" secondItem="qQ7-1Q-ubX" secondAttribute="bottom" id="ix2-OK-2X7"/>
                                             <constraint firstItem="LDh-u1-ScI" firstAttribute="top" secondItem="kEH-li-gGl" secondAttribute="bottom" id="z6S-7w-CEg"/>
-                                            <constraint firstItem="Chk-5t-AbC" firstAttribute="top" secondItem="LDh-u1-ScI" secondAttribute="bottom" id="Chk-5t-top"/>
-                                            <constraint firstItem="Chk-5t-AbC" firstAttribute="leading" secondItem="Ehu-0q-lWj" secondAttribute="leading" id="Chk-5t-led"/>
-                                            <constraint firstAttribute="trailing" secondItem="Chk-5t-AbC" secondAttribute="trailing" id="Chk-5t-trl"/>
                                         </constraints>
                                     </view>
                                     <view multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="htv-W8-YAw">
@@ -6805,10 +6805,10 @@
                         <outlet property="cashView" destination="Noj-S3-SbW" id="ZrH-nG-ggs"/>
                         <outlet property="checkButton" destination="h0w-RN-w89" id="95j-Fd-Y3B"/>
                         <outlet property="checkLabel" destination="NPV-uy-Krn" id="HKI-K1-BY0"/>
-                        <outlet property="checkView" destination="LDh-u1-ScI" id="TTw-nT-AtG"/>
                         <outlet property="checkTabButton" destination="Chk-5t-Btn" id="Chk-5t-ob"/>
                         <outlet property="checkTabLabel" destination="Chk-5t-Lbl" id="Chk-5t-ol"/>
                         <outlet property="checkTabView" destination="Chk-5t-AbC" id="Chk-5t-ov"/>
+                        <outlet property="checkView" destination="LDh-u1-ScI" id="TTw-nT-AtG"/>
                         <outlet property="creditcardButton" destination="TVq-c5-T0d" id="puF-vQ-gMz"/>
                         <outlet property="creditcardLabel" destination="cgd-PD-pGn" id="KH0-ia-j6D"/>
                         <outlet property="creditcardView" destination="qQ7-1Q-ubX" id="Kr2-CN-l9B"/>
@@ -13251,7 +13251,7 @@ Cgo
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vst-oB-yEL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="18316" y="786"/>
+            <point key="canvasLocation" x="18080" y="1242"/>
         </scene>
         <!--Signature Submit View Controller-->
         <scene sceneID="CPJ-Au-TNE">
@@ -15101,8 +15101,8 @@ Cgo
                                                         <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jfx-QP-raF">
-                                                        <rect key="frame" x="10" y="40" width="964" height="52"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jfx-QP-raF">
+                                                        <rect key="frame" x="10" y="40" width="964" height="51"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="8yb-7K-2dD">
                                                                 <rect key="frame" x="10" y="10" width="964" height="31"/>
@@ -22761,8 +22761,8 @@ Cgo
                                                         <color key="textColor" red="0.65490196079999996" green="0.69019607839999997" blue="0.72941176470000002" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gzo-VA-d6L">
-                                                        <rect key="frame" x="10" y="40" width="949" height="52"/>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gzo-VA-d6L">
+                                                        <rect key="frame" x="10" y="40" width="949" height="51"/>
                                                         <subviews>
                                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Here" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Qni-4f-jWU">
                                                                 <rect key="frame" x="10" y="10" width="964" height="31"/>
@@ -23245,7 +23245,7 @@ Cgo
                                 <rect key="frame" x="0.0" y="120" width="1024" height="2630"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="smp-dq-vLX">
-                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1692"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="1024" height="2231"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JLo-aj-vlm">
                                                 <rect key="frame" x="35" y="130" width="954" height="100"/>
@@ -24404,7 +24404,7 @@ Cgo
                                                 </constraints>
                                             </view>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NhI-Wj-AXV">
-                                                <rect key="frame" x="35" y="1422" width="954" height="100"/>
+                                                <rect key="frame" x="35" y="1961" width="954" height="100"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sex" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6dB-Rf-Z7G">
                                                         <rect key="frame" x="10" y="0.0" width="39.5" height="35"/>
@@ -24517,7 +24517,7 @@ Cgo
                                                 </constraints>
                                             </view>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lJT-5a-Lab">
-                                                <rect key="frame" x="50" y="1572" width="924" height="70"/>
+                                                <rect key="frame" x="50" y="2111" width="924" height="70"/>
                                                 <color key="backgroundColor" red="0.1616491377" green="0.14324414730000001" blue="0.3782793283" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="70" id="JY7-sR-UPK"/>
@@ -24577,7 +24577,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hfc-tR-S5F">
-                                                <rect key="frame" x="30" y="1391" width="964" height="1"/>
+                                                <rect key="frame" x="30" y="1391" width="964" height="540"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="L2j-gy-uEy"/>
@@ -28719,10 +28719,10 @@ Cgo
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WSp-dp-lpW">
-                                <rect key="frame" x="100" y="125" width="823" height="904"/>
+                                <rect key="frame" x="100" y="125" width="620" height="904"/>
                                 <subviews>
                                     <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RKh-9I-eaY" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="50" y="106.5" width="723" height="697.5"/>
+                                        <rect key="frame" x="50" y="106.5" width="520" height="697.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -28734,19 +28734,19 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Applicant Signature" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jUC-kd-ml0">
-                                        <rect key="frame" x="295.5" y="20" width="232.5" height="36"/>
+                                        <rect key="frame" x="194" y="20" width="232.5" height="36"/>
                                         <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="26"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(Please make your signature as large as possible)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EW3-9B-agM">
-                                        <rect key="frame" x="171.5" y="56" width="480" height="30.5"/>
+                                        <rect key="frame" x="70" y="56" width="480" height="30.5"/>
                                         <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="22"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OZj-bt-IKt" customClass="Canvas" customModule="Refloor" customModuleProvider="target">
-                                        <rect key="frame" x="61" y="117.5" width="701" height="675.5"/>
+                                        <rect key="frame" x="61" y="117.5" width="498" height="675.5"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="borderWidth">
@@ -28758,10 +28758,10 @@ Cgo
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="24" translatesAutoresizingMaskIntoConstraints="NO" id="kZ4-LT-Jf7">
-                                        <rect key="frame" x="50" y="824" width="723" height="60"/>
+                                        <rect key="frame" x="50" y="824" width="520" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J1e-NG-hA0">
-                                                <rect key="frame" x="0.0" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="157.5" height="60"/>
                                                 <color key="backgroundColor" red="0.17510655520000001" green="0.20349922779999999" blue="0.2398922741" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="2BF-iG-Kkd"/>
@@ -28776,7 +28776,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3oc-Iw-qJS">
-                                                <rect key="frame" x="249" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="181.5" y="0.0" width="157" height="60"/>
                                                 <color key="backgroundColor" red="0.65536212920000003" green="0.68948310609999997" blue="0.73103302719999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="6au-5z-6tY"/>
@@ -28791,7 +28791,7 @@ Cgo
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nw1-YA-hAi">
-                                                <rect key="frame" x="498" y="0.0" width="225" height="60"/>
+                                                <rect key="frame" x="362.5" y="0.0" width="157.5" height="60"/>
                                                 <color key="backgroundColor" red="0.16209933160000001" green="0.14278957249999999" blue="0.38260361549999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="225" id="jRN-8v-EjI"/>
@@ -42226,13 +42226,13 @@ Quick, easy, and tracks your referral status in real-time.</string>
         <image name="uncheck" width="30" height="30"/>
         <image name="undo" width="64" height="64"/>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.2196078431372549" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
