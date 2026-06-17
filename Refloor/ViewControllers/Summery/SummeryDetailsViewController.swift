@@ -84,15 +84,36 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
     func setRoomImagesArray(){
         self.roomImagesArray.removeAll()
         DispatchQueue.global(qos: .default).async{
+            var tempImages: [UIImage] = []
             if let transition = self.summaryData.attachments{
                 for attachment in transition{
-                    if let image = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: attachment.url ?? ""){
-                        self.roomImagesArray.append(image)
+                    autoreleasepool {
+                        if let pathString = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectoryURL(rfImage: attachment.url ?? "") {
+                            let url = URL(fileURLWithPath: pathString)
+                            
+                            let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+                            if let imageSource = CGImageSourceCreateWithURL(url as CFURL, imageSourceOptions) {
+                                let maxDimensionInPixels: CGFloat = 200.0
+                                let downsampleOptions = [
+                                    kCGImageSourceCreateThumbnailFromImageAlways: true,
+                                    kCGImageSourceShouldCacheImmediately: true,
+                                    kCGImageSourceCreateThumbnailWithTransform: true,
+                                    kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels
+                                ] as CFDictionary
+                                
+                                if let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) {
+                                    tempImages.append(UIImage(cgImage: downsampledImage))
+                                }
+                            }
+                        }
                     }
                 }
             }
+            DispatchQueue.main.async {
+                self.roomImagesArray = tempImages
+                self.tableView.reloadData()
+            }
         }
-
     }
     
     func setQuestion(){
@@ -438,7 +459,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
             if attachments.count != 0
             {
                 //cell.shapeMessurementImage.loadImageFormWeb(URL(string:attachments[0].url ?? ""))
-                if let drawingImg = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage:attachments[0].url ?? ""){
+                if let drawingImg = ImageSaveToDirectory.SharedImage.getDownsampledImageFromDocumentDirectory(rfImage:attachments[0].url ?? "", maxSize: 1024) ?? ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: attachments[0].url ?? "") {
                     cell.shapeMessurementImage.image = drawingImg
                     let tap = UITapGestureRecognizer(target: self, action: #selector(tapshapeMessureImageRecognizer))
                     tap.numberOfTapsRequired = 1

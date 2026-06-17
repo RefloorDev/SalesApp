@@ -565,6 +565,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
             }
             
             cell.customerNameLabel.text = name
+        cell.appointmentTimeZone.text = appoinmentsList?[indexPath.row].appointment_timezone ?? ""
             
             // cell.timeLabel.text = Date().TimeOnlyForCustomerList(datestr: appoinmentsList?[indexPath.row].appointment_date ?? "")
             cell.timeLabel.text =  appoinmentsList?[indexPath.row].appointment_datetime ?? ""

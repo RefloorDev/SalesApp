@@ -1353,6 +1353,7 @@ class rf_master_appointment : Object, Mappable {
     @objc dynamic var recisionDate:String?
     @objc dynamic var officeLocationId = 0
     @objc dynamic var enableDestinationSelection = 0
+    @objc dynamic var appointment_timezone:String?
     var externalEntityKey = List<rf_External_Entity_Key>()
    
     //var payment_options = List<rf_paymentOptionData>()
@@ -1399,6 +1400,7 @@ class rf_master_appointment : Object, Mappable {
         recisionDate = appointmentObj["recision_date"] as? String ?? ""
         officeLocationId = appointmentObj["office_location_id"] as? Int ?? 0
         enableDestinationSelection = appointmentObj["enable_destination_selection"] as? Int ?? 0
+        appointment_timezone = appointmentObj["appointment_timezone"] as? String ?? ""
         externalEntityKey = appointmentObj["external_entity_keys"] as? List<rf_External_Entity_Key> ?? List<rf_External_Entity_Key>()
     }
     
@@ -1446,6 +1448,7 @@ class rf_master_appointment : Object, Mappable {
         self.recisionDate = appointmentData.recisionDate
          self.officeLocationId = appointmentData.officeLocationId ?? 0
          self.externalEntityKey = appointmentData.externalEntityKey
+         self.appointment_timezone = appointmentData.appointment_timezone
          self.enableDestinationSelection = appointmentData.enableDestinationSelection ?? 0
     }
     
@@ -1482,6 +1485,7 @@ class rf_master_appointment : Object, Mappable {
         partner_longitude = appointmentObj.partner_longitude
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
+        appointment_timezone = appointmentObj.appointment_timezone
         externalEntityKey = appointmentObj.external_entity_keys
         enableDestinationSelection = appointmentObj.enableDestinationSelection
         
@@ -1534,6 +1538,7 @@ class rf_master_appointment : Object, Mappable {
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
         enableDestinationSelection <- map["enable_destination_selection"]
+        appointment_timezone <- map["appointment_timezone"]
         externalEntityKey <- (map["external_entity_keys"], ListTransform<rf_External_Entity_Key>())
             // payment_options <- (map["payment_options"], ListTransform<rf_paymentOptionData>())
     }
@@ -1651,6 +1656,7 @@ class rf_completed_appointment:Object{
     @objc dynamic var sync_status = false
     @objc dynamic var officeLocationId = 0
     @objc dynamic var isBothParties = -1
+    @objc dynamic var appointment_timezone : String?
     @objc dynamic var enableDestinationSelection = 0
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -1699,6 +1705,7 @@ class rf_completed_appointment:Object{
         partner_longitude = appointmentObj.partner_longitude
         recisionDate = appointmentObj.recisionDate
         officeLocationId = appointmentObj.officeLocationId
+        appointment_timezone = appointmentObj.appointment_timezone
         external_entity_keys = appointmentObj.externalEntityKey
     }
 }

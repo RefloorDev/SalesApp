@@ -17,6 +17,7 @@ class RoomsTableViewCell: UITableViewCell {
     @IBOutlet weak var areaMeasured: UILabel!
     @IBOutlet weak var removeExistingLbl: UILabel!
     @IBOutlet weak var currentSurface: UILabel!
+    @IBOutlet weak var closetInstalledLbl: UILabel!
     @IBOutlet weak var includedTick: UIImageView!
     @IBOutlet weak var roomName: UILabel!
     @IBOutlet weak var roomImage: UIImageView!

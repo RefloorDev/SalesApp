@@ -481,6 +481,7 @@ class AppoinmentDataValue:Object,Mappable
     var isHomeOwnersPrsent:Bool?
     var isSpecialOrder:Bool?
     var FinanceProviderId:Int?
+    var appointment_timezone:String?
     
     
     required convenience init?(map: ObjectMapper.Map) {
@@ -537,6 +538,7 @@ class AppoinmentDataValue:Object,Mappable
         self.officeLocationId = listOfAppointment.officeLocationId
         self.externalEntityKey = listOfAppointment.externalEntityKey
         self.enableDestinationSelection = listOfAppointment.enableDestinationSelection
+        self.appointment_timezone = listOfAppointment.appointment_timezone
     }
     
     func mapping(map: ObjectMapper.Map) {
@@ -583,6 +585,7 @@ class AppoinmentDataValue:Object,Mappable
         co_applicant_secondary_phone <- map["co_applicant_secondary_phone"]
         recisionDate <- map["recision_date"]
         officeLocationId <- map["office_location_id"]
+        appointment_timezone <- map["appointment_timezone"]
         enableDestinationSelection <- map["enable_destination_selection"]
         externalEntityKey <- (map["external_entity_keys"],ListTransform<rf_External_Entity_Key>())
         

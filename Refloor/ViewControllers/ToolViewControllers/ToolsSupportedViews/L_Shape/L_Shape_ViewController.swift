@@ -50,6 +50,8 @@ class L_Shape_ViewController: UIViewController,UIScrollViewDelegate,L_Shape_Cust
     var isFlip = true
     var graph_minimunValue = minimumValue
     var l_shape_tool_box:L_Shape_CustomView_ToolBoxView!
+    var relocateButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setNavigationBarbacklogoAndNext(name: "")
@@ -71,6 +73,7 @@ class L_Shape_ViewController: UIViewController,UIScrollViewDelegate,L_Shape_Cust
         self.l_ShapeView.delegete = self
         l_shape_tool_box.areaLabel.text = "Area of shape: \(l_ShapeView.getArea()) sq.ft"
         l_shape_tool_box.subSqureDelegate = self
+        self.setupRelocateButton()
         // Do any additional setup after loading the view.
     }
     func setgraphForMoodView(_ sender :UIView)
@@ -127,7 +130,7 @@ class L_Shape_ViewController: UIViewController,UIScrollViewDelegate,L_Shape_Cust
         
         let xAxispath = UIBezierPath()
         let tmpwidth = sender.frame.width
-        intWidth = tmpwidth / minimumValue
+        intWidth = tmpwidth / graphValue
         width = ((intWidth ) * graphValue) + graphValue
         
         let tmphight = sender.frame.height
@@ -234,7 +237,7 @@ class L_Shape_ViewController: UIViewController,UIScrollViewDelegate,L_Shape_Cust
         
         let xAxispath = UIBezierPath()
         let tmpwidth = sender.frame.width
-        intWidth = tmpwidth / minimumValue
+        intWidth = tmpwidth / graph_minimunValue
         width = ((intWidth ) * graph_minimunValue) + graph_minimunValue
         
         let tmphight = sender.frame.height
@@ -288,6 +291,72 @@ class L_Shape_ViewController: UIViewController,UIScrollViewDelegate,L_Shape_Cust
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return drowingView
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        checkRelocateButtonVisibility(scrollView: scrollView)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        checkRelocateButtonVisibility(scrollView: scrollView)
+    }
+    
+    func setupRelocateButton() {
+        relocateButton = UIButton(type: .custom)
+        relocateButton.setImage(UIImage(named: "relocateDrawing"), for: .normal)
+        relocateButton.translatesAutoresizingMaskIntoConstraints = false
+        relocateButton.isHidden = true
+        relocateButton.addTarget(self, action: #selector(relocateButtonTapped), for: .touchUpInside)
+        
+        self.view.addSubview(relocateButton)
+        
+        NSLayoutConstraint.activate([
+            relocateButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
+            relocateButton.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -120),
+            relocateButton.widthAnchor.constraint(equalToConstant: 50),
+            relocateButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+    
+    @objc func relocateButtonTapped() {
+        UIView.animate(withDuration: 0.3) {
+            self.scrollView.zoomScale = 1.0
+            
+            if self.l_ShapeView != nil {
+                let drawingRect = self.l_ShapeView.frame
+                let offsetX = (drawingRect.midX) - self.scrollView.bounds.width / 2
+                let offsetY = (drawingRect.midY) - self.scrollView.bounds.height / 2
+                
+                self.scrollView.contentOffset = CGPoint(x: max(0, min(offsetX, self.scrollView.contentSize.width - self.scrollView.bounds.width)),
+                                                   y: max(0, min(offsetY, self.scrollView.contentSize.height - self.scrollView.bounds.height)))
+            } else {
+                let offsetX = (self.scrollView.contentSize.width - self.scrollView.bounds.width) / 2
+                let offsetY = (self.scrollView.contentSize.height - self.scrollView.bounds.height) / 2
+                self.scrollView.contentOffset = CGPoint(x: offsetX, y: offsetY)
+            }
+            
+            self.relocateButton.isHidden = true
+        }
+    }
+    
+    func checkRelocateButtonVisibility(scrollView: UIScrollView) {
+        guard relocateButton != nil else { return }
+        if scrollView.zoomScale != 1.0 {
+            relocateButton.isHidden = false
+        } else {
+            if self.l_ShapeView != nil {
+                let drawingRect = self.l_ShapeView.frame
+                let visibleRect = CGRect(origin: scrollView.contentOffset, size: scrollView.bounds.size)
+                
+                if !visibleRect.intersects(drawingRect) {
+                    relocateButton.isHidden = false
+                } else {
+                    relocateButton.isHidden = true
+                }
+            } else {
+                relocateButton.isHidden = true
+            }
+        }
     }
     
     

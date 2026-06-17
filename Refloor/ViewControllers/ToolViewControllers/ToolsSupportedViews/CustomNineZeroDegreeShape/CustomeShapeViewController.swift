@@ -164,7 +164,7 @@ class CustomeShapeViewController: UIViewController,UITableViewDelegate,UITableVi
         
         let xAxispath = UIBezierPath()
         let tmpwidth = sender.frame.width
-        intWidth = tmpwidth / minimumValue
+        intWidth = tmpwidth / graphValue
         width = ((intWidth ) * graphValue) + graphValue
         
         let tmphight = sender.frame.height
@@ -271,7 +271,7 @@ class CustomeShapeViewController: UIViewController,UITableViewDelegate,UITableVi
         
         let xAxispath = UIBezierPath()
         let tmpwidth = sender.frame.width
-        intWidth = tmpwidth / minimumValue
+        intWidth = tmpwidth / graph_minimunValue
         width = ((intWidth ) * graph_minimunValue) + graph_minimunValue
         
         let tmphight = sender.frame.height

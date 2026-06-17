@@ -812,7 +812,47 @@ class L_Shape_CustomView: CustomView {
     }
     
     
-    
+    func getDrawingPoints() -> [CGPoint] {
+        if isFlip {
+            let startXaxis = (minimumValue + l_shape_side_width_2_temp + l_shape_side_width_1_temp)
+            let startYaxis = minimumValue
+            var xAxis = startXaxis
+            var yAxis = startYaxis
+            var points: [CGPoint] = []
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            xAxis = xAxis - l_shape_side_width_1_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            yAxis = yAxis + l_shape_side_height_1_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            xAxis = xAxis - l_shape_side_width_2_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            yAxis = yAxis + l_shape_side_height_2_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            let width_1_2_lines = l_shape_side_width_1_temp + l_shape_side_width_2_temp
+            xAxis = xAxis + width_1_2_lines
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            return points
+        } else {
+            let startXaxis = minimumValue
+            let startYaxis = minimumValue
+            var xAxis = startXaxis
+            var yAxis = startYaxis
+            var points: [CGPoint] = []
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            xAxis = xAxis + l_shape_side_width_1_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            yAxis = yAxis + l_shape_side_height_1_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            xAxis = xAxis + l_shape_side_width_2_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            yAxis = yAxis + l_shape_side_height_2_temp
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            let width_1_2_lines = l_shape_side_width_1_temp + l_shape_side_width_2_temp
+            xAxis = xAxis - width_1_2_lines
+            points.append(CGPoint(x: xAxis, y: yAxis))
+            return points
+        }
+    }
     
     /*
      // Only override draw() if you perform custom drawing.

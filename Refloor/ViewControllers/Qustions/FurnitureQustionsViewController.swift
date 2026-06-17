@@ -1746,6 +1746,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             let BuildUpLeveling = qustionAnswer.lastIndex(where: { $0.code == "SqftBuildUpLeveling" }) ?? 0
             let PrimerType = qustionAnswer.lastIndex(where: { $0.code == "PrimerType" }) ?? 0
             let patchLevelingIndex = qustionAnswer.firstIndex(where: { $0.code == "SqftPatchLeveling"})
+            let closetIndex  = qustionAnswer.firstIndex(where: { $0.code == "numberofclosets"})
             let miscellaneousCharge = qustionAnswer.lastIndex(where: {$0.code == "miscellaneouscharge"}) ?? 0
            let selectedAnswer = self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection
             
@@ -1762,11 +1763,18 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             
             print("mandatory value : ", "\(question.mandatory_answer == true)", ", NUMVAL: ", ((self.qustionAnswer[StairCount].answerOFQustion?.numberVaue ?? 0) > 0), ", STRWDT: ", "\((self.qustionAnswer[StairCount].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0)", "textvalue : ", "\((self.qustionAnswer[StairCount].answerOFQustion?.textValue?.count ?? 0) > 0)")
             
-            if (question.mandatory_answer == true) && question.code == "SqftPatchLeveling" && !((self.qustionAnswer[patchLevelingIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
+             if (question.mandatory_answer == true) && question.code == "numberofclosets" && !((self.qustionAnswer[closetIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
+            {
+                let questionNumber = value + 1
+                return "Please Answer The Quesion Closet To Install"//"Please answer question number \(questionNumber)"
+            }
+            
+            else if (question.mandatory_answer == true) && question.code == "SqftPatchLeveling" && !((self.qustionAnswer[patchLevelingIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
             {
                 let questionNumber = value + 1
                 return "Patch Leveling Is Required When Installing On A Concrete Surface"//"Please answer question number \(questionNumber)"
             }
+           
             else
             
             if ((question.mandatory_answer == true) &&  !((((self.qustionAnswer[value].answerOFQustion?.numberVaue ?? 0) > 0) || (self.qustionAnswer[value].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0) || ((self.qustionAnswer[value].answerOFQustion?.textValue?.count ?? 0) > 0) ||

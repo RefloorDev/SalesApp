@@ -526,7 +526,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                         self.createAppointmentsRequestDataToDatabase(title: RequestTitle.ImageUpload, url: AppURL().syncImageInfo, requestType: RequestType.formData, requestParams: imageDict as NSDictionary, imageName: imageDict["image_name"] as! String)
                     }
                     
-                    let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend()]
+                    let requestParaInitiateSync:[String:Any] = ["appointment_id":appointmentId,"screen_logs":self.getScreenCompletionArrayToSend(),"appointment_result":self.orderstatusLabel.text ?? ""]
                     let requestParaInitiateSyncFinal = ["data":requestParaInitiateSync]
                     self.createAppointmentsRequestDataToDatabase(title: RequestTitle.InitiateSync, url: AppURL().syncInitiate_i360, requestType: RequestType.post, requestParams: requestParaInitiateSyncFinal as NSDictionary, imageName: "")
                         self.dismiss(animated: true) {

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import ImageIO
 
 class ImageSaveToDirectory: NSObject
 {
@@ -38,24 +39,24 @@ class ImageSaveToDirectory: NSObject
         
         let documentDirectoryPath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString)
         let pathWithFolderName = documentDirectoryPath.appendingPathComponent("Refloor_Offline_Asset")
-        let url = NSURL(string: pathWithFolderName) // convert path in url
+        let url = NSURL(fileURLWithPath: pathWithFolderName) // convert path in url
         
-        return url!
+        return url
     }
 
-     func saveImageDocumentDirectory(rfImage:UIImage, saveImgName:String) -> String
+    func saveImageDocumentDirectory(rfImage:UIImage, saveImgName:String) -> String
     {
+        CreateFolderInDocumentDirectory()
         let fileManager = FileManager.default
         let url = (getDirectoryPath() as NSURL)
         
         let imagePath = url.appendingPathComponent(saveImgName) // Here Image Saved With This Name ."MyImage.png"
-        let urlString: String = imagePath!.absoluteString
+        let urlString: String = imagePath!.path
         
-        let ImgForSave = rfImage // here i Want To Saved This Image In Document Directory
-        let imageData = UIImage.jpegData(ImgForSave)
-     //   let imageData = attachments.jpegData(compressionQuality: 0.4)
+        if let imageData = rfImage.jpegData(compressionQuality: 0.4) {
+            fileManager.createFile(atPath: urlString, contents: imageData, attributes: nil)
+        }
         
-        fileManager.createFile(atPath: urlString as String, contents: imageData(0.4), attributes: nil)
         return saveImgName
     }
 
@@ -66,7 +67,7 @@ class ImageSaveToDirectory: NSObject
         
         let imagePath = (getDirectoryPath() as NSURL).appendingPathComponent(rfImage) // here assigned img name who assigned to img when saved in document directory. Here I Assigned Image Name "MyImage.png"
         
-        let urlString: String = imagePath!.absoluteString
+        let urlString: String = imagePath!.path
         
         if fileManager.fileExists(atPath: urlString)
         {
@@ -84,6 +85,30 @@ class ImageSaveToDirectory: NSObject
         }
     }
     
+    public func getDownsampledImageFromDocumentDirectory(rfImage: String, maxSize: CGFloat = 300.0) -> UIImage? {
+        let fileManager = FileManager.default
+        let imagePath = (getDirectoryPath() as NSURL).appendingPathComponent(rfImage)
+        guard let urlString = imagePath?.path else { return nil }
+        
+        if fileManager.fileExists(atPath: urlString) {
+            let url = URL(fileURLWithPath: urlString)
+            let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+            if let imageSource = CGImageSourceCreateWithURL(url as CFURL, imageSourceOptions) {
+                let downsampleOptions = [
+                    kCGImageSourceCreateThumbnailFromImageAlways: true,
+                    kCGImageSourceShouldCacheImmediately: true,
+                    kCGImageSourceCreateThumbnailWithTransform: true,
+                    kCGImageSourceThumbnailMaxPixelSize: maxSize as NSNumber
+                ] as CFDictionary
+                
+                if let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) {
+                    return UIImage(cgImage: downsampledImage)
+                }
+            }
+        }
+        return nil
+    }
+    
     public func getImageFromDocumentDirectoryURL(rfImage:String)->String?
     {
         
@@ -91,7 +116,7 @@ class ImageSaveToDirectory: NSObject
         
         let imagePath = (getDirectoryPath() as NSURL).appendingPathComponent(rfImage) // here assigned img name who assigned to img when saved in document directory. Here I Assigned Image Name "MyImage.png"
         
-        let urlString: String = imagePath!.absoluteString
+        let urlString: String = imagePath!.path
         return urlString
         
 //        if fileManager.fileExists(atPath: urlString)
@@ -116,7 +141,7 @@ class ImageSaveToDirectory: NSObject
         
         let imagePath = (getDirectoryPath() as NSURL).appendingPathComponent(rfImage) // here assigned img name who assigned to img when saved in document directory. Here I Assigned Image Name "MyImage.png"
 
-        let urlString: String = imagePath!.absoluteString
+        let urlString: String = imagePath!.path
         
         
         if fileManager.fileExists(atPath: urlString)
