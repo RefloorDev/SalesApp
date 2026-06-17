@@ -15,6 +15,7 @@ class CustomerListTableViewCell: UITableViewCell {
     @IBOutlet weak var timeLabel: UILabel!
     @IBOutlet weak var customerLocationLabel: UILabel!
     @IBOutlet weak var cutomerphoneNumberLabel: UILabel!
+    @IBOutlet weak var appointmentTimeZone: UILabel!
     @IBOutlet weak var cutomerphoneNumberLogoImageView: UIImageView!
     @IBOutlet weak var customerPhoneStackView: UIStackView!
     

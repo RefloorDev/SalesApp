@@ -182,6 +182,10 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
                        {
                            cell.removeExistingLbl.text = question.rf_AnswerOFQustion[0].answer[0]
                        }
+                       else if question.question_name == "Closets To Install"
+                       {
+                           cell.closetInstalledLbl.text = question.rf_AnswerOFQustion[0].answer[0]
+                       }
                        print(question)
                    }
                 }
@@ -369,7 +373,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         case 1:
             return 70
         case 2:
-            return 183
+            return 225
         case 3:
             return 70
         case 4:

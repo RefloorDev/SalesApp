@@ -357,6 +357,8 @@ class NineZeroDrowingView: UIView {
             {
                 isClosed = false
                 pointPath[0].label.removeFromSuperview()
+                pointPath[pointPath.count - 1].label.removeFromSuperview()
+                pointPath.remove(at: pointPath.count - 1)
                 drowShape(false)
             }
             else
@@ -464,22 +466,24 @@ class NineZeroDrowingView: UIView {
         let xMin = buzierpath.cgPath.boundingBox.minX
         let yMin = buzierpath.cgPath.boundingBox.minY
         var area:CGFloat = 0.0
-        for x in stride(from: xMin, to: xMax, by: +10 as CGFloat) {
-            for y in stride(from: yMin, to: yMax, by: +10 as CGFloat) {
+        
+        let width = max(1.0, xMax - xMin)
+        let height = max(1.0, yMax - yMin)
+        
+        let stepX = min(10.0, max(0.01, width / 50.0))
+        let stepY = min(10.0, max(0.01, height / 50.0))
+        
+        // Midpoint sampling to avoid edge cases
+        for x in stride(from: xMin + stepX/2, to: xMax, by: stepX) {
+            for y in stride(from: yMin + stepY/2, to: yMax, by: stepY) {
                 let point = CGPoint(x: x, y: y)
                 if(buzierpath.cgPath.contains(point, using: .winding, transform:.identity))
                 {
-                    //                      if(self.alphaFromPoint(point: point) != 0)
-                    //                      {
-                    //let view = UIView(frame: CGRect(origin: point, size: CGSize(width: 1, height: 1)))
-                    //  view.backgroundColor = .green
-                    // self.addSubview(view)
-                    area += 10
-                    //                      }
+                    area += (stepX * stepY)
                 }
             }
         }
-        area = area * 10
+        
         let value = (area/(minimumValue * minimumValue) * 100).rounded()/100
         return value
     }

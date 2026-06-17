@@ -788,14 +788,14 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
 //        }
         cell.molding.text = ((tableValues[indexPath.row].moulding ?? "") == "") ? "Select Molding" : (tableValues[indexPath.row].moulding ?? "")
         //cell.summeryAttachmentView.loadImageFormWeb(URL(string: tableValues[indexPath.row].room_image_url ?? ""))
-        cell.summeryAttachmentView.image = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].room_image_url ?? "")
+        cell.summeryAttachmentView.image = ImageSaveToDirectory.SharedImage.getDownsampledImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].room_image_url ?? "", maxSize: 300)
         cell.selectColor.tag = indexPath.row
         //cell.colorView.loadImageFormWeb(URL(string: tableValues[indexPath.row].material_image_url ?? ""))
         if tableValues[indexPath.row].material_image_url ?? "" == ""{
             cell.colorView.image = UIImage(named: "AppIcon")
         }else{
             print(tableValues[indexPath.row].material_image_url ?? "")
-            cell.colorView.image = ImageSaveToDirectory.SharedImage.getImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].material_image_url ?? "")
+            cell.colorView.image = ImageSaveToDirectory.SharedImage.getDownsampledImageFromDocumentDirectory(rfImage: tableValues[indexPath.row].material_image_url ?? "", maxSize: 300)
             
         }
         cell.selectColor.addTarget(self, action: #selector(getColorPopUpFromTableViewButton(sender:)), for: .touchUpInside)

@@ -6432,12 +6432,21 @@ extension UIImage {
      */
     convenience init(view: UIView) {
         
-        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
+        var size = view.bounds.size
+        if size.width <= 0 || size.height <= 0 {
+            size = CGSize(width: 1, height: 1)
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(size, view.isOpaque, 0.0)
         view.drawHierarchy(in: view.bounds, afterScreenUpdates: false)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        self.init(cgImage: (image?.cgImage)!)
         
+        if let cgImage = image?.cgImage {
+            self.init(cgImage: cgImage)
+        } else {
+            self.init()
+        }
     }
     
     

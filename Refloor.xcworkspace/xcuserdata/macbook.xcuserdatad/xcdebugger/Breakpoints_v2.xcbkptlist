@@ -82,36 +82,6 @@
             endingLineNumber = "1749"
             landmarkName = "validation()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "703A1E01-677D-485E-B688-54E565BE4F85 - 613a96ccc45e03bb"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FurnitureQustionsViewController.validation() -&gt; Swift.String"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1749"
-                  endingLineNumber = "1749">
-               </Location>
-               <Location
-                  uuid = "703A1E01-677D-485E-B688-54E565BE4F85 - 1144473d357491e1"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #5 (Refloor.QuestionsMeasurementData) -&gt; Swift.Bool in Refloor.FurnitureQustionsViewController.validation() -&gt; Swift.String"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1749"
-                  endingLineNumber = "1749">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -176,36 +146,6 @@
             endingLineNumber = "223"
             landmarkName = "AppinmentListApi(completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3EAC2A85-5C32-45A4-97C6-E4C34DDC02E9 - cff69f6f0d8bcf88"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.HttpClientManager.AppinmentListApi(completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Refloor.Appointments&gt;, Swift.Optional&lt;Swift.Int&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/AppModelClassAndApi/HttpClientManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "223"
-                  endingLineNumber = "223">
-               </Location>
-               <Location
-                  uuid = "3EAC2A85-5C32-45A4-97C6-E4C34DDC02E9 - e1fcada3ba82c8a8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any&gt;) -&gt; () in Refloor.HttpClientManager.AppinmentListApi(completion: (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Refloor.Appointments&gt;, Swift.Optional&lt;Swift.Int&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/AppModelClassAndApi/HttpClientManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "225"
-                  endingLineNumber = "225">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -398,36 +338,6 @@
             endingLineNumber = "55"
             landmarkName = "init(image:quad:rotateImage:strokeColor:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "01D2F1DF-5930-43F1-9B9D-370B6B309621 - cfdb63071f845385"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WeScan.EditImageViewController.__allocating_init(image: __C.UIImage, quad: Swift.Optional&lt;WeScan.Quadrilateral&gt;, rotateImage: Swift.Bool, strokeColor: Swift.Optional&lt;__C.CGColorRef&gt;) -&gt; WeScan.EditImageViewController"
-                  moduleName = "WeScan"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Pods/WeScan/WeScan/Edit/EditImageViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "0"
-                  endingLineNumber = "0">
-               </Location>
-               <Location
-                  uuid = "01D2F1DF-5930-43F1-9B9D-370B6B309621 - 21469a0c729f0e34"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "WeScan.EditImageViewController.init(image: __C.UIImage, quad: Swift.Optional&lt;WeScan.Quadrilateral&gt;, rotateImage: Swift.Bool, strokeColor: Swift.Optional&lt;__C.CGColorRef&gt;) -&gt; WeScan.EditImageViewController"
-                  moduleName = "WeScan"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Pods/WeScan/WeScan/Edit/EditImageViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "27"
-                  endingLineNumber = "27">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -700,36 +610,6 @@
             endingLineNumber = "419"
             landmarkName = "hunterCall(parameter:customer:url:apiKey:entityKey:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "CA8914D8-3A04-4ED5-9D6B-E5B71C91F4EB - ddbc24eab44643d"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FinanceViewController.hunterCall(parameter: Swift.Dictionary&lt;Swift.String, Any&gt;, customer: Refloor.AppoinmentDataValue, url: Swift.String, apiKey: Swift.String, entityKey: Swift.String) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/ViewControllers/Payment/FinanceViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "419"
-                  endingLineNumber = "419">
-               </Location>
-               <Location
-                  uuid = "CA8914D8-3A04-4ED5-9D6B-E5B71C91F4EB - 3b38acca1388de27"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;, Swift.Optional&lt;Swift.String&gt;) -&gt; () in Refloor.FinanceViewController.hunterCall(parameter: Swift.Dictionary&lt;Swift.String, Any&gt;, customer: Refloor.AppoinmentDataValue, url: Swift.String, apiKey: Swift.String, entityKey: Swift.String) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/ViewControllers/Payment/FinanceViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "420"
-                  endingLineNumber = "420">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1274,36 +1154,6 @@
             endingLineNumber = "481"
             landmarkName = "getMasterData()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "4E6F995B-E74A-4EE0-990D-E12A926A9513 - 7cb27ad7be857ae5"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.LoginViewController.getMasterData() -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/LoginSection/LoginViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "481"
-                  endingLineNumber = "481">
-               </Location>
-               <Location
-                  uuid = "4E6F995B-E74A-4EE0-990D-E12A926A9513 - 45d0f70428ba25c2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;Swift.String&gt;) -&gt; () in Refloor.LoginViewController.getMasterData() -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/LoginSection/LoginViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "482"
-                  endingLineNumber = "482">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1320,36 +1170,6 @@
             endingLineNumber = "2118"
             landmarkName = "getMasterDataApi(completion:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "5C987D51-17BA-47D6-B45C-2B08E3E11697 - 3c33303bec67b3e8"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.HttpClientManager.getMasterDataApi(completion: (Swift.Optional&lt;Swift.String&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/AppModelClassAndApi/HttpClientManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2118"
-                  endingLineNumber = "2118">
-               </Location>
-               <Location
-                  uuid = "5C987D51-17BA-47D6-B45C-2B08E3E11697 - c9957407fbef9f69"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Alamofire.DataResponse&lt;Any&gt;) -&gt; () in Refloor.HttpClientManager.getMasterDataApi(completion: (Swift.Optional&lt;Swift.String&gt;) -&gt; ()) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/AppModelClassAndApi/HttpClientManager.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2119"
-                  endingLineNumber = "2119">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1478,36 +1298,6 @@
             endingLineNumber = "186"
             landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "EDA0F00A-F9C2-441B-B4B0-A007905A0562 - 4749f9f0bd957df7"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Refloor.FinanceViewController.viewDidAppear(Swift.Bool) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/ViewControllers/Payment/FinanceViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186">
-               </Location>
-               <Location
-                  uuid = "EDA0F00A-F9C2-441B-B4B0-A007905A0562 - a0af3fcbcbe2a1e2"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in Refloor.FinanceViewController.viewDidAppear(Swift.Bool) -&gt; ()"
-                  moduleName = "Refloor.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/macbook/Desktop/Projects/Refloor/Refloor%203.3.6_Merge_Apr_2026/SalesApp%20Concurrency/Refloor/ViewControllers/Payment/FinanceViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
