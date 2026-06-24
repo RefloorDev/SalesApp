@@ -169,7 +169,7 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
         )
         downpaymentSelectionObjcet.append(payment3)
         // Tab 4 – ACH (always)
-        self.checkLabel.text = "ACH"
+        self.checkLabel.text = "E-Check/ACH"
         let payment4 = DownPaymentSelectionObj(
             paymentType: .ACH,
             lable: self.checkLabel,
@@ -311,7 +311,7 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
         )
         downpaymentSelectionObjcet.append(payment3)
         // Tab 4 – ACH (always)
-        self.checkLabel.text = "ACH"
+        self.checkLabel.text = "E-Check/ACH"
         let payment4 = DownPaymentSelectionObj(
             paymentType: .ACH,
             lable: self.checkLabel,
@@ -400,30 +400,81 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
     }
 
     func sideTabSelectedWith(at tag: Int) {
-        UIView.animate(withDuration: 0.2) {
-            for obj in self.downpaymentSelectionObjcet {
-                if obj.tag == tag {
-                    self.paymentType = obj.paymentType
-                    obj.view.backgroundColor = UIColor(
-                        displayP3Red: 174 / 255,
-                        green: 179 / 255,
-                        blue: 184 / 255,
-                        alpha: 0.66
-                    )
-                    obj.lable.textColor = .white
-                } else {
-                    obj.view.backgroundColor = .clear
-                    obj.lable.textColor = UIColor(
-                        displayP3Red: 167 / 255,
-                        green: 176 / 255,
-                        blue: 186 / 255,
-                        alpha: 1
-                    )
-
+        if tag == 14
+        {
+            let yes = UIAlertAction(title: "Continue", style: .default) { (action) in
+                
+                
+                
+                UIView.animate(withDuration: 0.2) {
+                    for obj in self.downpaymentSelectionObjcet {
+                        
+                        if obj.tag == tag {
+                            self.paymentType = obj.paymentType
+                            obj.view.backgroundColor = UIColor(
+                                displayP3Red: 174 / 255,
+                                green: 179 / 255,
+                                blue: 184 / 255,
+                                alpha: 0.66
+                            )
+                            obj.lable.textColor = .white
+                        } else {
+                            obj.view.backgroundColor = .clear
+                            obj.lable.textColor = UIColor(
+                                displayP3Red: 167 / 255,
+                                green: 176 / 255,
+                                blue: 186 / 255,
+                                alpha: 1
+                            )
+                            
+                        }
+                        
+                        self.paymentCollectionView.reloadData()
+                    }
+                    self.view.layoutIfNeeded()
+                    
                 }
-                self.paymentCollectionView.reloadData()
             }
-            self.view.layoutIfNeeded()
+                
+            let no = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+                return
+            }
+                self.alert("Are you sure that you want to collect the physical check and bring it back to the office for later processing?", [yes,no])
+            }
+        
+        else
+        {
+            
+            
+            
+            UIView.animate(withDuration: 0.2) {
+                for obj in self.downpaymentSelectionObjcet {
+                    
+                    if obj.tag == tag {
+                        self.paymentType = obj.paymentType
+                        obj.view.backgroundColor = UIColor(
+                            displayP3Red: 174 / 255,
+                            green: 179 / 255,
+                            blue: 184 / 255,
+                            alpha: 0.66
+                        )
+                        obj.lable.textColor = .white
+                    } else {
+                        obj.view.backgroundColor = .clear
+                        obj.lable.textColor = UIColor(
+                            displayP3Red: 167 / 255,
+                            green: 176 / 255,
+                            blue: 186 / 255,
+                            alpha: 1
+                        )
+                        
+                    }
+                    
+                    self.paymentCollectionView.reloadData()
+                }
+                self.view.layoutIfNeeded()
+                
+            }
         }
 
     }
@@ -631,69 +682,74 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
             print(
                 "******   CHECKS ----  DownPaymentFrom-- Check --CollectionViewCell  ---- *****"
             )
-
-            let cell =
+            
+            //Are you sure that you want to collect the physical check and bring it back to the office for later processing?"
+            
+            
+                
+                let cell =
                 collectionView.dequeueReusableCell(
                     withReuseIdentifier:
                         "DownPaymentFromCheckCollectionViewCell",
                     for: indexPath
                 ) as! DownPaymentFromCheckCollectionViewCell
-            // cell.totalLabel.text = "Total Price: $\(self.totalAmount.toDoubleString)"
-            cell.totalLabel.text = "Add Check Details"
-            //cell.totalLabel.text = "Down Payment: $\(self.downPaymentValue.toDoubleString)"
-            cell.selectedItem = self.selectedPersecntage
-
-            cell.accountNumberTF.delegate = self
-
-            cell.routingNumberTF.delegate = self
-            if routingNumber != "" || accountNumber != "" || checkNumber != "" {
-                cell.routingNumberTF.text = routingNumber
-
-                cell.accountNumberTF.text = accountNumber
-
-                cell.checkNumberTF.text = checkNumber
-                cell.routingNumber = routingNumber
-                cell.accountNumber = accountNumber
-                cell.checkNumber = checkNumber
-                //cell.collectionView.reloadData()
-            } else {
-                cell.checkNumberTF.setPlaceHolderWithColor(
-                    placeholder: "0000 0000 0000 0000",
-                    colour: .placeHolderColor
+                // cell.totalLabel.text = "Total Price: $\(self.totalAmount.toDoubleString)"
+                cell.totalLabel.text = "Add Turn-In Check Details"
+                //cell.totalLabel.text = "Down Payment: $\(self.downPaymentValue.toDoubleString)"
+                cell.selectedItem = self.selectedPersecntage
+                
+                cell.accountNumberTF.delegate = self
+                
+                cell.routingNumberTF.delegate = self
+                if routingNumber != "" || accountNumber != "" || checkNumber != "" {
+                    cell.routingNumberTF.text = routingNumber
+                    
+                    cell.accountNumberTF.text = accountNumber
+                    
+                    cell.checkNumberTF.text = checkNumber
+                    cell.routingNumber = routingNumber
+                    cell.accountNumber = accountNumber
+                    cell.checkNumber = checkNumber
+                    //cell.collectionView.reloadData()
+                } else {
+                    cell.checkNumberTF.setPlaceHolderWithColor(
+                        placeholder: "00000",
+                        colour: .placeHolderColor
+                    )
+                    cell.accountNumberTF.setPlaceHolderWithColor(
+                        placeholder: "0000 0000 0000 0000",
+                        colour: .placeHolderColor
+                    )
+                    cell.routingNumberTF.setPlaceHolderWithColor(
+                        placeholder: "0000 0000 0000 0000",
+                        colour: .placeHolderColor
+                    )
+                    cell.routingNumber = routingNumber
+                    cell.accountNumber = accountNumber
+                    cell.checkNumber = checkNumber
+                }
+                //cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
+                //cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
+                cell.payButton.addTarget(
+                    self,
+                    action: #selector(GoForJobCompleationValidation),
+                    for: .touchUpInside
                 )
-                cell.accountNumberTF.setPlaceHolderWithColor(
-                    placeholder: "0000 0000 0000 0000",
-                    colour: .placeHolderColor
+                cell.cameraButton.addTarget(
+                    self,
+                    action: #selector(autoReadOCRForCheck),
+                    for: .touchUpInside
                 )
-                cell.routingNumberTF.setPlaceHolderWithColor(
-                    placeholder: "0000 0000 0000 0000",
-                    colour: .placeHolderColor
+                cell.payButton.setTitle("Collect", for: .normal)
+                
+                cell.checkNumberTF.delegate = self
+                cell.collectionViewConfigruation(
+                    collectionViewData: self.persentage,
+                    delegate: self
                 )
-                cell.routingNumber = routingNumber
-                cell.accountNumber = accountNumber
-                cell.checkNumber = checkNumber
-            }
-            //cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
-            //cell.collectionViewConfigruation(collectionViewData: self.persentage, delegate: self)
-            cell.payButton.addTarget(
-                self,
-                action: #selector(GoForJobCompleationValidation),
-                for: .touchUpInside
-            )
-            cell.cameraButton.addTarget(
-                self,
-                action: #selector(autoReadOCRForCheck),
-                for: .touchUpInside
-            )
-            cell.payButton.setTitle("Collect", for: .normal)
-
-            cell.checkNumberTF.delegate = self
-            cell.collectionViewConfigruation(
-                collectionViewData: self.persentage,
-                delegate: self
-            )
-
-            return cell
+                
+                return cell
+            
         } else {
             // ACH cell
 
@@ -706,7 +762,7 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
                     withReuseIdentifier: "DownPaymentFromACHCollectionViewCell",
                     for: indexPath
                 ) as! DownPaymentFromACHCollectionViewCell
-            cell.totalLabel.text = "Add ACH Details"
+            cell.totalLabel.text = "Add E-Check/ACH Details"
             cell.selectedItem = self.selectedPersecntage
             cell.collectionViewConfigruation(
                 collectionViewData: self.persentage,
@@ -1330,21 +1386,21 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
                     return
                 }
                 checkNumber = (cell.checkNumberTF.text ?? "")
-                if (cell.accountNumberTF.text ?? "") != "" {
-                    if Int((cell.accountNumberTF.text ?? "")) == nil {
-                        self.alert("Please enter correct account number", nil)
-                        return
-                    }
+//                if (cell.accountNumberTF.text ?? "") != "" {
+//                    if Int((cell.accountNumberTF.text ?? "")) == nil {
+//                        self.alert("Please enter correct account number", nil)
+//                        return
+//                    }
 
-                    accountNumber = (cell.accountNumberTF.text ?? "")
-                    if (cell.routingNumberTF.text ?? "") != "" {
-                        if Int((cell.routingNumberTF.text ?? "")) == nil {
-                            self.alert(
-                                "Please enter correct routing number",
-                                nil
-                            )
-                            return
-                        }
+//                    accountNumber = (cell.accountNumberTF.text ?? "")
+//                    if (cell.routingNumberTF.text ?? "") != "" {
+//                        if Int((cell.routingNumberTF.text ?? "")) == nil {
+//                            self.alert(
+//                                "Please enter correct routing number",
+//                                nil
+//                            )
+//                            return
+//                        }
                         routineNumber = (cell.routingNumberTF.text ?? "")
                         downPaymentInputObject = DownPaymentInputObject(
                             paymentType: .Check,
@@ -1357,12 +1413,12 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
                         )
                         GoForJobCompleation()
 
-                    } else {
-                        self.alert("Please enter routine number", nil)
-                    }
-                } else {
-                    self.alert("Please enter account number", nil)
-                }
+//                    } else {
+//                        self.alert("Please enter routine number", nil)
+//                    }
+//                } else {
+//                    self.alert("Please enter account number", nil)
+//                }
 
             } else {
                 self.alert("Please enter check number", nil)
@@ -2157,9 +2213,9 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
                     .accountNumber ?? "",
                 "check_routing_number": downPaymentInputObject?.checkValue?
                     .routingNumber ?? "",
-                "pay_later":
-                    (downPaymentInputObject?.cardPaymentValue!.isPayLtr)!
-                    ? 1 : 0,
+//                "pay_later":
+//                    (downPaymentInputObject?.cardPaymentValue!.isPayLtr)!
+//                    ? 1 : 0
             ]
             let paymentOption = self.getPaymentOptionAndValues(
                 payment_method: "credit_card",

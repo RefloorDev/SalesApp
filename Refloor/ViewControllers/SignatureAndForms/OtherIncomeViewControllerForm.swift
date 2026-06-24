@@ -124,6 +124,8 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
     var adjustmentValue:Double = 0
     var roomName = ""
     let appointmetslData = AppDelegate.appoinmentslData
+    var sourceOfIncomeBool = false
+    
     
     
     override func viewDidLoad() {
@@ -329,7 +331,7 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
             self.sourceOfIncome.isUserInteractionEnabled = true
             self.additionalIncomeSource.isUserInteractionEnabled = true
             self.sourceOfIncomeSelectBtn.isUserInteractionEnabled = true
-            
+            sourceOfIncomeBool = true
         }
         else
         {
@@ -339,7 +341,7 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
             self.sourceOfIncomeSelectBtn.isUserInteractionEnabled = false
             self.additionalIncomeSource.text = ""
             self.sourceOfIncome.text = "Select"
-            
+            sourceOfIncomeBool = false
             //  _ = self.sourceOfIncome.text == "Select" ? "" : self.sourceOfIncome.text
             
         }
@@ -968,6 +970,10 @@ class OtherIncomeViewControllerForm: UIViewController,DropDownDelegate,UITextFie
          return "Please enter Bank Phone Number"
          }
          */
+        if sourceOfIncomeBool == true && self.sourceOfIncome.text == "Select"
+        {
+            return "Please select a Source of Income"
+        }
         if !istearmAndCondition
         {
             return "You must accept the Terms and Conditions"

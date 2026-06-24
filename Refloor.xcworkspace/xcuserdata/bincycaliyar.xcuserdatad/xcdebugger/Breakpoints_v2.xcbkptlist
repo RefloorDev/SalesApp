@@ -7,175 +7,159 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "E36857C5-B116-4A44-A466-937773B60EAD"
+            uuid = "39EB01C2-466A-4528-A6D2-038C4F8B01DB"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            filePath = "Refloor/ViewControllers/Payment/DownPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "544"
-            endingLineNumber = "544"
-            landmarkName = "discountApplied(discountAmount:discountArray:isDiscountApplied:)"
+            startingLineNumber = "2216"
+            endingLineNumber = "2216"
+            landmarkName = "getCardDetails()"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "17C8AD12-2AF9-42F8-A64E-9C10F02A40B4"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1768"
+            endingLineNumber = "1768"
+            landmarkName = "validation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "27B90295-1730-4E60-9619-0AD2867B5896"
+            uuid = "43BC5E97-DE8B-4CDC-A01E-5694EB18D7AF"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            filePath = "Refloor/ViewControllers/Qustions/FurnitureQustionsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "594"
-            endingLineNumber = "594"
-            landmarkName = "discountApplied(discountAmount:discountArray:isDiscountApplied:)"
+            startingLineNumber = "1766"
+            endingLineNumber = "1766"
+            landmarkName = "validation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D3317FDF-5C8E-4A2B-AD71-BDE13054B58A"
+            uuid = "0F323530-7B41-4466-89C4-D13758DA136D"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ExtensionFiles/Extension.swift"
+            filePath = "Refloor/ViewControllers/DownPaymentAndSignature/DownFinalPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5903"
-            endingLineNumber = "5903"
-            landmarkName = "saveRealmArray(_:)"
+            startingLineNumber = "321"
+            endingLineNumber = "321"
+            landmarkName = "finalPaymentDidEnd(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "44338B6A-68A0-40FF-89A5-7A2ADC08CCC2"
+            uuid = "006FB671-C88A-4E4F-90CE-888AD23B7331"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ExtensionFiles/Extension.swift"
+            filePath = "Refloor/ViewControllers/DownPaymentAndSignature/DownFinalPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4695"
-            endingLineNumber = "4695"
-            landmarkName = "getPaymentDetailsDataFromAppointmentDetail()"
+            startingLineNumber = "464"
+            endingLineNumber = "464"
+            landmarkName = "validation()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "ADEA1C15-5EE4-424F-92E9-1349B6B907C3"
+            uuid = "C5496579-C51E-4BB6-9FAA-28B5E4F4A583"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ExtensionFiles/Extension.swift"
+            filePath = "Refloor/ViewControllers/Payment/DownPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5853"
-            endingLineNumber = "5853"
-            landmarkName = "getDiscountArrayToSend()"
+            startingLineNumber = "133"
+            endingLineNumber = "133"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2A01F9D9-8364-47A3-A22C-4BF1C46D95BE"
+            uuid = "A23E3B54-69EC-4B21-887B-94BA2511291D"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ExtensionFiles/Extension.swift"
+            filePath = "Refloor/ViewControllers/Payment/DownPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "5855"
-            endingLineNumber = "5855"
-            landmarkName = "getDiscountArrayToSend()"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "80691D7A-751E-4055-B9F4-337816038D7F"
+            uuid = "C2F76A1F-8980-4526-80FF-0978D5313319"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Payment/PaymentOptionsNewViewController.swift"
+            filePath = "Refloor/ViewControllers/Payment/DownPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1020"
-            endingLineNumber = "1020"
-            landmarkName = "nextButtonAction(_:)"
+            startingLineNumber = "271"
+            endingLineNumber = "271"
+            landmarkName = "viewWillAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "65098173-4820-4C3D-9402-0C8F890A0332"
+            uuid = "64BF4B04-D267-4359-89AA-5A7E07312CE8"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/SignatureAndForms/SignatureSubmitViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "nextButtonAction(_:)"
+            startingLineNumber = "86"
+            endingLineNumber = "86"
+            landmarkName = "viewDidAppear(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "393DF2F4-2DF9-4C3E-BFD4-E16B959931B8"
+            uuid = "E2F3559C-BFF2-4ACD-9733-8A3FC5510DD4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/DownPaymentAndSignature/UpdateDownFinalPaymentViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "485"
-            endingLineNumber = "485"
-            landmarkName = "nextButtonAction(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "70B65C4C-05A0-4E10-B529-7CE9FCA3C040"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "233"
-            endingLineNumber = "233"
-            landmarkName = "textView(_:shouldChangeTextIn:replacementText:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FFBC8836-6759-47DA-9A9B-0798EF27E5CB"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -183,192 +167,96 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "D8D63581-3A11-4FA9-B53B-5AE51B5645B0"
+            uuid = "028D77FB-A8B6-4850-BF7F-5091E2EC2DA9"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "518"
-            endingLineNumber = "518"
-            landmarkName = "cellforSubHeadingTableViewCell(_:indexPath:tableValue:tag:)"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "C0DC3CD1-7426-4891-A16C-AEF555F72FCE"
+            uuid = "53DF18D7-112A-4385-8C8C-48056944A0CB"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "514"
-            endingLineNumber = "514"
-            landmarkName = "cellforSubHeadingTableViewCell(_:indexPath:tableValue:tag:)"
+            startingLineNumber = "211"
+            endingLineNumber = "211"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "876D7A31-3814-4981-B14B-FCFD0FC58481"
+            uuid = "E2010858-170F-4F7A-8124-84D69192C839"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "491"
-            endingLineNumber = "491"
-            landmarkName = "tapshapeMessureImageRecognizer()"
+            startingLineNumber = "215"
+            endingLineNumber = "215"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "65FAA7F8-DC5F-4F6B-A9F2-1D58B396F4A6"
+            uuid = "213FD224-55EC-4D80-8D15-01A917F1AED6"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "457"
-            endingLineNumber = "457"
-            landmarkName = "cellforSubDetailsTableViewCell(_:indexPath:tableValue:)"
+            startingLineNumber = "187"
+            endingLineNumber = "187"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "08EE73F3-B33E-43F7-B1FA-0E29D78930FC"
+            uuid = "55CB4B66-862D-4755-8F24-9D925BD392BE"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/Summery/SummeryDetailsViewController.swift"
+            filePath = "Refloor/ViewControllers/Summery/TableViewCell/AppointmentSummaryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "464"
-            endingLineNumber = "464"
-            landmarkName = "cellforSubDetailsTableViewCell(_:indexPath:tableValue:)"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "AB638C37-063A-44CD-9C08-E168F2E0CDC3"
+            uuid = "48974E6A-F503-4258-9F78-0518F8BE5EE5"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/ToolViewControllers/ToolsSupportedViews/CustomShapeWithLine/CustomShapeLineViewController.swift"
+            filePath = "Refloor/ViewControllers/DownPaymentAndSignature/DownFinalPaymentViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1380"
-            endingLineNumber = "1380"
-            landmarkName = "DropDownDidSelectedAction(_:_:_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A53CDDC1-9324-443B-A7A9-C112A3FBE7C5"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ViewControllers/ToolViewControllers/ToolsSupportedViews/CustomShapeWithLine/CustomShapeLineViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1408"
-            endingLineNumber = "1408"
-            landmarkName = "messurementUpload()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "7158524D-72B5-4C7F-81C5-34E9BF738B52"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/ExtensionFiles/Extension.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "4907"
-            endingLineNumber = "4907"
-            landmarkName = "createSummaryData(roomID:roomName:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "900AA194-6352-4DD2-8628-E97C4D151B3D"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/SupportedFiles/ImageSaveToDirectory.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "saveImageDocumentDirectory(rfImage:saveImgName:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C37FA868-DE8F-4DE9-A7DF-815E77B5D7A7"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/SupportedFiles/ImageSaveToDirectory.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "saveImageDocumentDirectory(rfImage:saveImgName:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "23485332-8CE7-46E6-A4EE-7E5C256D528C"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/SupportedFiles/ImageSaveToDirectory.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "65"
-            endingLineNumber = "65"
-            landmarkName = "getImageFromDocumentDirectory(rfImage:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A576D145-64FD-42F1-BAFB-9022165D7DB9"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Refloor/SupportedFiles/ImageSaveToDirectory.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
-            landmarkName = "getDownsampledImageFromDocumentDirectory(rfImage:maxSize:)"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
+            landmarkName = "UIUpdateForValueChange(isUpdateDownPayment:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

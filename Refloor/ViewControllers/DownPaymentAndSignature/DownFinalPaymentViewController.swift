@@ -238,6 +238,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
                 if(finalpayment + downPayment) > totalAmount
                 {
                     finalpayment = totalAmount - downPayment
+                    //finalPaymentTF.text = "\(finalpayment.noDecimal)"
                     downOrFinal = totalAmount
                 }
                 else
@@ -316,10 +317,19 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         // }
     }
     @IBAction func finalPaymentDidEnd(_ sender: UITextField) {
-        let value = Double(sender.text ?? "0")
-        //   {
-        finalpayment = value ?? 0
-        self.UIUpdateForValueChange(isUpdateDownPayment: false)
+        
+        if downPayment == totalAmount
+        {
+            finalpayment = 0
+            finalPaymentTF.text = "0"
+        }
+        else
+        {
+            let value = Double(sender.text ?? "0")
+            //   {
+            finalpayment = value ?? 0
+            self.UIUpdateForValueChange(isUpdateDownPayment: false)
+        }
         //   }
         //   else
         //  {
@@ -451,6 +461,11 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
     {
         let finalvalue = Double(finalPaymentTF.text ?? "0")
         let downvalue = Double(downPaymentTF.text ?? "0")
+        if downvalue == totalAmount && finalvalue != 0
+        {
+            return "Down payment is equal to the total payment. No final payment is required."
+        }
+        
         // {
         finalpayment = finalvalue ?? 0
         downPayment = downvalue ?? 0
@@ -465,6 +480,7 @@ class DownFinalPaymentViewController: UIViewController,UICollectionViewDelegate,
         {
             self.UIUpdateForValueChange(isUpdateDownPayment: true)
         }
+        UIUpdateForValueChange(isUpdateDownPayment: false)
         //                 else
         //                 {
         //                    self.UIUpdateForValueChange(isUpdateDownPayment: false)
