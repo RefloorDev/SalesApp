@@ -1763,10 +1763,12 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             
             print("mandatory value : ", "\(question.mandatory_answer == true)", ", NUMVAL: ", ((self.qustionAnswer[StairCount].answerOFQustion?.numberVaue ?? 0) > 0), ", STRWDT: ", "\((self.qustionAnswer[StairCount].answerOFQustion?.stairWidthDouble ?? 0.0) > 0.0)", "textvalue : ", "\((self.qustionAnswer[StairCount].answerOFQustion?.textValue?.count ?? 0) > 0)")
             
-             if (question.mandatory_answer == true) && question.code == "numberofclosets" && !((self.qustionAnswer[closetIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
+             if (question.mandatory_answer == true) && question.code == "numberofclosets" && !((self.qustionAnswer[closetIndex!].answerOFQustion?.numberVaue ?? 0) >= 0)
             {
-                let questionNumber = value + 1
-                return "Please Answer The Quesion Closet To Install"//"Please answer question number \(questionNumber)"
+                 let questionNumber = value + 1
+                 return "Please Answer Question Number \(questionNumber)"
+//                let questionNumber = value + 1
+//                return "Please Answer The Quesion Closet To Install"//"Please answer question number \(questionNumber)"
             }
             
             else if (question.mandatory_answer == true) && question.code == "SqftPatchLeveling" && !((self.qustionAnswer[patchLevelingIndex!].answerOFQustion?.numberVaue ?? 0) > 0)
@@ -1783,12 +1785,12 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
             {
          
                 let questionNumber = value + 1
-                return "Please answer question number \(questionNumber)"
+                return "Please Answer Question Number \(questionNumber)"
             } else if roomName.contains("STAIRS") {
                 if ((question.mandatory_answer == true) && !((self.qustionAnswer[StairCount].answerOFQustion?.numberVaue ?? 0) > 0) ) {
                     var StairCount = qustionAnswer.lastIndex(where: {$0.code == "StairCount"}) ?? 0
                     StairCount = StairCount + 1
-                    return "Please answer question number \(StairCount)"
+                    return "Please Answer Question Number \(StairCount)"
                 }
             }
            // q4 changes
@@ -1796,7 +1798,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         ((self.qustionAnswer[PrimerType].answerOFQustion?.singleSelection?.value) ?? "") == ""  {
                 
                 //Q4_Change Primer Type Mandatory dropdown
-                return "You must select a primer type"
+                return "You Must Select A Primer Type"
 
             }
              

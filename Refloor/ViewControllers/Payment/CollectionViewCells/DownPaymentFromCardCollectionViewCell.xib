@@ -246,7 +246,7 @@
                                     <constraint firstItem="1JD-rB-BT8" firstAttribute="top" secondItem="bwb-xa-kvf" secondAttribute="top" id="r1h-fZ-26k"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CKh-V7-nOf">
+                            <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CKh-V7-nOf">
                                 <rect key="frame" x="20" y="399" width="174" height="32"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="vxb-pD-ksT"/>

@@ -184,7 +184,7 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
                        }
                        else if question.question_name == "Closets To Install"
                        {
-                           cell.closetInstalledLbl.text = question.rf_AnswerOFQustion[0].answer[0]
+                           cell.closetInstalledLbl.text = question.rf_AnswerOFQustion[0].answer.count > 0 ? question.rf_AnswerOFQustion[0].answer[0] : "0"
                        }
                        print(question)
                    }

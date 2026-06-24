@@ -446,6 +446,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         let contentPanel = UIView()
         contentPanel.backgroundColor = UIColor(red: 0x2D/255.0, green: 0x34/255.0, blue: 0x3D/255.0, alpha: 1.0)
         contentPanel.layer.cornerRadius = 10
+        contentPanel.clipsToBounds = true
         contentPanel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(contentPanel)
         
@@ -480,20 +481,10 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         let originalOpaque = self.drowingView.isOpaque
         self.drowingView.isOpaque = false
         
-        UIGraphicsBeginImageContextWithOptions(contentRect.size, false, 0.0)
-        if let context = UIGraphicsGetCurrentContext() {
-            context.translateBy(x: -contentRect.origin.x, y: -contentRect.origin.y)
-            self.drowingView.layer.render(in: context)
-        }
-        let drawingImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
-        UIGraphicsEndImageContext()
+        let wasGridHidden = self.yAxisLayerSharae?.isHidden ?? false
+        self.yAxisLayerSharae?.isHidden = true
         
-        self.capturedConfirmationImage = drawingImage
-        
-        self.drowingView.isOpaque = originalOpaque
-        self.drowingView.configureForPreview(false)
-        
-        let imageView = UIImageView(image: drawingImage)
+        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         contentPanel.addSubview(imageView)
@@ -578,6 +569,23 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             areaValueLbl.leadingAnchor.constraint(equalTo: contentPanel.leadingAnchor, constant: 20),
             areaValueLbl.bottomAnchor.constraint(equalTo: contentPanel.bottomAnchor, constant: -20)
         ])
+        
+        self.view.layoutIfNeeded()
+        
+        UIGraphicsBeginImageContextWithOptions(contentRect.size, false, 0.0)
+        if let context = UIGraphicsGetCurrentContext() {
+            context.translateBy(x: -contentRect.origin.x, y: -contentRect.origin.y)
+            self.drowingView.layer.render(in: context)
+        }
+        let drawingImage = UIGraphicsGetImageFromCurrentImageContext() ?? UIImage()
+        UIGraphicsEndImageContext()
+        
+        self.yAxisLayerSharae?.isHidden = wasGridHidden
+        self.capturedConfirmationImage = drawingImage
+        self.drowingView.isOpaque = originalOpaque
+        self.drowingView.configureForPreview(false)
+        
+        imageView.image = drawingImage
     }
     
     @objc func hideConfirmationPopup() {
@@ -990,7 +998,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 self.selected_vertical_Button.borderColor = UIColor.white
                 self.selected_horizotal_Button.borderColor = .clear
                 self.selected_horizotal_Button.borderWidth = 0
-                self.seletced_SqureView_TF.text = String(format: "%.1f", subView.custom_width)//"\(subView.custom_width)"
+                self.seletced_SqureView_TF.text = String(format: "%.1f", Double(subView.custom_width))//"\(subView.custom_width)"
                 self.selected_SquareView_Height_TF.text = "\(subView.addViewHeight)" //addView_HeightTF.text
             }
             else
@@ -1000,7 +1008,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 self.selected_vertical_Button.borderColor = UIColor.clear
                 self.selected_horizotal_Button.borderColor = .white
                 self.selected_horizotal_Button.borderWidth = 1
-                self.seletced_SqureView_TF.text = String(format: "%.1f", subView.custom_hight)//"\(subView.custom_hight)"
+                self.seletced_SqureView_TF.text = String(format: "%.1f", Double(subView.custom_hight))//"\(subView.custom_hight)"
                 self.selected_SquareView_Height_TF.text = "\(subView.addViewHeight)" //addView_HeightTF.text
             }
         }
@@ -1236,7 +1244,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             self.areaTF.text = "\(a.rounded(.awayFromZero).clean)"
             self.sidePanel?.areaValueLabel.text = "\(a.rounded(.awayFromZero).clean)"
         }
-        self.perimeter =  Perimeter
+        self.perimeter = Perimeter.rounded()
         UIView.animate(withDuration: 0.2) {
             self.bottomToolView.isHidden = true
             self.bottomToolViewWidthConstrain.constant = 0
@@ -1266,7 +1274,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         if(isClosed)
         {
             let a = Double(area)
-            self.perimeter = Perimeter
+            self.perimeter = Perimeter.rounded()
             self.tempAreaLabel.text = "Area: \(a.rounded(.awayFromZero).clean) Sq.ft"
             self.areaTF.text = "\(a.rounded(.awayFromZero).clean)"
             self.sidePanel?.areaValueLabel.text = "\(a.rounded(.awayFromZero).clean)"
@@ -1697,27 +1705,93 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             } else if state == .changed {
                 self.bottomToolbarCenterXConstraint.constant += translation.x
                 self.bottomToolbarCenterYConstraint.constant += translation.y
+                
+                if !self.bottomToolbar.isCollapsed {
+                    let currentCenter = self.bottomToolbar.center
+                    let sw = self.view.bounds.width
+                    let sh = self.view.bounds.height
+                    
+                    let hDx = max(0, 220 - currentCenter.x) + min(0, sw - 220 - currentCenter.x)
+                    let hDy = max(0, 40 - currentCenter.y) + min(0, sh - 40 - currentCenter.y)
+                    let hCost = abs(hDx) + abs(hDy)
+                    
+                    let vDx = max(0, 40 - currentCenter.x) + min(0, sw - 40 - currentCenter.x)
+                    let vDy = max(0, 220 - currentCenter.y) + min(0, sh - 220 - currentCenter.y)
+                    let vCost = abs(vDx) + abs(vDy)
+                    
+                    UIView.animate(withDuration: 0.15) {
+                        if hCost <= vCost {
+                            self.bottomToolbar.transform = .identity
+                            self.bottomToolbar.setButtonsTransform(.identity)
+                        } else {
+                            if currentCenter.x < sw / 2 {
+                                self.bottomToolbar.transform = CGAffineTransform(rotationAngle: .pi/2)
+                                self.bottomToolbar.setButtonsTransform(CGAffineTransform(rotationAngle: -.pi/2))
+                            } else {
+                                self.bottomToolbar.transform = CGAffineTransform(rotationAngle: -.pi/2)
+                                self.bottomToolbar.setButtonsTransform(CGAffineTransform(rotationAngle: .pi/2))
+                            }
+                        }
+                    }
+                }
             } else if state == .ended || state == .cancelled {
-                let minX: CGFloat = 40
-                let maxX: CGFloat = self.view.bounds.width - 40
-                let minY: CGFloat = 40
-                let maxY: CGFloat = self.view.bounds.height - 40
-                
-                var currentX = self.bottomToolbar.center.x
-                var currentY = self.bottomToolbar.center.y
-                
-                if currentX < minX { currentX = minX }
-                if currentX > maxX { currentX = maxX }
-                if currentY < minY { currentY = minY }
-                if currentY > maxY { currentY = maxY }
-                
-                if currentX != self.bottomToolbar.center.x || currentY != self.bottomToolbar.center.y {
-                    let diffX = currentX - self.bottomToolbar.center.x
-                    let diffY = currentY - self.bottomToolbar.center.y
-                    self.bottomToolbarCenterXConstraint.constant += diffX
-                    self.bottomToolbarCenterYConstraint.constant += diffY
-                    UIView.animate(withDuration: 0.3) {
-                        self.view.layoutIfNeeded()
+                if !self.bottomToolbar.isCollapsed {
+                    let currentCenter = self.bottomToolbar.center
+                    let sw = self.view.bounds.width
+                    let sh = self.view.bounds.height
+                    
+                    let hDx = max(0, 220 - currentCenter.x) + min(0, sw - 220 - currentCenter.x)
+                    let hDy = max(0, 40 - currentCenter.y) + min(0, sh - 40 - currentCenter.y)
+                    let hCost = abs(hDx) + abs(hDy)
+                    
+                    let vDx = max(0, 40 - currentCenter.x) + min(0, sw - 40 - currentCenter.x)
+                    let vDy = max(0, 220 - currentCenter.y) + min(0, sh - 220 - currentCenter.y)
+                    let vCost = abs(vDx) + abs(vDy)
+                    
+                    if hCost <= vCost {
+                        self.bottomToolbarCenterXConstraint.constant += hDx
+                        self.bottomToolbarCenterYConstraint.constant += hDy
+                        UIView.animate(withDuration: 0.3) {
+                            self.bottomToolbar.transform = .identity
+                            self.bottomToolbar.setButtonsTransform(.identity)
+                            self.view.layoutIfNeeded()
+                        }
+                    } else {
+                        self.bottomToolbarCenterXConstraint.constant += vDx
+                        self.bottomToolbarCenterYConstraint.constant += vDy
+                        UIView.animate(withDuration: 0.3) {
+                            if currentCenter.x < sw / 2 {
+                                self.bottomToolbar.transform = CGAffineTransform(rotationAngle: .pi/2)
+                                self.bottomToolbar.setButtonsTransform(CGAffineTransform(rotationAngle: -.pi/2))
+                            } else {
+                                self.bottomToolbar.transform = CGAffineTransform(rotationAngle: -.pi/2)
+                                self.bottomToolbar.setButtonsTransform(CGAffineTransform(rotationAngle: .pi/2))
+                            }
+                            self.view.layoutIfNeeded()
+                        }
+                    }
+                } else {
+                    let minX: CGFloat = 40
+                    let maxX: CGFloat = self.view.bounds.width - 40
+                    let minY: CGFloat = 40
+                    let maxY: CGFloat = self.view.bounds.height - 40
+                    
+                    var currentX = self.bottomToolbar.center.x
+                    var currentY = self.bottomToolbar.center.y
+                    
+                    if currentX < minX { currentX = minX }
+                    if currentX > maxX { currentX = maxX }
+                    if currentY < minY { currentY = minY }
+                    if currentY > maxY { currentY = maxY }
+                    
+                    if currentX != self.bottomToolbar.center.x || currentY != self.bottomToolbar.center.y {
+                        let diffX = currentX - self.bottomToolbar.center.x
+                        let diffY = currentY - self.bottomToolbar.center.y
+                        self.bottomToolbarCenterXConstraint.constant += diffX
+                        self.bottomToolbarCenterYConstraint.constant += diffY
+                        UIView.animate(withDuration: 0.3) {
+                            self.view.layoutIfNeeded()
+                        }
                     }
                 }
             }
@@ -1773,7 +1847,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         self.view.addSubview(sidePanel)
         
         NSLayoutConstraint.activate([
-            sidePanel.centerYAnchor.constraint(equalTo: self.view.centerYAnchor, constant: -50),
+            sidePanel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 100),
             sidePanel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             sidePanel.heightAnchor.constraint(equalToConstant: 240),
             sidePanel.widthAnchor.constraint(equalToConstant: 280) // Initial width when closed is handled by the view itself
@@ -1970,6 +2044,7 @@ class DrawingToolbar: UIView {
     let curveBtn = CurveModeButton()
     let dimBtn = DimensionButton()
     let notchButton = UIButton()
+    let overlayBtn = UIButton()
     
     private let stackView = UIStackView()
     private let shapeLayer = CAShapeLayer()
@@ -2044,14 +2119,23 @@ class DrawingToolbar: UIView {
         NSLayoutConstraint.activate([
             notchButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             notchButton.topAnchor.constraint(equalTo: topAnchor),
-            notchButton.widthAnchor.constraint(equalToConstant: 60),
-            notchButton.heightAnchor.constraint(equalToConstant: 30)
+            notchButton.widthAnchor.constraint(equalToConstant: 40),
+            notchButton.heightAnchor.constraint(equalToConstant: 20)
         ])
         
         panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         self.addGestureRecognizer(panGesture)
-        panGesture.isEnabled = false // Only enabled when collapsed
         
+        overlayBtn.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(overlayBtn)
+        NSLayoutConstraint.activate([
+            overlayBtn.leadingAnchor.constraint(equalTo: leadingAnchor),
+            overlayBtn.trailingAnchor.constraint(equalTo: trailingAnchor),
+            overlayBtn.topAnchor.constraint(equalTo: topAnchor),
+            overlayBtn.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
+        overlayBtn.addTarget(self, action: #selector(notchTapped), for: .touchUpInside)
+        overlayBtn.isHidden = true
         layer.insertSublayer(shapeLayer, at: 0)
         shapeLayer.fillColor = UIColor(red: 40/255.0, green: 45/255.0, blue: 52/255.0, alpha: 1.0).cgColor
         shapeLayer.shadowColor = UIColor.black.cgColor
@@ -2067,7 +2151,7 @@ class DrawingToolbar: UIView {
     
     @objc func notchTapped() {
         isCollapsed.toggle()
-        panGesture.isEnabled = isCollapsed
+        overlayBtn.isHidden = !isCollapsed
         
         UIView.animate(withDuration: 0.3) {
             if self.isCollapsed {
@@ -2134,7 +2218,7 @@ class DrawingToolbar: UIView {
         super.layoutSubviews()
         
         let pillHeight: CGFloat = 60
-        let bumpSize: CGFloat = 60
+        let bumpSize: CGFloat = 40
         let bumpHeight: CGFloat = 20
         
         let pillRect = CGRect(x: 0, y: bumpHeight, width: bounds.width, height: pillHeight)
@@ -2275,9 +2359,11 @@ extension CustomShapeLineViewController: DrawingToolbarDelegate {
         allRooms.append(contentsOf: masterRooms)
         
         var uniqueNames: [String] = []
+        let currentRoomName = self.roomData?.name?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        
         for room in allRooms {
             if let name = room.name?.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty {
-                if !uniqueNames.contains(name) {
+                if name != currentRoomName && !uniqueNames.contains(name) {
                     uniqueNames.append(name)
                 }
             }
@@ -2836,6 +2922,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         widthLabel.text = "Width:"
         widthLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
         widthLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
+        widthLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         minusBtn.setTitle("−", for: .normal)
         minusBtn.setTitleColor(.white, for: .normal)
@@ -2895,6 +2982,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         heightLabel.text = "Height:"
         heightLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
         heightLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
+        heightLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         if let controller = viewController, controller.transitionHeightvalue.count > 0 {
             heightDropdownBtn.setTitle(controller.transitionHeightvalue[0], for: .normal)
@@ -2926,7 +3014,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         mainStack.addArrangedSubview(heightRow)
         
         NSLayoutConstraint.activate([
-            heightDropdownBtn.widthAnchor.constraint(equalToConstant: 120),
+            heightDropdownBtn.widthAnchor.constraint(equalToConstant: 163),
             heightDropdownBtn.heightAnchor.constraint(equalToConstant: 36)
         ])
         
@@ -3008,7 +3096,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         if let text = widthTF.text, var val = Float(text) {
             val -= 0.5
             if val < 0.5 { val = 0.5 }
-            widthTF.text = String(format: "%.1f", val)
+            widthTF.text = String(format: "%.1f", Double(val))
         }
     }
     
@@ -3017,7 +3105,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         if let text = widthTF.text, var val = Float(text) {
             val += 0.5
             if val > 50 { val = 50 }
-            widthTF.text = String(format: "%.1f", val)
+            widthTF.text = String(format: "%.1f", Double(val))
         }
     }
     
@@ -3059,7 +3147,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         }
         
         let widthVal = subSquare.isVertical ? subSquare.custom_hight : subSquare.custom_width
-        widthTF.text = String(format: "%.1f", widthVal)
+        widthTF.text = String(format: "%.1f", Double(widthVal))
         
         let h = subSquare.addViewHeight
         updateHeight(h)
@@ -3167,7 +3255,7 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField == widthTF {
             if let text = textField.text, let val = Float(text), val > 0 {
-                widthTF.text = String(format: "%.1f", val)
+                widthTF.text = String(format: "%.1f", Double(val))
             } else {
                 widthTF.text = "3.0"
             }
@@ -3199,7 +3287,7 @@ extension CustomShapeLineViewController {
         
         NSLayoutConstraint.activate([
             relocateButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            relocateButton.centerYAnchor.constraint(equalTo: self.bottomToolbar.centerYAnchor),
+            relocateButton.centerYAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -60),
             relocateButton.widthAnchor.constraint(equalToConstant: 50),
             relocateButton.heightAnchor.constraint(equalToConstant: 50)
         ])
@@ -3246,7 +3334,8 @@ extension CustomShapeLineViewController {
     
     func checkRelocateButtonVisibility(scrollView: UIScrollView) {
         guard relocateButton != nil else { return }
-        if scrollView.zoomScale != 1.0 {
+        let isZoomNormal = abs(scrollView.zoomScale - 1.0) < 0.05
+        if !isZoomNormal {
             relocateButton.isHidden = false
         } else {
             if let drawingView = self.drowingView, drawingView.pointPath.count > 0 {

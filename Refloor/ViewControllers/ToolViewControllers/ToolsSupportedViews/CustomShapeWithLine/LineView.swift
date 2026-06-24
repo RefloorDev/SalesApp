@@ -322,6 +322,7 @@ class LineView: UIView {
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if isClosed { return }
         isDrawingNow = false
         clearTempLine()
         self.delegate?.LineViewTempAreaResult(area: 0, isClosed: false, Perimeter: self.getPerimeter())
@@ -505,7 +506,7 @@ class LineView: UIView {
         
         for openingState in state.openings {
             let subView = SubSqureView(
-                frame: CGRect(x: openingState.center.x, y: openingState.center.y, width: openingState.customWidth * minimumValue * 3.2, height: openingState.customHeight * minimumValue * 3.2),
+                frame: CGRect(x: openingState.center.x, y: openingState.center.y, width: openingState.customWidth * minimumValue, height: openingState.customHeight * minimumValue),
                 isVertical: openingState.isVertical,
                 color: openingState.color
             )
@@ -782,6 +783,10 @@ class LineView: UIView {
                 label.isHidden = false
             }
             self.addSubview(label)
+        } else {
+            if pointPath.count > 0 {
+                pointPath[0].lineValue = 0
+            }
         }
         
         buzierpath = path
@@ -1331,16 +1336,27 @@ class LineView: UIView {
     
     
     
+    var longPressStartLocations = [UIView: CGPoint]()
+    
     func addGestureToPints(_ subView:UIView){
         let gesture = UIPanGestureRecognizer(target: self, action: #selector(self.wasDragged(gestureRecognizer:)))
         subView.addGestureRecognizer(gesture)
         subView.isUserInteractionEnabled = true
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(wasTaped(gestureRecognizer:)))
-        tapGesture.numberOfTapsRequired = 2
-        subView.addGestureRecognizer(tapGesture)
-        // subView.delegate = self
+        
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: #selector(wasDoubleTaped(gestureRecognizer:)))
+        doubleTapGesture.numberOfTapsRequired = 2
+        subView.addGestureRecognizer(doubleTapGesture)
+        
+        let singleTapGesture = UITapGestureRecognizer(target: self, action: #selector(wasSingleTaped(gestureRecognizer:)))
+        singleTapGesture.numberOfTapsRequired = 1
+        singleTapGesture.require(toFail: doubleTapGesture)
+        subView.addGestureRecognizer(singleTapGesture)
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(wasLongPressed(gestureRecognizer:)))
+        subView.addGestureRecognizer(longPressGesture)
     }
-    @objc func wasTaped(gestureRecognizer: UITapGestureRecognizer) {
+    
+    @objc func wasDoubleTaped(gestureRecognizer: UITapGestureRecognizer) {
         if let subview = gestureRecognizer.view {
             if(pointPath.count - 1 > subview.tag && subview.tag > 0)
             {
@@ -1350,7 +1366,94 @@ class LineView: UIView {
                 setPoints()
             }
         }
+    }
+    
+    @objc func wasSingleTaped(gestureRecognizer: UITapGestureRecognizer) {
+        if let subview = gestureRecognizer.view {
+            let tagIndex = subview.tag
+            if tagIndex == 0 && !isClosed && pointPath.count >= 3 {
+                saveState()
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.isClosed = true
+                    self.drowShape(true)
+                    self.layoutIfNeeded()
+                }
+            }
+        }
+    }
+    
+    @objc func wasLongPressed(gestureRecognizer: UILongPressGestureRecognizer) {
+        guard let draggedView = gestureRecognizer.view else { return }
         
+        if gestureRecognizer.state == .began {
+            saveState()
+            isDraggingPoint = true
+            longPressStartLocations[draggedView] = gestureRecognizer.location(in: self)
+        }
+        
+        if gestureRecognizer.state == .changed {
+            self.endEditing(true)
+            let currentLocation = gestureRecognizer.location(in: self)
+            guard let startLocation = longPressStartLocations[draggedView] else { return }
+            
+            let translation = CGPoint(x: currentLocation.x - startLocation.x, y: currentLocation.y - startLocation.y)
+            longPressStartLocations[draggedView] = currentLocation
+            
+            let tagIndex = draggedView.tag
+            let currentCenter = draggedView.center
+            let targetPoint = self.getLimitedPoint(at: CGPoint(x: currentCenter.x + translation.x, y: currentCenter.y + translation.y))
+            
+            let actualDx = targetPoint.x - currentCenter.x
+            let actualDy = targetPoint.y - currentCenter.y
+            
+            let xConnected = getXConnectedIndices(from: tagIndex, pointPath: pointPath)
+            let yConnected = getYConnectedIndices(from: tagIndex, pointPath: pointPath)
+            
+            for idx in xConnected {
+                var p = pointPath[idx].point
+                p.x += actualDx
+                p = self.getLimitedPoint(at: p)
+                pointPath[idx].point = p
+                pointPath[idx].subView.center = p
+            }
+            
+            for idx in yConnected {
+                var p = pointPath[idx].point
+                p.y += actualDy
+                p = self.getLimitedPoint(at: p)
+                pointPath[idx].point = p
+                pointPath[idx].subView.center = p
+            }
+            
+            moveShape()
+        }
+        
+        if gestureRecognizer.state == .ended || gestureRecognizer.state == .cancelled || gestureRecognizer.state == .failed {
+            isDraggingPoint = false
+            longPressStartLocations.removeValue(forKey: draggedView)
+            
+            if !isClosed && gestureRecognizer.state == .ended {
+                let tagIndex = draggedView.tag
+                if tagIndex == pointPath.count - 1 && pointPath.count >= 3 {
+                    let distance = getdistanceofpoint(pointPath[0].point, pointPath.last!.point)
+                    if distance < 60 {
+                        let removedPt = pointPath.removeLast()
+                        removedPt.subView.removeFromSuperview()
+                        removedPt.label.removeFromSuperview()
+                        
+                        UIView.animate(withDuration: 0.3) {
+                            self.isClosed = true
+                            self.drowShape(true)
+                            self.layoutIfNeeded()
+                        }
+                        return
+                    }
+                }
+            }
+            
+            moveShape()
+        }
     }
     private func getXConnectedIndices(from startIndex: Int, pointPath: [customPointObjcet]) -> Set<Int> {
         var visited = Set<Int>([startIndex])
@@ -1720,7 +1823,7 @@ extension LineView{
     func add_Sub_Square_View(xAsis:CGFloat,yAxis:CGFloat,width:CGFloat,hight:CGFloat,delegate:CustomViewDelegate,isVertical:Bool,objc:OpeningCustomObject,addViewHeight: String,transitionheightId:Int)
           {
               self.saveState()
-              let subView = SubSqureView(frame: CGRect(x: xAsis, y: yAxis, width: width * minimumValue * 3.2, height: hight * minimumValue * 3.2),isVertical:isVertical, color: objc.color)
+              let subView = SubSqureView(frame: CGRect(x: xAsis, y: yAxis, width: width * minimumValue, height: hight * minimumValue),isVertical:isVertical, color: objc.color)
                   
               subView.custom_width = width
               subView.custom_hight = hight
@@ -1847,6 +1950,7 @@ extension LineView{
         }
         
         for point in pointPath {
+            point.dotView.isHidden = isPreview
             if let controlView = point.label as? LineSegmentControlView {
                 controlView.minusButton.isHidden = isPreview
                 controlView.plusButton.isHidden = isPreview
@@ -2043,7 +2147,7 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
     }
     
     func formatFeetValue(_ val: Float) -> String {
-        let formatted = String(format: "%.2f", val)
+        let formatted = String(format: "%.2f", Double(val))
         if formatted.hasSuffix(".00") {
             return String(formatted.dropLast(3))
         } else if formatted.hasSuffix("0") {

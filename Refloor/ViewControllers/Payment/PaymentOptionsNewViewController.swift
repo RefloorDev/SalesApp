@@ -815,6 +815,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         
         let alert = UIAlertController(title: AppDetails.APP_NAME, message: "Please enter the down payment", preferredStyle: .alert)
+        alert.view.subviews.first?.subviews.first?.backgroundColor = .clear
         alert.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = UIColor().colorFromHexString("#586471")
         alert.view.subviews.first?.subviews.first?.subviews.first?.borderColor = UIColor().colorFromHexString("#707070")
         alert.view.subviews.first?.subviews.first?.subviews.first?.borderWidth = 1

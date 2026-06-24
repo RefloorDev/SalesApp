@@ -157,6 +157,10 @@ class SubSqureView: UIView {
             let proposedCenter = CGPoint(x: location.x + touchOffset.x, y: location.y + touchOffset.y)
             alignAndSnap(toProposedCenter: proposedCenter)
             lastLocation = self.center
+            
+            if let lineView = self.superview as? LineView {
+                lineView.drowShape(lineView.isClosed)
+            }
         }
     }
     
@@ -167,6 +171,10 @@ class SubSqureView: UIView {
             let proposedCenter = CGPoint(x: location.x + touchOffset.x, y: location.y + touchOffset.y)
             alignAndSnap(toProposedCenter: proposedCenter)
             lastLocation = self.center
+            
+            if let lineView = self.superview as? LineView {
+                lineView.drowShape(lineView.isClosed)
+            }
         }
         
         if !hasMovedDuringTouch {
@@ -184,10 +192,11 @@ class SubSqureView: UIView {
     func custom_size_reload()
     {
         let fixedThickness: CGFloat = 20.0
-        let variableLength = max(self.custom_width, self.custom_hight) * 40
+        let variableLength = max(self.custom_width, self.custom_hight) * minimumValue
         // Width is along the wall (grows with UI width/height)
         // Height is perpendicular to the wall (fixed thickness)
         self.bounds.size = CGSize(width: variableLength, height: fixedThickness)
+
         
         self.layerSharae.path = getSolidPath().cgPath
         self.dashedLayer.path = getDashedPath().cgPath
@@ -204,12 +213,7 @@ class SubSqureView: UIView {
         if let tooltip = tooltipView {
             let currentAngle = atan2(self.transform.b, self.transform.a)
             
-            let targetWidth: CGFloat = 130.0
-            var scale: CGFloat = 1.0
-            if self.bounds.width < targetWidth {
-                scale = max(0.6, self.bounds.width / targetWidth)
-            }
-            
+            let scale: CGFloat = 1.0
             tooltip.transform = CGAffineTransform(scaleX: scale, y: scale).rotated(by: -currentAngle)
             
             let dx = self.transform.a
@@ -253,21 +257,34 @@ class SubSqureView: UIView {
                 shouldFlip = dot > 0
             }
             
-            let tooltipHeight = tooltip.bounds.height
-            var yOffset = (self.bounds.height / 2.0) + 24.0 + (tooltipHeight / 2.0)
+            let isOutsideNegativeY = shouldFlip
+            let needsTextFlip = cos(currentAngle) < 0
             
-            if shouldFlip {
-                yOffset = -yOffset
-                if let t = tooltip as? OpeningTooltipView {
-                    t.setDirection(pointsUp: false)
+            if let t = tooltip as? OpeningTooltipView {
+                let wallDirectionInSubSqure: CGFloat = isOutsideNegativeY ? 1 : -1
+                let tooltipWallDirection = needsTextFlip ? -wallDirectionInSubSqure : wallDirectionInSubSqure
+                let pointingDown = tooltipWallDirection == 1
+                
+                t.setupLayout(pointingDown: pointingDown)
+                t.layoutIfNeeded()
+                
+                let chevronDistance: CGFloat = (self.bounds.height / 2.0) + 24.0 // Push further from the dashed line
+                let centerY = self.bounds.midY
+                
+                // Set anchorPoint to chevron's center so it stays completely stationary during bounds animations
+                let anchorY = t.bounds.height > 0 ? t.chevronImageView.center.y / t.bounds.height : 0.5
+                t.layer.anchorPoint = CGPoint(x: 0.5, y: anchorY)
+                
+                let tooltipCenterY: CGFloat
+                if wallDirectionInSubSqure == 1 {
+                    tooltipCenterY = centerY - chevronDistance
+                } else {
+                    tooltipCenterY = centerY + chevronDistance
                 }
-            } else {
-                if let t = tooltip as? OpeningTooltipView {
-                    t.setDirection(pointsUp: true)
-                }
+                
+                tooltip.center = CGPoint(x: self.bounds.midX, y: tooltipCenterY)
+                tooltip.transform = needsTextFlip ? CGAffineTransform(rotationAngle: .pi) : .identity
             }
-            
-            tooltip.center = CGPoint(x: self.bounds.midX, y: self.bounds.midY + yOffset)
         }
     }
     
@@ -424,7 +441,7 @@ class SubSqureView: UIView {
         }
         
         self.center = closestPoint
-        var scale: CGFloat = 1.5
+        var scale: CGFloat = 1.0
         if let _ = self.superview as? LineView {
             let value = Float((closestSegmentLength / minimumValue) * 100).rounded() / 100
             if value <= 3.0 {
@@ -487,12 +504,26 @@ class SubSqureView: UIView {
             
             tooltip.onArrowTapped = { [weak tooltip, weak self] in
                 guard let tooltip = tooltip else { return }
-                UIView.animate(withDuration: 0.3) {
-                    tooltip.containerView.isHidden.toggle()
-                    tooltip.layoutIfNeeded()
-                }
-                // Optional: trigger layout on self if tooltip size changes
+                let isHidden = !tooltip.containerView.isHidden
+                
+                // 1. Instantly update visibility and layout
+                tooltip.containerView.isHidden = isHidden
+                tooltip.layoutIfNeeded()
+                
+                let currentTransform = tooltip.transform
+                tooltip.transform = .identity
+                let size = tooltip.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+                let newWidth = isHidden ? size.width : max(size.width + 10, 130)
+                tooltip.bounds.size = CGSize(width: newWidth, height: size.height)
+                tooltip.transform = currentTransform
+                
                 self?.setNeedsLayout()
+                self?.layoutIfNeeded()
+                
+                // 2. Animate ONLY the chevron flip
+                UIView.animate(withDuration: 0.3) {
+                    tooltip.updateChevronRotation()
+                }
             }
             
             tooltip.onLabelTapped = { [weak self] in
@@ -512,7 +543,9 @@ class SubSqureView: UIView {
             let currentTransform = tooltip.transform
             tooltip.transform = .identity
             let size = tooltip.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-            tooltip.bounds.size = CGSize(width: max(size.width + 10, 130), height: size.height)
+            let isHidden = tooltip.containerView.isHidden
+            let newWidth = isHidden ? size.width : max(size.width + 10, 130)
+            tooltip.bounds.size = CGSize(width: newWidth, height: size.height)
             tooltip.transform = currentTransform
             self.setNeedsLayout()
         }
@@ -649,28 +682,50 @@ class OpeningTooltipView: UIView {
         onLabelTapped?()
     }
     
-    func setDirection(pointsUp: Bool) {
+    var currentLayoutState: Int = -1 // 0=Up, 1=Down
+    
+    func setupLayout(pointingDown: Bool) {
+        let targetState = pointingDown ? 1 : 0
+        
+        if currentLayoutState == targetState {
+            return
+        }
+        currentLayoutState = targetState
+        
         mainStack.removeArrangedSubview(containerView)
         mainStack.removeArrangedSubview(chevronImageView)
         containerView.removeFromSuperview()
         chevronImageView.removeFromSuperview()
         
-        if pointsUp {
-            mainStack.addArrangedSubview(chevronImageView)
+        mainStack.axis = .vertical
+        
+        if pointingDown {
             mainStack.addArrangedSubview(containerView)
-            if #available(iOS 13.0, *) {
-                chevronImageView.image = UIImage(systemName: "chevron.up")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 14, weight: .bold))
-            } else {
-                chevronImageView.image = UIImage(named: "dropUp") ?? UIImage(named: "dropDown")
-            }
+            mainStack.addArrangedSubview(chevronImageView)
         } else {
-            mainStack.addArrangedSubview(containerView)
             mainStack.addArrangedSubview(chevronImageView)
-            if #available(iOS 13.0, *) {
-                chevronImageView.image = UIImage(systemName: "chevron.down")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 14, weight: .bold))
-            } else {
-                chevronImageView.image = UIImage(named: "dropDown")
-            }
+            mainStack.addArrangedSubview(containerView)
+        }
+        
+        updateChevronRotation()
+        
+        if #available(iOS 13.0, *) {
+            chevronImageView.image = UIImage(systemName: "chevron.right")?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 14, weight: .bold))
+        } else {
+            chevronImageView.image = UIImage(named: "dropDown") // fallback
+        }
+        
+        chevronImageView.layer.zPosition = 1
+    }
+    
+    func updateChevronRotation() {
+        let isHidden = containerView.isHidden
+        if currentLayoutState == 1 { // pointingDown == true, chevron at bottom
+            // Expanded: points DOWN (.pi/2), Collapsed: points UP (-.pi/2)
+            chevronImageView.transform = CGAffineTransform(rotationAngle: isHidden ? -.pi / 2.0 : .pi / 2.0)
+        } else { // pointingDown == false, chevron at top
+            // Expanded: points UP (-.pi/2), Collapsed: points DOWN (.pi/2)
+            chevronImageView.transform = CGAffineTransform(rotationAngle: isHidden ? .pi / 2.0 : -.pi / 2.0)
         }
     }
 }

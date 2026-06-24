@@ -329,10 +329,19 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         // }
     }
     @IBAction func finalPaymentDidEnd(_ sender: UITextField) {
-        let value = Double(sender.text ?? "0")
-        //   {
-        finalpayment = value ?? 0
-        self.UIUpdateForValueChange(isUpdateDownPayment: false)
+        
+        if downPayment == totalAmount
+        {
+            finalpayment = 0
+            finalPaymentTF.text = "0"
+        }
+        else
+        {
+            let value = Double(sender.text ?? "0")
+            //   {
+            finalpayment = value ?? 0
+            self.UIUpdateForValueChange(isUpdateDownPayment: false)
+        }
         //   }
         //   else
         //  {
@@ -509,8 +518,14 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
     }
     func validation() -> String
     {
+        
         let finalvalue = Double(finalPaymentTF.text ?? "0")
         let downvalue = Double(downPaymentTF.text ?? "0")
+        if downvalue == totalAmount && finalvalue != 0
+        {
+            return "Down payment is equal to the total payment. No final payment is required."
+        }
+        
         // {
         finalpayment = finalvalue ?? 0
         downPayment = downvalue ?? 0
@@ -526,6 +541,7 @@ class UpdateDownFinalPaymentViewController: UIViewController,UICollectionViewDel
         {
             self.UIUpdateForValueChange(isUpdateDownPayment: true)
         }
+        UIUpdateForValueChange(isUpdateDownPayment: false)
         //                 else
         //                 {
         //                    self.UIUpdateForValueChange(isUpdateDownPayment: false)
