@@ -107,15 +107,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if(appointmentRequestArray.count != 0)
         {
-            if(!SceneDelegate.timer.isValid)
-            {
-                SceneDelegate.timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true, block: { _ in
-                    
-                    print("TIMER WAKEUP Scene")
-                    BackgroundTaskService.shared.startSyncProcess()
-                })
-            }
-           
+            BackgroundTaskService.shared.startSyncProcess()
             BackgroundTaskService.shared.enterBackground()
         }
     }

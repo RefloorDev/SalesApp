@@ -25,11 +25,13 @@ class ImageSaveToDirectory: NSObject
         
         if !fileManager.fileExists(atPath: PathWithFolderName)
         {
-            try! fileManager.createDirectory(atPath: PathWithFolderName, withIntermediateDirectories: true, attributes: nil)
+            try! fileManager.createDirectory(atPath: PathWithFolderName, withIntermediateDirectories: true, attributes: [FileAttributeKey.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication])
         }
         else
         {
             print("Already dictionary created.")
+            // Ensure protection is set even if it exists
+            try? fileManager.setAttributes([FileAttributeKey.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication], ofItemAtPath: PathWithFolderName)
         }
     }
 

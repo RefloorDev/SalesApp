@@ -41,7 +41,10 @@ class NineZeroDrowingView: UIView {
             }
             if(pointPath.count == 0)
             {
-                let point = CGPoint(x: roundTheValue(position.x), y: roundTheValue(position.y))
+                let snapUnit = minimumValue / 2.0
+                var snappedX = round(position.x / snapUnit) * snapUnit
+                var snappedY = round(position.y / snapUnit) * snapUnit
+                let point = CGPoint(x: roundTheValue(snappedX), y: roundTheValue(snappedY))
                 startTouch = XYpoint(point: point, isXvalue: true, position: .down)
                 
             }
@@ -49,7 +52,19 @@ class NineZeroDrowingView: UIView {
             {
                 startTouch = XYpoint(point: pointPath[pointPath.count - 1].point, isXvalue: pointPath[pointPath.count - 1].isXvalue, position: pointPath[pointPath.count - 1].position)
                 
-                secondTouch = self.getPoint(startPoint: startTouch!.point, endPoint: position)
+                var currentPosition = position
+                let snapUnit = minimumValue / 2.0
+                if let start = startTouch {
+                    let dx = currentPosition.x - start.point.x
+                    let dy = currentPosition.y - start.point.y
+                    currentPosition.x = start.point.x + round(dx / snapUnit) * snapUnit
+                    currentPosition.y = start.point.y + round(dy / snapUnit) * snapUnit
+                } else {
+                    currentPosition.x = round(currentPosition.x / snapUnit) * snapUnit
+                    currentPosition.y = round(currentPosition.y / snapUnit) * snapUnit
+                }
+                
+                secondTouch = self.getPoint(startPoint: startTouch!.point, endPoint: currentPosition)
             }
             drowTempLine()
             
@@ -61,7 +76,19 @@ class NineZeroDrowingView: UIView {
             return
         }
         for touch in touches{
-            let position = touch.location(in: self)
+            var position = touch.location(in: self)
+            
+            let snapUnit = minimumValue / 2.0
+            if let start = startTouch {
+                let dx = position.x - start.point.x
+                let dy = position.y - start.point.y
+                position.x = start.point.x + round(dx / snapUnit) * snapUnit
+                position.y = start.point.y + round(dy / snapUnit) * snapUnit
+            } else {
+                position.x = round(position.x / snapUnit) * snapUnit
+                position.y = round(position.y / snapUnit) * snapUnit
+            }
+            
             secondTouch = self.getPoint(startPoint: startTouch!.point, endPoint: position)
             drowTempLine()
             
@@ -196,7 +223,6 @@ class NineZeroDrowingView: UIView {
     {
         return CGFloat(roundf(Float(value) * 100) / 100)
     }
-    // get line position and changing value(x or y) and the 90 degree line maker
     func getPoint(startPoint:CGPoint, endPoint:CGPoint) -> XYpoint
     {
         let defX = (startPoint.x > endPoint.x) ? (startPoint.x - endPoint.x) : (endPoint.x - startPoint.x)
@@ -205,9 +231,7 @@ class NineZeroDrowingView: UIView {
         {
             if(startPoint.x > endPoint.x)
             {
-                
-                
-                return  XYpoint(point: CGPoint(x: startPoint.x - roundTheValue(defX), y: startPoint.y), isXvalue: true, position: .left)
+                return XYpoint(point: CGPoint(x: startPoint.x - roundTheValue(defX), y: startPoint.y), isXvalue: true, position: .left)
             }
             else
             {
@@ -272,7 +296,7 @@ class NineZeroDrowingView: UIView {
     func labelConfigration(_ label:UILabel,_ cgPoint:CGPoint,distance:CGFloat)
     {
         label.frame = CGRect(origin: cgPoint, size: CGSize(width: 60, height: 20))
-        let value = roundf(Float(distance/minimumValue) * 100) / 100
+        let value = round(Float(distance/minimumValue) * 12) / 12.0
         label.text = "\(value)"
         label.font = label.font.withSize(12)
         label.backgroundColor = .darkGray

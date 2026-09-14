@@ -139,6 +139,70 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
     func loadRefreshData(){
         tableValues = self.getRoomsSummary(appointmentId: AppointmentData().appointment_id ?? 0)
         
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        for room in tableValues {
+            if let color = room.color, color != "" {
+                let hasMatchingColorWithGlueDown = self.floorColorNamesArray.contains {
+                    $0.color == color && $0.glueDown == 1
+                }
+                
+                let roomID = room.room_id ?? 0
+                let currentVaporBarrierAnswer = self.getAnswer(for: "VaporBarrierBool", appointmentId: appointmentId, roomId: roomID) ?? ""
+                
+                if hasMatchingColorWithGlueDown {
+                    // Force Vapor Barrier to "No" if it isn't already
+                    if currentVaporBarrierAnswer == "Yes" {
+                        do {
+                            let realm = try Realm()
+                            if let vaporQuestion = realm.objects(rf_master_question.self).filter("question_name == %@ AND room_id == %d AND appointment_id == %d", "Vapor Barrier", roomID, appointmentId).first {
+                                let newAnswerList = List<rf_AnswerForQuestion>()
+                                let answerDict = ["id":UUID().uuidString,"question_id":vaporQuestion.id,"appointment_id":vaporQuestion.appointment_id,"answer":["No"]] as [String : Any]
+                                newAnswerList.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                
+                                let dict: [String: Any] = ["questionIdUnique":vaporQuestion.questionIdUnique,"id":vaporQuestion.id,"rf_AnswerOFQustion":newAnswerList,"appointment_id":appointmentId,"room_id":roomID,"room_name":room.room_name ?? ""]
+                                
+                                try realm.write {
+                                    realm.create(rf_master_question.self, value: dict, update: .all)
+                                }
+                                print("Forced VaporBarrierBool to No for Glue Down color on load")
+                            }
+                        } catch {
+                            print("Failed to update VaporBarrierBool: \(error.localizedDescription)")
+                        }
+                    }
+                } else {
+                    // Check if Vapor Barrier should be "Yes" or "No" based on subfloor/current surface
+                    let currentCoveringAnswer = self.getAnswer(for: "CurrentCoveringType", appointmentId: appointmentId, roomId: roomID) ?? ""
+                    let existingSubSurfaceAnswer = self.getAnswer(for: "ExistingSubSurface", appointmentId: appointmentId, roomId: roomID) ?? ""
+                    let removeCurrentCoveringAnswer = self.getAnswer(for: "RemoveCurrentCovering", appointmentId: appointmentId, roomId: roomID) ?? ""
+                    
+                    let shouldBeYes = (existingSubSurfaceAnswer == "Concrete / Cement / Gypsum" && removeCurrentCoveringAnswer == "Yes") || (currentCoveringAnswer == "Concrete / Cement / Gypsum")
+                    
+                    let newAnswer = shouldBeYes ? "Yes" : "No"
+                    
+                    if currentVaporBarrierAnswer != newAnswer && currentVaporBarrierAnswer != "" {
+                        do {
+                            let realm = try Realm()
+                            if let vaporQuestion = realm.objects(rf_master_question.self).filter("question_name == %@ AND room_id == %d AND appointment_id == %d", "Vapor Barrier", roomID, appointmentId).first {
+                                let newAnswerList = List<rf_AnswerForQuestion>()
+                                let answerDict = ["id":UUID().uuidString,"question_id":vaporQuestion.id,"appointment_id":vaporQuestion.appointment_id,"answer":[newAnswer]] as [String : Any]
+                                newAnswerList.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                
+                                let dict: [String: Any] = ["questionIdUnique":vaporQuestion.questionIdUnique,"id":vaporQuestion.id,"rf_AnswerOFQustion":newAnswerList,"appointment_id":appointmentId,"room_id":roomID,"room_name":room.room_name ?? ""]
+                                
+                                try realm.write {
+                                    realm.create(rf_master_question.self, value: dict, update: .all)
+                                }
+                                print("Restored VaporBarrierBool to \(newAnswer) for non-Glue Down color on load")
+                            }
+                        } catch {
+                            print("Failed to restore VaporBarrierBool: \(error.localizedDescription)")
+                        }
+                    }
+                }
+            }
+        }
+        
         if tableValues.count != 0{
             self.tableReload(tableValues)
             self.swipeLeftLbl.isHidden = false
@@ -272,6 +336,29 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                             let questionnaire = summaryData.questionaire
                             if questionnaire!.count > 0
                             {
+                                let appointmentId = AppointmentData().appointment_id ?? 0
+                                let vapourBarrierAnswer = self.getAnswer(for: "VaporBarrierBool", appointmentId: appointmentId, roomId: roomID)
+                                if vapourBarrierAnswer == "Yes"
+                                {
+                                    do {
+                                        let realm = try Realm()
+                                        if let vaporQuestion = realm.objects(rf_master_question.self).filter("question_name == %@ AND room_id == %d AND appointment_id == %d", "Vapor Barrier", roomID, appointmentId).first {
+                                            let newAnswer = List<rf_AnswerForQuestion>()
+                                            let answerDict = ["id":UUID().uuidString,"question_id":vaporQuestion.id,"appointment_id":vaporQuestion.appointment_id,"answer":["No"]] as [String : Any]
+                                            newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                            
+                                            let dict: [String: Any] = ["questionIdUnique":vaporQuestion.questionIdUnique,"id":vaporQuestion.id,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+                                            
+                                            try realm.write {
+                                                realm.create(rf_master_question.self, value: dict, update: .all)
+                                            }
+                                            print("Updated VaporBarrierBool answer to No for Glue Down Apply All")
+                                        }
+                                    } catch {
+                                        print("Failed to update VaporBarrierBool: \(error.localizedDescription)")
+                                    }
+                                }
+                                
                                 var excludedQuestions:[SummeryQustionsDetails] = []
                                 for excludedId in autoAnswerLogicListArray[0].questionLines[0].excludedQuestionId
                                 {
@@ -385,31 +472,37 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         }
                         else
                         {
-//                            let appointmentId = AppointmentData().appointment_id ?? 0
-//                            let realm = try! Realm()
-//                            if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, rooms.room_id!,appoinmentID).first {
-//                                
-//                                try! realm.write
-//                                {
-//                                    if let existingAnswer = question.rf_AnswerOFQustion.first {
-//                                        let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
-//                                        
-//                                        let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
-//                                        newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
-//                                        
-//                                        // Append it to rf_master_question
-//                                        //question.rf_AnswerOFQustion.append(newAnswer)
-//                                        
-//                                        //print("Created new answer object with plywood value: \(plywoodValueStr)")
-//                                        var dict:[String:Any] = [:]
-//                                        let questionUniqueIdentifier = question.questionIdUnique
-//                                        let questionId = question.id
-//                                        dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":rooms.room_id!,"room_name":rooms.room_name!]
-//                                        print("---dict2------", dict, " question : ", question.question_name)
-//                                        realm.create(rf_master_question.self, value: dict, update: .all)
-//                                    }
-//                                }
-//                            }
+                            let roomID = rooms.room_id ?? 0
+                            let appointmentId = AppointmentData().appointment_id ?? 0
+                            let currentVaporBarrierAnswer = self.getAnswer(for: "VaporBarrierBool", appointmentId: appointmentId, roomId: roomID) ?? ""
+                            
+                            let currentCoveringAnswer = self.getAnswer(for: "CurrentCoveringType", appointmentId: appointmentId, roomId: roomID) ?? ""
+                            let existingSubSurfaceAnswer = self.getAnswer(for: "ExistingSubSurface", appointmentId: appointmentId, roomId: roomID) ?? ""
+                            let removeCurrentCoveringAnswer = self.getAnswer(for: "RemoveCurrentCovering", appointmentId: appointmentId, roomId: roomID) ?? ""
+                            
+                            let shouldBeYes = (existingSubSurfaceAnswer == "Concrete / Cement / Gypsum" && removeCurrentCoveringAnswer == "Yes") || (currentCoveringAnswer == "Concrete / Cement / Gypsum")
+                            
+                            let newAnswer = shouldBeYes ? "Yes" : "No"
+                            
+                            if currentVaporBarrierAnswer != newAnswer && currentVaporBarrierAnswer != "" {
+                                do {
+                                    let realm = try Realm()
+                                    if let vaporQuestion = realm.objects(rf_master_question.self).filter("question_name == %@ AND room_id == %d AND appointment_id == %d", "Vapor Barrier", roomID, appointmentId).first {
+                                        let newAnswerList = List<rf_AnswerForQuestion>()
+                                        let answerDict = ["id":UUID().uuidString,"question_id":vaporQuestion.id,"appointment_id":vaporQuestion.appointment_id,"answer":[newAnswer]] as [String : Any]
+                                        newAnswerList.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                        
+                                        let dict: [String: Any] = ["questionIdUnique":vaporQuestion.questionIdUnique,"id":vaporQuestion.id,"rf_AnswerOFQustion":newAnswerList,"appointment_id":appointmentId,"room_id":roomID,"room_name":rooms.room_name ?? ""]
+                                        
+                                        try realm.write {
+                                            realm.create(rf_master_question.self, value: dict, update: .all)
+                                        }
+                                        print("Restored VaporBarrierBool answer to \(newAnswer) for non-Glue Down Apply All")
+                                    }
+                                } catch {
+                                    print("Failed to restore VaporBarrierBool: \(error.localizedDescription)")
+                                }
+                            }
                         }
                     }
                     self.updateRoomMoldOrColor(roomID: rooms.room_id ?? 0, moldName: "", isColor: true, colorName: applyAllSelectedColour, colorImageUrl: applyAllSelectedMaterialFileName, colorUpCharge: applyAllColourUpCharge, moldPrice: 0.0,deliveryOptions: "",isGlueDown: isGlueDown)
@@ -1689,6 +1782,8 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                 
                 // Auto Answer logic playwood/gluedown
                 let masterData = getMasterDataFromDB()
+                let roomId = tableValues[cell].room_id
+                let appointmentId = AppointmentData().appointment_id ?? 0
                 if masterData.autoAnswerLogicList.count > 0
                 {
                     let autoAnswerLogicListArray = masterData.autoAnswerLogicList
@@ -1700,6 +1795,29 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                         let questionnaire = summaryData.questionaire
                         if questionnaire!.count > 0
                         {
+                            //checking Vapour barrier answer is yes
+                            let vapourBarrierAnswer = getAnswer(for: "VaporBarrierBool", appointmentId: appointmentId, roomId: roomId ?? 0)
+                            if vapourBarrierAnswer == "Yes"
+                            {
+                                do {
+                                    let realm = try Realm()
+                                    if let vaporQuestion = realm.objects(rf_master_question.self).filter("question_name == %@ AND room_id == %d AND appointment_id == %d", "Vapor Barrier", roomID, appointmentId).first {
+                                        let newAnswer = List<rf_AnswerForQuestion>()
+                                        let answerDict = ["id":UUID().uuidString,"question_id":vaporQuestion.id,"appointment_id":vaporQuestion.appointment_id,"answer":["No"]] as [String : Any]
+                                        newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                        
+                                        let dict: [String: Any] = ["questionIdUnique":vaporQuestion.questionIdUnique,"id":vaporQuestion.id,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":roomID,"room_name":roomName]
+                                        
+                                        try realm.write {
+                                            realm.create(rf_master_question.self, value: dict, update: .all)
+                                        }
+                                        print("Updated VaporBarrierBool answer to No for Glue Down color selection")
+                                    }
+                                } catch {
+                                    print("Failed to update VaporBarrierBool: \(error.localizedDescription)")
+                                }
+                            }
+                            
                             var excludedQuestions:[SummeryQustionsDetails] = []
                             for excludedId in autoAnswerLogicListArray[0].questionLines[0].excludedQuestionId
                             {
@@ -1724,8 +1842,7 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                                 }
                                 if answered == false
                                 {
-                                    let roomId = tableValues[cell].room_id
-                                    let appointmentId = AppointmentData().appointment_id ?? 0
+                                    
                                     let currentCoveringAnswer = getAnswer(for: "CurrentCoveringType", appointmentId: appointmentId, roomId: roomId ?? 0)
                                     let existingSubSurfaceAnswer = getAnswer(for: "ExistingSubSurface", appointmentId: appointmentId, roomId: roomId ?? 0)
                                     let removeCurrentCoveringAnswer = getAnswer(for: "RemoveCurrentCovering", appointmentId: appointmentId, roomId: roomId ?? 0 )
@@ -1811,31 +1928,37 @@ class SummeryListViewController: UIViewController,UITableViewDelegate,UITableVie
                     }
                     else
                     {
-//                        let appointmentId = AppointmentData().appointment_id ?? 0
-//                        let realm = try! Realm()
-//                        if let question = realm.objects(rf_master_question.self).filter("id == %d AND room_id == %d AND appointment_id == %d", autoAnswerLogicListArray[0].questionLines[0].questionId, tableValues[cell].room_id!,appoinmentID).first {
-//                            
-//                            try! realm.write
-//                            {
-//                                if let existingAnswer = question.rf_AnswerOFQustion.first {
-//                                    let newAnswer = List<rf_AnswerForQuestion>()//rf_AnswerForQuestion()
-//                                    
-//                                    let answerDict = ["id":UUID().uuidString,"question_id":-1,"appointment_id":question.appointment_id,"answer":[]]
-//                                    newAnswer.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
-//
-//                                    // Append it to rf_master_question
-//                                    //question.rf_AnswerOFQustion.append(newAnswer)
-//
-//                                    //print("Created new answer object with plywood value: \(plywoodValueStr)")
-//                                    var dict:[String:Any] = [:]
-//                                    let questionUniqueIdentifier = question.questionIdUnique
-//                                    let questionId = question.id
-//                                    dict = ["questionIdUnique":questionUniqueIdentifier,"id":questionId,"rf_AnswerOFQustion":newAnswer,"appointment_id":appointmentId,"room_id":tableValues[cell].room_id!,"room_name":tableValues[cell].room_name!]
-//                                    print("---dict2------", dict, " question : ", question.question_name)
-//                                    realm.create(rf_master_question.self, value: dict, update: .all)
-//                                }
-//                            }
-//                        }
+                        let roomID = tableValues[cell].room_id ?? 0
+                        let appointmentId = AppointmentData().appointment_id ?? 0
+                        let currentVaporBarrierAnswer = self.getAnswer(for: "VaporBarrierBool", appointmentId: appointmentId, roomId: roomID) ?? ""
+                        
+                        let currentCoveringAnswer = self.getAnswer(for: "CurrentCoveringType", appointmentId: appointmentId, roomId: roomID) ?? ""
+                        let existingSubSurfaceAnswer = self.getAnswer(for: "ExistingSubSurface", appointmentId: appointmentId, roomId: roomID) ?? ""
+                        let removeCurrentCoveringAnswer = self.getAnswer(for: "RemoveCurrentCovering", appointmentId: appointmentId, roomId: roomID) ?? ""
+                        
+                        let shouldBeYes = (existingSubSurfaceAnswer == "Concrete / Cement / Gypsum" && removeCurrentCoveringAnswer == "Yes") || (currentCoveringAnswer == "Concrete / Cement / Gypsum")
+                        
+                        let newAnswer = shouldBeYes ? "Yes" : "No"
+                        
+                        if currentVaporBarrierAnswer != newAnswer && currentVaporBarrierAnswer != "" {
+                            do {
+                                let realm = try Realm()
+                                if let vaporQuestion = realm.objects(rf_master_question.self).filter("question_name == %@ AND room_id == %d AND appointment_id == %d", "Vapor Barrier", roomID, appointmentId).first {
+                                    let newAnswerList = List<rf_AnswerForQuestion>()
+                                    let answerDict = ["id":UUID().uuidString,"question_id":vaporQuestion.id,"appointment_id":vaporQuestion.appointment_id,"answer":[newAnswer]] as [String : Any]
+                                    newAnswerList.append(rf_AnswerForQuestion(qstnAnsDict: answerDict))
+                                    
+                                    let dict: [String: Any] = ["questionIdUnique":vaporQuestion.questionIdUnique,"id":vaporQuestion.id,"rf_AnswerOFQustion":newAnswerList,"appointment_id":appointmentId,"room_id":roomID,"room_name":tableValues[cell].room_name ?? ""]
+                                    
+                                    try realm.write {
+                                        realm.create(rf_master_question.self, value: dict, update: .all)
+                                    }
+                                    print("Restored VaporBarrierBool answer to \(newAnswer) for non-Glue Down individual color selection")
+                                }
+                            } catch {
+                                print("Failed to restore VaporBarrierBool: \(error.localizedDescription)")
+                            }
+                        }
                     }
                     
                 }

@@ -12,6 +12,7 @@ import RealmSwift
 import JWTCodable
 import CryptoKit
 import CommonCrypto
+import Alamofire
 
 // How to Make a Background Task
 //step 1 : click on your project >> Signing & Capabilities >> click on "+ Capability" and added Background fetch & Background processing
@@ -21,7 +22,6 @@ import CommonCrypto
 
 class BackgroundTaskService {
     static public let shared = BackgroundTaskService()
-    private init() {}
     
     var timer = Timer()
     var testResult = "TEST"
@@ -29,7 +29,28 @@ class BackgroundTaskService {
     var backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
     private var inFlightAppointmentIds = Set<Int>()
     private let isolationQueue = DispatchQueue(label: "com.refloor.syncIsolation")
+    private let reachabilityManager = NetworkReachabilityManager()
+    private var isSyncProcessRunning = false
     //private let syncLock = NSLock()
+
+    private init() {
+        startNetworkMonitoring()
+    }
+    
+    private func startNetworkMonitoring() {
+        reachabilityManager?.listener = { status in
+            switch status {
+            case .reachable(.ethernetOrWiFi), .reachable(.wwan):
+                print("Network became reachable. Triggering sync.")
+                self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                self.startSyncProcess()
+            case .notReachable, .unknown:
+                print("Network unreachable.")
+                self.isolationQueue.sync { self.isSyncProcessRunning = false }
+            }
+        }
+        reachabilityManager?.startListening()
+    }
 
     /// Returns true and registers the ID if not already in-flight. Returns false if a call is already active for this appointment.
 //    func markInFlight(appointmentId: Int) -> Bool {
@@ -134,23 +155,7 @@ extension BackgroundTaskService {
         do {
             // don't forget to sumbit the request
             testResult = "Submit"
-            // backgroundTaskID: UIBackgroundTaskIdentifier = UIBackgroundTaskIdentifier.invalid
-            
-            //let taskID = beginBackgroundUpdateTask()
-            
-            
-            self.backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "Finish doing this task", expirationHandler: {
-                
-                // End the task if time expires
-                
-                UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
-                
-                self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
-                
-                
-            })
             try BGTaskScheduler.shared.submit(request)
-            
         } catch {
             print("Could not schedule image : \(error)")
         }
@@ -529,11 +534,15 @@ extension BackgroundTaskService {
                             syncDelayValue = syncDelayValue + 1
                             if HttpClientManager.SharedHM.connectedToNetwork(){
                                 print("Spinner Count:9")
-                                self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue)
-                                //  self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
-                                
-                                if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
-                                    NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                                self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue) { ifSuccess in
+                                    if !ifSuccess{
+                                        ifAnyApiFailed = true
+                                    }else{
+                                        ifAnyApiFailed = false
+                                    }
+                                    if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
+                                        NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                                    }
                                 }
                             }
                             break
@@ -564,6 +573,27 @@ extension BackgroundTaskService {
     
     // MARK: - START SYNC ACTION
     func startSyncProcess(){
+        var shouldProceed = false
+        isolationQueue.sync {
+            if !isSyncProcessRunning {
+                isSyncProcessRunning = true
+                shouldProceed = true
+            }
+        }
+        guard shouldProceed else {
+            print("Sync already in progress. Skipping.")
+            return
+        }
+
+        // Ensure that this process can continue in the background if app is minimized or locked.
+        if self.backgroundTaskID == UIBackgroundTaskIdentifier.invalid {
+            self.backgroundTaskID = UIApplication.shared.beginBackgroundTask(withName: "RefloorBackgroundSync", expirationHandler: {
+                UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+                self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+                self.isolationQueue.sync { self.isSyncProcessRunning = false }
+            })
+        }
+        
         var syncDelayValue:Int = 0
         print("Timer called")
         var ifAnyApiFailed = false
@@ -579,101 +609,143 @@ extension BackgroundTaskService {
                     SceneDelegate.timer.invalidate()
                 }
                 self.cancelAllTaskRequests()
-                
+                if self.backgroundTaskID != UIBackgroundTaskIdentifier.invalid {
+                    UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+                    self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+                }
+                self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                return
             }
            // SceneDelegate.timer.invalidate()
             
+            let group = DispatchGroup()
+            var count = 0
+            
+            var didStartAnyApi = false
             for appointmentRequest in appointmentRequestArray
             {
-                //                count = count + 1
-                //                if count > 1{
-                //                    break
-                //                }
-//                if !(stop_syncAppointmentArray.contains(appointmentRequest.appointment_id))
-//                {
+                if count >= 1 {
+                    break
+                }
+                let appointmentId = appointmentRequest.appointment_id
+                guard self.markInFlight(appointmentId: appointmentId) else {
+                    print("⏳ Appointment \(appointmentId) already syncing — skipping duplicate call.")
+                    continue
+                }
                 
+                count = count + 1
+                didStartAnyApi = true
+                group.enter()
                 
                 print("Date Before \(Date().toString())")
                 switch appointmentRequest.reqest_title {
                 case RequestTitle.CustomerAndRoom.rawValue:
-                    let (appointmentId, requestParams, _) = self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
-                    guard self.markInFlight(appointmentId: appointmentId) else {
-                        print("⏳ Appointment \(appointmentId) already syncing — skipping duplicate call.")
-                        break
-                    }
+                    let (_, requestParams, _) = self.createCustomerAndRoomParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                     self.syncCustomerAndRoomData(appointmentId: appointmentId, parameter: requestParams) { ifSuccess in
                         self.clearInFlight(appointmentId: appointmentId)
                         if !ifSuccess {
                             print("Spinner Count:1")
                             ifAnyApiFailed = true
-                            return
                         } else {
                             print("Spinner Count:2")
-                            ifAnyApiFailed = false
                         }
+                        group.leave()
                     }
-                    break
                 case RequestTitle.ImageUpload.rawValue:
                     let requestParams =  self.createImageUploadParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                     self.syncImages(imageDict: requestParams){ ifSuccess in
-                        //self.isCallingApi = false
+                        self.clearInFlight(appointmentId: appointmentId)
                         if !ifSuccess{
                             print("Spinner Count:5")
                             ifAnyApiFailed = true
-                            return
                         }else{
                             print("Spinner Count:6")
-                            ifAnyApiFailed = false
                         }
+                        group.leave()
                     }
-                    break
                 case RequestTitle.GenerateContract.rawValue:
-                    let (appointmentId, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    let (_, requestParams, _) =  self.createGenerateContractParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                     self.syncGenerateContract(appointmentId:appointmentId,parameter: requestParams){ ifSuccess in
-                        //self.isCallingApi = false
+                        self.clearInFlight(appointmentId: appointmentId)
                         if !ifSuccess{
                             print("Spinner Count:7")
                             ifAnyApiFailed = true
-                            return
                         }else{
                             print("Spinner Count:8")
-                            ifAnyApiFailed = false
                         }
+                        group.leave()
                     }
-                    break
                 case RequestTitle.InitiateSync.rawValue:
-                    let (appointmentId, requestParams, _) = self.createInitiate_i360_SyncParametersForApiCall(completedAppointmentRequest: appointmentRequest)
+                    let (_, requestParams, _) = self.createInitiate_i360_SyncParametersForApiCall(completedAppointmentRequest: appointmentRequest)
                     syncDelayValue = syncDelayValue + 1
                     if HttpClientManager.SharedHM.connectedToNetwork(){
                         print("Spinner Count:9")
-                        self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue)
-                        //  self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
-                        
-                        if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
-                            NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                        self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue) { ifSuccess in
+                            self.clearInFlight(appointmentId: appointmentId)
+                            if !ifSuccess{
+                                ifAnyApiFailed = true
+                            }else{
+                                ifAnyApiFailed = false
+                            }
+                            if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
+                                NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                            }
+                            group.leave()
                         }
+                    } else {
+                        self.clearInFlight(appointmentId: appointmentId)
+                        ifAnyApiFailed = true
+                        group.leave()
                     }
-                    break
-                case .none:
-                    break
-                case .some(_):
-                    break
+                default:
+                    self.clearInFlight(appointmentId: appointmentId)
+                    group.leave()
                 }
-           // }
-                    
-                
             }
             
-            if ifAnyApiFailed
-            {
-                // Retry after 30s delay to prevent recursive retry storm
-                DispatchQueue.global().asyncAfter(deadline: .now() + 30.0)
+            if !didStartAnyApi {
+                self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                return
+            }
+            
+            group.notify(queue: .main) {
+                if ifAnyApiFailed
                 {
-                   // self.clearInFlight(appointmentId: appointmentId)
-                    self.startSyncProcess()
+                    self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                    // Retry after 5s delay to prevent recursive retry storm
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 5.0)
+                    {
+                        self.startSyncProcess()
+                    }
+                } else {
+                    if self.backgroundTaskID != UIBackgroundTaskIdentifier.invalid {
+                        // Check if more to sync, otherwise end background task.
+                        let moreAppointments = self.getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+                        if moreAppointments.count == 0 {
+                            UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+                            self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+                            self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                        } else {
+                            // Recursively call to sync next batch
+                            self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                            self.startSyncProcess()
+                        }
+                    } else {
+                        self.isolationQueue.sync { self.isSyncProcessRunning = false }
+                    }
                 }
             }
             
+        } else {
+            // Not connected to network
+            let appointmentRequestArray = getAppointmentsToSyncFromDB(requestTitle: RequestTitle.CustomerAndRoom)
+            if appointmentRequestArray.count == 0 {
+                if self.backgroundTaskID != UIBackgroundTaskIdentifier.invalid {
+                    UIApplication.shared.endBackgroundTask(self.backgroundTaskID)
+                    self.backgroundTaskID = UIBackgroundTaskIdentifier.invalid
+                }
+            }
+            self.isolationQueue.sync { self.isSyncProcessRunning = false }
         }
         
     }
@@ -760,11 +832,15 @@ extension BackgroundTaskService {
                         syncDelayValue = syncDelayValue + 1
                         if HttpClientManager.SharedHM.connectedToNetwork(){
                             print("Spinner Count:9")
-                            self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue)
-                            //  self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appointmentId, requestTitle: RequestTitle.InitiateSync)
-                            
-                            if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
-                                NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                            self.sync_i360(appointmentId: appointmentId, parameter: requestParams,sync_delay:syncDelayValue) { ifSuccess in
+                                if !ifSuccess{
+                                    ifAnyApiFailed = true
+                                }else{
+                                    ifAnyApiFailed = false
+                                }
+                                if (UIApplication.getTopViewController() as? CustomerListViewController) != nil {
+                                    NotificationCenter.default.post(name: Notification.Name("UpdateAppointments"), object: nil)
+                                }
                             }
                         }
                         break
@@ -876,7 +952,9 @@ extension BackgroundTaskService {
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
-            params["create_date"] = Date().getSyncDateAsString()
+            let innerData = params["data"] as? [String: Any]
+            let savedDate = innerData?["create_date"] as? String ?? Date().getSyncDateAsString()
+            params["create_date"] = savedDate
             HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: params, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
                 if(success ?? "") == "Success" {
                     //print(parameter.ke)
@@ -1005,6 +1083,7 @@ extension BackgroundTaskService {
         let appoint_id = room["appointment_id"]  as? Int ?? 0
         let image_name = room["image_name"] as? String ?? ""
         let image_type = room["image_type"] as? String ?? ""
+        let create_date = room["create_date"] as? String ?? ""
         //log
         self.addImageStatLogs(appointmentId: appoint_id, imageType: image_type)
         //
@@ -1019,19 +1098,21 @@ extension BackgroundTaskService {
             print("Upload speed: \(speed) Mbps")
             networkMessage = String(format: "%.2f", speed)
             networkMessage += "Mbps"
-            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
+            HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage,createDate: create_date) { success, message, imageName in
                 if(success ?? "") == "Success"{
                     print(message ?? "No msg")
                     if let imageNam = imageName{
                         self.addImageCompleteLogs(appointmentId: appoint_id)
                         self.updateAppointmentRequestSyncStatusAsComplete(appointmentId: appoint_id, requestTitle:  RequestTitle.ImageUpload, imageName: imageNam,paymentStatus: "",paymentMessage: "")
                         completion(true)
+                    } else {
+                        completion(false)
                     }
-                    completion(false)
                 }
                 else if success == "AuthFailed"
                 {
                     NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
+                    completion(false)
                 }
                 else{
                     self.addImageFailLogs(appointmentId: appoint_id, errorMessage: "Error image upload not complete")
@@ -1061,7 +1142,8 @@ extension BackgroundTaskService {
             networkMessage += "Mbps"
             var params = parameter
             params["network_strength"] = networkMessage
-            params["create_date"] = Date().getSyncDateAsString()
+            let savedDate = params["create_date"] as? String ?? Date().getSyncDateAsString()
+            params["create_date"] = savedDate
             HttpClientManager.SharedHM.generateContactAPi(parameter: params) { success, message in
                 
                 if(success ?? "") == "Success"{
@@ -1074,6 +1156,7 @@ extension BackgroundTaskService {
                 else if success == "AuthFailed"
                 {
                     NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
+                    completion(false)
                 }
                 else{
                     self.saveLogDetailsForAppointment(appointmentId: appointmentId, logMessage: AppointmentLogMessages.generateContractSyncCompleted.rawValue, time: Date().getSyncDateAsString(),errorMessage: message ?? "Error Occured",name:name ,appointmentDate:date)
@@ -1085,7 +1168,7 @@ extension BackgroundTaskService {
     }
     
     // MARK: - i360 Sync Api
-    func sync_i360(appointmentId:Int, parameter:[String:Any],sync_delay:Int){
+    func sync_i360(appointmentId:Int, parameter:[String:Any],sync_delay:Int, completion: @escaping (Bool) -> ()){
         var params = parameter
         var data = params["data"] as? [String:Any] ?? [:]
         data["sync_delay"] = sync_delay
@@ -1098,7 +1181,8 @@ extension BackgroundTaskService {
             networkMessage = String(format: "%.2f", speed)
             networkMessage += "Mbps"
             params["network_strength"] = networkMessage
-            params["create_date"] = Date().getSyncDateAsString()
+            let savedDate = params["create_date"] as? String ?? Date().getSyncDateAsString()
+            params["create_date"] = savedDate
             HttpClientManager.SharedHM.initiateSync_i360_APi(parameter: params) { success, message in
                 if(success ?? "") == "Success"{
                     print(message ?? "No msg")
@@ -1106,10 +1190,15 @@ extension BackgroundTaskService {
                     if (UIApplication.getTopViewController() as? ViewLogListViewController) != nil {
                         NotificationCenter.default.post(name: Notification.Name("UpdateLogView"), object: nil)
                     }
+                    completion(true)
                 }
                 else if success == "AuthFailed"
                 {
                     NotificationCenter.default.post(name: Notification.Name("AuthFailed"), object: nil)
+                    completion(false)
+                }
+                else {
+                    completion(false)
                 }
             }
         }

@@ -6,6 +6,7 @@ import AlamofireObjectMapper
 import ObjectMapper
 import SystemConfiguration
 import RealmSwift
+import Zip
 //import Firebase
 enum SHOWHIDEHUD {
     case SHOW
@@ -26,6 +27,107 @@ class HttpClientManager: NSObject {
     
     let LoginAPIKeys: NSArray = ["emailAddress","phoneNumber","salesId","userId"]
     private var syncSessionManager: Alamofire.SessionManager?
+    
+    private var taskStartTimes: [Int: Date] = [:]
+    private let taskQueue = DispatchQueue(label: "com.refloor.apilogqueue")
+    
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(networkRequestDidResume(_:)), name: Notification.Name.Task.DidResume, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(networkRequestDidComplete(_:)), name: Notification.Name.Task.DidComplete, object: nil)
+    }
+    
+    
+    @discardableResult
+    func makeRequest(
+        _ url: URLConvertible,
+        method: HTTPMethod = .get,
+        parameters: Parameters? = nil,
+        encoding: ParameterEncoding = URLEncoding.default,
+        headers: HTTPHeaders? = nil)
+        -> DataRequest {
+        
+        let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? "UnknownDevice"
+        let requestId = UUID().uuidString + "-" + deviceId
+        
+        var modifiedHeaders = headers ?? [:]
+        modifiedHeaders["X-Request-Id"] = requestId
+        modifiedHeaders["device_id"] = deviceId
+        
+        return Alamofire.request(url, method: method, parameters: parameters, encoding: encoding, headers: modifiedHeaders)
+    }
+    
+    func makeUpload(
+        multipartFormData: @escaping (MultipartFormData) -> Void,
+        usingThreshold encodingMemoryThreshold: UInt64 = SessionManager.multipartFormDataEncodingMemoryThreshold,
+        to url: URLConvertible,
+        method: HTTPMethod = .post,
+        headers: HTTPHeaders? = nil,
+        encodingCompletion: ((SessionManager.MultipartFormDataEncodingResult) -> Void)?) {
+            
+        let deviceId = UIDevice.current.identifierForVendor?.uuidString ?? "UnknownDevice"
+        let requestId = UUID().uuidString + "-" + deviceId
+        var modifiedHeaders = headers ?? [:]
+        modifiedHeaders["X-Request-Id"] = requestId
+        modifiedHeaders["device_id"] = deviceId
+            
+        Alamofire.upload(multipartFormData: multipartFormData, usingThreshold: encodingMemoryThreshold, to: url, method: method, headers: modifiedHeaders, encodingCompletion: encodingCompletion)
+    }
+    
+    @objc func networkRequestDidResume(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let task = userInfo[Notification.Key.Task] as? URLSessionTask else { return }
+        taskQueue.sync {
+            taskStartTimes[task.taskIdentifier] = Date()
+        }
+    }
+    
+    @objc func networkRequestDidComplete(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let task = userInfo[Notification.Key.Task] as? URLSessionTask else { return }
+        
+        let request = task.originalRequest
+        
+        let url = request?.url?.absoluteString ?? ""
+        let maxLogLength = 10000
+        var payload = request?.httpBody.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        if payload.count > maxLogLength { payload = String(payload.prefix(maxLogLength)) + " ... (truncated)" }
+        
+        let status = (task.response as? HTTPURLResponse)?.statusCode ?? 0
+        let data = userInfo[Notification.Key.ResponseData] as? Data
+        
+        var responseData = data.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        if responseData.count > maxLogLength { responseData = String(responseData.prefix(maxLogLength)) + " ... (truncated)" }
+        
+        let requestId = request?.value(forHTTPHeaderField: "X-Request-Id") ?? ""
+        
+        var startTime: Date?
+        taskQueue.sync {
+            startTime = taskStartTimes.removeValue(forKey: task.taskIdentifier)
+        }
+        let duration = startTime.map { Date().timeIntervalSince($0) } ?? 0.0
+        
+        let appointmentId = UserDefaults.standard.integer(forKey: "current_appointment_id")
+        
+        if appointmentId > 0 && !url.contains("update_sync_log") && !url.contains("compressed_files") && !url.contains("do_file_upload") && !url.contains("CreateAttachment") {
+            let log = rf_API_Log(appointmentId: appointmentId,
+                                 apiUrl: url,
+                                 requestPayload: payload,
+                                 responseStatus: status,
+                                 responseData: responseData,
+                                 timestamp: Date().getSyncDateAsString(),
+                                 timeTaken: duration,
+                                 requestId: requestId)
+            do {
+                let realm = try Realm()
+                try realm.write {
+                    realm.add(log)
+                }
+            } catch {
+                print("Failed to save API log: \(error.localizedDescription)")
+            }
+        }
+    }
     
     //MARK:- Internet
     
@@ -173,7 +275,7 @@ class HttpClientManager: NSObject {
             let version = ((Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)!)
             let parameters = ["login":usernae,"password":password,"device_reg_id":fcmToken,"restrict_multi_login":isoffline,"device_name":AppDetails.deviceName,"device_os":AppDetails.osVersion,"app_version":version] as [String : Any]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<UserLoginData>) in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<UserLoginData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -223,7 +325,7 @@ class HttpClientManager: NSObject {
             
             let parameters = ["token":UserData.init().token ?? "","app_version":version]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseJSON { response in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseJSON { response in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 switch response.result {
@@ -296,7 +398,7 @@ class HttpClientManager: NSObject {
             let parameters = ["token":UserData.init().token ?? ""]
             print("--token---", UserData.init().token ?? "")
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 // print(response.result.value.debugDescription)
                 let response = response.result.value
@@ -319,7 +421,7 @@ class HttpClientManager: NSObject {
             
             let parameters = ["token":UserData.init().token ?? ""]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<OrderStatusDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<OrderStatusDataMap>) in
                 
                 
                 
@@ -355,7 +457,7 @@ class HttpClientManager: NSObject {
             // let URL = AppURL().submit_appointment_result
             let URL = AppURL().submit_appointment_result_without_upload
             print("-----URL------", URL)
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 print("parameters1 : ", parameter)
                 // self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -390,7 +492,7 @@ class HttpClientManager: NSObject {
             // let URL = AppURL().submit_appointment_result
             let URL = AppURL().submit_appointment_file_upload
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 // self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -416,7 +518,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().update_appointments
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -456,7 +558,7 @@ class HttpClientManager: NSObject {
             let parameters = ["token":user.token ?? ""]
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
+            self.makeUpload(multipartFormData: { (multipartFormData) in
                 multipartFormData.append(imageData!, withName: "attachment", fileName: imagename, mimeType: "image/jpeg")
                 for (key, value) in parameters
                 {
@@ -485,7 +587,7 @@ class HttpClientManager: NSObject {
                     }}
             }
             
-            //            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
+            //            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
             //
             //                self.showhideHUD(viewtype: .HIDE, title: "")
             //                print(response.result.value.debugDescription)
@@ -524,7 +626,7 @@ class HttpClientManager: NSObject {
             let parameters:[String:String] = ["token":UserData.init().token ?? "", "appointment_id":String(AppDelegate.appoinmentslData.id ?? 0)]
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
+            self.makeUpload(multipartFormData: { (multipartFormData) in
                 multipartFormData.append(imageData!, withName: "attachment", fileName: imagename, mimeType: "image/jpeg")
                 for (key, value) in parameters
                 {
@@ -553,7 +655,7 @@ class HttpClientManager: NSObject {
                     }}
             }
             
-            //            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
+            //            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
             //
             //                self.showhideHUD(viewtype: .HIDE, title: "")
             //                print(response.result.value.debugDescription)
@@ -589,7 +691,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().filter_transitions
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<TransitionListDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<TransitionListDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -626,7 +728,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().add_transitions
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -658,7 +760,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().UnlinkAttachment
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -690,7 +792,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().remove_transition
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -722,7 +824,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().get_measurement_questions
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<QustionDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<QustionDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -759,7 +861,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().add_contract_measurement_questions
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject
             { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
@@ -809,7 +911,7 @@ class HttpClientManager: NSObject {
             
             
             let imageData = attachments.jpegData(compressionQuality: 0.4)
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
+            self.makeUpload(multipartFormData: { (multipartFormData) in
                 multipartFormData.append(imageData!, withName: "attachment", fileName: imagename, mimeType: "image/jpeg")
                 for (key, value) in parameters {
                     multipartFormData.append(value.data(using: String.Encoding.utf8)! , withName: key)
@@ -837,7 +939,7 @@ class HttpClientManager: NSObject {
                     }}
             }
             
-            //            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
+            //            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
             //
             //                self.showhideHUD(viewtype: .HIDE, title: "")
             //                print(response.result.value.debugDescription)
@@ -880,7 +982,7 @@ class HttpClientManager: NSObject {
             }
             
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject
             { (response:DataResponse<MessuerementDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
@@ -921,7 +1023,7 @@ class HttpClientManager: NSObject {
             
             let parameters = ["token":UserData.init().token ?? ""]
             
-            Alamofire.request(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<TileMeterailsDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<TileMeterailsDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -959,7 +1061,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -993,7 +1095,7 @@ class HttpClientManager: NSObject {
             let data = ["payment_plan_id":pymentplanID]
             let parameters:Parameters = ["token":UserData.init().token ?? "","data":data]
             
-            Alamofire.request(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<TileMeterailsDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<TileMeterailsDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1031,7 +1133,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -1066,7 +1168,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<QuotationApiData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<QuotationApiData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -1101,7 +1203,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<QuotationApiData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<QuotationApiData>) in
                 
                 // self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -1134,7 +1236,7 @@ class HttpClientManager: NSObject {
             
             let parameters:Parameters = ["token":UserData.init().token ?? "","appointment_id":appointment_id]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<RoomDataApiData>) in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<RoomDataApiData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1171,7 +1273,7 @@ class HttpClientManager: NSObject {
             let data = ["contract_room_id":contractroomID]
             let parameters:Parameters = ["token":UserData.init().token ?? "","data":data]
             
-            Alamofire.request(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<SummeryDetailsDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<SummeryDetailsDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1208,7 +1310,7 @@ class HttpClientManager: NSObject {
             let data = ["appointment_id":appointment_id]
             let parameters:Parameters = ["token":UserData.init().token ?? "","data":data]
             
-            Alamofire.request(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<SummeryListDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters,encoding: JSONEncoding.default).responseObject { (response:DataResponse<SummeryListDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1243,7 +1345,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().update_material_room
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1277,7 +1379,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().update_moulding
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1314,7 +1416,7 @@ class HttpClientManager: NSObject {
             
             let parameters:Parameters = ["token":UserData.init().token ?? "","appointment_id":appointment_id,"room_name":room_name]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1350,7 +1452,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().check_room_availability
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1387,7 +1489,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().delete_room_details
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1423,7 +1525,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().update_contract_room_measurement
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1460,7 +1562,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().update_contract_measurement_questions
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1499,7 +1601,7 @@ class HttpClientManager: NSObject {
             
             let parameters:Parameters = ["token":UserData.init().token ?? "", "appointment_id":AppDelegate.appoinmentslData.id ?? 0]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<PaymentApiData>) in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<PaymentApiData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1540,7 +1642,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -1577,7 +1679,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -1612,7 +1714,7 @@ class HttpClientManager: NSObject {
             
             
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -1643,7 +1745,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().check_document_status
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<SignData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<SignData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1678,7 +1780,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().propose_reject_quote
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1713,7 +1815,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().propose_reject_quote
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1747,7 +1849,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().update_summary_contract_room_measurement_line
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenImageQuestionDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CommenImageQuestionDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1792,14 +1894,14 @@ class HttpClientManager: NSObject {
             
             
             /*  let coApplicantImageData = coapplicant_signature?.jpegData(compressionQuality: 1)
-             Alamofire.upload(multipartFormData: { (multipartFormData) in
+             self.makeUpload(multipartFormData: { (multipartFormData) in
              multipartFormData.append(imageData!, withName: "applicant_signature", fileName: "applicant_signature.jpeg", mimeType: "image/jpeg")*/
             //   let coApplicantImageData = coapplicant_signature?.jpegData(compressionQuality: 1)
             let applicant_initialImageData = applicant_initial?.jpegData(compressionQuality: 0.4)
             let coapplicant_initialImageData = coapplicant_initial?.jpegData(compressionQuality: 0.4)
             let coApplicantImageData = coapplicant_signature?.jpegData(compressionQuality: 0.4)
             
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
+            self.makeUpload(multipartFormData: { (multipartFormData) in
                 multipartFormData.append(imageData!, withName: "applicant_signature", fileName: "applicant_signature.jpeg", mimeType: "image/jpeg")
                 
                 
@@ -1842,7 +1944,7 @@ class HttpClientManager: NSObject {
                     }}
             }
             
-            //            Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
+            //            self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<AttachmentClass>) in
             //
             //                self.showhideHUD(viewtype: .HIDE, title: "")
             //                print(response.result.value.debugDescription)
@@ -1877,7 +1979,7 @@ class HttpClientManager: NSObject {
             
             let URL = "https://hooks.zapier.com/hooks/catch/6718723/ofq05bh"
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<FormUpdateDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<FormUpdateDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1913,7 +2015,7 @@ class HttpClientManager: NSObject {
             let URL = AppURL().capture_payment_without_upload
             // let URL = AppURL().capture_payment
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataPDF>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataPDF>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1949,7 +2051,7 @@ class HttpClientManager: NSObject {
             let URL = AppURL().do_file_upload
             // let URL = AppURL().capture_payment
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataPDF>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataPDF>) in
                 
                 //   self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -1983,7 +2085,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().get_contract_document_status
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataPDF>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CommenDataPDF>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -2016,7 +2118,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().create_credit_application
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding:JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding:JSONEncoding.default).responseObject { (response:DataResponse<CommenDataMap>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -2050,9 +2152,9 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().generate_credit_application
             
-            // Alamofire.request(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<UserLoginData>)
+            // self.makeRequest(URL, method: .post, parameters: parameters).responseObject { (response:DataResponse<UserLoginData>)
             
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject { (response:DataResponse<CashData>) in
                 
                 self.showhideHUD(viewtype: .HIDE, title: "")
                 
@@ -2082,7 +2184,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().check_app_build_status
             
-            Alamofire.request(URL, method: .get).responseObject { (response:DataResponse<BuildStatus>) in
+            self.makeRequest(URL, method: .get).responseObject { (response:DataResponse<BuildStatus>) in
                 
                 // self.showhideHUD(viewtype: .HIDE, title: "")
                 // print(response.result.value.debugDescription)
@@ -2118,7 +2220,7 @@ class HttpClientManager: NSObject {
             let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String
             let parameters = ["token":UserData.init().token!,"app_version":version]
             
-            Alamofire.request(URL, method: .post, parameters: parameters).responseJSON { response in
+            self.makeRequest(URL, method: .post, parameters: parameters).responseJSON { response in
                 switch response.result {
                 case .success:
                     if response.result.value != nil {
@@ -2234,19 +2336,10 @@ class HttpClientManager: NSObject {
             self.syncSessionManager?.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashDataResponse>) in
                 let responseValue = response.result.value
                 if responseValue != nil{
-                    if(responseValue?.result != nil)
+                    completion(responseValue?.result,responseValue?.message,responseValue?.paymentStatus,responseValue?.paymentMessage,responseValue?.authorize_transaction_id, responseValue?.card_type)
+                    if isOnlineCollectBtnPressed
                     {
-                        completion(responseValue?.result,responseValue?.message,responseValue?.paymentStatus,responseValue?.paymentMessage,responseValue?.authorize_transaction_id, responseValue?.card_type)
-                        if isOnlineCollectBtnPressed
-                        {
-                            self.showhideHUD(viewtype: .HIDE, title: "")
-                        }
-                    }
-                    else
-                    {
-                        // Handle malformed result (result field missing)
-                        completion("false", "Server returned malformed response", responseValue?.paymentStatus, responseValue?.paymentMessage, responseValue?.authorize_transaction_id, responseValue?.card_type)
-                        if isOnlineCollectBtnPressed { self.showhideHUD(viewtype: .HIDE, title: "") }
+                        self.showhideHUD(viewtype: .HIDE, title: "")
                     }
                 }
                 else{
@@ -2272,7 +2365,7 @@ class HttpClientManager: NSObject {
 //            
 //            let URL = AppURL().syncContactInfo
 //            
-//            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
+//            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
 //                
 //                
 //                let response = response.result.value
@@ -2301,7 +2394,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().fetchDataBaseRawValue
             self.showhideHUD(viewtype: .SHOW, title: "Uploading Data. Please wait…")
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject {
                 (response:DataResponse<dataBaseData>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2334,7 +2427,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().autoLogout
             //self.showhideHUD(viewtype: .SHOW, title: "Logging out. Please wait.")
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject {
                 (response:DataResponse<autoLogoutData>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2378,7 +2471,7 @@ class HttpClientManager: NSObject {
             let URL = url//masterData.versatileURL
             let headers = ["Content-Type":"application/json","X-API-Key":apiKey,"X-Entity-Key":entityKey]
             self.showhideHUD(viewtype: .SHOW, title: "Loading versatile credit platforms.")
-            Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+            self.makeRequest(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
                 print(response)
                 if let jsonData = response.data {
@@ -2405,7 +2498,7 @@ class HttpClientManager: NSObject {
             let URL = url//masterData.versatileURL
             let headers = ["Content-Type":"application/json","apiKey":apiKey,"apiSecret":entityKey]
             self.showhideHUD(viewtype: .SHOW, title: "Loading credit card rate lending platforms.")
-            Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+            self.makeRequest(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
                 print(response)
                 if let jsonData = response.data {
@@ -2434,7 +2527,7 @@ class HttpClientManager: NSObject {
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
             //self.showhideHUD(viewtype: .SHOW, title: "Fetching loan status.")
-            Alamofire.request(URL, method: .get, parameters: nil, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+            self.makeRequest(URL, method: .get, parameters: nil, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
                 print(response)
                 if let jsonData = response.data {
@@ -2477,7 +2570,7 @@ class HttpClientManager: NSObject {
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
             self.showhideHUD(viewtype: .SHOW, title: "Fetching loan status.")
-            Alamofire.request(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
+            self.makeRequest(URL, method: .post, parameters: parameter, encoding: JSONEncoding.default ,headers: headers).responseJSON { response in
                 self.showhideHUD(viewtype: .HIDE)
                 print(response)
                 if let jsonData = response.data {
@@ -2516,7 +2609,7 @@ class HttpClientManager: NSObject {
             print(parameter)
             let URL = AppURL().additionalComments
             self.showhideHUD(viewtype: .SHOW, title: "Creating Sale Order")
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject {
                 (response:DataResponse<AdditionalComments>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2563,7 +2656,7 @@ class HttpClientManager: NSObject {
             //self.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
-            Alamofire.request(URL, method: .post, parameters: parameter,headers: headers).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter,headers: headers).responseObject {
                 (response:DataResponse<InstallerDatesSubmit>) in
                 //self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2601,7 +2694,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().installationDates
             self.showhideHUD(viewtype: .SHOW, title: "Fetching available installer schedule dates. Please wait…")
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject {
                 (response:DataResponse<InstallerDates>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2636,7 +2729,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().installationDatesSubmit
             self.showhideHUD(viewtype: .SHOW, title: "Submitting Installation Request. Please wait.")
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject {
                 (response:DataResponse<InstallerDatesSubmit>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2673,7 +2766,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().manualArrivalDate
             self.showhideHUD(viewtype: .SHOW, title: "Submitting manual arrival date.")
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject {
                 (response:DataResponse<ManualArrivalDate>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2712,7 +2805,7 @@ class HttpClientManager: NSObject {
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
             self.showhideHUD(viewtype: .SHOW, title: "Sending reviews. Please wait.")
-            Alamofire.request(URL, method: .post, parameters: parameter,headers: headers).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter,headers: headers).responseObject {
                 (response:DataResponse<ManualArrivalDate>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2761,9 +2854,9 @@ class HttpClientManager: NSObject {
             let token = UserData().token
             let headers = ["Authorization":"Bearer \(token!)"]
             self.showhideHUD(viewtype: .SHOW, title: "Checking appointment status")
-            Alamofire.request(URL, method: .post, parameters: parameter,headers: headers).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter,headers: headers).responseObject {
                 (response:DataResponse<ManualArrivalDate>) in
-                //self.showhideHUD(viewtype: .HIDE)
+                self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
                 print("\n\n\n *** 2222.APPOINTMENT_STATUS_API * RESPONSE = = \(response.result) *** \n\n\n")
                 let response = response.result.value
@@ -2773,7 +2866,6 @@ class HttpClientManager: NSObject {
                     {
                         
                         completion(response?.result,response?.message)
-                            //self.showhideHUD(viewtype: .HIDE, title: "")
                     }
                 }
                 else{
@@ -2799,7 +2891,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().geoLocationLogs
             self.showhideHUD(viewtype: .HIDE, title: "")
-            Alamofire.request(URL, method: .post, parameters: parameter).responseObject {
+            self.makeRequest(URL, method: .post, parameters: parameter).responseObject {
                 (response:DataResponse<InstallerDatesSubmit>) in
                 self.showhideHUD(viewtype: .HIDE)
                // print(response.result.value.debugDescription)
@@ -2828,7 +2920,7 @@ class HttpClientManager: NSObject {
     }
     
     // MARK: - Sync Images Upload
-    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,networkMessage:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
+    func syncImagesOfAppointment(appointmentId: String,roomId:String, attachments:UIImage,  imagename: String,imageType:String,dataCompleted:String = "",roomName:String,networkMessage:String,createDate:String,completion:@escaping (_ success: String?, _ message: String?,_ imageName : String? ) -> ()){
         
         
         if self.connectedToNetwork() {
@@ -2838,13 +2930,13 @@ class HttpClientManager: NSObject {
             let user = UserData.init()
             var parameters:[String:String] = [:]
             if dataCompleted != ""{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"data_completed":dataCompleted,"room_name":roomName,"network_strength":networkMessage,"create_date":createDate]
             }else{
-                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
+                parameters = ["token":user.token ?? "","appointment_id":appointmentId,"image_type":imageType,"room_id":roomId,"image_name":imagename,"room_name":roomName,"network_strength":networkMessage,"create_date": createDate]
             }
             
             let imageData = attachments.jpegData(compressionQuality: 0.0)
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
+            self.makeUpload(multipartFormData: { (multipartFormData) in
                 multipartFormData.append(imageData!, withName: "file", fileName: imagename, mimeType: "image/jpeg")
                 for (key, value) in parameters
                 {
@@ -2878,13 +2970,15 @@ class HttpClientManager: NSObject {
         }
     }
     
-    func CompressFileOfAppointment(appointmentId: String,fileURL:URL?,completion:@escaping (_ success: String?, _ message: String?) -> ()){
+    func CompressFileOfAppointment(appointmentId: String,fileURL:URL?,showHUD: Bool = true, completion:@escaping (_ success: String?, _ message: String?) -> ()){
         
         
         if self.connectedToNetwork() {
             
             let URL = AppURL().compressedFiles
-            self.showhideHUD(viewtype: .SHOW, title: "Submitting Data and making zip file...")
+            if showHUD {
+                self.showhideHUD(viewtype: .SHOW, title: "Submitting Data and making zip file...")
+            }
             let user = UserData.init()
             var parameters:[String:String] = [:]
             let headers: HTTPHeaders = [
@@ -2898,7 +2992,7 @@ class HttpClientManager: NSObject {
             //}
             
             //let imageData = attachments.jpegData(compressionQuality: 0.0)
-            Alamofire.upload(multipartFormData: { (multipartFormData) in
+            self.makeUpload(multipartFormData: { (multipartFormData) in
                 multipartFormData.append(fileURL!, withName: "file", fileName: "\(appointmentId).zip", mimeType: "application/zip")
                 for (key, value) in parameters
                 {
@@ -2914,7 +3008,9 @@ class HttpClientManager: NSObject {
                             //print response.result
                             let value = response.result.value
                             let result = Mapper<OfflineAttachment>().map(JSONObject: value)
-                            self.showhideHUD(viewtype: .HIDE, title: "")
+                            if showHUD {
+                                self.showhideHUD(viewtype: .HIDE, title: "")
+                            }
                             completion(result?.result,result?.message)
                             
                         }
@@ -2940,7 +3036,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().syncGenerateContractDocumentInServer
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: URLEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: URLEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 
                 
                 let response = response.result.value
@@ -2969,7 +3065,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().syncInitiate_i360
             
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 
                 
                 let response = response.result.value
@@ -2977,6 +3073,39 @@ class HttpClientManager: NSObject {
                 if response != nil{
                     if(response?.result != nil)
                     {
+                        // Sync logs after successful response
+                        let appointmentId = UserDefaults.standard.integer(forKey: "current_appointment_id")
+                        if appointmentId > 0 {
+                            do {
+                                let realm = try Realm()
+                                let logs = realm.objects(rf_API_Log.self).filter("appointmentId == \(appointmentId)")
+                                if logs.count > 0 {
+                                    var logArray: [[String: Any]] = []
+                                    for log in logs {
+                                        logArray.append(log.toDictionary())
+                                    }
+                                    let logData = ["api_logs": logArray]
+                                    if let zipUrl = self.createAppointmentZipLogs(appointmentID: String(appointmentId), data: logData) {
+                                        self.CompressFileOfAppointment(appointmentId: String(appointmentId), fileURL: zipUrl, showHUD: false) { success, message in
+                                            if (success ?? "") == "Success" {
+                                                do {
+                                                    let realm = try Realm()
+                                                    let logsToDelete = realm.objects(rf_API_Log.self).filter("appointmentId == \(appointmentId)")
+                                                    try realm.write {
+                                                        realm.delete(logsToDelete)
+                                                    }
+                                                } catch {
+                                                    print("Failed to delete logs: \(error.localizedDescription)")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch {
+                                print("Realm error: \(error.localizedDescription)")
+                            }
+                        }
+                        
                         completion(response?.result,response?.message)
                     }
                 }
@@ -2999,7 +3128,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().uploadAppointmentLogs
             self.showhideHUD(viewtype: .SHOW, title: "Uploading logs. Please wait.")
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: JSONEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 
                 self.showhideHUD(viewtype: .HIDE)
                 let response = response.result.value
@@ -3032,7 +3161,7 @@ class HttpClientManager: NSObject {
             
             let URL = AppURL().logoutApi
             self.showhideHUD(viewtype: .SHOW, title: "Logging out. Please wait.")
-            Alamofire.request(URL, method: .post, parameters: parameter,encoding: URLEncoding.default).responseObject { (response:DataResponse<CashData>) in
+            self.makeRequest(URL, method: .post, parameters: parameter,encoding: URLEncoding.default).responseObject { (response:DataResponse<CashData>) in
                 self.showhideHUD(viewtype: .HIDE)
                 
                 print("*** \n\n LOGOUT API RESPONSE = \(response) \n\n ***")
@@ -3055,47 +3184,37 @@ class HttpClientManager: NSObject {
             
         }
     }
+    
+    //MARK: - Create Appointment Zip for Logs
+    func createAppointmentZipLogs(appointmentID: String, data: [String: Any]) -> URL? {
+        let fileManager = FileManager.default
+        let folderURL = fileManager.temporaryDirectory.appendingPathComponent(appointmentID + "_logs")
+        
+        do {
+            try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true, attributes: nil)
+            
+            let dataFileURL = folderURL.appendingPathComponent("data.txt")
+            let dataText = data.map { "\($0): \($1)" }.joined(separator: "\n")
+            try dataText.write(to: dataFileURL, atomically: true, encoding: .utf8)
+            
+            let zipFilePath = fileManager.temporaryDirectory.appendingPathComponent("\(appointmentID)_logs.zip")
+            try Zip.zipFiles(paths: [folderURL], zipFilePath: zipFilePath, password: nil, progress: nil)
+            return zipFilePath
+        } catch {
+            print("Error creating log zip: \(error)")
+            return nil
+        }
+    }
 }
 
 class NetworkSpeedTest {
 
     func testUploadSpeed(completion: @escaping (Double) -> Void) {
         
-        print("\n\n\n *** TEST-UPLOAD-SPEED called *** \n\n\n")
+        print("\n\n\n *** TEST-UPLOAD-SPEED bypassed for faster background sync *** \n\n\n")
         
-        // Generate data to upload (1 MB of data in this example)
-        let dataSize = 1 * 1024 * 1024 // 1 MB
-        let data = Data(repeating: 0, count: dataSize)
-        
-        // Start measuring time
-        let startTime = Date()
-        
-        // URL to upload data
-        let url = URL(string: "https://odoo.myx.ac")!
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        
-        print("** URL = = \(url) **")
-        
-        let task = URLSession.shared.uploadTask(with: request, from: data) { responseData, response, error in
-            // End measuring time
-            let endTime = Date()
-            
-            // Calculate time taken in seconds
-            let timeInterval = endTime.timeIntervalSince(startTime)
-            
-            // Calculate upload speed in Mbps
-            let speed = Double(dataSize) * 8 / timeInterval / (1024 * 1024) // Mbps
-            
-            // Return the upload speed
-            
-            print("\n **** SPEED = = = \(speed) **** \n")
-            
-            completion(speed)
-        }
-        
-        // Start the upload task
-        task.resume()
+        // Return a mocked reasonable speed instantly to prevent the 30-second background timeout
+        completion(10.0)
     }
 }
 

@@ -80,7 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,
         let config = Realm.Configuration(
             // Set the new schema version. This must be greater than the previously used
             // version (if you've never set a schema version before, the version is 0).
-            schemaVersion: 37,  //7, // production 12
+            schemaVersion: 40,  //7, // production 12
 
             // Set the block which will be called automatically when opening a Realm with
             // a schema version lower than the one set above
@@ -88,6 +88,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate,
                 // We haven't migrated anything yet, so oldSchemaVersion == 0
             }
         )
+        
+        // Ensure Realm files are accessible in background even if device is locked
+        if let realmURL = config.fileURL {
+            let folderURL = realmURL.deletingLastPathComponent()
+            try? FileManager.default.setAttributes([FileAttributeKey.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication], ofItemAtPath: folderURL.path)
+            try? FileManager.default.setAttributes([FileAttributeKey.protectionKey: FileProtectionType.completeUntilFirstUserAuthentication], ofItemAtPath: realmURL.path)
+        }
+        
         Realm.Configuration.defaultConfiguration = config
         IQKeyboardManager.shared.enable = true
         if UserDefaults.standard.string(forKey: "BASE_URL") ?? "" == "" {

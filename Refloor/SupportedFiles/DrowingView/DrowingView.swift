@@ -63,7 +63,7 @@ class Canvas: UIView {
         }
     }
     func getSignature() ->UIImage {
-        UIGraphicsBeginImageContext(CGSize(width: self.bounds.size.width, height: self.bounds.size.height))
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: self.bounds.size.width, height: self.bounds.size.height), false, 0.0)
         if let cgContext = UIGraphicsGetCurrentContext()
         {
             self.layer.render(in: cgContext)

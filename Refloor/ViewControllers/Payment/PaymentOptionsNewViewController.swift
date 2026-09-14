@@ -124,6 +124,7 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
     var restrictedPromo:[[Int:String]] = [[:]]
     var restrictedDiscount:[[Int:String]] = [[:]]
     var vapurBarrierValue:Double = 0.0
+    var officeLocationName:String = String()
     
     
     
@@ -171,6 +172,22 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
        appointmentOfficeLocationId = self.getMasterAppointmentOfficeLocationId()
         appointmentDate = (AppDelegate.appoinmentslData.appointment_date?.logDate())!
+        if ruleList.count > 0
+        {
+            for rules in ruleList
+            {
+                
+                for locationDetails in rules.office_location
+                        
+                {
+                    if locationDetails.office_location_id == appointmentOfficeLocationId
+                    {
+                        officeLocationName = locationDetails.office_location_name ?? ""
+                    }
+                    
+                }
+            }
+        }
 
         if specialPriceTable.count > 0
         {
@@ -218,9 +235,10 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         for paymentPlan in paymentPlans{
             self.paymentPlanValueDetails.append( PaymentPlanValue(paymentPlan: paymentPlan))
         }
+      
         if self.paymentPlanValueDetails.count == 0
         {
-            self.alert("No package is available for the selected market segment", nil)
+            self.alert("No package is available for the market segment  \(officeLocationName). Please log out, then log in again and try again.", nil)
         }
         for paymentMethod in productPaymentMethod{
             self.paymentRestrictionDataValueDetail.append(PaymentOptionDataValue(paymentOption: paymentMethod))
@@ -532,6 +550,81 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
             self.dismiss(animated: true, completion: nil)
         }
     }
+    
+    @objc override func OrderstatusBarButtonAction() {
+        let appointmentId = AppointmentData().appointment_id ?? 0
+        let currentClassName = String(describing: type(of: self))
+        let classDisplayName = "PaymentOption"
+        self.saveScreenCompletionTimeToDb(appointmentId: appointmentId, className: currentClassName, displayName: classDisplayName, time: Date())
+        
+        var savingsAmount = "0"
+        var selected_package_id = 0
+        var discountAmount: Int = 0
+        var additionalCost: Double = 0
+        var mrpPrice: Double = 0
+        var minimum_Sale_price: Double = 0
+        
+        if self.selectedPlan >= 0 {
+            selected_package_id = self.paymentPlanValueDetails[self.selectedPlan].id ?? 0
+            discountAmount = self.paymentPlanValueDetails[self.selectedPlan].discount ?? 0
+            additionalCost = self.paymentPlanValueDetails[self.selectedPlan].additional_cost ?? 0
+            minimum_Sale_price = self.paymentPlanValueDetails[self.selectedPlan].minimum_Sale_price ?? 0
+            
+            if savingsArray.count > self.selectedPlan {
+                savingsAmount = savingsArray[self.selectedPlan]
+                if let index = savingsAmount.firstIndex(of: "$") {
+                    savingsAmount.remove(at: index)
+                }
+            }
+            let msrppersqft = self.paymentPlanValueDetails[self.selectedPlan].cost_per_sqft ?? 0.0
+            mrpPrice = (msrppersqft * area) + stairPrice + additionalCost
+            mrpPrice = mrpPrice.rounded()
+            if mrpPrice < self.minimumFee {
+                mrpPrice = self.minimumFee
+            }
+        }
+        
+        let data = ["selected_package_id": selected_package_id,
+                    "appointment_id": appointmentId,
+                    "discount": discountAmount,
+                    "payment_method": "",
+                    "finance_option_id": 0,
+                    "additional_cost": additionalCost,
+                    "msrp": mrpPrice,
+                    "installation_date": "",
+                    "photo_permission": 0,
+                    "adjustment": self.adjestmentValue,
+                    "price": self.amountTotel,
+                    "down_payment_amount": self.downOrFinal,
+                    "final_payment": 0,
+                    "finance_amount": 0,
+                    "coapplicant_skip": 0,
+                    "savings": Double(savingsAmount) ?? 0,
+                    "special_price_id": 0,
+                    "stair_special_price_id": 0,
+                    "calc_based_on": "msrp",
+                    "stair_calc_based_on": "msrp",
+                    "promotion_code_id": self.promoCodeDropDownSelectedId,
+                    "excluded_amount_promotion": self.discount_exclude_amount,
+                    "min_sale_price": minimum_Sale_price] as [String : Any]
+        
+        self.savePaymentDetailsToAppointmentDetail(data: data as NSDictionary)
+        
+        let order  = OrderStatusViewController.initialization()!
+        order.delegate = self
+        order.appointmentResults = self.getAppointmentResultToShow(className: currentClassName, isNextBtn: false)
+        order.appoinmentslData = AppDelegate.appoinmentslData
+        
+        order.isFromPackageScreen = true
+        if self.selectedPlan >= 0 {
+            order.lastPriceQuoted = self.amountTotel
+            order.shouldShowLastQuotedPrice = true
+        } else {
+            order.shouldShowLastQuotedPrice = false
+        }
+        
+        self.present(order, animated: true, completion: nil)
+    }
     func promoDiscountApplied(discountAmount: Double, ispromoApplies: Bool, discountArray: [PromoDropDownStruct])
     {
 //        isPromoDiscountApplied = ispromoApplies
@@ -815,7 +908,8 @@ class PaymentOptionsNewViewController: UIViewController,UICollectionViewDelegate
         
         
         let alert = UIAlertController(title: AppDetails.APP_NAME, message: "Please enter the down payment", preferredStyle: .alert)
-        alert.view.subviews.first?.subviews.first?.backgroundColor = .clear
+        
+        //alert.view.subviews.first?.subviews.first?.backgroundColor = .clear
         alert.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = UIColor().colorFromHexString("#586471")
         alert.view.subviews.first?.subviews.first?.subviews.first?.borderColor = UIColor().colorFromHexString("#707070")
         alert.view.subviews.first?.subviews.first?.subviews.first?.borderWidth = 1

@@ -132,7 +132,18 @@ class LineView: UIView {
                         }
                     }
                     
-                    let limitedPoint = self.getLimitedPoint(at: position) // No need for optional binding
+                    let dx = position.x - lastPoint.point.x
+                    let dy = position.y - lastPoint.point.y
+                    
+                    if currentDrawingMode != .line && currentDrawingMode != .curve {
+                        if abs(dx) > abs(dy) {
+                            currentDrawingMode = .horizontal
+                        } else {
+                            currentDrawingMode = .vertical
+                        }
+                    }
+                    
+                    let limitedPoint = self.getLimitedPoint(at: position, referencePoint: lastPoint.point)
                     startTouch = lastPoint.point
                     
                     var snappedPoint = limitedPoint
@@ -194,7 +205,7 @@ class LineView: UIView {
         touchmoved=true
         if let touch = touches.first {
             let position = touch.location(in: self)
-            let limitedPoint = self.getLimitedPoint(at: position)
+            let limitedPoint = self.getLimitedPoint(at: position, referencePoint: startTouch)
             
             var snappedPoint = limitedPoint
             if let start = startTouch {
@@ -603,8 +614,8 @@ class LineView: UIView {
             }
         }
         
-        let offset: CGFloat = 30.0
-        return CGPoint(x: mid.x + ux * offset, y: mid.y + uy * offset)
+        let d = abs(ux) * 110 + abs(uy) * 45 + 15
+        return CGPoint(x: mid.x + ux * d, y: mid.y + uy * d)
     }
 
     func calculateAngle(from p1: CGPoint, to p2: CGPoint) -> CGFloat {
@@ -678,10 +689,10 @@ class LineView: UIView {
         let outsideNormalY = -insideNormalY
         
         // Calculate the required offset distance to prevent overlap
-        // Label size: W = 150, H = 30
-        let wHalf: CGFloat = 75
-        let hHalf: CGFloat = 15
-        let margin: CGFloat = 25
+        // Label size: W = 220, H = 90
+        let wHalf: CGFloat = 110
+        let hHalf: CGFloat = 45
+        let margin: CGFloat = 5
         
         // Offset for inside candidate
         let insideOffset = wHalf * abs(insideNormalX) + hHalf * abs(insideNormalY) + margin
@@ -855,7 +866,7 @@ class LineView: UIView {
         }
     }
     func labelConfigration(_ label: UILabel, _ cgPoint: CGPoint, distance: CGFloat, angle: CGFloat = 0) -> Float {
-        let value = Float((distance/minimumValue) * 100).rounded()/100
+        let value = round(Float(distance/minimumValue) * 12) / 12.0
         let ftValue = Float(Int(value))
         let inchVal = (value - ftValue) * 12
         let roundeInch = Int(inchVal)
@@ -863,15 +874,16 @@ class LineView: UIView {
         label.transform = .identity
         if roundeInch == 0 {
             label.text = "\(Int(value)) ft"
-            label.bounds = CGRect(x: 0, y: 0, width: 80, height: 30)
+            label.bounds = CGRect(x: 0, y: 0, width: 80, height: 25)
         } else {
             label.text = "\(Int(value)) ft \(roundeInch) in"
-            label.bounds = CGRect(x: 0, y: 0, width: 110, height: 30)
+            label.bounds = CGRect(x: 0, y: 0, width: 110, height: 25)
         }
+        label.numberOfLines = 1
         label.center = cgPoint
         label.transform = CGAffineTransform(rotationAngle: angle)
         
-        label.font = UIFont(name: "Avenir-Black", size: 17)
+        label.font = UIFont(name: "Avenir-Black", size: 15)
         label.backgroundColor = UIColor.white
         label.textColor = .black
         label.borderColor = .darkGray
@@ -881,11 +893,19 @@ class LineView: UIView {
     }
     
     func labelConfigration(_ label: LineSegmentControlView, _ cgPoint: CGPoint, distance: CGFloat, angle: CGFloat = 0, isCurved: Bool = false) -> Float {
-        let value = Float((distance/minimumValue) * 100).rounded()/100
+        let value = round(Float(distance/minimumValue) * 12) / 12.0
         
         label.lineView = self
         if label.pointObject == nil {
             label.pointObject = self.pointPath.first(where: { $0.label === label })
+        }
+        
+        if let idx = self.pointPath.firstIndex(where: { $0.label === label }) {
+            let wallNum = (idx == 0) ? self.pointPath.count : idx
+            label.wallBadgeLabel.text = "Wall \(wallNum)"
+            label.wallBadgeLabel.isHidden = true
+        } else {
+            label.wallBadgeLabel.isHidden = true
         }
         
         label.updateText(label.formatFeetValue(value))
@@ -902,9 +922,8 @@ class LineView: UIView {
         }
         
         label.transform = CGAffineTransform(scaleX: scale, y: scale)
-        if !isCurved {
-            label.transform = label.transform.rotated(by: angle)
-        }
+        // Removed rotation so the control view always stays horizontal
+        
         
         if let idx = self.pointPath.firstIndex(where: { $0.label === label }) {
             label.setSelected(selectedSegmentIndex == nil ? nil : (selectedSegmentIndex == idx))
@@ -949,7 +968,7 @@ class LineView: UIView {
             let newDistance = newLength * minimumValue
             
             let newEndPoint = CGPoint(x: startPoint.x + ux * newDistance, y: startPoint.y + uy * newDistance)
-            let limitedEndPoint = getLimitedPoint(at: newEndPoint)
+            let limitedEndPoint = getLimitedPoint(at: newEndPoint, snapToHalfFoot: false)
             endPointNode.point = limitedEndPoint
             endPointNode.subView.center = limitedEndPoint
             
@@ -957,7 +976,7 @@ class LineView: UIView {
             let cdx = pointObject.point.x - startPoint.x
             let cdy = pointObject.point.y - startPoint.y
             let newControlPoint = CGPoint(x: startPoint.x + cdx * scaleRatio, y: startPoint.y + cdy * scaleRatio)
-            let limitedControlPoint = getLimitedPoint(at: newControlPoint)
+            let limitedControlPoint = getLimitedPoint(at: newControlPoint, snapToHalfFoot: false)
             pointObject.point = limitedControlPoint
             pointObject.subView.center = limitedControlPoint
             
@@ -974,7 +993,7 @@ class LineView: UIView {
             
             let newDistance = newLength * minimumValue
             let proposedPoint = CGPoint(x: startPoint.x + ux * newDistance, y: startPoint.y + uy * newDistance)
-            let limitedPoint = getLimitedPoint(at: proposedPoint)
+            let limitedPoint = getLimitedPoint(at: proposedPoint, snapToHalfFoot: false)
             
             pointObject.point = limitedPoint
             pointObject.subView.center = limitedPoint
@@ -985,28 +1004,38 @@ class LineView: UIView {
     
     
     
-    func getLimitedPoint(at point:CGPoint) -> CGPoint
+    func getLimitedPoint(at point:CGPoint, referencePoint: CGPoint? = nil, snapToHalfFoot: Bool = true) -> CGPoint
     {
         var xVal = point.x
         var yVal = point.y
         
-        if(xVal > self.bounds.width)
-        {
-            xVal = self.bounds.width
-        }
-        else if(xVal < 40)
-        {
-            xVal = 40
+        let snapUnit = snapToHalfFoot ? (minimumValue / 2.0) : (minimumValue / 12.0)
+        
+        if let ref = referencePoint {
+            let dx = xVal - ref.x
+            let dy = yVal - ref.y
+            
+            if currentDrawingMode == .line || currentDrawingMode == .curve {
+                // Snap the actual distance (hypotenuse) to snapUnit so slanting and curved lines also adhere to 6-inch increments
+                let distance = hypot(dx, dy)
+                let snappedDistance = round(distance / snapUnit) * snapUnit
+                
+                if distance > 0 {
+                    xVal = ref.x + (dx / distance) * snappedDistance
+                    yVal = ref.y + (dy / distance) * snappedDistance
+                } else {
+                    xVal = ref.x
+                    yVal = ref.y
+                }
+            } else {
+                xVal = ref.x + round(dx / snapUnit) * snapUnit
+                yVal = ref.y + round(dy / snapUnit) * snapUnit
+            }
+        } else {
+            xVal = round(xVal / snapUnit) * snapUnit
+            yVal = round(yVal / snapUnit) * snapUnit
         }
         
-        if(yVal > self.bounds.height - 20)
-        {
-            yVal = self.bounds.height - 20
-        }
-        else if(yVal < 40)
-        {
-            yVal = 40
-        }
         return CGPoint(x: xVal, y: yVal)
     }
     
@@ -1292,6 +1321,7 @@ class LineView: UIView {
     }
     func removeAllPoints()
     {
+        self.deselectSegment()
         for point in pointPath
         {
             point.subView.removeFromSuperview()
@@ -1398,35 +1428,118 @@ class LineView: UIView {
             guard let startLocation = longPressStartLocations[draggedView] else { return }
             
             let translation = CGPoint(x: currentLocation.x - startLocation.x, y: currentLocation.y - startLocation.y)
-            longPressStartLocations[draggedView] = currentLocation
             
             let tagIndex = draggedView.tag
             let currentCenter = draggedView.center
-            let targetPoint = self.getLimitedPoint(at: CGPoint(x: currentCenter.x + translation.x, y: currentCenter.y + translation.y))
-            
-            let actualDx = targetPoint.x - currentCenter.x
-            let actualDy = targetPoint.y - currentCenter.y
             
             let xConnected = getXConnectedIndices(from: tagIndex, pointPath: pointPath)
             let yConnected = getYConnectedIndices(from: tagIndex, pointPath: pointPath)
+            let snapUnit = minimumValue / 2.0
+            var actualDx: CGFloat = 0
+            var actualDy: CGFloat = 0
             
-            for idx in xConnected {
-                var p = pointPath[idx].point
-                p.x += actualDx
-                p = self.getLimitedPoint(at: p)
-                pointPath[idx].point = p
-                pointPath[idx].subView.center = p
+            if xConnected.count > 1 || yConnected.count > 1 {
+                var xAnchor: CGPoint? = nil
+                var yAnchor: CGPoint? = nil
+                
+                for idx in xConnected {
+                    let idxNeighbors = isClosed ? [(idx - 1 + pointPath.count) % pointPath.count, (idx + 1) % pointPath.count] : [idx - 1, idx + 1].filter { $0 >= 0 && $0 < pointPath.count }
+                    for n in idxNeighbors {
+                        if !xConnected.contains(n) { xAnchor = pointPath[n].point; break }
+                    }
+                    if xAnchor != nil { break }
+                }
+                
+                for idx in yConnected {
+                    let idxNeighbors = isClosed ? [(idx - 1 + pointPath.count) % pointPath.count, (idx + 1) % pointPath.count] : [idx - 1, idx + 1].filter { $0 >= 0 && $0 < pointPath.count }
+                    for n in idxNeighbors {
+                        if !yConnected.contains(n) { yAnchor = pointPath[n].point; break }
+                    }
+                    if yAnchor != nil { break }
+                }
+                
+                let targetX = currentCenter.x + translation.x
+                let targetY = currentCenter.y + translation.y
+                
+                let snappedX = xAnchor != nil ? xAnchor!.x + round((targetX - xAnchor!.x) / snapUnit) * snapUnit : round(targetX / snapUnit) * snapUnit
+                let snappedY = yAnchor != nil ? yAnchor!.y + round((targetY - yAnchor!.y) / snapUnit) * snapUnit : round(targetY / snapUnit) * snapUnit
+                
+                actualDx = snappedX - currentCenter.x
+                actualDy = snappedY - currentCenter.y
+            } else {
+                let prevPt = isClosed ? pointPath[(tagIndex - 1 + pointPath.count) % pointPath.count].point : (tagIndex > 0 ? pointPath[tagIndex - 1].point : nil)
+                let nextPt = isClosed ? pointPath[(tagIndex + 1) % pointPath.count].point : (tagIndex < pointPath.count - 1 ? pointPath[tagIndex + 1].point : nil)
+                
+                let rawTargetX = currentCenter.x + translation.x
+                let rawTargetY = currentCenter.y + translation.y
+                
+                var finalTargetX = rawTargetX
+                var finalTargetY = rawTargetY
+                
+                if let p1 = prevPt, let p2 = nextPt {
+                    let d1 = hypot(rawTargetX - p1.x, rawTargetY - p1.y)
+                    let d2 = hypot(rawTargetX - p2.x, rawTargetY - p2.y)
+                    let l1 = round(d1 / snapUnit) * snapUnit
+                    let l2 = round(d2 / snapUnit) * snapUnit
+                    
+                    var bestIntersection: CGPoint? = nil
+                    var minD: CGFloat = .infinity
+                    for dl1 in [-snapUnit, 0.0, snapUnit] {
+                        for dl2 in [-snapUnit, 0.0, snapUnit] {
+                            let r1 = max(snapUnit, l1 + dl1)
+                            let r2 = max(snapUnit, l2 + dl2)
+                            let inters = self.getCircleIntersections(center1: p1, radius1: r1, center2: p2, radius2: r2)
+                            for inter in inters {
+                                let dist = hypot(inter.x - rawTargetX, inter.y - rawTargetY)
+                                if dist < minD {
+                                    minD = dist
+                                    bestIntersection = inter
+                                }
+                            }
+                        }
+                    }
+                    
+                    if let best = bestIntersection {
+                        finalTargetX = best.x
+                        finalTargetY = best.y
+                    } else {
+                        let refPoint = p1
+                        let targetPoint = self.getLimitedPoint(at: CGPoint(x: rawTargetX, y: rawTargetY), referencePoint: refPoint)
+                        finalTargetX = targetPoint.x
+                        finalTargetY = targetPoint.y
+                    }
+                } else {
+                    let refPoint = prevPt ?? nextPt
+                    let targetPoint = self.getLimitedPoint(at: CGPoint(x: rawTargetX, y: rawTargetY), referencePoint: refPoint)
+                    finalTargetX = targetPoint.x
+                    finalTargetY = targetPoint.y
+                }
+                
+                actualDx = finalTargetX - currentCenter.x
+                actualDy = finalTargetY - currentCenter.y
             }
             
-            for idx in yConnected {
-                var p = pointPath[idx].point
-                p.y += actualDy
-                p = self.getLimitedPoint(at: p)
-                pointPath[idx].point = p
-                pointPath[idx].subView.center = p
+            if actualDx != 0 || actualDy != 0 {
+                let xConnected = getXConnectedIndices(from: tagIndex, pointPath: pointPath)
+                let yConnected = getYConnectedIndices(from: tagIndex, pointPath: pointPath)
+                
+                for idx in xConnected {
+                    var p = pointPath[idx].point
+                    p.x += actualDx
+                    pointPath[idx].point = p
+                    pointPath[idx].subView.center = p
+                }
+                
+                for idx in yConnected {
+                    var p = pointPath[idx].point
+                    p.y += actualDy
+                    pointPath[idx].point = p
+                    pointPath[idx].subView.center = p
+                }
+                
+                longPressStartLocations[draggedView] = CGPoint(x: currentLocation.x - (translation.x - actualDx), y: currentLocation.y - (translation.y - actualDy))
+                moveShape()
             }
-            
-            moveShape()
         }
         
         if gestureRecognizer.state == .ended || gestureRecognizer.state == .cancelled || gestureRecognizer.state == .failed {
@@ -1572,6 +1685,21 @@ class LineView: UIView {
         }
         return minDistance
     }
+    func getCircleIntersections(center1: CGPoint, radius1: CGFloat, center2: CGPoint, radius2: CGFloat) -> [CGPoint] {
+        let dx = center2.x - center1.x
+        let dy = center2.y - center1.y
+        let d = hypot(dx, dy)
+        if d > radius1 + radius2 || d < abs(radius1 - radius2) || d == 0 { return [] }
+        let a = (radius1 * radius1 - radius2 * radius2 + d * d) / (2 * d)
+        let h = sqrt(max(0, radius1 * radius1 - a * a))
+        let p2x = center1.x + a * (center2.x - center1.x) / d
+        let p2y = center1.y + a * (center2.y - center1.y) / d
+        let p3x1 = p2x + h * (center2.y - center1.y) / d
+        let p3y1 = p2y - h * (center2.x - center1.x) / d
+        let p3x2 = p2x - h * (center2.y - center1.y) / d
+        let p3y2 = p2y + h * (center2.x - center1.x) / d
+        return [CGPoint(x: p3x1, y: p3y1), CGPoint(x: p3x2, y: p3y2)]
+    }
     
     func findClickedSegment(at position: CGPoint) -> Int? {
         let count = pointPath.count
@@ -1631,33 +1759,116 @@ class LineView: UIView {
             if let draggedView = gestureRecognizer.view {
                 let tagIndex = draggedView.tag
                 let currentCenter = draggedView.center
-                let targetPoint = self.getLimitedPoint(at: CGPoint(x: currentCenter.x + translation.x, y: currentCenter.y + translation.y))
-                
-                let actualDx = targetPoint.x - currentCenter.x
-                let actualDy = targetPoint.y - currentCenter.y
                 
                 let xConnected = getXConnectedIndices(from: tagIndex, pointPath: pointPath)
                 let yConnected = getYConnectedIndices(from: tagIndex, pointPath: pointPath)
+                let snapUnit = minimumValue / 2.0
+                var actualDx: CGFloat = 0
+                var actualDy: CGFloat = 0
                 
-                for idx in xConnected {
-                    var p = pointPath[idx].point
-                    p.x += actualDx
-                    p = self.getLimitedPoint(at: p)
-                    pointPath[idx].point = p
-                    pointPath[idx].subView.center = p
+                if xConnected.count > 1 || yConnected.count > 1 {
+                    var xAnchor: CGPoint? = nil
+                    var yAnchor: CGPoint? = nil
+                    
+                    for idx in xConnected {
+                        let idxNeighbors = isClosed ? [(idx - 1 + pointPath.count) % pointPath.count, (idx + 1) % pointPath.count] : [idx - 1, idx + 1].filter { $0 >= 0 && $0 < pointPath.count }
+                        for n in idxNeighbors {
+                            if !xConnected.contains(n) { xAnchor = pointPath[n].point; break }
+                        }
+                        if xAnchor != nil { break }
+                    }
+                    
+                    for idx in yConnected {
+                        let idxNeighbors = isClosed ? [(idx - 1 + pointPath.count) % pointPath.count, (idx + 1) % pointPath.count] : [idx - 1, idx + 1].filter { $0 >= 0 && $0 < pointPath.count }
+                        for n in idxNeighbors {
+                            if !yConnected.contains(n) { yAnchor = pointPath[n].point; break }
+                        }
+                        if yAnchor != nil { break }
+                    }
+                    
+                    let targetX = currentCenter.x + translation.x
+                    let targetY = currentCenter.y + translation.y
+                    
+                    let snappedX = xAnchor != nil ? xAnchor!.x + round((targetX - xAnchor!.x) / snapUnit) * snapUnit : round(targetX / snapUnit) * snapUnit
+                    let snappedY = yAnchor != nil ? yAnchor!.y + round((targetY - yAnchor!.y) / snapUnit) * snapUnit : round(targetY / snapUnit) * snapUnit
+                    
+                    actualDx = snappedX - currentCenter.x
+                    actualDy = snappedY - currentCenter.y
+                } else {
+                    let prevPt = isClosed ? pointPath[(tagIndex - 1 + pointPath.count) % pointPath.count].point : (tagIndex > 0 ? pointPath[tagIndex - 1].point : nil)
+                    let nextPt = isClosed ? pointPath[(tagIndex + 1) % pointPath.count].point : (tagIndex < pointPath.count - 1 ? pointPath[tagIndex + 1].point : nil)
+                    
+                    let rawTargetX = currentCenter.x + translation.x
+                    let rawTargetY = currentCenter.y + translation.y
+                    
+                    var finalTargetX = rawTargetX
+                    var finalTargetY = rawTargetY
+                    
+                    if let p1 = prevPt, let p2 = nextPt {
+                        let d1 = hypot(rawTargetX - p1.x, rawTargetY - p1.y)
+                        let d2 = hypot(rawTargetX - p2.x, rawTargetY - p2.y)
+                        let l1 = round(d1 / snapUnit) * snapUnit
+                        let l2 = round(d2 / snapUnit) * snapUnit
+                        
+                        var bestIntersection: CGPoint? = nil
+                        var minD: CGFloat = .infinity
+                        for dl1 in [-snapUnit, 0.0, snapUnit] {
+                            for dl2 in [-snapUnit, 0.0, snapUnit] {
+                                let r1 = max(snapUnit, l1 + dl1)
+                                let r2 = max(snapUnit, l2 + dl2)
+                                let inters = self.getCircleIntersections(center1: p1, radius1: r1, center2: p2, radius2: r2)
+                                for inter in inters {
+                                    let dist = hypot(inter.x - rawTargetX, inter.y - rawTargetY)
+                                    if dist < minD {
+                                        minD = dist
+                                        bestIntersection = inter
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if let best = bestIntersection {
+                            finalTargetX = best.x
+                            finalTargetY = best.y
+                        } else {
+                            let refPoint = p1
+                            let targetPoint = self.getLimitedPoint(at: CGPoint(x: rawTargetX, y: rawTargetY), referencePoint: refPoint)
+                            finalTargetX = targetPoint.x
+                            finalTargetY = targetPoint.y
+                        }
+                    } else {
+                        let refPoint = prevPt ?? nextPt
+                        let targetPoint = self.getLimitedPoint(at: CGPoint(x: rawTargetX, y: rawTargetY), referencePoint: refPoint)
+                        finalTargetX = targetPoint.x
+                        finalTargetY = targetPoint.y
+                    }
+                    
+                    actualDx = finalTargetX - currentCenter.x
+                    actualDy = finalTargetY - currentCenter.y
                 }
                 
-                for idx in yConnected {
-                    var p = pointPath[idx].point
-                    p.y += actualDy
-                    p = self.getLimitedPoint(at: p)
-                    pointPath[idx].point = p
-                    pointPath[idx].subView.center = p
+                if actualDx != 0 || actualDy != 0 {
+                    let xConnected = getXConnectedIndices(from: tagIndex, pointPath: pointPath)
+                    let yConnected = getYConnectedIndices(from: tagIndex, pointPath: pointPath)
+                    
+                    for idx in xConnected {
+                        var p = pointPath[idx].point
+                        p.x += actualDx
+                        pointPath[idx].point = p
+                        pointPath[idx].subView.center = p
+                    }
+                    
+                    for idx in yConnected {
+                        var p = pointPath[idx].point
+                        p.y += actualDy
+                        pointPath[idx].point = p
+                        pointPath[idx].subView.center = p
+                    }
+                    
+                    gestureRecognizer.setTranslation(CGPoint(x: translation.x - actualDx, y: translation.y - actualDy), in: self)
+                    moveShape()
                 }
             }
-            
-            gestureRecognizer.setTranslation(CGPoint(x: 0, y: 0), in: self)
-            moveShape()
         }
         
         if gestureRecognizer.state == .ended || gestureRecognizer.state == .cancelled || gestureRecognizer.state == .failed {
@@ -1956,24 +2167,66 @@ extension LineView{
                 controlView.plusButton.isHidden = isPreview
                 if isPreview {
                     controlView.containerPill.backgroundColor = goldColor
-                    controlView.textField.backgroundColor = .clear
-                    controlView.textField.textColor = .white
-                    controlView.unitLabel.textColor = goldColor
+                    controlView.feetTextField.backgroundColor = .clear
+                    controlView.feetTextField.textColor = .white
+                    controlView.inchesTextField.backgroundColor = .clear
+                    controlView.inchesTextField.textColor = .white
                     
-                    controlView.containerPill.frame = CGRect(x: 30, y: 0, width: 55, height: 30)
-                    controlView.textField.frame = CGRect(x: 0, y: 0, width: 55, height: 30)
-                    controlView.unitLabel.frame = CGRect(x: 90, y: 0, width: 30, height: 30)
+                    controlView.containerPill.frame = CGRect(x: 15, y: 22, width: 100, height: 30)
+                    controlView.feetTextField.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+                    controlView.feetLabel.frame = CGRect(x: 30, y: 0, width: 20, height: 30)
+                    controlView.inchesTextField.frame = CGRect(x: 50, y: 0, width: 28, height: 30)
+                    controlView.inchesLabel.frame = CGRect(x: 78, y: 0, width: 22, height: 30)
+                    
+                    controlView.feetLabel.textColor = .white
+                    controlView.wallBadgeLabel.isHidden = true
+                    controlView.wallBadgeLabel.frame = CGRect(x: 30, y: 0, width: 70, height: 20)
+                    controlView.wallBadgeLabel.backgroundColor = .clear
+                    controlView.wallBadgeLabel.textColor = .white
+                    controlView.wallBadgeLabel.layer.cornerRadius = 10
+                    controlView.wallBadgeLabel.clipsToBounds = true
+                    
+                    controlView.moldingDropdownButton.isHidden = true
+                    controlView.moldingDropdownButton.frame = CGRect(x: 0, y: 54, width: 130, height: 24)
+                    controlView.moldingDropdownButton.titleLabel?.font = UIFont.systemFont(ofSize: 10, weight: .regular)
+                    controlView.moldingDropdownButton.isUserInteractionEnabled = false
+                    controlView.moldingDropdownButton.backgroundColor = .clear
+                    controlView.moldingDropdownButton.setTitleColor(.white, for: .normal)
+                    controlView.moldingDropdownButton.layer.borderWidth = 0
+                    controlView.moldingDropdownButton.setImage(nil, for: .normal)
                 } else {
                     controlView.containerPill.backgroundColor = UIColor(red: 28/255, green: 28/255, blue: 30/255, alpha: 1.0)
-                    controlView.textField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
-                    controlView.textField.textColor = .white
-                    controlView.unitLabel.textColor = .white
+                    controlView.feetTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+                    controlView.feetTextField.textColor = .white
+                    controlView.feetLabel.textColor = .white
+                    controlView.inchesTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+                    controlView.inchesTextField.textColor = .white
+                    controlView.inchesLabel.textColor = .white
                     
-                    controlView.containerPill.frame = CGRect(x: 0, y: 0, width: 120, height: 30)
-                    controlView.minusButton.frame = CGRect(x: 4, y: 4, width: 22, height: 22)
-                    controlView.textField.frame = CGRect(x: 36, y: 4, width: 48, height: 22)
-                    controlView.plusButton.frame = CGRect(x: 94, y: 4, width: 22, height: 22)
-                    controlView.unitLabel.frame = CGRect(x: 124, y: 0, width: 26, height: 30)
+                    controlView.wallBadgeLabel.isHidden = true
+                    controlView.wallBadgeLabel.backgroundColor = .clear
+                    controlView.wallBadgeLabel.textColor = UIColor(red: 167/255, green: 176/255, blue: 186/255, alpha: 1.0)
+                    
+                    controlView.moldingDropdownButton.isHidden = true
+                    controlView.moldingDropdownButton.backgroundColor = UIColor(red: 28/255, green: 28/255, blue: 30/255, alpha: 1.0)
+                    controlView.moldingDropdownButton.setTitleColor(UIColor(red: 167/255, green: 176/255, blue: 186/255, alpha: 1.0), for: .normal)
+                    controlView.moldingDropdownButton.layer.borderWidth = 1
+                    if #available(iOS 13.0, *) {
+                        controlView.moldingDropdownButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+                    }
+                    
+                    controlView.containerPill.frame = CGRect(x: 12, y: 24, width: 196, height: 34)
+                    controlView.wallBadgeLabel.frame = CGRect(x: 75, y: 0, width: 70, height: 20)
+                    controlView.moldingDropdownButton.frame = CGRect(x: 52, y: 62, width: 135, height: 38)
+                    controlView.moldingDropdownButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+                    controlView.moldingDropdownButton.isUserInteractionEnabled = true
+                    
+                    controlView.minusButton.frame = CGRect(x: 6, y: 6, width: 22, height: 22)
+                    controlView.feetTextField.frame = CGRect(x: 34, y: 4, width: 40, height: 26)
+                    controlView.feetLabel.frame = CGRect(x: 76, y: 4, width: 18, height: 26)
+                    controlView.inchesTextField.frame = CGRect(x: 98, y: 4, width: 36, height: 26)
+                    controlView.inchesLabel.frame = CGRect(x: 136, y: 4, width: 22, height: 26)
+                    controlView.plusButton.frame = CGRect(x: 168, y: 6, width: 22, height: 22)
                 }
             }
         }
@@ -2008,9 +2261,9 @@ class customPointObjcet:NSObject
         self.dotView.clipsToBounds = true
         self.subView.addSubview(self.dotView)
         
-        // Inner core dot view (diameter 8) centered in the 18x18 container
-        self.coreView = UIView(frame: CGRect(x: 5, y: 5, width: 8, height: 8))
-        self.coreView.layer.cornerRadius = 4
+        // Inner core dot view (diameter 12) centered in the 18x18 container
+        self.coreView = UIView(frame: CGRect(x: 3, y: 3, width: 12, height: 12))
+        self.coreView.layer.cornerRadius = 6
         self.coreView.clipsToBounds = true
         self.dotView.addSubview(self.coreView)
     }
@@ -2019,18 +2272,21 @@ class customPointObjcet:NSObject
 class LineSegmentControlView: UIView, UITextFieldDelegate {
     weak var lineView: LineView?
     weak var pointObject: customPointObjcet?
-    
+    let wallBadgeLabel = UILabel()
+    let moldingDropdownButton = UIButton(type: .custom)
     let containerPill = UIView()
     let minusButton = UIButton(type: .custom)
-    let textField = UITextField()
+    let feetTextField = UITextField()
+    let feetLabel = UILabel()
+    let inchesTextField = UITextField()
+    let inchesLabel = UILabel()
     let plusButton = UIButton(type: .custom)
-    let unitLabel = UILabel()
     
     private var isUpdatingValue = false
     private var originalValueBeforeEditing: Float?
     
     override init(frame: CGRect) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 150, height: 30))
+        super.init(frame: CGRect(x: 0, y: 0, width: 220, height: 90))
         setupViews()
     }
     
@@ -2042,15 +2298,47 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
     private func setupViews() {
         self.backgroundColor = .clear
         
+        // Wall Badge Setup
+        wallBadgeLabel.frame = CGRect(x: 75, y: 0, width: 70, height: 20)
+        wallBadgeLabel.isHidden = true
+        wallBadgeLabel.backgroundColor = UIColor(red: 28/255, green: 28/255, blue: 30/255, alpha: 0.9)
+        wallBadgeLabel.textColor = .white
+        wallBadgeLabel.font = UIFont.systemFont(ofSize: 11, weight: .bold)
+        wallBadgeLabel.textAlignment = .center
+        wallBadgeLabel.layer.cornerRadius = 10
+        wallBadgeLabel.clipsToBounds = true
+        self.addSubview(wallBadgeLabel)
+        
         // Container Pill Setup
-        containerPill.frame = CGRect(x: 0, y: 0, width: 120, height: 30)
+        containerPill.frame = CGRect(x: 12, y: 24, width: 196, height: 34)
         containerPill.backgroundColor = UIColor(red: 28/255, green: 28/255, blue: 30/255, alpha: 1.0)
-        containerPill.layer.cornerRadius = 15
+        containerPill.layer.cornerRadius = 17
         containerPill.clipsToBounds = true
         self.addSubview(containerPill)
         
+        // Molding Dropdown Button Setup
+        moldingDropdownButton.frame = CGRect(x: 52, y: 62, width: 135, height: 38)
+        moldingDropdownButton.isHidden = true
+        moldingDropdownButton.backgroundColor = UIColor(red: 28/255, green: 28/255, blue: 30/255, alpha: 1.0)
+        moldingDropdownButton.layer.cornerRadius = 19
+        moldingDropdownButton.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        moldingDropdownButton.layer.borderWidth = 1
+        moldingDropdownButton.setTitle("Select Molding", for: .normal)
+        moldingDropdownButton.setTitleColor(UIColor(red: 167/255, green: 176/255, blue: 186/255, alpha: 1.0), for: .normal)
+        moldingDropdownButton.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        moldingDropdownButton.titleLabel?.lineBreakMode = .byTruncatingTail
+        moldingDropdownButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        if #available(iOS 13.0, *) {
+            moldingDropdownButton.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+            moldingDropdownButton.tintColor = UIColor(red: 167/255, green: 176/255, blue: 186/255, alpha: 1.0)
+            moldingDropdownButton.semanticContentAttribute = .forceRightToLeft
+            moldingDropdownButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
+        }
+        moldingDropdownButton.addTarget(self, action: #selector(moldingDropdownTapped), for: .touchUpInside)
+        self.addSubview(moldingDropdownButton)
+        
         // Minus Button Setup
-        minusButton.frame = CGRect(x: 4, y: 4, width: 22, height: 22)
+        minusButton.frame = CGRect(x: 6, y: 6, width: 22, height: 22)
         minusButton.backgroundColor = UIColor(white: 0.25, alpha: 1.0)
         minusButton.layer.cornerRadius = 11
         minusButton.setTitle("−", for: .normal)
@@ -2059,20 +2347,46 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
         minusButton.addTarget(self, action: #selector(minusTapped), for: .touchUpInside)
         containerPill.addSubview(minusButton)
         
-        // Text Field Setup
-        textField.frame = CGRect(x: 36, y: 4, width: 48, height: 22)
-        textField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
-        textField.textColor = .white
-        textField.textAlignment = .center
-        textField.font = UIFont(name: "Avenir-Black", size: 13)
-        textField.layer.cornerRadius = 6
-        textField.keyboardType = .decimalPad
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        containerPill.addSubview(textField)
+        // Feet Text Field Setup
+        feetTextField.frame = CGRect(x: 34, y: 4, width: 40, height: 26)
+        feetTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+        feetTextField.textColor = .white
+        feetTextField.textAlignment = .center
+        feetTextField.font = UIFont(name: "Avenir-Black", size: 13)
+        feetTextField.layer.cornerRadius = 6
+        feetTextField.keyboardType = .numberPad
+        feetTextField.delegate = self
+        feetTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        containerPill.addSubview(feetTextField)
+        
+        feetLabel.frame = CGRect(x: 76, y: 4, width: 18, height: 26)
+        feetLabel.text = "Ft."
+        feetLabel.textColor = .white
+        feetLabel.font = UIFont(name: "Avenir-Black", size: 12)
+        feetLabel.textAlignment = .left
+        containerPill.addSubview(feetLabel)
+        
+        // Inches Text Field Setup
+        inchesTextField.frame = CGRect(x: 98, y: 4, width: 36, height: 26)
+        inchesTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+        inchesTextField.textColor = .white
+        inchesTextField.textAlignment = .center
+        inchesTextField.font = UIFont(name: "Avenir-Black", size: 13)
+        inchesTextField.layer.cornerRadius = 6
+        inchesTextField.keyboardType = .numberPad
+        inchesTextField.delegate = self
+        inchesTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        containerPill.addSubview(inchesTextField)
+        
+        inchesLabel.frame = CGRect(x: 136, y: 4, width: 22, height: 26)
+        inchesLabel.text = "In."
+        inchesLabel.textColor = .white
+        inchesLabel.font = UIFont(name: "Avenir-Black", size: 12)
+        inchesLabel.textAlignment = .left
+        containerPill.addSubview(inchesLabel)
         
         // Plus Button Setup
-        plusButton.frame = CGRect(x: 94, y: 4, width: 22, height: 22)
+        plusButton.frame = CGRect(x: 168, y: 6, width: 22, height: 22)
         plusButton.backgroundColor = UIColor(white: 0.25, alpha: 1.0)
         plusButton.layer.cornerRadius = 11
         plusButton.setTitle("+", for: .normal)
@@ -2080,19 +2394,21 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
         plusButton.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
         plusButton.addTarget(self, action: #selector(plusTapped), for: .touchUpInside)
         containerPill.addSubview(plusButton)
-        
-        // Unit Label Setup
-        unitLabel.frame = CGRect(x: 124, y: 0, width: 26, height: 30)
-        unitLabel.text = "Ft."
-        unitLabel.textColor = .white
-        unitLabel.font = UIFont(name: "Avenir-Black", size: 14)
-        unitLabel.textAlignment = .left
-        self.addSubview(unitLabel)
     }
     
     func updateText(_ text: String) {
-        guard !textField.isFirstResponder else { return }
-        textField.text = text
+        guard !feetTextField.isFirstResponder && !inchesTextField.isFirstResponder else { return }
+        let feetVal = parseFeetValue(text) ?? 0
+        let totalInches = Int(round(feetVal * 12.0))
+        let feet = totalInches / 12
+        let inches = totalInches % 12
+        
+        feetTextField.text = "\(feet)"
+        inchesTextField.text = "\(inches)"
+    }
+    
+    @objc private func moldingDropdownTapped() {
+        lineView?.showMoldingPopup(for: self)
     }
     
     @objc private func minusTapped() {
@@ -2129,34 +2445,93 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
         guard !isUpdatingValue else { return }
-        guard let text = textField.text, let val = Float(text), val > 0 else { return }
-        guard let pointObject = pointObject, let lineView = lineView else { return }
         
-        pointObject.lineValue = val
-        lineView.updateSegmentLength(for: pointObject, newLength: CGFloat(val))
+        let feet = Float(feetTextField.text ?? "0") ?? 0
+        let inches = Float(inchesTextField.text ?? "0") ?? 0
+        let val = feet + (inches / 12.0)
+        
+        if val > 0 {
+            guard let pointObject = pointObject, let lineView = lineView else { return }
+            pointObject.lineValue = val
+            lineView.updateSegmentLength(for: pointObject, newLength: CGFloat(val))
+        }
     }
     
     private func updateValue(_ newVal: Float) {
         guard let pointObject = pointObject, let lineView = lineView else { return }
         isUpdatingValue = true
         pointObject.lineValue = newVal
-        textField.text = formatFeetValue(newVal)
+        
+        let totalInches = Int(round(newVal * 12.0))
+        let feet = totalInches / 12
+        let inches = totalInches % 12
+        feetTextField.text = "\(feet)"
+        inchesTextField.text = "\(inches)"
+        
         isUpdatingValue = false
         
         lineView.updateSegmentLength(for: pointObject, newLength: CGFloat(newVal))
     }
     
-    func formatFeetValue(_ val: Float) -> String {
-        let formatted = String(format: "%.2f", Double(val))
-        if formatted.hasSuffix(".00") {
-            return String(formatted.dropLast(3))
-        } else if formatted.hasSuffix("0") {
-            return String(formatted.dropLast(1))
+    func parseFeetValue(_ text: String) -> Float? {
+        let cleanText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let val = Float(cleanText) { return val }
+        
+        let lower = cleanText.lowercased()
+        
+        var feet: Float = 0
+        var inches: Float = 0
+        
+        let numbers = lower.components(separatedBy: CharacterSet.decimalDigits.inverted).filter { !$0.isEmpty }
+        
+        if lower.contains("ft") || lower.contains("'") {
+            if numbers.count > 0, let f = Float(numbers[0]) {
+                feet = f
+            }
+            if numbers.count > 1, let i = Float(numbers[1]) {
+                inches = i
+            }
+        } else if lower.contains("in") || lower.contains("\"") || lower.contains("inc") {
+            if numbers.count > 0, let i = Float(numbers[0]) {
+                inches = i
+            }
         }
-        return formatted
+        
+        return feet + (inches / 12.0)
+    }
+    
+    func formatFeetValue(_ val: Float) -> String {
+        let ftValue = Int(val)
+        let inchVal = Int(round((val - Float(ftValue)) * 12))
+        
+        if inchVal == 0 {
+            return "\(ftValue) Ft."
+        } else if inchVal == 12 {
+            return "\(ftValue + 1) Ft."
+        } else {
+            return "\(ftValue) Ft. \(inchVal) In."
+        }
     }
     
     // UITextFieldDelegate
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if textField == inchesTextField {
+            let currentText = textField.text ?? ""
+            guard let stringRange = Range(range, in: currentText) else { return false }
+            let updatedText = currentText.replacingCharacters(in: stringRange, with: string)
+            
+            if updatedText.isEmpty {
+                return true
+            }
+            
+            if let intValue = Int(updatedText) {
+                return intValue >= 0 && intValue <= 12
+            }
+            return false
+        }
+        return true
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         originalValueBeforeEditing = pointObject?.lineValue
         lineView?.saveState()
@@ -2168,10 +2543,14 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let text = textField.text, let val = Float(text), val > 0 {
+        let feet = Float(feetTextField.text ?? "0") ?? 0
+        let inches = Float(inchesTextField.text ?? "0") ?? 0
+        let val = feet + (inches / 12.0)
+        
+        if val > 0 {
             updateValue(val)
         } else {
-            if let text = textField.text, let val = Float(text), val <= 0 {
+            if val <= 0 {
                 if let vc = lineView?.delegate as? UIViewController {
                     let alert = UIAlertController(title: "Alert", message: "We cannot enter 0 as a measurement", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -2197,29 +2576,271 @@ class LineSegmentControlView: UIView, UITextFieldDelegate {
         if let selected = isSelected {
             if selected {
                 self.alpha = 1.0
-                textField.backgroundColor = .white
-                textField.textColor = .black
-                textField.layer.borderColor = UIColor(red: 0.75, green: 0.7, blue: 0.4, alpha: 1.0).cgColor
-                textField.layer.borderWidth = 1.5
+                feetTextField.backgroundColor = .white
+                feetTextField.textColor = .black
+                feetTextField.layer.borderColor = UIColor(red: 0.75, green: 0.7, blue: 0.4, alpha: 1.0).cgColor
+                feetTextField.layer.borderWidth = 1.5
+                inchesTextField.backgroundColor = .white
+                inchesTextField.textColor = .black
+                inchesTextField.layer.borderColor = UIColor(red: 0.75, green: 0.7, blue: 0.4, alpha: 1.0).cgColor
+                inchesTextField.layer.borderWidth = 1.5
                 minusButton.alpha = 1.0
                 plusButton.alpha = 1.0
             } else {
                 self.alpha = 0.4
-                textField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
-                textField.textColor = .white
-                textField.layer.borderColor = UIColor.clear.cgColor
-                textField.layer.borderWidth = 0
+                feetTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+                feetTextField.textColor = .white
+                feetTextField.layer.borderColor = UIColor.clear.cgColor
+                feetTextField.layer.borderWidth = 0
+                inchesTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+                inchesTextField.textColor = .white
+                inchesTextField.layer.borderColor = UIColor.clear.cgColor
+                inchesTextField.layer.borderWidth = 0
                 minusButton.alpha = 0.6
                 plusButton.alpha = 0.6
             }
         } else {
             self.alpha = 1.0
-            textField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
-            textField.textColor = .white
-            textField.layer.borderColor = UIColor.clear.cgColor
-            textField.layer.borderWidth = 0
+            feetTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+            feetTextField.textColor = .white
+            feetTextField.layer.borderColor = UIColor.clear.cgColor
+            feetTextField.layer.borderWidth = 0
+            inchesTextField.backgroundColor = UIColor(red: 18/255, green: 18/255, blue: 20/255, alpha: 1.0)
+            inchesTextField.textColor = .white
+            inchesTextField.layer.borderColor = UIColor.clear.cgColor
+            inchesTextField.layer.borderWidth = 0
             minusButton.alpha = 1.0
             plusButton.alpha = 1.0
         }
+    }
+}
+
+protocol MoldingSelectionDelegate: AnyObject {
+    func didSelectMolding(name: String, applyToAll: Bool, popup: MoldingSelectionPopupView)
+}
+
+class MoldingSelectionPopupView: UIView, UITableViewDelegate, UITableViewDataSource {
+    
+    weak var delegate: MoldingSelectionDelegate?
+    weak var targetControl: LineSegmentControlView?
+    var moldingList: [String] = []
+    var selectedMolding: String?
+    
+    private let tableView = UITableView()
+    private let applyToAllButton = UIButton(type: .custom)
+    private let applyButton = UIButton(type: .custom)
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        loadData()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupUI()
+        loadData()
+    }
+    
+    private func setupUI() {
+        self.backgroundColor = UIColor(red: 42/255, green: 42/255, blue: 46/255, alpha: 0.95)
+        self.layer.cornerRadius = 16
+        self.clipsToBounds = true
+        
+        tableView.backgroundColor = .clear
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.separatorStyle = .none
+        tableView.register(MoldingSelectionCell.self, forCellReuseIdentifier: "MoldingSelectionCell")
+        
+        applyToAllButton.setTitle("Apply to All", for: .normal)
+        applyToAllButton.backgroundColor = UIColor(red: 0x58/255.0, green: 0x64/255.0, blue: 0x71/255.0, alpha: 1.0) // #586471
+        applyToAllButton.layer.cornerRadius = 8
+        applyToAllButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 15)
+        applyToAllButton.addTarget(self, action: #selector(applyToAllTapped), for: .touchUpInside)
+        
+        applyButton.setTitle("Apply", for: .normal)
+        applyButton.backgroundColor = UIColor(red: 0x29/255.0, green: 0x25/255.0, blue: 0x62/255.0, alpha: 1.0) // #292562
+        applyButton.layer.cornerRadius = 8
+        applyButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 15)
+        applyButton.addTarget(self, action: #selector(applyTapped), for: .touchUpInside)
+        
+        self.addSubview(tableView)
+        self.addSubview(applyToAllButton)
+        self.addSubview(applyButton)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let padding: CGFloat = 12
+        let buttonHeight: CGFloat = 40
+        let buttonWidth = (self.bounds.width - (padding * 3)) / 2
+        
+        applyToAllButton.frame = CGRect(x: padding, y: self.bounds.height - buttonHeight - padding, width: buttonWidth, height: buttonHeight)
+        applyButton.frame = CGRect(x: padding * 2 + buttonWidth, y: self.bounds.height - buttonHeight - padding, width: buttonWidth, height: buttonHeight)
+        
+        tableView.frame = CGRect(x: 0, y: padding, width: self.bounds.width, height: self.bounds.height - buttonHeight - padding * 3)
+    }
+    
+    private func loadData() {
+        moldingList = ["Not Applicable"]
+        let molds = UIViewController().getMoldList()
+        for mold in molds {
+            if let name = mold.name {
+                moldingList.append(name)
+            }
+        }
+        tableView.reloadData()
+    }
+    
+    @objc private func applyToAllTapped() {
+        if let selected = selectedMolding {
+            delegate?.didSelectMolding(name: selected, applyToAll: true, popup: self)
+        }
+    }
+    
+    @objc private func applyTapped() {
+        if let selected = selectedMolding {
+            delegate?.didSelectMolding(name: selected, applyToAll: false, popup: self)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return moldingList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MoldingSelectionCell", for: indexPath) as! MoldingSelectionCell
+        let name = moldingList[indexPath.row]
+        cell.titleLabel.text = name
+        cell.isMoldingSelected = (name == selectedMolding)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedMolding = moldingList[indexPath.row]
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 44
+    }
+}
+
+class MoldingSelectionCell: UITableViewCell {
+    let titleLabel = UILabel()
+    let radioImageView = UIImageView()
+    
+    var isMoldingSelected: Bool = false {
+        didSet {
+            if isMoldingSelected {
+                if #available(iOS 13.0, *) {
+                    radioImageView.image = UIImage(systemName: "checkmark.circle.fill")
+                }
+                radioImageView.tintColor = .green
+                self.backgroundColor = UIColor(white: 1.0, alpha: 0.1)
+            } else {
+                if #available(iOS 13.0, *) {
+                    radioImageView.image = UIImage(systemName: "circle")
+                }
+                radioImageView.tintColor = .gray
+                self.backgroundColor = .clear
+            }
+        }
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
+        self.backgroundColor = .clear
+        
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont(name: "Avenir-Medium", size: 15)
+        
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(radioImageView)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let padding: CGFloat = 16
+        radioImageView.frame = CGRect(x: self.bounds.width - padding - 20, y: (self.bounds.height - 20) / 2, width: 20, height: 20)
+        titleLabel.frame = CGRect(x: padding, y: 0, width: self.bounds.width - padding * 3 - 20, height: self.bounds.height)
+    }
+}
+
+extension LineView: MoldingSelectionDelegate {
+    func showMoldingPopup(for control: LineSegmentControlView) {
+        // Remove existing if any
+        dismissMoldingPopup()
+        
+        let dimmer = UIView()
+        dimmer.tag = 999999
+        dimmer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        dimmer.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(dimmer)
+        
+        NSLayoutConstraint.activate([
+            dimmer.topAnchor.constraint(equalTo: self.topAnchor),
+            dimmer.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            dimmer.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            dimmer.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+        ])
+        
+        let popup = MoldingSelectionPopupView()
+        popup.delegate = self
+        popup.targetControl = control
+        let currentTitle = control.moldingDropdownButton.title(for: .normal)
+        if currentTitle != "Select Molding" {
+            popup.selectedMolding = currentTitle
+        }
+        popup.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.addSubview(popup)
+        
+        NSLayoutConstraint.activate([
+            popup.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            popup.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            popup.widthAnchor.constraint(equalToConstant: 300),
+            popup.heightAnchor.constraint(equalToConstant: 350)
+        ])
+        
+        self.bringSubviewToFront(popup)
+        
+        popup.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        popup.alpha = 0.0
+        dimmer.alpha = 0.0
+        
+        UIView.animate(withDuration: 0.25, delay: 0.0, options: .curveEaseOut, animations: {
+            popup.transform = .identity
+            popup.alpha = 1.0
+            dimmer.alpha = 1.0
+        }, completion: nil)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissMoldingPopup))
+        dimmer.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissMoldingPopup() {
+        for subview in self.subviews where subview is MoldingSelectionPopupView || subview.tag == 999999 {
+            subview.removeFromSuperview()
+        }
+    }
+    
+    func didSelectMolding(name: String, applyToAll: Bool, popup: MoldingSelectionPopupView) {
+        if applyToAll {
+            for point in pointPath {
+                if let control = point.label as? LineSegmentControlView {
+                    control.moldingDropdownButton.setTitle(name, for: .normal)
+                }
+            }
+        } else {
+            popup.targetControl?.moldingDropdownButton.setTitle(name, for: .normal)
+        }
+        dismissMoldingPopup()
     }
 }

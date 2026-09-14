@@ -44,6 +44,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     var removeCurrentCoveringAnswer: String? = nil
     var currentCoveringTypeAnswer: String? = nil
     var existingSubSurfaceAnswer: String? = nil
+    var completedRoomsToImport: [rf_completed_room] = []
     
     
     override func viewDidLoad() {
@@ -88,19 +89,45 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         //arb
 //        questionsListApiCall()
         var questionsList = RealmSwift.List<rf_master_question>()
+        
+        let completedRooms = getCompletedRoomFromDB(appointmentId: appointmentId)
+        let currentRoomIsStair = self.roomName.localizedCaseInsensitiveContains("stair")
+        
+        for room in completedRooms {
+            let isStair = room.room_name?.localizedCaseInsensitiveContains("stair") == true
+            if room.room_id != self.roomID {
+                if currentRoomIsStair == isStair {
+                    self.completedRoomsToImport.append(room)
+                }
+            }
+        }
         questionsList = self.getQuestionsForAppointment(appointmentId: appointmentId, roomId: roomID)
         var qustionAnswer: [QuestionsMeasurementData] = []
+        
+        // Determine if this is a custom room by checking if it exists in the master room list
+        let realm = try! Realm()
+        let isCustomRoom = realm.objects(rf_master_roomname.self).filter("room_id == %d", self.roomID).first == nil
+        
         questionsList.forEach{ question in
-            print("questionsList : ", questionsList)
-            //if !roomName.localizedCaseInsensitiveContains("stair") && area != 0
-            if area != 0
-            {
-                if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
-                qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
-                }
-            }else{
-                if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "stairs"){
-                    qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+            var isApplicable = true
+            
+            if isCustomRoom {
+                isApplicable = true
+            } else if question.applicableRooms.count > 0 {
+                isApplicable = question.applicableRooms.contains { $0.room_id == self.roomID }
+            }
+            
+            if isApplicable {
+                //if !roomName.localizedCaseInsensitiveContains("stair") && area != 0
+                if area != 0
+                {
+                    if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "rooms"){
+                        qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+                    }
+                }else{
+                    if (question.applicableTo ?? "" == "common" || question.applicableTo ?? "" == "stairs"){
+                        qustionAnswer.append(QuestionsMeasurementData(masterQuestions: question))
+                    }
                 }
             }
         }
@@ -246,7 +273,9 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                         dict["setDefaultAnswer"] = question.setDefaultAnswer
                         dict["calculate_order_wise"] = question.calculate_order_wise
                         dict["mandatory_for_current_surface_concrete"] = question.mandatory_for_current_surface_concrete
-                        dict["applicableRooms"] = List<rf_AnswerapplicableRooms>()
+                        let newApplicableRooms = List<rf_AnswerapplicableRooms>()
+                        newApplicableRooms.append(objectsIn: question.applicableRooms)
+                        dict["applicableRooms"] = newApplicableRooms
                         dict["rf_AnswerOFQustion"] = List<rf_AnswerOFQustion>()
                         realm.create(rf_master_question.self, value: dict, update: .all)
                     }
@@ -810,6 +839,106 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
         }
     }
     
+    @objc func importRoomAction(_ sender: UIButton) {
+        let roomNames = completedRoomsToImport.compactMap { $0.room_name }
+        let popup = SelectARoomPopupView(rooms: roomNames)
+        popup.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Find the topmost view to present the popup properly, avoiding clipping by table view cells.
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            NSLayoutConstraint.activate([
+                popup.topAnchor.constraint(equalTo: window.topAnchor),
+                popup.leadingAnchor.constraint(equalTo: window.leadingAnchor),
+                popup.trailingAnchor.constraint(equalTo: window.trailingAnchor),
+                popup.bottomAnchor.constraint(equalTo: window.bottomAnchor)
+            ])
+        } else {
+            self.view.addSubview(popup)
+            NSLayoutConstraint.activate([
+                popup.topAnchor.constraint(equalTo: self.view.topAnchor),
+                popup.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+                popup.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+                popup.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+            ])
+        }
+        
+        popup.onImport = { [weak self] index in
+            guard let self = self else { return }
+            let selectedRoom = self.completedRoomsToImport[index]
+            self.importData(from: selectedRoom)
+        }
+    }
+    
+    func importData(from previousRoom: rf_completed_room) {
+        // Copy the miscellaneous comment
+        if let previousMisc = previousRoom.miscellaneous_comments {
+            self.miscelleneous_Comments = previousMisc
+        }
+        
+        // Iterate through all current questions
+        for (index, currentQData) in self.qustionAnswer.enumerated() {
+            // Find a matching question in the previous room by code
+            if let matchedPrevQuestion = previousRoom.questionnaires.first(where: { $0.question_code == currentQData.code }),
+               let prevAnswersList = matchedPrevQuestion.rf_AnswerOFQustion.first?.answer {
+                
+                let answerStrings = Array(prevAnswersList)
+                if answerStrings.isEmpty { continue }
+                
+                let newAnswer = AnswerOFQustion(0)
+                
+                switch currentQData.question_type {
+                case "simple_choice":
+                    if let firstAns = answerStrings.first {
+                        let quote = QuoteLabelData(question_id: matchedPrevQuestion.id, value: firstAns)
+                        // Note: Some quotes have additional details, we map it back to original quote if possible
+                        if let originalQuote = currentQData.quote_label?.first(where: { $0.value == firstAns }) {
+                            newAnswer.singleSelection = originalQuote
+                        } else {
+                            newAnswer.singleSelection = quote
+                        }
+                    }
+                case "numerical_box":
+                    if let firstAns = answerStrings.first {
+                        if currentQData.code == "StairWidth" {
+                            if let stairDbl = Double(firstAns) {
+                                newAnswer.stairWidthDouble = stairDbl
+                            }
+                        } else {
+                            if let number = Int(firstAns) {
+                                newAnswer.numberVaue = number
+                            }
+                        }
+                    }
+                case "textbox":
+                    if let firstAns = answerStrings.first {
+                        newAnswer.textValue = firstAns
+                    }
+                case "multiple_choice":
+                    var quotes: [QuoteLabelData] = []
+                    for ansStr in answerStrings {
+                        if let originalQuote = currentQData.quote_label?.first(where: { $0.value == ansStr }) {
+                            quotes.append(originalQuote)
+                        } else {
+                            quotes.append(QuoteLabelData(question_id: matchedPrevQuestion.id, value: ansStr))
+                        }
+                    }
+                    newAnswer.multySelection = quotes
+                default:
+                    break
+                }
+                
+                self.qustionAnswer[index].answerOFQustion = newAnswer
+            }
+        }
+        
+        self.tableView.reloadData()
+        
+        let previousRoomName = previousRoom.room_name ?? "Room"
+        let alertMessage = "\(previousRoomName) details imported successfully. Please review and ensure these answers are accurate for the current room"
+        self.alert(alertMessage, nil)
+    }
+    
     @IBAction func nextButtonAction(_ sender: Any) {
         
         if(validation() == "")
@@ -880,7 +1009,7 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         
-            var cell = QustionsTableViewCell()
+        var cell: QustionsTableViewCell!
             if(indexPath.row == 0)
             {
                 cell = tableView.dequeueReusableCell(withIdentifier: "HeaderQustionsTableViewCell") as! QustionsTableViewCell
@@ -889,6 +1018,10 @@ class FurnitureQustionsViewController: UIViewController,UITableViewDelegate,UITa
                 cell.nextButton.setTitle((self.delegate != nil) ? "Save":"Next", for: .normal)
                 // cell.areaLabel.text = "\((self.roomData.name ?? "Unknown")) > Total Area: \(area) Sq.Fts"
                 cell.headingLabel.text =  "What is in this room ?"
+                if let importBtn = cell.importRoomButton {
+                    importBtn.addTarget(self, action: #selector(importRoomAction(_:)), for: .touchUpInside)
+                    importBtn.isHidden = self.completedRoomsToImport.isEmpty
+                }
             }
         else if indexPath.row == qustionAnswer.count + 1
         {
@@ -2500,6 +2633,184 @@ extension FurnitureQustionsViewController: ImagePickerDelegate {
         _ = self.saveSnapshotImage(savedImageName: snapShotImageName, appointmentId: appointmentId)
         //self.imageUploadScreenShot(image,imageName ?? name)
         
+    }
+}
+
+class SelectARoomPopupView: UIView {
+    
+    var rooms: [String] = []
+    var selectedIndex: Int?
+    var onImport: ((Int) -> Void)?
+    var onCancel: (() -> Void)?
+    
+    private let cardView = UIView()
+    private var tagButtons: [UIButton] = []
+    private let importButton = UIButton(type: .custom)
+    
+    init(rooms: [String]) {
+        self.rooms = rooms
+        super.init(frame: .zero)
+        setup()
+    }
+    
+    required init?(coder: NSCoder) { fatalError() }
+    
+    private func setup() {
+        self.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        
+        cardView.translatesAutoresizingMaskIntoConstraints = false
+        cardView.backgroundColor = UIColor(red: 88/255.0, green: 100/255.0, blue: 113/255.0, alpha: 1.0)
+        self.addSubview(cardView)
+        
+        NSLayoutConstraint.activate([
+            cardView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            cardView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            cardView.widthAnchor.constraint(equalToConstant: 750),
+            cardView.heightAnchor.constraint(greaterThanOrEqualToConstant: 300)
+        ])
+        
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.text = "Select a Room"
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont(name: "Avenir-Medium", size: 24)
+        titleLabel.textAlignment = .center
+        cardView.addSubview(titleLabel)
+        
+        let divider = UIView()
+        divider.translatesAutoresizingMaskIntoConstraints = false
+        divider.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+        cardView.addSubview(divider)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 20),
+            titleLabel.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            titleLabel.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            
+            divider.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
+            divider.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            divider.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            divider.heightAnchor.constraint(equalToConstant: 1)
+        ])
+        
+        let gridStack = UIStackView()
+        gridStack.axis = .vertical
+        gridStack.spacing = 15
+        gridStack.translatesAutoresizingMaskIntoConstraints = false
+        cardView.addSubview(gridStack)
+        
+        var currentRow: UIStackView?
+        for (index, room) in rooms.enumerated() {
+            if index % 5 == 0 {
+                currentRow = UIStackView()
+                currentRow?.axis = .horizontal
+                currentRow?.spacing = 15
+                currentRow?.distribution = .fillEqually
+                gridStack.addArrangedSubview(currentRow!)
+            }
+            
+            let btn = UIButton(type: .custom)
+            btn.setTitle(room, for: .normal)
+            btn.setTitleColor(.white, for: .normal)
+            btn.titleLabel?.font = UIFont(name: "Avenir-Black", size: 16)
+            btn.backgroundColor = UIColor(red: 45/255.0, green: 52/255.0, blue: 61/255.0, alpha: 1.0)
+            btn.tag = index
+            btn.heightAnchor.constraint(equalToConstant: 70).isActive = true
+            btn.addTarget(self, action: #selector(roomTapped(_:)), for: .touchUpInside)
+            
+            currentRow?.addArrangedSubview(btn)
+            tagButtons.append(btn)
+        }
+        
+        // Fill remaining spaces in last row
+        if let lastRow = currentRow, rooms.count % 5 != 0 {
+            let remainder = 5 - (rooms.count % 5)
+            for _ in 0..<remainder {
+                let spacer = UIView()
+                lastRow.addArrangedSubview(spacer)
+            }
+        }
+        
+        NSLayoutConstraint.activate([
+            gridStack.topAnchor.constraint(equalTo: divider.bottomAnchor, constant: 20),
+            gridStack.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            gridStack.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20)
+        ])
+        
+        let cancelBtn = UIButton(type: .custom)
+        cancelBtn.setTitle("Cancel", for: .normal)
+        cancelBtn.setTitleColor(.white, for: .normal)
+        cancelBtn.backgroundColor = UIColor(red: 45/255.0, green: 52/255.0, blue: 61/255.0, alpha: 1.0)
+        cancelBtn.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 24)
+        cancelBtn.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
+        
+        importButton.setTitle("Import", for: .normal)
+        importButton.setTitleColor(.white, for: .normal)
+        importButton.backgroundColor = UIColor(red: 41/255.0, green: 37/255.0, blue: 98/255.0, alpha: 1.0)
+        importButton.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 24)
+        importButton.layer.borderColor = UIColor(red: 167/255.0, green: 176/255.0, blue: 186/255.0, alpha: 1.0).cgColor
+        importButton.layer.borderWidth = 1
+        importButton.addTarget(self, action: #selector(importTapped), for: .touchUpInside)
+        
+        let actionStack = UIStackView(arrangedSubviews: [cancelBtn, importButton])
+        actionStack.axis = .horizontal
+        actionStack.spacing = 20
+        actionStack.distribution = .fillEqually
+        actionStack.translatesAutoresizingMaskIntoConstraints = false
+        cardView.addSubview(actionStack)
+        
+        NSLayoutConstraint.activate([
+            actionStack.topAnchor.constraint(equalTo: gridStack.bottomAnchor, constant: 30),
+            actionStack.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 20),
+            actionStack.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -20),
+            actionStack.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -20),
+            actionStack.heightAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+    
+    @objc private func roomTapped(_ sender: UIButton) {
+        selectedIndex = sender.tag
+        
+        for btn in tagButtons {
+            btn.backgroundColor = UIColor(red: 45/255.0, green: 52/255.0, blue: 61/255.0, alpha: 1.0)
+            btn.layer.borderWidth = 0
+            btn.viewWithTag(999)?.removeFromSuperview()
+        }
+        
+        sender.backgroundColor = UIColor(red: 41/255.0, green: 37/255.0, blue: 98/255.0, alpha: 1.0)
+        sender.layer.borderColor = UIColor.white.cgColor
+        sender.layer.borderWidth = 3
+        
+        let checkIcon = UIImageView()
+        if #available(iOS 13.0, *) {
+            checkIcon.image = UIImage(systemName: "checkmark.circle.fill")
+            checkIcon.tintColor = .white
+        }
+        checkIcon.tag = 999
+        checkIcon.backgroundColor = UIColor(red: 41/255.0, green: 29/255.0, blue: 107/255.0, alpha: 1.0)
+        checkIcon.layer.cornerRadius = 10
+        checkIcon.clipsToBounds = true
+        checkIcon.translatesAutoresizingMaskIntoConstraints = false
+        sender.addSubview(checkIcon)
+        
+        NSLayoutConstraint.activate([
+            checkIcon.topAnchor.constraint(equalTo: sender.topAnchor, constant: 5),
+            checkIcon.trailingAnchor.constraint(equalTo: sender.trailingAnchor, constant: -5),
+            checkIcon.widthAnchor.constraint(equalToConstant: 20),
+            checkIcon.heightAnchor.constraint(equalToConstant: 20)
+        ])
+    }
+    
+    @objc private func cancelTapped() {
+        onCancel?()
+        self.removeFromSuperview()
+    }
+    
+    @objc private func importTapped() {
+        if let idx = selectedIndex {
+            onImport?(idx)
+            self.removeFromSuperview()
+        }
     }
 }
 

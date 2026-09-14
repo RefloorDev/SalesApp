@@ -28,7 +28,7 @@ struct AppURL
     //let STAGE_BASE_URL = "http://34.48.50.165:7007/api/"//"https://odoostage.myx.ac/api/"
     let STAGE_BASE_URL = "https://odoostage.myx.ac/api/"
     //let LIVE_BASE_URL = "https://refloor-stage.odooapps.oneteam.us/api/" // Stage
-    //let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
+   // let LIVE_BASE_URL = "https://odoostage.myx.ac/api/" // Stage
      //let LIVE_BASE_URL = "http://35.199.10.7:7007/api/"
       let LIVE_BASE_URL = "https://odoo.myx.ac/api/"
 //http://server.oneteamus.com:2446

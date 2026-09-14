@@ -13,6 +13,7 @@ class QustionsTableViewCell: UITableViewCell {
     @IBOutlet weak var headingLabel: UILabel!
     @IBOutlet weak var skipButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
+    weak var importRoomButton: UIButton?
     //@IBOutlet weak var subHeadingLabel: UILabel!
     
     @IBOutlet weak var numerical_Qustion_Label: UILabel!
@@ -35,6 +36,24 @@ class QustionsTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        if let nextBtn = nextButton, let parent = nextBtn.superview {
+            let btn = UIButton(type: .custom)
+            btn.setTitle("Import Room", for: .normal)
+            btn.setTitleColor(.white, for: .normal)
+            btn.backgroundColor = UIColor(red: 88/255.0, green: 100/255.0, blue: 113/255.0, alpha: 1.0)
+            btn.titleLabel?.font = UIFont(name: "Avenir-Heavy", size: 24) ?? UIFont.boldSystemFont(ofSize: 24)
+            btn.translatesAutoresizingMaskIntoConstraints = false
+            parent.addSubview(btn)
+            self.importRoomButton = btn
+            
+            NSLayoutConstraint.activate([
+                btn.trailingAnchor.constraint(equalTo: nextBtn.leadingAnchor, constant: -20),
+                btn.centerYAnchor.constraint(equalTo: nextBtn.centerYAnchor),
+                btn.heightAnchor.constraint(equalToConstant: 70),
+                btn.widthAnchor.constraint(equalToConstant: 207)
+            ])
+        }
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

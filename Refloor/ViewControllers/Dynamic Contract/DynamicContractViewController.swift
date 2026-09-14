@@ -294,11 +294,20 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
                     print("fieldArray",self.fieldArray)
                     self.checkboxArray.removeAll()
                     for i in 0...self.fieldArray.count-1{
-                        self.page = self.pdfView.document?.page(at: self.fieldArray[i].page-1)
+                        //self.page = self.pdfView.document?.page(at: self.fieldArray[i].page-1)
+                        self.page = document?.page(at: self.fieldArray[i].page-1)
                         if self.page == nil
                         {
-                            self.alert("Contract Not found", nil)
-                            return
+                            let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                                
+                                self.addAnnotationsWithoutCoApplicant()
+                                
+                            }
+                            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                            
+                            //self.alert((message), [yes,no])
+                            self.alert("Contract Not properly loaded. Please try again", [yes,no])
+                            
                         }
                         self.pageRect=self.page.bounds(for: .trimBox)
                         self.pageheight=self.pageRect.size.height
@@ -1217,6 +1226,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             {
                 customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
             }
+            customerAndRoomData["create_date"] = Date().getSyncDateAsString()
             if HttpClientManager.SharedHM.connectedToNetwork()
             {
                 if !isCardVerified
@@ -1325,7 +1335,7 @@ class DynamicContractViewController: UIViewController,PDFDocumentDelegate,UIText
             let date = appointment?.appointment_datetime ?? ""
             var parameterToPass:[String:Any] = [:]
             let decodeOption:[String:Bool] = ["verify_signature":false]
-            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
+            parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"create_date": customerAndRoomData["create_date"] as? String ?? Date().getSyncDateAsString()]
             HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
                 if(success ?? "") == "Success"
                 {

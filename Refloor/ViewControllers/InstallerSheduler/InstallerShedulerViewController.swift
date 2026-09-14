@@ -459,6 +459,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         {
             customerAndRoomData["payment_transaction_info"] = self.payment_TrasnsactionDict
         }
+        customerAndRoomData["create_date"] = Date().getSyncDateAsString()
         
         let appointment = self.getAppointmentData(appointmentId: AppointmentData().appointment_id ?? 0)
         let firstName = appointment?.applicant_first_name ?? ""
@@ -468,7 +469,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         let date = appointment?.appointment_datetime ?? ""
         var parameterToPass:[String:Any] = [:]
         let decodeOption:[String:Bool] = ["verify_signature":false]
-        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"create_date": Date().getSyncDateAsString()]
+        parameterToPass = ["token": UserData.init().token ?? "" ,"decode_options":decodeOption,"data":customerAndRoomData,"network_strength":networkMessage,"create_date": customerAndRoomData["create_date"] as? String ?? Date().getSyncDateAsString()]
         HttpClientManager.SharedHM.updateCustomerAndRoomInfoAPi(parameter: parameterToPass, isOnlineCollectBtnPressed: false) { success, message,payment_status,payment_message,transactionId,cardType  in
             if(success ?? "") == "Success"
             {
@@ -555,7 +556,7 @@ class InstallerShedulerViewController: UIViewController,installerConfirmProtocol
         customerDict["customer"] = customerData
         customerDict["rooms"] = createRoomParameters()
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
-        customerDict["operation_mode"] = "Online"
+        customerDict["operation_mode"] = "online"
         customerDict["app_version"] = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         return customerDict
     }

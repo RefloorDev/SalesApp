@@ -1037,6 +1037,7 @@ extension ViewLogListViewController{
         let appoint_id = room["appointment_id"]  as? Int ?? 0
         let image_name = room["image_name"] as? String ?? ""
         let image_type = room["image_type"] as? String ?? ""
+        let create_date = room["create_date"] as? String ?? ""
         //log
         self.addImageStatLogs(appointmentId: appoint_id, imageType: image_type)
         //
@@ -1051,7 +1052,7 @@ extension ViewLogListViewController{
             networkMessage = String(format: "%.2f", speed)
             networkMessage += "Mbps"
         }
-        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage) { success, message, imageName in
+        HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: String(appoint_id ?? 0), roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type,roomName: room_name,networkMessage: networkMessage,createDate: create_date) { success, message, imageName in
             if(success ?? "") == "Success"{
                 print(message ?? "No msg")
                 if let imageNam = imageName{

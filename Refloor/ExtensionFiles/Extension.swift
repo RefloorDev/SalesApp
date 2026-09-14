@@ -2312,6 +2312,15 @@ extension UIViewController:OrderStatusViewDelegate
         let currentClassName = String(describing: type(of: self))
         order.appointmentResults = self.getAppointmentResultToShow(className: currentClassName, isNextBtn: false)
         order.appoinmentslData = AppDelegate.appoinmentslData
+        
+        var isForwardOfPackage = false
+        if let nav = self.navigationController {
+            let hasPackage = nav.viewControllers.contains { String(describing: type(of: $0)) == "PaymentOptionsNewViewController" }
+            let isPackage = self is PaymentOptionsNewViewController
+            isForwardOfPackage = hasPackage && !isPackage
+        }
+        order.shouldShowLastQuotedPrice = isForwardOfPackage
+        
         self.present(order, animated: true, completion: nil)
         //}
         //        else
@@ -3634,7 +3643,7 @@ extension UIViewController:OrderStatusViewDelegate
         }
     }
     
-    func saveDynamicContractData(templateId:Int,documentURL:String,name:String,type:String)
+    func saveDynamicContractData(templateId:Int,documentURL:String,name:String,type:String) -> Bool
     {
         do
         {
@@ -3650,15 +3659,23 @@ extension UIViewController:OrderStatusViewDelegate
                             {
                         contractValue.data = contractData
                             }
+                    else
+                    {
+                        return false
+                    }
                     
     
                     realm.create(rf_customRoomName.self, value: ["template_id": templateId,"document_url": documentURL, "name":name, "type": type], update: .all)
+                    return true
                 }
+               // return true
             }
+            return true
             
         }catch{
             print(RealmError.initialisationFailed)
         }
+        return true
     }
     
     func identifyMoldingTypesSelectedForRooms() -> [String]{
@@ -4469,7 +4486,8 @@ extension UIViewController:OrderStatusViewDelegate
                                           "request_parameter" : requestParameter.JsonString(),
                                           "request_type" : requestType.rawValue,
                                           "sync_status" : true,
-                                          "image_name": imageName]
+                                          "image_name": imageName,
+                                          "create_date": Date().getSyncDateAsString()]
                 realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .all)
             }
         }catch{
@@ -4512,7 +4530,8 @@ extension UIViewController:OrderStatusViewDelegate
                                               "request_parameter" : requestParameter.JsonString(),
                                               "request_type" : requestType.rawValue,
                                               "sync_status" : false,
-                                              "image_name": imageName]
+                                              "image_name": imageName,
+                                              "create_date": Date().getSyncDateAsString()]
                     print("Dictionary to be created/updated in Realm: \(dict)")
                     print("Dictionary to be created/updated in Realm1: \(rf_Completed_Appointment_Request.self)")
                     realm.create(rf_Completed_Appointment_Request.self, value: dict, update: .modified )

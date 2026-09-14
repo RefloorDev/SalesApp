@@ -395,6 +395,8 @@ class SubSqureView: UIView {
         let segments = getParentSegments()
         guard !segments.isEmpty else {
             self.center = proposedCenter
+            let defaultAngle: CGFloat = self.isVertical ? .pi/2 : 0
+            self.transform = CGAffineTransform(rotationAngle: defaultAngle)
             return
         }
         
@@ -440,7 +442,6 @@ class SubSqureView: UIView {
             }
         }
         
-        self.center = closestPoint
         var scale: CGFloat = 1.0
         if let _ = self.superview as? LineView {
             let value = Float((closestSegmentLength / minimumValue) * 100).rounded() / 100
@@ -448,7 +449,16 @@ class SubSqureView: UIView {
                 scale = 0.65
             }
         }
-        self.transform = CGAffineTransform(rotationAngle: closestAngle).scaledBy(x: scale, y: scale)
+        
+        if closestDistance < 50 {
+            self.center = closestPoint
+            self.transform = CGAffineTransform(rotationAngle: closestAngle).scaledBy(x: scale, y: scale)
+        } else {
+            self.center = proposedCenter
+            let defaultAngle: CGFloat = self.isVertical ? .pi/2 : 0
+            self.transform = CGAffineTransform(rotationAngle: defaultAngle).scaledBy(x: scale, y: scale)
+        }
+        
         self.layerSharae.strokeColor = getLineColor().cgColor
         self.dashedLayer.strokeColor = getLineColor().cgColor
         self.backgroundColor = self.getOpeningBackgroundColor()

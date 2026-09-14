@@ -343,6 +343,13 @@ class SelectRoomCommentPopUpViewController: UIViewController,UITextFieldDelegate
         {
             self.alert("Please enter a custom room name", nil)
         }
+        
+       else if let text = roomNameTxtFld.text,
+           text.range(of: "stair", options: .caseInsensitive) != nil {
+            print("Contains 'stair' or any word containing it")
+           self.alert("You cannot have 'Stairs' in the name of your custom room", nil)
+        }
+        
         else
         {
             self.dismiss(animated: true)

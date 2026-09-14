@@ -53,6 +53,15 @@ class TransactionViewController: UIViewController,UITableViewDelegate,UITableVie
         transitionListApi()
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.popOver?.dismiss(animated: false)
+        } else {
+            self.imagePicker.dismiss(animated: false, completion: nil)
+        }
+    }
     func textViewDidBeginEditing(_ textView: UITextView) {
         if(placeHolder == (textView.text ?? ""))
         {

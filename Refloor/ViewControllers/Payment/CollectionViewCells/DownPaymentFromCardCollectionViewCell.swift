@@ -37,6 +37,8 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
     var cardExpiry:String = String()
     var cardPin:String = String()
     @IBOutlet weak var cardScanButton: UIButton!
+    let infoButton = UIButton(type: .custom)
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -44,6 +46,36 @@ class DownPaymentFromCardCollectionViewCell: UICollectionViewCell,UICollectionVi
         cardNumberTF.addTarget(self, action: #selector(reformatAsCardNumber), for: .editingChanged)
         cardPinTF.addTarget(self, action: #selector(reformatAsCardNumber), for: .editingChanged)
         
+        infoButton.setImage(UIImage(named: "iButton"), for: .normal)
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(infoButton)
+        NSLayoutConstraint.activate([
+            infoButton.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
+            infoButton.leadingAnchor.constraint(equalTo: totalLabel.trailingAnchor, constant: 10),
+            infoButton.widthAnchor.constraint(equalToConstant: 24),
+            infoButton.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func infoButtonTapped() {
+        if let parentVC = self.delegate as? UIViewController {
+            let popupVC = InfoImagesPopupViewController()
+            popupVC.modalPresentationStyle = .overFullScreen
+            popupVC.modalTransitionStyle = .crossDissolve
+            
+            if let text = totalLabel.text, text.lowercased().contains("credit") {
+                if let frontImg = UIImage(named: "credit_front_info"), let backImg = UIImage(named: "credit_back_info") {
+                    popupVC.images = [frontImg, backImg]
+                }
+            } else {
+                if let frontImg = UIImage(named: "debit_front_info"), let backImg = UIImage(named: "debit_back_info") {
+                    popupVC.images = [frontImg, backImg]
+                }
+            }
+            
+            parentVC.present(popupVC, animated: true, completion: nil)
+        }
     }
     func collectionViewConfigruation(collectionViewData:[String],delegate:ExternalCollectionViewDelegateForTableView?)
     {

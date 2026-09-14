@@ -184,7 +184,14 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
                        }
                        else if question.question_name == "Closets To Install"
                        {
-                           cell.closetInstalledLbl.text = question.rf_AnswerOFQustion[0].answer.count > 0 ? question.rf_AnswerOFQustion[0].answer[0] : "0"
+                           if question.rf_AnswerOFQustion.count > 0
+                           {
+                               cell.closetInstalledLbl.text = question.rf_AnswerOFQustion[0].answer.count > 0 ? question.rf_AnswerOFQustion[0].answer[0] : "0"
+                           }
+                           else
+                           {
+                               cell.closetInstalledLbl.text = "0"
+                           }
                        }
                        print(question)
                    }
@@ -373,16 +380,31 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         case 1:
             return 70
         case 2:
+            return UITableView.automaticDimension
+        case 3:
+            return 70
+        case 4:
+            return UITableView.automaticDimension
+        default:
+            return 115
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section
+        {
+        case 0:
+            return 115
+        case 1:
+            return 70
+        case 2:
             return 225
         case 3:
             return 70
         case 4:
-            return 183
+            return 225
         default:
             return 115
         }
-        
     }
-    
-    
 }

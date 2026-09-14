@@ -128,7 +128,14 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
     var cardExpiry: String = String()
     var cardPin: String = String()
     let signature = "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"  //"password"//UserData.init().token ?? ""//
+    var isPaymentProcessing = false
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.popOver?.dismiss(animated: false)
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -283,9 +290,12 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
         )
         //JWT<paymentOptionUser>(header)
         self.setNavigationBarbackAndlogo(with: "DOWN PAYMENT".uppercased())
+        self.view.isUserInteractionEnabled = true
+        self.isPaymentProcessing = false
         if isOCR {
             return
         }
+        downpaymentSelectionObjcet.removeAll()
         let payment1 = DownPaymentSelectionObj(
             paymentType: .Cash,
             lable: self.cashLabel,
@@ -1881,6 +1891,9 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
     }
 
     @objc func goNextPageForPAyButtonAction() {
+        if isPaymentProcessing { return }
+        isPaymentProcessing = true
+        self.view.isUserInteractionEnabled = false
         if paymentType == .CreditCard || paymentType == .DebitCard
             || paymentType == .ACH
         {
@@ -1972,16 +1985,18 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
 
             // params["network_strength"] = networkMessage
 
+            parameter["create_date"] = Date().getSyncDateAsString()
+            let dbParameter = parameter
+
             parameterToPass = [
                 "token": UserData.init().token ?? "",
                 "decode_options": decodeOption, "data": parameter,
                 "network_strength": networkMessage,
-                "create_date": Date().getSyncDateAsString(),
+                "create_date": parameter["create_date"] as? String ?? Date().getSyncDateAsString(),
             ]
             // }
             // let paymentOptionUserDetails = paymentOptionUser(payment_Method: "cash", paymentDetails: userPaymentDetails)
 
-            let dbParameter = parameter
             //
 
             //parameter["token"] = UserData.init().token ?? ""
@@ -2054,6 +2069,8 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
                     } else if (success ?? "") == "AuthFailed"
                         || ((success ?? "") == "authfailed")
                     {
+                        self.isPaymentProcessing = false
+                        self.view.isUserInteractionEnabled = true
 
                         let yes = UIAlertAction(title: "OK", style: .default) {
                             (_) in
@@ -2067,6 +2084,8 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
                         )
 
                     } else {
+                        self.isPaymentProcessing = false
+                        self.view.isUserInteractionEnabled = true
                         let yes = UIAlertAction(title: "Retry", style: .default)
                         { (_) in
                             self.goNextPageForPAyButtonAction()
@@ -2091,6 +2110,7 @@ class DownPaymentViewController: UIViewController, UICollectionViewDelegate,
     }
 
     @objc func cardDetailsAPiSuccess() {
+        self.view.isUserInteractionEnabled = true
         if self.paymentType == .Cash {
             DispatchQueue.main.async {
                 let cancel = AppointmentSummaryViewController.initialization()!
@@ -3252,6 +3272,69 @@ extension DownPaymentViewController {
                     cell.checkNumberTF.text = data.checkNumber
                 }
             }
+        }
+    }
+}
+
+class InfoImagesPopupViewController: UIViewController {
+    
+    var images: [UIImage] = []
+    
+    private let containerView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = UIColor(hex: "#515C68") ?? UIColor(displayP3Red: 81/255, green: 92/255, blue: 104/255, alpha: 1)
+        v.layer.cornerRadius = 16
+        v.layer.borderWidth = 2
+        v.layer.borderColor = UIColor.lightGray.cgColor
+        v.clipsToBounds = true
+        return v
+    }()
+    
+    private let stackView: UIStackView = {
+        let sv = UIStackView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        sv.axis = .vertical
+        sv.spacing = 10
+        sv.alignment = .fill
+        sv.distribution = .fillEqually
+        return sv
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.7)
+        
+        view.addSubview(containerView)
+        containerView.addSubview(stackView)
+        
+        NSLayoutConstraint.activate([
+            containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.6),
+            containerView.heightAnchor.constraint(lessThanOrEqualTo: view.heightAnchor, multiplier: 0.6),
+            
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            stackView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            stackView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16)
+        ])
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(backgroundTapped(_:)))
+        view.addGestureRecognizer(tapGesture)
+        
+        for image in images {
+            let imageView = UIImageView(image: image)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.contentMode = .scaleAspectFit
+            stackView.addArrangedSubview(imageView)
+        }
+    }
+    
+    @objc private func backgroundTapped(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: view)
+        if !containerView.frame.contains(location) {
+            dismiss(animated: true, completion: nil)
         }
     }
 }

@@ -45,6 +45,14 @@ class AboutRoomViewController: UIViewController,UITableViewDelegate,UITableViewD
         imagePicker.delegate = self
         
     }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.popOver?.dismiss(animated: false)
+        } else {
+            self.imagePicker.dismiss(animated: false, completion: nil)
+        }
+    }
     
     override func viewDidAppear(_ animated: Bool)
     {

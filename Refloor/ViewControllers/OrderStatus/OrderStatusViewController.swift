@@ -53,6 +53,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
     var appointmentResults = List<rf_master_appointments_results_demoedNotDemoed>()
     var appointDetailsResults:List<rf_appointment_result_reasons_results>!
     var selectedResultId = 0
+    var lastPriceQuoted: Double? = nil
+    var isFromPackageScreen: Bool = false
+    var shouldShowLastQuotedPrice: Bool = false
     
     
     override func viewDidLoad() {
@@ -64,8 +67,26 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         whatsnewTextView.textColor = placeholderColor
         whthpndTextView.text = "Enter here"
         whthpndTextView.textColor = placeholderColor 
-        priceQuotedTextView.text = "Enter here"
-        priceQuotedTextView.textColor = placeholderColor
+        
+        var priceToDisplay = lastPriceQuoted
+        if shouldShowLastQuotedPrice && (priceToDisplay == nil || priceToDisplay! <= 0) {
+            let paymentDetails = self.getPaymentDetailsDataFromAppointmentDetail()
+            if let price = paymentDetails["price"] as? Double, price > 0 {
+                priceToDisplay = price
+            } else if let price = paymentDetails["price"] as? Int, price > 0 {
+                priceToDisplay = Double(price)
+            }
+        }
+        
+        if let price = priceToDisplay, price > 0 {
+            priceQuotedTextView.text = floor(price) == price ? "$\(Int(price))" : String(format: "$%.2f", price)
+            priceQuotedTextView.textColor = .white
+            priceQuotedTextView.isEditable = false
+        } else {
+            priceQuotedTextView.text = "Enter here"
+            priceQuotedTextView.textColor = placeholderColor
+            priceQuotedTextView.isEditable = true
+        }
         if appoinmentslData?.isHomeOwnersPrsent ?? false
         {
             dropDownString = ["Yes"]
@@ -275,7 +296,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         
     }
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == placeholderColor {
+        if textView.text == "Enter here" {
             textView.text = nil
             textView.textColor = UIColor.white
         }
@@ -301,7 +322,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             whthpndTextView.borderWidth = 1
             whthpndTextView.isUserInteractionEnabled=true
             whthpndButton.isHidden=true
-            whthpndTextView.text=""
+            if whthpndTextView.text == "Enter here" {
+                whthpndTextView.text=""
+            }
             whthpndTextView.becomeFirstResponder()
             whathpnderrorLabel.isHidden=true
         }
@@ -322,7 +345,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             whatsnewTextView.borderWidth = 1
             whatsnewTextView.isUserInteractionEnabled=true
             whtnextButton.isHidden=true
-            whatsnewTextView.text=""
+            if whatsnewTextView.text == "Enter here" {
+                whatsnewTextView.text=""
+            }
             whatsnewTextView.becomeFirstResponder()
             whatsnxterrorLabel.isHidden=true
         }
@@ -342,7 +367,9 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             priceQuotedTextView.borderWidth = 1
             priceQuotedTextView.isUserInteractionEnabled=true
             priceQuoted.isHidden=true
-            priceQuotedTextView.text=""
+            if priceQuotedTextView.text == "Enter here" {
+                priceQuotedTextView.text=""
+            }
             priceQuotedTextView.becomeFirstResponder()
             lastPricerrorLabel.isHidden=true
         }
@@ -747,6 +774,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
             let image_name = room["image_name"] as? String ?? ""
             let image_type = room["image_type"] as? String ?? ""
             let dataCompleted = room["data_completed"] as? Int ?? 0
+            let create_Date = room["create_date"] as? String ?? ""
             //log
             let appoint_Id = (AppointmentData().appointment_id ?? 0)
             self.addImageStatLogs(appointmentId: appoint_Id, imageType: image_type)
@@ -762,7 +790,7 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
                 print("Upload speed: \(speed) Mbps")
                 networkMessage = String(format: "%.2f", speed)
                 networkMessage += "Mbps"
-                HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name, networkMessage: networkMessage) { success, message, imageName in
+                HttpClientManager.SharedHM.syncImagesOfAppointment(appointmentId: appoint_id, roomId: room_id_str, attachments: file, imagename: image_name, imageType: image_type, dataCompleted: String(dataCompleted),roomName: room_name, networkMessage: networkMessage, createDate: create_Date) { success, message, imageName in
                     if(success ?? "") == "Success"{
                         group.leave()
                         print(message ?? "No msg")
@@ -945,6 +973,14 @@ class OrderStatusViewController: UIViewController,DropDownDelegate,UITextViewDel
         customerDict["answer"] = createQuestionAnswerForAllRoomsParameter()
         customerDict["operation_mode"] = "offline"
         customerDict["app_version"] = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        
+        if self.isFromPackageScreen {
+            let paymentDetails = self.getPaymentDetailsDataFromAppointmentDetail()
+            if !paymentDetails.isEmpty {
+                customerDict["paymentdetails"] = paymentDetails
+            }
+        }
+        
         return customerDict
     }
     

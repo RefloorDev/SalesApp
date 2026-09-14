@@ -64,6 +64,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     var hight:CGFloat = 0
     var selectedPostion = 0
     var areaSquareFt = 0
+    var yAxisLayerSmallDots:CAShapeLayer!
     var yAxisLayerSharae:CAShapeLayer!
     var xAxisLayerSharae:CAShapeLayer!
     var roomData:RoomDataValue!
@@ -98,6 +99,12 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.view.backgroundColor = UIColor(red: 35/255.0, green: 43/255.0, blue: 53/255.0, alpha: 1.0)
+        if let master = self.masterView {
+            master.backgroundColor = UIColor(red: 35/255.0, green: 43/255.0, blue: 53/255.0, alpha: 1.0)
+        }
+        
         //
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         minimumValue = 40
@@ -123,7 +130,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             //        }
             transitionHeightId = transitionHeightDropDownArray[0].transitionHeightId
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        DispatchQueue.main.async {
             // Commented out to prevent the scroll view content view from collapsing to 0 width.
             /*
             if let rightContainer = self.addView?.superview {
@@ -372,9 +379,10 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 }
             }
             
-            // Validation: Measurement should not be less than 0.5 ft
+            // Validation: Measurement should not be less than 0.5 ft, and molding must be selected
             var hasInvalidLine = false
             var hasAnyValidLine = false
+            var hasMissingMolding = false
             
             for point in self.drowingView.pointPath {
                 if !point.label.isHidden {
@@ -383,7 +391,11 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                     }
                     if point.lineValue < 0.5 {
                         hasInvalidLine = true
-                        break
+                    }
+                    if let control = point.label as? LineSegmentControlView {
+                        if control.moldingDropdownButton.title(for: .normal) == "Select Molding" {
+                            hasMissingMolding = true
+                        }
                     }
                 }
             }
@@ -399,6 +411,10 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
                 self.alert("The estimated area must be greater than 0.", nil)
                 return
             }
+            // if hasMissingMolding {
+            //     self.alert("Please select molding for each wall", nil)
+            //     return
+            // }
             
             if self.drowingView.subSquareView.isEmpty {     // Q4_Change Add Openings Popup
                 self.alert("Please select add openings", nil)
@@ -415,7 +431,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         self.view.endEditing(true)
         
         let dimmer = UIView()
-        dimmer.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        dimmer.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         dimmer.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(dimmer)
         self.confirmationDimmerView = dimmer
@@ -450,6 +466,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         contentPanel.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(contentPanel)
         
+        self.drowingView.deselectSegment()
         self.drowingView.configureForPreview(true)
         self.drowingView.layoutIfNeeded()
         
@@ -483,6 +500,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         
         let wasGridHidden = self.yAxisLayerSharae?.isHidden ?? false
         self.yAxisLayerSharae?.isHidden = true
+        self.yAxisLayerSmallDots?.isHidden = true
         
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -581,6 +599,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         UIGraphicsEndImageContext()
         
         self.yAxisLayerSharae?.isHidden = wasGridHidden
+        self.yAxisLayerSmallDots?.isHidden = wasGridHidden
         self.capturedConfirmationImage = drawingImage
         self.drowingView.isOpaque = originalOpaque
         self.drowingView.configureForPreview(false)
@@ -721,93 +740,89 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
     {
         graph_minimunValue = minimumValue
         
-        if(graph_minimunValue == 30)
-        {
+        if(graph_minimunValue == 30) {
             graph_minimunValue *= 2
-            //               self.graphMood.setTitle("2x", for: .normal)
-            //               self.graphMood.tag = 1
             orginalgraphXvalue = 1
         }
-        else if(graph_minimunValue == 20)
-        {
+        else if(graph_minimunValue == 20) {
             graph_minimunValue *= 3
-            //               self.graphMood.setTitle("3x", for: .normal)
-            //               self.graphMood.tag = 2
             orginalgraphXvalue = 2
         }
-        else if(graph_minimunValue == 10)
-        {
+        else if(graph_minimunValue == 10) {
             graph_minimunValue *= 4
-            //               self.graphMood.setTitle("4x", for: .normal)
-            //               self.graphMood.tag = 3
             orginalgraphXvalue = 3
         }
-        else if(graph_minimunValue == 5)
-        {
+        else if(graph_minimunValue == 5) {
             graph_minimunValue *= 10
-            //               self.graphMood.setTitle("10x", for: .normal)
-            //               self.graphMood.tag = 4
             orginalgraphXvalue = 4
         }
-        else if graph_minimunValue == 1
-        {
+        else if graph_minimunValue == 1 {
             graph_minimunValue *= 50
-            //               self.graphMood.setTitle("50x", for: .normal)
-            //               self.graphMood.tag = 5
             orginalgraphXvalue = 5
         }
-        else if graph_minimunValue != 40
-        {
+        else if graph_minimunValue != 40 {
             graph_minimunValue *= 100
-            //               self.graphMood.setTitle("100x", for: .normal)
-            //               self.graphMood.tag = 6
             orginalgraphXvalue = 6
         }
-        else
-        {
-            //               self.graphMood.setTitle("1x", for: .normal)
-            //               self.graphMood.tag = 0
+        else {
             orginalgraphXvalue = 0
         }
         
-        let xAxispath = UIBezierPath()
-        let tmpwidth: CGFloat = 10000.0
-        intWidth = tmpwidth / graph_minimunValue
-        width = ((intWidth ) * graph_minimunValue) + graph_minimunValue
+        let spacing = graph_minimunValue
+        let halfSpacing = spacing / 2.0
+        let size = CGSize(width: spacing, height: spacing)
         
-        let tmphight: CGFloat = 10000.0
-        intHight = Int(tmphight / graph_minimunValue)
-        hight = CGFloat((intHight + 1) * Int(graph_minimunValue))
-        // Draw horizontal lines with a dashed pattern to create dots
-        for i in 0...(intHight + 2)
-        {
-            let yvalue =  (Int(graph_minimunValue) * i)
-            xAxispath.move(to: CGPoint(x: 0, y: yvalue))
-            xAxispath.addLine(to: CGPoint(x:Int(width), y: yvalue))
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            UIGraphicsEndImageContext()
+            return
         }
         
-        if(yAxisLayerSharae == nil)
-        {
-            yAxisLayerSharae = CAShapeLayer()
-            yAxisLayerSharae.backgroundColor = UIColor.clear.cgColor
-            yAxisLayerSharae.path = xAxispath.cgPath
-            yAxisLayerSharae.fillColor = UIColor.clear.cgColor
-            yAxisLayerSharae.strokeColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
-            yAxisLayerSharae.lineWidth = 3.5 // Larger single point size
-            yAxisLayerSharae.lineCap = .round
-            yAxisLayerSharae.lineDashPattern = [0, NSNumber(value: Double(graph_minimunValue))]
-            sender.layer.insertSublayer(yAxisLayerSharae, at: 0)
-        }
-        else
-        {
-            yAxisLayerSharae.path = xAxispath.cgPath
-            yAxisLayerSharae.lineWidth = 3.5
-            yAxisLayerSharae.lineCap = .round
-            yAxisLayerSharae.lineDashPattern = [0, NSNumber(value: Double(graph_minimunValue))]
+        let dotColor = UIColor.lightGray.withAlphaComponent(0.6).cgColor
+        context.setFillColor(dotColor)
+        
+        // Small dots (diameter 1.5)
+        let smallRadius: CGFloat = 1.5 / 2.0
+        let smallPoints = [
+            CGPoint(x: halfSpacing, y: halfSpacing), // Center
+            CGPoint(x: halfSpacing, y: 0),           // Top edge
+            CGPoint(x: halfSpacing, y: spacing),     // Bottom edge
+            CGPoint(x: 0, y: halfSpacing),           // Left edge
+            CGPoint(x: spacing, y: halfSpacing)      // Right edge
+        ]
+        for pt in smallPoints {
+            context.addArc(center: pt, radius: smallRadius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            context.fillPath()
         }
         
+        // Large dots (diameter 3.5)
+        let largeRadius: CGFloat = 3.5 / 2.0
+        let largePoints = [
+            CGPoint(x: 0, y: 0),             // Top-Left corner
+            CGPoint(x: spacing, y: 0),       // Top-Right corner
+            CGPoint(x: 0, y: spacing),       // Bottom-Left corner
+            CGPoint(x: spacing, y: spacing)  // Bottom-Right corner
+        ]
+        for pt in largePoints {
+            context.addArc(center: pt, radius: largeRadius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            context.fillPath()
+        }
         
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         
+        if let patternImage = image {
+            let patternView = UIView(frame: sender.bounds)
+            patternView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            patternView.backgroundColor = UIColor(patternImage: patternImage)
+            patternView.isUserInteractionEnabled = false
+            
+            // Remove previous pattern view if exists
+            sender.viewWithTag(8888)?.removeFromSuperview()
+            patternView.tag = 8888
+            
+            sender.insertSubview(patternView, at: 0)
+        }
     }
     
     
@@ -1192,10 +1207,19 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         self.view.addSubview(popup)
         self.activeCustomPopup = popup
         
+        let lead = popup.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100)
+        lead.priority = .defaultHigh
+        let trail = popup.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100)
+        trail.priority = .defaultHigh
+        let minWidth = popup.widthAnchor.constraint(greaterThanOrEqualToConstant: 750)
+        
         NSLayoutConstraint.activate([
-            popup.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             popup.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            popup.widthAnchor.constraint(equalToConstant: 340)
+            lead,
+            trail,
+            minWidth,
+            popup.topAnchor.constraint(greaterThanOrEqualTo: self.view.topAnchor, constant: 50),
+            popup.bottomAnchor.constraint(lessThanOrEqualTo: self.view.bottomAnchor, constant: -50)
         ])
         
         popup.onCancel = { [weak self] in
@@ -1354,11 +1378,8 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
             minimumValue = 40
             self.graphMoodLabel.text = "1X"
         }
-        self.sidePanel?.scaleDropdownBtn.setTitle(self.graphMoodLabel.text, for: .normal)
-        if let text = self.graphMoodLabel.text {
-            let scaleFt = text.replacingOccurrences(of: "X", with: "")
-            self.sidePanel?.scaleSub.text = "Scale 1 Unit = \(scaleFt) Ft."
-        }
+        // self.sidePanel?.scaleDropdownBtn.setTitle(self.graphMoodLabel.text, for: .normal)
+        // Removed dynamic text override to keep "Scale 1 unit = 6 Inch" static
         setgraphView(self.drowingView)
         if self.drowingView!.pointPath.count != 0
         {
@@ -1667,9 +1688,7 @@ class CustomShapeLineViewController: UIViewController,CustomViewDelegate,LineVie
         self.addView?.isHidden = true
         self.selected_View?.isHidden = true
         
-        self.masterView?.backgroundColor = UIColor(red: 35/255.0, green: 43/255.0, blue: 53/255.0, alpha: 1.0)
         self.drowingContentView?.backgroundColor = .clear
-        self.view.backgroundColor = UIColor(red: 35/255.0, green: 43/255.0, blue: 53/255.0, alpha: 1.0)
         self.areaTF?.textColor = UIColor().colorFromHexString("#FFFFFF")
         
         self.navigationController?.setNavigationBarHidden(true, animated: false)
@@ -2069,6 +2088,7 @@ class DrawingToolbar: UIView {
     }
     
     private func setup() {
+        self.backgroundColor = .clear
         backgroundColor = .clear
         
         undoBtn.addTarget(self, action: #selector(undoTapped), for: .touchUpInside)
@@ -2309,10 +2329,19 @@ extension CustomShapeLineViewController: DrawingToolbarDelegate {
         self.view.addSubview(popup)
         self.activeCustomPopup = popup
         
+        let lead = popup.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 100)
+        lead.priority = .defaultHigh
+        let trail = popup.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -100)
+        trail.priority = .defaultHigh
+        let minWidth = popup.widthAnchor.constraint(greaterThanOrEqualToConstant: 750)
+        
         NSLayoutConstraint.activate([
-            popup.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             popup.centerYAnchor.constraint(equalTo: self.view.centerYAnchor),
-            popup.widthAnchor.constraint(equalToConstant: 340)
+            lead,
+            trail,
+            minWidth,
+            popup.topAnchor.constraint(greaterThanOrEqualTo: self.view.topAnchor, constant: 50),
+            popup.bottomAnchor.constraint(lessThanOrEqualTo: self.view.bottomAnchor, constant: -50)
         ])
         
         popup.onCancel = { [weak self] in
@@ -2401,7 +2430,7 @@ class FloatingSidePanelView: UIView {
     private let containerView = UIView()
     private let handleView = UIImageView()
     
-    let scaleDropdownBtn = ScaleDropdownButton(type: .custom)
+    
     let scaleLabel = UILabel()
     let scaleSub = UILabel()
     let areaValueLabel = UITextField()
@@ -2429,6 +2458,7 @@ class FloatingSidePanelView: UIView {
     }
     
     private func setup() {
+        self.backgroundColor = .clear
         backgroundColor = .clear
         
         containerView.backgroundColor = UIColor().colorFromHexString("#2D343D")
@@ -2462,25 +2492,13 @@ class FloatingSidePanelView: UIView {
         scaleTitle.minimumScaleFactor = 0.5
         topBox.addSubview(scaleTitle)
         
-        scaleSub.text = "Scale 1 Unit = 1 Ft."
+        scaleSub.text = "Scale 1 unit = 6 Inch"
         scaleSub.font = UIFont(name: "Avenir-Roman", size: 14) ?? UIFont.systemFont(ofSize: 14)
         scaleSub.textColor = UIColor().colorFromHexString("#A7B0BA")
         scaleSub.translatesAutoresizingMaskIntoConstraints = false
         scaleSub.adjustsFontSizeToFitWidth = true
         scaleSub.minimumScaleFactor = 0.5
         topBox.addSubview(scaleSub)
-        
-        scaleDropdownBtn.setTitle("1x", for: .normal)
-        scaleDropdownBtn.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 14) ?? UIFont.systemFont(ofSize: 14)
-        scaleDropdownBtn.setTitleColor(UIColor().colorFromHexString("#FFFFFF"), for: .normal)
-        scaleDropdownBtn.layer.cornerRadius = 8
-        scaleDropdownBtn.layer.borderWidth = 1
-        scaleDropdownBtn.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
-        scaleDropdownBtn.backgroundColor = UIColor().colorFromHexString("#58647133")
-        scaleDropdownBtn.translatesAutoresizingMaskIntoConstraints = false
-        scaleDropdownBtn.addTarget(self, action: #selector(scaleBtnTapped(_:)), for: .touchUpInside)
-        scaleDropdownBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: -20, bottom: 0, right: 0)
-        topBox.addSubview(scaleDropdownBtn)
         
         let bottomBox = UIView()
         bottomBox.backgroundColor = UIColor().colorFromHexString("#252C35")
@@ -2497,7 +2515,7 @@ class FloatingSidePanelView: UIView {
         
         minusBtn.setTitle("−", for: .normal)
         minusBtn.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .regular)
-        minusBtn.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        minusBtn.backgroundColor = UIColor().colorFromHexString("#252C354D")
         minusBtn.layer.cornerRadius = 20
         minusBtn.translatesAutoresizingMaskIntoConstraints = false
         minusBtn.addTarget(self, action: #selector(minusTapped), for: .touchUpInside)
@@ -2505,7 +2523,7 @@ class FloatingSidePanelView: UIView {
         
         plusBtn.setTitle("+", for: .normal)
         plusBtn.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        plusBtn.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        plusBtn.backgroundColor = UIColor().colorFromHexString("#252C354D")
         plusBtn.layer.cornerRadius = 20
         plusBtn.translatesAutoresizingMaskIntoConstraints = false
         plusBtn.addTarget(self, action: #selector(plusTapped), for: .touchUpInside)
@@ -2516,7 +2534,7 @@ class FloatingSidePanelView: UIView {
         areaValueLabel.font = UIFont(name: "Avenir-Roman", size: 14) ?? UIFont.systemFont(ofSize: 14)
         areaValueLabel.textColor = UIColor().colorFromHexString("#FFFFFF")
         areaValueLabel.layer.borderWidth = 1
-        areaValueLabel.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        areaValueLabel.layer.borderColor = UIColor().colorFromHexString("#586471").cgColor
         areaValueLabel.layer.cornerRadius = 8
         areaValueLabel.layer.masksToBounds = true
         areaValueLabel.backgroundColor = UIColor().colorFromHexString("#58647133")
@@ -2546,16 +2564,11 @@ class FloatingSidePanelView: UIView {
             
             scaleTitle.topAnchor.constraint(equalTo: topBox.topAnchor, constant: 15),
             scaleTitle.leadingAnchor.constraint(equalTo: topBox.leadingAnchor, constant: 15),
-            scaleTitle.trailingAnchor.constraint(lessThanOrEqualTo: scaleDropdownBtn.leadingAnchor, constant: -5),
+            scaleTitle.trailingAnchor.constraint(equalTo: topBox.trailingAnchor, constant: -15),
             
             scaleSub.topAnchor.constraint(equalTo: scaleTitle.bottomAnchor, constant: 5),
             scaleSub.leadingAnchor.constraint(equalTo: topBox.leadingAnchor, constant: 15),
-            scaleSub.trailingAnchor.constraint(lessThanOrEqualTo: scaleDropdownBtn.leadingAnchor, constant: -5),
-            
-            scaleDropdownBtn.centerYAnchor.constraint(equalTo: topBox.centerYAnchor),
-            scaleDropdownBtn.trailingAnchor.constraint(equalTo: topBox.trailingAnchor, constant: -15),
-            scaleDropdownBtn.widthAnchor.constraint(equalToConstant: 70),
-            scaleDropdownBtn.heightAnchor.constraint(equalToConstant: 35),
+            scaleSub.trailingAnchor.constraint(equalTo: topBox.trailingAnchor, constant: -15),
             
             bottomBox.topAnchor.constraint(equalTo: topBox.bottomAnchor, constant: 15),
             bottomBox.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 37),
@@ -2664,22 +2677,23 @@ class DropdownSelectButton: UIButton {
     required init?(coder: NSCoder) { fatalError() }
     
     private func setup() {
-        backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        self.backgroundColor = .clear
+        backgroundColor = UIColor().colorFromHexString("#252C354D")
         layer.cornerRadius = 10
         layer.masksToBounds = true
         layer.borderWidth = 1
-        layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        layer.borderColor = UIColor().colorFromHexString("#586471").cgColor
         setTitleColor(.white, for: .normal)
         titleLabel?.font = UIFont(name: "Avenir-Medium", size: 15) ?? UIFont.systemFont(ofSize: 15)
         contentHorizontalAlignment = .left
-        titleEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 35)
+        titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 25)
     }
     
     override func draw(_ rect: CGRect) {
         super.draw(rect)
         let path = UIBezierPath()
         let size: CGFloat = 5
-        let centerX = rect.width - 20
+        let centerX = rect.width - 15
         let centerY = rect.height / 2
         path.move(to: CGPoint(x: centerX - size, y: centerY - size/2))
         path.addLine(to: CGPoint(x: centerX, y: centerY + size/2))
@@ -2713,11 +2727,12 @@ class OpeningTypeButton: UIButton {
     required init?(coder: NSCoder) { fatalError() }
     
     private func setup() {
+        self.backgroundColor = .clear
         backgroundColor = .clear
         layer.cornerRadius = 10
         layer.masksToBounds = true
         layer.borderWidth = 1
-        layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        layer.borderColor = UIColor().colorFromHexString("#586471").cgColor
     }
     
     override func draw(_ rect: CGRect) {
@@ -2745,49 +2760,100 @@ class OpeningTypeButton: UIButton {
     }
 }
 
+
+class FlowLayoutView: UIView {
+    var spacing: CGFloat = 10
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        var currentX: CGFloat = 0
+        var currentY: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        
+        for view in subviews {
+            if view.isHidden { continue }
+            view.sizeToFit()
+            let viewWidth = view.bounds.width
+            let viewHeight = max(view.bounds.height, 30)
+            
+            if currentX + viewWidth > bounds.width {
+                currentX = 0
+                currentY += rowHeight + spacing
+                rowHeight = 0
+            }
+            
+            view.frame = CGRect(x: currentX, y: currentY, width: viewWidth, height: viewHeight)
+            currentX += viewWidth + spacing
+            rowHeight = max(rowHeight, viewHeight)
+        }
+        
+        if self.frame.height != currentY + rowHeight {
+            self.invalidateIntrinsicContentSize()
+        }
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        var currentX: CGFloat = 0
+        var currentY: CGFloat = 0
+        var rowHeight: CGFloat = 0
+        let maxWidth = bounds.width > 0 ? bounds.width : 500
+        
+        for view in subviews {
+            if view.isHidden { continue }
+            view.sizeToFit()
+            let viewWidth = view.bounds.width
+            let viewHeight = max(view.bounds.height, 30)
+            
+            if currentX + viewWidth > maxWidth {
+                currentX = 0
+                currentY += rowHeight + spacing
+                rowHeight = 0
+            }
+            
+            currentX += viewWidth + spacing
+            rowHeight = max(rowHeight, viewHeight)
+        }
+        return CGSize(width: UIView.noIntrinsicMetric, height: currentY + rowHeight)
+    }
+}
+
 class AddOpeningPopupView: UIView, UITextFieldDelegate {
     weak var viewController: CustomShapeLineViewController?
     
-    // Background card view (glassmorphism/dark card)
-    let cardView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    
-    // Content stack view
+    let cardView = UIView()
     let mainStack = UIStackView()
     
-    // Rows
-    // 1. Opening Type Row
-    let typeRow = UIStackView()
+    // Top Row
+    let titleLabel = UILabel()
     let typeLabel = UILabel()
     let typeToggleStack = UIStackView()
     let verticalBtn = OpeningTypeButton(isVertical: true)
     let horizontalBtn = OpeningTypeButton(isVertical: false)
     
-    // 2. Opening Name Row
-    let nameStack = UIStackView()
+    // Inner Box (Name, Width, Height)
+    let innerBox = UIView()
+    let innerStack = UIStackView()
+    
     let nameLabel = UILabel()
     let nameDropdownBtn = DropdownSelectButton()
     
-    // 3. Opening to Row
-    let toStack = UIStackView()
-    let toLabel = UILabel()
-    let toDropdownBtn = DropdownSelectButton()
-    
-    // 4. Width Row
-    let widthRow = UIStackView()
     let widthLabel = UILabel()
-    let widthStepperStack = UIStackView()
     let minusBtn = UIButton(type: .custom)
     let widthTF = UITextField()
     let plusBtn = UIButton(type: .custom)
-    let widthUnitLabel = UILabel()
     
-    // 5. Height Row
-    let heightRow = UIStackView()
     let heightLabel = UILabel()
     let heightDropdownBtn = DropdownSelectButton()
     let heightUnitLabel = UILabel()
     
-    // 6. Add button
+    // Room Selector
+    let toLabel = UILabel()
+    let roomsFlowView = FlowLayoutView()
+    let roomsScrollView = UIScrollView()
+    var roomButtons: [UIButton] = []
+    
+    // Bottom Buttons
+    let cancelBtn = UIButton(type: .custom)
     let addBtn = UIButton(type: .custom)
     
     var isVertical: Bool = true
@@ -2813,15 +2879,14 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
     required init?(coder: NSCoder) { fatalError() }
     
     private func setup() {
-        // Blur card configuration
+        self.backgroundColor = .clear
         cardView.translatesAutoresizingMaskIntoConstraints = false
         cardView.layer.cornerRadius = 20
         cardView.clipsToBounds = true
-        // Add a subtle border
-        cardView.contentView.backgroundColor = UIColor().colorFromHexString("#586471B2")
-        cardView.contentView.layer.borderColor = UIColor().colorFromHexString("#6B7987").cgColor
-        cardView.contentView.layer.borderWidth = 1
-        cardView.contentView.layer.cornerRadius = 20
+        cardView.backgroundColor = UIColor().colorFromHexString("#3A4553")
+        cardView.layer.borderColor = UIColor().colorFromHexString("#3A4553").cgColor
+        cardView.layer.borderWidth = 1
+        cardView.layer.cornerRadius = 20
         addSubview(cardView)
         
         NSLayoutConstraint.activate([
@@ -2831,31 +2896,35 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
             cardView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         
-        // Add drop shadow to self
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.5
-        layer.shadowOffset = CGSize(width: 0, height: 10)
-        layer.shadowRadius = 15
-        
-        // Configure main stack
         mainStack.axis = .vertical
-        mainStack.spacing = 10
-        mainStack.alignment = .fill
-        mainStack.distribution = .fill
+        mainStack.spacing = 20
         mainStack.translatesAutoresizingMaskIntoConstraints = false
-        cardView.contentView.addSubview(mainStack)
+        cardView.addSubview(mainStack)
         
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: cardView.contentView.topAnchor, constant: 25),
-            mainStack.leadingAnchor.constraint(equalTo: cardView.contentView.leadingAnchor, constant: 25),
-            mainStack.trailingAnchor.constraint(equalTo: cardView.contentView.trailingAnchor, constant: -25),
-            mainStack.bottomAnchor.constraint(equalTo: cardView.contentView.bottomAnchor, constant: -25)
+            mainStack.topAnchor.constraint(equalTo: cardView.topAnchor, constant: 25),
+            mainStack.leadingAnchor.constraint(equalTo: cardView.leadingAnchor, constant: 25),
+            mainStack.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -25),
+            mainStack.bottomAnchor.constraint(equalTo: cardView.bottomAnchor, constant: -25)
         ])
         
-        // --- 1. Opening Type Row ---
+        // --- 1. Top Row ---
+        let topRowStack = UIStackView()
+        topRowStack.axis = .horizontal
+        topRowStack.distribution = .equalSpacing
+        
+        titleLabel.text = editIndex == nil ? "Add Opening" : "Edit Opening"
+        titleLabel.textColor = .white
+        titleLabel.font = UIFont(name: "Avenir-Heavy", size: 22) ?? UIFont.boldSystemFont(ofSize: 22)
+        
+        let typeContainer = UIStackView()
+        typeContainer.axis = .horizontal
+        typeContainer.spacing = 15
+        typeContainer.alignment = .center
+        
         typeLabel.text = "Opening Type:"
         typeLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-        typeLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
+        typeLabel.font = UIFont(name: "Avenir-Medium", size: 15)
         
         verticalBtn.isToolActive = true
         verticalBtn.addTarget(self, action: #selector(verticalTypeTapped), for: .touchUpInside)
@@ -2863,19 +2932,10 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         horizontalBtn.addTarget(self, action: #selector(horizontalTypeTapped), for: .touchUpInside)
         
         typeToggleStack.axis = .horizontal
-        typeToggleStack.spacing = 10
+        typeToggleStack.spacing = 8
         typeToggleStack.addArrangedSubview(verticalBtn)
         typeToggleStack.addArrangedSubview(horizontalBtn)
         
-        typeRow.axis = .horizontal
-        typeRow.distribution = .equalSpacing
-        typeRow.alignment = .center
-        typeRow.addArrangedSubview(typeLabel)
-        typeRow.addArrangedSubview(typeToggleStack)
-        mainStack.addArrangedSubview(typeRow)
-        typeRow.isHidden = true // Hide Opening Type as requested
-        
-        // Constraints for toggle buttons
         NSLayoutConstraint.activate([
             verticalBtn.widthAnchor.constraint(equalToConstant: 45),
             verticalBtn.heightAnchor.constraint(equalToConstant: 40),
@@ -2883,106 +2943,116 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
             horizontalBtn.heightAnchor.constraint(equalToConstant: 40)
         ])
         
-        // --- 2. Opening Name Row ---
-        let nameTitleLabel = UILabel()
-        nameTitleLabel.text = "Opening Name"
-        nameTitleLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-        nameTitleLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
-        mainStack.addArrangedSubview(nameTitleLabel)
+        typeContainer.addArrangedSubview(typeLabel)
+        typeContainer.addArrangedSubview(typeToggleStack)
+        
+        topRowStack.addArrangedSubview(titleLabel)
+        topRowStack.addArrangedSubview(typeContainer)
+        mainStack.addArrangedSubview(topRowStack)
+        
+        // --- 2. Inner Box ---
+        innerBox.backgroundColor = UIColor().colorFromHexString("#586471")
+        innerBox.layer.borderColor = UIColor().colorFromHexString("#586471").cgColor
+        innerBox.layer.borderWidth = 1
+        innerBox.layer.cornerRadius = 15
+        
+        innerStack.axis = .horizontal
+        innerStack.spacing = 20
+        innerStack.distribution = .equalSpacing
+        innerStack.alignment = .center
+        innerStack.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        widthLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+        heightLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
+
+        innerBox.addSubview(innerStack)
+        
+        NSLayoutConstraint.activate([
+            innerStack.topAnchor.constraint(equalTo: innerBox.topAnchor, constant: 15),
+            innerStack.leadingAnchor.constraint(equalTo: innerBox.leadingAnchor, constant: 20),
+            innerStack.trailingAnchor.constraint(equalTo: innerBox.trailingAnchor, constant: -20),
+            innerStack.bottomAnchor.constraint(equalTo: innerBox.bottomAnchor, constant: -15)
+        ])
+        
+        // Name Block
+        let nameBlock = UIStackView()
+        nameBlock.axis = .horizontal
+        nameBlock.spacing = 5
+        nameBlock.alignment = .center
+        
+        nameLabel.text = "Opening Name"
+        nameLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+        nameLabel.font = UIFont(name: "Avenir-Medium", size: 14)
         
         if let controller = viewController, controller.openingsList.count > 0 {
             nameDropdownBtn.setTitle(controller.openingsList[0].name, for: .normal)
             selectedOpeningIndex = 0
         }
         nameDropdownBtn.addTarget(self, action: #selector(nameDropdownTapped), for: .touchUpInside)
-        mainStack.addArrangedSubview(nameDropdownBtn)
-        nameDropdownBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        nameDropdownBtn.titleLabel?.adjustsFontSizeToFitWidth = false
+        nameDropdownBtn.titleLabel?.minimumScaleFactor = 0.5
+        nameDropdownBtn.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        nameDropdownBtn.widthAnchor.constraint(equalToConstant: 200).isActive = true
         
-        // --- 3. Opening to Row ---
-        let toTitleLabel = UILabel()
-        toTitleLabel.text = "Opening to"
-        toTitleLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-        toTitleLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
-        mainStack.addArrangedSubview(toTitleLabel)
+        nameBlock.addArrangedSubview(nameLabel)
+        nameBlock.addArrangedSubview(nameDropdownBtn)
         
-        if let controller = viewController {
-            availableRoomNames = controller.getAllAvailableRoomNames()
-        }
-        if availableRoomNames.count > 0 {
-            toDropdownBtn.setTitle(availableRoomNames[0], for: .normal)
-            selectedRoomName = availableRoomNames[0]
-        } else {
-            toDropdownBtn.setTitle("Select Room", for: .normal)
-        }
-        toDropdownBtn.addTarget(self, action: #selector(toDropdownTapped), for: .touchUpInside)
-        mainStack.addArrangedSubview(toDropdownBtn)
-        toDropdownBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        // Width Block
+        let widthBlock = UIStackView()
+        widthBlock.axis = .horizontal
+        widthBlock.spacing = 5
+        widthBlock.alignment = .center
         
-        // --- 4. Width Row ---
         widthLabel.text = "Width:"
         widthLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-        widthLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
-        widthLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        widthLabel.font = UIFont(name: "Avenir-Medium", size: 14)
         
         minusBtn.setTitle("−", for: .normal)
         minusBtn.setTitleColor(.white, for: .normal)
-        minusBtn.titleLabel?.font = UIFont.systemFont(ofSize: 22, weight: .regular)
-        minusBtn.backgroundColor = UIColor.white.withAlphaComponent(0.1)
-        minusBtn.layer.cornerRadius = 18
+        minusBtn.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        minusBtn.backgroundColor = UIColor().colorFromHexString("#252C354D")
+        minusBtn.layer.cornerRadius = 17.5
         minusBtn.addTarget(self, action: #selector(minusWidthTapped), for: .touchUpInside)
         
         widthTF.text = "1.0"
         widthTF.textColor = .white
         widthTF.textAlignment = .center
-        widthTF.font = UIFont(name: "Avenir-Medium", size: 15) ?? UIFont.systemFont(ofSize: 15)
+        widthTF.font = UIFont(name: "Avenir-Medium", size: 15)
         widthTF.keyboardType = .decimalPad
-        widthTF.backgroundColor = UIColor.white.withAlphaComponent(0.05)
-        widthTF.layer.cornerRadius = 10
-        widthTF.layer.masksToBounds = true
-        widthTF.layer.borderWidth = 1
-        widthTF.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        widthTF.backgroundColor = UIColor().colorFromHexString("#252C354D")
+        widthTF.layer.cornerRadius = 8
         widthTF.delegate = self
         
         plusBtn.setTitle("+", for: .normal)
         plusBtn.setTitleColor(.white, for: .normal)
-        plusBtn.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .regular)
-        plusBtn.backgroundColor = UIColor.white.withAlphaComponent(0.1)
-        plusBtn.layer.cornerRadius = 18
+        plusBtn.titleLabel?.font = UIFont.systemFont(ofSize: 18)
+        plusBtn.backgroundColor = UIColor().colorFromHexString("#252C354D")
+        plusBtn.layer.cornerRadius = 17.5
         plusBtn.addTarget(self, action: #selector(plusWidthTapped), for: .touchUpInside)
         
-        widthUnitLabel.text = "Ft."
-        widthUnitLabel.textColor = .white
-        widthUnitLabel.font = UIFont.systemFont(ofSize: 16)
-        
-        widthStepperStack.axis = .horizontal
-        widthStepperStack.spacing = 8
-        widthStepperStack.alignment = .center
-        widthStepperStack.addArrangedSubview(minusBtn)
-        widthStepperStack.addArrangedSubview(widthTF)
-        widthStepperStack.addArrangedSubview(plusBtn)
-        widthStepperStack.addArrangedSubview(widthUnitLabel)
-        
-        widthRow.axis = .horizontal
-        widthRow.distribution = .fill
-        widthRow.alignment = .center
-        widthRow.addArrangedSubview(widthLabel)
-        widthRow.addArrangedSubview(widthStepperStack)
-        mainStack.addArrangedSubview(widthRow)
-        
         NSLayoutConstraint.activate([
-            minusBtn.widthAnchor.constraint(equalToConstant: 36),
-            minusBtn.heightAnchor.constraint(equalToConstant: 36),
-            plusBtn.widthAnchor.constraint(equalToConstant: 36),
-            plusBtn.heightAnchor.constraint(equalToConstant: 36),
-            widthTF.widthAnchor.constraint(equalToConstant: 75),
-            widthTF.heightAnchor.constraint(equalToConstant: 36)
+            minusBtn.widthAnchor.constraint(equalToConstant: 35),
+            minusBtn.heightAnchor.constraint(equalToConstant: 35),
+            plusBtn.widthAnchor.constraint(equalToConstant: 35),
+            plusBtn.heightAnchor.constraint(equalToConstant: 35),
+            widthTF.widthAnchor.constraint(equalToConstant: 80),
+            widthTF.heightAnchor.constraint(equalToConstant: 40)
         ])
         
-        // --- 5. Height Row ---
+        widthBlock.addArrangedSubview(widthLabel)
+        widthBlock.addArrangedSubview(minusBtn)
+        widthBlock.addArrangedSubview(widthTF)
+        widthBlock.addArrangedSubview(plusBtn)
+        
+        // Height Block
+        let heightBlock = UIStackView()
+        heightBlock.axis = .horizontal
+        heightBlock.spacing = 5
+        heightBlock.alignment = .center
+        
         heightLabel.text = "Height:"
         heightLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
-        heightLabel.font = UIFont(name: "Avenir-Heavy", size: 15) ?? UIFont.boldSystemFont(ofSize: 15)
-        heightLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        heightLabel.font = UIFont(name: "Avenir-Medium", size: 14)
         
         if let controller = viewController, controller.transitionHeightvalue.count > 0 {
             heightDropdownBtn.setTitle(controller.transitionHeightvalue[0], for: .normal)
@@ -2994,67 +3064,158 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
             heightDropdownBtn.setTitle("Select Height", for: .normal)
         }
         heightDropdownBtn.addTarget(self, action: #selector(heightDropdownTapped), for: .touchUpInside)
+        heightDropdownBtn.titleLabel?.adjustsFontSizeToFitWidth = false
+        heightDropdownBtn.titleLabel?.minimumScaleFactor = 0.5
+        heightDropdownBtn.widthAnchor.constraint(equalToConstant: 160).isActive = true
+        heightDropdownBtn.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         heightUnitLabel.text = "In."
         heightUnitLabel.textColor = .white
-        heightUnitLabel.font = UIFont.systemFont(ofSize: 16)
+        heightUnitLabel.font = UIFont(name: "Avenir-Medium", size: 14)
+        heightUnitLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
         
-        let heightRightStack = UIStackView()
-        heightRightStack.axis = .horizontal
-        heightRightStack.spacing = 10
-        heightRightStack.alignment = .center
-        heightRightStack.addArrangedSubview(heightDropdownBtn)
-        heightRightStack.addArrangedSubview(heightUnitLabel)
+        heightBlock.addArrangedSubview(heightLabel)
+        heightBlock.addArrangedSubview(heightDropdownBtn)
+        heightBlock.addArrangedSubview(heightUnitLabel)
         
-        heightRow.axis = .horizontal
-        heightRow.distribution = .fill
-        heightRow.alignment = .center
-        heightRow.addArrangedSubview(heightLabel)
-        heightRow.addArrangedSubview(heightRightStack)
-        mainStack.addArrangedSubview(heightRow)
+        // Add blocks to inner stack
+        let sep1 = UIView()
+        sep1.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        sep1.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        sep1.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        NSLayoutConstraint.activate([
-            heightDropdownBtn.widthAnchor.constraint(equalToConstant: 163),
-            heightDropdownBtn.heightAnchor.constraint(equalToConstant: 36)
-        ])
+        let sep2 = UIView()
+        sep2.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        sep2.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        sep2.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
-        // --- Spacer Removed ---
+        innerStack.addArrangedSubview(nameBlock)
+        innerStack.addArrangedSubview(sep1)
+        innerStack.addArrangedSubview(widthBlock)
+        innerStack.addArrangedSubview(sep2)
+        innerStack.addArrangedSubview(heightBlock)
         
-        // --- 6. Add Button / Delete Button ---
-        if editIndex == nil {
-            addBtn.setTitle("Add", for: .normal)
-            addBtn.setTitleColor(.white, for: .normal)
-            addBtn.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 15) ?? UIFont.systemFont(ofSize: 15)
-            addBtn.backgroundColor = UIColor(red: 41/255.0, green: 37/255.0, blue: 98/255.0, alpha: 1.0)
-            addBtn.layer.cornerRadius = 10
-            addBtn.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
-            mainStack.addArrangedSubview(addBtn)
-            addBtn.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        } else {
-            let deleteBtn = UIButton(type: .custom)
-            deleteBtn.setImage(UIImage(named: "openingDelete"), for: .normal)
-            deleteBtn.backgroundColor = UIColor(red: 43/255.0, green: 48/255.0, blue: 56/255.0, alpha: 1.0)
-            deleteBtn.layer.cornerRadius = 25
-            deleteBtn.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
-            
-            let deleteWrapper = UIView()
-            deleteWrapper.translatesAutoresizingMaskIntoConstraints = false
-            deleteWrapper.addSubview(deleteBtn)
-            deleteBtn.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                deleteBtn.centerXAnchor.constraint(equalTo: deleteWrapper.centerXAnchor),
-                deleteBtn.centerYAnchor.constraint(equalTo: deleteWrapper.centerYAnchor),
-                deleteBtn.widthAnchor.constraint(equalToConstant: 50),
-                deleteBtn.heightAnchor.constraint(equalToConstant: 50)
-            ])
-            
-            mainStack.addArrangedSubview(deleteWrapper)
-            deleteWrapper.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        mainStack.addArrangedSubview(innerBox)
+        
+        // --- 3. Room Selector ---
+        toLabel.text = "Opening to"
+        toLabel.textColor = UIColor().colorFromHexString("#A7B0BA")
+        toLabel.font = UIFont(name: "Avenir-Medium", size: 14)
+        mainStack.addArrangedSubview(toLabel)
+        
+        if let controller = viewController {
+            availableRoomNames = controller.getAllAvailableRoomNames()
         }
         
-        // Add card tap gesture to dismiss keyboard
+        roomsFlowView.translatesAutoresizingMaskIntoConstraints = false
+        mainStack.addArrangedSubview(roomsFlowView)
+        
+        for roomName in availableRoomNames {
+            let btn = UIButton(type: .custom)
+            btn.setTitle(roomName, for: .normal)
+            btn.titleLabel?.font = UIFont(name: "Avenir-Medium", size: 13)
+            btn.layer.cornerRadius = 10
+            btn.layer.borderWidth = 1
+            btn.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+            btn.addTarget(self, action: #selector(roomTapped(_:)), for: .touchUpInside)
+            styleRoomButtonUnselected(btn)
+            roomsFlowView.addSubview(btn)
+            roomButtons.append(btn)
+        }
+        
+        if editIndex == nil {
+            // When adding, no room selected initially
+            selectedRoomName = ""
+        } else {
+            // Edit will pre-select in populateForEdit
+        }
+        
+        // --- 4. Bottom Buttons ---
+        let bottomStack = UIStackView()
+        bottomStack.axis = .horizontal
+        bottomStack.spacing = 15
+        bottomStack.distribution = .fillEqually
+        
+        cancelBtn.setTitle("Cancel", for: .normal)
+        cancelBtn.setTitleColor(.white, for: .normal)
+        cancelBtn.backgroundColor = UIColor().colorFromHexString("#465261")
+        cancelBtn.layer.cornerRadius = 10
+        cancelBtn.addTarget(self, action: #selector(cancelTapped), for: .touchUpInside)
+        cancelBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        let deleteBtn = UIButton(type: .custom)
+        let trashIcon = UIImage(systemName: "trash")?.withTintColor(.red, renderingMode: .alwaysOriginal)
+        deleteBtn.setImage(trashIcon, for: .normal)
+        deleteBtn.backgroundColor = UIColor().colorFromHexString("#252C354D")
+        deleteBtn.layer.cornerRadius = 22.5
+        deleteBtn.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
+        deleteBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        deleteBtn.widthAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        addBtn.setTitle(editIndex == nil ? "Add" : "Save", for: .normal)
+        addBtn.setTitleColor(.white, for: .normal)
+        addBtn.backgroundColor = UIColor().colorFromHexString("#352F75") // purple
+        addBtn.layer.cornerRadius = 10
+        addBtn.addTarget(self, action: #selector(addOrSaveTapped), for: .touchUpInside)
+        addBtn.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        
+        let actionStack = UIStackView(arrangedSubviews: [cancelBtn, addBtn])
+        actionStack.axis = .horizontal
+        actionStack.spacing = 15
+        actionStack.distribution = .fillEqually
+        
+        bottomStack.distribution = .fill
+        
+        if editIndex == nil {
+            // Hide cancel when adding
+            cancelBtn.isHidden = true
+            bottomStack.addArrangedSubview(actionStack)
+        } else {
+            addBtn.setTitle("Update", for: .normal)
+            bottomStack.addArrangedSubview(deleteBtn)
+            bottomStack.addArrangedSubview(actionStack)
+        }
+        mainStack.addArrangedSubview(bottomStack)
+        
         let cardTap = UITapGestureRecognizer(target: self, action: #selector(cardTapped))
-        cardView.contentView.addGestureRecognizer(cardTap)
+        cardView.addGestureRecognizer(cardTap)
+    }
+    
+    @objc func roomTapped(_ sender: UIButton) {
+        for btn in roomButtons {
+            styleRoomButtonUnselected(btn)
+        }
+        styleRoomButtonSelected(sender)
+        selectedRoomName = sender.title(for: .normal)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+    }
+    
+    func styleRoomButtonUnselected(_ btn: UIButton) {
+        btn.backgroundColor = UIColor().colorFromHexString("#252C354D")
+        btn.layer.borderColor = UIColor().colorFromHexString("#6A7888").cgColor
+        btn.setTitleColor(UIColor().colorFromHexString("#A7B0BA"), for: .normal)
+        let dummyImage = UIImage(systemName: "circle")?.withTintColor(.clear, renderingMode: .alwaysOriginal)
+        btn.setImage(dummyImage, for: .normal)
+        btn.semanticContentAttribute = .forceRightToLeft
+        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 24)
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.minimumScaleFactor = 0.8
+    }
+    
+    func styleRoomButtonSelected(_ btn: UIButton) {
+        btn.backgroundColor = UIColor().colorFromHexString("#352F75")
+        btn.layer.borderColor = UIColor.clear.cgColor
+        btn.setTitleColor(.white, for: .normal)
+        let checkImage = UIImage(systemName: "checkmark.circle.fill")?.withTintColor(UIColor().colorFromHexString("#68D168") ?? UIColor.systemGreen, renderingMode: .alwaysOriginal)
+        btn.setImage(checkImage, for: .normal)
+        btn.semanticContentAttribute = .forceRightToLeft
+        btn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
+        btn.contentEdgeInsets = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 24)
+        btn.titleLabel?.adjustsFontSizeToFitWidth = true
+        btn.titleLabel?.minimumScaleFactor = 0.8
+        
+        btn.superview?.setNeedsLayout()
+        btn.superview?.layoutIfNeeded()
     }
     
     @objc func cardTapped() {
@@ -3077,12 +3238,6 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         guard let controller = viewController else { return }
         let strings = controller.openingsList.map { $0.name }
         controller.DropDownDefaultfunction(sender, sender.bounds.width, strings, selectedOpeningIndex, delegate: controller, tag: 100)
-    }
-    
-    @objc func toDropdownTapped(_ sender: UIButton) {
-        guard let controller = viewController else { return }
-        let selectedIdx = availableRoomNames.firstIndex(of: selectedRoomName) ?? -1
-        controller.DropDownDefaultfunction(sender, sender.bounds.width, availableRoomNames, selectedIdx, delegate: controller, tag: 101)
     }
     
     @objc func heightDropdownTapped(_ sender: UIButton) {
@@ -3117,8 +3272,15 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
     }
     
     func updateOpeningTo(_ roomName: String) {
-        toDropdownBtn.setTitle(roomName, for: .normal)
         selectedRoomName = roomName
+        for btn in roomButtons {
+            let title = btn.title(for: .normal)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+            if title == roomName {
+                styleRoomButtonSelected(btn)
+            } else {
+                styleRoomButtonUnselected(btn)
+            }
+        }
     }
     
     func updateHeight(_ heightStr: String) {
@@ -3153,6 +3315,11 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         updateHeight(h)
     }
     
+    @objc func cancelTapped() {
+        self.endEditing(true)
+        onCancel?()
+    }
+    
     @objc func deleteTapped() {
         self.endEditing(true)
         guard let controller = viewController, let idx = editIndex else { return }
@@ -3172,72 +3339,48 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
         onCancel?()
     }
     
-
-    
-    @objc func addTapped() {
+    @objc func addOrSaveTapped() {
         self.endEditing(true)
+        
+        if selectedRoomName.isEmpty {
+            viewController?.alert("Please select a room for 'Opening to'", nil)
+            return
+        }
+        
         guard let widthText = widthTF.text, let widthVal = Float(widthText), widthVal > 0 else {
             viewController?.alert("Please enter a valid width", nil)
             return
         }
         
-        guard let controller = viewController else { return }
-        
-        let baseOpening = controller.openingsList[selectedOpeningIndex]
-        let combinedName = "\(baseOpening.name) to \(selectedRoomName)"
-        let customOpening = OpeningCustomObject(name: combinedName, color: baseOpening.color)
-        let heightStr = selectedHeight
-        
-        let hValue = (!isVertical) ? 1 : CGFloat(widthVal * 100) / 100
-        let wValue = (!isVertical) ? CGFloat(widthVal * 100) / 100 : 1
-        
-        let xCenter = controller.drowingView.buzierpath.bounds.isEmpty ? controller.drowingView.bounds.midX : controller.drowingView.buzierpath.bounds.midX
-        let yCenter = controller.drowingView.buzierpath.bounds.isEmpty ? controller.drowingView.bounds.midY : controller.drowingView.buzierpath.bounds.midY
-        
-        controller.drowingView.add_Sub_Square_View(
-            xAsis: xCenter,
-            yAxis: yCenter,
-            width: wValue,
-            hight: hValue,
-            delegate: controller,
-            isVertical: isVertical,
-            objc: customOpening,
-            addViewHeight: heightStr,
-            transitionheightId: controller.transitionHeightId
-        )
-        
-        onCancel?()
-    }
-    
-    func applyEdits() {
-        self.endEditing(true)
-        guard let controller = viewController, let idx = editIndex else { return }
-        if idx < controller.drowingView.subSquareView.count {
-            let subSquare = controller.drowingView.subSquareView[idx]
-            
+        if editIndex == nil {
+            // ADD
+            guard let controller = viewController else { return }
             let baseOpening = controller.openingsList[selectedOpeningIndex]
             let combinedName = "\(baseOpening.name) to \(selectedRoomName)"
             let customOpening = OpeningCustomObject(name: combinedName, color: baseOpening.color)
             
-            subSquare.object = customOpening
-            subSquare.addViewHeight = selectedHeight
-            subSquare.isVertical = isVertical
+            let hValue = (!isVertical) ? 1 : CGFloat(widthVal * 100) / 100
+            let wValue = (!isVertical) ? CGFloat(widthVal * 100) / 100 : 1
             
-            if let widthText = widthTF.text, let widthVal = Float(widthText), widthVal > 0 {
-                if isVertical {
-                    subSquare.custom_hight = CGFloat(widthVal)
-                    subSquare.custom_width = 1.0
-                } else {
-                    subSquare.custom_width = CGFloat(widthVal)
-                    subSquare.custom_hight = 1.0
-                }
-                
-                subSquare.custom_size_reload()
-            }
+            let xCenter = controller.drowingView.buzierpath.bounds.isEmpty ? controller.drowingView.bounds.midX : controller.drowingView.buzierpath.bounds.midX
+            let yCenter = controller.drowingView.buzierpath.bounds.isEmpty ? controller.drowingView.bounds.midY : controller.drowingView.buzierpath.bounds.midY
             
-            subSquare.change_color_of_path(customOpening.color)
-            subSquare.setNeedsLayout()
-            controller.drowingView.setNeedsDisplay()
+            controller.drowingView.add_Sub_Square_View(
+                xAsis: xCenter,
+                yAxis: yCenter,
+                width: wValue,
+                hight: hValue,
+                delegate: controller,
+                isVertical: isVertical,
+                objc: customOpening,
+                addViewHeight: selectedHeight,
+                transitionheightId: controller.transitionHeightId
+            )
+            onCancel?()
+        } else {
+            // SAVE (Edit)
+            applyEdits()
+            onCancel?()
         }
     }
     
@@ -3261,6 +3404,39 @@ class AddOpeningPopupView: UIView, UITextFieldDelegate {
             }
         }
     }
+    
+    func applyEdits() {
+        self.endEditing(true)
+        guard let controller = viewController, let idx = editIndex else { return }
+        
+        if selectedRoomName.isEmpty { return }
+        guard let widthText = widthTF.text, let widthVal = Float(widthText), widthVal > 0 else { return }
+        
+        if idx < controller.drowingView.subSquareView.count {
+            let subSquare = controller.drowingView.subSquareView[idx]
+            let baseOpening = controller.openingsList[selectedOpeningIndex]
+            let combinedName = "\(baseOpening.name) to \(selectedRoomName)"
+            let customOpening = OpeningCustomObject(name: combinedName, color: baseOpening.color)
+            
+            subSquare.object = customOpening
+            subSquare.addViewHeight = selectedHeight
+            subSquare.isVertical = isVertical
+            
+            if isVertical {
+                subSquare.custom_hight = CGFloat(widthVal)
+                subSquare.custom_width = 1.0
+            } else {
+                subSquare.custom_width = CGFloat(widthVal)
+                subSquare.custom_hight = 1.0
+            }
+            
+            subSquare.custom_size_reload()
+            subSquare.change_color_of_path(customOpening.color)
+            subSquare.setNeedsLayout()
+            controller.drowingView.setNeedsDisplay()
+        }
+    }
+
 }
 
 extension CustomShapeLineViewController {

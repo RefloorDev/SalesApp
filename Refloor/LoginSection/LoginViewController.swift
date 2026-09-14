@@ -481,6 +481,7 @@ class LoginViewController: UIViewController {
         HttpClientManager.SharedHM.getMasterDataApi { success in
             print(Realm.Configuration.defaultConfiguration.fileURL)
             if (success ?? "") == "Success"{
+                
                 do {
                     let realm = try Realm()
                     //UserDefaults.standard.set(true, forKey: "isMasterDataSaved")
@@ -490,7 +491,18 @@ class LoginViewController: UIViewController {
                     //var stairColourImageArray:[String] = []
                     if let masterData = results.first{
                         //dynamic contract
-                       
+                        if masterData.contract_document_templates.count == 0
+                        {
+                            let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                                
+                                self.getMasterData()
+                                
+                            }
+                            let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                            
+                            //self.alert((message), [yes,no])
+                            self.alert("Contract document template not loaded properly. Please try again.", [yes,no])
+                        }
                         let discountDataArray = masterData.discount_coupons
                         for discountObj in discountDataArray{
                             let discountSuccessPopupImageUrlStr = discountObj.promoUrlImage ?? ""

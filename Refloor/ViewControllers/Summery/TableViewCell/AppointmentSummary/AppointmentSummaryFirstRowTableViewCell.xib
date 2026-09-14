@@ -82,7 +82,7 @@
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="Def-U3-osp" secondAttribute="bottom" id="CGb-Fq-sFb"/>
-                    <constraint firstItem="Def-U3-osp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="FCR-FN-4Kg"/>
+                    <constraint firstItem="Def-U3-osp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="FCR-FN-4Kg"/>
                     <constraint firstItem="Def-U3-osp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Ngt-zj-w4S"/>
                     <constraint firstAttribute="trailing" secondItem="Def-U3-osp" secondAttribute="trailing" id="lcg-eg-bNn"/>
                 </constraints>

@@ -2214,6 +2214,7 @@ class rf_Completed_Appointment_Request:Object
     @objc dynamic var sync_status: Bool = false
     @objc dynamic var image_name: String?
     @objc dynamic var stop_sync:Bool = false
+    @objc dynamic var create_date:String?
     
     
     override static func primaryKey() -> String? {
@@ -2337,5 +2338,41 @@ class ScreenCompletion: Object{
     
 }
 
-
-
+class rf_API_Log: Object {
+    @objc dynamic var appointmentId: Int = 0
+    @objc dynamic var apiUrl: String?
+    @objc dynamic var requestPayload: String?
+    @objc dynamic var responseStatus: Int = 0
+    @objc dynamic var responseData: String?
+    @objc dynamic var timestamp: String?
+    @objc dynamic var timeTaken: Double = 0.0
+    @objc dynamic var requestId: String?
+    
+    override init(){
+    }
+    
+    convenience init(appointmentId: Int, apiUrl: String, requestPayload: String, responseStatus: Int, responseData: String, timestamp: String, timeTaken: Double, requestId: String){
+        self.init()
+        self.appointmentId = appointmentId
+        self.apiUrl = apiUrl
+        self.requestPayload = requestPayload
+        self.responseStatus = responseStatus
+        self.responseData = responseData
+        self.timestamp = timestamp
+        self.timeTaken = timeTaken
+        self.requestId = requestId
+    }
+    
+    func toDictionary() -> [String:Any] {
+        return [
+            "appointment_id": appointmentId,
+            "api_url": apiUrl ?? "",
+            "request_payload": requestPayload ?? "",
+            "response_status": responseStatus,
+            "response_data": responseData ?? "",
+            "timestamp": timestamp ?? "",
+            "time_taken": timeTaken,
+            "request_id": requestId ?? ""
+        ]
+    }
+}

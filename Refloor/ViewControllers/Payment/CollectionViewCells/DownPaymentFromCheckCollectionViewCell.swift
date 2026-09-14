@@ -31,6 +31,7 @@ class DownPaymentFromCheckCollectionViewCell: UICollectionViewCell,UICollectionV
         // Initialization code
         collectionView.register(UINib(nibName: "SubCollectionViewLabelCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SubCollectionViewLabelCollectionViewCell")
     }
+    
     func collectionViewConfigruation(collectionViewData:[String],delegate:ExternalCollectionViewDelegateForTableView?)
     {
         self.accountNumberTF.text = accountNumber.isEmpty ? nil : accountNumber

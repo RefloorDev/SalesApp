@@ -43,6 +43,7 @@ class InstallerPopUpViewController: UIViewController {
     
     @IBAction func installationConfirmBtn(_ sender: UIButton)
     {
+        sender.isUserInteractionEnabled = false
         self.dismiss(animated: true)
         installationView.isHidden = true
         installerConfirm?.installerConfirm()

@@ -59,7 +59,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         {
             for contract in masterData.contract_document_templates
             {
-                self.saveDynamicContractData(templateId: contract.template_id , documentURL: contract.document_url ?? "", name: contract.name ?? "", type: contract.type ?? "")
+                contractSaveInDatabase(templateId: contract.template_id, documentURL: contract.document_url ?? "", name: contract.name ?? "", type: contract.type ?? "")
+             
             }
         }
         
@@ -84,6 +85,26 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         self.navigationController?.viewControllers = [self]
 
     }
+    
+    func contractSaveInDatabase(templateId:Int,documentURL:String,name:String,type:String)
+    {
+        if self.saveDynamicContractData(templateId: templateId, documentURL: documentURL, name: name, type: type)
+         {
+            
+        }
+         else
+         {
+             
+             let yes = UIAlertAction(title: "Retry", style:.default) { (_) in
+                 
+                 self.contractSaveInDatabase(templateId: templateId, documentURL: documentURL, name: name, type: type)
+             }
+             let no = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+             
+             self.alert("Contract not updated. Please try again", [yes,no])
+         }
+    }
+    
     @IBAction func crashButtonTapped(_ sender: AnyObject) {
           let numbers = [0]
           let _ = numbers[1]
@@ -143,7 +164,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         {
             for appointment in appointments {
                 
-                self.geoFencing(latitude: appointment.partner_latitude ?? 0.0, longtitude: appointment.partner_longitude ?? 0.0,appointmentId: appointment.id!)
+                self.geoFencing(latitude: appointment.partner_latitude ?? 0.0, longtitude: appointment.partner_longitude ?? 0.0,appointmentId: appointment.id ?? 0)
                     //print("Lat: \(lat), Lon: \(lon)")
                // }
                 
@@ -826,6 +847,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
     }
     
     @IBAction func startButtonActionFromCustomerList(_ sender: UIButton) {
+        sender.isUserInteractionEnabled = false
         
         print("\n\n\n **** startButtonActionFromCustomerList *** \n\n\n")
         print("\n\n\n **** sender = \(sender) *** \n\n\n")
@@ -838,6 +860,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         UserDefaults.standard.set(manualDateSting, forKey: "manual_appointment_date")
         let tag = sender.tag   // ✅ capture on main thread
         let appointmentID = self.appoinmentsList?[tag].id ?? 0
+        UserDefaults.standard.set(appointmentID, forKey: "current_appointment_id")
         let screenEntryTime = Date().getSyncDateAsString()
         let screenName = ScreenNames.appointmentList
         let (_,timeZone) = Date().getCompletedDateStringAndTimeZone()
@@ -900,35 +923,14 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 //            Crashlytics.crashlytics().setCustomValue(appointmentID, forKey: "appointment_id")
             let parameter:[String:Any] = ["appointment_id":  appointmentID]
             HttpClientManager.SharedHM.appointmentStatusAPi(parameter: parameter) { success, message in
-//                Crashlytics.crashlytics().log("Appointment Status API Called")
-//                Crashlytics.crashlytics().setCustomValue(appointmentID, forKey: "appointment_id")
-//                Crashlytics.crashlytics().setCustomValue(tag, forKey: "button_tag")
-//                Crashlytics.crashlytics().setCustomValue(success ?? "nil", forKey: "success_value")
-//                Crashlytics.crashlytics().setCustomValue(message ?? "nil", forKey: "message")
-//                
-//                
-//                do
-//                {
-//                    let realm = try! Realm()
-//                    //let userData = realm.objects(rf_Debug_Appointment_Log.self)
-//                    
-//                    
-//                    let object = (rf_Debug_Appointment_Log(appointmentId: appointmentID, log: log, apiStatus: success ?? "", apiMessage: message ?? ""))
-//                    
-//                    try realm.write {
-//                            realm.add(object)
-//                        }
-//                }
-//                catch
-//                {
-//                    print("❌ Failed to write to Realm: \(error.localizedDescription)")
-//                }
+                
                 if (success ?? "") == "Success"
                 {
                     self.appointmentStatus(buttonTag: tag)
                 }
                 else if success == "Failed"
                 {
+                    sender.isUserInteractionEnabled = true
                     HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
                     let selectRoomPopUp = SelectRoomCommentPopUpViewController.initialization()!
                     selectRoomPopUp.isSuccess = true
@@ -938,11 +940,17 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                     self.refreshAction()
                    // self.alert(message ?? "", nil)
                 }
+                else
+                {
+                    sender.isUserInteractionEnabled = true
+                    self.alert(message ?? AppAlertMsg.serverNotReached, nil)
+                }
                 
             }
         }
         else
         {
+            sender.isUserInteractionEnabled = true
             appointmentStatus(buttonTag: tag)
         }
     }
@@ -1043,8 +1051,8 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
         print("\n\n\n *** PERFORMANCE-APPOINTMENT-ACTION *** \n\n\n")
         
         //HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
-        let appointmentDateTimeString = self.appoinmentsList?[sender].appointment_datetime
-            let appointmentDateTime = convertStringToDate(appointmentDateTimeString!)
+        let appointmentDateTimeString = self.appoinmentsList?[sender].appointment_datetime ?? ""
+            let appointmentDateTime = convertStringToDate(appointmentDateTimeString)
             print("appointmentDateTime", appointmentDateTime)
 
             
@@ -1059,9 +1067,15 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
 
             let date = dateFormatter.date(from: dateString)
                         
-            let time_difference = appointmentDateTime!.timeIntervalSince(date!)
+            var shouldShowConfirmation = false
+            if let apptDate = appointmentDateTime, let currDate = date {
+                let time_difference = apptDate.timeIntervalSince(currDate)
+                if (apptDate < currDate) || (time_difference > 2 * 60 * 60) {
+                    shouldShowConfirmation = true
+                }
+            }
             
-            if (appointmentDateTime! < date!) || (time_difference > 2 * 60 * 60) {
+            if shouldShowConfirmation {
                 //  print("appointmentDateTime", appointmentDateTime, "date", date)
                 
                 // Q4_Change Confirmation Popup with Appointment date and time
@@ -1089,7 +1103,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                     else
                     {
                         
-                        self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
+                        self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList?[sender].id ?? 0)
                     //
                         if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
                             //            //print(getTodayWeekDay())
@@ -1097,7 +1111,7 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                             details.appoinmentslData = self.appoinmentsList![sender]
                             _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
                             
-                            UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
+                            UserDefaults.standard.set(self.appoinmentsList?[sender].recisionDate ?? "", forKey: "Recision_Date")
                             // let details = InstallerShedulerViewController.initialization()!
                             self.navigationController?.pushViewController(details, animated: true)
                         }
@@ -1107,21 +1121,21 @@ class CustomerListViewController: UIViewController,UITableViewDelegate,UITableVi
                 DispatchQueue.main.async
                 {
                     HttpClientManager.SharedHM.showhideHUD(viewtype: .HIDE)
-                    if let convertedDateString = self.convertDateString(self.appoinmentsList![sender].appointment_datetime ?? "") {
+                    if let convertedDateString = self.convertDateString(self.appoinmentsList?[sender].appointment_datetime ?? "") {
                                     //   print("convertedDateString", convertedDateString)
                                       self.alert("Are you sure you want to proceed with this" + " " + "\(convertedDateString) appointment?", [yes,no])
                                   }
                 }
             } else {
-                self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList![sender].id ?? 0)
+                self.createAppointResultDemoedNotDemoedDB(appointmentId:self.appoinmentsList?[sender].id ?? 0)
                 //
                 if self.appoinmentsList?[sender].appointmentStatus == AppointmentStatus.start{
                     //            //print(getTodayWeekDay())
                     let details = CustomerDetailsOneViewController.initialization()!
-                    details.appoinmentslData = self.appoinmentsList![sender]
-                    _ = AppointmentData(appointment_id: self.appoinmentsList![sender].id ?? 0)
+                    details.appoinmentslData = self.appoinmentsList?[sender]
+                    _ = AppointmentData(appointment_id: self.appoinmentsList?[sender].id ?? 0)
                     
-                    UserDefaults.standard.set(self.appoinmentsList![sender].recisionDate ?? "", forKey: "Recision_Date")
+                    UserDefaults.standard.set(self.appoinmentsList?[sender].recisionDate ?? "", forKey: "Recision_Date")
                     // let details = InstallerShedulerViewController.initialization()!
                     self.navigationController?.pushViewController(details, animated: true)
                 }

@@ -341,21 +341,37 @@ extension AppointmentSummaryViewController : UITableViewDelegate, UITableViewDat
         switch indexPath.section
         {
         case 0:
-            return 115
+            return 125
         case 1:
             return 70
         case 2:
-            return 183
+            return UITableView.automaticDimension
         case 3:
             return 70
         case 4:
-            return 183
+            return UITableView.automaticDimension
         default:
-            return 115
+            return 125
         }
         
     }
     
-    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section
+        {
+        case 0:
+            return 115
+        case 1:
+            return 70
+        case 2:
+            return 225
+        case 3:
+            return 70
+        case 4:
+            return 225
+        default:
+            return 115
+        }
+    }
 }
 

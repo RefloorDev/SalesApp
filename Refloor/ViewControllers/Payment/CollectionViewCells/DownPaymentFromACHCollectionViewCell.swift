@@ -22,9 +22,36 @@ class DownPaymentFromACHCollectionViewCell: UICollectionViewCell, UICollectionVi
     var routingNumber:String = String()
     var accountNumber:String = String()
 
+    let infoButton = UIButton(type: .custom)
+
     override func awakeFromNib() {
         super.awakeFromNib()
         collectionView.register(UINib(nibName: "SubCollectionViewLabelCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "SubCollectionViewLabelCollectionViewCell")
+        
+        infoButton.setImage(UIImage(named: "iButton"), for: .normal)
+        infoButton.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(infoButton)
+        NSLayoutConstraint.activate([
+            infoButton.centerYAnchor.constraint(equalTo: totalLabel.centerYAnchor),
+            infoButton.leadingAnchor.constraint(equalTo: totalLabel.trailingAnchor, constant: 10),
+            infoButton.widthAnchor.constraint(equalToConstant: 24),
+            infoButton.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func infoButtonTapped() {
+        if let parentVC = self.delegate as? UIViewController {
+            let popupVC = InfoImagesPopupViewController()
+            popupVC.modalPresentationStyle = .overFullScreen
+            popupVC.modalTransitionStyle = .crossDissolve
+            
+            if let img = UIImage(named: "check_info") {
+                popupVC.images = [img]
+            }
+            
+            parentVC.present(popupVC, animated: true, completion: nil)
+        }
     }
 
     func collectionViewConfigruation(collectionViewData: [String], delegate: ExternalCollectionViewDelegateForTableView?) {
