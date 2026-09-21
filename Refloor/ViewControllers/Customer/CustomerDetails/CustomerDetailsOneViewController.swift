@@ -646,21 +646,24 @@ extension CustomerDetailsOneViewController: GMSAutocompleteViewControllerDelegat
 {
     
     
-    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+    func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace)
+    {
         
         
         self.DidAddressSelectPlaceEntryDelegate(title: place.name ?? "", mapItem: place, tag: GMSTag)
         
         self.dismiss(animated: true, completion: nil)
     }
-    nonisolated func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+    nonisolated func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error)
+    {
         // TODO: handle the error.
         //        print("Error: \(error.description)")
         self.dismiss(animated: true, completion: nil)
     }
     
     // User canceled the operation.
-    nonisolated func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+    nonisolated func wasCancelled(_ viewController: GMSAutocompleteViewController)
+    {
         print("Autocomplete was cancelled.")
         self.dismiss(animated: true, completion: nil)
         

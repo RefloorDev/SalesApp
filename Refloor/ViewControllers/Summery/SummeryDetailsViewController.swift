@@ -42,6 +42,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
     var currentSurfaceAnswerScore = 0.0
     var qustionAnswer:[QuestionsMeasurementData] = []
     var miscellaneous_coments = ""
+    var isQuestionnaireChanged = false
     
     //
     override func viewDidLoad() {
@@ -744,6 +745,13 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
        // summeryDetailsUpdateApi()
     }
     
+    override func performSegueToReturnBack() {
+        self.updateAdjustedArea(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , area: String(summaryData.adjusted_area ?? 0.0))
+        self.submitApiCall()
+        self.updateRoomComment(appointmentId: AppointmentData().appointment_id ?? 0, roomId:self.summaryData.room_id ?? 0 , comment: summaryData.comments ?? "",miscellaneous_comments: self.miscellaneous_coments)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     func summeryDetailsDataApiCall(_ masuremetID:Int)
     {
         HttpClientManager.SharedHM.RoomSummeryDetailsApi(masuremetID) { (result,message, value) in
@@ -783,6 +791,7 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
     }
     func SummeryEditDelegateInQustionariesEditingDone(summaryData:SummeryDetailsData) {
         self.summaryData = summaryData
+        self.isQuestionnaireChanged = true
         self.tableReaload()
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
 //            self.summeryDetailsDataApiCall(self.summaryData.contract_measurement_id ?? 0)
@@ -933,6 +942,8 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         var extraCost:Double = 0.0
         var extraCostExclude:Double = 0.0
         var extrapromoToexclude:Double = 0.0
+        var hasQuestionnaireChanged = self.isQuestionnaireChanged
+        
         for i in 0..<questionsForAppointment.count{
             let questionsArray = List<rf_AnswerForQuestion>()
             let question = questionsForAppointment[i]
@@ -941,6 +952,13 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
                 let questionAnswerForQuestionId = questionAnswerForQuestionIdArr.first!
                 if let answerOFQustion = questionAnswerForQuestionId.answerOFQustion{
                     let rf_answerOfQstn = chooseAnswerBasedOnQuestionType(question: question, answer: answerOFQustion)
+                    
+                    let newAnswers = rf_answerOfQstn["answer"] as? [String] ?? []
+                    let oldAnswers = Array(question.rf_AnswerOFQustion.first?.answer ?? List<String>())
+                    if oldAnswers != newAnswers {
+                        hasQuestionnaireChanged = true
+                    }
+                    
                     questionsArray.append(rf_AnswerForQuestion(qstnAnsDict: rf_answerOfQstn))
                     do{
                         let realm = try Realm()
@@ -985,6 +1003,12 @@ class SummeryDetailsViewController: UIViewController,UITableViewDelegate,UITable
         //to save stair count and width to appointment room details
         if roomName.localizedCaseInsensitiveContains("stair"){
             self.saveStairDetailsToCompletedAppointment(roomId: self.roomID)
+        }
+        
+        if hasQuestionnaireChanged {
+            SummeryListViewController.forcedVaporBarrierNoRoomIDs.remove(self.roomID)
+            self.updateRoomMoldOrColor(roomID: self.roomID, moldName: "", isColor: true, colorName: "", colorImageUrl: "", colorUpCharge: 0.0, moldPrice: 0.0, deliveryOptions: "", isGlueDown: false)
+            print("Questionnaire changed for room \(self.roomID). Reset selected color to empty.")
         }
     }
     
